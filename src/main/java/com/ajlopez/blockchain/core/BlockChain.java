@@ -41,7 +41,10 @@ public class BlockChain {
     }
 
     private boolean isOrphan(Block block) {
-        return block.getParentHash() != null && !blocksByHash.containsKey(block.getParentHash());
+        if (block.getNumber() == 0)
+            return false;
+
+        return !blocksByHash.containsKey(block.getParentHash());
     }
 
     private void addToOrphans(Block block) {

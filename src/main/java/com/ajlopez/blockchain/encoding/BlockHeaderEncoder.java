@@ -9,17 +9,17 @@ import com.ajlopez.blockchain.utils.ByteUtils;
  */
 public class BlockHeaderEncoder {
     public static byte[] encode(BlockHeader header) {
-        byte[] rlpHash = RLP.encode(header.getParentHash().getBytes());
+        byte[] rlpParentHash = RLP.encode(header.getParentHash().getBytes());
         byte[] rlpNumber = RLP.encode(ByteUtils.longToBytes(header.getNumber()));
 
-        return RLP.encodeList(rlpNumber, rlpHash);
+        return RLP.encodeList(rlpNumber, rlpParentHash);
     }
 
     public static BlockHeader decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
         byte[] number = RLP.decode(bytes[0]);
-        byte[] hash = RLP.decode(bytes[1]);
+        byte[] parentHash = RLP.decode(bytes[1]);
 
-        return new BlockHeader(ByteUtils.bytesToLong(number), new Hash(hash));
+        return new BlockHeader(ByteUtils.bytesToLong(number), new Hash(parentHash));
     }
 }

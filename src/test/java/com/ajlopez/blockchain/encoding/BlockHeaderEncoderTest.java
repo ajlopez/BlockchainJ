@@ -23,5 +23,6 @@ public class BlockHeaderEncoderTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(42, result.getNumber());
         Assert.assertEquals(hash, result.getParentHash());
+        Assert.assertEquals(header.getHash(), result.getHash());
     }
 }
