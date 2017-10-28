@@ -9,8 +9,8 @@ import com.ajlopez.blockchain.utils.ByteUtils;
  */
 public class BlockHeaderEncoder {
     public static byte[] encode(BlockHeader header) {
-        byte[] rlpParentHash = RLP.encode(header.getParentHash().getBytes());
         byte[] rlpNumber = RLP.encode(ByteUtils.longToBytes(header.getNumber()));
+        byte[] rlpParentHash = RLP.encode(header.getParentHash().getBytes());
 
         return RLP.encodeList(rlpNumber, rlpParentHash);
     }

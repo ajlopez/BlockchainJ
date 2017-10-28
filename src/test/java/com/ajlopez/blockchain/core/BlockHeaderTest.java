@@ -19,6 +19,14 @@ public class BlockHeaderTest {
         Assert.assertNotNull(header.getHash());
     }
 
+    @Test
+    public void twoDifferentHeadersHaveDifferentHashes() {
+        BlockHeader header1 = new BlockHeader(1L, generateHash());
+        BlockHeader header2 = new BlockHeader(2L, generateHash());
+
+        Assert.assertNotEquals(header1.getHash(), header2.getHash());
+    }
+
     private static Hash generateHash() {
         byte[] bytes = new byte[32];
         Random random = new Random();
