@@ -1,0 +1,22 @@
+group 'com.ajlopez'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    scastleVersion = '1.53.0.0'
+    junitVersion = '4.11'
+}
+
+dependencies {
+    compile "com.madgag.spongycastle:core:${scastleVersion}" // for SHA3 and SECP256K1
+    compile "com.madgag.spongycastle:prov:${scastleVersion}" // for SHA3 and SECP256K1
+
+    testCompile "junit:junit:${junitVersion}"
+}

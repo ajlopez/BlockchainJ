@@ -1,0 +1,44 @@
+# local credentials
+credentials.properties
+
+out
+
+# Vim
+*.sw[op]
+
+# Gradle
+.gradle
+build
+
+# IDEA
+.idea
+!.idea/codeStyleSettings.xml
+*.iml
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin
+
+# Maven
+*.log
+log/
+target/
+
+# Output
+
+# Mac
+.DS_Store
+
+
+# Local configuration
+**/user.conf
+**/test-user.conf
+**/out.log
+**/user.log4j.properties
+
+#Classes
+classes/
+
