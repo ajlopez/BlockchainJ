@@ -8,6 +8,8 @@ import com.ajlopez.blockchain.utils.ByteUtils;
  * Created by ajlopez on 23/09/2017.
  */
 public class BlockHeaderEncoder {
+    private BlockHeaderEncoder() {}
+
     public static byte[] encode(BlockHeader header) {
         byte[] rlpNumber = RLP.encode(ByteUtils.longToBytes(header.getNumber()));
         byte[] rlpParentHash = RLP.encode(header.getParentHash().getBytes());

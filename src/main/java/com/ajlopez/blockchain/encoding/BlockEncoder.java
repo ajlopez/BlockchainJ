@@ -7,6 +7,8 @@ import com.ajlopez.blockchain.core.BlockHeader;
  * Created by ajlopez on 10/10/2017.
  */
 public class BlockEncoder {
+    private BlockEncoder() {}
+
     public static byte[] encode(Block block) {
         byte[] rlpHeader = BlockHeaderEncoder.encode(block.getHeader());
 

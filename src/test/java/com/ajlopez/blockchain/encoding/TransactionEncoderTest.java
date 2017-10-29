@@ -19,13 +19,11 @@ public class TransactionEncoderTest {
 
         Transaction tx = new Transaction(sender, receiver, value);
 
-        TransactionEncoder encoder = new TransactionEncoder();
-
-        byte[] encoded = encoder.encode(tx);
+        byte[] encoded = TransactionEncoder.encode(tx);
 
         Assert.assertNotNull(encoded);
 
-        Transaction result = encoder.decode(encoded);
+        Transaction result = TransactionEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
 

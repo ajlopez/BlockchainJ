@@ -6,6 +6,8 @@ import com.ajlopez.blockchain.core.Address;
  * Created by ajlopez on 27/09/2017.
  */
 public class AddressEncoder {
+    private AddressEncoder() {}
+
     public static byte[] encode(Address address) {
         byte[] rlpBytes = RLP.encode(address.getBytes());
 

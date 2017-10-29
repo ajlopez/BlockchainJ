@@ -95,7 +95,7 @@ public class RLP {
 
     public static byte[][] decodeList(byte[] encoded) {
         int b0 = encoded[0] & 0xff;
-        long length;
+        int length;
         int offset = 1;
 
         if (b0 > 247) {
@@ -110,7 +110,7 @@ public class RLP {
         int position = offset;
 
         while (position < offset + length) {
-            int l = (int)getTotalLength(encoded, position);
+            int l = getTotalLength(encoded, position);
 
             byte[] item = new byte[l];
 
@@ -122,7 +122,7 @@ public class RLP {
         return items.toArray(new byte[items.size()][]);
     }
 
-    public static long getTotalLength(byte[] bytes, int position) {
+    public static int getTotalLength(byte[] bytes, int position) {
         int b0 = bytes[position] & 0xff;
 
         if (b0 > 247) {
@@ -157,12 +157,12 @@ public class RLP {
         return Arrays.copyOfRange(bytes, 4 - pos, 4);
     }
 
-    public static long bytesToLength(byte[] bytes) {
+    public static int bytesToLength(byte[] bytes) {
         return bytesToLength(bytes, 0, bytes.length);
     }
 
-    public static long bytesToLength(byte[] bytes, int position, int size) {
-        long length = 0;
+    public static int bytesToLength(byte[] bytes, int position, int size) {
+        int length = 0;
 
         for (int k = 0; k < size; k++) {
             length <<= 8;
