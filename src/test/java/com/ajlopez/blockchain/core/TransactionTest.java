@@ -20,5 +20,8 @@ public class TransactionTest {
         Assert.assertEquals(sender, tx.getSender());
         Assert.assertEquals(receiver, tx.getReceiver());
         Assert.assertEquals(value, tx.getValue());
+
+        Assert.assertNotNull(tx.getHash());
+        Assert.assertNotEquals(Hash.emptyHash(), tx.getHash());
     }
 }

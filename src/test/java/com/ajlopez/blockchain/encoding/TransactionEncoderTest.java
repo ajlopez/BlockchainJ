@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.Address;
+import com.ajlopez.blockchain.core.Hash;
 import com.ajlopez.blockchain.core.Transaction;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,5 +31,8 @@ public class TransactionEncoderTest {
         Assert.assertEquals(tx.getSender(), result.getSender());
         Assert.assertEquals(tx.getReceiver(), result.getReceiver());
         Assert.assertEquals(tx.getValue(), result.getValue());
+        Assert.assertNotNull(result.getHash());
+        Assert.assertNotEquals(Hash.emptyHash(), result.getHash());
+        Assert.assertEquals(tx.getHash(), result.getHash());
     }
 }
