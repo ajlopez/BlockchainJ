@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.core;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -17,6 +18,17 @@ public class BlockTest {
         Assert.assertEquals(1L, block.getNumber());
         Assert.assertEquals(hash, block.getParentHash());
         Assert.assertNotNull(block.getHash());
+    }
+
+    @Test
+    public void noTransactions() {
+        Hash hash = generateHash();
+        Block block = new Block(1L, hash);
+
+        List<Transaction> transactions = block.getTransactions();
+
+        Assert.assertNotNull(transactions);
+        Assert.assertTrue(transactions.isEmpty());
     }
 
     private static Hash generateHash() {
