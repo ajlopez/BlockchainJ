@@ -294,6 +294,19 @@ public class RLPTest {
     }
 
     @Test
+    public void encodeEmptyList() {
+        byte[] encoded = RLP.encodeList();
+
+        Assert.assertNotNull(encoded);
+        Assert.assertEquals(1, encoded.length);
+
+        byte[][] decoded = RLP.decodeList(encoded);
+
+        Assert.assertNotNull(decoded);
+        Assert.assertEquals(0, decoded.length);
+    }
+
+    @Test
     public void encodeListWithTwoShortElements() {
         byte[] element1 = RLP.encode(new byte[] { 0x01, 0x02 });
         byte[] element2 = RLP.encode(new byte[] { 0x03, 0x04 });
