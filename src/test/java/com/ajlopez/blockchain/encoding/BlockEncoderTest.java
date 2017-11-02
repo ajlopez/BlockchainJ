@@ -54,7 +54,11 @@ public class BlockEncoderTest {
         Assert.assertEquals(block.getParentHash(), result.getParentHash());
         Assert.assertNotNull(result.getTransactions());
         Assert.assertEquals(1, result.getTransactions().size());
-        Assert.assertEquals(block.getTransactions().get(0), result.getTransactions().get(0));
+        Assert.assertEquals(tx.getSender(), result.getTransactions().get(0).getSender());
+        Assert.assertEquals(tx.getReceiver(), result.getTransactions().get(0).getReceiver());
+        Assert.assertEquals(tx.getValue(), result.getTransactions().get(0).getValue());
+        Assert.assertNotEquals(Hash.emptyHash(), result.getTransactions().get(0).getHash());
+        Assert.assertEquals(tx.getHash(), result.getTransactions().get(0).getHash());
     }
 
     @Test
