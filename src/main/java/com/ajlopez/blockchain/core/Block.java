@@ -14,6 +14,10 @@ public class Block {
         this(new BlockHeader(number, parentHash));
     }
 
+    public Block(long number, Hash parentHash, List<Transaction> txs) {
+        this(new BlockHeader(number, parentHash), txs);
+    }
+
     public Block(BlockHeader header) {
         this(header, null);
     }

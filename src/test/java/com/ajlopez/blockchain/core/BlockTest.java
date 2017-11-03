@@ -3,6 +3,8 @@ package com.ajlopez.blockchain.core;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -29,6 +31,28 @@ public class BlockTest {
 
         Assert.assertNotNull(transactions);
         Assert.assertTrue(transactions.isEmpty());
+    }
+
+    @Test
+    public void withOneTransaction() {
+        Address sender = new Address();
+        Address receiver = new Address();
+        BigInteger value = BigInteger.ONE;
+
+        Transaction tx = new Transaction(sender, receiver, value);
+
+        List<Transaction> txs = new ArrayList<>();
+        txs.add(tx);
+
+        Hash hash = generateHash();
+        Block block = new Block(1L, hash, txs);
+
+        List<Transaction> transactions = block.getTransactions();
+
+        Assert.assertNotNull(transactions);
+        Assert.assertFalse(transactions.isEmpty());
+        Assert.assertEquals(1, transactions.size());
+        Assert.assertEquals(tx.getHash(), transactions.get(0).getHash());
     }
 
     private static Hash generateHash() {
