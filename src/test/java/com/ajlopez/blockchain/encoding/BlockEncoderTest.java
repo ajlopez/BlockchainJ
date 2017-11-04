@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class BlockEncoderTest {
     @Test
-    public void encodeDecodeSimpleBlock() {
+    public void encodeDecodeBlock() {
         Hash parentHash = new Hash();
         Block block = new Block(42, parentHash);
 
@@ -30,7 +30,7 @@ public class BlockEncoderTest {
     }
 
     @Test
-    public void encodeDecodeSimpleBlockWithOneTransaction() {
+    public void encodeDecodeBlockWithOneTransaction() {
         Address sender = new Address();
         Address receiver = new Address();
         BigInteger value = BigInteger.ONE;
@@ -59,6 +59,46 @@ public class BlockEncoderTest {
         Assert.assertEquals(tx.getValue(), result.getTransactions().get(0).getValue());
         Assert.assertNotEquals(Hash.emptyHash(), result.getTransactions().get(0).getHash());
         Assert.assertEquals(tx.getHash(), result.getTransactions().get(0).getHash());
+    }
+
+    @Test
+    public void encodeDecodeBlockWithTwoTransactions() {
+        Address account1 = new Address();
+        Address account2 = new Address();
+
+        Transaction tx1 = new Transaction(account1, account2, BigInteger.ONE);
+        Transaction tx2 = new Transaction(account2, account1, BigInteger.TEN);
+
+        List<Transaction> txs = new ArrayList<>();
+        txs.add(tx1);
+        txs.add(tx2);
+
+        Hash parentHash = new Hash();
+        Block block = new Block(new BlockHeader(42, parentHash), txs);
+
+        byte[] encoded = BlockEncoder.encode(block);
+
+        Assert.assertNotNull(encoded);
+
+        Block result = BlockEncoder.decode(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(block.getNumber(), result.getNumber());
+        Assert.assertEquals(block.getParentHash(), result.getParentHash());
+        Assert.assertNotNull(result.getTransactions());
+        Assert.assertEquals(2, result.getTransactions().size());
+
+        Assert.assertEquals(tx1.getSender(), result.getTransactions().get(0).getSender());
+        Assert.assertEquals(tx1.getReceiver(), result.getTransactions().get(0).getReceiver());
+        Assert.assertEquals(tx1.getValue(), result.getTransactions().get(0).getValue());
+        Assert.assertNotEquals(Hash.emptyHash(), result.getTransactions().get(0).getHash());
+        Assert.assertEquals(tx1.getHash(), result.getTransactions().get(0).getHash());
+
+        Assert.assertEquals(tx2.getSender(), result.getTransactions().get(1).getSender());
+        Assert.assertEquals(tx2.getReceiver(), result.getTransactions().get(1).getReceiver());
+        Assert.assertEquals(tx2.getValue(), result.getTransactions().get(1).getValue());
+        Assert.assertNotEquals(Hash.emptyHash(), result.getTransactions().get(1).getHash());
+        Assert.assertEquals(tx2.getHash(), result.getTransactions().get(1).getHash());
     }
 
     @Test
