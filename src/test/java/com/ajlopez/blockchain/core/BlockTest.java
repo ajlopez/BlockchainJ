@@ -34,6 +34,45 @@ public class BlockTest {
     }
 
     @Test
+    public void blockWithDifferentParentHashesHaveDifferentHashes() {
+        Block block1 = new Block(1L, generateHash());
+        Block block2 = new Block(1L, generateHash());
+
+        Assert.assertNotEquals(block1.getHash(), block2.getHash());
+    }
+
+    @Test
+    public void blockWithDifferentNumbersHaveDifferentHashes() {
+        Hash parentHash = generateHash();
+        Block block1 = new Block(1L, parentHash);
+        Block block2 = new Block(2L, parentHash);
+
+        Assert.assertNotEquals(block1.getHash(), block2.getHash());
+    }
+
+    @Test
+    public void blockWithDifferentTransactionsHaveDifferentHashes() {
+        Address sender = new Address();
+        Address receiver = new Address();
+
+        Transaction tx1 = new Transaction(sender, receiver, BigInteger.ONE);
+        Transaction tx2 = new Transaction(sender, receiver, BigInteger.TEN);
+
+        List<Transaction> txs1 = new ArrayList<>();
+        List<Transaction> txs2 = new ArrayList<>();
+
+        txs1.add(tx1);
+        txs2.add(tx2);
+
+        Hash hash = generateHash();
+
+        Block block1 = new Block(1L, hash, txs1);
+        Block block2 = new Block(1L, hash, txs2);
+
+        Assert.assertNotEquals(block1.getHash(), block2.getHash());
+    }
+
+    @Test
     public void withOneTransaction() {
         Address sender = new Address();
         Address receiver = new Address();
