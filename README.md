@@ -19,6 +19,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [BouncyCastle Java](http://www.bouncycastle.org/java.html)
 - [RLP](https://github.com/ethereum/wiki/wiki/RLP)
 - [RLP Tests](https://github.com/ethereum/tests/blob/develop/RLPTests/rlptest.json)
+- [How to Build Your Own Blockchain Part 3 — Writing Nodes that Mine and Talk](https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/)
 
 ## License
 
