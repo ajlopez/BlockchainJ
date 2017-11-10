@@ -15,4 +15,12 @@ public class AccountStateTest {
 
         Assert.assertEquals(BigInteger.ZERO, accstate.getBalance());
     }
+
+    @Test
+    public void addToBalance() {
+        AccountState accstate = new AccountState();
+
+        accstate.addToBalance(BigInteger.TEN);
+        Assert.assertEquals(BigInteger.TEN, accstate.getBalance());
+    }
 }

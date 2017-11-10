@@ -15,4 +15,8 @@ public class AccountState {
     public BigInteger getBalance() {
         return this.balance;
     }
+
+    public void addToBalance(BigInteger amount) {
+        this.balance = this.balance.add(amount);
+    }
 }
