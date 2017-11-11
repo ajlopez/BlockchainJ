@@ -17,6 +17,11 @@ public class AccountState {
     }
 
     public void addToBalance(BigInteger amount) {
-        this.balance = this.balance.add(amount);
+        BigInteger newbalance = this.balance.add(amount);
+
+        if (newbalance.compareTo(BigInteger.ZERO) < 0)
+            throw new IllegalStateException("Invalid balance");
+
+        this.balance = newbalance;
     }
 }

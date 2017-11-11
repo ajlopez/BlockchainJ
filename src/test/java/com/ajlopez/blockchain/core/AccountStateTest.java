@@ -23,4 +23,11 @@ public class AccountStateTest {
         accstate.addToBalance(BigInteger.TEN);
         Assert.assertEquals(BigInteger.TEN, accstate.getBalance());
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void addNegativeNumberToZeroBalance() {
+        AccountState accstate = new AccountState();
+
+        accstate.addToBalance(BigInteger.TEN.negate());
+    }
 }
