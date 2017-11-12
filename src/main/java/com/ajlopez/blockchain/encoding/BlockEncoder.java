@@ -15,12 +15,8 @@ public class BlockEncoder {
 
     public static byte[] encode(Block block) {
         byte[] rlpHeader = BlockHeaderEncoder.encode(block.getHeader());
-        byte[][] rlpTransactions = new byte[block.getTransactions().size()][];
 
-        for (int k = 0; k < rlpTransactions.length; k++)
-            rlpTransactions[k] = TransactionEncoder.encode(block.getTransactions().get(k));
-
-        return RLP.encodeList(rlpHeader, RLP.encodeList(rlpTransactions));
+        return RLP.encodeList(rlpHeader, TransactionEncoder.encode(block.getTransactions()));
     }
 
     public static Block decode(byte[] encoded) {

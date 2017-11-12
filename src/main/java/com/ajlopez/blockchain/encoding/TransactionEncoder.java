@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Address;
 import com.ajlopez.blockchain.core.Transaction;
 
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * Created by ajlopez on 04/10/2017.
@@ -17,6 +18,15 @@ public class TransactionEncoder {
         byte[] rlpValue = RLP.encode(transaction.getValue().toByteArray());
 
         return RLP.encodeList(rlpSender, rlpReceiver, rlpValue);
+    }
+
+    public static byte[] encode(List<Transaction> transactions) {
+        byte[][] rlpTransactions = new byte[transactions.size()][];
+
+        for (int k = 0; k < rlpTransactions.length; k++)
+            rlpTransactions[k] = TransactionEncoder.encode(transactions.get(k));
+
+        return RLP.encodeList(rlpTransactions);
     }
 
     public static Transaction decode(byte[] encoded) {
