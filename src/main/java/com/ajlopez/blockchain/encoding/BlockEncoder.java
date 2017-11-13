@@ -24,13 +24,6 @@ public class BlockEncoder {
 
         BlockHeader header = BlockHeaderEncoder.decode(bytes[0]);
 
-        byte[][] encodedtxs = RLP.decodeList(bytes[1]);
-
-        List<Transaction> txs = new ArrayList<>();
-
-        for (int k = 0; k < encodedtxs.length; k++)
-            txs.add(TransactionEncoder.decode(encodedtxs[k]));
-
-        return new Block(header, txs);
+        return new Block(header, TransactionEncoder.decodeList(bytes[1]));
     }
 }

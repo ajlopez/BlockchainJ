@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Address;
 import com.ajlopez.blockchain.core.Transaction;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,5 +37,16 @@ public class TransactionEncoder {
         BigInteger value = new BigInteger(1, RLP.decode(bytes[2]));
 
         return new Transaction(sender, receiver, value);
+    }
+
+    public static List<Transaction> decodeList(byte[] encoded) {
+        byte[][] encodedtxs = RLP.decodeList(encoded);
+
+        List<Transaction> txs = new ArrayList<>();
+
+        for (int k = 0; k < encodedtxs.length; k++)
+            txs.add(TransactionEncoder.decode(encodedtxs[k]));
+
+        return txs;
     }
 }
