@@ -12,7 +12,8 @@ public class BlockHeaderEncoderTest {
     @Test
     public void encodeDecodeBlockHeader() {
         Hash hash = new Hash();
-        BlockHeader header = new BlockHeader(42, hash);
+        Hash transactionsHash = new Hash();
+        BlockHeader header = new BlockHeader(42, hash, transactionsHash);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -24,5 +25,6 @@ public class BlockHeaderEncoderTest {
         Assert.assertEquals(42, result.getNumber());
         Assert.assertEquals(hash, result.getParentHash());
         Assert.assertEquals(header.getHash(), result.getHash());
+        Assert.assertEquals(header.getTransactionsHash(), result.getTransactionsHash());
     }
 }

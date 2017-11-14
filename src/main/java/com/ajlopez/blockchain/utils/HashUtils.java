@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.utils;
 
+import com.ajlopez.blockchain.core.Hash;
 import com.ajlopez.blockchain.crypto.SpongyCastleProvider;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
@@ -21,5 +22,17 @@ public class HashUtils {
         digest = MessageDigest.getInstance("KECCAK-256", BouncyCastleProvider.PROVIDER_NAME);
         digest.update(input);
         return digest.digest();
+    }
+
+    public static Hash calculateHash(byte[] data) {
+        try {
+            return new Hash(sha3(data));
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

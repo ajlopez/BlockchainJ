@@ -12,17 +12,20 @@ public class BlockHeaderTest {
     @Test
     public void createWithNumberAndParentHash() {
         Hash hash = generateHash();
-        BlockHeader header = new BlockHeader(1L, hash);
+        Hash transactionsHash = generateHash();
+        BlockHeader header = new BlockHeader(1L, hash, transactionsHash);
 
         Assert.assertEquals(1L, header.getNumber());
         Assert.assertEquals(hash, header.getParentHash());
+        Assert.assertEquals(transactionsHash, header.getTransactionsHash());
         Assert.assertNotNull(header.getHash());
     }
 
     @Test
     public void twoDifferentHeadersHaveDifferentHashes() {
-        BlockHeader header1 = new BlockHeader(1L, generateHash());
-        BlockHeader header2 = new BlockHeader(2L, generateHash());
+        BlockHeader header1 =
+                new BlockHeader(1L, generateHash(), generateHash());
+        BlockHeader header2 = new BlockHeader(2L, generateHash(), generateHash());
 
         Assert.assertNotEquals(header1.getHash(), header2.getHash());
     }

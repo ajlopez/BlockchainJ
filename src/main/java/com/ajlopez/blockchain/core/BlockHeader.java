@@ -1,10 +1,12 @@
 package com.ajlopez.blockchain.core;
 
 import com.ajlopez.blockchain.encoding.BlockHeaderEncoder;
+import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.utils.HashUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.List;
 
 /**
  * Created by ajlopez on 12/08/2017.
@@ -15,10 +17,12 @@ public class BlockHeader {
     private long number;
     private Hash parentHash;
     private Hash hash;
+    private Hash transactionsHash;
 
-    public BlockHeader(long number, Hash parentHash) {
+    public BlockHeader(long number, Hash parentHash, Hash transactionsHash) {
         this.number = number;
         this.parentHash = parentHash == null ? emptyHash : parentHash;
+        this.transactionsHash = transactionsHash;
     }
 
     public long getNumber() {
@@ -36,15 +40,9 @@ public class BlockHeader {
         return this.parentHash;
     }
 
-    private Hash calculateHash() {
-        try {
-            return new Hash(HashUtils.sha3(BlockHeaderEncoder.encode(this)));
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+    public Hash getTransactionsHash() { return this.transactionsHash; }
 
-        return null;
+    private Hash calculateHash() {
+        return HashUtils.calculateHash(BlockHeaderEncoder.encode(this));
     }
 }

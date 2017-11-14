@@ -41,7 +41,7 @@ public class BlockEncoderTest {
         txs.add(tx);
 
         Hash parentHash = new Hash();
-        Block block = new Block(new BlockHeader(42, parentHash), txs);
+        Block block = new Block(42, parentHash, txs);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -74,7 +74,7 @@ public class BlockEncoderTest {
         txs.add(tx2);
 
         Hash parentHash = new Hash();
-        Block block = new Block(new BlockHeader(42, parentHash), txs);
+        Block block = new Block(42, parentHash, txs);
 
         byte[] encoded = BlockEncoder.encode(block);
 
