@@ -24,4 +24,9 @@ public class AccountState {
 
         this.balance = newbalance;
     }
+
+    public void subtractFromBalance(BigInteger amount) {
+        BigInteger newbalance = this.balance.subtract(amount);
+        this.balance = newbalance;
+    }
 }
