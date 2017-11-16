@@ -39,4 +39,11 @@ public class AccountStateTest {
 
         accstate.addToBalance(BigInteger.TEN.negate());
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void subtractAmountFromZeroBalance() {
+        AccountState accstate = new AccountState();
+
+        accstate.subtractFromBalance(BigInteger.TEN);
+    }
 }

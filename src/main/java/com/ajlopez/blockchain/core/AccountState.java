@@ -27,6 +27,10 @@ public class AccountState {
 
     public void subtractFromBalance(BigInteger amount) {
         BigInteger newbalance = this.balance.subtract(amount);
+
+        if (newbalance.compareTo(BigInteger.ZERO) < 0)
+            throw new IllegalStateException("Invalid balance");
+
         this.balance = newbalance;
     }
 }
