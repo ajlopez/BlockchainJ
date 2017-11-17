@@ -21,10 +21,6 @@ public class Block {
         this(new BlockHeader(number, parentHash, HashUtils.calculateHash(TransactionEncoder.encode(txs))), txs);
     }
 
-    public Block(BlockHeader header) {
-        this(header, null);
-    }
-
     public Block(BlockHeader header, List<Transaction> transactions)
     {
         this.header = header;
