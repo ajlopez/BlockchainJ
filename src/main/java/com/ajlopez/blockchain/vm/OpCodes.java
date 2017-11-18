@@ -4,6 +4,8 @@ package com.ajlopez.blockchain.vm;
  * Created by ajlopez on 12/08/2017.
  */
 public class OpCodes {
+    private OpCodes() { }
+    
     public static final byte OP_PUSH = 1;
     public static final byte OP_POP = 2;
     public static final byte OP_ADD = 3;
