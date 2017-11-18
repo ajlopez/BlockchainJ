@@ -17,6 +17,8 @@ public class HashUtils {
         Security.addProvider(SpongyCastleProvider.getInstance());
     }
 
+    private HashUtils() { }
+
     public static byte[] sha3(byte[] input) throws NoSuchProviderException, NoSuchAlgorithmException {
         MessageDigest digest;
         digest = MessageDigest.getInstance("KECCAK-256", BouncyCastleProvider.PROVIDER_NAME);
