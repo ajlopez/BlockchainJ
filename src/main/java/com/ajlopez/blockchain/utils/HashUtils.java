@@ -29,9 +29,7 @@ public class HashUtils {
     public static Hash calculateHash(byte[] data) {
         try {
             return new Hash(sha3(data));
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
