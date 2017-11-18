@@ -4,6 +4,8 @@ package com.ajlopez.blockchain.utils;
  * Created by ajlopez on 23/09/2017.
  */
 public class ByteUtils {
+    private ByteUtils() { }
+
     public static byte[] longToBytes(long value) {
         byte[] result = new byte[Long.BYTES];
 
