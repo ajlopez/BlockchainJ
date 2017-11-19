@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.AccountState;
-import com.ajlopez.blockchain.core.Address;
 
 import java.math.BigInteger;
 
