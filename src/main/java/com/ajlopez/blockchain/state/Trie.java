@@ -6,6 +6,8 @@ import java.util.Arrays;
  * Created by ajlopez on 12/08/2017.
  */
 public class Trie {
+    private static final int ARITY = 16;
+
     private static Trie empty = new Trie();
     private byte[] value;
     private Trie[] nodes;
@@ -107,9 +109,9 @@ public class Trie {
 
     private static Trie[] copyNodes(Trie[] nodes, boolean create) {
         if (nodes == null)
-            return create ? new Trie[16] : null;
+            return create ? new Trie[ARITY] : null;
 
-        return Arrays.copyOf(nodes, 16);
+        return Arrays.copyOf(nodes, ARITY);
     }
 
     private static int getOffset(byte[] key, int position) {
