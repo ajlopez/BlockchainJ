@@ -16,6 +16,14 @@ public class TrieTest {
     }
 
     @Test
+    public void getUnknownValueWithEmptyKeyAsNull() {
+        Trie trie = Trie.getEmptyTrie();
+
+        Assert.assertNull(trie.get(new byte[0]));
+        Assert.assertEquals(1, trie.nodesSize());
+    }
+
+    @Test
     public void putAndGetKeyValue() {
         byte[] key = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value = new byte[] { 0x01, 0x02, 0x03 };
@@ -29,13 +37,25 @@ public class TrieTest {
     }
 
     @Test
+    public void putAndGetKeyNullValue() {
+        byte[] key = new byte[0];
+        byte[] value = new byte[] { 0x01, 0x02, 0x03 };
+
+        Trie trie = Trie.getEmptyTrie();
+        trie = trie.put(key, value);
+
+        Assert.assertNotNull(trie);
+        Assert.assertArrayEquals(value, trie.get(key));
+        Assert.assertEquals(1, trie.nodesSize());
+    }
+
+    @Test
     public void putRemoveAndGetKeyValue() {
         byte[] key = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value = new byte[] { 0x01, 0x02, 0x03 };
 
         Trie trie = Trie.getEmptyTrie();
         trie = trie.put(key, value).delete(key);
-
         Assert.assertNotNull(trie);
         Assert.assertNull(trie.get(key));
         Assert.assertEquals(1, trie.nodesSize());
