@@ -37,6 +37,41 @@ public class TrieTest {
     }
 
     @Test
+    public void putAndGetValueUsingKeyWithLeftZeroBytes() {
+        byte[] key = new byte[] { 0x00, 0x00, (byte)0xab, (byte)0xcd };
+        byte[] key1 = new byte[] { 0x00, (byte)0xab, (byte)0xcd };
+        byte[] key2 = new byte[] { (byte)0xab, (byte)0xcd };
+        byte[] value = new byte[] { 0x01, 0x02, 0x03 };
+
+        Trie trie = Trie.getEmptyTrie();
+        trie = trie.put(key, value);
+
+        Assert.assertNotNull(trie);
+        Assert.assertArrayEquals(value, trie.get(key));
+        Assert.assertArrayEquals(value, trie.get(key1));
+        Assert.assertArrayEquals(value, trie.get(key2));
+        Assert.assertEquals(5, trie.nodesSize());
+    }
+
+
+    @Test
+    public void putAndGetValueUsingKeyWithLeftZeroNibbles() {
+        byte[] key = new byte[] { 0x00, 0x00, 0x0f, (byte)0xab, (byte)0xcd };
+        byte[] key1 = new byte[] { 0x00, 0x0f, (byte)0xab, (byte)0xcd };
+        byte[] key2 = new byte[] { 0x0f, (byte)0xab, (byte)0xcd };
+        byte[] value = new byte[] { 0x01, 0x02, 0x03 };
+
+        Trie trie = Trie.getEmptyTrie();
+        trie = trie.put(key, value);
+
+        Assert.assertNotNull(trie);
+        Assert.assertArrayEquals(value, trie.get(key));
+        Assert.assertArrayEquals(value, trie.get(key1));
+        Assert.assertArrayEquals(value, trie.get(key2));
+        Assert.assertEquals(6, trie.nodesSize());
+    }
+
+    @Test
     public void putAndGetKeyNullValue() {
         byte[] key = new byte[0];
         byte[] value = new byte[] { 0x01, 0x02, 0x03 };
