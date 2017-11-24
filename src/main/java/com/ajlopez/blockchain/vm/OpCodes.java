@@ -15,4 +15,5 @@ public class OpCodes {
     public static final byte OP_DUP = 7;
     public static final byte OP_SWAP = 8;
     public static final byte OP_EQUAL = 9;
+    public static final byte OP_SSTORE = 10;
 }

@@ -11,11 +11,14 @@ import static com.ajlopez.blockchain.vm.OpCodes.*;
  */
 public class VirtualMachine {
     private Stack<byte[]> stack;
+    private Storage storage;
+
     private int pc;
     private byte[] opcodes;
 
-    public VirtualMachine(Stack<byte[]> stack) {
+    public VirtualMachine(Stack<byte[]> stack, Storage storage) {
         this.stack = stack;
+        this.storage = storage;
     }
 
     public void execute(byte[] opcodes) {
@@ -90,6 +93,10 @@ public class VirtualMachine {
                     this.stack.push(new byte[] { 0x00 });
 
                 break;
+            case OP_SSTORE:
+                bvalue1 = this.stack.pop();
+                bvalue2 = this.stack.pop();
+                storage.setValue(bvalue1, bvalue2);
         }
 
         this.pc++;
