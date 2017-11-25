@@ -97,6 +97,13 @@ public class VirtualMachine {
                 bvalue1 = this.stack.pop();
                 bvalue2 = this.stack.pop();
                 storage.setValue(bvalue1, bvalue2);
+
+                break;
+            case OP_SLOAD:
+                bvalue1 = this.stack.pop();
+                stack.push(storage.getValue(bvalue1));
+
+                break;
         }
 
         this.pc++;
