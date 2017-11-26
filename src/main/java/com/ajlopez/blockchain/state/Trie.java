@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.state;
 
+import com.ajlopez.blockchain.utils.ByteUtils;
+
 import java.util.Arrays;
 
 /**
@@ -33,7 +35,7 @@ public class Trie {
     }
 
     public byte[] get(byte[] key) {
-        return this.get(key, getInitialPosition(key));
+        return this.get(key, ByteUtils.getInitialPosition(key));
     }
 
     private byte[] get(byte[] key, int position) {
@@ -52,7 +54,7 @@ public class Trie {
     }
 
     public Trie put(byte[] key, byte[] value) {
-        Trie trie = this.put(key, getInitialPosition(key), value);
+        Trie trie = this.put(key, ByteUtils.getInitialPosition(key), value);
 
         if (trie == null)
             return empty;
@@ -119,20 +121,5 @@ public class Trie {
             return (key[position / 2] >> 4) & 0x0f;
 
         return key[position / 2] & 0x0f;
-    }
-
-    private static int getInitialPosition(byte[] key) {
-        int l = key.length;
-        int k = 0;
-
-        for (; k < l && key[k] == 0; k++)
-            ;
-
-        if (k < l && (key[k] & 0xf0) == 0)
-            k = k * 2 + 1;
-        else
-            k = k * 2;
-
-        return k;
     }
 }

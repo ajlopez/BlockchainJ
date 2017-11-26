@@ -27,4 +27,19 @@ public class ByteUtils {
 
         return result;
     }
+
+    public static int getInitialPosition(byte[] bytes) {
+        int l = bytes.length;
+        int k = 0;
+
+        for (; k < l && bytes[k] == 0; k++)
+            ;
+
+        if (k < l && (bytes[k] & 0xf0) == 0)
+            k = k * 2 + 1;
+        else
+            k = k * 2;
+
+        return k;
+    }
 }
