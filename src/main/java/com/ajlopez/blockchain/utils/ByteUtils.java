@@ -42,4 +42,14 @@ public class ByteUtils {
 
         return k;
     }
+
+    public static int getInitialOffset(byte[] bytes) {
+        int l = bytes.length;
+        int k = 0;
+
+        for (; k < l && bytes[k] == 0; k++)
+            ;
+
+        return k;
+    }
 }
