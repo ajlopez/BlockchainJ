@@ -17,4 +17,6 @@ public class OpCodes {
     public static final byte OP_EQUAL = 9;
     public static final byte OP_SSTORE = 10;
     public static final byte OP_SLOAD = 11;
+    public static final byte OP_MSTORE = 12;
+    public static final byte OP_MLOAD = 13;
 }

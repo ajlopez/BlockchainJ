@@ -216,4 +216,15 @@ public class VirtualMachineTest {
         Assert.assertEquals(1, stack.size());
         Assert.assertArrayEquals(new byte[] { 0x03, 0x04, 0x05 }, stack.pop());
     }
+
+    @Test
+    public void executeStoreValueToMemory() {
+        Stack<byte[]> stack = new Stack<>();
+        VirtualMachine vm = new VirtualMachine(stack, null);
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_MSTORE});
+
+        Assert.assertTrue(stack.isEmpty());
+        Assert.assertArrayEquals(new byte[] { 0x01 }, vm.getMemory().getValue(new byte[] { 0x02 }));
+    }
 }
