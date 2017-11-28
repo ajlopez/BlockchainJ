@@ -227,4 +227,18 @@ public class VirtualMachineTest {
         Assert.assertTrue(stack.isEmpty());
         Assert.assertArrayEquals(new byte[] { 0x01 }, vm.getMemory().getValue(new byte[] { 0x02 }));
     }
+
+    @Test
+    public void executeLoadValueFromMemory() {
+        Stack<byte[]> stack = new Stack<>();
+        Storage storage = new Storage();
+        VirtualMachine vm = new VirtualMachine(stack, storage);
+        vm.getMemory().setValue(new byte[] { 0x01, 0x02 }, new byte[] { 0x03, 0x04, 0x05 });
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x02, 0x01, 0x02, OpCodes.OP_MLOAD});
+
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertArrayEquals(new byte[] { 0x03, 0x04, 0x05 }, stack.pop());
+    }
 }

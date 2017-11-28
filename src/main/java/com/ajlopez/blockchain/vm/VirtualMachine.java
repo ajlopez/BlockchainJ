@@ -99,21 +99,30 @@ public class VirtualMachine {
                     this.stack.push(new byte[] { 0x00 });
 
                 break;
+
             case OP_SSTORE:
                 bvalue1 = this.stack.pop();
                 bvalue2 = this.stack.pop();
                 this.storage.setValue(bvalue1, bvalue2);
 
                 break;
+
             case OP_SLOAD:
                 bvalue1 = this.stack.pop();
                 this.stack.push(this.storage.getValue(bvalue1));
 
                 break;
+
             case OP_MSTORE:
                 bvalue1 = this.stack.pop();
                 bvalue2 = this.stack.pop();
                 this.memory.setValue(bvalue1, bvalue2);
+
+                break;
+
+            case OP_MLOAD:
+                bvalue1 = this.stack.pop();
+                this.stack.push(this.memory.getValue(bvalue1));
 
                 break;
         }
