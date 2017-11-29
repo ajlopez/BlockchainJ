@@ -17,10 +17,14 @@ public class VirtualMachine {
     private int pc;
     private byte[] opcodes;
 
-    public VirtualMachine(Stack<byte[]> stack, Storage storage) {
-        this.stack = stack;
+    public VirtualMachine(Storage storage) {
         this.storage = storage;
+        this.stack = new Stack();
         this.memory = new Memory();
+    }
+
+    public Stack<byte[]> getStack() {
+        return this.stack;
     }
 
     public Memory getMemory() {

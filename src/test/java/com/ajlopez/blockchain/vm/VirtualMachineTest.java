@@ -11,20 +11,22 @@ import java.util.Stack;
 public class VirtualMachineTest {
     @Test
     public void executeEmptyOpCodes() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[0]);
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertTrue(stack.isEmpty());
     }
 
     @Test
     public void executePushThreeBytes() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x03, 0x01, 0x02, 0x03 });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
@@ -33,32 +35,36 @@ public class VirtualMachineTest {
 
     @Test
     public void executePushAndPop() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x03, 0x01, 0x02, 0x03, OpCodes.OP_POP });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertTrue(stack.isEmpty());
     }
 
     @Test
     public void executeAddTwoBytes() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_ADD });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
         Assert.assertArrayEquals(new byte[] { 0x03 }, stack.get(0));
     }
 
+
     @Test
     public void executeAddTwoBytesWithOverflow() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, (byte)0xff, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_ADD });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
@@ -67,10 +73,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMultiplyTwoBytes() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, (byte)0xff, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_MULTIPLY });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
@@ -79,10 +86,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeDivideTwoBytes() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x54, OpCodes.OP_DIVIDE });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
@@ -91,10 +99,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSubtractTwoBytes() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_SUBTRACT });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
@@ -103,10 +112,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSubtractTwoBytesWithUnsignedIntegers() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x02, 0x01, 0x00, OpCodes.OP_SUBTRACT });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
@@ -115,10 +125,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeDupTopOfStack() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_DUP, 0x00 });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(2, stack.size());
@@ -128,10 +139,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeDupSecondElementOfStack() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_DUP, 0x01 });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(3, stack.size());
@@ -142,10 +154,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSwapOfStack() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_SWAP, 0x01 });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(2, stack.size());
@@ -155,10 +168,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSwapOfThirdElementOfStack() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x03, OpCodes.OP_SWAP, 0x02 });
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(3, stack.size());
@@ -169,10 +183,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeEqualTwoElementsOfStack() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_EQUAL});
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
@@ -181,10 +196,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeEqualTwoDifferentElementsOfStack() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_EQUAL});
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
@@ -193,11 +209,12 @@ public class VirtualMachineTest {
 
     @Test
     public void executeStoreValueToStorage() {
-        Stack<byte[]> stack = new Stack<>();
         Storage storage = new Storage();
-        VirtualMachine vm = new VirtualMachine(stack, storage);
+        VirtualMachine vm = new VirtualMachine(storage);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_SSTORE});
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertTrue(stack.isEmpty());
         Assert.assertArrayEquals(new byte[] { 0x01 }, storage.getValue(new byte[] { 0x02 }));
@@ -205,12 +222,13 @@ public class VirtualMachineTest {
 
     @Test
     public void executeLoadValueFromStorage() {
-        Stack<byte[]> stack = new Stack<>();
         Storage storage = new Storage();
         storage.setValue(new byte[] { 0x01, 0x02 }, new byte[] { 0x03, 0x04, 0x05 });
-        VirtualMachine vm = new VirtualMachine(stack, storage);
+        VirtualMachine vm = new VirtualMachine(storage);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x02, 0x01, 0x02, OpCodes.OP_SLOAD});
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
@@ -219,10 +237,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeStoreValueToMemory() {
-        Stack<byte[]> stack = new Stack<>();
-        VirtualMachine vm = new VirtualMachine(stack, null);
+        VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_MSTORE});
+
+        Stack stack = vm.getStack();
 
         Assert.assertTrue(stack.isEmpty());
         Assert.assertArrayEquals(new byte[] { 0x01 }, vm.getMemory().getValue(new byte[] { 0x02 }));
@@ -230,12 +249,13 @@ public class VirtualMachineTest {
 
     @Test
     public void executeLoadValueFromMemory() {
-        Stack<byte[]> stack = new Stack<>();
         Storage storage = new Storage();
-        VirtualMachine vm = new VirtualMachine(stack, storage);
+        VirtualMachine vm = new VirtualMachine(storage);
         vm.getMemory().setValue(new byte[] { 0x01, 0x02 }, new byte[] { 0x03, 0x04, 0x05 });
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x02, 0x01, 0x02, OpCodes.OP_MLOAD});
+
+        Stack<byte[]> stack = vm.getStack();
 
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
