@@ -57,7 +57,6 @@ public class VirtualMachineTest {
         Assert.assertArrayEquals(new byte[] { 0x03 }, stack.get(0));
     }
 
-
     @Test
     public void executeAddTwoBytesWithOverflow() {
         VirtualMachine vm = new VirtualMachine(null);
@@ -121,6 +120,18 @@ public class VirtualMachineTest {
         Assert.assertFalse(stack.isEmpty());
         Assert.assertEquals(1, stack.size());
         Assert.assertArrayEquals(new byte[] { 0x00, (byte)0xff }, stack.get(0));
+    }
+    @Test
+    public void executeModTwoBytes() {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x03, OpCodes.OP_PUSH, 0x01, 0x08, OpCodes.OP_MOD });
+
+        Stack<byte[]> stack = vm.getStack();
+
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertArrayEquals(new byte[] { 0x02 }, stack.get(0));
     }
 
     @Test

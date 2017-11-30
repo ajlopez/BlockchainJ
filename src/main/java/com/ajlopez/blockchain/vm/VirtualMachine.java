@@ -80,6 +80,12 @@ public class VirtualMachine {
                 this.stack.push(value1.divide(value2).toByteArray());
                 break;
 
+            case OP_MOD:
+                value1 = new BigInteger(1, this.stack.pop());
+                value2 = new BigInteger(1, this.stack.pop());
+                this.stack.push(value1.mod(value2).toByteArray());
+                break;
+
             case OP_DUP:
                 int offset = this.opcodes[++pc];
                 this.stack.push(this.stack.get(this.stack.size() - 1 - offset));
