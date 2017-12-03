@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.vm;
 
+import com.ajlopez.blockchain.utils.ByteUtils;
+
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Stack;
@@ -124,19 +126,31 @@ public class VirtualMachine {
                 break;
 
             case OP_MSTORE:
-                bvalue1 = this.stack.pop();
-                bvalue2 = this.stack.pop();
-                this.memory.setValue(bvalue1, bvalue2);
+                offset = this.popInteger();
+                byte bvalue = this.popByte();
+                this.memory.setValue(offset, bvalue);
 
                 break;
 
             case OP_MLOAD:
-                bvalue1 = this.stack.pop();
-                this.stack.push(this.memory.getValue(bvalue1));
+                offset = this.popInteger();
+                this.stack.push(new byte[] { this.memory.getValue(offset) });
 
                 break;
         }
 
         this.pc++;
+    }
+
+    private int popInteger() {
+        byte[] bytes = this.stack.pop();
+
+        return ByteUtils.bytesToInteger(bytes);
+    }
+
+    private byte popByte() {
+        byte[] bytes = this.stack.pop();
+
+        return bytes[bytes.length - 1];
     }
 }

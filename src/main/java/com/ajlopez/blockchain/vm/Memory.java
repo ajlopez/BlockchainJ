@@ -10,23 +10,20 @@ import java.util.Map;
  * Created by ajlopez on 26/11/2017.
  */
 public class Memory {
-    private Map<ByteArrayWrapper, byte[]> values = new HashMap<>();
+    private byte[] bytes;
 
-    public byte[] getValue(byte[] key) {
-        return values.get(toKey(key));
+    public byte getValue(int offset) {
+        if (this.bytes == null)
+            return 0;
+
+        return bytes[offset];
     }
 
-    public void setValue(byte[] key, byte[] value) {
-        values.put(toKey(key), value);
-    }
+    public void setValue(int offset, byte value)
+    {
+        if (this.bytes == null)
+            this.bytes = new byte[1024];
 
-    private static ByteArrayWrapper toKey(byte[] key) {
-        int offset = ByteUtils.getInitialOffset(key);
-        int length = key.length - offset;
-
-        if (offset == 0)
-            return new ByteArrayWrapper(key);
-
-        return new ByteArrayWrapper(key, offset, length);
+        this.bytes[offset] = value;
     }
 }

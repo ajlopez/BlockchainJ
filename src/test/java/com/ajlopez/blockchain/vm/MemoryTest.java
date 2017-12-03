@@ -8,35 +8,23 @@ import org.junit.Test;
  */
 public class MemoryTest {
     @Test
-    public void getNullForUndefinedValue() {
+    public void getZeroUndefinedValue() {
         Memory memory = new Memory();
 
-        Assert.assertNull(memory.getValue(new byte[] { 0x01, 0x02, 0x03 }));
+        Assert.assertEquals(0, memory.getValue(0));
+        Assert.assertEquals(0, memory.getValue(10));
+        Assert.assertEquals(0, memory.getValue(100));
+        Assert.assertEquals(0, memory.getValue(1_000_000));
     }
 
     @Test
     public void setAndGetValue() {
-        byte[] key = new byte[] { 0x01, 0x02, 0x03 };
-        byte[] value = new byte[] { 0x04, 0x05, 0x06 };
         Memory memory = new Memory();
 
-        memory.setValue(key, value);
+        memory.setValue(10, (byte)42);
 
-        Assert.assertArrayEquals(value, memory.getValue(key));
-    }
-
-    @Test
-    public void setAndGetValueWithLeadingZeroesInKey() {
-        byte[] key = new byte[] { 0x00, 0x00, 0x01, 0x02, 0x03 };
-        byte[] key2 = new byte[] { 0x00, 0x01, 0x02, 0x03 };
-        byte[] key3 = new byte[] { 0x01, 0x02, 0x03 };
-        byte[] value = new byte[] { 0x04, 0x05, 0x06 };
-        Memory memory = new Memory();
-
-        memory.setValue(key, value);
-
-        Assert.assertArrayEquals(value, memory.getValue(key));
-        Assert.assertArrayEquals(value, memory.getValue(key2));
-        Assert.assertArrayEquals(value, memory.getValue(key3));
+        Assert.assertEquals(0, memory.getValue(0));
+        Assert.assertEquals(42, memory.getValue(10));
+        Assert.assertEquals(0, memory.getValue(100));
     }
 }

@@ -20,7 +20,18 @@ public class ByteUtils {
     public static long bytesToLong(byte[] bytes) {
         long result = 0;
 
-        for (int k = 0; k < bytes.length; k++) {
+        for (int k = 0; k < bytes.length && k < Long.BYTES; k++) {
+            result <<= 8;
+            result |= bytes[k] & 0xff;
+        }
+
+        return result;
+    }
+
+    public static int bytesToInteger(byte[] bytes) {
+        int result = 0;
+
+        for (int k = 0; k < bytes.length && k < Integer.BYTES; k++) {
             result <<= 8;
             result |= bytes[k] & 0xff;
         }
