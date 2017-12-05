@@ -26,4 +26,11 @@ public class Memory {
 
         this.bytes[offset] = value;
     }
+
+    public void setValues(int offset, byte[] values) {
+        if (this.bytes == null)
+            this.bytes = new byte[1024];
+
+        System.arraycopy(values, 0, this.bytes, offset, values.length);
+    }
 }

@@ -27,4 +27,17 @@ public class MemoryTest {
         Assert.assertEquals(42, memory.getValue(10));
         Assert.assertEquals(0, memory.getValue(100));
     }
+
+    @Test
+    public void setAndGetValues() {
+        Memory memory = new Memory();
+
+        memory.setValues(10, new byte[] { 0x01, 0x02, 0x03 });
+
+        Assert.assertEquals(0, memory.getValue(0));
+        Assert.assertEquals(1, memory.getValue(10));
+        Assert.assertEquals(2, memory.getValue(11));
+        Assert.assertEquals(3, memory.getValue(12));
+        Assert.assertEquals(0, memory.getValue(100));
+    }
 }
