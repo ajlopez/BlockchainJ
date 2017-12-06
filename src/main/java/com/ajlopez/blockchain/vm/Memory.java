@@ -16,7 +16,18 @@ public class Memory {
         if (this.bytes == null)
             return 0;
 
-        return bytes[offset];
+        return this.bytes[offset];
+    }
+
+    public byte[] getValues(int offset, int length) {
+        byte[] values = new byte[length];
+
+        if (this.bytes == null)
+            return values;
+
+        System.arraycopy(this.bytes, offset, values, 0, length);
+
+        return values;
     }
 
     public void setValue(int offset, byte value)

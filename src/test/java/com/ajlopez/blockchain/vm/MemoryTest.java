@@ -39,5 +39,7 @@ public class MemoryTest {
         Assert.assertEquals(2, memory.getValue(11));
         Assert.assertEquals(3, memory.getValue(12));
         Assert.assertEquals(0, memory.getValue(100));
+
+        Assert.assertArrayEquals(new byte[] { 0x00, 0x01, 0x02, 0x03, 0x00 }, memory.getValues(9, 5));
     }
 }
