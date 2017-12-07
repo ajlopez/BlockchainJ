@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class RLP {
     private static byte[] empty = new byte[0];
+    private static byte[] emptyEncoding = new byte[] { (byte)0x80 };
 
     private RLP() {
 
@@ -16,7 +17,7 @@ public class RLP {
 
     public static byte[] encode(byte[] bytes) {
         if (bytes == null || bytes.length == 0)
-            return new byte[] { (byte)0x80 };
+            return emptyEncoding;
 
         if (bytes.length == 1 && (bytes[0] & 0x80) == 0)
             return bytes;
@@ -33,6 +34,7 @@ public class RLP {
         encoded[0] = (byte) (183 + blength.length);
         System.arraycopy(blength, 0, encoded, 1, blength.length);
         System.arraycopy(bytes, 0, encoded, 1 + blength.length, bytes.length);
+
         return encoded;
     }
 
