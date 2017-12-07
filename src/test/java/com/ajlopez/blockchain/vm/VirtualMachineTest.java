@@ -264,7 +264,7 @@ public class VirtualMachineTest {
         VirtualMachine vm = new VirtualMachine(storage);
         vm.getMemory().setValue(0x0102, (byte)0x03);
 
-        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x02, 0x01, 0x02, OpCodes.OP_MLOAD});
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x02, 0x01, 0x02, OpCodes.OP_MLOAD });
 
         Stack<byte[]> stack = vm.getStack();
 

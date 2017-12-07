@@ -134,7 +134,8 @@ public class VirtualMachine {
 
             case OP_MLOAD:
                 offset = this.popInteger();
-                this.stack.push(new byte[] { this.memory.getValue(offset) });
+                int length = new BigInteger(1, this.stack.pop()).intValue();
+                this.stack.push(this.memory.getValues(offset, length));
 
                 break;
         }
