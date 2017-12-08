@@ -37,14 +37,6 @@ public class Transaction {
     }
 
     private Hash calculateHash() {
-        try {
-            return new Hash(HashUtils.sha3(TransactionEncoder.encode(this)));
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return HashUtils.calculateHash(TransactionEncoder.encode(this));
     }
 }
