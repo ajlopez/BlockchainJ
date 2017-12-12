@@ -15,11 +15,12 @@ public class TransactionTest {
         Address receiver = new Address();
         BigInteger value = BigInteger.ONE;
 
-        Transaction tx = new Transaction(sender, receiver, value);
+        Transaction tx = new Transaction(sender, receiver, value, 42);
 
         Assert.assertEquals(sender, tx.getSender());
         Assert.assertEquals(receiver, tx.getReceiver());
         Assert.assertEquals(value, tx.getValue());
+        Assert.assertEquals(42, tx.getNonce());
 
         Assert.assertNotNull(tx.getHash());
         Assert.assertNotEquals(Hash.emptyHash(), tx.getHash());

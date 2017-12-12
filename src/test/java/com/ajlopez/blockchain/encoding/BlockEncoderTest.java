@@ -35,7 +35,7 @@ public class BlockEncoderTest {
         Address receiver = new Address();
         BigInteger value = BigInteger.ONE;
 
-        Transaction tx = new Transaction(sender, receiver, value);
+        Transaction tx = new Transaction(sender, receiver, value, 0);
 
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx);
@@ -66,8 +66,8 @@ public class BlockEncoderTest {
         Address account1 = new Address();
         Address account2 = new Address();
 
-        Transaction tx1 = new Transaction(account1, account2, BigInteger.ONE);
-        Transaction tx2 = new Transaction(account2, account1, BigInteger.TEN);
+        Transaction tx1 = new Transaction(account1, account2, BigInteger.ONE, 0);
+        Transaction tx2 = new Transaction(account2, account1, BigInteger.TEN, 1);
 
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx1);
@@ -91,12 +91,14 @@ public class BlockEncoderTest {
         Assert.assertEquals(tx1.getSender(), result.getTransactions().get(0).getSender());
         Assert.assertEquals(tx1.getReceiver(), result.getTransactions().get(0).getReceiver());
         Assert.assertEquals(tx1.getValue(), result.getTransactions().get(0).getValue());
+        Assert.assertEquals(tx1.getNonce(), result.getTransactions().get(0).getNonce());
         Assert.assertNotEquals(Hash.emptyHash(), result.getTransactions().get(0).getHash());
         Assert.assertEquals(tx1.getHash(), result.getTransactions().get(0).getHash());
 
         Assert.assertEquals(tx2.getSender(), result.getTransactions().get(1).getSender());
         Assert.assertEquals(tx2.getReceiver(), result.getTransactions().get(1).getReceiver());
         Assert.assertEquals(tx2.getValue(), result.getTransactions().get(1).getValue());
+        Assert.assertEquals(tx2.getNonce(), result.getTransactions().get(1).getNonce());
         Assert.assertNotEquals(Hash.emptyHash(), result.getTransactions().get(1).getHash());
         Assert.assertEquals(tx2.getHash(), result.getTransactions().get(1).getHash());
     }

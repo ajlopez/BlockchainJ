@@ -18,7 +18,7 @@ public class TransactionEncoderTest {
         Address receiver = new Address();
         BigInteger value = BigInteger.ONE;
 
-        Transaction tx = new Transaction(sender, receiver, value);
+        Transaction tx = new Transaction(sender, receiver, value, 42);
 
         byte[] encoded = TransactionEncoder.encode(tx);
 
@@ -31,6 +31,7 @@ public class TransactionEncoderTest {
         Assert.assertEquals(tx.getSender(), result.getSender());
         Assert.assertEquals(tx.getReceiver(), result.getReceiver());
         Assert.assertEquals(tx.getValue(), result.getValue());
+        Assert.assertEquals(tx.getNonce(), result.getNonce());
         Assert.assertNotNull(result.getHash());
         Assert.assertNotEquals(Hash.emptyHash(), result.getHash());
         Assert.assertEquals(tx.getHash(), result.getHash());

@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.Address;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -17,8 +18,9 @@ public class TransactionEncoder {
         byte[] rlpSender = RLP.encode(transaction.getSender().getBytes());
         byte[] rlpReceiver = RLP.encode(transaction.getReceiver().getBytes());
         byte[] rlpValue = RLP.encode(transaction.getValue().toByteArray());
+        byte[] rlpNonce = RLP.encode(ByteUtils.longToBytes(transaction.getNonce()));
 
-        return RLP.encodeList(rlpSender, rlpReceiver, rlpValue);
+        return RLP.encodeList(rlpSender, rlpReceiver, rlpValue, rlpNonce);
     }
 
     public static byte[] encode(List<Transaction> transactions) {
@@ -35,8 +37,9 @@ public class TransactionEncoder {
         Address sender = new Address(RLP.decode(bytes[0]));
         Address receiver = new Address(RLP.decode(bytes[1]));
         BigInteger value = new BigInteger(1, RLP.decode(bytes[2]));
+        long nonce = ByteUtils.bytesToLong(RLP.decode(bytes[3]));
 
-        return new Transaction(sender, receiver, value);
+        return new Transaction(sender, receiver, value, nonce);
     }
 
     public static List<Transaction> decodeList(byte[] encoded) {

@@ -15,12 +15,14 @@ public class Transaction {
     private Address sender;
     private Address receiver;
     private BigInteger value;
+    private long nonce;
     private Hash hash;
 
-    public Transaction(Address sender, Address receiver, BigInteger value) {
+    public Transaction(Address sender, Address receiver, BigInteger value, long nonce) {
         this.sender = sender;
         this.receiver = receiver;
         this.value = value;
+        this.nonce = nonce;
     }
 
     public Address getSender() { return this.sender; }
@@ -28,6 +30,8 @@ public class Transaction {
     public Address getReceiver() { return this.receiver; }
 
     public BigInteger getValue() { return this.value; }
+
+    public long getNonce() { return this.nonce; }
 
     public Hash getHash() {
         if (this.hash == null)

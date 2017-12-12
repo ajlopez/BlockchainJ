@@ -55,8 +55,8 @@ public class BlockTest {
         Address sender = new Address();
         Address receiver = new Address();
 
-        Transaction tx1 = new Transaction(sender, receiver, BigInteger.ONE);
-        Transaction tx2 = new Transaction(sender, receiver, BigInteger.TEN);
+        Transaction tx1 = new Transaction(sender, receiver, BigInteger.ONE, 0);
+        Transaction tx2 = new Transaction(sender, receiver, BigInteger.TEN, 1);
 
         List<Transaction> txs1 = new ArrayList<>();
         List<Transaction> txs2 = new ArrayList<>();
@@ -78,7 +78,7 @@ public class BlockTest {
         Address receiver = new Address();
         BigInteger value = BigInteger.ONE;
 
-        Transaction tx = new Transaction(sender, receiver, value);
+        Transaction tx = new Transaction(sender, receiver, value, 0);
 
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx);
