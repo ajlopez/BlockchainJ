@@ -10,10 +10,11 @@ import java.math.BigInteger;
  */
 public class AccountStateTest {
     @Test
-    public void createWithZeroBalance() {
+    public void createWithZeroBalanceAndZeroNonce() {
         AccountState accstate = new AccountState();
 
         Assert.assertEquals(BigInteger.ZERO, accstate.getBalance());
+        Assert.assertEquals(0, accstate.getNonce());
     }
 
     @Test

@@ -7,6 +7,7 @@ import java.math.BigInteger;
  */
 public class AccountState {
     private BigInteger balance;
+    private long nonce;
 
     public AccountState() {
         this.balance = BigInteger.ZERO;
@@ -15,6 +16,8 @@ public class AccountState {
     public BigInteger getBalance() {
         return this.balance;
     }
+
+    public long getNonce() { return this.nonce; }
 
     public void addToBalance(BigInteger amount) {
         BigInteger newbalance = this.balance.add(amount);
