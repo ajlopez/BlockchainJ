@@ -26,6 +26,19 @@ public class AccountStateTest {
     }
 
     @Test
+    public void incrementNonce() {
+        AccountState accstate = new AccountState();
+
+        Assert.assertEquals(0, accstate.getNonce());
+        accstate.incrementNonce();
+        Assert.assertEquals(1, accstate.getNonce());
+        accstate.incrementNonce();
+        Assert.assertEquals(2, accstate.getNonce());
+        accstate.incrementNonce();
+        Assert.assertEquals(3, accstate.getNonce());
+    }
+
+    @Test
     public void addToAndSubtractFromBalance() {
         AccountState accstate = new AccountState();
 

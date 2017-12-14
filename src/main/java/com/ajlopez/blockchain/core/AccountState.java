@@ -19,6 +19,10 @@ public class AccountState {
 
     public long getNonce() { return this.nonce; }
 
+    public void incrementNonce() {
+        this.nonce++;
+    }
+
     public void addToBalance(BigInteger amount) {
         BigInteger newbalance = this.balance.add(amount);
 
