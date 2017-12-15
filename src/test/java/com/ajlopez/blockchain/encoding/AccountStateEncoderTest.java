@@ -11,7 +11,7 @@ import java.math.BigInteger;
  */
 public class AccountStateEncoderTest {
     @Test
-    public void encodeDecodeAccountStateWithZeroBalance() {
+    public void encodeDecodeAccountStateWithZeroBalanceAndZeroNonce() {
         AccountState state = new AccountState();
 
         byte[] encoded = AccountStateEncoder.encode(state);
@@ -22,6 +22,7 @@ public class AccountStateEncoderTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(0, result.getNonce());
     }
 
     @Test
@@ -38,5 +39,21 @@ public class AccountStateEncoderTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.TEN, result.getBalance());
+        Assert.assertEquals(0, result.getNonce());
+    }
+
+    @Test
+    public void encodeDecodeAccountStateWithNonZeroNonce() {
+        AccountState state = new AccountState(BigInteger.ZERO, 42);
+
+        byte[] encoded = AccountStateEncoder.encode(state);
+
+        Assert.assertNotNull(encoded);
+
+        AccountState result = AccountStateEncoder.decode(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(42, result.getNonce());
     }
 }

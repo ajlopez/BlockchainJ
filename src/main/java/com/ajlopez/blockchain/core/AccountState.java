@@ -13,6 +13,11 @@ public class AccountState {
         this.balance = BigInteger.ZERO;
     }
 
+    public AccountState(BigInteger balance, long nonce) {
+        this.balance = balance;
+        this.nonce = nonce;
+    }
+
     public BigInteger getBalance() {
         return this.balance;
     }
