@@ -12,11 +12,6 @@ public class ByteArrayWrapper {
         this.bytes = bytes;
     }
 
-    public ByteArrayWrapper(byte[] bytes, int offset, int length) {
-        this.bytes = new byte[length];
-        System.arraycopy(bytes, offset, this.bytes, 0, length);
-    }
-
     public byte[] getBytes() {
         return this.bytes;
     }
