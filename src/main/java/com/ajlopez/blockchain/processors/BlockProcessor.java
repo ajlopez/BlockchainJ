@@ -13,10 +13,6 @@ public class BlockProcessor {
     private OrphanBlocks orphanBlocks = new OrphanBlocks();
     private BlockChain blockChain = new BlockChain();
 
-    public BlockChain getBlockChain() {
-        return this.blockChain;
-    }
-
     public void processBlock(Block block) {
         if (this.orphanBlocks.isKnownOrphan(block))
             return;
@@ -25,6 +21,10 @@ public class BlockProcessor {
             connectDescendants(block);
         else
             orphanBlocks.addToOrphans(block);
+    }
+
+    public Block getBestBlock() {
+        return this.blockChain.getBestBlock();
     }
 
     private void connectDescendants(Block block) {
