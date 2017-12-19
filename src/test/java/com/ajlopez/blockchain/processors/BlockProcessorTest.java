@@ -9,8 +9,28 @@ import org.junit.Test;
  */
 public class BlockProcessorTest {
     @Test
+    public void noBestBlock() {
+        BlockProcessor processor = new BlockProcessor();
+
+        Assert.assertNull(processor.getBestBlock());
+    }
+
+    @Test
+    public void addFirstBlock() {
+        BlockProcessor processor = new BlockProcessor();
+
+        Block block = new Block(0, null);
+
+        processor.processBlock(block);
+
+        Assert.assertNotNull(processor.getBestBlock());
+        Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
+    }
+
+    @Test
     public void switchToABetterForkUsingOrphan() {
         BlockProcessor processor = new BlockProcessor();
+
         Block genesis = new Block(0, null);
         Block block1 = new Block(1, genesis.getHash());
         Block block2 = new Block(2, block1.getHash());
