@@ -19,6 +19,12 @@ public class Transaction {
     private Hash hash;
 
     public Transaction(Address sender, Address receiver, BigInteger value, long nonce) {
+        if (sender == null)
+            throw new IllegalStateException("No sender in transaction");
+
+        if (receiver == null)
+            throw new IllegalStateException("No receiver in transaction");
+
         this.sender = sender;
         this.receiver = receiver;
         this.value = value;

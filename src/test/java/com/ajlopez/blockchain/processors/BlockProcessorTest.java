@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by usuario on 17/12/2017.
+ * Created by ajlopez on 17/12/2017.
  */
 public class BlockProcessorTest {
     @Test

@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.core;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,5 +25,21 @@ public class TransactionTest {
 
         Assert.assertNotNull(tx.getHash());
         Assert.assertNotEquals(Hash.emptyHash(), tx.getHash());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void createTransactionWithNoSender() {
+        Address receiver = new Address();
+        BigInteger value = BigInteger.ONE;
+
+        new Transaction(null, receiver, value, 42);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void createTransactionWithNoReceiver() {
+        Address sender = new Address();
+        BigInteger value = BigInteger.ONE;
+
+        new Transaction(sender, null, value, 42);
     }
 }
