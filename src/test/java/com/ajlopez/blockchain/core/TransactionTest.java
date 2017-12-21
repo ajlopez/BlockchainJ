@@ -42,4 +42,13 @@ public class TransactionTest {
 
         new Transaction(sender, null, value, 42);
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void createTransactionWithNegativeValue() {
+        Address sender = new Address();
+        Address receiver = new Address();
+        BigInteger value = BigInteger.ONE.negate();
+
+        new Transaction(sender, receiver, value, 42);
+    }
 }
