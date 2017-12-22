@@ -27,6 +27,22 @@ public class TransactionTest {
         Assert.assertNotEquals(Hash.emptyHash(), tx.getHash());
     }
 
+    @Test
+    public void createTransactionWithNullValue() {
+        Address sender = new Address();
+        Address receiver = new Address();
+
+        Transaction tx = new Transaction(sender, receiver, null, 42);
+
+        Assert.assertEquals(sender, tx.getSender());
+        Assert.assertEquals(receiver, tx.getReceiver());
+        Assert.assertEquals(BigInteger.ZERO, tx.getValue());
+        Assert.assertEquals(42, tx.getNonce());
+
+        Assert.assertNotNull(tx.getHash());
+        Assert.assertNotEquals(Hash.emptyHash(), tx.getHash());
+    }
+
     @Test(expected = IllegalStateException.class)
     public void createTransactionWithNoSender() {
         Address receiver = new Address();

@@ -25,6 +25,9 @@ public class Transaction {
         if (receiver == null)
             throw new IllegalStateException("No receiver in transaction");
 
+        if (value == null)
+            value = BigInteger.ZERO;
+
         if (BigInteger.ZERO.compareTo(value) > 0)
             throw new IllegalStateException("Negative value in transaction");
 
