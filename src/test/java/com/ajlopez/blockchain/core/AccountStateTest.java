@@ -48,6 +48,16 @@ public class AccountStateTest {
     }
 
     @Test(expected = IllegalStateException.class)
+    public void negativeBalance() {
+        new AccountState(BigInteger.TEN.negate(), 0);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void negativeNonce() {
+        new AccountState(BigInteger.TEN, -1);
+    }
+
+    @Test(expected = IllegalStateException.class)
     public void addNegativeNumberToZeroBalance() {
         AccountState accstate = new AccountState();
 
