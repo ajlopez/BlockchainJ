@@ -44,6 +44,15 @@ public class TransactionTest {
     }
 
     @Test(expected = IllegalStateException.class)
+    public void createTransactionWithNegativeNonce() {
+        Address sender = new Address();
+        Address receiver = new Address();
+        BigInteger value = BigInteger.ONE;
+
+        new Transaction(sender, receiver, value, -1);
+    }
+
+    @Test(expected = IllegalStateException.class)
     public void createTransactionWithNoSender() {
         Address receiver = new Address();
         BigInteger value = BigInteger.ONE;

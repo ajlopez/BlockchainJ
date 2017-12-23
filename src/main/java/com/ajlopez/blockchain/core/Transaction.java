@@ -31,6 +31,9 @@ public class Transaction {
         if (BigInteger.ZERO.compareTo(value) > 0)
             throw new IllegalStateException("Negative value in transaction");
 
+        if (nonce < 0)
+            throw new IllegalStateException("Negative nonce in transaction");
+
         this.sender = sender;
         this.receiver = receiver;
         this.value = value;
