@@ -18,6 +18,14 @@ public class AccountStateTest {
     }
 
     @Test
+    public void createWithNullBalanceAndNonZeroNonce() {
+        AccountState accstate = new AccountState(null, 42);
+
+        Assert.assertEquals(BigInteger.ZERO, accstate.getBalance());
+        Assert.assertEquals(42, accstate.getNonce());
+    }
+
+    @Test
     public void addToBalance() {
         AccountState accstate = new AccountState();
 
