@@ -20,6 +20,9 @@ public class BlockHeader {
     private Hash transactionsHash;
 
     public BlockHeader(long number, Hash parentHash, Hash transactionsHash) {
+        if (number < 0)
+            throw new IllegalStateException("Negative number in block header");
+
         this.number = number;
         this.parentHash = parentHash == null ? emptyHash : parentHash;
         this.transactionsHash = transactionsHash;

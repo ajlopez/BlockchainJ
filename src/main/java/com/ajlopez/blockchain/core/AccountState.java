@@ -16,7 +16,7 @@ public class AccountState {
     public AccountState(BigInteger balance, long nonce) {
         if (balance == null)
             balance = BigInteger.ZERO;
-        
+
         if (BigInteger.ZERO.compareTo(balance) > 0)
             throw new IllegalStateException("Negative balance in account state");
 

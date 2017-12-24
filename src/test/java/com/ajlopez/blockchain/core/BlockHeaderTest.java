@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.core;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 /**
@@ -28,6 +29,14 @@ public class BlockHeaderTest {
         BlockHeader header2 = new BlockHeader(2L, generateHash(), generateHash());
 
         Assert.assertNotEquals(header1.getHash(), header2.getHash());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void negativeNumber() {
+        Hash hash = generateHash();
+        Hash transactionsHash = generateHash();
+
+        new BlockHeader(-1L, hash, transactionsHash);
     }
 
     private static Hash generateHash() {
