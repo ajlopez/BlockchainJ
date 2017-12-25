@@ -21,6 +21,15 @@ public class AddressTest {
         Assert.assertArrayEquals(bytes, address.getBytes());
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void createAddressWithInvalidBytesLength() {
+        Random random = new Random();
+        byte[] bytes = new byte[30];
+        random.nextBytes(bytes);
+
+        new Address(bytes);
+    }
+
     @Test
     public void createAddressWithInitialBytes() {
         Address address = new Address();

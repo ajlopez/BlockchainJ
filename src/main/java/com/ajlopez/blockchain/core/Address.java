@@ -17,6 +17,9 @@ public class Address {
     }
 
     public Address(byte[] bytes) {
+        if (bytes.length > 20)
+            throw new IllegalStateException("Address too long");
+
         this.bytes = bytes;
     }
 
