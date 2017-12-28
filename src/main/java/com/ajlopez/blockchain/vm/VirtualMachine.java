@@ -59,38 +59,38 @@ public class VirtualMachine {
                 break;
 
             case OP_ADD:
-                value1 = new BigInteger(1, this.stack.pop());
-                value2 = new BigInteger(1, this.stack.pop());
+                value1 = this.popBigInteger();
+                value2 = this.popBigInteger();
                 this.stack.push(value1.add(value2).toByteArray());
                 break;
 
             case OP_SUBTRACT:
-                value1 = new BigInteger(1, this.stack.pop());
-                value2 = new BigInteger(1, this.stack.pop());
+                value1 = this.popBigInteger();
+                value2 = this.popBigInteger();
                 this.stack.push(value1.subtract(value2).toByteArray());
                 break;
 
             case OP_MULTIPLY:
-                value1 = new BigInteger(1, this.stack.pop());
-                value2 = new BigInteger(1, this.stack.pop());
+                value1 = this.popBigInteger();
+                value2 = this.popBigInteger();
                 this.stack.push(value1.multiply(value2).toByteArray());
                 break;
 
             case OP_DIVIDE:
-                value1 = new BigInteger(1, this.stack.pop());
-                value2 = new BigInteger(1, this.stack.pop());
+                value1 = this.popBigInteger();
+                value2 = this.popBigInteger();
                 this.stack.push(value1.divide(value2).toByteArray());
                 break;
 
             case OP_MOD:
-                value1 = new BigInteger(1, this.stack.pop());
-                value2 = new BigInteger(1, this.stack.pop());
+                value1 = this.popBigInteger();
+                value2 = this.popBigInteger();
                 this.stack.push(value1.mod(value2).toByteArray());
                 break;
 
             case OP_DIVMOD:
-                value1 = new BigInteger(1, this.stack.pop());
-                value2 = new BigInteger(1, this.stack.pop());
+                value1 = this.popBigInteger();
+                value2 = this.popBigInteger();
                 BigInteger[] divmod = value1.divideAndRemainder(value2);
 
                 this.stack.push(divmod[0].toByteArray());
@@ -144,13 +144,17 @@ public class VirtualMachine {
 
             case OP_MLOAD:
                 offset = this.popInteger();
-                int length = new BigInteger(1, this.stack.pop()).intValue();
+                int length = this.popBigInteger().intValue();
                 this.stack.push(this.memory.getValues(offset, length));
 
                 break;
         }
 
         this.pc++;
+    }
+
+    private BigInteger popBigInteger() {
+        return new BigInteger(1, this.stack.pop());
     }
 
     private int popInteger() {
