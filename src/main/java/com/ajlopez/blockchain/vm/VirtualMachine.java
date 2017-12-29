@@ -61,19 +61,19 @@ public class VirtualMachine {
             case OP_ADD:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
-                this.stack.push(value1.add(value2).toByteArray());
+                this.pushBigInteger(value1.add(value2));
                 break;
 
             case OP_SUBTRACT:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
-                this.stack.push(value1.subtract(value2).toByteArray());
+                this.pushBigInteger(value1.subtract(value2));
                 break;
 
             case OP_MULTIPLY:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
-                this.stack.push(value1.multiply(value2).toByteArray());
+                this.pushBigInteger(value1.multiply(value2));
                 break;
 
             case OP_DIVIDE:
@@ -85,7 +85,7 @@ public class VirtualMachine {
             case OP_MOD:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
-                this.stack.push(value1.mod(value2).toByteArray());
+                this.pushBigInteger(value1.mod(value2));
                 break;
 
             case OP_DIVMOD:
@@ -93,8 +93,8 @@ public class VirtualMachine {
                 value2 = this.popBigInteger();
                 BigInteger[] divmod = value1.divideAndRemainder(value2);
 
-                this.stack.push(divmod[0].toByteArray());
-                this.stack.push(divmod[1].toByteArray());
+                this.pushBigInteger(divmod[0]);
+                this.pushBigInteger(divmod[1]);
 
                 break;
 
@@ -155,6 +155,10 @@ public class VirtualMachine {
 
     private BigInteger popBigInteger() {
         return new BigInteger(1, this.stack.pop());
+    }
+
+    private void pushBigInteger(BigInteger value) {
+        this.stack.push(value.toByteArray());
     }
 
     private int popInteger() {
