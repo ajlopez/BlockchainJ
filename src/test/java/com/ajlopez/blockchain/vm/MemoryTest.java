@@ -56,4 +56,21 @@ public class MemoryTest {
 
         Assert.assertArrayEquals(new byte[] { 0x00, 0x01, 0x02, 0x03, 0x00 }, memory.getValues(9, 5));
     }
+
+    @Test
+    public void setAndGetValuesAndGetUndefinedValues() {
+        Memory memory = new Memory();
+
+        memory.setValues(10, new byte[] { 0x01, 0x02, 0x03 });
+
+        Assert.assertEquals(0, memory.getValue(0));
+        Assert.assertEquals(1, memory.getValue(10));
+        Assert.assertEquals(2, memory.getValue(11));
+        Assert.assertEquals(3, memory.getValue(12));
+        Assert.assertEquals(0, memory.getValue(100));
+
+        Assert.assertArrayEquals(new byte[] { 0x00, 0x01, 0x02, 0x03, 0x00 }, memory.getValues(9, 5));
+
+        Assert.assertArrayEquals(new byte[32], memory.getValues(1024, 32));
+    }
 }

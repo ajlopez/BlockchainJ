@@ -22,7 +22,7 @@ public class Memory {
     public byte[] getValues(int offset, int length) {
         byte[] values = new byte[length];
 
-        if (this.bytes == null)
+        if (this.bytes == null || this.bytes.length <= offset)
             return values;
 
         System.arraycopy(this.bytes, offset, values, 0, length);
