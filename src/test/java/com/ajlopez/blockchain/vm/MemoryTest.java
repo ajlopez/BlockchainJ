@@ -28,6 +28,20 @@ public class MemoryTest {
         Assert.assertEquals(0, memory.getValue(100));
     }
 
+
+    @Test
+    public void setAndGetValueAndGetUndefinedValueAsZero() {
+        Memory memory = new Memory();
+
+        memory.setValue(10, (byte)42);
+
+        Assert.assertEquals(0, memory.getValue(0));
+        Assert.assertEquals(42, memory.getValue(10));
+        Assert.assertEquals(0, memory.getValue(100));
+
+        Assert.assertEquals(0, memory.getValue(100000));
+    }
+
     @Test
     public void setAndGetValues() {
         Memory memory = new Memory();

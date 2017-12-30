@@ -13,7 +13,7 @@ public class Memory {
     private byte[] bytes;
 
     public byte getValue(int offset) {
-        if (this.bytes == null)
+        if (this.bytes == null || this.bytes.length <= offset)
             return 0;
 
         return this.bytes[offset];
