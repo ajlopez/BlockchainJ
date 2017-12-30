@@ -25,7 +25,12 @@ public class Memory {
         if (this.bytes == null || this.bytes.length <= offset)
             return values;
 
-        System.arraycopy(this.bytes, offset, values, 0, length);
+        int size = length;
+
+        if (offset + length > this.bytes.length)
+            size -= length + offset - this.bytes.length;
+
+        System.arraycopy(this.bytes, offset, values, 0, size);
 
         return values;
     }
