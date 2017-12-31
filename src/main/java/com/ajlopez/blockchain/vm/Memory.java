@@ -37,16 +37,32 @@ public class Memory {
 
     public void setValue(int offset, byte value)
     {
-        if (this.bytes == null)
-            this.bytes = new byte[1024];
+        ensureCapacity(offset + 1);
 
         this.bytes[offset] = value;
     }
 
     public void setValues(int offset, byte[] values) {
-        if (this.bytes == null)
-            this.bytes = new byte[1024];
+        ensureCapacity(offset + values.length);
 
         System.arraycopy(values, 0, this.bytes, offset, values.length);
+    }
+
+    private void ensureCapacity(int length) {
+        int blocks = (length + 1023) / 1024;
+        int required = blocks * 1024;
+
+        if (this.bytes == null) {
+            this.bytes = new byte[required];
+            return;
+        }
+
+        if (this.bytes.length >= required)
+            return;
+
+        byte[] newbytes = new byte[required];
+        System.arraycopy(this.bytes, 0, newbytes, 0, this.bytes.length);
+
+        this.bytes = newbytes;
     }
 }

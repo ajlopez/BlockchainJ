@@ -58,6 +58,22 @@ public class MemoryTest {
     }
 
     @Test
+    public void setAndGetValuesExtendingMemory() {
+        Memory memory = new Memory();
+
+        memory.setValues(1021, new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 });
+
+        Assert.assertEquals(0, memory.getValue(0));
+        Assert.assertEquals(1, memory.getValue(1021));
+        Assert.assertEquals(2, memory.getValue(1022));
+        Assert.assertEquals(3, memory.getValue(1023));
+        Assert.assertEquals(4, memory.getValue(1024));
+        Assert.assertEquals(5, memory.getValue(1025));
+        Assert.assertEquals(6, memory.getValue(1026));
+        Assert.assertEquals(0, memory.getValue(1027));
+    }
+
+    @Test
     public void setAndGetValuesAndGetUndefinedValues() {
         Memory memory = new Memory();
 
