@@ -166,10 +166,4 @@ public class VirtualMachine {
 
         return ByteUtils.bytesToInteger(bytes);
     }
-
-    private byte popByte() {
-        byte[] bytes = this.stack.pop();
-
-        return bytes[bytes.length - 1];
-    }
 }
