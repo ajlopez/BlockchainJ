@@ -137,8 +137,8 @@ public class VirtualMachine {
 
             case OP_MSTORE:
                 offset = this.popInteger();
-                byte bvalue = this.popByte();
-                this.memory.setValue(offset, bvalue);
+                byte[] bytes = this.stack.pop();
+                this.memory.setValues(offset, bytes);
 
                 break;
 

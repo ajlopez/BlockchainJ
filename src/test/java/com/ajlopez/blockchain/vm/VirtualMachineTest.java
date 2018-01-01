@@ -274,6 +274,19 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeStoreMultyByteValueToMemory() {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x02, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_MSTORE});
+
+        Stack stack = vm.getStack();
+
+        Assert.assertTrue(stack.isEmpty());
+        Assert.assertEquals(1, vm.getMemory().getValue(2));
+        Assert.assertEquals(2, vm.getMemory().getValue(3));
+    }
+
+    @Test
     public void executeLoadValueFromMemory() {
         Storage storage = new Storage();
         VirtualMachine vm = new VirtualMachine(storage);
