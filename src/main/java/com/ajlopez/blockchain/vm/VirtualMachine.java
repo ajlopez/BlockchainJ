@@ -148,6 +148,14 @@ public class VirtualMachine {
                 this.stack.push(this.memory.getValues(offset, length));
 
                 break;
+
+            case OP_JUMP:
+                nbytes = this.opcodes[pc + 1];
+                offset = ByteUtils.bytesToInteger(Arrays.copyOfRange(this.opcodes, this.pc + 2, this.pc + 2 + nbytes));
+
+                this.pc = offset;
+
+                break;
         }
 
         this.pc++;

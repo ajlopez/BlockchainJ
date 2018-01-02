@@ -300,4 +300,17 @@ public class VirtualMachineTest {
         Assert.assertEquals(1, stack.size());
         Assert.assertArrayEquals(new byte[] { 0x03 }, stack.pop());
     }
+
+    @Test
+    public void executeJumpToJumpDest() {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_JUMP, 0x01, 0x06, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_JUMPDEST, OpCodes.OP_PUSH, 0x01, 0x02 });
+
+        Stack<byte[]> stack = vm.getStack();
+
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertArrayEquals(new byte[] { 0x02 }, stack.pop());
+    }
 }
