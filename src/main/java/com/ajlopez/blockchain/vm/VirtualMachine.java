@@ -33,7 +33,7 @@ public class VirtualMachine {
         return this.memory;
     }
 
-    public void execute(byte[] opcodes) {
+    public void execute(byte[] opcodes) throws VirtualMachineException {
         this.pc = 0;
         this.opcodes = opcodes;
 
@@ -43,7 +43,7 @@ public class VirtualMachine {
             execute(opcodes[pc]);
     }
 
-    private void execute(byte opcode) {
+    private void execute(byte opcode) throws VirtualMachineException {
         BigInteger value1;
         BigInteger value2;
 
@@ -152,6 +152,9 @@ public class VirtualMachine {
             case OP_JUMP:
                 nbytes = this.opcodes[pc + 1];
                 offset = ByteUtils.bytesToInteger(Arrays.copyOfRange(this.opcodes, this.pc + 2, this.pc + 2 + nbytes));
+
+                if (this.opcodes[offset] != OP_JUMPDEST)
+                    throw new VirtualMachineException("Invalid jump");
 
                 this.pc = offset;
 
