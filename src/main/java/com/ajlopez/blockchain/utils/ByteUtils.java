@@ -53,4 +53,12 @@ public class ByteUtils {
 
         return k;
     }
+
+    public static boolean areZero(byte[] bytes) {
+        for (int k = 0; k < bytes.length; k++)
+            if (bytes[k] != 0)
+                return false;
+
+        return true;
+    }
 }
