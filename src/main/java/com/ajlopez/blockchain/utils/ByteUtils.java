@@ -6,7 +6,7 @@ package com.ajlopez.blockchain.utils;
 public class ByteUtils {
     private ByteUtils() { }
 
-    public static byte[] longToBytes(long value) {
+    public static byte[] unsignedLongToBytes(long value) {
         byte[] result = new byte[Long.BYTES];
 
         for (int k = Long.BYTES; k-- > 0;) {
@@ -17,7 +17,7 @@ public class ByteUtils {
         return result;
     }
 
-    public static long bytesToLong(byte[] bytes) {
+    public static long bytesToUnsignedLong(byte[] bytes) {
         long result = 0;
 
         for (int k = 0; k < bytes.length && k < Long.BYTES; k++) {
@@ -28,7 +28,7 @@ public class ByteUtils {
         return result;
     }
 
-    public static int bytesToInteger(byte[] bytes) {
+    public static int bytesToUnsignedInteger(byte[] bytes) {
         int result = 0;
 
         for (int k = 0; k < bytes.length && k < Integer.BYTES; k++) {
