@@ -25,5 +25,6 @@ public class OpCodes {
     public static final byte OP_EQUAL = 48;
 
     public static final byte OP_JUMP = 64;
-    public static final byte OP_JUMPDEST = 65;
+    public static final byte OP_JUMPI = 66;
+    public static final byte OP_JUMPDEST = 66;
 }

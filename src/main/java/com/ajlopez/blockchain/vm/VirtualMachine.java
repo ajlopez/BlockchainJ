@@ -159,6 +159,15 @@ public class VirtualMachine {
                 this.pc = offset;
 
                 break;
+
+            case OP_JUMPI:
+                nbytes = this.opcodes[pc + 1];
+                offset = ByteUtils.bytesToUnsignedInteger(Arrays.copyOfRange(this.opcodes, this.pc + 2, this.pc + 2 + nbytes));
+
+                if (ByteUtils.areZero(this.stack.pop()))
+                    this.pc = offset;
+
+                break;
         }
 
         this.pc++;
