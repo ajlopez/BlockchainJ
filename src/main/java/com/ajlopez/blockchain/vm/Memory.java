@@ -1,11 +1,5 @@
 package com.ajlopez.blockchain.vm;
 
-import com.ajlopez.blockchain.utils.ByteArrayWrapper;
-import com.ajlopez.blockchain.utils.ByteUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by ajlopez on 26/11/2017.
  */

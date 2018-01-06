@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by usuario on 21/11/2017.
+ * Created by ajlopez on 21/11/2017.
  */
 public class ByteArrayWrapperTest {
     @Test
