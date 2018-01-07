@@ -68,16 +68,31 @@ public class Trie {
     }
 
     public byte[] getEncoded() {
-        byte[] bytes = new byte[1 + 1 + 1 + 2];
+        int valsizebytes = 0;
+        int valbytes = 0;
+
+        if (this.value != null && this.value.length > 0) {
+            valsizebytes = Integer.BYTES;
+            valbytes = this.value.length;
+        }
+
+        byte[] bytes = new byte[1 + 1 + 1 + 2 + valsizebytes + valbytes];
 
         // byte[0] version == 0
 
         // arity
         bytes[1] = 16;
 
-        // byte[1] flags
+        // byte[2] flags
 
-        // byte[2..3] subnode bits
+        // byte[3..4] subnode bits
+
+        // value size
+
+        if (valsizebytes > 0) {
+            System.arraycopy(ByteUtils.unsignedIntegerToBytes(valbytes), 0, bytes, 5, valsizebytes);
+            System.arraycopy(this.value, 0, bytes, 5 + valsizebytes, valbytes);
+        }
 
         // subnodes hashes
 

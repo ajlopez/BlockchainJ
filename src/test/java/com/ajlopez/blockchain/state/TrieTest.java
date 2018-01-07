@@ -1,12 +1,17 @@
 package com.ajlopez.blockchain.state;
 
+import com.ajlopez.blockchain.core.Hash;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Random;
 
 /**
  * Created by ajlopez on 12/08/2017.
  */
 public class TrieTest {
+    private static Random random = new Random();
+
     @Test
     public void getUnknownValueAsNull() {
         Trie trie = Trie.getEmptyTrie();
@@ -26,6 +31,26 @@ public class TrieTest {
 
         byte[] expected = new byte[5];
         expected[1] = 16; // arity
+
+        Assert.assertArrayEquals(expected, encoded);
+    }
+
+    @Test
+    public void getEncodedTrieWithValueAndNoSubNodes() {
+        byte[] value = new byte[32];
+        random.nextBytes(value);
+
+        Trie trie = Trie.getEmptyTrie().put(new byte[0], value);
+
+        byte[] encoded = trie.getEncoded();
+
+        Assert.assertNotNull(encoded);
+        Assert.assertEquals(5 + Integer.BYTES + 32, encoded.length);
+
+        byte[] expected = new byte[5 + Integer.BYTES + 32];
+        expected[1] = 16; // arity
+        expected[8] = 32; // value length in bytes[5..8]
+        System.arraycopy(value, 0, expected, 9, value.length);
 
         Assert.assertArrayEquals(expected, encoded);
     }

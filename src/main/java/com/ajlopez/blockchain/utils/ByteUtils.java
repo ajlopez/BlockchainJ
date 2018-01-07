@@ -28,6 +28,17 @@ public class ByteUtils {
         return result;
     }
 
+    public static byte[] unsignedIntegerToBytes(int value) {
+        byte[] result = new byte[Integer.BYTES];
+
+        for (int k = Integer.BYTES; k-- > 0;) {
+            result[k] = (byte)(value & 0xff);
+            value >>= 8;
+        }
+
+        return result;
+    }
+
     public static int bytesToUnsignedInteger(byte[] bytes) {
         int result = 0;
 
