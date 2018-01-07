@@ -16,6 +16,21 @@ public class TrieTest {
     }
 
     @Test
+    public void getEncodedEmptyTrie() {
+        Trie trie = Trie.getEmptyTrie();
+
+        byte[] encoded = trie.getEncoded();
+
+        Assert.assertNotNull(encoded);
+        Assert.assertEquals(5, encoded.length);
+
+        byte[] expected = new byte[5];
+        expected[1] = 16; // arity
+
+        Assert.assertArrayEquals(expected, encoded);
+    }
+
+    @Test
     public void getUnknownValueWithEmptyKeyAsNull() {
         Trie trie = Trie.getEmptyTrie();
 

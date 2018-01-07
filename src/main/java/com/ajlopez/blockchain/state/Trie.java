@@ -11,6 +11,7 @@ public class Trie {
     private static final int ARITY = 16;
 
     private static Trie empty = new Trie();
+
     private byte[] value;
     private Trie[] nodes;
 
@@ -64,6 +65,23 @@ public class Trie {
 
     public Trie delete(byte[] key) {
         return this.put(key, null);
+    }
+
+    public byte[] getEncoded() {
+        byte[] bytes = new byte[1 + 1 + 1 + 2];
+
+        // byte[0] version == 0
+
+        // arity
+        bytes[1] = 16;
+
+        // byte[1] flags
+
+        // byte[2..3] subnode bits
+
+        // subnodes hashes
+
+        return bytes;
     }
 
     private Trie put(byte[] key, int position, byte[] value) {
