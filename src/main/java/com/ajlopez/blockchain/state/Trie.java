@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.state;
 
+import com.ajlopez.blockchain.core.Hash;
 import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.utils.HashUtils;
 
 import java.util.Arrays;
 
@@ -65,6 +67,10 @@ public class Trie {
 
     public Trie delete(byte[] key) {
         return this.put(key, null);
+    }
+
+    public Hash getHash() {
+        return HashUtils.calculateHash(this.getEncoded());
     }
 
     public byte[] getEncoded() {

@@ -56,6 +56,33 @@ public class TrieTest {
     }
 
     @Test
+    public void getHashFromEmptyTrie() {
+        Trie trie = Trie.getEmptyTrie();
+
+        Hash hash = trie.getHash();
+
+        Assert.assertNotNull(hash);
+    }
+
+    @Test
+    public void getHashFromTrieWithValueAndNoSubNodes() {
+        byte[] value = new byte[32];
+        random.nextBytes(value);
+
+        Trie trie = Trie.getEmptyTrie().put(new byte[0], value);
+
+        Hash hash = trie.getHash();
+
+        Assert.assertNotNull(hash);
+
+        Trie trie2 = Trie.getEmptyTrie().put(new byte[0], value);
+
+        Hash hash2 = trie2.getHash();
+
+        Assert.assertEquals(hash, hash2);
+    }
+
+    @Test
     public void getUnknownValueWithEmptyKeyAsNull() {
         Trie trie = Trie.getEmptyTrie();
 
