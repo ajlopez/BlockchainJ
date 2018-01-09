@@ -17,6 +17,8 @@ public class Trie {
     private byte[] value;
     private Trie[] nodes;
 
+    private Hash hash;
+
     private Trie() {}
 
     public static Trie getEmptyTrie() { return empty; }
@@ -70,7 +72,12 @@ public class Trie {
     }
 
     public Hash getHash() {
-        return HashUtils.calculateHash(this.getEncoded());
+        if (this.hash != null)
+            return this.hash;
+
+        this.hash = HashUtils.calculateHash(this.getEncoded());
+
+        return this.hash;
     }
 
     public byte[] getEncoded() {
