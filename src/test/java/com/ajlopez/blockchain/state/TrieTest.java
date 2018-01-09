@@ -56,6 +56,25 @@ public class TrieTest {
     }
 
     @Test
+    public void getEncodedTrieWithoutValueAndSubNode() {
+        byte[] value = new byte[32];
+        random.nextBytes(value);
+
+        Trie trie = Trie.getEmptyTrie().put(new byte[] { 0x01 }, value);
+
+        byte[] encoded = trie.getEncoded();
+
+        Assert.assertNotNull(encoded);
+        Assert.assertEquals(5, encoded.length);
+
+        byte[] expected = new byte[5 + Integer.BYTES];
+        expected[1] = 16; // arity
+        expected[4] = 1; // first subnode
+
+        Assert.assertArrayEquals(expected, encoded);
+    }
+
+    @Test
     public void getHashFromEmptyTrie() {
         Trie trie = Trie.getEmptyTrie();
 
