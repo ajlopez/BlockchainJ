@@ -89,7 +89,9 @@ public class Trie {
             valbytes = this.value.length;
         }
 
-        byte[] bytes = new byte[1 + 1 + 1 + 2 + valsizebytes + valbytes];
+        int nsubnodes = this.getSubnodesCount();
+
+        byte[] bytes = new byte[1 + 1 + 1 + 2 + HashUtils.HASH_BYTES * nsubnodes + valsizebytes + valbytes];
 
         // byte[0] version == 0
 
@@ -110,6 +112,19 @@ public class Trie {
         // subnodes hashes
 
         return bytes;
+    }
+
+    private int getSubnodesCount() {
+        if (this.nodes == null)
+            return 0;
+
+        int nsubnodes = 0;
+
+        for (int k = 0; k < this.nodes.length; k++)
+            if (this.nodes[k] != null)
+                nsubnodes++;
+
+        return nsubnodes;
     }
 
     private Trie put(byte[] key, int position, byte[] value) {

@@ -13,6 +13,8 @@ import java.security.Security;
  * Created by ajlopez on 28/10/2017.
  */
 public class HashUtils {
+    public static final int HASH_BYTES = 32;
+
     static {
         Security.addProvider(SpongyCastleProvider.getInstance());
     }
