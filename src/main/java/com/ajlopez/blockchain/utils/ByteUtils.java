@@ -50,6 +50,17 @@ public class ByteUtils {
         return result;
     }
 
+    public static byte[] unsignedShortToBytes(short value) {
+        byte[] result = new byte[Short.BYTES];
+
+        for (int k = Short.BYTES; k-- > 0;) {
+            result[k] = (byte)(value & 0xff);
+            value >>= 8;
+        }
+
+        return result;
+    }
+
     public static int getInitialPosition(byte[] bytes) {
         int l = bytes.length;
         int k = 0;

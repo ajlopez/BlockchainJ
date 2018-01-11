@@ -36,4 +36,24 @@ public class ByteUtilsTest {
         Assert.assertFalse(ByteUtils.areZero(new byte[] { 0x0, 0x01 }));
         Assert.assertFalse(ByteUtils.areZero(new byte[] { 0x0, 0x00, (byte)0xff }));
     }
+
+    @Test
+    public void unsignedShortOneToBytes() {
+        byte[] result = ByteUtils.unsignedShortToBytes((short)1);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.length);
+        Assert.assertEquals(0, result[0]);
+        Assert.assertEquals(1, result[1]);
+    }
+
+    @Test
+    public void unsignedShort256ToBytes() {
+        byte[] result = ByteUtils.unsignedShortToBytes((short)256);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.length);
+        Assert.assertEquals(1, result[0]);
+        Assert.assertEquals(0, result[1]);
+    }
 }
