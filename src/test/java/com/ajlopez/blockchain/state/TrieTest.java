@@ -65,7 +65,7 @@ public class TrieTest {
         byte[] encoded = trie.getEncoded();
 
         Assert.assertNotNull(encoded);
-        Assert.assertEquals(5, encoded.length);
+        Assert.assertEquals(5 + 32, encoded.length);
 
         byte[] expected = new byte[5 + Integer.BYTES];
         expected[1] = 16; // arity

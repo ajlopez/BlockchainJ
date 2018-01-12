@@ -93,6 +93,14 @@ public class Trie {
 
         byte[] bytes = new byte[1 + 1 + 1 + 2 + HashUtils.HASH_BYTES * nsubnodes + valsizebytes + valbytes];
 
+        short subnodes = 0;
+
+        if (this.nodes != null)
+            for (int k = 0; k < this.nodes.length; k++)
+                subnodes |= 1 << k;
+
+        byte[] subnodesbits = ByteUtils.unsignedShortToBytes(subnodes);
+
         // byte[0] version == 0
 
         // arity
@@ -101,6 +109,8 @@ public class Trie {
         // byte[2] flags
 
         // byte[3..4] subnode bits
+        bytes[3] = subnodesbits[0];
+        bytes[4] = subnodesbits[1];
 
         // value size
 
