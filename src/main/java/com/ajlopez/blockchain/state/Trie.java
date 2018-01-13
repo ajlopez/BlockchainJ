@@ -94,10 +94,18 @@ public class Trie {
         byte[] bytes = new byte[1 + 1 + 1 + 2 + HashUtils.HASH_BYTES * nsubnodes + valsizebytes + valbytes];
 
         short subnodes = 0;
+        int nsubnode = 0;
 
         if (this.nodes != null)
-            for (int k = 0; k < this.nodes.length; k++)
+            for (int k = 0; k < this.nodes.length; k++) {
+                if (this.nodes[k] == null)
+                    continue;
+
                 subnodes |= 1 << k;
+                Hash subhash = this.nodes[k].getHash();
+                System.arraycopy(subhash.getBytes(), 0, bytes, 1 + 1 + 1 + 2 + HashUtils.HASH_BYTES * nsubnode, HashUtils.HASH_BYTES);
+                nsubnode++;
+            }
 
         byte[] subnodesbits = ByteUtils.unsignedShortToBytes(subnodes);
 

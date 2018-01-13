@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.state;
 
 import com.ajlopez.blockchain.core.Hash;
+import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -67,7 +68,7 @@ public class TrieTest {
         Assert.assertNotNull(encoded);
         Assert.assertEquals(5 + 32, encoded.length);
 
-        byte[] expected = new byte[5 + Integer.BYTES];
+        byte[] expected = new byte[5 + Integer.BYTES + HashUtils.HASH_BYTES];
         expected[1] = 16; // arity
         expected[4] = 1; // first subnode
 
