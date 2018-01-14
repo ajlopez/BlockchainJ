@@ -40,7 +40,7 @@ public class Trie {
     }
 
     public byte[] get(byte[] key) {
-        return this.get(key, ByteUtils.getInitialPosition(key));
+        return this.get(key, 0);
     }
 
     private byte[] get(byte[] key, int position) {
@@ -59,7 +59,7 @@ public class Trie {
     }
 
     public Trie put(byte[] key, byte[] value) {
-        Trie trie = this.put(key, ByteUtils.getInitialPosition(key), value);
+        Trie trie = this.put(key, 0, value);
 
         if (trie == null)
             return empty;

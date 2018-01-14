@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -66,13 +67,13 @@ public class TrieTest {
         byte[] encoded = trie.getEncoded();
 
         Assert.assertNotNull(encoded);
-        Assert.assertEquals(5 + 32, encoded.length);
+        Assert.assertEquals(5 + HashUtils.HASH_BYTES, encoded.length);
 
-        byte[] expected = new byte[5 + Integer.BYTES + HashUtils.HASH_BYTES];
-        expected[1] = 16; // arity
-        expected[4] = 1; // first subnode
+        byte[] firstexpected = new byte[5];
+        firstexpected[1] = 16; // arity
+        firstexpected[4] = 1; // first subnode
 
-        Assert.assertArrayEquals(expected, encoded);
+        Assert.assertArrayEquals(firstexpected, Arrays.copyOfRange(encoded, 0, 5));
     }
 
     @Test
@@ -121,41 +122,6 @@ public class TrieTest {
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value, trie.get(key));
         Assert.assertEquals(5, trie.nodesSize());
-    }
-
-    @Test
-    public void putAndGetValueUsingKeyWithLeftZeroBytes() {
-        byte[] key = new byte[] { 0x00, 0x00, (byte)0xab, (byte)0xcd };
-        byte[] key1 = new byte[] { 0x00, (byte)0xab, (byte)0xcd };
-        byte[] key2 = new byte[] { (byte)0xab, (byte)0xcd };
-        byte[] value = new byte[] { 0x01, 0x02, 0x03 };
-
-        Trie trie = Trie.getEmptyTrie();
-        trie = trie.put(key, value);
-
-        Assert.assertNotNull(trie);
-        Assert.assertArrayEquals(value, trie.get(key));
-        Assert.assertArrayEquals(value, trie.get(key1));
-        Assert.assertArrayEquals(value, trie.get(key2));
-        Assert.assertEquals(5, trie.nodesSize());
-    }
-
-
-    @Test
-    public void putAndGetValueUsingKeyWithLeftZeroNibbles() {
-        byte[] key = new byte[] { 0x00, 0x00, 0x0f, (byte)0xab, (byte)0xcd };
-        byte[] key1 = new byte[] { 0x00, 0x0f, (byte)0xab, (byte)0xcd };
-        byte[] key2 = new byte[] { 0x0f, (byte)0xab, (byte)0xcd };
-        byte[] value = new byte[] { 0x01, 0x02, 0x03 };
-
-        Trie trie = Trie.getEmptyTrie();
-        trie = trie.put(key, value);
-
-        Assert.assertNotNull(trie);
-        Assert.assertArrayEquals(value, trie.get(key));
-        Assert.assertArrayEquals(value, trie.get(key1));
-        Assert.assertArrayEquals(value, trie.get(key2));
-        Assert.assertEquals(6, trie.nodesSize());
     }
 
     @Test
