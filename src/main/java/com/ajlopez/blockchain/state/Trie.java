@@ -98,11 +98,13 @@ public class Trie {
 
         if (this.nodes != null)
             for (int k = 0; k < this.nodes.length; k++) {
-                if (this.nodes[k] == null)
+                Trie subnode = this.getSubnode(k);
+
+                if (subnode == null)
                     continue;
 
                 subnodes |= 1 << k;
-                Hash subhash = this.nodes[k].getHash();
+                Hash subhash = subnode.getHash();
                 System.arraycopy(subhash.getBytes(), 0, bytes, 1 + 1 + 1 + 2 + HashUtils.HASH_BYTES * nsubnode, HashUtils.HASH_BYTES);
                 nsubnode++;
             }
@@ -130,6 +132,10 @@ public class Trie {
         // subnodes hashes
 
         return bytes;
+    }
+
+    private Trie getSubnode(int k) {
+        return this.nodes[k];
     }
 
     private int getSubnodesCount() {
