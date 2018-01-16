@@ -94,20 +94,7 @@ public class Trie {
         byte[] bytes = new byte[1 + 1 + 1 + 2 + HashUtils.HASH_BYTES * nsubnodes + valsizebytes + valbytes];
 
         short subnodes = 0;
-        int nsubnode = 0;
-
-        if (this.nodes != null)
-            for (int k = 0; k < this.nodes.length; k++) {
-                Trie subnode = this.getSubnode(k);
-
-                if (subnode == null)
-                    continue;
-
-                subnodes |= 1 << k;
-                Hash subhash = subnode.getHash();
-                System.arraycopy(subhash.getBytes(), 0, bytes, 1 + 1 + 1 + 2 + HashUtils.HASH_BYTES * nsubnode, HashUtils.HASH_BYTES);
-                nsubnode++;
-            }
+        subnodes = getSubnodes(bytes, 1 + 1 + 1 + 2, subnodes);
 
         byte[] subnodesbits = ByteUtils.unsignedShortToBytes(subnodes);
 
@@ -132,6 +119,25 @@ public class Trie {
         // subnodes hashes
 
         return bytes;
+    }
+
+    private short getSubnodes(byte[] bytes, int offset, short subnodes) {
+        int nsubnode = 0;
+
+        if (this.nodes != null)
+            for (int k = 0; k < this.nodes.length; k++) {
+                Trie subnode = this.getSubnode(k);
+
+                if (subnode == null)
+                    continue;
+
+                subnodes |= 1 << k;
+                Hash subhash = subnode.getHash();
+                System.arraycopy(subhash.getBytes(), 0, bytes, offset + HashUtils.HASH_BYTES * nsubnode, HashUtils.HASH_BYTES);
+                nsubnode++;
+            }
+
+        return subnodes;
     }
 
     private Trie getSubnode(int k) {
