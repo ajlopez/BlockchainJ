@@ -77,6 +77,17 @@ public class TrieTest {
     }
 
     @Test
+    public void getEncodedFromEncodedEmptyTrie() {
+        Trie trie = Trie.getEmptyTrie();
+
+        byte[] encoded = trie.getEncoded();
+
+        Trie result = Trie.fromEncoded(encoded);
+
+        Assert.assertNotNull(result);
+    }
+
+    @Test
     public void getHashFromEmptyTrie() {
         Trie trie = Trie.getEmptyTrie();
 

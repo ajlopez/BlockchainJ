@@ -100,8 +100,6 @@ public class Trie {
         // arity
         bytes[1] = 16;
 
-        // byte[2] flags
-
         // value size
 
         if (valsizebytes > 0) {
@@ -112,6 +110,10 @@ public class Trie {
         // subnodes hashes
 
         return bytes;
+    }
+
+    public static Trie fromEncoded(byte[] bytes) {
+        return null;
     }
 
     private void getSubnodes(byte[] bytes, int offset) {
@@ -169,14 +171,14 @@ public class Trie {
         else
             children[offset] = children[offset].put(key, position + 1, value);
 
-        if (noNode(children))
+        if (noNodes(children))
             children = null;
 
         return createNewTrie(children, this.value, false);
     }
 
     private static Trie createNewTrie(Trie[] nodes, byte[] value, boolean copy) {
-        if (value == null && noNode(nodes))
+        if (value == null && noNodes(nodes))
             return null;
 
         if (copy)
@@ -185,7 +187,7 @@ public class Trie {
         return new Trie(nodes, value);
     }
 
-    private static boolean noNode(Trie[] nodes) {
+    private static boolean noNodes(Trie[] nodes) {
         if (nodes == null)
             return true;
 
