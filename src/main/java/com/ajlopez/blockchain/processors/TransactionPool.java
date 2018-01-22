@@ -11,6 +11,9 @@ public class TransactionPool {
     private Set<Transaction> transactions = new HashSet<>();
 
     public void addTransaction(Transaction transaction) {
+        if (transaction == null)
+            throw new IllegalArgumentException("Null transaction");
+
         this.transactions.add(transaction);
     }
 

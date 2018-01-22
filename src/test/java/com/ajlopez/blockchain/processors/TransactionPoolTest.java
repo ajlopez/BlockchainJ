@@ -79,4 +79,11 @@ public class TransactionPoolTest {
 
         return new Transaction(sender, receiver, bivalue, nonce);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addNullTransaction() {
+        TransactionPool pool = new TransactionPool();
+
+        pool.addTransaction(null);
+    }
 }
