@@ -39,6 +39,33 @@ public class TransactionPoolTest {
     }
 
     @Test
+    public void addAndRemoveTransaction() {
+        TransactionPool pool = new TransactionPool();
+        Transaction transaction = createTransaction(100);
+
+        pool.addTransaction(transaction);
+        pool.removeTransaction(transaction);
+
+        List<Transaction> result = pool.getTransactions();
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void removeUnknownTransaction() {
+        TransactionPool pool = new TransactionPool();
+        Transaction transaction = createTransaction(100);
+
+        pool.removeTransaction(transaction);
+
+        List<Transaction> result = pool.getTransactions();
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+    }
+
+    @Test
     public void addTransactionTwice() {
         TransactionPool pool = new TransactionPool();
         Transaction transaction = createTransaction(100);
@@ -70,6 +97,20 @@ public class TransactionPoolTest {
         Assert.assertEquals(transaction1, result.get(0));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void addNullTransaction() {
+        TransactionPool pool = new TransactionPool();
+
+        pool.addTransaction(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removeNullTransaction() {
+        TransactionPool pool = new TransactionPool();
+
+        pool.removeTransaction(null);
+    }
+
     private static Transaction createTransaction(int value) {
         Address sender = new Address();
         Address receiver = new Address();
@@ -78,12 +119,5 @@ public class TransactionPoolTest {
         int nonce = Math.abs(random.nextInt());
 
         return new Transaction(sender, receiver, bivalue, nonce);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void addNullTransaction() {
-        TransactionPool pool = new TransactionPool();
-
-        pool.addTransaction(null);
     }
 }

@@ -17,6 +17,13 @@ public class TransactionPool {
         this.transactions.add(transaction);
     }
 
+    public void removeTransaction(Transaction transaction) {
+        if (transaction == null)
+            throw new IllegalArgumentException("Null transaction");
+
+        this.transactions.remove(transaction);
+    }
+
     public List<Transaction> getTransactions() {
         List<Transaction> list = new ArrayList<Transaction>();
 
