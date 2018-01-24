@@ -13,6 +13,10 @@ public class Block {
     private BlockHeader header;
     private List<Transaction> transactions;
 
+    public Block(Block parent, List<Transaction> txs) {
+        this(parent.getNumber() + 1, parent.getHash(), txs);
+    }
+
     public Block(long number, Hash parentHash) {
         this(number, parentHash, new ArrayList<>());
     }
