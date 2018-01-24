@@ -53,6 +53,21 @@ public class TransactionPoolTest {
     }
 
     @Test
+    public void addAndRemoveTwiceATransaction() {
+        TransactionPool pool = new TransactionPool();
+        Transaction transaction = createTransaction(100);
+
+        pool.addTransaction(transaction);
+        pool.removeTransaction(transaction);
+        pool.removeTransaction(transaction);
+
+        List<Transaction> result = pool.getTransactions();
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+    }
+
+    @Test
     public void removeUnknownTransaction() {
         TransactionPool pool = new TransactionPool();
         Transaction transaction = createTransaction(100);
