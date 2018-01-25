@@ -126,7 +126,7 @@ public class TransactionPoolTest {
         pool.removeTransaction(null);
     }
 
-    private static Transaction createTransaction(int value) {
+    public static Transaction createTransaction(int value) {
         Address sender = new Address();
         Address receiver = new Address();
         BigInteger bivalue = BigInteger.valueOf(value);

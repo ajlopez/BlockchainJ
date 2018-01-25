@@ -33,4 +33,32 @@ public class MinerProcessorTest {
         Assert.assertNotNull(txs);
         Assert.assertTrue(txs.isEmpty());
     }
+
+    @Test
+    public void mineBlockWithOneTransaction() {
+        MinerProcessor processor = new MinerProcessor();
+
+        Hash hash = HashUtilsTest.generateRandomHash();
+        Block parent = new Block(1L, hash);
+
+        Transaction tx = TransactionPoolTest.createTransaction(100);
+
+        TransactionPool txpool = new TransactionPool();
+        txpool.addTransaction(tx);
+
+        Block block = processor.mineBlock(parent, txpool);
+
+        Assert.assertNotNull(block);
+        Assert.assertEquals(2, block.getNumber());
+        Assert.assertEquals(parent.getHash(), block.getParentHash());
+
+        List<Transaction> txs = block.getTransactions();
+
+        Assert.assertNotNull(txs);
+        Assert.assertFalse(txs.isEmpty());
+        Assert.assertEquals(1, txs.size());
+        Assert.assertSame(tx, txs.get(0));
+
+        Assert.assertTrue(txpool.getTransactions().isEmpty());
+    }
 }

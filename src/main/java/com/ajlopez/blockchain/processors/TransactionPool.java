@@ -24,6 +24,10 @@ public class TransactionPool {
         this.transactions.remove(transaction);
     }
 
+    public void removeTransactions(List<Transaction> transactions) {
+        this.transactions.removeAll(transactions);
+    }
+
     public List<Transaction> getTransactions() {
         List<Transaction> list = new ArrayList<Transaction>();
 
