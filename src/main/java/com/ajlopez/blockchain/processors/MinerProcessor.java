@@ -10,12 +10,6 @@ import java.util.List;
  */
 public class MinerProcessor {
     public Block mineBlock(Block parent, TransactionPool txpool) {
-        List<Transaction> txs = txpool.getTransactions();
-
-        Block block = new Block(parent, txpool.getTransactions());
-
-        txpool.removeTransactions(txs);
-
-        return block;
+        return new Block(parent, txpool.getTransactions());
     }
 }

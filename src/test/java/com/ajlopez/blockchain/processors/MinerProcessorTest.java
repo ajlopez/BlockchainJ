@@ -59,6 +59,6 @@ public class MinerProcessorTest {
         Assert.assertEquals(1, txs.size());
         Assert.assertSame(tx, txs.get(0));
 
-        Assert.assertTrue(txpool.getTransactions().isEmpty());
+        Assert.assertFalse(txpool.getTransactions().isEmpty());
     }
 }
