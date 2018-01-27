@@ -10,8 +10,13 @@ import java.util.List;
  * Created by ajlopez on 17/12/2017.
  */
 public class BlockProcessor {
-    private OrphanBlocks orphanBlocks = new OrphanBlocks();
-    private BlockChain blockChain = new BlockChain();
+    private OrphanBlocks orphanBlocks;
+    private BlockChain blockChain;
+
+    public BlockProcessor(BlockChain blockChain, OrphanBlocks orphanBlocks) {
+        this.blockChain = blockChain;
+        this.orphanBlocks = orphanBlocks;
+    }
 
     public void processBlock(Block block) {
         if (this.orphanBlocks.isKnownOrphan(block))

@@ -1,14 +1,11 @@
 package com.ajlopez.blockchain.processors;
 
-import com.ajlopez.blockchain.core.Address;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.test.utils.TransactionHelper;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by ajlopez on 21/01/2018.
@@ -27,7 +24,7 @@ public class TransactionPoolTest {
     @Test
     public void addTransaction() {
         TransactionPool pool = new TransactionPool();
-        Transaction transaction = TransactionHelper.createTransaction(100);
+        Transaction transaction = FactoryHelper.createTransaction(100);
 
         pool.addTransaction(transaction);
 
@@ -42,7 +39,7 @@ public class TransactionPoolTest {
     @Test
     public void addAndRemoveTransaction() {
         TransactionPool pool = new TransactionPool();
-        Transaction transaction = TransactionHelper.createTransaction(100);
+        Transaction transaction = FactoryHelper.createTransaction(100);
 
         pool.addTransaction(transaction);
         pool.removeTransaction(transaction);
@@ -56,7 +53,7 @@ public class TransactionPoolTest {
     @Test
     public void addAndRemoveTwiceATransaction() {
         TransactionPool pool = new TransactionPool();
-        Transaction transaction = TransactionHelper.createTransaction(100);
+        Transaction transaction = FactoryHelper.createTransaction(100);
 
         pool.addTransaction(transaction);
         pool.removeTransaction(transaction);
@@ -71,7 +68,7 @@ public class TransactionPoolTest {
     @Test
     public void removeUnknownTransaction() {
         TransactionPool pool = new TransactionPool();
-        Transaction transaction = TransactionHelper.createTransaction(100);
+        Transaction transaction = FactoryHelper.createTransaction(100);
 
         pool.removeTransaction(transaction);
 
@@ -84,7 +81,7 @@ public class TransactionPoolTest {
     @Test
     public void addTransactionTwice() {
         TransactionPool pool = new TransactionPool();
-        Transaction transaction = TransactionHelper.createTransaction(100);
+        Transaction transaction = FactoryHelper.createTransaction(100);
 
         pool.addTransaction(transaction);
         pool.addTransaction(transaction);
@@ -100,8 +97,8 @@ public class TransactionPoolTest {
     @Test
     public void addTransactionGetListAddTransaction() {
         TransactionPool pool = new TransactionPool();
-        Transaction transaction1 = TransactionHelper.createTransaction(100);
-        Transaction transaction2 = TransactionHelper.createTransaction(200);
+        Transaction transaction1 = FactoryHelper.createTransaction(100);
+        Transaction transaction2 = FactoryHelper.createTransaction(200);
 
         pool.addTransaction(transaction1);
         List<Transaction> result = pool.getTransactions();

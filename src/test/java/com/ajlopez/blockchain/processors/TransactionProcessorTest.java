@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.test.utils.TransactionHelper;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class TransactionProcessorTest {
         TransactionPool pool = new TransactionPool();
         TransactionProcessor processor = new TransactionProcessor(pool);
 
-        Transaction transaction = TransactionHelper.createTransaction(100);
+        Transaction transaction = FactoryHelper.createTransaction(100);
 
         processor.processTransaction(transaction);
 

@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.messages.BlockMessage;
 import com.ajlopez.blockchain.messages.Message;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ import org.junit.Test;
 public class MessageProcessorTest {
     @Test
     public void processBlockMessage() {
-        BlockProcessor blockProcessor = new BlockProcessor();
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
 

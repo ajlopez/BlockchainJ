@@ -3,7 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Hash;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.test.utils.TransactionHelper;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class MinerProcessorTest {
         Hash hash = HashUtilsTest.generateRandomHash();
         Block parent = new Block(1L, hash);
 
-        Transaction tx = TransactionHelper.createTransaction(100);
+        Transaction tx = FactoryHelper.createTransaction(100);
 
         TransactionPool txpool = new TransactionPool();
         txpool.addTransaction(tx);

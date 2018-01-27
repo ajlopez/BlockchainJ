@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import org.hamcrest.Factory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,14 +12,14 @@ import org.junit.Test;
 public class BlockProcessorTest {
     @Test
     public void noBestBlock() {
-        BlockProcessor processor = new BlockProcessor();
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         Assert.assertNull(processor.getBestBlock());
     }
 
     @Test
     public void addFirstBlock() {
-        BlockProcessor processor = new BlockProcessor();
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         Block block = new Block(0, null);
 
@@ -29,7 +31,7 @@ public class BlockProcessorTest {
 
     @Test
     public void switchToABetterForkUsingOrphan() {
-        BlockProcessor processor = new BlockProcessor();
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         Block genesis = new Block(0, null);
         Block block1 = new Block(1, genesis.getHash());
