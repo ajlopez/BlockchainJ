@@ -24,8 +24,8 @@ public class TransactionPool {
         this.transactions.remove(transaction);
     }
 
-    public void removeTransactions(List<Transaction> transactions) {
-        this.transactions.removeAll(transactions);
+    public boolean containsTransaction(Transaction transaction) {
+        return this.transactions.contains(transaction);
     }
 
     public List<Transaction> getTransactions() {
