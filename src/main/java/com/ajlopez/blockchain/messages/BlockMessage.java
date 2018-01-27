@@ -10,4 +10,8 @@ public class BlockMessage extends Message {
     public BlockMessage(Block block) {
         super(MessageType.BLOCK, BlockEncoder.encode(block));
     }
+
+    public Block getBlock() {
+        return BlockEncoder.decode(this.getPayload());
+    }
 }
