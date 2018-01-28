@@ -10,4 +10,8 @@ public class TransactionMessage extends Message {
     public TransactionMessage(Transaction tx) {
         super(MessageType.TRANSACTION, TransactionEncoder.encode(tx));
     }
+
+    public Transaction getTransaction() {
+        return TransactionEncoder.decode(this.getPayload());
+    }
 }
