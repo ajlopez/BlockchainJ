@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockChain;
+import com.ajlopez.blockchain.core.Hash;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,10 @@ public class BlockProcessor {
 
     public Block getBestBlock() {
         return this.blockChain.getBestBlock();
+    }
+
+    public Block getBlockByHash(Hash hash) {
+        return this.blockChain.getBlockByHash(hash);
     }
 
     private void connectDescendants(Block block) {

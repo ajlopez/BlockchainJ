@@ -27,6 +27,8 @@ public class BlockProcessorTest {
 
         Assert.assertNotNull(processor.getBestBlock());
         Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
+
+        Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
     }
 
     @Test
@@ -55,5 +57,10 @@ public class BlockProcessorTest {
 
         Assert.assertNotNull(processor.getBestBlock());
         Assert.assertEquals(block3.getHash(), processor.getBestBlock().getHash());
+
+        Assert.assertEquals(genesis.getHash(), processor.getBlockByHash(genesis.getHash()).getHash());
+        Assert.assertEquals(block1.getHash(), processor.getBlockByHash(block1.getHash()).getHash());
+        Assert.assertEquals(block2.getHash(), processor.getBlockByHash(block2.getHash()).getHash());
+        Assert.assertEquals(block3.getHash(), processor.getBlockByHash(block3.getHash()).getHash());
     }
 }
