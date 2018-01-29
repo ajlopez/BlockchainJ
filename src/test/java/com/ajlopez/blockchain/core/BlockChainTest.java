@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.core;
 
+import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class BlockChainTest {
     public void noBlockByHash() {
         BlockChain blockChain = new BlockChain();
 
-        Assert.assertNull(blockChain.getBlockByHash(new Hash()));
+        Assert.assertNull(blockChain.getBlockByHash(HashUtilsTest.generateRandomHash()));
     }
 
     @Test

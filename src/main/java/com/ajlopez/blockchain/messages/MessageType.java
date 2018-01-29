@@ -6,5 +6,6 @@ package com.ajlopez.blockchain.messages;
 public enum MessageType {
     STATUS,
     TRANSACTION,
-    BLOCK
+    BLOCK,
+    GET_BLOCK_BY_HASH
 }
