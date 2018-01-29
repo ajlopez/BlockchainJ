@@ -15,6 +15,13 @@ public class BlockChainTest {
     }
 
     @Test
+    public void noBlockByHash() {
+        BlockChain blockChain = new BlockChain();
+
+        Assert.assertNull(blockChain.getBlockByHash(new Hash()));
+    }
+
+    @Test
     public void addFirstBlock() {
         BlockChain blockChain = new BlockChain();
         Block block = new Block(0, null);
@@ -23,6 +30,8 @@ public class BlockChainTest {
 
         Assert.assertNotNull(blockChain.getBestBlock());
         Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
+
+        Assert.assertEquals(block.getHash(), blockChain.getBlockByHash(block.getHash()).getHash());
     }
 
     @Test
@@ -36,6 +45,9 @@ public class BlockChainTest {
 
         Assert.assertNotNull(blockChain.getBestBlock());
         Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
+
+        Assert.assertEquals(genesis.getHash(), blockChain.getBlockByHash(genesis.getHash()).getHash());
+        Assert.assertEquals(block.getHash(), blockChain.getBlockByHash(block.getHash()).getHash());
     }
 
     @Test
