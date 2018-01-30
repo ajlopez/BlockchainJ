@@ -7,5 +7,6 @@ public enum MessageType {
     STATUS,
     TRANSACTION,
     BLOCK,
-    GET_BLOCK_BY_HASH
+    GET_BLOCK_BY_HASH,
+    GET_BLOCK_BY_NUMBER
 }
