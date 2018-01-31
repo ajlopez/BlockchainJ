@@ -34,6 +34,10 @@ public class BlockChain {
         return this.blocksByHash.get(hash);
     }
 
+    public Block getBlockByNumber(long number) {
+        return null;
+    }
+
     private boolean isOrphan(Block block) {
         if (block.getNumber() == 0)
             return false;

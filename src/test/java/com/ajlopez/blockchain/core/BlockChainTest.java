@@ -23,6 +23,15 @@ public class BlockChainTest {
     }
 
     @Test
+    public void noBlockByNumber() {
+        BlockChain blockChain = new BlockChain();
+
+        Assert.assertNull(blockChain.getBlockByNumber(0));
+        Assert.assertNull(blockChain.getBlockByNumber(1));
+        Assert.assertNull(blockChain.getBlockByNumber(42));
+    }
+
+    @Test
     public void addFirstBlock() {
         BlockChain blockChain = new BlockChain();
         Block block = new Block(0, null);
