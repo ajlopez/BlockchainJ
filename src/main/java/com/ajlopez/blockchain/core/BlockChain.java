@@ -38,7 +38,7 @@ public class BlockChain {
         for (Block b: this.blocksByHash.values())
             if (b.getNumber() == number)
                 return b;
-        
+
         return null;
     }
 
