@@ -35,6 +35,10 @@ public class BlockChain {
     }
 
     public Block getBlockByNumber(long number) {
+        for (Block b: this.blocksByHash.values())
+            if (b.getNumber() == number)
+                return b;
+        
         return null;
     }
 

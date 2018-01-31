@@ -42,6 +42,7 @@ public class BlockChainTest {
         Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
 
         Assert.assertEquals(block.getHash(), blockChain.getBlockByHash(block.getHash()).getHash());
+        Assert.assertEquals(block.getHash(), blockChain.getBlockByNumber(block.getNumber()).getHash());
     }
 
     @Test
@@ -57,7 +58,9 @@ public class BlockChainTest {
         Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
 
         Assert.assertEquals(genesis.getHash(), blockChain.getBlockByHash(genesis.getHash()).getHash());
+        Assert.assertEquals(genesis.getHash(), blockChain.getBlockByNumber(genesis.getNumber()).getHash());
         Assert.assertEquals(block.getHash(), blockChain.getBlockByHash(block.getHash()).getHash());
+        Assert.assertEquals(block.getHash(), blockChain.getBlockByNumber(block.getNumber()).getHash());
     }
 
     @Test
