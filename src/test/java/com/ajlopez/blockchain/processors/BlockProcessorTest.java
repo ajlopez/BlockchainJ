@@ -2,6 +2,8 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtils;
+import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.hamcrest.Factory;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,6 +20,20 @@ public class BlockProcessorTest {
     }
 
     @Test
+    public void noBlockByHash() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        Assert.assertNull(processor.getBlockByHash(HashUtilsTest.generateRandomHash()));
+    }
+
+    @Test
+    public void noBlockByNumber() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        Assert.assertNull(processor.getBlockByNumber(1));
+    }
+
+    @Test
     public void addFirstBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
@@ -29,6 +45,7 @@ public class BlockProcessorTest {
         Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
 
         Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
+        Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
     }
 
     @Test

@@ -37,6 +37,10 @@ public class BlockProcessor {
         return this.blockChain.getBlockByHash(hash);
     }
 
+    public Block getBlockByNumber(long number) {
+        return this.blockChain.getBlockByNumber(number);
+    }
+
     private void connectDescendants(Block block) {
         List<Block> children = new ArrayList<>(orphanBlocks.getChildrenOrphanBlocks(block));
 
