@@ -34,6 +34,27 @@ public class BlockProcessorTest {
     }
 
     @Test
+    public void notChainedBlock() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        Assert.assertFalse(processor.isChainedBlock(HashUtilsTest.generateRandomHash()));
+    }
+
+    @Test
+    public void notOrphanBlock() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        Assert.assertFalse(processor.isOrphanBlock(HashUtilsTest.generateRandomHash()));
+    }
+
+    @Test
+    public void unknownBlock() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        Assert.assertFalse(processor.isKnownBlock(HashUtilsTest.generateRandomHash()));
+    }
+
+    @Test
     public void addFirstBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 

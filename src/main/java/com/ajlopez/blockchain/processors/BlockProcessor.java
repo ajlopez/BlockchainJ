@@ -20,7 +20,12 @@ public class BlockProcessor {
     }
 
     public void processBlock(Block block) {
-        if (this.orphanBlocks.isKnownOrphan(block))
+        Hash hash = block.getHash();
+
+        if (this.orphanBlocks.isKnownOrphan(hash))
+            return;
+
+        if (this.blockChain.isChainedBlock(hash))
             return;
 
         if (blockChain.connectBlock(block))
@@ -39,6 +44,18 @@ public class BlockProcessor {
 
     public Block getBlockByNumber(long number) {
         return this.blockChain.getBlockByNumber(number);
+    }
+
+    public boolean isChainedBlock(Hash hash) {
+        return this.blockChain.isChainedBlock(hash);
+    }
+
+    public boolean isOrphanBlock(Hash hash) {
+        return this.orphanBlocks.isKnownOrphan(hash);
+    }
+
+    public boolean isKnownBlock(Hash hash) {
+        return this.isChainedBlock(hash) || this.isOrphanBlock(hash);
     }
 
     private void connectDescendants(Block block) {

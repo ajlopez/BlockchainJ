@@ -15,8 +15,8 @@ public class OrphanBlocks {
     private Map<Hash, Block> orphansByHash = new HashMap<>();
     private Map<Hash, List<Block>> orphansByParent = new HashMap<>();
 
-    public boolean isKnownOrphan(Block block) {
-        return this.orphansByHash.containsKey(block.getHash());
+    public boolean isKnownOrphan(Hash hash) {
+        return this.orphansByHash.containsKey(hash);
     }
 
     public void addToOrphans(Block block) {

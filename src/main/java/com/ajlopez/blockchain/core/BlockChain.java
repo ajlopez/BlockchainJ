@@ -1,10 +1,6 @@
 package com.ajlopez.blockchain.core;
 
-import com.ajlopez.blockchain.processors.OrphanBlocks;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +28,10 @@ public class BlockChain {
 
     public Block getBlockByHash(Hash hash) {
         return this.blocksByHash.get(hash);
+    }
+
+    public boolean isChainedBlock(Hash hash) {
+        return this.blocksByHash.containsKey(hash);
     }
 
     public Block getBlockByNumber(long number) {
