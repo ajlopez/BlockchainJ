@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by ajlopez on 28/01/2018.
  */
-public class InputProcessor implements Runnable {
+public class InputProcessor implements Runnable, InputChannel {
     private MessageProcessor messageProcessor;
     private BlockingQueue<Message> messageQueue = new LinkedBlockingDeque<>();
     private boolean stopped = false;
