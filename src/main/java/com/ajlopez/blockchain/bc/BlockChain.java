@@ -1,4 +1,7 @@
-package com.ajlopez.blockchain.core;
+package com.ajlopez.blockchain.bc;
+
+import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Hash;
 
 import java.util.HashMap;
 import java.util.Map;

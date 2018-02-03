@@ -1,5 +1,8 @@
-package com.ajlopez.blockchain.core;
+package com.ajlopez.blockchain.bc;
 
+import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Hash;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -102,6 +105,7 @@ public class BlockChainTest {
 
         Assert.assertNotNull(blockChain.getBestBlock());
         Assert.assertEquals(genesis.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNull(blockChain.getBlockByNumber(block.getNumber()));
     }
 
     @Test
@@ -127,5 +131,12 @@ public class BlockChainTest {
 
         Assert.assertNotNull(blockChain.getBestBlock());
         Assert.assertEquals(block2b.getHash(), blockChain.getBestBlock().getHash());
+
+        Assert.assertEquals(block1.getHash(), blockChain.getBlockByHash(block1.getHash()).getHash());
+        Assert.assertEquals(block1b.getHash(), blockChain.getBlockByHash(block1b.getHash()).getHash());
+        Assert.assertEquals(block2b.getHash(), blockChain.getBlockByHash(block2b.getHash()).getHash());
+
+        Assert.assertEquals(block1b.getHash(), blockChain.getBlockByNumber(block1b.getNumber()).getHash());
+        Assert.assertEquals(block2b.getHash(), blockChain.getBlockByNumber(block2b.getNumber()).getHash());
     }
 }
