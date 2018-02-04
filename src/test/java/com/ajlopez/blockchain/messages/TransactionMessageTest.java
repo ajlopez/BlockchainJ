@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.messages;
 
-import com.ajlopez.blockchain.core.Address;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import org.junit.Assert;

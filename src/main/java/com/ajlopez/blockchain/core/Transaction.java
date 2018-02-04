@@ -1,12 +1,11 @@
 package com.ajlopez.blockchain.core;
 
-import com.ajlopez.blockchain.encoding.BlockHeaderEncoder;
+import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.utils.HashUtils;
 
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 
 /**
  * Created by ajlopez on 12/08/2017.

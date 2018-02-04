@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.state;
 
-import com.ajlopez.blockchain.core.Hash;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
 import org.junit.Test;

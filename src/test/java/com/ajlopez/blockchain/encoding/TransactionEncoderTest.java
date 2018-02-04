@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
-import com.ajlopez.blockchain.core.Address;
-import com.ajlopez.blockchain.core.Hash;
+import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.core.Transaction;
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain.messages;
 
-import com.ajlopez.blockchain.core.Hash;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
 /**

@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.utils;
 
-import com.ajlopez.blockchain.core.Hash;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.crypto.SpongyCastleProvider;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 

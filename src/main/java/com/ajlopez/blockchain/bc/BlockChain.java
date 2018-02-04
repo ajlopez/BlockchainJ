@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.Hash;
+import com.ajlopez.blockchain.core.types.Hash;
 
 /**
  * Created by ajlopez on 15/08/2017.

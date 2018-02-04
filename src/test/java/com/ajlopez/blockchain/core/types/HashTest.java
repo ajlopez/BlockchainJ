@@ -1,5 +1,6 @@
-package com.ajlopez.blockchain.core;
+package com.ajlopez.blockchain.core.types;
 
+import com.ajlopez.blockchain.core.types.Hash;
 import org.junit.Assert;
 import org.junit.Test;
 

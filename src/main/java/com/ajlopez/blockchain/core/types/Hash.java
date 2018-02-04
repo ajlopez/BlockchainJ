@@ -1,30 +1,34 @@
-package com.ajlopez.blockchain.core;
+package com.ajlopez.blockchain.core.types;
 
 import java.util.Arrays;
 import java.util.Random;
 
 /**
- * Created by ajlopez on 31/08/2017.
+ * Created by ajlopez on 12/08/2017.
  */
-public class Address {
+public class Hash {
+    private static Hash emptyHash = new Hash(new byte[32]);
     private static Random random = new Random();
 
     private byte[] bytes;
 
-    public Address() {
-        this.bytes = new byte[20];
+    public Hash() {
+        this.bytes = new byte[32];
         random.nextBytes(this.bytes);
     }
 
-    public Address(byte[] bytes) {
-        if (bytes.length > 20)
-            throw new IllegalStateException("Address too long");
-
+    public Hash(byte[] bytes) {
         this.bytes = bytes;
     }
 
+    public static Hash emptyHash() { return emptyHash; }
+
     public byte[] getBytes() {
         return this.bytes;
+    }
+
+    public boolean isEmpty() {
+        return emptyHash.equals(this);
     }
 
     @Override
@@ -32,12 +36,12 @@ public class Address {
         if (obj == null)
             return false;
 
-        if (!(obj instanceof Address))
+        if (!(obj instanceof Hash))
             return false;
 
-        Address address = (Address)obj;
+        Hash hash = (Hash)obj;
 
-        return Arrays.equals(this.bytes, address.bytes);
+        return Arrays.equals(this.bytes, hash.bytes);
     }
 
     @Override

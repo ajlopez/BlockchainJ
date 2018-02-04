@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.BlockHeader;
-import com.ajlopez.blockchain.core.Hash;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
 /**

@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.test.utils;
 
-import com.ajlopez.blockchain.core.Address;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.processors.BlockProcessor;

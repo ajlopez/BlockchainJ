@@ -1,8 +1,6 @@
 package com.ajlopez.blockchain.messages;
 
-import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.Hash;
-import com.ajlopez.blockchain.encoding.BlockEncoder;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
