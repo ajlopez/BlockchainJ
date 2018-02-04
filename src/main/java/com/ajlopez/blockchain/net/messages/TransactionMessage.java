@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain.messages;
+package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;

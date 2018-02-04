@@ -2,9 +2,9 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.messages.BlockMessage;
-import com.ajlopez.blockchain.messages.Message;
-import com.ajlopez.blockchain.messages.TransactionMessage;
+import com.ajlopez.blockchain.net.messages.BlockMessage;
+import com.ajlopez.blockchain.net.messages.Message;
+import com.ajlopez.blockchain.net.messages.TransactionMessage;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;

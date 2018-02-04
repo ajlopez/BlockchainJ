@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain.messages;
+package com.ajlopez.blockchain.net.messages;
 
 import org.junit.Assert;
 import org.junit.Test;

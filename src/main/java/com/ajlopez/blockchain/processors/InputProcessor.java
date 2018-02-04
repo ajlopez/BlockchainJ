@@ -1,12 +1,11 @@
 package com.ajlopez.blockchain.processors;
 
-import com.ajlopez.blockchain.messages.Message;
+import com.ajlopez.blockchain.net.messages.Message;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
