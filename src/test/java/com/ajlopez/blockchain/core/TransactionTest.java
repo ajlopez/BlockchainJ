@@ -25,7 +25,6 @@ public class TransactionTest {
         Assert.assertEquals(42, tx.getNonce());
 
         Assert.assertNotNull(tx.getHash());
-        Assert.assertNotEquals(Hash.emptyHash(), tx.getHash());
     }
 
     @Test
@@ -41,7 +40,6 @@ public class TransactionTest {
         Assert.assertEquals(42, tx.getNonce());
 
         Assert.assertNotNull(tx.getHash());
-        Assert.assertNotEquals(Hash.emptyHash(), tx.getHash());
     }
 
     @Test(expected = IllegalStateException.class)

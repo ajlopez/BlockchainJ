@@ -33,7 +33,6 @@ public class TransactionEncoderTest {
         Assert.assertEquals(tx.getValue(), result.getValue());
         Assert.assertEquals(tx.getNonce(), result.getNonce());
         Assert.assertNotNull(result.getHash());
-        Assert.assertNotEquals(Hash.emptyHash(), result.getHash());
         Assert.assertEquals(tx.getHash(), result.getHash());
     }
 }

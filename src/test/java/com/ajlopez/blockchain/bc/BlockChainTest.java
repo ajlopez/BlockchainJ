@@ -97,7 +97,7 @@ public class BlockChainTest {
     public void rejectBlockIfNotChild() {
         BlockChain blockChain = new BlockChain();
         Block genesis = new Block(0, null);
-        Block block = new Block(1, new Hash());
+        Block block = new Block(1, HashUtilsTest.generateRandomHash());
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertFalse(blockChain.connectBlock(block));

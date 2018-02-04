@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.encoding;
 import com.ajlopez.blockchain.core.*;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class BlockEncoderTest {
     @Test
     public void encodeDecodeBlock() {
-        Hash parentHash = new Hash();
+        Hash parentHash = HashUtilsTest.generateRandomHash();
         Block block = new Block(42, parentHash);
 
         byte[] encoded = BlockEncoder.encode(block);
@@ -42,7 +43,7 @@ public class BlockEncoderTest {
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx);
 
-        Hash parentHash = new Hash();
+        Hash parentHash = HashUtilsTest.generateRandomHash();
         Block block = new Block(42, parentHash, txs);
 
         byte[] encoded = BlockEncoder.encode(block);
@@ -59,7 +60,6 @@ public class BlockEncoderTest {
         Assert.assertEquals(tx.getSender(), result.getTransactions().get(0).getSender());
         Assert.assertEquals(tx.getReceiver(), result.getTransactions().get(0).getReceiver());
         Assert.assertEquals(tx.getValue(), result.getTransactions().get(0).getValue());
-        Assert.assertNotEquals(Hash.emptyHash(), result.getTransactions().get(0).getHash());
         Assert.assertEquals(tx.getHash(), result.getTransactions().get(0).getHash());
     }
 
@@ -75,7 +75,7 @@ public class BlockEncoderTest {
         txs.add(tx1);
         txs.add(tx2);
 
-        Hash parentHash = new Hash();
+        Hash parentHash = HashUtilsTest.generateRandomHash();
         Block block = new Block(42, parentHash, txs);
 
         byte[] encoded = BlockEncoder.encode(block);
@@ -94,20 +94,18 @@ public class BlockEncoderTest {
         Assert.assertEquals(tx1.getReceiver(), result.getTransactions().get(0).getReceiver());
         Assert.assertEquals(tx1.getValue(), result.getTransactions().get(0).getValue());
         Assert.assertEquals(tx1.getNonce(), result.getTransactions().get(0).getNonce());
-        Assert.assertNotEquals(Hash.emptyHash(), result.getTransactions().get(0).getHash());
         Assert.assertEquals(tx1.getHash(), result.getTransactions().get(0).getHash());
 
         Assert.assertEquals(tx2.getSender(), result.getTransactions().get(1).getSender());
         Assert.assertEquals(tx2.getReceiver(), result.getTransactions().get(1).getReceiver());
         Assert.assertEquals(tx2.getValue(), result.getTransactions().get(1).getValue());
         Assert.assertEquals(tx2.getNonce(), result.getTransactions().get(1).getNonce());
-        Assert.assertNotEquals(Hash.emptyHash(), result.getTransactions().get(1).getHash());
         Assert.assertEquals(tx2.getHash(), result.getTransactions().get(1).getHash());
     }
 
     @Test
     public void encodeTwoBlocks() {
-        Hash parentHash = new Hash();
+        Hash parentHash = HashUtilsTest.generateRandomHash();
         Block block1 = new Block(42, parentHash);
         Block block2 = new Block(0, null);
 
