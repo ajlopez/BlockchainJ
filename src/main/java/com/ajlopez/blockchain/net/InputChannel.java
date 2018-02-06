@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain.processors;
+package com.ajlopez.blockchain.net;
 
 import com.ajlopez.blockchain.net.messages.Message;
 
