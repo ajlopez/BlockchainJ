@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.net.InputChannel;
+import com.ajlopez.blockchain.net.Node;
 import com.ajlopez.blockchain.net.messages.Message;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class InputProcessor implements Runnable, InputChannel {
     private MessageProcessor messageProcessor;
-    private BlockingQueue<Message> messageQueue = new LinkedBlockingDeque<>();
+    private BlockingQueue<MessageTask> messageTaskQueue = new LinkedBlockingDeque<>();
     private boolean stopped = false;
     private List<Runnable> emptyActions = new ArrayList<>();
 
@@ -33,10 +34,10 @@ public class InputProcessor implements Runnable, InputChannel {
     public void run() {
         while (!this.stopped) {
             try {
-                Message message = this.messageQueue.poll(1, TimeUnit.SECONDS);
+                MessageTask task = this.messageTaskQueue.poll(1, TimeUnit.SECONDS);
 
-                if (message != null)
-                    this.messageProcessor.processMessage(message);
+                if (task != null)
+                    this.messageProcessor.processMessage(task.getMessage());
                 else
                     emitEmpty();
             } catch (Exception e) {
@@ -45,8 +46,8 @@ public class InputProcessor implements Runnable, InputChannel {
         }
     }
 
-    public void postMessage(Message message) {
-        this.messageQueue.add(message);
+    public void postMessage(Message message, Node sender) {
+        this.messageTaskQueue.add(new MessageTask(message, sender));
     }
 
     public void onEmpty(Runnable action) {

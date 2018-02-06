@@ -32,7 +32,8 @@ public class InputProcessorTest {
         processor.onEmpty(() -> {
             sem.release();
         });
-        processor.postMessage(message);
+
+        processor.postMessage(message, null);
         processor.start();
 
         sem.acquire();
@@ -63,7 +64,7 @@ public class InputProcessorTest {
         });
 
         for (int k = 0; k < 10; k++)
-            processor.postMessage(message);
+            processor.postMessage(message, null);
 
         processor.start();
 
@@ -94,7 +95,7 @@ public class InputProcessorTest {
             sem.release();
         });
 
-        processor.postMessage(message);
+        processor.postMessage(message, null);
         processor.start();
 
         sem.acquire();
