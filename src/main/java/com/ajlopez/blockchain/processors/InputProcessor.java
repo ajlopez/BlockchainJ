@@ -37,7 +37,7 @@ public class InputProcessor implements Runnable, InputChannel {
                 MessageTask task = this.messageTaskQueue.poll(1, TimeUnit.SECONDS);
 
                 if (task != null)
-                    this.messageProcessor.processMessage(task.getMessage());
+                    this.messageProcessor.processMessage(task.getMessage(), null);
                 else
                     emitEmpty();
             } catch (Exception e) {
