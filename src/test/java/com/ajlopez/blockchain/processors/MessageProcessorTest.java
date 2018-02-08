@@ -59,6 +59,33 @@ public class MessageProcessorTest {
     }
 
     @Test
+    public void processGetBlockByNumberMessage() {
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+
+        Block block = new Block(0, null);
+        Message blockMessage = new BlockMessage(block);
+
+        MessageProcessor processor = new MessageProcessor(blockProcessor, null);
+
+        processor.processMessage(blockMessage, null);
+
+        Message message = new GetBlockByNumberMessage(block.getNumber());
+        SimpleOutputChannel output = new SimpleOutputChannel();
+
+        processor.processMessage(message, output);
+
+        Message result = output.getMessage();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.BLOCK, result.getMessageType());
+
+        BlockMessage bmessage = (BlockMessage)result;
+
+        Assert.assertNotNull(bmessage.getBlock());
+        Assert.assertEquals(block.getHash(), bmessage.getBlock().getHash());
+    }
+
+    @Test
     public void processTransactionMessage() {
         TransactionPool pool = new TransactionPool();
         TransactionProcessor transactionProcessor = new TransactionProcessor(pool);

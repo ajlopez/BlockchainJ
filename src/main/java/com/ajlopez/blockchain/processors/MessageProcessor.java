@@ -27,6 +27,12 @@ public class MessageProcessor {
             if (block != null)
                 channel.postMessage(new BlockMessage(block));
         }
+        else if (msgtype == MessageType.GET_BLOCK_BY_NUMBER) {
+            Block block = this.blockProcessor.getBlockByNumber((((GetBlockByNumberMessage) message).getNumber()));
+
+            if (block != null)
+                channel.postMessage(new BlockMessage(block));
+        }
         else if (msgtype == MessageType.BLOCK.TRANSACTION)
             this.transactionProcessor.processTransaction(((TransactionMessage)message).getTransaction());
     }
