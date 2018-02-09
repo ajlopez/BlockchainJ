@@ -21,19 +21,25 @@ public class MessageProcessor {
 
         if (msgtype == MessageType.BLOCK)
             this.blockProcessor.processBlock(((BlockMessage)message).getBlock());
-        else if (msgtype == MessageType.GET_BLOCK_BY_HASH) {
-            Block block = this.blockProcessor.getBlockByHash((((GetBlockByHashMessage) message).getHash()));
-
-            if (block != null)
-                channel.postMessage(new BlockMessage(block));
-        }
-        else if (msgtype == MessageType.GET_BLOCK_BY_NUMBER) {
-            Block block = this.blockProcessor.getBlockByNumber((((GetBlockByNumberMessage) message).getNumber()));
-
-            if (block != null)
-                channel.postMessage(new BlockMessage(block));
-        }
+        else if (msgtype == MessageType.GET_BLOCK_BY_HASH)
+            this.processGetBlockByHashMessage((GetBlockByHashMessage) message, channel);
+        else if (msgtype == MessageType.GET_BLOCK_BY_NUMBER)
+            this.processGetBlockByNumberMessage((GetBlockByNumberMessage) message, channel);
         else if (msgtype == MessageType.BLOCK.TRANSACTION)
             this.transactionProcessor.processTransaction(((TransactionMessage)message).getTransaction());
+    }
+
+    private void processGetBlockByHashMessage(GetBlockByHashMessage message, OutputChannel channel) {
+        Block block = this.blockProcessor.getBlockByHash(message.getHash());
+
+        if (block != null)
+            channel.postMessage(new BlockMessage(block));
+    }
+
+    private void processGetBlockByNumberMessage(GetBlockByNumberMessage message, OutputChannel channel) {
+        Block block = this.blockProcessor.getBlockByNumber(message.getNumber());
+
+        if (block != null)
+            channel.postMessage(new BlockMessage(block));
     }
 }
