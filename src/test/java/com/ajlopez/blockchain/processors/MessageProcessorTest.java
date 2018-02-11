@@ -2,9 +2,12 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.test.simples.SimpleOutputChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtils;
+import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,7 +24,7 @@ public class MessageProcessorTest {
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
 
-        MessageProcessor processor = new MessageProcessor(blockProcessor, null);
+        MessageProcessor processor = new MessageProcessor(blockProcessor, null, null);
 
         processor.processMessage(message, null);
 
@@ -38,7 +41,7 @@ public class MessageProcessorTest {
         Block block = new Block(0, null);
         Message blockMessage = new BlockMessage(block);
 
-        MessageProcessor processor = new MessageProcessor(blockProcessor, null);
+        MessageProcessor processor = new MessageProcessor(blockProcessor, null, null);
 
         processor.processMessage(blockMessage, null);
 
@@ -65,7 +68,7 @@ public class MessageProcessorTest {
         Block block = new Block(0, null);
         Message blockMessage = new BlockMessage(block);
 
-        MessageProcessor processor = new MessageProcessor(blockProcessor, null);
+        MessageProcessor processor = new MessageProcessor(blockProcessor, null, null);
 
         processor.processMessage(blockMessage, null);
 
@@ -93,7 +96,7 @@ public class MessageProcessorTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 
-        MessageProcessor processor = new MessageProcessor(null, transactionProcessor);
+        MessageProcessor processor = new MessageProcessor(null, transactionProcessor, null);
 
         processor.processMessage(message, null);
 
@@ -107,5 +110,18 @@ public class MessageProcessorTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(transaction.getHash(), result.getHash());
+    }
+
+    @Test
+    public void processStatusMessage() {
+        PeerProcessor peerProcessor = new PeerProcessor();
+        MessageProcessor processor = new MessageProcessor(null, null, peerProcessor);
+        Hash nodeId = HashUtilsTest.generateRandomHash();
+        Message message = new StatusMessage(nodeId, 1, 100);
+
+        processor.processMessage(message, null);
+
+        Assert.assertEquals(100, peerProcessor.getBestBlockNumber());
+        Assert.assertEquals(100, peerProcessor.getPeerBestBlockNumber(nodeId));
     }
 }

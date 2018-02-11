@@ -10,10 +10,12 @@ import com.ajlopez.blockchain.net.messages.*;
 public class MessageProcessor {
     BlockProcessor blockProcessor;
     TransactionProcessor transactionProcessor;
+    PeerProcessor peerProcessor;
 
-    public MessageProcessor(BlockProcessor blockProcessor, TransactionProcessor transactionProcessor) {
+    public MessageProcessor(BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor) {
         this.blockProcessor = blockProcessor;
         this.transactionProcessor = transactionProcessor;
+        this.peerProcessor = peerProcessor;
     }
 
     public void processMessage(Message message, OutputChannel channel) {
@@ -27,6 +29,12 @@ public class MessageProcessor {
             this.processGetBlockByNumberMessage((GetBlockByNumberMessage) message, channel);
         else if (msgtype == MessageType.BLOCK.TRANSACTION)
             this.transactionProcessor.processTransaction(((TransactionMessage)message).getTransaction());
+        else if (msgtype == MessageType.STATUS)
+            this.processStatusMessage((StatusMessage)message, channel);
+    }
+
+    private void processStatusMessage(StatusMessage message, OutputChannel channel) {
+        this.peerProcessor.registerBestBlockNumber(null, message.getBestBlockNumber());
     }
 
     private void processGetBlockByHashMessage(GetBlockByHashMessage message, OutputChannel channel) {
