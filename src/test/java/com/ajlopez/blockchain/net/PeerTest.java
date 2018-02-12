@@ -8,13 +8,13 @@ import org.junit.Test;
 /**
  * Created by ajlopez on 04/02/2018.
  */
-public class NodeTest {
+public class PeerTest {
     @Test
     public void createWithHash() {
         Hash hash = HashUtilsTest.generateRandomHash();
 
-        Node node = new Node(hash);
+        Peer peer = new Peer(hash);
 
-        Assert.assertEquals(hash, node.getHash());
+        Assert.assertEquals(hash, peer.getHash());
     }
 }

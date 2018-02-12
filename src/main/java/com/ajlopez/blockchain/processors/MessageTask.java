@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
-import com.ajlopez.blockchain.net.Node;
+import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 
 /**
@@ -8,9 +8,9 @@ import com.ajlopez.blockchain.net.messages.Message;
  */
 public class MessageTask {
     private Message message;
-    private Node sender;
+    private Peer sender;
 
-    public MessageTask(Message message, Node sender) {
+    public MessageTask(Message message, Peer sender) {
         this.message = message;
         this.sender = sender;
     }
@@ -19,7 +19,7 @@ public class MessageTask {
         return this.message;
     }
 
-    public Node getSender() {
+    public Peer getSender() {
         return this.sender;
     }
 }

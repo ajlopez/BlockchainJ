@@ -3,8 +3,10 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.test.simples.SimpleOutputChannel;
+import com.ajlopez.blockchain.test.simples.SimplePeer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -46,11 +48,11 @@ public class MessageProcessorTest {
         processor.processMessage(blockMessage, null);
 
         Message message = new GetBlockByHashMessage(block.getHash());
-        SimpleOutputChannel output = new SimpleOutputChannel();
+        SimplePeer sender = new SimplePeer(HashUtilsTest.generateRandomHash());
 
-        processor.processMessage(message, output);
+        processor.processMessage(message, sender);
 
-        Message result = output.getMessage();
+        Message result = sender.getMessage();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(MessageType.BLOCK, result.getMessageType());
@@ -73,11 +75,11 @@ public class MessageProcessorTest {
         processor.processMessage(blockMessage, null);
 
         Message message = new GetBlockByNumberMessage(block.getNumber());
-        SimpleOutputChannel output = new SimpleOutputChannel();
+        SimplePeer sender = new SimplePeer(HashUtilsTest.generateRandomHash());
 
-        processor.processMessage(message, output);
+        processor.processMessage(message, sender);
 
-        Message result = output.getMessage();
+        Message result = sender.getMessage();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(MessageType.BLOCK, result.getMessageType());
@@ -116,12 +118,13 @@ public class MessageProcessorTest {
     public void processStatusMessage() {
         PeerProcessor peerProcessor = new PeerProcessor();
         MessageProcessor processor = new MessageProcessor(null, null, peerProcessor);
-        Hash nodeId = HashUtilsTest.generateRandomHash();
-        Message message = new StatusMessage(nodeId, 1, 100);
+        Hash peerId = HashUtilsTest.generateRandomHash();
+        Peer peer = new Peer(peerId);
+        Message message = new StatusMessage(peerId, 1, 100);
 
-        processor.processMessage(message, null);
+        processor.processMessage(message, peer);
 
         Assert.assertEquals(100, peerProcessor.getBestBlockNumber());
-        Assert.assertEquals(100, peerProcessor.getPeerBestBlockNumber(nodeId));
+        Assert.assertEquals(100, peerProcessor.getPeerBestBlockNumber(peerId));
     }
 }

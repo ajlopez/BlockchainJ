@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.net.InputChannel;
-import com.ajlopez.blockchain.net.Node;
+import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class InputProcessor implements Runnable, InputChannel {
                 MessageTask task = this.messageTaskQueue.poll(1, TimeUnit.SECONDS);
 
                 if (task != null)
-                    this.messageProcessor.processMessage(task.getMessage(), null);
+                    this.messageProcessor.processMessage(task.getMessage(), task.getSender());
                 else
                     emitEmpty();
             } catch (Exception e) {
@@ -46,7 +46,7 @@ public class InputProcessor implements Runnable, InputChannel {
         }
     }
 
-    public void postMessage(Message message, Node sender) {
+    public void postMessage(Message message, Peer sender) {
         this.messageTaskQueue.add(new MessageTask(message, sender));
     }
 
