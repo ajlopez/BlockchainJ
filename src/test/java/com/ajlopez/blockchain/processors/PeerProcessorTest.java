@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class PeerProcessorTest {
     public void noBestBlockNumber() {
         PeerProcessor processor = new PeerProcessor();
 
-        Assert.assertEquals(PeerProcessor.NO_BEST_BLOCK_NUMBER, processor.getBestBlockNumber());
+        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getBestBlockNumber());
     }
 
     @Test
@@ -22,7 +22,7 @@ public class PeerProcessorTest {
         PeerProcessor processor = new PeerProcessor();
         Hash peerId = HashUtilsTest.generateRandomHash();
 
-        Assert.assertEquals(PeerProcessor.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(peerId));
+        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(peerId));
     }
 
     @Test
@@ -33,7 +33,7 @@ public class PeerProcessorTest {
 
         processor.registerBestBlockNumber(peerId, bestBlockNumber);
 
-        Assert.assertEquals(PeerProcessor.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(HashUtilsTest.generateRandomHash()));
+        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(HashUtilsTest.generateRandomHash()));
         Assert.assertEquals(bestBlockNumber, processor.getPeerBestBlockNumber(peerId));
         Assert.assertEquals(bestBlockNumber, processor.getBestBlockNumber());
     }
@@ -49,7 +49,7 @@ public class PeerProcessorTest {
         processor.registerBestBlockNumber(peerId1, bestBlockNumber1);
         processor.registerBestBlockNumber(peerId2, bestBlockNumber2);
 
-        Assert.assertEquals(PeerProcessor.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(HashUtilsTest.generateRandomHash()));
+        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(HashUtilsTest.generateRandomHash()));
         Assert.assertEquals(bestBlockNumber1, processor.getPeerBestBlockNumber(peerId1));
         Assert.assertEquals(bestBlockNumber2, processor.getPeerBestBlockNumber(peerId2));
         Assert.assertEquals(bestBlockNumber1, processor.getBestBlockNumber());

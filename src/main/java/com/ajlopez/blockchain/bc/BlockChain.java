@@ -7,6 +7,8 @@ import com.ajlopez.blockchain.core.types.Hash;
  * Created by ajlopez on 15/08/2017.
  */
 public class BlockChain {
+    public static final long NO_BEST_BLOCK_NUMBER = -1;
+
     private Block best;
     private BlockHashStore blocksByHash = new BlockHashStore();
     private BlockNumberStore blocksByNumber = new BlockNumberStore();
