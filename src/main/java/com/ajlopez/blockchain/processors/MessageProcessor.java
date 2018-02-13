@@ -36,6 +36,12 @@ public class MessageProcessor {
 
     private void processStatusMessage(StatusMessage message, Peer sender) {
         this.peerProcessor.registerBestBlockNumber(sender.getHash(), message.getBestBlockNumber());
+
+        long fromNumber = this.blockProcessor.getBestBlockNumber();
+        long toNumber = this.peerProcessor.getPeerBestBlockNumber(sender.getHash());
+
+        for (long number = fromNumber + 1; number <= toNumber; number++)
+            sender.postMessage(new GetBlockByNumberMessage(number));
     }
 
     private void processGetBlockByHashMessage(GetBlockByHashMessage message, OutputChannel channel) {

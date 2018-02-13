@@ -38,6 +38,10 @@ public class BlockProcessor {
         return this.blockChain.getBestBlock();
     }
 
+    public long getBestBlockNumber() {
+        return this.blockChain.getBestBlockNumber();
+    }
+
     public Block getBlockByHash(Hash hash) {
         return this.blockChain.getBlockByHash(hash);
     }

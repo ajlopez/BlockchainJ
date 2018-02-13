@@ -5,10 +5,8 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.*;
-import com.ajlopez.blockchain.test.simples.SimpleOutputChannel;
 import com.ajlopez.blockchain.test.simples.SimplePeer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -52,7 +50,7 @@ public class MessageProcessorTest {
 
         processor.processMessage(message, sender);
 
-        Message result = sender.getMessage();
+        Message result = sender.getLastMessage();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(MessageType.BLOCK, result.getMessageType());
@@ -79,7 +77,7 @@ public class MessageProcessorTest {
 
         processor.processMessage(message, sender);
 
-        Message result = sender.getMessage();
+        Message result = sender.getLastMessage();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(MessageType.BLOCK, result.getMessageType());
@@ -115,16 +113,30 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processStatusMessage() {
+    public void processStatusMessageAndStartSync() {
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        MessageProcessor processor = new MessageProcessor(null, null, peerProcessor);
+        MessageProcessor processor = new MessageProcessor(blockProcessor, null, peerProcessor);
         Hash peerId = HashUtilsTest.generateRandomHash();
-        Peer peer = new Peer(peerId);
-        Message message = new StatusMessage(peerId, 1, 100);
+        SimplePeer peer = new SimplePeer(peerId);
+        Message message = new StatusMessage(peerId, 1, 10);
 
         processor.processMessage(message, peer);
 
-        Assert.assertEquals(100, peerProcessor.getBestBlockNumber());
-        Assert.assertEquals(100, peerProcessor.getPeerBestBlockNumber(peerId));
+        Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
+        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peerId));
+
+        Assert.assertEquals(11, peer.getMessages().size());
+
+        for (int k = 0; k < 11; k++) {
+            Message msg = peer.getMessages().get(k);
+
+            Assert.assertNotNull(msg);
+            Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER, msg.getMessageType());
+
+            GetBlockByNumberMessage gmsg = (GetBlockByNumberMessage)msg;
+
+            Assert.assertEquals(k, gmsg.getNumber());
+        }
     }
 }
