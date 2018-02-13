@@ -14,7 +14,14 @@ public class BlockChain {
     private BlockNumberStore blocksByNumber = new BlockNumberStore();
 
     public Block getBestBlock() {
-        return best;
+        return this.best;
+    }
+
+    public long getBestBlockNumber() {
+        if (this.best == null)
+            return NO_BEST_BLOCK_NUMBER;
+
+        return this.best.getNumber();
     }
 
     public boolean connectBlock(Block block) {

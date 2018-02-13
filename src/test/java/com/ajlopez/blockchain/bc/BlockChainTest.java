@@ -15,6 +15,7 @@ public class BlockChainTest {
         BlockChain blockChain = new BlockChain();
 
         Assert.assertNull(blockChain.getBestBlock());
+        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, blockChain.getBestBlockNumber());
     }
 
     @Test
@@ -45,6 +46,8 @@ public class BlockChainTest {
 
         Assert.assertEquals(block.getHash(), blockChain.getBlockByHash(block.getHash()).getHash());
         Assert.assertEquals(block.getHash(), blockChain.getBlockByNumber(block.getNumber()).getHash());
+
+        Assert.assertEquals(0, blockChain.getBestBlockNumber());
     }
 
     @Test
