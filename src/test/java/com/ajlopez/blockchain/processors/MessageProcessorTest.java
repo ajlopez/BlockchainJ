@@ -139,4 +139,33 @@ public class MessageProcessorTest {
             Assert.assertEquals(k, gmsg.getNumber());
         }
     }
+
+    @Test
+    public void processStatusMessageTwiceAndStartSync() {
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        PeerProcessor peerProcessor = new PeerProcessor();
+        MessageProcessor processor = new MessageProcessor(blockProcessor, null, peerProcessor);
+        Hash peerId = HashUtilsTest.generateRandomHash();
+        SimplePeer peer = new SimplePeer(peerId);
+        Message message = new StatusMessage(peerId, 1, 10);
+
+        processor.processMessage(message, peer);
+        processor.processMessage(message, peer);
+
+        Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
+        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peerId));
+
+        Assert.assertEquals(11, peer.getMessages().size());
+
+        for (int k = 0; k < 11; k++) {
+            Message msg = peer.getMessages().get(k);
+
+            Assert.assertNotNull(msg);
+            Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER, msg.getMessageType());
+
+            GetBlockByNumberMessage gmsg = (GetBlockByNumberMessage)msg;
+
+            Assert.assertEquals(k, gmsg.getNumber());
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.*;
@@ -35,10 +36,18 @@ public class MessageProcessor {
     }
 
     private void processStatusMessage(StatusMessage message, Peer sender) {
-        this.peerProcessor.registerBestBlockNumber(sender.getHash(), message.getBestBlockNumber());
+        Hash senderId = sender.getHash();
+
+        long peerNumber = this.peerProcessor.getPeerBestBlockNumber(senderId);
+
+        this.peerProcessor.registerBestBlockNumber(senderId, message.getBestBlockNumber());
 
         long fromNumber = this.blockProcessor.getBestBlockNumber();
-        long toNumber = this.peerProcessor.getPeerBestBlockNumber(sender.getHash());
+
+        if (fromNumber < peerNumber)
+            fromNumber = peerNumber;
+        
+        long toNumber = this.peerProcessor.getPeerBestBlockNumber(senderId);
 
         for (long number = fromNumber + 1; number <= toNumber; number++)
             sender.postMessage(new GetBlockByNumberMessage(number));
