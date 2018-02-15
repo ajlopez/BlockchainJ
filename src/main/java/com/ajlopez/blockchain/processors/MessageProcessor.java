@@ -46,7 +46,7 @@ public class MessageProcessor {
 
         if (fromNumber < peerNumber)
             fromNumber = peerNumber;
-        
+
         long toNumber = this.peerProcessor.getPeerBestBlockNumber(senderId);
 
         for (long number = fromNumber + 1; number <= toNumber; number++)
