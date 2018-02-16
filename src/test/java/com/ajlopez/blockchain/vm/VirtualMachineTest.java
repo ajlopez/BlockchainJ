@@ -150,6 +150,19 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeExpTwoBytes() throws VirtualMachineException {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x03, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_EXP });
+
+        Stack<byte[]> stack = vm.getStack();
+
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertArrayEquals(new byte[] { 0x08 }, stack.get(0));
+    }
+
+    @Test
     public void executeDupTopOfStack() throws VirtualMachineException {
         VirtualMachine vm = new VirtualMachine(null);
 

@@ -98,6 +98,12 @@ public class VirtualMachine {
 
                 break;
 
+            case OP_EXP:
+                value1 = this.popBigInteger();
+                value2 = this.popBigInteger();
+                this.pushBigInteger(value1.pow(value2.intValueExact()));
+                break;
+
             case OP_DUP:
                 int offset = this.opcodes[++pc];
                 this.stack.push(this.stack.get(this.stack.size() - 1 - offset));

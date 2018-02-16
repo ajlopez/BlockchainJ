@@ -14,6 +14,7 @@ public class OpCodes {
     public static final byte OP_DIVIDE = 6;
     public static final byte OP_MOD = 7;
     public static final byte OP_DIVMOD = 8;
+    public static final byte OP_EXP = 9;
 
     public static final byte OP_DUP = 16;
     public static final byte OP_SWAP = 17;
