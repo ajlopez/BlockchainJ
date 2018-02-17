@@ -233,6 +233,59 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeLessThanTwoElementsOfStack() throws VirtualMachineException {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x10, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_LT});
+
+        Stack<byte[]> stack = vm.getStack();
+
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertArrayEquals(new byte[] { (byte)0x01 }, stack.pop());
+    }
+
+    @Test
+    public void executeLessThanTwoElementsOfStackGivenFalse() throws VirtualMachineException {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x10, OpCodes.OP_PUSH, 0x01, 0x20, OpCodes.OP_LT});
+
+        Stack<byte[]> stack = vm.getStack();
+
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertArrayEquals(new byte[] { (byte)0x00 }, stack.pop());
+    }
+
+
+    @Test
+    public void executeGreaterThanTwoElementsOfStack() throws VirtualMachineException {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x10, OpCodes.OP_GT});
+
+        Stack<byte[]> stack = vm.getStack();
+
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertArrayEquals(new byte[] { (byte)0x01 }, stack.pop());
+    }
+
+    @Test
+    public void executeGreaterThanTwoElementsOfStackGivenFalse() throws VirtualMachineException {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x20, OpCodes.OP_PUSH, 0x01, 0x10, OpCodes.OP_GT});
+
+        Stack<byte[]> stack = vm.getStack();
+
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertArrayEquals(new byte[] { (byte)0x00 }, stack.pop());
+    }
+
+    @Test
     public void executeStoreValueToStorage() throws VirtualMachineException {
         Storage storage = new Storage();
         VirtualMachine vm = new VirtualMachine(storage);
@@ -273,7 +326,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeStoreMultyByteValueToMemory() throws VirtualMachineException {
+    public void executeStoreMultiByteValueToMemory() throws VirtualMachineException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x02, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_MSTORE});

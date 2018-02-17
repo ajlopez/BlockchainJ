@@ -118,6 +118,28 @@ public class VirtualMachine {
 
                 break;
 
+            case OP_LT:
+                value1 = this.popBigInteger();
+                value2 = this.popBigInteger();
+
+                if (value1.compareTo(value2) < 0)
+                    this.stack.push(new byte[] { 0x01 });
+                else
+                    this.stack.push(new byte[] { 0x00 });
+
+                break;
+
+            case OP_GT:
+                value1 = this.popBigInteger();
+                value2 = this.popBigInteger();
+
+                if (value1.compareTo(value2) > 0)
+                    this.stack.push(new byte[] { 0x01 });
+                else
+                    this.stack.push(new byte[] { 0x00 });
+
+                break;
+
             case OP_SSTORE:
                 bvalue1 = this.stack.pop();
                 bvalue2 = this.stack.pop();

@@ -23,6 +23,8 @@ public class OpCodes {
     public static final byte OP_MLOAD = 35;
 
     public static final byte OP_EQUAL = 48;
+    public static final byte OP_LT = 49;
+    public static final byte OP_GT = 50;
 
     public static final byte OP_JUMP = 64;
     public static final byte OP_JUMPI = 66;
