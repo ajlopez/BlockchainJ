@@ -88,16 +88,6 @@ public class VirtualMachine {
                 this.pushBigInteger(value1.mod(value2));
                 break;
 
-            case OP_DIVMOD:
-                value1 = this.popBigInteger();
-                value2 = this.popBigInteger();
-                BigInteger[] divmod = value1.divideAndRemainder(value2);
-
-                this.pushBigInteger(divmod[0]);
-                this.pushBigInteger(divmod[1]);
-
-                break;
-
             case OP_EXP:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();

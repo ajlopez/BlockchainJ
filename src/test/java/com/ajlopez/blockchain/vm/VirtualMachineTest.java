@@ -136,20 +136,6 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeDivModTwoBytes() throws VirtualMachineException {
-        VirtualMachine vm = new VirtualMachine(null);
-
-        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x03, OpCodes.OP_PUSH, 0x01, 0x07, OpCodes.OP_DIVMOD });
-
-        Stack<byte[]> stack = vm.getStack();
-
-        Assert.assertFalse(stack.isEmpty());
-        Assert.assertEquals(2, stack.size());
-        Assert.assertArrayEquals(new byte[] { 0x02 }, stack.get(0));
-        Assert.assertArrayEquals(new byte[] { 0x01 }, stack.get(1));
-    }
-
-    @Test
     public void executeExpTwoBytes() throws VirtualMachineException {
         VirtualMachine vm = new VirtualMachine(null);
 
