@@ -367,7 +367,7 @@ public class VirtualMachineTest {
     }
 
     @Test(expected = VirtualMachineException.class)
-    public void executeJumpWhitoutJumpDestRaiseException() throws VirtualMachineException {
+    public void executeJumpWithoutJumpDestRaiseException() throws VirtualMachineException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_JUMP, 0x01, 0x06, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02 });
@@ -378,6 +378,19 @@ public class VirtualMachineTest {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x00, OpCodes.OP_JUMPI, 0x01, 0x09, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_JUMPDEST, OpCodes.OP_PUSH, 0x01, 0x02 });
+
+        Stack<byte[]> stack = vm.getStack();
+
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertArrayEquals(new byte[] { 0x02 }, stack.pop());
+    }
+
+    @Test(expected = VirtualMachineException.class)
+    public void executeJumpIfZeroWithoutJumpDestRaiseException() throws VirtualMachineException {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x00, OpCodes.OP_JUMPI, 0x01, 0x09, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_ADD, OpCodes.OP_PUSH, 0x01, 0x02 });
 
         Stack<byte[]> stack = vm.getStack();
 
