@@ -18,6 +18,7 @@ public class VirtualMachine {
 
     private int pc;
     private byte[] opcodes;
+    private boolean[] jumpdests;
 
     public VirtualMachine(Storage storage) {
         this.storage = storage;
@@ -36,6 +37,7 @@ public class VirtualMachine {
     public void execute(byte[] opcodes) throws VirtualMachineException {
         this.pc = 0;
         this.opcodes = opcodes;
+        this.jumpdests = makeJumpDests(opcodes);
 
         int l = opcodes.length;
 
@@ -50,61 +52,77 @@ public class VirtualMachine {
         switch (opcode) {
             case OP_PUSH:
                 int nbytes = this.opcodes[pc + 1];
+
                 this.stack.push(Arrays.copyOfRange(this.opcodes, this.pc + 2, this.pc + 2 + nbytes));
                 this.pc += nbytes + 1;
+
                 break;
 
             case OP_POP:
                 stack.pop();
+
                 break;
 
             case OP_ADD:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
+
                 this.pushBigInteger(value1.add(value2));
+
                 break;
 
             case OP_SUBTRACT:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
+
                 this.pushBigInteger(value1.subtract(value2));
+
                 break;
 
             case OP_MULTIPLY:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
                 this.pushBigInteger(value1.multiply(value2));
+
                 break;
 
             case OP_DIVIDE:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
+
                 this.stack.push(value1.divide(value2).toByteArray());
+
                 break;
 
             case OP_MOD:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
                 this.pushBigInteger(value1.mod(value2));
+
                 break;
 
             case OP_EXP:
                 value1 = this.popBigInteger();
                 value2 = this.popBigInteger();
+
                 this.pushBigInteger(value1.pow(value2.intValueExact()));
+
                 break;
 
             case OP_DUP:
                 int offset = this.opcodes[++pc];
                 this.stack.push(this.stack.get(this.stack.size() - 1 - offset));
+
                 break;
 
             case OP_SWAP:
                 offset = this.opcodes[++pc];
                 byte[] bvalue1 = this.stack.peek();
                 byte[] bvalue2 = this.stack.get(this.stack.size() - 1 - offset);
+
                 this.stack.set(this.stack.size() - 1 - offset, bvalue1);
                 this.stack.set(this.stack.size() - 1, bvalue2);
+
                 break;
 
             case OP_EQUAL:
@@ -171,7 +189,7 @@ public class VirtualMachine {
                 nbytes = this.opcodes[pc + 1];
                 offset = ByteUtils.bytesToUnsignedInteger(Arrays.copyOfRange(this.opcodes, this.pc + 2, this.pc + 2 + nbytes));
 
-                if (this.opcodes[offset] != OP_JUMPDEST)
+                if (!this.jumpdests[offset])
                     throw new VirtualMachineException("Invalid jump");
 
                 this.pc = offset;
@@ -182,8 +200,12 @@ public class VirtualMachine {
                 nbytes = this.opcodes[pc + 1];
                 offset = ByteUtils.bytesToUnsignedInteger(Arrays.copyOfRange(this.opcodes, this.pc + 2, this.pc + 2 + nbytes));
 
-                if (ByteUtils.areZero(this.stack.pop()))
+                if (ByteUtils.areZero(this.stack.pop())) {
+                    if (!this.jumpdests[offset])
+                        throw new VirtualMachineException("Invalid jump");
+
                     this.pc = offset;
+                }
 
                 break;
         }
@@ -203,5 +225,16 @@ public class VirtualMachine {
         byte[] bytes = this.stack.pop();
 
         return ByteUtils.bytesToUnsignedInteger(bytes);
+    }
+
+    private static boolean[] makeJumpDests(byte[] opcodes) {
+        int l = opcodes.length;
+        boolean[] jumpdests = new boolean[l];
+
+        for (int k = 0; k < l; k++)
+            if (opcodes[k] == OP_JUMPDEST)
+                jumpdests[k] = true;
+
+        return jumpdests;
     }
 }
