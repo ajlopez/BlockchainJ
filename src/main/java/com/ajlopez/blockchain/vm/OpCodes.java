@@ -5,7 +5,8 @@ package com.ajlopez.blockchain.vm;
  */
 public class OpCodes {
     private OpCodes() { }
-    
+
+    public static final byte OP_STOP = 0;
     public static final byte OP_PUSH = 1;
     public static final byte OP_POP = 2;
     public static final byte OP_ADD = 3;
@@ -27,6 +28,6 @@ public class OpCodes {
     public static final byte OP_GT = 50;
 
     public static final byte OP_JUMP = 64;
-    public static final byte OP_JUMPI = 66;
+    public static final byte OP_JUMPI = 65;
     public static final byte OP_JUMPDEST = 66;
 }

@@ -194,7 +194,7 @@ public class VirtualMachine {
 
                 this.pc = offset;
 
-                break;
+                return;
 
             case OP_JUMPI:
                 nbytes = this.opcodes[pc + 1];
@@ -205,6 +205,8 @@ public class VirtualMachine {
                         throw new VirtualMachineException("Invalid jump");
 
                     this.pc = offset;
+
+                    return;
                 }
 
                 break;
@@ -231,9 +233,18 @@ public class VirtualMachine {
         int l = opcodes.length;
         boolean[] jumpdests = new boolean[l];
 
-        for (int k = 0; k < l; k++)
-            if (opcodes[k] == OP_JUMPDEST)
+        for (int k = 0; k < l; k++) {
+            byte opcode = opcodes[k];
+
+            if (opcode == OP_JUMPDEST)
                 jumpdests[k] = true;
+            else if (opcode == OP_SWAP || opcode == OP_DUP)
+                k++;
+            else if (opcode == OP_PUSH || opcode == OP_JUMP || opcode == OP_JUMPI) {
+                int nbytes = opcodes[k + 1];
+                k += nbytes + 1;
+            }
+        }
 
         return jumpdests;
     }

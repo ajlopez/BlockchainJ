@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.vm;
 
+import jdk.internal.org.objectweb.asm.Opcodes;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -371,6 +372,13 @@ public class VirtualMachineTest {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_JUMP, 0x01, 0x06, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02 });
+    }
+
+    @Test(expected = VirtualMachineException.class)
+    public void executeJumpToFalseJumpDestRaiseException() throws VirtualMachineException {
+        VirtualMachine vm = new VirtualMachine(null);
+
+        vm.execute(new byte[] { OpCodes.OP_JUMP, 0x01, 0x06, OpCodes.OP_PUSH, 0x02, 0x01, OpCodes.OP_JUMPDEST });
     }
 
     @Test
