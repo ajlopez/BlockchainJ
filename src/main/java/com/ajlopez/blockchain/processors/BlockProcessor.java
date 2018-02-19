@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by ajlopez on 17/12/2017.
@@ -13,6 +14,7 @@ import java.util.List;
 public class BlockProcessor {
     private OrphanBlocks orphanBlocks;
     private BlockChain blockChain;
+    private List<Consumer<Block>> newBestBlockConsumers = new ArrayList<>();
 
     public BlockProcessor(BlockChain blockChain, OrphanBlocks orphanBlocks) {
         this.blockChain = blockChain;
@@ -28,8 +30,15 @@ public class BlockProcessor {
         if (this.blockChain.isChainedBlock(hash))
             return;
 
-        if (blockChain.connectBlock(block))
+        Block initialBestBlock = this.getBestBlock();
+
+        if (blockChain.connectBlock(block)) {
             connectDescendants(block);
+            Block newBestBlock = this.getBestBlock();
+
+            if (initialBestBlock == null || !newBestBlock.getHash().equals(initialBestBlock.getHash()))
+                emitNewBestBlock(newBestBlock);
+        }
         else
             orphanBlocks.addToOrphans(block);
     }
@@ -62,6 +71,10 @@ public class BlockProcessor {
         return this.isChainedBlock(hash) || this.isOrphanBlock(hash);
     }
 
+    public void onNewBestBlock(Consumer<Block> consumer) {
+        this.newBestBlockConsumers.add(consumer);
+    }
+
     private void connectDescendants(Block block) {
         List<Block> children = new ArrayList<>(orphanBlocks.getChildrenOrphanBlocks(block));
 
@@ -69,5 +82,9 @@ public class BlockProcessor {
             orphanBlocks.removeOrphan(child);
             processBlock(child);
         });
+    }
+
+    private void emitNewBestBlock(Block block) {
+        this.newBestBlockConsumers.forEach(a -> a.accept(block));
     }
 }

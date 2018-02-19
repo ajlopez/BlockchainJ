@@ -101,4 +101,46 @@ public class BlockProcessorTest {
         Assert.assertEquals(block2.getHash(), processor.getBlockByHash(block2.getHash()).getHash());
         Assert.assertEquals(block3.getHash(), processor.getBlockByHash(block3.getHash()).getHash());
     }
+
+    @Test
+    public void switchToABetterForkUsingOrphanAndEmitNewBestBlock() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        Block genesis = new Block(0, null);
+        Block block1 = new Block(1, genesis.getHash());
+        Block block2 = new Block(2, block1.getHash());
+        Block block3 = new Block(3, block2.getHash());
+
+        processor.processBlock(genesis);
+        processor.processBlock(block1);
+
+        Assert.assertNotNull(processor.getBestBlock());
+        Assert.assertNotNull(processor.getBestBlock().getHash());
+        Assert.assertEquals(block1.getHash(), processor.getBestBlock().getHash());
+
+        processor.processBlock(block3);
+
+        Assert.assertNotNull(processor.getBestBlock());
+        Assert.assertEquals(block1.getNumber(), processor.getBestBlock().getNumber());
+        Assert.assertEquals(block1.getHash(), processor.getBestBlock().getHash());
+
+        final Block newBestBlock;
+
+        processor.onNewBestBlock(b -> {
+            newBestBlock = b;
+        });
+
+        processor.processBlock(block2);
+
+        Assert.assertNotNull(processor.getBestBlock());
+        Assert.assertEquals(block3.getHash(), processor.getBestBlock().getHash());
+
+        Assert.assertEquals(genesis.getHash(), processor.getBlockByHash(genesis.getHash()).getHash());
+        Assert.assertEquals(block1.getHash(), processor.getBlockByHash(block1.getHash()).getHash());
+        Assert.assertEquals(block2.getHash(), processor.getBlockByHash(block2.getHash()).getHash());
+        Assert.assertEquals(block3.getHash(), processor.getBlockByHash(block3.getHash()).getHash());
+
+        Assert.assertNotNull(newBestBlock);
+        Assert.assertEquals(block3.getHash(), newBestBlock.getHash());
+    }
 }
