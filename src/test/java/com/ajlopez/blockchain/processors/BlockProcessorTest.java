@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.test.BlockConsumer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -124,11 +125,9 @@ public class BlockProcessorTest {
         Assert.assertEquals(block1.getNumber(), processor.getBestBlock().getNumber());
         Assert.assertEquals(block1.getHash(), processor.getBestBlock().getHash());
 
-        final Block newBestBlock;
+        BlockConsumer consumer = new BlockConsumer();
 
-        processor.onNewBestBlock(b -> {
-            newBestBlock = b;
-        });
+        processor.onNewBestBlock(consumer);
 
         processor.processBlock(block2);
 
@@ -140,7 +139,7 @@ public class BlockProcessorTest {
         Assert.assertEquals(block2.getHash(), processor.getBlockByHash(block2.getHash()).getHash());
         Assert.assertEquals(block3.getHash(), processor.getBlockByHash(block3.getHash()).getHash());
 
-        Assert.assertNotNull(newBestBlock);
-        Assert.assertEquals(block3.getHash(), newBestBlock.getHash());
+        Assert.assertNotNull(consumer.getBlock());
+        Assert.assertEquals(block3.getHash(), consumer.getBlock().getHash());
     }
 }
