@@ -71,6 +71,53 @@ public class BlockProcessorTest {
     }
 
     @Test
+    public void addFirstBlockAndEmitNewBestBlock() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        BlockConsumer consumer = new BlockConsumer();
+
+        processor.onNewBestBlock(consumer);
+
+        Block block = new Block(0, null);
+
+        processor.processBlock(block);
+
+        Assert.assertNotNull(processor.getBestBlock());
+        Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
+
+        Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
+        Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
+
+        Assert.assertNotNull(consumer.getBlock());
+        Assert.assertEquals(block.getHash(), consumer.getBlock().getHash());
+    }
+
+    @Test
+    public void addOrphanBlock() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        Block block = new Block(1, HashUtilsTest.generateRandomHash());
+
+        processor.processBlock(block);
+
+        Assert.assertNull(processor.getBestBlock());
+    }
+
+    @Test
+    public void addOrphanBlockAndNoEmitNewBestBlock() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+        BlockConsumer consumer = new BlockConsumer();
+
+        Block block = new Block(1, HashUtilsTest.generateRandomHash());
+
+        processor.onNewBestBlock(consumer);
+        processor.processBlock(block);
+
+        Assert.assertNull(processor.getBestBlock());
+        Assert.assertNull(consumer.getBlock());
+    }
+
+    @Test
     public void switchToABetterForkUsingOrphan() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
