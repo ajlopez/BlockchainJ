@@ -85,6 +85,7 @@ public class TrieTest {
         Trie result = Trie.fromEncoded(encoded);
 
         Assert.assertNotNull(result);
+        Assert.assertEquals(trie.getHash(), result.getHash());
     }
 
     @Test

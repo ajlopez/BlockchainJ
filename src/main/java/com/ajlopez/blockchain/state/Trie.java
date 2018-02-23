@@ -113,7 +113,7 @@ public class Trie {
     }
 
     public static Trie fromEncoded(byte[] bytes) {
-        return null;
+        return new Trie();
     }
 
     private void getSubnodes(byte[] bytes, int offset) {
