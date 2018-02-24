@@ -92,14 +92,14 @@ public class Trie {
 
         int nsubnodes = this.getSubnodesCount();
 
-        byte[] bytes = new byte[1 + 1 + 1 + 2 + HashUtils.HASH_BYTES * nsubnodes + valsizebytes + valbytes];
+        byte[] bytes = new byte[1 + 1 + 1 + Short.BYTES + HashUtils.HASH_BYTES * nsubnodes + valsizebytes + valbytes];
 
         getSubnodes(bytes, 1 + 1 + 1);
 
         // byte[0] version == 0
 
         // arity
-        bytes[1] = 16;
+        bytes[1] = ARITY;
 
         // value size
 
@@ -125,13 +125,14 @@ public class Trie {
             for (int k = 0; k < this.nodes.length; k++) {
                 Hash subhash = this.getSubhash(k);
 
-                if (subhash == null)
+                if (subhash == null) {
                     subhash = this.getSubhashFromNode(k);
 
-                if (subhash == null)
-                    continue;
+                    if (subhash == null)
+                        continue;
 
-                this.setSubhash(k, subhash);
+                    this.setSubhash(k, subhash);
+                }
 
                 subnodes |= 1 << k;
                 System.arraycopy(subhash.getBytes(), 0, bytes, offset + Short.BYTES + HashUtils.HASH_BYTES * nsubnode, HashUtils.HASH_BYTES);
@@ -172,12 +173,25 @@ public class Trie {
 
     private int getSubnodesCount() {
         if (this.nodes == null)
-            return 0;
+            return this.getSubhashesCount();
 
         int nsubnodes = 0;
 
         for (int k = 0; k < this.nodes.length; k++)
-            if (this.nodes[k] != null)
+            if (this.nodes[k] != null || (this.hashes != null && this.hashes[k] != null))
+                nsubnodes++;
+
+        return nsubnodes;
+    }
+
+    private int getSubhashesCount() {
+        if (this.hashes == null)
+            return 0;
+
+        int nsubnodes = 0;
+
+        for (int k = 0; k < this.hashes.length; k++)
+            if (this.hashes[k] != null)
                 nsubnodes++;
 
         return nsubnodes;
