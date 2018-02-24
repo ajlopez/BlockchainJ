@@ -39,6 +39,17 @@ public class ByteUtils {
         return result;
     }
 
+    public static short bytesToUnsignedShort(byte[] bytes, int offset) {
+        short result = 0;
+
+        for (int k = 0; k < Short.BYTES; k++) {
+            result <<= 8;
+            result |= bytes[k + offset] & 0xff;
+        }
+
+        return result;
+    }
+
     public static int bytesToUnsignedInteger(byte[] bytes) {
         int result = 0;
 

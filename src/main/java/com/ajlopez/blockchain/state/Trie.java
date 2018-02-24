@@ -29,6 +29,10 @@ public class Trie {
         this.value = value;
     }
 
+    private Trie(Hash[] hashes) {
+        this.hashes = hashes;
+    }
+
     public int nodesSize() {
         int count = 1;
 
@@ -114,15 +118,34 @@ public class Trie {
     }
 
     public static Trie fromEncoded(byte[] bytes) {
-        return new Trie();
+        short subnodes = ByteUtils.bytesToUnsignedShort(bytes, 3);
+
+        if (subnodes == 0)
+            return new Trie();
+
+        Hash[] hashes = new Hash[ARITY];
+        int h = 0;
+
+        for (int k = 0; k < ARITY; k++) {
+            if ((subnodes & (1 << k)) == 0)
+                continue;
+
+            byte[] bhash = new byte[HashUtils.HASH_BYTES];
+            System.arraycopy(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h, bhash, 0, HashUtils.HASH_BYTES);
+            hashes[k] = new Hash(bhash);
+
+            h++;
+        }
+
+        return new Trie(hashes);
     }
 
     private void getSubnodes(byte[] bytes, int offset) {
         short subnodes = 0;
         int nsubnode = 0;
 
-        if (this.nodes != null)
-            for (int k = 0; k < this.nodes.length; k++) {
+        if (this.nodes != null || this.hashes != null)
+            for (int k = 0; k < ARITY; k++) {
                 Hash subhash = this.getSubhash(k);
 
                 if (subhash == null) {
@@ -168,6 +191,9 @@ public class Trie {
     }
 
     private Trie getSubnode(int k) {
+        if (this.nodes == null)
+            return null;
+
         return this.nodes[k];
     }
 
