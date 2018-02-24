@@ -16,6 +16,7 @@ public class Trie {
 
     private byte[] value;
     private Trie[] nodes;
+    private Hash[] hashes;
 
     private Hash hash;
 
@@ -122,13 +123,17 @@ public class Trie {
 
         if (this.nodes != null)
             for (int k = 0; k < this.nodes.length; k++) {
-                Trie subnode = this.getSubnode(k);
+                Hash subhash = this.getSubhash(k);
 
-                if (subnode == null)
+                if (subhash == null)
+                    subhash = this.getSubhashFromNode(k);
+
+                if (subhash == null)
                     continue;
 
+                this.setSubhash(k, subhash);
+
                 subnodes |= 1 << k;
-                Hash subhash = subnode.getHash();
                 System.arraycopy(subhash.getBytes(), 0, bytes, offset + Short.BYTES + HashUtils.HASH_BYTES * nsubnode, HashUtils.HASH_BYTES);
                 nsubnode++;
             }
@@ -136,6 +141,29 @@ public class Trie {
         byte[] subnodesbits = ByteUtils.unsignedShortToBytes(subnodes);
 
         System.arraycopy(subnodesbits, 0, bytes, offset, subnodesbits.length);
+    }
+
+    private Hash getSubhash(int k) {
+        if (this.hashes == null)
+            return null;
+
+        return this.hashes[k];
+    }
+
+    private void setSubhash(int k, Hash hash) {
+        if (this.hashes == null)
+            this.hashes = new Hash[ARITY];
+
+        this.hashes[k] = hash;
+    }
+
+    private Hash getSubhashFromNode(int k) {
+        Trie node = this.getSubnode(k);
+
+        if (node == null)
+            return null;
+
+        return node.getHash();
     }
 
     private Trie getSubnode(int k) {

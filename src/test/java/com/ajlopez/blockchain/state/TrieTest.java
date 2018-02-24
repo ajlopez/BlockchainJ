@@ -89,6 +89,21 @@ public class TrieTest {
     }
 
     @Test
+    public void getEncodedFromEncodedTrieWithKeyValue() {
+        byte[] value = new byte[32];
+        random.nextBytes(value);
+        byte[] key = new byte[] { 0x01 };
+        Trie trie = Trie.getEmptyTrie().put(key, value);
+
+        byte[] encoded = trie.getEncoded();
+
+        Trie result = Trie.fromEncoded(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(trie.getHash(), result.getHash());
+    }
+
+    @Test
     public void getHashFromEmptyTrie() {
         Trie trie = Trie.getEmptyTrie();
 
