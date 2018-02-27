@@ -148,14 +148,8 @@ public class Trie {
             for (int k = 0; k < ARITY; k++) {
                 Hash subhash = this.getSubhash(k);
 
-                if (subhash == null) {
-                    subhash = this.getSubhashFromNode(k);
-
-                    if (subhash == null)
-                        continue;
-
-                    this.setSubhash(k, subhash);
-                }
+                if (subhash == null)
+                    continue;
 
                 subnodes |= 1 << k;
                 System.arraycopy(subhash.getBytes(), 0, bytes, offset + Short.BYTES + HashUtils.HASH_BYTES * nsubnode, HashUtils.HASH_BYTES);
@@ -168,6 +162,22 @@ public class Trie {
     }
 
     private Hash getSubhash(int k) {
+        Hash hash = this.getSubhashFromHashes(k);
+
+        if (hash != null)
+            return hash;
+
+        hash = this.getSubhashFromNodes(k);
+
+        if (hash == null)
+            return null;
+
+        this.setSubhash(k, hash);
+
+        return hash;
+    }
+
+    private Hash getSubhashFromHashes(int k) {
         if (this.hashes == null)
             return null;
 
@@ -181,7 +191,7 @@ public class Trie {
         this.hashes[k] = hash;
     }
 
-    private Hash getSubhashFromNode(int k) {
+    private Hash getSubhashFromNodes(int k) {
         Trie node = this.getSubnode(k);
 
         if (node == null)
