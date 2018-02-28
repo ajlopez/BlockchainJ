@@ -51,6 +51,7 @@ public class TrieTest {
 
         byte[] expected = new byte[5 + Integer.BYTES + 32];
         expected[1] = 16; // arity
+        expected[2] = Integer.BYTES; // value length in bytes
         expected[8] = 32; // value length in bytes[5..8]
         System.arraycopy(value, 0, expected, 9, value.length);
 

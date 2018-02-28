@@ -107,9 +107,11 @@ public class Trie {
 
         // value size
 
+        bytes[2] = (byte)valsizebytes;
+
         if (valsizebytes > 0) {
-            System.arraycopy(ByteUtils.unsignedIntegerToBytes(valbytes), 0, bytes, 5, valsizebytes);
-            System.arraycopy(this.value, 0, bytes, 5 + valsizebytes, valbytes);
+            System.arraycopy(ByteUtils.unsignedIntegerToBytes(valbytes), 0, bytes, 1 + 1 + 1 + Short.BYTES + HashUtils.HASH_BYTES * nsubnodes, valsizebytes);
+            System.arraycopy(this.value, 0, bytes, 1 + 1 + 1 + Short.BYTES + HashUtils.HASH_BYTES * nsubnodes + valsizebytes, valbytes);
         }
 
         // subnodes hashes
