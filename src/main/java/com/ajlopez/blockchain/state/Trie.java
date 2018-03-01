@@ -33,6 +33,11 @@ public class Trie {
         this.hashes = hashes;
     }
 
+    private Trie(Hash[] hashes, byte[] value) {
+        this.hashes = hashes;
+        this.value = value;
+    }
+
     public int nodesSize() {
         int count = 1;
 
@@ -109,6 +114,8 @@ public class Trie {
 
         bytes[2] = (byte)valsizebytes;
 
+        // value encoding
+
         if (valsizebytes > 0) {
             System.arraycopy(ByteUtils.unsignedIntegerToBytes(valbytes), 0, bytes, 1 + 1 + 1 + Short.BYTES + HashUtils.HASH_BYTES * nsubnodes, valsizebytes);
             System.arraycopy(this.value, 0, bytes, 1 + 1 + 1 + Short.BYTES + HashUtils.HASH_BYTES * nsubnodes + valsizebytes, valbytes);
@@ -120,9 +127,10 @@ public class Trie {
     }
 
     public static Trie fromEncoded(byte[] bytes) {
+        short valsizebytes = bytes[2];
         short subnodes = ByteUtils.bytesToUnsignedShort(bytes, 3);
 
-        if (subnodes == 0)
+        if (subnodes == 0 && valsizebytes == 0)
             return new Trie();
 
         Hash[] hashes = new Hash[ARITY];
@@ -139,7 +147,15 @@ public class Trie {
             h++;
         }
 
-        return new Trie(hashes);
+        if (valsizebytes == 0)
+            return new Trie(hashes);
+
+        int lvalue = ByteUtils.bytesToUnsignedShort(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h);
+
+        byte[] value = new byte[lvalue];
+        System.arraycopy(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h + Short.BYTES, value, 0, lvalue);
+
+        return new Trie(hashes, value);
     }
 
     private void getSubnodes(byte[] bytes, int offset) {
