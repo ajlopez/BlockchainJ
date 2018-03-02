@@ -150,7 +150,7 @@ public class Trie {
         if (valsizebytes == 0)
             return new Trie(hashes);
 
-        int lvalue = ByteUtils.bytesToUnsignedShort(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h);
+        int lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h);
 
         byte[] value = new byte[lvalue];
         System.arraycopy(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h + Short.BYTES, value, 0, lvalue);

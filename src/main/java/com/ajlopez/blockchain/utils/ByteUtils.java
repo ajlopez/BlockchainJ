@@ -50,12 +50,12 @@ public class ByteUtils {
         return result;
     }
 
-    public static int bytesToUnsignedInteger(byte[] bytes) {
+    public static int bytesToUnsignedInteger(byte[] bytes, int offset) {
         int result = 0;
 
-        for (int k = 0; k < bytes.length && k < Integer.BYTES; k++) {
+        for (int k = 0; k < Integer.BYTES && k + offset < bytes.length; k++) {
             result <<= 8;
-            result |= bytes[k] & 0xff;
+            result |= bytes[k + offset] & 0xff;
         }
 
         return result;

@@ -9,17 +9,17 @@ import org.junit.Test;
 public class ByteUtilsTest {
     @Test
     public void zeroByteToUnsignedInteger() {
-        Assert.assertEquals(0, ByteUtils.bytesToUnsignedInteger(new byte[1]));
+        Assert.assertEquals(0, ByteUtils.bytesToUnsignedInteger(new byte[1], 0));
     }
 
     @Test
     public void zeroByte2ToUnsignedInteger() {
-        Assert.assertEquals(0, ByteUtils.bytesToUnsignedInteger(new byte[1]));
+        Assert.assertEquals(0, ByteUtils.bytesToUnsignedInteger(new byte[1], 0));
     }
 
     @Test
     public void manyZeroBytesToUnsignedInteger() {
-        Assert.assertEquals(0, ByteUtils.bytesToUnsignedInteger(new byte[32]));
+        Assert.assertEquals(0, ByteUtils.bytesToUnsignedInteger(new byte[32], 0));
     }
 
     @Test

@@ -186,8 +186,7 @@ public class VirtualMachine {
                 break;
 
             case OP_JUMP:
-                nbytes = this.opcodes[pc + 1];
-                offset = ByteUtils.bytesToUnsignedInteger(Arrays.copyOfRange(this.opcodes, this.pc + 2, this.pc + 2 + nbytes));
+                offset = ByteUtils.bytesToUnsignedInteger(this.opcodes, this.pc + 2);
 
                 if (!this.jumpdests[offset])
                     throw new VirtualMachineException("Invalid jump");
@@ -197,8 +196,7 @@ public class VirtualMachine {
                 return;
 
             case OP_JUMPI:
-                nbytes = this.opcodes[pc + 1];
-                offset = ByteUtils.bytesToUnsignedInteger(Arrays.copyOfRange(this.opcodes, this.pc + 2, this.pc + 2 + nbytes));
+                offset = ByteUtils.bytesToUnsignedInteger(this.opcodes, this.pc + 2);
 
                 if (ByteUtils.areZero(this.stack.pop())) {
                     if (!this.jumpdests[offset])
@@ -226,7 +224,7 @@ public class VirtualMachine {
     private int popInteger() {
         byte[] bytes = this.stack.pop();
 
-        return ByteUtils.bytesToUnsignedInteger(bytes);
+        return ByteUtils.bytesToUnsignedInteger(bytes, 0);
     }
 
     private static boolean[] makeJumpDests(byte[] opcodes) {
