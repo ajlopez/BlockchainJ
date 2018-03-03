@@ -186,7 +186,7 @@ public class VirtualMachine {
                 break;
 
             case OP_JUMP:
-                offset = ByteUtils.bytesToUnsignedInteger(this.opcodes, this.pc + 2);
+                offset = ByteUtils.bytesWithLengthToUnsignedInteger(this.opcodes, this.pc + 1);
 
                 if (!this.jumpdests[offset])
                     throw new VirtualMachineException("Invalid jump");
@@ -196,7 +196,7 @@ public class VirtualMachine {
                 return;
 
             case OP_JUMPI:
-                offset = ByteUtils.bytesToUnsignedInteger(this.opcodes, this.pc + 2);
+                offset = ByteUtils.bytesWithLengthToUnsignedInteger(this.opcodes, this.pc + 1);
 
                 if (ByteUtils.areZero(this.stack.pop())) {
                     if (!this.jumpdests[offset])

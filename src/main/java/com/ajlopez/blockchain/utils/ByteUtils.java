@@ -50,6 +50,18 @@ public class ByteUtils {
         return result;
     }
 
+    public static short bytesWithLengthToUnsignedInteger(byte[] bytes, int offset) {
+        short result = 0;
+        short l = bytes[offset];
+
+        for (int k = 0; k < l; k++) {
+            result <<= 8;
+            result |= bytes[k + offset + 1] & 0xff;
+        }
+
+        return result;
+    }
+
     public static int bytesToUnsignedInteger(byte[] bytes, int offset) {
         int result = 0;
 
