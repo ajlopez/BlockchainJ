@@ -116,6 +116,7 @@ public class TrieTest {
         Trie result = Trie.fromEncoded(encoded);
 
         Assert.assertNotNull(result);
+        Assert.assertArrayEquals(encoded, result.getEncoded());
         Assert.assertEquals(trie.getHash(), result.getHash());
         Assert.assertArrayEquals(value, trie.get(key));
     }

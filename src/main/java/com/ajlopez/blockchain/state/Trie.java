@@ -153,7 +153,7 @@ public class Trie {
         int lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h);
 
         byte[] value = new byte[lvalue];
-        System.arraycopy(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h + Short.BYTES, value, 0, lvalue);
+        System.arraycopy(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes, value, 0, lvalue);
 
         return new Trie(hashes, value);
     }
