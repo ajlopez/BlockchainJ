@@ -49,5 +49,10 @@ public class TrieStoreTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(trie.getHash(), result.getHash());
+
+        byte[] rvalue = result.get(key);
+
+        Assert.assertNotNull(rvalue);
+        Assert.assertArrayEquals(rvalue, value);
     }
 }
