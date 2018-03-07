@@ -23,6 +23,6 @@ public class TrieStore {
         if (encoded == null)
             return null;
 
-        return Trie.fromEncoded(encoded);
+        return Trie.fromEncoded(encoded, this);
     }
 }

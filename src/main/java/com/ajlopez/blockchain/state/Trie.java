@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.state;
 
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
 
@@ -17,6 +18,7 @@ public class Trie {
     private byte[] value;
     private Trie[] nodes;
     private Hash[] hashes;
+    private TrieStore store;
 
     private Hash hash;
 
@@ -126,7 +128,7 @@ public class Trie {
         return bytes;
     }
 
-    public static Trie fromEncoded(byte[] bytes) {
+    public static Trie fromEncoded(byte[] bytes, TrieStore store) {
         short valsizebytes = bytes[2];
         short subnodes = ByteUtils.bytesToUnsignedShort(bytes, 3);
 

@@ -83,7 +83,7 @@ public class TrieTest {
 
         byte[] encoded = trie.getEncoded();
 
-        Trie result = Trie.fromEncoded(encoded);
+        Trie result = Trie.fromEncoded(encoded, null);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(trie.getHash(), result.getHash());
@@ -98,7 +98,7 @@ public class TrieTest {
 
         byte[] encoded = trie.getEncoded();
 
-        Trie result = Trie.fromEncoded(encoded);
+        Trie result = Trie.fromEncoded(encoded, null);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(trie.getHash(), result.getHash());
@@ -113,7 +113,7 @@ public class TrieTest {
 
         byte[] encoded = trie.getEncoded();
 
-        Trie result = Trie.fromEncoded(encoded);
+        Trie result = Trie.fromEncoded(encoded, null);
 
         Assert.assertNotNull(result);
         Assert.assertArrayEquals(encoded, result.getEncoded());
