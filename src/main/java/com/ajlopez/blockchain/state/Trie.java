@@ -59,15 +59,14 @@ public class Trie {
         if (position == key.length * 2)
             return this.value;
 
-        if (this.nodes == null)
-            return null;
-
         int nibble = getOffset(key, position);
 
-        if (this.nodes[nibble] == null)
+        Trie trie = this.getSubnode(nibble);
+
+        if (trie == null)
             return null;
 
-        return this.nodes[nibble].get(key, position + 1);
+        return trie.get(key, position + 1);
     }
 
     public Trie put(byte[] key, byte[] value) {
@@ -212,7 +211,10 @@ public class Trie {
     }
 
     private Hash getSubhashFromNodes(int k) {
-        Trie node = this.getSubnode(k);
+        if (this.nodes == null)
+            return null;
+
+        Trie node = this.nodes[k];
 
         if (node == null)
             return null;
@@ -221,8 +223,23 @@ public class Trie {
     }
 
     private Trie getSubnode(int k) {
-        if (this.nodes == null)
-            return null;
+        if (this.nodes == null) {
+            if (this.hashes == null)
+                return null;
+
+            Hash hash = this.hashes[k];
+
+            Trie trie = this.store.retrieve(hash);
+
+            // TODO replace by exceptin
+            if (trie == null)
+                return null;
+
+            this.nodes = new Trie[ARITY];
+            this.nodes[k] = trie;
+
+            return trie;
+        }
 
         return this.nodes[k];
     }
