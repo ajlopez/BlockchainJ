@@ -31,13 +31,15 @@ public class Trie {
         this.value = value;
     }
 
-    private Trie(Hash[] hashes) {
+    private Trie(Hash[] hashes, TrieStore store) {
         this.hashes = hashes;
+        this.store = store;
     }
 
-    private Trie(Hash[] hashes, byte[] value) {
+    private Trie(Hash[] hashes, byte[] value, TrieStore store) {
         this.hashes = hashes;
         this.value = value;
+        this.store = store;
     }
 
     public int nodesSize() {
@@ -149,14 +151,14 @@ public class Trie {
         }
 
         if (valsizebytes == 0)
-            return new Trie(hashes);
+            return new Trie(hashes, store);
 
         int lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h);
 
         byte[] value = new byte[lvalue];
         System.arraycopy(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes, value, 0, lvalue);
 
-        return new Trie(hashes, value);
+        return new Trie(hashes, value, store);
     }
 
     private void getSubnodes(byte[] bytes, int offset) {
