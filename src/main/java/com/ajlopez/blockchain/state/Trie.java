@@ -21,22 +21,26 @@ public class Trie {
     private TrieStore store;
 
     private Hash hash;
+    private boolean saved;
 
     private Trie() {}
 
     public static Trie getEmptyTrie() { return empty; }
 
     private Trie(Trie[] nodes, byte[] value) {
-        this.nodes = nodes;
-        this.value = value;
+        this(nodes, null, value, null);
+    }
+
+    public Trie(TrieStore store) {
+        this(null, null, null, store);
     }
 
     private Trie(Hash[] hashes, TrieStore store) {
-        this.hashes = hashes;
-        this.store = store;
+        this(null, hashes, null, store);
     }
 
-    private Trie(Hash[] hashes, byte[] value, TrieStore store) {
+    private Trie(Trie[] nodes, Hash[] hashes, byte[] value, TrieStore store) {
+        this.nodes = nodes;
         this.hashes = hashes;
         this.value = value;
         this.store = store;
@@ -129,12 +133,30 @@ public class Trie {
         return bytes;
     }
 
+    public void save() {
+        if (this.saved)
+            return;
+
+        this.store.save(this);
+        this.saved = true;
+
+        if (this.nodes == null)
+            return;
+
+        for (int k = 0; k < ARITY; k++) {
+            Trie node = this.nodes[k];
+
+            if (node != null)
+                node.save();
+        }
+    }
+
     public static Trie fromEncoded(byte[] bytes, TrieStore store) {
         short valsizebytes = bytes[2];
         short subnodes = ByteUtils.bytesToUnsignedShort(bytes, 3);
 
         if (subnodes == 0 && valsizebytes == 0)
-            return new Trie();
+            return new Trie(store);
 
         Hash[] hashes = new Hash[ARITY];
         int h = 0;
@@ -158,7 +180,7 @@ public class Trie {
         byte[] value = new byte[lvalue];
         System.arraycopy(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes, value, 0, lvalue);
 
-        return new Trie(hashes, value, store);
+        return new Trie(null, hashes, value, store);
     }
 
     private void getSubnodes(byte[] bytes, int offset) {
@@ -277,7 +299,7 @@ public class Trie {
             if (Arrays.equals(value, this.value))
                 return this;
             else
-                return createNewTrie(this.nodes, value, true);
+                return createNewTrie(this.nodes, value, true, this.store);
 
         int offset = getOffset(key, position);
 
@@ -291,17 +313,17 @@ public class Trie {
         if (noNodes(children))
             children = null;
 
-        return createNewTrie(children, this.value, false);
+        return createNewTrie(children, this.value, false, this.store);
     }
 
-    private static Trie createNewTrie(Trie[] nodes, byte[] value, boolean copy) {
+    private static Trie createNewTrie(Trie[] nodes, byte[] value, boolean copy, TrieStore store) {
         if (value == null && noNodes(nodes))
             return null;
 
         if (copy)
-            return new Trie(copyNodes(nodes, false), value);
+            return new Trie(copyNodes(nodes, false), null, value, store);
 
-        return new Trie(nodes, value);
+        return new Trie(nodes, null, value, store);
     }
 
     private static boolean noNodes(Trie[] nodes) {

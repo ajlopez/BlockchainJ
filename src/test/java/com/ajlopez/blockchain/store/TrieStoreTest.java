@@ -41,9 +41,9 @@ public class TrieStoreTest {
 
         TrieStore store = new TrieStore(new HashMapStore());
 
-        Trie trie = Trie.getEmptyTrie().put(key, value);
+        Trie trie = new Trie(store).put(key, value);
 
-        store.save(trie);
+        trie.save();
 
         Trie result = store.retrieve(trie.getHash());
 
