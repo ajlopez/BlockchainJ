@@ -79,7 +79,10 @@ public class Trie {
         Trie trie = this.put(key, 0, value);
 
         if (trie == null)
-            return empty;
+            if (this.store == null)
+                return empty;
+            else
+                new Trie(this.store);
 
         return trie;
     }
@@ -299,31 +302,31 @@ public class Trie {
             if (Arrays.equals(value, this.value))
                 return this;
             else
-                return createNewTrie(this.nodes, value, true, this.store);
+                return createNewTrie(this.nodes, this.hashes, value, true, this.store);
 
         int offset = getOffset(key, position);
 
         Trie[] children = copyNodes(this.nodes, true);
 
         if (children[offset] == null)
-            children[offset] = empty.put(key, position + 1, value);
+            children[offset] = new Trie(this.store).put(key, position + 1, value);
         else
             children[offset] = children[offset].put(key, position + 1, value);
 
         if (noNodes(children))
             children = null;
 
-        return createNewTrie(children, this.value, false, this.store);
+        return createNewTrie(children, this.hashes, this.value, false, this.store);
     }
 
-    private static Trie createNewTrie(Trie[] nodes, byte[] value, boolean copy, TrieStore store) {
+    private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, boolean copy, TrieStore store) {
         if (value == null && noNodes(nodes))
             return null;
 
         if (copy)
-            return new Trie(copyNodes(nodes, false), null, value, store);
+            return new Trie(copyNodes(nodes, false), hashes, value, store);
 
-        return new Trie(nodes, null, value, store);
+        return new Trie(nodes, hashes, value, store);
     }
 
     private static boolean noNodes(Trie[] nodes) {
