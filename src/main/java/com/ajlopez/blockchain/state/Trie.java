@@ -27,16 +27,8 @@ public class Trie {
 
     public static Trie getEmptyTrie() { return empty; }
 
-    private Trie(Trie[] nodes, byte[] value) {
-        this(nodes, null, value, null);
-    }
-
     public Trie(TrieStore store) {
         this(null, null, null, store);
-    }
-
-    private Trie(Hash[] hashes, TrieStore store) {
-        this(null, hashes, null, store);
     }
 
     private Trie(Trie[] nodes, Hash[] hashes, byte[] value, TrieStore store) {
@@ -176,7 +168,7 @@ public class Trie {
         }
 
         if (valsizebytes == 0)
-            return new Trie(hashes, store);
+            return new Trie(null, hashes, null, store);
 
         int lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h);
 
