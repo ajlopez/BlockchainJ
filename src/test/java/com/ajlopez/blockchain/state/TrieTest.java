@@ -16,7 +16,7 @@ public class TrieTest {
 
     @Test
     public void getUnknownValueAsNull() {
-        Trie trie = Trie.getEmptyTrie();
+        Trie trie = new Trie();
 
         Assert.assertNull(trie.get(new byte[] { 0x01, 0x02 }));
         Assert.assertEquals(1, trie.nodesSize());
@@ -24,7 +24,7 @@ public class TrieTest {
 
     @Test
     public void getEncodedEmptyTrie() {
-        Trie trie = Trie.getEmptyTrie();
+        Trie trie = new Trie();
 
         byte[] encoded = trie.getEncoded();
 
@@ -42,7 +42,7 @@ public class TrieTest {
         byte[] value = new byte[32];
         random.nextBytes(value);
 
-        Trie trie = Trie.getEmptyTrie().put(new byte[0], value);
+        Trie trie = new Trie().put(new byte[0], value);
 
         byte[] encoded = trie.getEncoded();
 
@@ -63,7 +63,7 @@ public class TrieTest {
         byte[] value = new byte[32];
         random.nextBytes(value);
 
-        Trie trie = Trie.getEmptyTrie().put(new byte[] { 0x01 }, value);
+        Trie trie = new Trie().put(new byte[] { 0x01 }, value);
 
         byte[] encoded = trie.getEncoded();
 
@@ -79,7 +79,7 @@ public class TrieTest {
 
     @Test
     public void retrieveTrieFromEncodedEmptyTrie() {
-        Trie trie = Trie.getEmptyTrie();
+        Trie trie = new Trie();
 
         byte[] encoded = trie.getEncoded();
 
@@ -94,7 +94,7 @@ public class TrieTest {
         byte[] value = new byte[32];
         random.nextBytes(value);
         byte[] key = new byte[] { 0x01 };
-        Trie trie = Trie.getEmptyTrie().put(key, value);
+        Trie trie = new Trie().put(key, value);
 
         byte[] encoded = trie.getEncoded();
 
@@ -109,7 +109,7 @@ public class TrieTest {
         byte[] value = new byte[32];
         random.nextBytes(value);
         byte[] key = new byte[0];
-        Trie trie = Trie.getEmptyTrie().put(key, value);
+        Trie trie = new Trie().put(key, value);
 
         byte[] encoded = trie.getEncoded();
 
@@ -123,7 +123,7 @@ public class TrieTest {
 
     @Test
     public void getHashFromEmptyTrie() {
-        Trie trie = Trie.getEmptyTrie();
+        Trie trie = new Trie();
 
         Hash hash = trie.getHash();
 
@@ -135,13 +135,13 @@ public class TrieTest {
         byte[] value = new byte[32];
         random.nextBytes(value);
 
-        Trie trie = Trie.getEmptyTrie().put(new byte[0], value);
+        Trie trie = new Trie().put(new byte[0], value);
 
         Hash hash = trie.getHash();
 
         Assert.assertNotNull(hash);
 
-        Trie trie2 = Trie.getEmptyTrie().put(new byte[0], value);
+        Trie trie2 = new Trie().put(new byte[0], value);
 
         Hash hash2 = trie2.getHash();
 
@@ -150,7 +150,7 @@ public class TrieTest {
 
     @Test
     public void getUnknownValueWithEmptyKeyAsNull() {
-        Trie trie = Trie.getEmptyTrie();
+        Trie trie = new Trie();
 
         Assert.assertNull(trie.get(new byte[0]));
         Assert.assertEquals(1, trie.nodesSize());
@@ -161,7 +161,7 @@ public class TrieTest {
         byte[] key = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value = new byte[] { 0x01, 0x02, 0x03 };
 
-        Trie trie = Trie.getEmptyTrie();
+        Trie trie = new Trie();
         trie = trie.put(key, value);
 
         Assert.assertNotNull(trie);
@@ -174,7 +174,7 @@ public class TrieTest {
         byte[] key = new byte[0];
         byte[] value = new byte[] { 0x01, 0x02, 0x03 };
 
-        Trie trie = Trie.getEmptyTrie();
+        Trie trie = new Trie();
         trie = trie.put(key, value);
 
         Assert.assertNotNull(trie);
@@ -187,7 +187,7 @@ public class TrieTest {
         byte[] key = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value = new byte[] { 0x01, 0x02, 0x03 };
 
-        Trie trie = Trie.getEmptyTrie();
+        Trie trie = new Trie();
         trie = trie.put(key, value).delete(key);
         Assert.assertNotNull(trie);
         Assert.assertNull(trie.get(key));
@@ -202,7 +202,7 @@ public class TrieTest {
         byte[] value2 = new byte[] { 0x01, 0x02, 0x03, 0x04 };
         byte[] key3 = new byte[] { (byte)0xcd, (byte)0xaa };
 
-        Trie trie = Trie.getEmptyTrie().put(key1, value1).put(key2, value2);
+        Trie trie = new Trie().put(key1, value1).put(key2, value2);
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value1, trie.get(key1));
@@ -219,7 +219,7 @@ public class TrieTest {
         byte[] value2 = new byte[] { 0x01, 0x02, 0x03, 0x04 };
         byte[] key3 = new byte[] { (byte)0xcd, (byte)0xaa };
 
-        Trie trie = Trie.getEmptyTrie().put(key1, value1).put(key2, value2);
+        Trie trie = new Trie().put(key1, value1).put(key2, value2);
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value1, trie.get(key1));
@@ -234,7 +234,7 @@ public class TrieTest {
         byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
         byte[] value2 = new byte[] { 0x01, 0x02, 0x03, 0x04 };
 
-        Trie trie = Trie.getEmptyTrie().put(key1, value1).put(key1, value2);
+        Trie trie = new Trie().put(key1, value1).put(key1, value2);
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value2, trie.get(key1));

@@ -23,7 +23,7 @@ public class TrieStoreTest {
     @Test
     public void saveAndRetrieveEmptyTrie() {
         TrieStore store = new TrieStore(new HashMapStore());
-        Trie trie = Trie.getEmptyTrie();
+        Trie trie = new Trie();
 
         store.save(trie);
 

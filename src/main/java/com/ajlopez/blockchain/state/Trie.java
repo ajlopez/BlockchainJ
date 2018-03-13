@@ -13,8 +13,6 @@ import java.util.Arrays;
 public class Trie {
     private static final int ARITY = 16;
 
-    private static Trie empty = new Trie();
-
     private byte[] value;
     private Trie[] nodes;
     private Hash[] hashes;
@@ -23,9 +21,7 @@ public class Trie {
     private Hash hash;
     private boolean saved;
 
-    private Trie() {}
-
-    public static Trie getEmptyTrie() { return empty; }
+    public Trie() {}
 
     public Trie(TrieStore store) {
         this(null, null, null, store);
@@ -71,10 +67,7 @@ public class Trie {
         Trie trie = this.put(key, 0, value);
 
         if (trie == null)
-            if (this.store == null)
-                return empty;
-            else
-                new Trie(this.store);
+            return new Trie(this.store);
 
         return trie;
     }
