@@ -235,7 +235,7 @@ public class Trie {
     }
 
     private Trie getSubnode(int k) {
-        if (this.nodes == null) {
+        if (this.nodes == null || this.nodes[k] == null) {
             if (this.hashes == null)
                 return null;
 
