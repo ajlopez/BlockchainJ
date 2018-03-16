@@ -235,25 +235,24 @@ public class Trie {
     }
 
     private Trie getSubnode(int k) {
-        if (this.nodes == null || this.nodes[k] == null) {
-            if (this.hashes == null)
-                return null;
+        if (this.nodes != null && this.nodes[k] != null)
+            return this.nodes[k];
 
-            Hash hash = this.hashes[k];
+        if (this.hashes == null)
+            return null;
 
-            Trie trie = this.store.retrieve(hash);
+        Hash hash = this.hashes[k];
 
-            // TODO replace by exceptin
-            if (trie == null)
-                return null;
+        Trie trie = this.store.retrieve(hash);
 
-            this.nodes = new Trie[ARITY];
-            this.nodes[k] = trie;
+        // TODO replace by exceptin
+        if (trie == null)
+            return null;
 
-            return trie;
-        }
+        this.nodes = new Trie[ARITY];
+        this.nodes[k] = trie;
 
-        return this.nodes[k];
+        return trie;
     }
 
     private int getSubnodesCount() {
