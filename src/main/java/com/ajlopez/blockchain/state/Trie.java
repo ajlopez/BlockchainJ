@@ -256,26 +256,13 @@ public class Trie {
     }
 
     private int getSubnodesCount() {
-        if (this.nodes == null)
-            return this.getSubhashesCount();
+        boolean hasnodes = this.nodes != null;
+        boolean hashashes = this.hashes != null;
 
         int nsubnodes = 0;
 
-        for (int k = 0; k < this.nodes.length; k++)
-            if (this.nodes[k] != null || (this.hashes != null && this.hashes[k] != null))
-                nsubnodes++;
-
-        return nsubnodes;
-    }
-
-    private int getSubhashesCount() {
-        if (this.hashes == null)
-            return 0;
-
-        int nsubnodes = 0;
-
-        for (int k = 0; k < this.hashes.length; k++)
-            if (this.hashes[k] != null)
+        for (int k = 0; k < ARITY; k++)
+            if ((hasnodes && this.nodes[k] != null) || (hashashes && this.hashes[k] != null))
                 nsubnodes++;
 
         return nsubnodes;
