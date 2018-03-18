@@ -20,8 +20,9 @@ public class TrieStore {
     public Trie retrieve(Hash hash) {
         byte[] encoded = this.store.getValue(hash.getBytes());
 
+        // TODO add hash
         if (encoded == null)
-            return null;
+            throw new RuntimeException("Unknown trie");
 
         return Trie.fromEncoded(encoded, this);
     }

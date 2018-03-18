@@ -245,10 +245,6 @@ public class Trie {
 
         Trie trie = this.store.retrieve(hash);
 
-        // TODO replace by exceptin
-        if (trie == null)
-            return null;
-
         this.nodes = new Trie[ARITY];
         this.nodes[k] = trie;
 

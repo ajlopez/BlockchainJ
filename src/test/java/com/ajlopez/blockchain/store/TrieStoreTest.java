@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Random;
 
@@ -13,11 +14,11 @@ import java.util.Random;
 public class TrieStoreTest {
     private static Random random = new Random();
 
-    @Test
-    public void retrieveNoTrie() {
+    @Test(expected = RuntimeException.class)
+    public void retrieveUnknownTrie() {
         TrieStore store = new TrieStore(new HashMapStore());
 
-        Assert.assertNull(store.retrieve(HashUtilsTest.generateRandomHash()));
+        store.retrieve(HashUtilsTest.generateRandomHash());
     }
 
     @Test
