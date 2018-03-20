@@ -7,14 +7,14 @@ import com.ajlopez.blockchain.net.messages.Message;
  * Created by ajlopez on 04/02/2018.
  */
 public class Peer implements OutputChannel {
-    private Hash hash;
+    private PeerId id;
 
-    public Peer(Hash hash) {
-        this.hash = hash;
+    public Peer(PeerId id) {
+        this.id = id;
     }
 
-    public Hash getHash() {
-        return this.hash;
+    public Hash getId() {
+        return this.id;
     }
 
     @Override

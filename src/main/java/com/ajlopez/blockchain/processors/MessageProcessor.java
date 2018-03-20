@@ -36,7 +36,7 @@ public class MessageProcessor {
     }
 
     private void processStatusMessage(StatusMessage message, Peer sender) {
-        Hash senderId = sender.getHash();
+        Hash senderId = sender.getId();
 
         long peerNumber = this.peerProcessor.getPeerBestBlockNumber(senderId);
 

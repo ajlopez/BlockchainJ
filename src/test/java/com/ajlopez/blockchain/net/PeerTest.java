@@ -10,11 +10,11 @@ import org.junit.Test;
  */
 public class PeerTest {
     @Test
-    public void createWithHash() {
-        Hash hash = HashUtilsTest.generateRandomHash();
+    public void createWithPeerId() {
+        PeerId peerId = HashUtilsTest.generateRandomPeerId();
 
-        Peer peer = new Peer(hash);
+        Peer peer = new Peer(peerId);
 
-        Assert.assertEquals(hash, peer.getHash());
+        Assert.assertEquals(peerId, peer.getId());
     }
 }

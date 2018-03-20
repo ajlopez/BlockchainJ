@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.test.simples;
 
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.Peer;
+import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.messages.Message;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class SimplePeer extends Peer {
     private Message message;
     private List<Message> messages = new ArrayList<>();
 
-    public SimplePeer(Hash id) {
+    public SimplePeer(PeerId id) {
         super(id);
     }
 
