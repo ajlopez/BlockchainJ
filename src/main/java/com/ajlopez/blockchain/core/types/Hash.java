@@ -7,6 +7,8 @@ import java.util.Random;
  * Created by ajlopez on 12/08/2017.
  */
 public class Hash {
+    public static Hash emptyHash = new Hash(new byte[32]);
+
     private byte[] bytes;
 
     public Hash(byte[] bytes) {

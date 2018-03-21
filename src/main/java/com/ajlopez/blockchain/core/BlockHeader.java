@@ -8,8 +8,6 @@ import com.ajlopez.blockchain.utils.HashUtils;
  * Created by ajlopez on 12/08/2017.
  */
 public class BlockHeader {
-    private static Hash emptyHash = new Hash(new byte[32]);
-
     private long number;
     private Hash parentHash;
     private Hash hash;
@@ -20,7 +18,7 @@ public class BlockHeader {
             throw new IllegalStateException("Negative number in block header");
 
         this.number = number;
-        this.parentHash = parentHash == null ? emptyHash : parentHash;
+        this.parentHash = parentHash == null ? Hash.emptyHash : parentHash;
         this.transactionsHash = transactionsHash;
     }
 
