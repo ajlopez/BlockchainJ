@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.core;
 
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockHeaderEncoder;
 import com.ajlopez.blockchain.utils.HashUtils;
@@ -9,16 +10,16 @@ import com.ajlopez.blockchain.utils.HashUtils;
  */
 public class BlockHeader {
     private long number;
-    private Hash parentHash;
-    private Hash hash;
+    private BlockHash parentHash;
+    private BlockHash hash;
     private Hash transactionsHash;
 
-    public BlockHeader(long number, Hash parentHash, Hash transactionsHash) {
+    public BlockHeader(long number, BlockHash parentHash, Hash transactionsHash) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
         this.number = number;
-        this.parentHash = parentHash == null ? Hash.emptyHash : parentHash;
+        this.parentHash = parentHash == null ? new BlockHash(Hash.emptyHash) : parentHash;
         this.transactionsHash = transactionsHash;
     }
 
@@ -26,20 +27,20 @@ public class BlockHeader {
         return this.number;
     }
 
-    public Hash getHash() {
+    public BlockHash getHash() {
         if (this.hash == null)
             this.hash = this.calculateHash();
 
         return this.hash;
     }
 
-    public Hash getParentHash() {
+    public BlockHash getParentHash() {
         return this.parentHash;
     }
 
     public Hash getTransactionsHash() { return this.transactionsHash; }
 
-    private Hash calculateHash() {
-        return HashUtils.calculateHash(BlockHeaderEncoder.encode(this));
+    private BlockHash calculateHash() {
+        return new BlockHash(HashUtils.calculateHash(BlockHeaderEncoder.encode(this)));
     }
 }

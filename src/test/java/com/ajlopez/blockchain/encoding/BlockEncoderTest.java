@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.*;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -18,7 +19,7 @@ import java.util.List;
 public class BlockEncoderTest {
     @Test
     public void encodeDecodeBlock() {
-        Hash parentHash = HashUtilsTest.generateRandomHash();
+        BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block block = new Block(42, parentHash);
 
         byte[] encoded = BlockEncoder.encode(block);
@@ -43,7 +44,7 @@ public class BlockEncoderTest {
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx);
 
-        Hash parentHash = HashUtilsTest.generateRandomHash();
+        BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block block = new Block(42, parentHash, txs);
 
         byte[] encoded = BlockEncoder.encode(block);
@@ -75,7 +76,7 @@ public class BlockEncoderTest {
         txs.add(tx1);
         txs.add(tx2);
 
-        Hash parentHash = HashUtilsTest.generateRandomHash();
+        BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block block = new Block(42, parentHash, txs);
 
         byte[] encoded = BlockEncoder.encode(block);
@@ -105,7 +106,7 @@ public class BlockEncoderTest {
 
     @Test
     public void encodeTwoBlocks() {
-        Hash parentHash = HashUtilsTest.generateRandomHash();
+        BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block block1 = new Block(42, parentHash);
         Block block2 = new Block(0, null);
 

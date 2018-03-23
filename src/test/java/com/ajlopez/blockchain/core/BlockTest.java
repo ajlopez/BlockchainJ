@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.core;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -16,7 +17,7 @@ import java.util.List;
 public class BlockTest {
     @Test
     public void createWithNumberAndParentHash() {
-        Hash hash = HashUtilsTest.generateRandomHash();
+        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block block = new Block(1L, hash);
 
         Assert.assertEquals(1L, block.getNumber());
@@ -26,7 +27,7 @@ public class BlockTest {
 
     @Test
     public void noTransactions() {
-        Hash hash = HashUtilsTest.generateRandomHash();
+        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block block = new Block(1L, hash);
 
         List<Transaction> transactions = block.getTransactions();
@@ -37,15 +38,15 @@ public class BlockTest {
 
     @Test
     public void blockWithDifferentParentHashesHaveDifferentHashes() {
-        Block block1 = new Block(1L, HashUtilsTest.generateRandomHash());
-        Block block2 = new Block(1L, HashUtilsTest.generateRandomHash());
+        Block block1 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()));
+        Block block2 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()));
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
 
     @Test
     public void blockWithDifferentNumbersHaveDifferentHashes() {
-        Hash parentHash = HashUtilsTest.generateRandomHash();
+        BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block block1 = new Block(1L, parentHash);
         Block block2 = new Block(2L, parentHash);
 
@@ -66,7 +67,7 @@ public class BlockTest {
         txs1.add(tx1);
         txs2.add(tx2);
 
-        Hash hash = HashUtilsTest.generateRandomHash();
+        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
 
         Block block1 = new Block(1L, hash, txs1);
         Block block2 = new Block(1L, hash, txs2);
@@ -85,7 +86,7 @@ public class BlockTest {
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx);
 
-        Hash hash = HashUtilsTest.generateRandomHash();
+        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block block = new Block(1L, hash, txs);
 
         List<Transaction> transactions = block.getTransactions();

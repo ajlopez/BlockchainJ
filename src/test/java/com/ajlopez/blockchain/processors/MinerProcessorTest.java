@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -18,7 +19,7 @@ public class MinerProcessorTest {
     public void mineBlockWithNoTransactions() {
         MinerProcessor processor = new MinerProcessor();
 
-        Hash hash = HashUtilsTest.generateRandomHash();
+        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block parent = new Block(1L, hash);
 
         TransactionPool txpool = new TransactionPool();
@@ -39,7 +40,7 @@ public class MinerProcessorTest {
     public void mineBlockWithOneTransaction() {
         MinerProcessor processor = new MinerProcessor();
 
-        Hash hash = HashUtilsTest.generateRandomHash();
+        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block parent = new Block(1L, hash);
 
         Transaction tx = FactoryHelper.createTransaction(100);

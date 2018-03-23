@@ -7,4 +7,8 @@ public class BlockHash extends Hash {
     public BlockHash(byte[] bytes) {
         super(bytes);
     }
+
+    public BlockHash(Hash hash) {
+        this(hash.getBytes());
+    }
 }

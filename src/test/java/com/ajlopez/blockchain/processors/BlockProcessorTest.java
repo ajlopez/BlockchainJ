@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.test.BlockConsumer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
@@ -96,7 +97,7 @@ public class BlockProcessorTest {
     public void addOrphanBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(1, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()));
 
         processor.processBlock(block);
 
@@ -108,7 +109,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         BlockConsumer consumer = new BlockConsumer();
 
-        Block block = new Block(1, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()));
 
         processor.onNewBestBlock(consumer);
         processor.processBlock(block);

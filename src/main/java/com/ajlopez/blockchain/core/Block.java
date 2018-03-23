@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.core;
 
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.utils.HashUtils;
@@ -18,11 +19,11 @@ public class Block {
         this(parent.getNumber() + 1, parent.getHash(), txs);
     }
 
-    public Block(long number, Hash parentHash) {
+    public Block(long number, BlockHash parentHash) {
         this(number, parentHash, new ArrayList<>());
     }
 
-    public Block(long number, Hash parentHash, List<Transaction> txs) {
+    public Block(long number, BlockHash parentHash, List<Transaction> txs) {
         this(new BlockHeader(number, parentHash, HashUtils.calculateHash(TransactionEncoder.encode(txs))), txs);
     }
 
@@ -44,7 +45,7 @@ public class Block {
         return this.header.getNumber();
     }
 
-    public Hash getHash() {
+    public BlockHash getHash() {
         return this.header.getHash();
     }
 

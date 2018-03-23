@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -100,7 +101,7 @@ public class BlockChainTest {
     public void rejectBlockIfNotChild() {
         BlockChain blockChain = new BlockChain();
         Block genesis = new Block(0, null);
-        Block block = new Block(1, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()));
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertFalse(blockChain.connectBlock(block));

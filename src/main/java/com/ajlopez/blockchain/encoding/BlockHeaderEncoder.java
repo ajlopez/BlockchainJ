@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.BlockHeader;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
@@ -24,6 +25,6 @@ public class BlockHeaderEncoder {
         byte[] parentHash = RLP.decode(bytes[1]);
         byte[] transactionsHash = RLP.decode(bytes[2]);
 
-        return new BlockHeader(ByteUtils.bytesToUnsignedLong(number), new Hash(parentHash), new Hash(transactionsHash));
+        return new BlockHeader(ByteUtils.bytesToUnsignedLong(number), new BlockHash(parentHash), new Hash(transactionsHash));
     }
 }
