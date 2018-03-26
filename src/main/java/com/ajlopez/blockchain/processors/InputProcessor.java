@@ -46,7 +46,7 @@ public class InputProcessor implements Runnable, InputChannel {
         }
     }
 
-    public void postMessage(Message message, Peer sender) {
+    public void postMessage(Peer sender, Message message) {
         this.messageTaskQueue.add(new MessageTask(message, sender));
     }
 
