@@ -17,13 +17,13 @@ import java.util.List;
 public class MinerProcessorTest {
     @Test
     public void mineBlockWithNoTransactions() {
-        TransactionPool txpool = new TransactionPool();
-        MinerProcessor processor = new MinerProcessor(null, txpool);
+        TransactionPool transactionPool = new TransactionPool();
+        MinerProcessor processor = new MinerProcessor(null, transactionPool);
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block parent = new Block(1L, hash);
 
-        Block block = processor.mineBlock(parent, txpool);
+        Block block = processor.mineBlock(parent, transactionPool);
 
         Assert.assertNotNull(block);
         Assert.assertEquals(2, block.getNumber());
@@ -42,12 +42,12 @@ public class MinerProcessorTest {
 
         Transaction tx = FactoryHelper.createTransaction(100);
 
-        TransactionPool txpool = new TransactionPool();
-        txpool.addTransaction(tx);
+        TransactionPool transactionPool = new TransactionPool();
+        transactionPool.addTransaction(tx);
 
-        MinerProcessor processor = new MinerProcessor(null, txpool);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool);
 
-        Block block = processor.mineBlock(parent, txpool);
+        Block block = processor.mineBlock(parent, transactionPool);
 
         Assert.assertNotNull(block);
         Assert.assertEquals(2, block.getNumber());
@@ -60,7 +60,7 @@ public class MinerProcessorTest {
         Assert.assertEquals(1, txs.size());
         Assert.assertSame(tx, txs.get(0));
 
-        Assert.assertFalse(txpool.getTransactions().isEmpty());
+        Assert.assertFalse(transactionPool.getTransactions().isEmpty());
     }
 
     @Test
@@ -69,13 +69,13 @@ public class MinerProcessorTest {
 
         Transaction tx = FactoryHelper.createTransaction(100);
 
-        TransactionPool txpool = new TransactionPool();
-        txpool.addTransaction(tx);
+        TransactionPool transactionPool = new TransactionPool();
+        transactionPool.addTransaction(tx);
 
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         blockProcessor.processBlock(genesis);
 
-        MinerProcessor processor = new MinerProcessor(blockProcessor, txpool);
+        MinerProcessor processor = new MinerProcessor(blockProcessor, transactionPool);
 
         processor.process();
 
@@ -92,6 +92,6 @@ public class MinerProcessorTest {
         Assert.assertEquals(1, txs.size());
         Assert.assertSame(tx, txs.get(0));
 
-        Assert.assertFalse(txpool.getTransactions().isEmpty());
+        Assert.assertFalse(transactionPool.getTransactions().isEmpty());
     }
 }
