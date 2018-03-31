@@ -17,12 +17,11 @@ import java.util.List;
 public class MinerProcessorTest {
     @Test
     public void mineBlockWithNoTransactions() {
-        MinerProcessor processor = new MinerProcessor();
+        TransactionPool txpool = new TransactionPool();
+        MinerProcessor processor = new MinerProcessor(null, txpool);
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block parent = new Block(1L, hash);
-
-        TransactionPool txpool = new TransactionPool();
 
         Block block = processor.mineBlock(parent, txpool);
 
@@ -38,8 +37,6 @@ public class MinerProcessorTest {
 
     @Test
     public void mineBlockWithOneTransaction() {
-        MinerProcessor processor = new MinerProcessor();
-
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block parent = new Block(1L, hash);
 
@@ -48,11 +45,45 @@ public class MinerProcessorTest {
         TransactionPool txpool = new TransactionPool();
         txpool.addTransaction(tx);
 
+        MinerProcessor processor = new MinerProcessor(null, txpool);
+
         Block block = processor.mineBlock(parent, txpool);
 
         Assert.assertNotNull(block);
         Assert.assertEquals(2, block.getNumber());
         Assert.assertEquals(parent.getHash(), block.getParentHash());
+
+        List<Transaction> txs = block.getTransactions();
+
+        Assert.assertNotNull(txs);
+        Assert.assertFalse(txs.isEmpty());
+        Assert.assertEquals(1, txs.size());
+        Assert.assertSame(tx, txs.get(0));
+
+        Assert.assertFalse(txpool.getTransactions().isEmpty());
+    }
+
+    @Test
+    public void processBlockWithOneTransaction() {
+        Block genesis = new Block(0, null);
+
+        Transaction tx = FactoryHelper.createTransaction(100);
+
+        TransactionPool txpool = new TransactionPool();
+        txpool.addTransaction(tx);
+
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        blockProcessor.processBlock(genesis);
+
+        MinerProcessor processor = new MinerProcessor(blockProcessor, txpool);
+
+        processor.process();
+
+        Block block = blockProcessor.getBestBlock();
+
+        Assert.assertNotNull(block);
+        Assert.assertEquals(1, block.getNumber());
+        Assert.assertEquals(genesis.getHash(), block.getParentHash());
 
         List<Transaction> txs = block.getTransactions();
 
