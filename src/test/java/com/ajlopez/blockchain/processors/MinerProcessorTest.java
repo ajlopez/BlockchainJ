@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by ajlopez on 24/01/2018.
@@ -93,5 +94,79 @@ public class MinerProcessorTest {
         Assert.assertSame(tx, txs.get(0));
 
         Assert.assertFalse(transactionPool.getTransactions().isEmpty());
+    }
+
+    @Test
+    public void mineOneBlockUsingStartAndStop() throws InterruptedException {
+        Block genesis = new Block(0, null);
+
+        Transaction tx = FactoryHelper.createTransaction(100);
+
+        TransactionPool transactionPool = new TransactionPool();
+        transactionPool.addTransaction(tx);
+
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        blockProcessor.processBlock(genesis);
+
+        MinerProcessor processor = new MinerProcessor(blockProcessor, transactionPool);
+
+        Semaphore sem = new Semaphore(0, true);
+
+        processor.onNewMinedBlock((block) -> {
+            sem.release();
+        });
+
+        processor.start();
+
+        sem.acquire();
+
+        processor.stop();
+
+        Block block = blockProcessor.getBestBlock();
+
+        Assert.assertNotNull(block);
+        Assert.assertEquals(1, block.getNumber());
+        Assert.assertEquals(genesis.getHash(), block.getParentHash());
+
+        List<Transaction> txs = block.getTransactions();
+
+        Assert.assertNotNull(txs);
+        Assert.assertFalse(txs.isEmpty());
+        Assert.assertEquals(1, txs.size());
+        Assert.assertSame(tx, txs.get(0));
+
+        Assert.assertFalse(transactionPool.getTransactions().isEmpty());
+    }
+
+    @Test
+    public void mineTwoBlocksUsingStartAndStop() throws InterruptedException {
+        Block genesis = new Block(0, null);
+
+        TransactionPool transactionPool = new TransactionPool();
+
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        blockProcessor.processBlock(genesis);
+
+        MinerProcessor processor = new MinerProcessor(blockProcessor, transactionPool);
+
+        Semaphore sem = new Semaphore(0, true);
+
+        processor.onNewMinedBlock((block) -> {
+            sem.release();
+        });
+
+        processor.start();
+
+        sem.acquire();
+        sem.acquire();
+
+        processor.stop();
+
+        Block block = blockProcessor.getBestBlock();
+
+        Assert.assertNotNull(block);
+        Assert.assertEquals(2, block.getNumber());
+
+        Assert.assertTrue(transactionPool.getTransactions().isEmpty());
     }
 }

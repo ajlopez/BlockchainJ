@@ -4,9 +4,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.test.BlockConsumer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
-import org.hamcrest.Factory;
 import org.junit.Assert;
 import org.junit.Test;
 
