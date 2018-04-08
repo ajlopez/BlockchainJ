@@ -3,8 +3,7 @@ package com.ajlopez.blockchain.test.utils;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.processors.BlockProcessor;
-import com.ajlopez.blockchain.processors.OrphanBlocks;
+import com.ajlopez.blockchain.processors.*;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -25,5 +24,25 @@ public class FactoryHelper {
 
     public static BlockProcessor createBlockProcessor() {
         return new BlockProcessor(new BlockChain(), new OrphanBlocks());
+    }
+
+    public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor) {
+        return new MessageProcessor(blockProcessor, null, null, null);
+    }
+
+    public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, PeerProcessor peerProcessor) {
+        return new MessageProcessor(blockProcessor, null, peerProcessor, null);
+    }
+
+    public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, PeerProcessor peerProcessor, OutputProcessor outputProcessor) {
+        return new MessageProcessor(blockProcessor, null, peerProcessor, outputProcessor);
+    }
+
+    public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, OutputProcessor outputProcessor) {
+        return new MessageProcessor(blockProcessor, null, null, outputProcessor);
+    }
+
+    public static MessageProcessor createMessageProcessor(TransactionProcessor   transactionProcessor) {
+        return new MessageProcessor(null, transactionProcessor, null, null);
     }
 }

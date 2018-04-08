@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.StatusMessage;
+import com.ajlopez.blockchain.test.simples.SimpleOutputChannel;
 import com.ajlopez.blockchain.test.simples.SimplePeer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -17,12 +18,13 @@ public class OutputProcessorTest {
     public void registerPeerAndPostMessage() {
         OutputProcessor processor = new OutputProcessor();
         SimplePeer peer = new SimplePeer(HashUtilsTest.generateRandomPeerId());
+        SimpleOutputChannel channel = new SimpleOutputChannel();
 
-        processor.registerPeer(peer, peer);
+        processor.registerPeer(peer, channel);
 
         Message message = new StatusMessage(HashUtilsTest.generateRandomPeerId(), 1, 10);
         processor.postMessage(peer, message);
 
-        Assert.assertFalse(peer.getMessages().isEmpty());
+        Assert.assertFalse(channel.getMessages().isEmpty());
     }
 }

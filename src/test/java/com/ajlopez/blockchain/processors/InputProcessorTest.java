@@ -23,7 +23,7 @@ public class InputProcessorTest {
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
 
-        MessageProcessor messageProcessor = new MessageProcessor(blockProcessor, null, null);
+        MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(blockProcessor);
 
         InputProcessor processor = new InputProcessor(messageProcessor);
 
@@ -53,7 +53,7 @@ public class InputProcessorTest {
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
 
-        MessageProcessor messageProcessor = new MessageProcessor(blockProcessor, null, null);
+        MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(blockProcessor);
 
         InputProcessor processor = new InputProcessor(messageProcessor);
 
@@ -86,7 +86,7 @@ public class InputProcessorTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 
-        MessageProcessor messageProcessor = new MessageProcessor(null, transactionProcessor, null);
+        MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(transactionProcessor);
 
         InputProcessor processor = new InputProcessor(messageProcessor);
 
