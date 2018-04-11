@@ -13,6 +13,17 @@ import org.junit.Test;
  */
 public class OutputProcessorTest {
     @Test
+    public void postMessageToUnregisteredPeer() {
+        OutputProcessor processor = new OutputProcessor();
+        Peer peer = new Peer(HashUtilsTest.generateRandomPeerId());
+        SimpleOutputChannel channel = new SimpleOutputChannel();
+
+        Message message = new StatusMessage(HashUtilsTest.generateRandomPeerId(), 1, 10);
+        Assert.assertFalse(processor.postMessage(peer, message));
+        Assert.assertTrue(channel.getMessages().isEmpty());
+    }
+
+    @Test
     public void registerPeerAndPostMessage() {
         OutputProcessor processor = new OutputProcessor();
         Peer peer = new Peer(HashUtilsTest.generateRandomPeerId());
@@ -21,8 +32,7 @@ public class OutputProcessorTest {
         processor.registerPeer(peer, channel);
 
         Message message = new StatusMessage(HashUtilsTest.generateRandomPeerId(), 1, 10);
-        processor.postMessage(peer, message);
-
+        Assert.assertTrue(processor.postMessage(peer, message));
         Assert.assertFalse(channel.getMessages().isEmpty());
     }
 }

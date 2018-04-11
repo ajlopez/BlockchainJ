@@ -18,12 +18,14 @@ public class OutputProcessor {
         channelsByPeer.put(peer.getId(), channel);
     }
 
-    public void postMessage(Peer peer, Message message) {
+    public boolean postMessage(Peer peer, Message message) {
         OutputChannel channel = channelsByPeer.get(peer.getId());
 
         if (channel == null)
-            return;
+            return false;
 
         channel.postMessage(message);
+
+        return true;
     }
 }
