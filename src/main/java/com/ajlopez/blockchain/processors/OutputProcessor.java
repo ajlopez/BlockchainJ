@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.messages.Message;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,5 +28,14 @@ public class OutputProcessor {
         channel.postMessage(message);
 
         return true;
+    }
+
+    public boolean postMessage(Message message) {
+        Collection<OutputChannel> channels = this.channelsByPeer.values();
+
+        for (OutputChannel channel: channels)
+            channel.postMessage(message);
+
+        return !channels.isEmpty();
     }
 }
