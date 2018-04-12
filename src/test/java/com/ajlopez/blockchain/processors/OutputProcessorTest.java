@@ -35,4 +35,18 @@ public class OutputProcessorTest {
         Assert.assertTrue(processor.postMessage(peer, message));
         Assert.assertFalse(channel.getMessages().isEmpty());
     }
+
+    @Test
+    public void registerPeerAndPostMessageToAnotherPeer() {
+        OutputProcessor processor = new OutputProcessor();
+        Peer peer = new Peer(HashUtilsTest.generateRandomPeerId());
+        Peer peer2 = new Peer(HashUtilsTest.generateRandomPeerId());
+        SimpleOutputChannel channel = new SimpleOutputChannel();
+
+        processor.registerPeer(peer, channel);
+
+        Message message = new StatusMessage(HashUtilsTest.generateRandomPeerId(), 1, 10);
+        Assert.assertFalse(processor.postMessage(peer2, message));
+        Assert.assertTrue(channel.getMessages().isEmpty());
+    }
 }
