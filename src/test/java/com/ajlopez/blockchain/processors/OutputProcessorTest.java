@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.StatusMessage;
 import com.ajlopez.blockchain.test.simples.SimpleOutputChannel;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class OutputProcessorTest {
     @Test
     public void postMessageToUnregisteredPeer() {
         OutputProcessor processor = new OutputProcessor();
-        Peer peer = new Peer(HashUtilsTest.generateRandomPeerId());
+        Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
 
         Message message = new StatusMessage(HashUtilsTest.generateRandomPeerId(), 1, 10);
@@ -36,7 +37,7 @@ public class OutputProcessorTest {
     @Test
     public void registerPeerAndPostMessage() {
         OutputProcessor processor = new OutputProcessor();
-        Peer peer = new Peer(HashUtilsTest.generateRandomPeerId());
+        Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
 
         processor.registerPeer(peer, channel);

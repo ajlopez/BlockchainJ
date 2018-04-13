@@ -3,7 +3,9 @@ package com.ajlopez.blockchain.test.utils;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.processors.*;
+import com.ajlopez.blockchain.utils.HashUtilsTest;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -44,5 +46,9 @@ public class FactoryHelper {
 
     public static MessageProcessor createMessageProcessor(TransactionProcessor   transactionProcessor) {
         return new MessageProcessor(null, transactionProcessor, null, null);
+    }
+
+    public static Peer createPeer() {
+        return new Peer(HashUtilsTest.generateRandomPeerId());
     }
 }

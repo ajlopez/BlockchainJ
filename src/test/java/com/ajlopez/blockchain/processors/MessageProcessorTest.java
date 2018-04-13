@@ -79,7 +79,7 @@ public class MessageProcessorTest {
         processor.processMessage(blockMessage, null);
 
         Message getBlockMessage = new GetBlockByNumberMessage(block.getNumber());
-        Peer sender = new Peer(HashUtilsTest.generateRandomPeerId());
+        Peer sender = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.registerPeer(sender, channel);
 
