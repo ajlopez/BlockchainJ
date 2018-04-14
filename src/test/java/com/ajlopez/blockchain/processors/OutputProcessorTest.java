@@ -50,9 +50,9 @@ public class OutputProcessorTest {
     @Test
     public void registerPeersAndPostMessage() {
         OutputProcessor processor = new OutputProcessor();
-        Peer peer1 = new Peer(HashUtilsTest.generateRandomPeerId());
+        Peer peer1 = FactoryHelper.createPeer();
         SimpleOutputChannel channel1 = new SimpleOutputChannel();
-        Peer peer2 = new Peer(HashUtilsTest.generateRandomPeerId());
+        Peer peer2 = FactoryHelper.createPeer();
         SimpleOutputChannel channel2 = new SimpleOutputChannel();
 
         processor.registerPeer(peer1, channel1);
@@ -70,8 +70,8 @@ public class OutputProcessorTest {
     @Test
     public void registerPeerAndPostMessageToAnotherPeer() {
         OutputProcessor processor = new OutputProcessor();
-        Peer peer = new Peer(HashUtilsTest.generateRandomPeerId());
-        Peer peer2 = new Peer(HashUtilsTest.generateRandomPeerId());
+        Peer peer = FactoryHelper.createPeer();
+        Peer peer2 = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
 
         processor.registerPeer(peer, channel);

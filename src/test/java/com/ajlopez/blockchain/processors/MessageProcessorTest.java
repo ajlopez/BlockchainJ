@@ -49,7 +49,7 @@ public class MessageProcessorTest {
 
         Message message = new GetBlockByHashMessage(block.getHash());
 
-        Peer sender = new Peer(HashUtilsTest.generateRandomPeerId());
+        Peer sender = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.registerPeer(sender, channel);
 
@@ -128,17 +128,16 @@ public class MessageProcessorTest {
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
-        PeerId peerId = HashUtilsTest.generateRandomPeerId();
-        Peer peer = new Peer(peerId);
+        Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.registerPeer(peer, channel);
 
-        Message message = new StatusMessage(peerId, 1, 10);
+        Message message = new StatusMessage(peer.getId(), 1, 10);
 
         processor.processMessage(message, peer);
 
         Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
-        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peerId));
+        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peer.getId()));
 
         Assert.assertEquals(11, channel.getMessages().size());
 
@@ -162,18 +161,17 @@ public class MessageProcessorTest {
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
-        PeerId peerId = HashUtilsTest.generateRandomPeerId();
-        Peer peer = new Peer(peerId);
+        Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.registerPeer(peer, channel);
 
-        Message message = new StatusMessage(peerId, 1, 10);
+        Message message = new StatusMessage(peer.getId(), 1, 10);
 
         processor.processMessage(message, peer);
         processor.processMessage(message, peer);
 
         Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
-        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peerId));
+        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peer.getId()));
 
         Assert.assertEquals(11, channel.getMessages().size());
 
@@ -197,19 +195,18 @@ public class MessageProcessorTest {
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
-        PeerId peerId = HashUtilsTest.generateRandomPeerId();
-        Peer peer = new Peer(peerId);
+        Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.registerPeer(peer, channel);
 
-        Message message1 = new StatusMessage(peerId, 1, 5);
-        Message message2 = new StatusMessage(peerId, 1, 10);
+        Message message1 = new StatusMessage(peer.getId(), 1, 5);
+        Message message2 = new StatusMessage(peer.getId(), 1, 10);
 
         processor.processMessage(message1, peer);
         processor.processMessage(message2, peer);
 
         Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
-        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peerId));
+        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peer.getId()));
 
         Assert.assertEquals(11, channel.getMessages().size());
 
