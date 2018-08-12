@@ -6,6 +6,14 @@ package com.ajlopez.blockchain.utils;
 public class ByteUtils {
     private ByteUtils() { }
 
+    public static boolean equals(byte[] bytes, int offset, byte[] bytes2, int offset2, int length) {
+        for (int k = 0; k < length; k++)
+            if (bytes[k + offset] != bytes2[k + offset2])
+                return false;
+
+        return true;
+    }
+
     public static byte[] unsignedLongToBytes(long value) {
         byte[] result = new byte[Long.BYTES];
 
@@ -31,12 +39,16 @@ public class ByteUtils {
     public static byte[] unsignedIntegerToBytes(int value) {
         byte[] result = new byte[Integer.BYTES];
 
-        for (int k = Integer.BYTES; k-- > 0;) {
-            result[k] = (byte)(value & 0xff);
-            value >>= 8;
-        }
+        unsignedIntegerToBytes(value, result, 0);
 
         return result;
+    }
+
+    public static void unsignedIntegerToBytes(int value, byte[] bytes, int offset) {
+        for (int k = Integer.BYTES; k-- > 0;) {
+            bytes[k + offset] = (byte)(value & 0xff);
+            value >>= 8;
+        }
     }
 
     public static short bytesToUnsignedShort(byte[] bytes, int offset) {
