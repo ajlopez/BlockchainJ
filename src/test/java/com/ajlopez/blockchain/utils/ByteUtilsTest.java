@@ -80,4 +80,28 @@ public class ByteUtilsTest {
         Assert.assertEquals(1, result[2]);
         Assert.assertEquals(0, result[3]);
     }
+
+    @Test
+    public void unsignedIntegerOneToBytesUsingArray() {
+        byte[] result = new byte[Integer.BYTES];
+        ByteUtils.unsignedIntegerToBytes(1, result, 0);
+
+        Assert.assertEquals(Integer.BYTES, result.length);
+        Assert.assertEquals(0, result[0]);
+        Assert.assertEquals(0, result[1]);
+        Assert.assertEquals(0, result[2]);
+        Assert.assertEquals(1, result[3]);
+    }
+
+    @Test
+    public void unsignedInteger256ToBytesUsingArray() {
+        byte[] result = new byte[Integer.BYTES];
+        ByteUtils.unsignedIntegerToBytes(256, result, 0);
+
+        Assert.assertEquals(Integer.BYTES, result.length);
+        Assert.assertEquals(0, result[0]);
+        Assert.assertEquals(0, result[1]);
+        Assert.assertEquals(1, result[2]);
+        Assert.assertEquals(0, result[3]);
+    }
 }
