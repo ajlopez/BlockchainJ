@@ -30,4 +30,23 @@ public class MessageEncoderTest {
         Assert.assertEquals(MessageType.BLOCK.ordinal(), bytes[0]);
         Assert.assertTrue(ByteUtils.equals(ByteUtils.unsignedIntegerToBytes(blength), 0, bytes, 1, Integer.BYTES));
     }
+
+    @Test
+    public void encodeAndDecodeBlockMessage() {
+        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
+        Block block = new Block(1L, hash);
+
+        BlockMessage message = new BlockMessage(block);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.BLOCK, result.getMessageType());
+
+        BlockMessage bresult = (BlockMessage)result;
+
+        Assert.assertEquals(block.getHash(), bresult.getBlock().getHash());
+    }
 }
