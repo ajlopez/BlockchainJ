@@ -49,4 +49,21 @@ public class MessageEncoderTest {
 
         Assert.assertEquals(block.getHash(), bresult.getBlock().getHash());
     }
+
+    @Test
+    public void encodeGetBlockByNumberMessage() {
+        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
+        Block block = new Block(1L, hash);
+
+        Message message = new GetBlockByNumberMessage(42);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+        Assert.assertNotEquals(0, bytes.length);
+
+        Assert.assertEquals(1 + Integer.BYTES + Long.BYTES, bytes.length);
+        Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER.ordinal(), bytes[0]);
+        Assert.assertTrue(ByteUtils.equals(ByteUtils.unsignedIntegerToBytes(Long.BYTES), 0, bytes, 1, Integer.BYTES));
+    }
 }
