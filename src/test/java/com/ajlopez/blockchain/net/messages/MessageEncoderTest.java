@@ -66,4 +66,20 @@ public class MessageEncoderTest {
         Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER.ordinal(), bytes[0]);
         Assert.assertTrue(ByteUtils.equals(ByteUtils.unsignedIntegerToBytes(Long.BYTES), 0, bytes, 1, Integer.BYTES));
     }
+
+    @Test
+    public void encodeAndDecodeGetBlockByNumberMessage() {
+        Message message = new GetBlockByNumberMessage(42);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER, result.getMessageType());
+
+        GetBlockByNumberMessage bresult = (GetBlockByNumberMessage)result;
+
+        Assert.assertEquals(42, bresult.getNumber());
+    }
 }

@@ -27,8 +27,18 @@ public class MessageEncoder {
         byte[] bbytes = new byte[bytes.length - 1 - Integer.BYTES];
         System.arraycopy(bytes, 1 + Integer.BYTES, bbytes, 0, bbytes.length);
 
-        Block block = BlockEncoder.decode(bbytes);
+        if (bytes[0] == MessageType.BLOCK.ordinal()) {
+            Block block = BlockEncoder.decode(bbytes);
 
-        return new BlockMessage(block);
+            return new BlockMessage(block);
+        }
+
+        if (bytes[0] == MessageType.GET_BLOCK_BY_NUMBER.ordinal()) {
+            long number = ByteUtils.bytesToUnsignedLong(bbytes);
+
+            return new GetBlockByNumberMessage(number);
+        }
+
+        throw new UnsupportedOperationException();
     }
 }
