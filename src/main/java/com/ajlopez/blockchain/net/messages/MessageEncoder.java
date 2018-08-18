@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
@@ -37,6 +38,14 @@ public class MessageEncoder {
             long number = ByteUtils.bytesToUnsignedLong(bbytes);
 
             return new GetBlockByNumberMessage(number);
+        }
+
+        if (bytes[0] == MessageType.GET_BLOCK_BY_HASH.ordinal()) {
+            byte[] bhash = new byte[bytes.length - 1 - Integer.BYTES];
+            System.arraycopy(bytes, 1 + Integer.BYTES, bhash, 0, bhash.length);
+            Hash hash = new Hash(bhash);
+
+            return new GetBlockByHashMessage(hash);
         }
 
         throw new UnsupportedOperationException();

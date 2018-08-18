@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -76,5 +77,25 @@ public class MessageEncoderTest {
         GetBlockByNumberMessage bresult = (GetBlockByNumberMessage)result;
 
         Assert.assertEquals(42, bresult.getNumber());
+    }
+
+    @Test
+    public void encodeAndDecodeGetBlockByHashMessage() {
+        Hash hash = HashUtilsTest.generateRandomHash();
+        Message message = new GetBlockByHashMessage(hash);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+        Assert.assertEquals(1 + Integer.BYTES + Hash.BYTES, bytes.length);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.GET_BLOCK_BY_HASH, result.getMessageType());
+
+        GetBlockByHashMessage bresult = (GetBlockByHashMessage)result;
+
+        Assert.assertEquals(hash, bresult.getHash());
     }
 }
