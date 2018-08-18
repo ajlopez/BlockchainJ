@@ -8,8 +8,6 @@ import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 public class MessageEncoderTest {
     @Test
     public void encodeBlockMessage() {
@@ -52,9 +50,6 @@ public class MessageEncoderTest {
 
     @Test
     public void encodeGetBlockByNumberMessage() {
-        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash);
-
         Message message = new GetBlockByNumberMessage(42);
 
         byte[] bytes = MessageEncoder.encode(message);
