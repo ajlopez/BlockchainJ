@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
@@ -8,6 +10,8 @@ import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.math.BigInteger;
 
 public class MessageEncoderTest {
     @Test
@@ -97,5 +101,29 @@ public class MessageEncoderTest {
         GetBlockByHashMessage bresult = (GetBlockByHashMessage)result;
 
         Assert.assertEquals(hash, bresult.getHash());
+    }
+
+    @Test
+    public void encodeAndDecodeTransactionMessage() {
+        Address sender = new Address();
+        Address receiver = new Address();
+        BigInteger value = BigInteger.ONE;
+
+        Transaction tx = new Transaction(sender, receiver, value, 42);
+
+        Message message = new TransactionMessage(tx);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.TRANSACTION, result.getMessageType());
+
+        TransactionMessage tresult = (TransactionMessage)result;
+
+        Assert.assertEquals(tx.getHash(), tresult.getTransaction().getHash());
     }
 }
