@@ -1,32 +1,21 @@
 package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.net.Status;
 
 /**
  * Created by ajlopez on 04/02/2018.
  */
 public class StatusMessage extends Message {
-    private Hash nodeId;
-    private long networkNumber;
-    private long bestBlockNumber;
+    private Status status;
 
-    public StatusMessage(Hash nodeId, long networkNumber, long bestBlockNumber) {
+    public StatusMessage(Status status) {
         super(MessageType.STATUS);
-        this.nodeId = nodeId;
-        this.networkNumber = networkNumber;
-        this.bestBlockNumber = bestBlockNumber;
+        this.status = status;
     }
 
-    public Hash getNodeId() {
-        return this.nodeId;
-    }
-
-    public long getNetworkNumber() {
-        return this.networkNumber;
-    }
-
-    public long getBestBlockNumber() {
-        return this.bestBlockNumber;
+    public Status getStatus() {
+        return this.status;
     }
 
     @Override

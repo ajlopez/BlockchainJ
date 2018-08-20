@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.PeerId;
+import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.test.simples.SimpleOutputChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -132,7 +133,7 @@ public class MessageProcessorTest {
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.registerPeer(peer, channel);
 
-        Message message = new StatusMessage(peer.getId(), 1, 10);
+        Message message = new StatusMessage(new Status(peer.getId(), 1, 10));
 
         processor.processMessage(message, peer);
 
@@ -165,7 +166,7 @@ public class MessageProcessorTest {
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.registerPeer(peer, channel);
 
-        Message message = new StatusMessage(peer.getId(), 1, 10);
+        Message message = new StatusMessage(new Status(peer.getId(), 1, 10));
 
         processor.processMessage(message, peer);
         processor.processMessage(message, peer);
@@ -199,8 +200,8 @@ public class MessageProcessorTest {
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.registerPeer(peer, channel);
 
-        Message message1 = new StatusMessage(peer.getId(), 1, 5);
-        Message message2 = new StatusMessage(peer.getId(), 1, 10);
+        Message message1 = new StatusMessage(new Status(peer.getId(), 1, 5));
+        Message message2 = new StatusMessage(new Status(peer.getId(), 1, 10));
 
         processor.processMessage(message1, peer);
         processor.processMessage(message2, peer);

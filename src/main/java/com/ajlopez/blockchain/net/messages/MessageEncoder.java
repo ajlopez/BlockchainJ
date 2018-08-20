@@ -56,7 +56,7 @@ public class MessageEncoder {
             Transaction tx = TransactionEncoder.decode(btx);
 
             return new TransactionMessage(tx);
-        }x
+        }
 
         throw new UnsupportedOperationException();
     }
