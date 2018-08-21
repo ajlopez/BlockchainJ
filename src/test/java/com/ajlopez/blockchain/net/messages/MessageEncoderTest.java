@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
+import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -125,5 +126,26 @@ public class MessageEncoderTest {
         TransactionMessage tresult = (TransactionMessage)result;
 
         Assert.assertEquals(tx.getHash(), tresult.getTransaction().getHash());
+    }
+
+    @Test
+    public void encodeAndDecodeStatusMessage() {
+        Hash nodeid = HashUtilsTest.generateRandomHash();
+        Message message = new StatusMessage(new Status(nodeid, 2, 3));
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.STATUS, result.getMessageType());
+
+        StatusMessage sresult = (StatusMessage)result;
+
+        Assert.assertEquals(nodeid, sresult.getStatus().getNodeId());
+        Assert.assertEquals(2, sresult.getStatus().getNetworkNumber());
+        Assert.assertEquals(3, sresult.getStatus().getBestBlockNumber());
     }
 }
