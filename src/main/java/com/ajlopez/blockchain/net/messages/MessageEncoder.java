@@ -4,7 +4,9 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
+import com.ajlopez.blockchain.encoding.StatusEncoder;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
+import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
 public class MessageEncoder {
@@ -56,6 +58,14 @@ public class MessageEncoder {
             Transaction tx = TransactionEncoder.decode(btx);
 
             return new TransactionMessage(tx);
+        }
+
+        if (bytes[0] == MessageType.STATUS.ordinal()) {
+            byte[] bstatus = new byte[bytes.length - 1 - Integer.BYTES];
+            System.arraycopy(bytes, 1 + Integer.BYTES, bstatus, 0, bstatus.length);
+            Status status = StatusEncoder.decode(bstatus);
+
+            return new StatusMessage(status);
         }
 
         throw new UnsupportedOperationException();
