@@ -47,7 +47,7 @@ public class RLP {
             else
                 return bytes;
 
-        long length;
+        int length;
         int offset;
 
         if (b0 > 183) {
@@ -59,7 +59,7 @@ public class RLP {
             offset = 1;
         }
 
-        byte[] decoded = new byte[(int)length];
+        byte[] decoded = new byte[length];
 
         System.arraycopy(bytes, offset, decoded, 0, (int)length);
 
