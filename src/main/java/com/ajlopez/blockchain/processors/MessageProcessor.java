@@ -31,7 +31,7 @@ public class MessageProcessor {
             this.processGetBlockByHashMessage((GetBlockByHashMessage) message, sender);
         else if (msgtype == MessageType.GET_BLOCK_BY_NUMBER)
             this.processGetBlockByNumberMessage((GetBlockByNumberMessage) message, sender);
-        else if (msgtype == MessageType.BLOCK.TRANSACTION)
+        else if (msgtype == MessageType.TRANSACTION)
             this.transactionProcessor.processTransaction(((TransactionMessage)message).getTransaction());
         else if (msgtype == MessageType.STATUS)
             this.processStatusMessage((StatusMessage)message, sender);
