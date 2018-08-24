@@ -30,12 +30,16 @@ public class OutputProcessor {
         return true;
     }
 
-    public boolean postMessage(Message message) {
+    public int postMessage(Message message) {
+        int sent = 0;
+
         Collection<OutputChannel> channels = this.channelsByPeer.values();
 
-        for (OutputChannel channel: channels)
+        for (OutputChannel channel: channels) {
             channel.postMessage(message);
+            sent++;
+        }
 
-        return !channels.isEmpty();
+        return sent;
     }
 }

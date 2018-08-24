@@ -32,7 +32,7 @@ public class OutputProcessorTest {
         SimpleOutputChannel channel = new SimpleOutputChannel();
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
-        Assert.assertFalse(processor.postMessage(message));
+        Assert.assertEquals(0, processor.postMessage(message));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class OutputProcessorTest {
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
 
-        Assert.assertTrue(processor.postMessage(message));
+        Assert.assertEquals(2, processor.postMessage(message));
 
         Assert.assertFalse(channel1.getMessages().isEmpty());
         Assert.assertTrue(processor.postMessage(peer2, message));
