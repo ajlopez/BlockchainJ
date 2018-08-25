@@ -16,4 +16,22 @@ public class Peer {
     public PeerId getId() {
         return this.id;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+
+        if (!(obj instanceof Peer))
+            return false;
+
+        Peer peer = (Peer)obj;
+
+        return this.getId().equals(peer.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
 }
