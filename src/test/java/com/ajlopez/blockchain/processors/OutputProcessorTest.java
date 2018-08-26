@@ -10,6 +10,8 @@ import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collections;
+
 /**
  * Created by ajlopez on 06/04/2018.
  */
@@ -64,8 +66,26 @@ public class OutputProcessorTest {
         Assert.assertEquals(2, processor.postMessage(message));
 
         Assert.assertFalse(channel1.getMessages().isEmpty());
-        Assert.assertTrue(processor.postMessage(peer2, message));
         Assert.assertFalse(channel2.getMessages().isEmpty());
+    }
+
+    @Test
+    public void registerPeersAndPostMessageSkippingOne() {
+        OutputProcessor processor = new OutputProcessor();
+        Peer peer1 = FactoryHelper.createPeer();
+        SimpleOutputChannel channel1 = new SimpleOutputChannel();
+        Peer peer2 = FactoryHelper.createPeer();
+        SimpleOutputChannel channel2 = new SimpleOutputChannel();
+
+        processor.registerPeer(peer1, channel1);
+        processor.registerPeer(peer2, channel2);
+
+        Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
+
+        Assert.assertEquals(1, processor.postMessage(message, Collections.singletonList(peer2.getId())));
+
+        Assert.assertFalse(channel1.getMessages().isEmpty());
+        Assert.assertTrue(channel2.getMessages().isEmpty());
     }
 
     @Test

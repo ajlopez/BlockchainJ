@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.net.messages.Message;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +38,21 @@ public class OutputProcessor {
 
         for (OutputChannel channel: channels) {
             channel.postMessage(message);
+            sent++;
+        }
+
+        return sent;
+    }
+
+    public int postMessage(Message message, List<PeerId> toSkip) {
+        int sent = 0;
+
+        for (Map.Entry<PeerId, OutputChannel> entry: this.channelsByPeer.entrySet()) {
+            if (toSkip.contains(entry.getKey()))
+                continue;
+
+            entry.getValue().postMessage(message);
+
             sent++;
         }
 
