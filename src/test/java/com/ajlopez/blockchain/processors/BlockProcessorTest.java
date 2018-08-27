@@ -8,6 +8,8 @@ import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * Created by ajlopez on 17/12/2017.
  */
@@ -60,7 +62,12 @@ public class BlockProcessorTest {
 
         Block block = new Block(0, null);
 
-        processor.processBlock(block);
+        List<Block> processedBlocks = processor.processBlock(block);
+
+        Assert.assertNotNull(processedBlocks);
+        Assert.assertFalse(processedBlocks.isEmpty());
+        Assert.assertEquals(1, processedBlocks.size());
+        Assert.assertEquals(block, processedBlocks.get(0));
 
         Assert.assertNotNull(processor.getBestBlock());
         Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
@@ -79,7 +86,12 @@ public class BlockProcessorTest {
 
         Block block = new Block(0, null);
 
-        processor.processBlock(block);
+        List<Block> processedBlocks = processor.processBlock(block);
+
+        Assert.assertNotNull(processedBlocks);
+        Assert.assertFalse(processedBlocks.isEmpty());
+        Assert.assertEquals(1, processedBlocks.size());
+        Assert.assertEquals(block, processedBlocks.get(0));
 
         Assert.assertNotNull(processor.getBestBlock());
         Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
@@ -97,7 +109,10 @@ public class BlockProcessorTest {
 
         Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()));
 
-        processor.processBlock(block);
+        List<Block> connectedBlocks = processor.processBlock(block);
+
+        Assert.assertNotNull(connectedBlocks);
+        Assert.assertTrue(connectedBlocks.isEmpty());
 
         Assert.assertNull(processor.getBestBlock());
     }

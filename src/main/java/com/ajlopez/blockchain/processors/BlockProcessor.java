@@ -5,6 +5,8 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.Hash;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -12,6 +14,8 @@ import java.util.function.Consumer;
  * Created by ajlopez on 17/12/2017.
  */
 public class BlockProcessor {
+    private static List<Block> emptyList = Collections.unmodifiableList(Arrays.asList());
+
     private OrphanBlocks orphanBlocks;
     private BlockChain blockChain;
     private List<Consumer<Block>> newBestBlockConsumers = new ArrayList<>();
@@ -21,26 +25,32 @@ public class BlockProcessor {
         this.orphanBlocks = orphanBlocks;
     }
 
-    public void processBlock(Block block) {
+    public List<Block> processBlock(Block block) {
         Hash hash = block.getHash();
 
         if (this.orphanBlocks.isKnownOrphan(hash))
-            return;
+            return emptyList;
 
         if (this.blockChain.isChainedBlock(hash))
-            return;
+            return emptyList;
 
         Block initialBestBlock = this.getBestBlock();
 
         if (blockChain.connectBlock(block)) {
+            List<Block> connectedBlocks = Arrays.asList(block);
+
             connectDescendants(block);
             Block newBestBlock = this.getBestBlock();
 
             if (initialBestBlock == null || !newBestBlock.getHash().equals(initialBestBlock.getHash()))
                 emitNewBestBlock(newBestBlock);
+
+            return connectedBlocks;
         }
-        else
+        else {
             orphanBlocks.addToOrphans(block);
+            return emptyList;
+        }
     }
 
     public Block getBestBlock() {
