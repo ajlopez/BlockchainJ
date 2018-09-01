@@ -37,9 +37,10 @@ public class BlockProcessor {
         Block initialBestBlock = this.getBestBlock();
 
         if (blockChain.connectBlock(block)) {
-            List<Block> connectedBlocks = Arrays.asList(block);
+            List<Block> connectedBlocks = new ArrayList<>();
+            connectedBlocks.add(block);
+            connectedBlocks.addAll(connectDescendants(block));
 
-            connectDescendants(block);
             Block newBestBlock = this.getBestBlock();
 
             if (initialBestBlock == null || !newBestBlock.getHash().equals(initialBestBlock.getHash()))
@@ -85,13 +86,16 @@ public class BlockProcessor {
         this.newBestBlockConsumers.add(consumer);
     }
 
-    private void connectDescendants(Block block) {
+    private List<Block> connectDescendants(Block block) {
         List<Block> children = new ArrayList<>(orphanBlocks.getChildrenOrphanBlocks(block));
+        List<Block> connected = new ArrayList<>();
 
         children.forEach(child -> {
             orphanBlocks.removeOrphan(child);
-            processBlock(child);
+            connected.addAll(processBlock(child));
         });
+
+        return connected;
     }
 
     private void emitNewBestBlock(Block block) {
