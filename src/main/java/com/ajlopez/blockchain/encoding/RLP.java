@@ -8,6 +8,7 @@ import java.util.List;
  * Created by ajlopez on 12/08/2017.
  */
 public class RLP {
+    private static final int EMPTY_MARK = 128;
     private static final int SIZE_SMALL = 55;
 
     private static byte[] empty = new byte[0];
@@ -26,7 +27,7 @@ public class RLP {
 
         if (bytes.length <= SIZE_SMALL) {
             byte[] encoded = new byte[1 + bytes.length];
-            encoded[0] = (byte)(128 + bytes.length);
+            encoded[0] = (byte)(EMPTY_MARK + bytes.length);
             System.arraycopy(bytes, 0, encoded, 1, bytes.length);
             return encoded;
         }
@@ -44,7 +45,7 @@ public class RLP {
         int b0 = bytes[0] & 0xff;
 
         if (bytes.length == 1)
-            if (b0 == 128)
+            if (b0 == EMPTY_MARK)
                 return empty;
             else
                 return bytes;
