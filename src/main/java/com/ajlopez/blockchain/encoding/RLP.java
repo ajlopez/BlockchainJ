@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class RLP {
     private static final int EMPTY_MARK = 128;
-    private static final int SIZE_SMALL = 55;
+    private static final int TINY_SIZE = 55;
 
     private static byte[] empty = new byte[0];
     private static byte[] emptyEncoding = new byte[] { (byte)0x80 };
@@ -25,7 +25,7 @@ public class RLP {
         if (bytes.length == 1 && (bytes[0] & 0x80) == 0)
             return bytes;
 
-        if (bytes.length <= SIZE_SMALL) {
+        if (bytes.length <= TINY_SIZE) {
             byte[] encoded = new byte[1 + bytes.length];
             encoded[0] = (byte)(EMPTY_MARK + bytes.length);
             System.arraycopy(bytes, 0, encoded, 1, bytes.length);
@@ -34,7 +34,7 @@ public class RLP {
 
         byte[] blength = lengthToBytes(bytes.length);
         byte[] encoded = new byte[1 + blength.length + bytes.length];
-        encoded[0] = (byte) (183 + blength.length);
+        encoded[0] = (byte) ((EMPTY_MARK + TINY_SIZE) + blength.length);
         System.arraycopy(blength, 0, encoded, 1, blength.length);
         System.arraycopy(bytes, 0, encoded, 1 + blength.length, bytes.length);
 
@@ -53,8 +53,8 @@ public class RLP {
         int length;
         int offset;
 
-        if (b0 > 183) {
-            offset = b0 - 183 + 1;
+        if (b0 > (EMPTY_MARK + TINY_SIZE)) {
+            offset = b0 - (EMPTY_MARK + TINY_SIZE) + 1;
             length = bytesToLength(bytes, 1, offset - 1);
         }
         else {
@@ -77,7 +77,7 @@ public class RLP {
         for (int k = 0; k < elements.length; k++)
             length += elements[k].length;
 
-        if (length <= SIZE_SMALL) {
+        if (length <= TINY_SIZE) {
             encoded = new byte[length + 1];
             encoded[0] = (byte)(192 + length);
             offset = 1;
@@ -138,8 +138,8 @@ public class RLP {
         if (b0 >= 192)
             return b0 - 192 + 1;
 
-        if (b0 > 183) {
-            int nbytes = b0 - 183;
+        if (b0 > (EMPTY_MARK + TINY_SIZE)) {
+            int nbytes = b0 - (EMPTY_MARK + TINY_SIZE);
             return 1 + nbytes + bytesToLength(bytes, position + 1, nbytes);
         }
 
