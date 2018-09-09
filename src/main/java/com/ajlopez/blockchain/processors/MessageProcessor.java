@@ -6,6 +6,8 @@ import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.*;
 
+import java.util.List;
+
 /**
  * Created by ajlopez on 27/01/2018.
  */
@@ -26,7 +28,7 @@ public class MessageProcessor {
         MessageType msgtype = message.getMessageType();
 
         if (msgtype == MessageType.BLOCK)
-            this.blockProcessor.processBlock(((BlockMessage)message).getBlock());
+            this.processBlockMessage((BlockMessage)message, sender);
         else if (msgtype == MessageType.GET_BLOCK_BY_HASH)
             this.processGetBlockByHashMessage((GetBlockByHashMessage) message, sender);
         else if (msgtype == MessageType.GET_BLOCK_BY_NUMBER)
@@ -35,6 +37,18 @@ public class MessageProcessor {
             this.transactionProcessor.processTransaction(((TransactionMessage)message).getTransaction());
         else if (msgtype == MessageType.STATUS)
             this.processStatusMessage((StatusMessage)message, sender);
+    }
+
+    private void processBlockMessage(BlockMessage message, Peer sender) {
+        List<Block> processed = this.blockProcessor.processBlock(message.getBlock());
+
+        if (this.outputProcessor == null)
+            return;
+
+        for (Block block : processed) {
+            Message outputMessage = new BlockMessage(block);
+            this.outputProcessor.postMessage(outputMessage);
+        }
     }
 
     private void processStatusMessage(StatusMessage message, Peer sender) {
