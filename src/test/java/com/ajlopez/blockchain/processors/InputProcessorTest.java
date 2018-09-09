@@ -47,6 +47,41 @@ public class InputProcessorTest {
     }
 
     @Test
+    public void processTwoConsecutiveBlockMessages() throws InterruptedException {
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+
+        Block genesis = new Block(0, null);
+        Block block1 = new Block(1, genesis.getHash());
+
+        Message message0 = new BlockMessage(genesis);
+        Message message1 = new BlockMessage(block1);
+
+        MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(blockProcessor);
+
+        InputProcessor processor = new InputProcessor(messageProcessor);
+
+        Semaphore sem = new Semaphore(0, true);
+
+        processor.onEmpty(() -> {
+            sem.release();
+        });
+
+        processor.postMessage(null, message0);
+        processor.postMessage(null, message1);
+
+        processor.start();
+
+        sem.acquire();
+
+        processor.stop();
+
+        Block result = blockProcessor.getBestBlock();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(block1.getHash(), result.getHash());
+    }
+
+    @Test
     public void processTenRepeatedBlockMessage() throws InterruptedException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
