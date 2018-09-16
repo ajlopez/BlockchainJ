@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.*;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,9 +46,17 @@ public class MessageProcessor {
         if (this.outputProcessor == null)
             return;
 
+        int nprocessed = 0;
+
         for (Block block : processed) {
             Message outputMessage = new BlockMessage(block);
-            this.outputProcessor.postMessage(outputMessage);
+
+            if (nprocessed == 0 && sender != null)
+                this.outputProcessor.postMessage(outputMessage, Collections.singletonList(sender.getId()));
+            else
+                this.outputProcessor.postMessage(outputMessage);
+
+            nprocessed++;
         }
     }
 
