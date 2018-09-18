@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.test.simples;
 
 import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.messages.Message;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;

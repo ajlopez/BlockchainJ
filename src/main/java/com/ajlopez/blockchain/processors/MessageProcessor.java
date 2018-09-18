@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.*;
 

@@ -125,10 +125,7 @@ public class BlockProcessorTest {
         Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()));
 
         processor.onNewBestBlock(consumer);
-        List<Block> connectedBlocks = processor.processBlock(block);
-
-        Assert.assertNotNull(connectedBlocks);
-        Assert.assertTrue(connectedBlocks.isEmpty());
+        processor.processBlock(block);
 
         Assert.assertNull(processor.getBestBlock());
         Assert.assertNull(consumer.getBlock());
@@ -156,12 +153,7 @@ public class BlockProcessorTest {
         Assert.assertEquals(block1.getNumber(), processor.getBestBlock().getNumber());
         Assert.assertEquals(block1.getHash(), processor.getBestBlock().getHash());
 
-        List<Block> connectedBlocks = processor.processBlock(block2);
-
-        Assert.assertNotNull(connectedBlocks);
-        Assert.assertEquals(2, connectedBlocks.size());
-        Assert.assertEquals(block2, connectedBlocks.get(0));
-        Assert.assertEquals(block3, connectedBlocks.get(1));
+        processor.processBlock(block2);
 
         Assert.assertNotNull(processor.getBestBlock());
         Assert.assertEquals(block3.getHash(), processor.getBestBlock().getHash());
