@@ -192,6 +192,7 @@ public class TrieTest {
         Assert.assertNotNull(trie);
         Assert.assertNull(trie.get(key));
         Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals((new Trie()).getHash(), trie.getHash());
     }
 
     @Test
