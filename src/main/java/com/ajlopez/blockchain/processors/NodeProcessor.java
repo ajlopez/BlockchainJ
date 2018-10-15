@@ -12,10 +12,12 @@ import java.util.List;
  * Created by ajlopez on 14/10/2018.
  */
 public class NodeProcessor implements InputChannel {
+    private Peer peer;
     private InputProcessor inputProcessor;
     private TransactionPool transactionPool;
 
-    public NodeProcessor(BlockChain blockChain) {
+    public NodeProcessor(Peer peer, BlockChain blockChain) {
+        this.peer = peer;
         OrphanBlocks orphanBlocks = new OrphanBlocks();
         BlockProcessor blockProcessor = new BlockProcessor(blockChain, orphanBlocks);
         this.transactionPool = new TransactionPool();
@@ -24,6 +26,10 @@ public class NodeProcessor implements InputChannel {
         OutputProcessor outputProcessor = new OutputProcessor();
         MessageProcessor messageProcessor = new MessageProcessor(blockProcessor, transactionProcessor, peerProcessor, outputProcessor);
         this.inputProcessor = new InputProcessor(messageProcessor);
+    }
+
+    public Peer getPeer() {
+        return this.peer;
     }
 
     public void start() {

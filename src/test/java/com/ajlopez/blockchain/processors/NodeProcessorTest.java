@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.TransactionMessage;
@@ -18,9 +19,19 @@ import java.util.concurrent.Semaphore;
  */
 public class NodeProcessorTest {
     @Test
+    public void createWithPeer() {
+        BlockChain blockChain = new BlockChain();
+        Peer peer = FactoryHelper.createPeer();
+
+        NodeProcessor nodeProcessor = new NodeProcessor(peer, blockChain);
+
+        Assert.assertSame(peer, nodeProcessor.getPeer());
+    }
+
+    @Test
     public void processBlockMessage() throws InterruptedException {
         BlockChain blockChain = new BlockChain();
-        NodeProcessor nodeProcessor = new NodeProcessor(blockChain);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
@@ -47,7 +58,7 @@ public class NodeProcessorTest {
     @Test
     public void processTenRepeatedBlockMessages() throws InterruptedException {
         BlockChain blockChain = new BlockChain();
-        NodeProcessor nodeProcessor = new NodeProcessor(blockChain);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
@@ -76,7 +87,7 @@ public class NodeProcessorTest {
     @Test
     public void processTwoConsecutiveBlockMessages() throws InterruptedException {
         BlockChain blockChain = new BlockChain();
-        NodeProcessor nodeProcessor = new NodeProcessor(blockChain);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
         Block genesis = new Block(0, null);
         Block block1 = new Block(1, genesis.getHash());
@@ -107,7 +118,7 @@ public class NodeProcessorTest {
     @Test
     public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException {
         BlockChain blockChain = new BlockChain();
-        NodeProcessor nodeProcessor = new NodeProcessor(blockChain);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
         Block genesis = new Block(0, null);
         Block block1 = new Block(1, genesis.getHash());
@@ -141,7 +152,7 @@ public class NodeProcessorTest {
         Message message = new TransactionMessage(transaction);
 
         BlockChain blockChain = new BlockChain();
-        NodeProcessor nodeProcessor = new NodeProcessor(blockChain);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
         Semaphore sem = new Semaphore(0, true);
         nodeProcessor.onEmpty(() -> {
