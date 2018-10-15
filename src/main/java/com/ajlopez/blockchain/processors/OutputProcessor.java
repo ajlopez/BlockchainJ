@@ -16,12 +16,20 @@ import java.util.Map;
 public class OutputProcessor {
     private Map<PeerId, OutputChannel> channelsByPeer = new HashMap<>();
 
-    public void registerPeer(Peer peer, OutputChannel channel) {
-        channelsByPeer.put(peer.getId(), channel);
+    public void connectToPeer(Peer receiver, OutputChannel channel) {
+        channelsByPeer.put(receiver.getId(), channel);
     }
 
-    public boolean postMessage(Peer peer, Message message) {
-        OutputChannel channel = channelsByPeer.get(peer.getId());
+    public boolean isConnected(Peer receiver) {
+        return channelsByPeer.containsKey(receiver.getId());
+    }
+
+    public void disconnectFromPeer(Peer receiver) {
+        channelsByPeer.remove(receiver.getId());
+    }
+
+    public boolean postMessage(Peer receiver, Message message) {
+        OutputChannel channel = channelsByPeer.get(receiver.getId());
 
         if (channel == null)
             return false;

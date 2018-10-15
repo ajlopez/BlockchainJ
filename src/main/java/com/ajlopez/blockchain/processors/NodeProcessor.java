@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.net.InputChannel;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by ajlopez on 14/10/2018.
  */
-public class NodeProcessor {
+public class NodeProcessor implements InputChannel {
     private InputProcessor inputProcessor;
     private TransactionPool transactionPool;
 

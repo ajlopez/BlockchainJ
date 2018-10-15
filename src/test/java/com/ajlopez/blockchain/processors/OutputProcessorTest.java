@@ -28,7 +28,7 @@ public class OutputProcessorTest {
     }
 
     @Test
-    public void postMessageToNoPeer() {
+    public void postMessageWhenNoPeerIsConnected() {
         OutputProcessor processor = new OutputProcessor();
 
         SimpleOutputChannel channel = new SimpleOutputChannel();
@@ -38,12 +38,12 @@ public class OutputProcessorTest {
     }
 
     @Test
-    public void registerPeerAndPostMessage() {
+    public void connectToPeerAndPostMessage() {
         OutputProcessor processor = new OutputProcessor();
         Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
 
-        processor.registerPeer(peer, channel);
+        processor.connectToPeer(peer, channel);
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
         Assert.assertTrue(processor.postMessage(peer, message));
@@ -51,15 +51,15 @@ public class OutputProcessorTest {
     }
 
     @Test
-    public void registerPeersAndPostMessage() {
+    public void connectToPeersAndPostMessage() {
         OutputProcessor processor = new OutputProcessor();
         Peer peer1 = FactoryHelper.createPeer();
         SimpleOutputChannel channel1 = new SimpleOutputChannel();
         Peer peer2 = FactoryHelper.createPeer();
         SimpleOutputChannel channel2 = new SimpleOutputChannel();
 
-        processor.registerPeer(peer1, channel1);
-        processor.registerPeer(peer2, channel2);
+        processor.connectToPeer(peer1, channel1);
+        processor.connectToPeer(peer2, channel2);
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
 
@@ -70,15 +70,15 @@ public class OutputProcessorTest {
     }
 
     @Test
-    public void registerPeersAndPostMessageSkippingOne() {
+    public void connectToPeersAndPostMessageSkippingOne() {
         OutputProcessor processor = new OutputProcessor();
         Peer peer1 = FactoryHelper.createPeer();
         SimpleOutputChannel channel1 = new SimpleOutputChannel();
         Peer peer2 = FactoryHelper.createPeer();
         SimpleOutputChannel channel2 = new SimpleOutputChannel();
 
-        processor.registerPeer(peer1, channel1);
-        processor.registerPeer(peer2, channel2);
+        processor.connectToPeer(peer1, channel1);
+        processor.connectToPeer(peer2, channel2);
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
 
@@ -89,13 +89,13 @@ public class OutputProcessorTest {
     }
 
     @Test
-    public void registerPeerAndPostMessageToAnotherPeer() {
+    public void connectToPeerAndPostMessageToAnotherPeer() {
         OutputProcessor processor = new OutputProcessor();
         Peer peer = FactoryHelper.createPeer();
         Peer peer2 = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
 
-        processor.registerPeer(peer, channel);
+        processor.connectToPeer(peer, channel);
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
         Assert.assertFalse(processor.postMessage(peer2, message));

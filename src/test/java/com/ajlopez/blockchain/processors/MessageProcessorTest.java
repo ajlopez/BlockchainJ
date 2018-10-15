@@ -2,14 +2,11 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.Peer;
-import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.test.simples.SimpleOutputChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,7 +40,7 @@ public class MessageProcessorTest {
         OutputProcessor outputProcessor = new OutputProcessor();
         Peer sender = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
-        outputProcessor.registerPeer(sender, channel);
+        outputProcessor.connectToPeer(sender, channel);
 
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
@@ -77,11 +74,11 @@ public class MessageProcessorTest {
 
         Peer peer1 = FactoryHelper.createPeer();
         SimpleOutputChannel channel1 = new SimpleOutputChannel();
-        outputProcessor.registerPeer(peer1, channel1);
+        outputProcessor.connectToPeer(peer1, channel1);
 
         Peer peer2 = FactoryHelper.createPeer();
         SimpleOutputChannel channel2 = new SimpleOutputChannel();
-        outputProcessor.registerPeer(peer2, channel2);
+        outputProcessor.connectToPeer(peer2, channel2);
 
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
@@ -128,7 +125,7 @@ public class MessageProcessorTest {
 
         Peer sender = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
-        outputProcessor.registerPeer(sender, channel);
+        outputProcessor.connectToPeer(sender, channel);
 
         processor.processMessage(message, sender);
 
@@ -158,7 +155,7 @@ public class MessageProcessorTest {
         Message getBlockMessage = new GetBlockByNumberMessage(block.getNumber());
         Peer sender = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
-        outputProcessor.registerPeer(sender, channel);
+        outputProcessor.connectToPeer(sender, channel);
 
         processor.processMessage(getBlockMessage, sender);
 
@@ -207,7 +204,7 @@ public class MessageProcessorTest {
 
         Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
-        outputProcessor.registerPeer(peer, channel);
+        outputProcessor.connectToPeer(peer, channel);
 
         Message message = new StatusMessage(new Status(peer.getId(), 1, 10));
 
@@ -240,7 +237,7 @@ public class MessageProcessorTest {
 
         Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
-        outputProcessor.registerPeer(peer, channel);
+        outputProcessor.connectToPeer(peer, channel);
 
         Message message = new StatusMessage(new Status(peer.getId(), 1, 10));
 
@@ -274,7 +271,7 @@ public class MessageProcessorTest {
 
         Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
-        outputProcessor.registerPeer(peer, channel);
+        outputProcessor.connectToPeer(peer, channel);
 
         Message message1 = new StatusMessage(new Status(peer.getId(), 1, 5));
         Message message2 = new StatusMessage(new Status(peer.getId(), 1, 10));
