@@ -17,7 +17,22 @@ import java.util.Collections;
  */
 public class OutputProcessorTest {
     @Test
-    public void postMessageToUnregisteredPeer() {
+    public void connectAndDisconnectPeer() {
+        OutputProcessor processor = new OutputProcessor();
+        Peer peer = FactoryHelper.createPeer();
+        SimpleOutputChannel channel = new SimpleOutputChannel();
+
+        processor.connectToPeer(peer, channel);
+
+        Assert.assertTrue(processor.isConnected(peer));
+
+        processor.disconnectFromPeer(peer);
+
+        Assert.assertFalse(processor.isConnected(peer));
+    }
+    
+    @Test
+    public void postMessageToNotConnectedPeer() {
         OutputProcessor processor = new OutputProcessor();
         Peer peer = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
