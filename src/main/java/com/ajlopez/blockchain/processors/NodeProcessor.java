@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.net.InputChannel;
+import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class NodeProcessor implements InputChannel {
     private Peer peer;
     private InputProcessor inputProcessor;
+    private OutputProcessor outputProcessor;
     private TransactionPool transactionPool;
 
     public NodeProcessor(Peer peer, BlockChain blockChain) {
@@ -23,8 +25,8 @@ public class NodeProcessor implements InputChannel {
         this.transactionPool = new TransactionPool();
         TransactionProcessor transactionProcessor = new TransactionProcessor(this.transactionPool);
         PeerProcessor peerProcessor = new PeerProcessor();
-        OutputProcessor outputProcessor = new OutputProcessor();
-        MessageProcessor messageProcessor = new MessageProcessor(blockProcessor, transactionProcessor, peerProcessor, outputProcessor);
+        this.outputProcessor = new OutputProcessor();
+        MessageProcessor messageProcessor = new MessageProcessor(blockProcessor, transactionProcessor, peerProcessor, this.outputProcessor);
         this.inputProcessor = new InputProcessor(messageProcessor);
     }
 
@@ -50,5 +52,9 @@ public class NodeProcessor implements InputChannel {
 
     public List<Transaction> getTransactions() {
         return this.transactionPool.getTransactions();
+    }
+
+    public void connectTo(Peer peer, OutputChannel channel) {
+        this.outputProcessor.connectToPeer(peer, channel);
     }
 }

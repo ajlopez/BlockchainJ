@@ -38,8 +38,10 @@ public class InputProcessor implements Runnable, InputChannel {
 
                 if (task != null)
                     this.messageProcessor.processMessage(task.getMessage(), task.getSender());
-                else
+                else {
                     emitEmpty();
+                    Thread.sleep(1000);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

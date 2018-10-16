@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.TransactionMessage;
+import com.ajlopez.blockchain.test.PeerToPeerOutputChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -144,6 +145,58 @@ public class NodeProcessorTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block1.getHash(), result.getHash());
+    }
+
+
+    @Test
+    public void processTwoBlockMessagesUsingTwoNodes() throws InterruptedException {
+        BlockChain blockChain1 = new BlockChain();
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+        BlockChain blockChain2 = new BlockChain();
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
+
+        PeerToPeerOutputChannel channel = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2.getPeer(), nodeProcessor2);
+
+        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel);
+
+        Block genesis = new Block(0, null);
+        Block block1 = new Block(1, genesis.getHash());
+
+        Message message0 = new BlockMessage(genesis);
+        Message message1 = new BlockMessage(block1);
+
+        Semaphore sem1 = new Semaphore(0, true);
+
+        nodeProcessor1.onEmpty(() -> {
+            sem1.release();
+        });
+
+        Semaphore sem2 = new Semaphore(0, true);
+
+        nodeProcessor2.onEmpty(() -> {
+            sem2.release();
+        });
+
+        nodeProcessor1.postMessage(null, message0);
+        nodeProcessor1.postMessage(null, message1);
+        nodeProcessor1.start();
+        nodeProcessor2.start();
+
+        sem1.acquire();
+        sem2.acquire();
+
+        nodeProcessor1.stop();
+        nodeProcessor2.stop();
+
+        Block result1 = blockChain1.getBestBlock();
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(block1.getHash(), result1.getHash());
+
+        Block result2 = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(block1.getHash(), result2.getHash());
     }
 
     @Test

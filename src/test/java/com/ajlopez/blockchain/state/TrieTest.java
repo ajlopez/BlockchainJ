@@ -194,7 +194,7 @@ public class TrieTest {
         Assert.assertEquals(1, trie.nodesSize());
         Assert.assertEquals((new Trie()).getHash(), trie.getHash());
     }
-    
+
     @Test
     public void putRemoveAndGetTwoKeyValue() {
         byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
