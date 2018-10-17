@@ -4,9 +4,8 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.net.Peer;
-import com.ajlopez.blockchain.net.messages.BlockMessage;
-import com.ajlopez.blockchain.net.messages.Message;
-import com.ajlopez.blockchain.net.messages.TransactionMessage;
+import com.ajlopez.blockchain.net.Status;
+import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.test.PeerToPeerOutputChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -177,7 +176,6 @@ public class NodeProcessorTest {
         Assert.assertEquals(block1.getHash(), result.getHash());
     }
 
-
     @Test
     public void processTwoBlockMessagesUsingTwoNodes() throws InterruptedException {
         BlockChain blockChain1 = new BlockChain();
@@ -227,6 +225,62 @@ public class NodeProcessorTest {
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(block1.getHash(), result2.getHash());
+    }
+
+    @Test
+    public void synchronizeTwoNodes() throws InterruptedException {
+        List<Block> blocks = FactoryHelper.createBlocks(9);
+        Block bestBlock = blocks.get(9);
+
+        BlockChain blockChain1 = new BlockChain();
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+        BlockChain blockChain2 = new BlockChain();
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
+
+        PeerToPeerOutputChannel channel1 = new PeerToPeerOutputChannel(nodeProcessor2.getPeer(), nodeProcessor1.getPeer(), nodeProcessor2);
+        PeerToPeerOutputChannel channel2 = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2.getPeer(), nodeProcessor2);
+
+        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel2);
+        nodeProcessor2.connectTo(nodeProcessor1.getPeer(), channel1);
+
+        Semaphore sem1 = new Semaphore(0, true);
+
+        nodeProcessor1.onEmpty(() -> {
+            sem1.release();
+        });
+
+        Semaphore sem2 = new Semaphore(0, true);
+
+        nodeProcessor2.onEmpty(() -> {
+            sem2.release();
+        });
+
+        for (Block block : blocks)
+            blockChain1.connectBlock(block);
+
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
+        StatusMessage statusMessage = new StatusMessage(status);
+
+        nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
+
+        nodeProcessor1.start();
+        nodeProcessor2.start();
+
+        sem1.acquire();
+        sem2.acquire();
+
+        nodeProcessor1.stop();
+        nodeProcessor2.stop();
+
+        Block result1 = blockChain1.getBestBlock();
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(bestBlock.getHash(), result1.getHash());
+
+        Block result2 = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(bestBlock.getHash(), result2.getHash());
     }
 
     @Test
