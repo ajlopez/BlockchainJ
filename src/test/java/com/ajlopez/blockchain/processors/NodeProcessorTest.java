@@ -117,6 +117,36 @@ public class NodeProcessorTest {
     }
 
     @Test
+    public void processTenBlockMessages() throws InterruptedException {
+        BlockChain blockChain = new BlockChain();
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
+        List<Block> blocks = FactoryHelper.createBlocks(9);
+
+        Semaphore sem = new Semaphore(0, true);
+
+        nodeProcessor.onEmpty(() -> {
+            sem.release();
+        });
+
+        for (Block block: blocks) {
+            Message message = new BlockMessage(block);
+            nodeProcessor.postMessage(null, message);
+        }
+
+        nodeProcessor.start();
+
+        sem.acquire();
+
+        nodeProcessor.stop();
+
+        Block result = blockChain.getBestBlock();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(9, result.getNumber());
+        Assert.assertEquals(blocks.get(9).getHash(), result.getHash());
+    }
+
+    @Test
     public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException {
         BlockChain blockChain = new BlockChain();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);

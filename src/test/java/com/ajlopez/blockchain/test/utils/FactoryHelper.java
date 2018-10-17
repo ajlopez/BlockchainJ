@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test.utils;
 
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
@@ -8,6 +9,8 @@ import com.ajlopez.blockchain.processors.*;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -50,5 +53,20 @@ public class FactoryHelper {
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
         return new NodeProcessor(createPeer(), blockChain);
+    }
+
+    public static List<Block> createBlocks(int nblocks) {
+        List<Block> blocks = new ArrayList<>();
+
+        Block block = new Block(0, null);
+
+        blocks.add(block);
+
+        for (int k = 0; k < nblocks; k++) {
+            block = new Block(block.getNumber() + 1, block.getHash());
+            blocks.add(block);
+        }
+
+        return blocks;
     }
 }
