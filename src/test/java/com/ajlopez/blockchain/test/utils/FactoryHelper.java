@@ -32,10 +32,6 @@ public class FactoryHelper {
         return new MessageProcessor(blockProcessor, null, null, null);
     }
 
-    public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, PeerProcessor peerProcessor) {
-        return new MessageProcessor(blockProcessor, null, peerProcessor, null);
-    }
-
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, PeerProcessor peerProcessor, OutputProcessor outputProcessor) {
         return new MessageProcessor(blockProcessor, null, peerProcessor, outputProcessor);
     }
