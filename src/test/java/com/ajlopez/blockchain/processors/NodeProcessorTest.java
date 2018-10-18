@@ -183,7 +183,7 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        PeerToPeerOutputChannel channel = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2.getPeer(), nodeProcessor2);
+        PeerToPeerOutputChannel channel = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2);
 
         nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel);
 
@@ -237,8 +237,8 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        PeerToPeerOutputChannel channel1 = new PeerToPeerOutputChannel(nodeProcessor2.getPeer(), nodeProcessor1.getPeer(), nodeProcessor1);
-        PeerToPeerOutputChannel channel2 = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2.getPeer(), nodeProcessor2);
+        PeerToPeerOutputChannel channel1 = new PeerToPeerOutputChannel(nodeProcessor2.getPeer(), nodeProcessor1);
+        PeerToPeerOutputChannel channel2 = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2);
 
         nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel2);
         nodeProcessor2.connectTo(nodeProcessor1.getPeer(), channel1);
