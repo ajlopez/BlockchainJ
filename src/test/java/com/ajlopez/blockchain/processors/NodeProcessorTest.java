@@ -256,7 +256,10 @@ public class NodeProcessorTest {
         });
 
         for (Block block : blocks)
-            blockChain1.connectBlock(block);
+            Assert.assertTrue(blockChain1.connectBlock(block));
+
+        for (int k = 0; k < 10; k++)
+            Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
         Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
         StatusMessage statusMessage = new StatusMessage(status);
