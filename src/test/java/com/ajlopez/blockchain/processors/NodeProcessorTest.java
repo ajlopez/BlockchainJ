@@ -287,6 +287,83 @@ public class NodeProcessorTest {
     }
 
     @Test
+    public void synchronizeThreeNodes() throws InterruptedException {
+        List<Block> blocks = FactoryHelper.createBlocks(9);
+        Block bestBlock = blocks.get(9);
+
+        BlockChain blockChain1 = new BlockChain();
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+        BlockChain blockChain2 = new BlockChain();
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
+        BlockChain blockChain3 = new BlockChain();
+        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(blockChain3);
+
+        PeerToPeerOutputChannel channel1 = new PeerToPeerOutputChannel(nodeProcessor2.getPeer(), nodeProcessor1);
+        PeerToPeerOutputChannel channel2 = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2);
+        PeerToPeerOutputChannel channel3 = new PeerToPeerOutputChannel(nodeProcessor2.getPeer(), nodeProcessor3);
+
+        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel2);
+        nodeProcessor2.connectTo(nodeProcessor1.getPeer(), channel1);
+        nodeProcessor2.connectTo(nodeProcessor3.getPeer(), channel3);
+
+        Semaphore sem1 = new Semaphore(0, true);
+
+        nodeProcessor1.onEmpty(() -> {
+            sem1.release();
+        });
+
+        Semaphore sem2 = new Semaphore(0, true);
+
+        nodeProcessor2.onEmpty(() -> {
+            sem2.release();
+        });
+
+        Semaphore sem3 = new Semaphore(0, true);
+
+        nodeProcessor3.onEmpty(() -> {
+            sem3.release();
+        });
+
+        for (Block block : blocks)
+            Assert.assertTrue(blockChain1.connectBlock(block));
+
+        for (int k = 0; k < 10; k++)
+            Assert.assertNotNull(blockChain1.getBlockByNumber(k));
+
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
+        StatusMessage statusMessage = new StatusMessage(status);
+
+        nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
+
+        nodeProcessor1.start();
+        nodeProcessor2.start();
+        nodeProcessor3.start();
+
+        sem1.acquire();
+        sem2.acquire();
+        sem3.acquire();
+
+        nodeProcessor1.stop();
+        nodeProcessor2.stop();
+        nodeProcessor3.stop();
+
+        Block result1 = blockChain1.getBestBlock();
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(bestBlock.getHash(), result1.getHash());
+
+        Block result2 = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(bestBlock.getHash(), result2.getHash());
+
+        Block result3 = blockChain3.getBestBlock();
+
+        Assert.assertNotNull(result3);
+        Assert.assertEquals(bestBlock.getHash(), result3.getHash());
+    }
+
+    @Test
     public void processTransactionMessage() throws InterruptedException {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
