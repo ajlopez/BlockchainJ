@@ -26,7 +26,12 @@ public class TransactionPoolTest {
         TransactionPool pool = new TransactionPool();
         Transaction transaction = FactoryHelper.createTransaction(100);
 
-        pool.addTransaction(transaction);
+        List<Transaction> added = pool.addTransaction(transaction);
+
+        Assert.assertNotNull(added);
+        Assert.assertFalse(added.isEmpty());
+        Assert.assertEquals(1, added.size());
+        Assert.assertSame(transaction, added.get(0));
 
         List<Transaction> result = pool.getTransactions();
 
@@ -84,7 +89,10 @@ public class TransactionPoolTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
 
         pool.addTransaction(transaction);
-        pool.addTransaction(transaction);
+        List<Transaction> added = pool.addTransaction(transaction);
+
+        Assert.assertNotNull(added);
+        Assert.assertTrue(added.isEmpty());
 
         List<Transaction> result = pool.getTransactions();
 

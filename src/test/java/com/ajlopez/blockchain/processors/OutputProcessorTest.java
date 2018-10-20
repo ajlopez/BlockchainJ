@@ -30,7 +30,7 @@ public class OutputProcessorTest {
 
         Assert.assertFalse(processor.isConnected(peer));
     }
-    
+
     @Test
     public void postMessageToNotConnectedPeer() {
         OutputProcessor processor = new OutputProcessor();

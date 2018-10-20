@@ -8,13 +8,18 @@ import java.util.*;
  * Created by ajlopez on 21/01/2018.
  */
 public class TransactionPool {
+    private static List<Transaction> emptyList = Collections.unmodifiableList(Arrays.asList());
+
     private Set<Transaction> transactions = new HashSet<>();
 
-    public void addTransaction(Transaction transaction) {
+    public List<Transaction> addTransaction(Transaction transaction) {
         if (transaction == null)
             throw new IllegalArgumentException("Null transaction");
 
-        this.transactions.add(transaction);
+        if (!this.transactions.add(transaction))
+            return emptyList;
+
+        return Collections.singletonList(transaction);
     }
 
     public void removeTransaction(Transaction transaction) {
