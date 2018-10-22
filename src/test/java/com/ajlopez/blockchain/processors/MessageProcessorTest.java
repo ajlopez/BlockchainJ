@@ -195,6 +195,41 @@ public class MessageProcessorTest {
     }
 
     @Test
+    public void processTransactionMessageAndRelayToPeers() {
+        TransactionPool pool = new TransactionPool();
+        TransactionProcessor transactionProcessor = new TransactionProcessor(pool);
+
+        Transaction transaction = FactoryHelper.createTransaction(100);
+        Message message = new TransactionMessage(transaction);
+
+        OutputProcessor outputProcessor = new OutputProcessor();
+        Peer sender = FactoryHelper.createPeer();
+        SimpleOutputChannel channel = new SimpleOutputChannel();
+        outputProcessor.connectToPeer(sender, channel);
+
+        MessageProcessor processor = FactoryHelper.createMessageProcessor(transactionProcessor, outputProcessor);
+
+        processor.processMessage(message, null);
+
+        List<Transaction> transactions = pool.getTransactions();
+
+        Assert.assertNotNull(transactions);
+        Assert.assertEquals(1, transactions.size());
+        Assert.assertEquals(transaction, transactions.get(0));
+
+        List<Message> messages = channel.getMessages();
+
+        Assert.assertNotNull(messages);
+        Assert.assertEquals(1, messages.size());
+
+        Message outputMessage = messages.get(0);
+
+        Assert.assertNotNull(outputMessage);
+        Assert.assertEquals(MessageType.TRANSACTION, outputMessage.getMessageType());
+        Assert.assertEquals(transaction, ((TransactionMessage)outputMessage).getTransaction());
+    }
+
+    @Test
     public void processStatusMessageAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();

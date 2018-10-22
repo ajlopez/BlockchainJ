@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.*;
@@ -34,7 +35,7 @@ public class MessageProcessor {
         else if (msgtype == MessageType.GET_BLOCK_BY_NUMBER)
             this.processGetBlockByNumberMessage((GetBlockByNumberMessage) message, sender);
         else if (msgtype == MessageType.TRANSACTION)
-            this.transactionProcessor.processTransaction(((TransactionMessage)message).getTransaction());
+            this.processTransactionMessage((TransactionMessage)message, sender);
         else if (msgtype == MessageType.STATUS)
             this.processStatusMessage((StatusMessage)message, sender);
     }
@@ -49,6 +50,26 @@ public class MessageProcessor {
 
         for (Block block : processed) {
             Message outputMessage = new BlockMessage(block);
+
+            if (nprocessed == 0 && sender != null)
+                this.outputProcessor.postMessage(outputMessage, Collections.singletonList(sender.getId()));
+            else
+                this.outputProcessor.postMessage(outputMessage);
+
+            nprocessed++;
+        }
+    }
+
+    private void processTransactionMessage(TransactionMessage message, Peer sender) {
+        List<Transaction> processed = this.transactionProcessor.processTransaction(message.getTransaction());
+
+        if (this.outputProcessor == null)
+            return;
+
+        int nprocessed = 0;
+
+        for (Transaction transaction: processed) {
+            Message outputMessage = new TransactionMessage(transaction);
 
             if (nprocessed == 0 && sender != null)
                 this.outputProcessor.postMessage(outputMessage, Collections.singletonList(sender.getId()));

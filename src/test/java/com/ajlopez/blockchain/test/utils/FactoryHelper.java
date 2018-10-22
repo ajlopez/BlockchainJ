@@ -39,12 +39,20 @@ public class FactoryHelper {
         return new MessageProcessor(blockProcessor, null, peerProcessor, outputProcessor);
     }
 
+    public static MessageProcessor createMessageProcessor(TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, OutputProcessor outputProcessor) {
+        return new MessageProcessor(null, transactionProcessor, peerProcessor, outputProcessor);
+    }
+
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, OutputProcessor outputProcessor) {
         return new MessageProcessor(blockProcessor, null, null, outputProcessor);
     }
 
-    public static MessageProcessor createMessageProcessor(TransactionProcessor   transactionProcessor) {
+    public static MessageProcessor createMessageProcessor(TransactionProcessor transactionProcessor) {
         return new MessageProcessor(null, transactionProcessor, null, null);
+    }
+
+    public static MessageProcessor createMessageProcessor(TransactionProcessor transactionProcessor, OutputProcessor outputProcessor) {
+        return new MessageProcessor(null, transactionProcessor, null, outputProcessor);
     }
 
     public static Peer createPeer() {
