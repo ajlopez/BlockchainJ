@@ -141,6 +141,28 @@ public class MessageProcessorTest {
     }
 
     @Test
+    public void processGetUnknownBlockByHashMessage() {
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        OutputProcessor outputProcessor = new OutputProcessor();
+
+        Block block = new Block(0, null);
+
+        MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
+
+        Message message = new GetBlockByHashMessage(block.getHash());
+
+        Peer sender = FactoryHelper.createPeer();
+        SimpleOutputChannel channel = new SimpleOutputChannel();
+        outputProcessor.connectToPeer(sender, channel);
+
+        processor.processMessage(message, sender);
+
+        Message result = channel.getMessage();
+
+        Assert.assertNull(result);
+    }
+
+    @Test
     public void processGetBlockByNumberMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         OutputProcessor outputProcessor = new OutputProcessor();
@@ -168,6 +190,27 @@ public class MessageProcessorTest {
 
         Assert.assertNotNull(bmessage.getBlock());
         Assert.assertEquals(block.getHash(), bmessage.getBlock().getHash());
+    }
+
+    @Test
+    public void processGetUnknownBlockByNumberMessage() {
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        OutputProcessor outputProcessor = new OutputProcessor();
+
+        Block block = new Block(0, null);
+
+        MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
+
+        Message getBlockMessage = new GetBlockByNumberMessage(block.getNumber());
+        Peer sender = FactoryHelper.createPeer();
+        SimpleOutputChannel channel = new SimpleOutputChannel();
+        outputProcessor.connectToPeer(sender, channel);
+
+        processor.processMessage(getBlockMessage, sender);
+
+        Message result = channel.getMessage();
+
+        Assert.assertNull(result);
     }
 
     @Test
