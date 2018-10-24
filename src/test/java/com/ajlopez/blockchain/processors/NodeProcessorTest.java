@@ -36,18 +36,9 @@ public class NodeProcessorTest {
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
 
-        Semaphore sem = new Semaphore(0, true);
-
-        nodeProcessor.onEmpty(() -> {
-            sem.release();
-        });
-
         nodeProcessor.postMessage(null, message);
-        nodeProcessor.start();
 
-        sem.acquire();
-
-        nodeProcessor.stop();
+        runNodeProcessor(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -63,20 +54,10 @@ public class NodeProcessorTest {
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
 
-        Semaphore sem = new Semaphore(0, true);
-
-        nodeProcessor.onEmpty(() -> {
-            sem.release();
-        });
-
         for (int k = 0; k < 10; k++)
             nodeProcessor.postMessage(null, message);
 
-        nodeProcessor.start();
-
-        sem.acquire();
-
-        nodeProcessor.stop();
+        runNodeProcessor(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -95,19 +76,10 @@ public class NodeProcessorTest {
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
 
-        Semaphore sem = new Semaphore(0, true);
-
-        nodeProcessor.onEmpty(() -> {
-            sem.release();
-        });
-
         nodeProcessor.postMessage(null, message0);
         nodeProcessor.postMessage(null, message1);
-        nodeProcessor.start();
 
-        sem.acquire();
-
-        nodeProcessor.stop();
+        runNodeProcessor(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -121,22 +93,12 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         List<Block> blocks = FactoryHelper.createBlocks(9);
 
-        Semaphore sem = new Semaphore(0, true);
-
-        nodeProcessor.onEmpty(() -> {
-            sem.release();
-        });
-
         for (Block block: blocks) {
             Message message = new BlockMessage(block);
             nodeProcessor.postMessage(null, message);
         }
 
-        nodeProcessor.start();
-
-        sem.acquire();
-
-        nodeProcessor.stop();
+        runNodeProcessor(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -156,19 +118,10 @@ public class NodeProcessorTest {
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
 
-        Semaphore sem = new Semaphore(0, true);
-
-        nodeProcessor.onEmpty(() -> {
-            sem.release();
-        });
-
         nodeProcessor.postMessage(null, message1);
         nodeProcessor.postMessage(null, message0);
-        nodeProcessor.start();
 
-        sem.acquire();
-
-        nodeProcessor.stop();
+        runNodeProcessor(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -371,17 +324,9 @@ public class NodeProcessorTest {
         BlockChain blockChain = new BlockChain();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
-        Semaphore sem = new Semaphore(0, true);
-        nodeProcessor.onEmpty(() -> {
-            sem.release();
-        });
-
         nodeProcessor.postMessage(null, message);
-        nodeProcessor.start();
 
-        sem.acquire();
-
-        nodeProcessor.stop();
+        runNodeProcessor(nodeProcessor);
 
         List<Transaction> transactions = nodeProcessor.getTransactions();
 
@@ -393,5 +338,75 @@ public class NodeProcessorTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(transaction.getHash(), result.getHash());
+    }
+
+    @Test
+    public void processTransactionMessageWithRelayToOtherNode() throws InterruptedException {
+        Transaction transaction = FactoryHelper.createTransaction(100);
+        Message message = new TransactionMessage(transaction);
+
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor();
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor();
+
+        Semaphore sem1 = new Semaphore(0, true);
+        nodeProcessor1.onEmpty(() -> {
+            sem1.release();
+        });
+
+        Semaphore sem2 = new Semaphore(0, true);
+        nodeProcessor2.onEmpty(() -> {
+            sem2.release();
+        });
+
+        PeerToPeerOutputChannel channel = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2);
+
+        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel);
+
+        nodeProcessor1.postMessage(null, message);
+
+        nodeProcessor1.start();
+        nodeProcessor2.start();
+
+        sem1.acquire();
+        sem2.acquire();
+
+        nodeProcessor1.stop();
+        nodeProcessor2.stop();
+
+        List<Transaction> transactions1 = nodeProcessor1.getTransactions();
+
+        Assert.assertNotNull(transactions1);
+        Assert.assertFalse(transactions1.isEmpty());
+        Assert.assertEquals(1, transactions1.size());
+
+        Transaction result1 = transactions1.get(0);
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(transaction.getHash(), result1.getHash());
+
+        List<Transaction> transactions2 = nodeProcessor2.getTransactions();
+
+        Assert.assertNotNull(transactions2);
+        Assert.assertFalse(transactions2.isEmpty());
+        Assert.assertEquals(1, transactions2.size());
+
+        Transaction result2 = transactions2.get(0);
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(transaction.getHash(), result2.getHash());
+    }
+
+    private static void runNodeProcessor(NodeProcessor nodeProcessor) throws InterruptedException {
+        Semaphore sem = new Semaphore(0, true);
+
+        nodeProcessor.onEmpty(() -> {
+            sem.release();
+        });
+
+        nodeProcessor.start();
+
+        sem.acquire();
+
+        nodeProcessor.stop();
     }
 }

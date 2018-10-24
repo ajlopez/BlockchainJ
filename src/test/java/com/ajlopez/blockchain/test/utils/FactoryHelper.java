@@ -59,6 +59,10 @@ public class FactoryHelper {
         return new Peer(HashUtilsTest.generateRandomPeerId());
     }
 
+    public static NodeProcessor createNodeProcessor() {
+        return createNodeProcessor(new BlockChain());
+    }
+
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
         return new NodeProcessor(createPeer(), blockChain);
     }
