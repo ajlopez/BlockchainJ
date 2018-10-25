@@ -146,28 +146,10 @@ public class NodeProcessorTest {
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
 
-        Semaphore sem1 = new Semaphore(0, true);
-
-        nodeProcessor1.onEmpty(() -> {
-            sem1.release();
-        });
-
-        Semaphore sem2 = new Semaphore(0, true);
-
-        nodeProcessor2.onEmpty(() -> {
-            sem2.release();
-        });
-
         nodeProcessor1.postMessage(null, message0);
         nodeProcessor1.postMessage(null, message1);
-        nodeProcessor1.start();
-        nodeProcessor2.start();
 
-        sem1.acquire();
-        sem2.acquire();
-
-        nodeProcessor1.stop();
-        nodeProcessor2.stop();
+        runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -196,18 +178,6 @@ public class NodeProcessorTest {
         nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel2);
         nodeProcessor2.connectTo(nodeProcessor1.getPeer(), channel1);
 
-        Semaphore sem1 = new Semaphore(0, true);
-
-        nodeProcessor1.onEmpty(() -> {
-            sem1.release();
-        });
-
-        Semaphore sem2 = new Semaphore(0, true);
-
-        nodeProcessor2.onEmpty(() -> {
-            sem2.release();
-        });
-
         for (Block block : blocks)
             Assert.assertTrue(blockChain1.connectBlock(block));
 
@@ -219,14 +189,7 @@ public class NodeProcessorTest {
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
-        nodeProcessor1.start();
-        nodeProcessor2.start();
-
-        sem1.acquire();
-        sem2.acquire();
-
-        nodeProcessor1.stop();
-        nodeProcessor2.stop();
+        runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -408,5 +371,28 @@ public class NodeProcessorTest {
         sem.acquire();
 
         nodeProcessor.stop();
+    }
+
+    private static void runNodeProcessors(NodeProcessor nodeProcessor1, NodeProcessor nodeProcessor2) throws InterruptedException {
+        Semaphore sem1 = new Semaphore(0, true);
+
+        nodeProcessor1.onEmpty(() -> {
+            sem1.release();
+        });
+
+        Semaphore sem2 = new Semaphore(0, true);
+
+        nodeProcessor2.onEmpty(() -> {
+            sem2.release();
+        });
+
+        nodeProcessor1.start();
+        nodeProcessor2.start();
+
+        sem1.acquire();
+        sem2.acquire();
+
+        nodeProcessor1.stop();
+        nodeProcessor2.stop();
     }
 }
