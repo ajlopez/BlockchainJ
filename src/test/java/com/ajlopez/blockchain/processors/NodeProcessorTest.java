@@ -11,6 +11,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -38,7 +39,7 @@ public class NodeProcessorTest {
 
         nodeProcessor.postMessage(null, message);
 
-        runNodeProcessor(nodeProcessor);
+        runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -57,7 +58,7 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             nodeProcessor.postMessage(null, message);
 
-        runNodeProcessor(nodeProcessor);
+        runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -79,7 +80,7 @@ public class NodeProcessorTest {
         nodeProcessor.postMessage(null, message0);
         nodeProcessor.postMessage(null, message1);
 
-        runNodeProcessor(nodeProcessor);
+        runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -98,7 +99,7 @@ public class NodeProcessorTest {
             nodeProcessor.postMessage(null, message);
         }
 
-        runNodeProcessor(nodeProcessor);
+        runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -121,7 +122,7 @@ public class NodeProcessorTest {
         nodeProcessor.postMessage(null, message1);
         nodeProcessor.postMessage(null, message0);
 
-        runNodeProcessor(nodeProcessor);
+        runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -222,24 +223,6 @@ public class NodeProcessorTest {
         nodeProcessor2.connectTo(nodeProcessor1.getPeer(), channel1);
         nodeProcessor2.connectTo(nodeProcessor3.getPeer(), channel3);
 
-        Semaphore sem1 = new Semaphore(0, true);
-
-        nodeProcessor1.onEmpty(() -> {
-            sem1.release();
-        });
-
-        Semaphore sem2 = new Semaphore(0, true);
-
-        nodeProcessor2.onEmpty(() -> {
-            sem2.release();
-        });
-
-        Semaphore sem3 = new Semaphore(0, true);
-
-        nodeProcessor3.onEmpty(() -> {
-            sem3.release();
-        });
-
         for (Block block : blocks)
             Assert.assertTrue(blockChain1.connectBlock(block));
 
@@ -251,17 +234,7 @@ public class NodeProcessorTest {
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
-        nodeProcessor1.start();
-        nodeProcessor2.start();
-        nodeProcessor3.start();
-
-        sem1.acquire();
-        sem2.acquire();
-        sem3.acquire();
-
-        nodeProcessor1.stop();
-        nodeProcessor2.stop();
-        nodeProcessor3.stop();
+        runNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -289,7 +262,7 @@ public class NodeProcessorTest {
 
         nodeProcessor.postMessage(null, message);
 
-        runNodeProcessor(nodeProcessor);
+        runNodeProcessors(nodeProcessor);
 
         List<Transaction> transactions = nodeProcessor.getTransactions();
 
@@ -311,30 +284,13 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor();
 
-        Semaphore sem1 = new Semaphore(0, true);
-        nodeProcessor1.onEmpty(() -> {
-            sem1.release();
-        });
-
-        Semaphore sem2 = new Semaphore(0, true);
-        nodeProcessor2.onEmpty(() -> {
-            sem2.release();
-        });
-
         PeerToPeerOutputChannel channel = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2);
 
         nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel);
 
         nodeProcessor1.postMessage(null, message);
 
-        nodeProcessor1.start();
-        nodeProcessor2.start();
-
-        sem1.acquire();
-        sem2.acquire();
-
-        nodeProcessor1.stop();
-        nodeProcessor2.stop();
+        runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         List<Transaction> transactions1 = nodeProcessor1.getTransactions();
 
@@ -359,40 +315,26 @@ public class NodeProcessorTest {
         Assert.assertEquals(transaction.getHash(), result2.getHash());
     }
 
-    private static void runNodeProcessor(NodeProcessor nodeProcessor) throws InterruptedException {
-        Semaphore sem = new Semaphore(0, true);
+    private static void runNodeProcessors(NodeProcessor ...nodeProcessors) throws InterruptedException {
+        List<Semaphore> semaphores = new ArrayList<>();
 
-        nodeProcessor.onEmpty(() -> {
-            sem.release();
-        });
+        for (NodeProcessor nodeProcessor : nodeProcessors) {
+            Semaphore semaphore = new Semaphore(0, true);
 
-        nodeProcessor.start();
+            nodeProcessor.onEmpty(() -> {
+                semaphore.release();
+            });
 
-        sem.acquire();
+            semaphores.add(semaphore);
+        }
 
-        nodeProcessor.stop();
-    }
+        for (NodeProcessor nodeProcessor : nodeProcessors)
+            nodeProcessor.start();
 
-    private static void runNodeProcessors(NodeProcessor nodeProcessor1, NodeProcessor nodeProcessor2) throws InterruptedException {
-        Semaphore sem1 = new Semaphore(0, true);
+        for (Semaphore semaphore : semaphores)
+            semaphore.acquire();
 
-        nodeProcessor1.onEmpty(() -> {
-            sem1.release();
-        });
-
-        Semaphore sem2 = new Semaphore(0, true);
-
-        nodeProcessor2.onEmpty(() -> {
-            sem2.release();
-        });
-
-        nodeProcessor1.start();
-        nodeProcessor2.start();
-
-        sem1.acquire();
-        sem2.acquire();
-
-        nodeProcessor1.stop();
-        nodeProcessor2.stop();
+        for (NodeProcessor nodeProcessor : nodeProcessors)
+            nodeProcessor.stop();
     }
 }
