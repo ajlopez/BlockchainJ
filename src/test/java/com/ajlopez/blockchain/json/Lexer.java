@@ -58,6 +58,8 @@ public class Lexer {
         while ((ch = this.nextCharacter()) != null && Character.isDigit(ch))
             buffer.append(ch);
 
+        this.pushCharacter(ch);
+
         return new Token(TokenType.NUMBER, buffer.toString());
     }
 

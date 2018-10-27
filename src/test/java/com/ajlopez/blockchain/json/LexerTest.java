@@ -167,6 +167,25 @@ public class LexerTest {
         Assert.assertNull(lexer.nextToken());
     }
 
+    @Test
+    public void processNumberAndSymbol() throws IOException {
+        Lexer lexer = createLexer("42;");
+
+        Token token = lexer.nextToken();
+
+        Assert.assertNotNull(token);
+        Assert.assertEquals(TokenType.NUMBER, token.getType());
+        Assert.assertEquals("42", token.getValue());
+
+        token = lexer.nextToken();
+
+        Assert.assertNotNull(token);
+        Assert.assertEquals(TokenType.SYMBOL, token.getType());
+        Assert.assertEquals(";", token.getValue());
+
+        Assert.assertNull(lexer.nextToken());
+    }
+
     private static Lexer createLexer(String text) {
         return new Lexer(new StringReader(text));
     }
