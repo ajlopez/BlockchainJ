@@ -25,6 +25,13 @@ public class LexerTest {
     }
 
     @Test
+    public void processBlankStringWithNewLineCarriageReturn() throws IOException {
+        Lexer lexer = createLexer(" \r\n  ");
+
+        Assert.assertNull(lexer.nextToken());
+    }
+
+    @Test
     public void processSimpleName() throws IOException {
         Lexer lexer = createLexer("adam");
 
@@ -105,6 +112,19 @@ public class LexerTest {
     @Test
     public void processSimpleNumber() throws IOException {
         Lexer lexer = createLexer("42");
+
+        Token token = lexer.nextToken();
+
+        Assert.assertNotNull(token);
+        Assert.assertEquals(TokenType.NUMBER, token.getType());
+        Assert.assertEquals("42", token.getValue());
+
+        Assert.assertNull(lexer.nextToken());
+    }
+
+    @Test
+    public void processSimpleNumberWithWhitespaces() throws IOException {
+        Lexer lexer = createLexer("   42   ");
 
         Token token = lexer.nextToken();
 
