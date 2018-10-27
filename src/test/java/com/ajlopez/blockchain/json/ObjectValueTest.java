@@ -20,6 +20,10 @@ public class ObjectValueTest {
 
         ObjectValue value = new ObjectValue(properties);
 
+        Assert.assertTrue(value.hasProperty("name"));
+        Assert.assertTrue(value.hasProperty("age"));
+        Assert.assertFalse(value.hasProperty("weight"));
+        
         Assert.assertEquals(ValueType.OBJECT, value.getType());
         Assert.assertSame(properties, value.getValue());
         Assert.assertSame(name, value.getProperty("name"));

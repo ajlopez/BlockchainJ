@@ -16,4 +16,8 @@ public class ObjectValue extends Value {
     public Value getProperty(String name) {
         return this.properties.get(name);
     }
+
+    public boolean hasProperty(String name) {
+        return this.properties.containsKey(name);
+    }
 }
