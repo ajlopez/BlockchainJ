@@ -15,11 +15,14 @@ public class Lexer {
         this.reader = reader;
     }
 
-    public Token nextToken() throws IOException {
+    public Token nextToken() throws IOException, LexerException {
         Character ch = this.skipWhitespaces();
 
         if (ch == null)
             return null;
+
+        if (ch == '"')
+            return this.nextString();
 
         StringBuffer buffer = new StringBuffer();
         buffer.append(ch);
@@ -33,12 +36,41 @@ public class Lexer {
         return new Token(TokenType.SYMBOL, buffer.toString());
     }
 
-    private static boolean isInitialNameCharacter(Character ch) {
-        return Character.isLetter(ch) || ch == '_';
-    }
+    private Token nextString() throws IOException, LexerException {
+        StringBuffer buffer = new StringBuffer();
 
-    private static boolean isNameCharacter(Character ch) {
-        return Character.isLetterOrDigit(ch)  || ch == '_';
+        Character ch;
+
+        while ((ch = this.nextCharacter()) != null && ch != '"') {
+            if (ch == '\\') {
+                ch = this.nextCharacter();
+
+                if (ch == null)
+                    break;
+
+                if (ch == 'n')
+                    buffer.append('\n');
+                else if (ch == 'r')
+                    buffer.append('\r');
+                else if (ch == 't')
+                   buffer.append('\t');
+                else if (ch == 't')
+                    buffer.append('\t');
+                else if (ch == '\\')
+                    buffer.append('\\');
+                else if (ch == '"')
+                    buffer.append('"');
+                else
+                    buffer.append(ch);
+            }
+            else
+                buffer.append(ch);
+        }
+
+        if (ch == null)
+            throw new LexerException("Unclosed string");
+
+        return new Token(TokenType.STRING, buffer.toString());
     }
 
     private Token nextName(StringBuffer buffer) throws IOException {
@@ -87,5 +119,13 @@ public class Lexer {
             return null;
 
         return (char)ch;
+    }
+
+    private static boolean isInitialNameCharacter(Character ch) {
+        return Character.isLetter(ch) || ch == '_';
+    }
+
+    private static boolean isNameCharacter(Character ch) {
+        return Character.isLetterOrDigit(ch)  || ch == '_';
     }
 }

@@ -1,7 +1,10 @@
 package com.ajlopez.blockchain.json;
 
 /**
- * Created by Angel on 10/27/2018.
+ * Created by ajlopez on 27/10/2018.
  */
-public class LexerException {
+public class LexerException extends Exception {
+    public LexerException(String message) {
+        super(message);
+    }
 }
