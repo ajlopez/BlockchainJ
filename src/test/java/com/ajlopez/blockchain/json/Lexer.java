@@ -22,10 +22,28 @@ public class Lexer {
         StringBuffer buffer = new StringBuffer();
         buffer.append(ch);
 
+        if (Character.isDigit(ch))
+            return this.nextNumber(buffer);
+
+        return this.nextName(buffer);
+    }
+
+    private Token nextName(StringBuffer buffer) throws IOException {
+        Character ch;
+
         while ((ch = this.nextCharacter()) != null && !Character.isWhitespace(ch))
             buffer.append(ch);
 
         return new Token(TokenType.NAME, buffer.toString());
+    }
+
+    private Token nextNumber(StringBuffer buffer) throws IOException {
+        Character ch;
+
+        while ((ch = this.nextCharacter()) != null && Character.isDigit(ch))
+            buffer.append(ch);
+
+        return new Token(TokenType.NUMBER, buffer.toString());
     }
 
     private Character skipWhitespaces() throws IOException {
