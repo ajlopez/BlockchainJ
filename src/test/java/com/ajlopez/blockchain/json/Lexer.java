@@ -2,12 +2,14 @@ package com.ajlopez.blockchain.json;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Stack;
 
 /**
  * Created by ajlopez on 27/10/2018.
  */
 public class Lexer {
     private Reader reader;
+    private Stack<Character> chars = new Stack<>();
 
     public Lexer(Reader reader) {
         this.reader = reader;
@@ -25,14 +27,27 @@ public class Lexer {
         if (Character.isDigit(ch))
             return this.nextNumber(buffer);
 
-        return this.nextName(buffer);
+        if (isInitialNameCharacter(ch))
+            return this.nextName(buffer);
+
+        return new Token(TokenType.SYMBOL, buffer.toString());
+    }
+
+    private static boolean isInitialNameCharacter(Character ch) {
+        return Character.isLetter(ch) || ch == '_';
+    }
+
+    private static boolean isNameCharacter(Character ch) {
+        return Character.isLetterOrDigit(ch)  || ch == '_';
     }
 
     private Token nextName(StringBuffer buffer) throws IOException {
         Character ch;
 
-        while ((ch = this.nextCharacter()) != null && !Character.isWhitespace(ch))
+        while ((ch = this.nextCharacter()) != null && isNameCharacter(ch))
             buffer.append(ch);
+
+        this.pushCharacter(ch);
 
         return new Token(TokenType.NAME, buffer.toString());
     }
@@ -55,7 +70,15 @@ public class Lexer {
         return ch;
     }
 
+    private void pushCharacter(Character ch) {
+        if (ch != null)
+            this.chars.push(ch);
+    }
+
     private Character nextCharacter() throws IOException {
+        if (!this.chars.empty())
+            return this.chars.pop();
+
         int ch = reader.read();
 
         if (ch == -1)
