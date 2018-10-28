@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.json;
 
+import java.io.IOException;
 import java.io.Reader;
 
 /**
@@ -12,7 +13,12 @@ public class Parser {
         this.lexer = new Lexer(reader);
     }
 
-    public Value parseValue() {
-        return null;
+    public Value parseValue() throws IOException, LexerException {
+        Token token = this.lexer.nextToken();
+
+        if (token == null)
+            return null;
+
+        return new NumericValue(token.getValue());
     }
 }

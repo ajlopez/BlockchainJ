@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.json;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.io.StringReader;
 
 /**
@@ -10,8 +11,21 @@ import java.io.StringReader;
  */
 public class ParserTest {
     @Test
-    public void parseEmptyStringAsNull() {
+    public void parseEmptyStringAsNull() throws IOException, LexerException {
         Parser parser = createParser("");
+
+        Assert.assertNull(parser.parseValue());
+    }
+
+    @Test
+    public void parseIntegerAsNumericValue() throws IOException, LexerException {
+        Parser parser = createParser("42");
+
+        Value result = parser.parseValue();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.NUMBER, result.getType());
+        Assert.assertEquals("42", result.getValue());
 
         Assert.assertNull(parser.parseValue());
     }
