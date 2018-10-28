@@ -20,4 +20,8 @@ public class ObjectValue extends Value {
     public boolean hasProperty(String name) {
         return this.properties.containsKey(name);
     }
+
+    public int noProperties() {
+        return this.properties.size();
+    }
 }

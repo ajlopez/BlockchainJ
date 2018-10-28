@@ -82,6 +82,59 @@ public class ParserTest {
         }
     }
 
+    @Test
+    public void parseEmptyObject() throws IOException, LexerException, ParserException {
+        Parser parser = createParser("{}");
+
+        Value result = parser.parseValue();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.OBJECT, result.getType());
+
+        ObjectValue oresult = (ObjectValue)result;
+
+        Assert.assertEquals(0, oresult.noProperties());
+    }
+
+    @Test
+    public void parseUnclosedObject() throws IOException, LexerException, ParserException {
+        Parser parser = createParser("{");
+
+        try {
+            parser.parseValue();
+            Assert.fail();
+        }
+        catch (ParserException ex) {
+            Assert.assertEquals("Unclosed object", ex.getMessage());
+        }
+    }
+
+    @Test
+    public void parseObjectWithTwoProperties() throws IOException, LexerException, ParserException {
+        Parser parser = createParser("{ \"name\": \"adam\", \"age\": 900 }");
+
+        Value result = parser.parseValue();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.OBJECT, result.getType());
+
+        ObjectValue oresult = (ObjectValue)result;
+
+        Assert.assertTrue(oresult.hasProperty("name"));
+        Value pname = oresult.getProperty("name");
+        Assert.assertNotNull(pname);
+        Assert.assertEquals(ValueType.STRING, pname.getType());
+        Assert.assertEquals("adam", pname.getValue());
+
+        Assert.assertTrue(oresult.hasProperty("age"));
+        Value page = oresult.getProperty("age");
+        Assert.assertNotNull(page);
+        Assert.assertEquals(ValueType.NUMBER, page.getType());
+        Assert.assertEquals("900", page.getValue());
+
+        Assert.assertNull(parser.parseValue());
+    }
+
     private static Parser createParser(String text) {
         return new Parser(new StringReader(text));
     }

@@ -9,13 +9,21 @@ import java.util.Stack;
  */
 public class Lexer {
     private Reader reader;
+    private Stack<Token> tokens = new Stack<>();
     private Stack<Character> chars = new Stack<>();
 
     public Lexer(Reader reader) {
         this.reader = reader;
     }
 
+    public void pushToken(Token token) {
+        this.tokens.push(token);
+    }
+
     public Token nextToken() throws IOException, LexerException {
+        if (!this.tokens.isEmpty())
+            return this.tokens.pop();
+
         Character ch = this.skipWhitespaces();
 
         if (ch == null)

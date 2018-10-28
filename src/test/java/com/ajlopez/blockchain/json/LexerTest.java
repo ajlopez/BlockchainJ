@@ -45,6 +45,23 @@ public class LexerTest {
     }
 
     @Test
+    public void pushToken() throws IOException, LexerException {
+        Lexer lexer = createLexer("adam");
+
+        Token original = lexer.nextToken();
+
+        lexer.pushToken(original);
+
+        Token token = lexer.nextToken();
+
+        Assert.assertNotNull(token);
+        Assert.assertEquals(TokenType.NAME, token.getType());
+        Assert.assertEquals("adam", token.getValue());
+
+        Assert.assertNull(lexer.nextToken());
+    }
+
+    @Test
     public void processSimpleNameWithWhitespaces() throws IOException, LexerException {
         Lexer lexer = createLexer("  adam   ");
 
