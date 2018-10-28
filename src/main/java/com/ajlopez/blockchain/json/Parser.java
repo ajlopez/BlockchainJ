@@ -13,11 +13,23 @@ public class Parser {
         this.lexer = new Lexer(reader);
     }
 
-    public Value parseValue() throws IOException, LexerException {
+    public Value parseValue() throws IOException, LexerException, ParserException {
         Token token = this.lexer.nextToken();
 
         if (token == null)
             return null;
+
+        if (token.getType() == TokenType.NAME) {
+            if (token.getValue().equals("true"))
+                return new BooleanValue(true);
+            if (token.getValue().equals("false"))
+                return new BooleanValue(false);
+
+            throw new ParserException(String.format("Invalid value '%s'", token.getValue()));
+        }
+
+        if (token.getType() == TokenType.STRING)
+            return new StringValue(token.getValue());
 
         return new NumericValue(token.getValue());
     }
