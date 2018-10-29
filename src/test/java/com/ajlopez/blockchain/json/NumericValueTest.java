@@ -14,5 +14,12 @@ public class NumericValueTest {
         Assert.assertEquals(ValueType.NUMBER, value.getType());
         Assert.assertEquals("42", value.getValue());
     }
+
+    @Test
+    public void simpleNumericValueToString() {
+        NumericValue value = new NumericValue("42");
+
+        Assert.assertEquals("42", value.toString());
+    }
 }
 

@@ -21,5 +21,12 @@ public class StringValueTest {
 
         Assert.assertEquals("\"foo\"", value.toString());
     }
+
+    @Test
+    public void simpleStringValueToStringWithEscapedCharacters() {
+        StringValue value = new StringValue("\n\r\tfoo\\\"");
+
+        Assert.assertEquals("\"\\n\\r\\tfoo\\\\\\\"\"", value.toString());
+    }
 }
 

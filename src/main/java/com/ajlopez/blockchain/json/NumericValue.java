@@ -7,4 +7,9 @@ public class NumericValue extends Value {
     public NumericValue(String value) {
         super(ValueType.NUMBER, value);
     }
+
+    @Override
+    public String toString() {
+        return (String)this.getValue();
+    }
 }
