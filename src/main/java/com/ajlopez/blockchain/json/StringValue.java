@@ -7,4 +7,9 @@ public class StringValue extends Value {
     public StringValue(String value) {
         super(ValueType.STRING, value);
     }
+
+    @Override
+    public String toString() {
+        return "\"" + this.getValue() + "\"";
+    }
 }

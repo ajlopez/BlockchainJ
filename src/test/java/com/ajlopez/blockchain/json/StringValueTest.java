@@ -14,5 +14,12 @@ public class StringValueTest {
         Assert.assertEquals(ValueType.STRING, value.getType());
         Assert.assertEquals("foo", value.getValue());
     }
+
+    @Test
+    public void simpleStringValueToString() {
+        StringValue value = new StringValue("foo");
+
+        Assert.assertEquals("\"foo\"", value.toString());
+    }
 }
 
