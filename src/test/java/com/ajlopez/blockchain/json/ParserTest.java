@@ -105,7 +105,7 @@ public class ParserTest {
             Assert.fail();
         }
         catch (ParserException ex) {
-            Assert.assertEquals("Unclosed object", ex.getMessage());
+            Assert.assertEquals("Expected string", ex.getMessage());
         }
     }
 
@@ -120,6 +120,8 @@ public class ParserTest {
 
         ObjectValue oresult = (ObjectValue)result;
 
+        Assert.assertEquals(2, oresult.noProperties());
+
         Assert.assertTrue(oresult.hasProperty("name"));
         Value pname = oresult.getProperty("name");
         Assert.assertNotNull(pname);
@@ -131,6 +133,44 @@ public class ParserTest {
         Assert.assertNotNull(page);
         Assert.assertEquals(ValueType.NUMBER, page.getType());
         Assert.assertEquals("900", page.getValue());
+
+        Assert.assertNull(parser.parseValue());
+    }
+
+    @Test
+    public void parseObjectWithNestedObject() throws IOException, LexerException, ParserException {
+        Parser parser = createParser("{ \"name\": \"adam\", \"age\": 900, \"wife\": { \"name\": \"eve\", \"age\": 800 } }");
+
+        Value result = parser.parseValue();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.OBJECT, result.getType());
+
+        ObjectValue oresult = (ObjectValue)result;
+
+        Assert.assertEquals(3, oresult.noProperties());
+
+        Assert.assertTrue(oresult.hasProperty("name"));
+        Value pname = oresult.getProperty("name");
+        Assert.assertNotNull(pname);
+        Assert.assertEquals(ValueType.STRING, pname.getType());
+        Assert.assertEquals("adam", pname.getValue());
+
+        Assert.assertTrue(oresult.hasProperty("age"));
+        Value page = oresult.getProperty("age");
+        Assert.assertNotNull(page);
+        Assert.assertEquals(ValueType.NUMBER, page.getType());
+        Assert.assertEquals("900", page.getValue());
+
+        Value pname2 = oresult.getProperty("wife","name");
+        Assert.assertNotNull(pname2);
+        Assert.assertEquals(ValueType.STRING, pname2.getType());
+        Assert.assertEquals("eve", pname2.getValue());
+
+        Value page2 = oresult.getProperty("wife","age");
+        Assert.assertNotNull(page2);
+        Assert.assertEquals(ValueType.NUMBER, page2.getType());
+        Assert.assertEquals("800", page2.getValue());
 
         Assert.assertNull(parser.parseValue());
     }

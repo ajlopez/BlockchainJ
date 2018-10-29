@@ -17,6 +17,15 @@ public class ObjectValue extends Value {
         return this.properties.get(name);
     }
 
+    public Value getProperty(String name, String ...names) {
+        Value value = this.getProperty(name);
+
+        for (int k = 0; k < names.length; k++)
+            value = ((ObjectValue)value).getProperty(names[k]);
+
+        return value;
+    }
+
     public boolean hasProperty(String name) {
         return this.properties.containsKey(name);
     }
