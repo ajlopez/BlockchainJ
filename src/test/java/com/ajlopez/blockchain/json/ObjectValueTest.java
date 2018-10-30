@@ -3,7 +3,7 @@ package com.ajlopez.blockchain.json;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -14,7 +14,7 @@ public class ObjectValueTest {
     public void createObjectValueWithTwoProperties() {
         Value name = new StringValue("adam");
         Value age = new NumericValue("900");
-        Map<String, Value> properties = new HashMap<>();
+        Map<String, Value> properties = new LinkedHashMap<>();
         properties.put("name", name);
         properties.put("age", age);
 
@@ -28,6 +28,19 @@ public class ObjectValueTest {
         Assert.assertSame(properties, value.getValue());
         Assert.assertSame(name, value.getProperty("name"));
         Assert.assertSame(age, value.getProperty("age"));
+    }
+
+    @Test
+    public void objectValueWithTwoPropertiesToString() {
+        Value name = new StringValue("adam");
+        Value age = new NumericValue("900");
+        Map<String, Value> properties = new LinkedHashMap<>();
+        properties.put("name", name);
+        properties.put("age", age);
+
+        ObjectValue value = new ObjectValue(properties);
+
+        Assert.assertEquals("{ \"name\": \"adam\", \"age\": 900 }", value.toString());
     }
 }
 
