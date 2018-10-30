@@ -7,4 +7,12 @@ public class BooleanValue extends Value {
     public BooleanValue(boolean value) {
         super(ValueType.BOOLEAN, value);
     }
+
+    @Override
+    public String toString() {
+        if (this.getValue().equals(true))
+            return "true";
+
+        return "false";
+    }
 }

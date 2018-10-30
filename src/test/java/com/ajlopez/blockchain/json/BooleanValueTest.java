@@ -22,5 +22,14 @@ public class BooleanValueTest {
         Assert.assertEquals(ValueType.BOOLEAN, value.getType());
         Assert.assertEquals(true, value.getValue());
     }
+
+    @Test
+    public void booleanValuesToString() {
+        BooleanValue trueValue = new BooleanValue(true);
+        BooleanValue falseValue = new BooleanValue(false);
+
+        Assert.assertEquals("true", trueValue.toString());
+        Assert.assertEquals("false", falseValue.toString());
+    }
 }
 
