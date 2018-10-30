@@ -2,7 +2,7 @@ package com.ajlopez.blockchain.json;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -40,7 +40,7 @@ public class Parser {
     }
 
     private ObjectValue parseObjectValue() throws IOException, LexerException, ParserException {
-        Map<String, Value> properties = new HashMap<>();
+        Map<String, Value> properties = new LinkedHashMap<>();
 
         while (!this.tryParseSymbol("}")) {
             String name = this.parseString();
