@@ -138,6 +138,32 @@ public class ParserTest {
     }
 
     @Test
+    public void parseArrayWithTwoElements() throws IOException, LexerException, ParserException {
+        Parser parser = createParser("[ \"adam\", 900 ]");
+
+        Value result = parser.parseValue();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.ARRAY, result.getType());
+
+        ArrayValue aresult = (ArrayValue)result;
+
+        Assert.assertEquals(2, aresult.size());
+
+        Value pname = aresult.getValue(0);
+        Assert.assertNotNull(pname);
+        Assert.assertEquals(ValueType.STRING, pname.getType());
+        Assert.assertEquals("adam", pname.getValue());
+
+        Value page = aresult.getValue(1);
+        Assert.assertNotNull(page);
+        Assert.assertEquals(ValueType.NUMBER, page.getType());
+        Assert.assertEquals("900", page.getValue());
+
+        Assert.assertNull(parser.parseValue());
+    }
+
+    @Test
     public void parseObjectWithNestedObject() throws IOException, LexerException, ParserException {
         Parser parser = createParser("{ \"name\": \"adam\", \"age\": 900, \"wife\": { \"name\": \"eve\", \"age\": 800 } }");
 

@@ -2,7 +2,9 @@ package com.ajlopez.blockchain.json;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +36,8 @@ public class Parser {
         else if (token.getType() == TokenType.SYMBOL) {
             if (token.getValue().equals("{"))
                 return this.parseObjectValue();
+            if (token.getValue().equals("["))
+                return this.parseArrayValue();
         }
 
         throw new ParserException(String.format("Invalid value '%s'", token.getValue()));
@@ -62,6 +66,26 @@ public class Parser {
         }
 
         return new ObjectValue(properties);
+    }
+
+    private ArrayValue parseArrayValue() throws IOException, LexerException, ParserException {
+        List<Value> elements = new ArrayList<>();
+
+        while (!this.tryParseSymbol("]")) {
+            Value value = this.parseValue();
+
+            elements.add(value);
+
+            if (this.tryParseSymbol(","))
+                continue;
+
+            if (!this.tryParseSymbol("]"))
+                throw new ParserException("Unclosed array");
+
+            break;
+        }
+
+        return new ArrayValue(elements);
     }
 
     private String parseString() throws ParserException, IOException, LexerException {
