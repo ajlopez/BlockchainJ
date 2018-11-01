@@ -20,4 +20,31 @@ public class ArrayValue extends Value {
     public Value getValue(int index) {
         return this.values.get(index);
     }
-}
+
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append('[');
+
+        int nvalue = 0;
+
+        for (Value value : this.values) {
+            if (nvalue > 0)
+                buffer.append(',');
+
+            buffer.append(' ');
+
+            buffer.append(value.toString());
+
+            nvalue++;
+        }
+
+        if (nvalue > 0)
+            buffer.append(' ');
+
+        buffer.append(']');
+
+        return buffer.toString();
+    }}
