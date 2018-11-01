@@ -42,5 +42,14 @@ public class ObjectValueTest {
 
         Assert.assertEquals("{ \"name\": \"adam\", \"age\": 900 }", value.toString());
     }
+
+    @Test
+    public void objectValueWithNoPropertiesToString() {
+        Map<String, Value> properties = new LinkedHashMap<>();
+
+        ObjectValue value = new ObjectValue(properties);
+
+        Assert.assertEquals("{}", value.toString());
+    }
 }
 

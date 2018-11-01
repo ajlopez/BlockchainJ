@@ -38,13 +38,15 @@ public class ObjectValue extends Value {
     public String toString() {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("{ ");
+        buffer.append('{');
 
         int nproperty = 0;
 
         for (Map.Entry<String, Value> entry: this.properties.entrySet()) {
             if (nproperty > 0)
-                buffer.append(", ");
+                buffer.append(',');
+
+            buffer.append(' ');
 
             buffer.append((new StringValue(entry.getKey())).toString());
             buffer.append(": ");
@@ -53,7 +55,10 @@ public class ObjectValue extends Value {
             nproperty++;
         }
 
-        buffer.append(" }");
+        if (nproperty > 0)
+            buffer.append(' ');
+
+        buffer.append('}');
 
         return buffer.toString();
     }
