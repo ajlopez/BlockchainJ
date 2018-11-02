@@ -12,9 +12,9 @@ import java.util.Map;
 public class ObjectValueTest {
     @Test
     public void createObjectValueWithTwoProperties() {
-        Value name = new StringValue("adam");
-        Value age = new NumericValue("900");
-        Map<String, Value> properties = new LinkedHashMap<>();
+        JsonValue name = new StringValue("adam");
+        JsonValue age = new NumericValue("900");
+        Map<String, JsonValue> properties = new LinkedHashMap<>();
         properties.put("name", name);
         properties.put("age", age);
 
@@ -32,9 +32,9 @@ public class ObjectValueTest {
 
     @Test
     public void objectValueWithTwoPropertiesToString() {
-        Value name = new StringValue("adam");
-        Value age = new NumericValue("900");
-        Map<String, Value> properties = new LinkedHashMap<>();
+        JsonValue name = new StringValue("adam");
+        JsonValue age = new NumericValue("900");
+        Map<String, JsonValue> properties = new LinkedHashMap<>();
         properties.put("name", name);
         properties.put("age", age);
 
@@ -45,7 +45,7 @@ public class ObjectValueTest {
 
     @Test
     public void objectValueWithNoPropertiesToString() {
-        Map<String, Value> properties = new LinkedHashMap<>();
+        Map<String, JsonValue> properties = new LinkedHashMap<>();
 
         ObjectValue value = new ObjectValue(properties);
 

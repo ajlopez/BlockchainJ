@@ -5,10 +5,10 @@ import java.util.List;
 /**
  * Created by ajlopez on 29/10/2018.
  */
-public class ArrayValue extends Value {
-    private List<Value> values;
+public class ArrayValue extends JsonValue {
+    private List<JsonValue> values;
 
-    public ArrayValue(List<Value> values) {
+    public ArrayValue(List<JsonValue> values) {
         super(ValueType.ARRAY, values);
         this.values = values;
     }
@@ -17,7 +17,7 @@ public class ArrayValue extends Value {
         return this.values.size();
     }
 
-    public Value getValue(int index) {
+    public JsonValue getValue(int index) {
         return this.values.get(index);
     }
 
@@ -30,7 +30,7 @@ public class ArrayValue extends Value {
 
         int nvalue = 0;
 
-        for (Value value : this.values) {
+        for (JsonValue value : this.values) {
             if (nvalue > 0)
                 buffer.append(',');
 

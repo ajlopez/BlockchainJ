@@ -17,7 +17,7 @@ public class Parser {
         this.lexer = new Lexer(reader);
     }
 
-    public Value parseValue() throws IOException, LexerException, ParserException {
+    public JsonValue parseValue() throws IOException, LexerException, ParserException {
         Token token = this.lexer.nextToken();
 
         if (token == null)
@@ -44,7 +44,7 @@ public class Parser {
     }
 
     private ObjectValue parseObjectValue() throws IOException, LexerException, ParserException {
-        Map<String, Value> properties = new LinkedHashMap<>();
+        Map<String, JsonValue> properties = new LinkedHashMap<>();
 
         while (!this.tryParseSymbol("}")) {
             String name = this.parseString();
@@ -52,7 +52,7 @@ public class Parser {
             if (!this.tryParseSymbol(":"))
                 throw new ParserException("Expected ':'");
 
-            Value value = this.parseValue();
+            JsonValue value = this.parseValue();
 
             properties.put(name, value);
 
@@ -69,10 +69,10 @@ public class Parser {
     }
 
     private ArrayValue parseArrayValue() throws IOException, LexerException, ParserException {
-        List<Value> elements = new ArrayList<>();
+        List<JsonValue> elements = new ArrayList<>();
 
         while (!this.tryParseSymbol("]")) {
-            Value value = this.parseValue();
+            JsonValue value = this.parseValue();
 
             elements.add(value);
 

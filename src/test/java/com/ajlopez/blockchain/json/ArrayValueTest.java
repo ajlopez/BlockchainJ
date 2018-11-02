@@ -12,9 +12,9 @@ import java.util.List;
 public class ArrayValueTest {
     @Test
     public void createArrayValueWithTwoElements() {
-        Value value1 = new StringValue("foo");
-        Value value2 = new NumericValue("42");
-        List<Value> values = new ArrayList<>();
+        JsonValue value1 = new StringValue("foo");
+        JsonValue value2 = new NumericValue("42");
+        List<JsonValue> values = new ArrayList<>();
         values.add(value1);
         values.add(value2);
 
@@ -27,9 +27,9 @@ public class ArrayValueTest {
 
     @Test
     public void arrayValueWithTwoElementsToString() {
-        Value value1 = new StringValue("foo");
-        Value value2 = new NumericValue("42");
-        List<Value> values = new ArrayList<>();
+        JsonValue value1 = new StringValue("foo");
+        JsonValue value2 = new NumericValue("42");
+        List<JsonValue> values = new ArrayList<>();
         values.add(value1);
         values.add(value2);
 
@@ -40,7 +40,7 @@ public class ArrayValueTest {
 
     @Test
     public void arrayValueWithNoElementsToString() {
-        List<Value> values = new ArrayList<>();
+        List<JsonValue> values = new ArrayList<>();
 
         ArrayValue value = new ArrayValue(values);
 
