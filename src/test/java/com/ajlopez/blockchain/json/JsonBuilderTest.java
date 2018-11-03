@@ -17,4 +17,15 @@ public class JsonBuilderTest {
         Assert.assertEquals(ValueType.STRING, result.getType());
         Assert.assertEquals("foo", result.getValue());
     }
+
+    @Test
+    public void buildNumericValueFromInteger() {
+        JsonBuilder builder = new JsonBuilder();
+
+        JsonValue result = builder.value(42).build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.NUMBER, result.getType());
+        Assert.assertEquals("42", result.getValue());
+    }
 }
