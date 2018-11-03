@@ -21,7 +21,16 @@ public class JsonBuilder {
         return this;
     }
 
+    public JsonBuilder value(boolean value) {
+        this.value = value;
+        this.type = ValueType.BOOLEAN;
+
+        return this;
+    }
+
     public JsonValue build() {
+        if (this.type == ValueType.BOOLEAN)
+            return new BooleanValue((Boolean)this.value);
         if (this.type == ValueType.NUMBER)
             return new NumericValue((String)this.value);
 

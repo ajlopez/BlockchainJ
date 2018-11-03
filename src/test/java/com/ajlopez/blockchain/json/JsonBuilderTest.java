@@ -28,4 +28,15 @@ public class JsonBuilderTest {
         Assert.assertEquals(ValueType.NUMBER, result.getType());
         Assert.assertEquals("42", result.getValue());
     }
+
+    @Test
+    public void buildBooleanValue() {
+        JsonBuilder builder = new JsonBuilder();
+
+        JsonValue result = builder.value(true).build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.BOOLEAN, result.getType());
+        Assert.assertEquals(true, result.getValue());
+    }
 }
