@@ -39,4 +39,30 @@ public class JsonBuilderTest {
         Assert.assertEquals(ValueType.BOOLEAN, result.getType());
         Assert.assertEquals(true, result.getValue());
     }
+
+    @Test
+    public void buildArrayWithTwoStringElements() {
+        JsonBuilder builder = new JsonBuilder();
+
+        JsonValue result = builder.array()
+                .value("foo")
+                .value("bar")
+                .end()
+                .build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.ARRAY, result.getType());
+
+        ArrayValue aresult = (ArrayValue)result;
+
+        Assert.assertEquals(2, aresult.size());
+
+        Assert.assertNotNull(aresult.getValue(0));
+        Assert.assertEquals(ValueType.STRING, aresult.getValue(0).getType());
+        Assert.assertEquals("foo", ((StringValue)aresult.getValue(0)).getValue());
+
+        Assert.assertNotNull(aresult.getValue(1));
+        Assert.assertEquals(ValueType.STRING, aresult.getValue(1).getType());
+        Assert.assertEquals("bar", ((StringValue)aresult.getValue(1)).getValue());
+    }
 }
