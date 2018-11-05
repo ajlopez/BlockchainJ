@@ -23,6 +23,14 @@ public class JsonArrayBuilder extends JsonBuilder {
     }
 
     @Override
+    public JsonBuilder value(boolean value) {
+        super.value(value);
+        elements.add(super.build());
+
+        return this;
+    }
+
+    @Override
     public JsonBuilder value(String value) {
         super.value(value);
         elements.add(super.build());
