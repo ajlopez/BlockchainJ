@@ -107,4 +107,76 @@ public class JsonBuilderTest {
         Assert.assertEquals(ValueType.BOOLEAN, aresult.getValue(0).getType());
         Assert.assertEquals(true, ((BooleanValue)aresult.getValue(0)).getValue());
     }
+
+    @Test
+    public void buildObjectWithTwoProperties() {
+        JsonBuilder builder = new JsonBuilder();
+
+        JsonValue result = builder.object()
+                .name("name")
+                .value("adam")
+                .name("age")
+                .value(900)
+                .end()
+                .build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.OBJECT, result.getType());
+
+        ObjectValue oresult = (ObjectValue)result;
+
+        Assert.assertEquals(2, oresult.noProperties());
+
+        Assert.assertNotNull(oresult.getProperty("name"));
+        Assert.assertEquals(ValueType.STRING, oresult.getProperty("name").getType());
+        Assert.assertEquals("adam", ((StringValue)oresult.getProperty("name")).getValue());
+
+        Assert.assertNotNull(oresult.getProperty("age"));
+        Assert.assertEquals(ValueType.NUMBER, oresult.getProperty("age").getType());
+        Assert.assertEquals("900", ((NumericValue)oresult.getProperty("age")).getValue());
+    }
+
+    @Test
+    public void buildObjectWithNumericElement() {
+        JsonBuilder builder = new JsonBuilder();
+
+        JsonValue result = builder.object()
+                .name("answer")
+                .value(42)
+                .end()
+                .build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.OBJECT, result.getType());
+
+        ObjectValue oresult = (ObjectValue)result;
+
+        Assert.assertEquals(1, oresult.noProperties());
+
+        Assert.assertNotNull(oresult.getProperty("answer"));
+        Assert.assertEquals(ValueType.NUMBER, oresult.getProperty("answer").getType());
+        Assert.assertEquals("42", ((NumericValue)oresult.getProperty("answer")).getValue());
+    }
+
+    @Test
+    public void buildObjectWithBooleanElement() {
+        JsonBuilder builder = new JsonBuilder();
+
+        JsonValue result = builder.object()
+                .name("alive")
+                .value(true)
+                .end()
+                .build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.OBJECT, result.getType());
+
+        ObjectValue oresult = (ObjectValue)result;
+
+        Assert.assertEquals(1, oresult.noProperties());
+
+        Assert.assertNotNull(oresult.getProperty("alive"));
+        Assert.assertEquals(ValueType.BOOLEAN, oresult.getProperty("alive").getType());
+        Assert.assertEquals(true, ((BooleanValue)oresult.getProperty("alive")).getValue());
+    }
 }

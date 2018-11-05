@@ -30,8 +30,16 @@ public class JsonBuilder {
         return this;
     }
 
+    public JsonBuilder name(String name) {
+        throw new UnsupportedOperationException();
+    }
+
     public JsonBuilder array() {
         return new JsonArrayBuilder(this);
+    }
+
+    public JsonBuilder object() {
+        return new JsonObjectBuilder(this);
     }
 
     public JsonBuilder end() {
