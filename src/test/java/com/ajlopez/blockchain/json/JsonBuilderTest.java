@@ -65,4 +65,25 @@ public class JsonBuilderTest {
         Assert.assertEquals(ValueType.STRING, aresult.getValue(1).getType());
         Assert.assertEquals("bar", ((StringValue)aresult.getValue(1)).getValue());
     }
+
+    @Test
+    public void buildArrayWithNumericElement() {
+        JsonBuilder builder = new JsonBuilder();
+
+        JsonValue result = builder.array()
+                .value(42)
+                .end()
+                .build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ValueType.ARRAY, result.getType());
+
+        ArrayValue aresult = (ArrayValue)result;
+
+        Assert.assertEquals(1, aresult.size());
+
+        Assert.assertNotNull(aresult.getValue(0));
+        Assert.assertEquals(ValueType.NUMBER, aresult.getValue(0).getType());
+        Assert.assertEquals("42", ((NumericValue)aresult.getValue(0)).getValue());
+    }
 }
