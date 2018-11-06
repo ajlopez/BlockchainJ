@@ -3,8 +3,8 @@ package com.ajlopez.blockchain.json;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class StringValue extends JsonValue {
-    public StringValue(String value) {
+public class JsonStringValue extends JsonValue {
+    public JsonStringValue(String value) {
         super(ValueType.STRING, value);
     }
 

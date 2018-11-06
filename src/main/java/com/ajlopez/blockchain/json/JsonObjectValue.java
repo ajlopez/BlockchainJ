@@ -5,10 +5,10 @@ import java.util.Map;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class ObjectValue extends JsonValue {
+public class JsonObjectValue extends JsonValue {
     private Map<String, JsonValue> properties;
 
-    public ObjectValue(Map<String, JsonValue> properties) {
+    public JsonObjectValue(Map<String, JsonValue> properties) {
         super(ValueType.OBJECT, properties);
         this.properties = properties;
     }
@@ -21,7 +21,7 @@ public class ObjectValue extends JsonValue {
         JsonValue value = this.getProperty(name);
 
         for (int k = 0; k < names.length; k++)
-            value = ((ObjectValue)value).getProperty(names[k]);
+            value = ((JsonObjectValue)value).getProperty(names[k]);
 
         return value;
     }
@@ -48,7 +48,7 @@ public class ObjectValue extends JsonValue {
 
             buffer.append(' ');
 
-            buffer.append((new StringValue(entry.getKey())).toString());
+            buffer.append((new JsonStringValue(entry.getKey())).toString());
             buffer.append(": ");
             buffer.append(entry.getValue().toString());
 

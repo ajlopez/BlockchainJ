@@ -7,19 +7,19 @@ public class JsonBuilder {
     private JsonValue value;
 
     public JsonBuilder value(String value) {
-        this.value = new StringValue(value);
+        this.value = new JsonStringValue(value);
 
         return this;
     }
 
     public JsonBuilder value(int value) {
-        this.value = new NumericValue(Integer.toString(value));
+        this.value = new JsonNumericValue(Integer.toString(value));
 
         return this;
     }
 
     public JsonBuilder value(boolean value) {
-        this.value = new BooleanValue(value);
+        this.value = new JsonBooleanValue(value);
 
         return this;
     }

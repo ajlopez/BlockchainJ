@@ -48,7 +48,7 @@ public class JsonObjectBuilder extends JsonBuilder {
 
     @Override
     public JsonValue build() {
-        return new ObjectValue(this.properties);
+        return new JsonObjectValue(this.properties);
     }
 
     @Override

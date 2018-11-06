@@ -25,14 +25,14 @@ public class Parser {
 
         if (token.getType() == TokenType.NAME) {
             if (token.getValue().equals("true"))
-                return new BooleanValue(true);
+                return new JsonBooleanValue(true);
             if (token.getValue().equals("false"))
-                return new BooleanValue(false);
+                return new JsonBooleanValue(false);
         }
         else if (token.getType() == TokenType.STRING)
-            return new StringValue(token.getValue());
+            return new JsonStringValue(token.getValue());
         else if (token.getType() == TokenType.NUMBER)
-            return new NumericValue(token.getValue());
+            return new JsonNumericValue(token.getValue());
         else if (token.getType() == TokenType.SYMBOL) {
             if (token.getValue().equals("{"))
                 return this.parseObjectValue();
@@ -43,7 +43,7 @@ public class Parser {
         throw new ParserException(String.format("Invalid value '%s'", token.getValue()));
     }
 
-    private ObjectValue parseObjectValue() throws IOException, LexerException, ParserException {
+    private JsonObjectValue parseObjectValue() throws IOException, LexerException, ParserException {
         Map<String, JsonValue> properties = new LinkedHashMap<>();
 
         while (!this.tryParseSymbol("}")) {
@@ -65,10 +65,10 @@ public class Parser {
             break;
         }
 
-        return new ObjectValue(properties);
+        return new JsonObjectValue(properties);
     }
 
-    private ArrayValue parseArrayValue() throws IOException, LexerException, ParserException {
+    private JsonArrayValue parseArrayValue() throws IOException, LexerException, ParserException {
         List<JsonValue> elements = new ArrayList<>();
 
         while (!this.tryParseSymbol("]")) {
@@ -85,7 +85,7 @@ public class Parser {
             break;
         }
 
-        return new ArrayValue(elements);
+        return new JsonArrayValue(elements);
     }
 
     private String parseString() throws ParserException, IOException, LexerException {

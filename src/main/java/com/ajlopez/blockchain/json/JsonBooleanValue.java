@@ -3,8 +3,8 @@ package com.ajlopez.blockchain.json;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class BooleanValue extends JsonValue {
-    public BooleanValue(boolean value) {
+public class JsonBooleanValue extends JsonValue {
+    public JsonBooleanValue(boolean value) {
         super(ValueType.BOOLEAN, value);
     }
 

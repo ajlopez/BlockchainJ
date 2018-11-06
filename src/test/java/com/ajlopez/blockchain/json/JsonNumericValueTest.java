@@ -6,10 +6,10 @@ import org.junit.Test;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class NumericValueTest {
+public class JsonNumericValueTest {
     @Test
     public void createNumericValue() {
-        NumericValue value = new NumericValue("42");
+        JsonNumericValue value = new JsonNumericValue("42");
 
         Assert.assertEquals(ValueType.NUMBER, value.getType());
         Assert.assertEquals("42", value.getValue());
@@ -17,7 +17,7 @@ public class NumericValueTest {
 
     @Test
     public void simpleNumericValueToString() {
-        NumericValue value = new NumericValue("42");
+        JsonNumericValue value = new JsonNumericValue("42");
 
         Assert.assertEquals("42", value.toString());
     }

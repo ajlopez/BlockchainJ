@@ -9,16 +9,16 @@ import java.util.Map;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class ObjectValueTest {
+public class JsonObjectValueTest {
     @Test
     public void createObjectValueWithTwoProperties() {
-        JsonValue name = new StringValue("adam");
-        JsonValue age = new NumericValue("900");
+        JsonValue name = new JsonStringValue("adam");
+        JsonValue age = new JsonNumericValue("900");
         Map<String, JsonValue> properties = new LinkedHashMap<>();
         properties.put("name", name);
         properties.put("age", age);
 
-        ObjectValue value = new ObjectValue(properties);
+        JsonObjectValue value = new JsonObjectValue(properties);
 
         Assert.assertTrue(value.hasProperty("name"));
         Assert.assertTrue(value.hasProperty("age"));
@@ -32,13 +32,13 @@ public class ObjectValueTest {
 
     @Test
     public void objectValueWithTwoPropertiesToString() {
-        JsonValue name = new StringValue("adam");
-        JsonValue age = new NumericValue("900");
+        JsonValue name = new JsonStringValue("adam");
+        JsonValue age = new JsonNumericValue("900");
         Map<String, JsonValue> properties = new LinkedHashMap<>();
         properties.put("name", name);
         properties.put("age", age);
 
-        ObjectValue value = new ObjectValue(properties);
+        JsonObjectValue value = new JsonObjectValue(properties);
 
         Assert.assertEquals("{ \"name\": \"adam\", \"age\": 900 }", value.toString());
     }
@@ -47,7 +47,7 @@ public class ObjectValueTest {
     public void objectValueWithNoPropertiesToString() {
         Map<String, JsonValue> properties = new LinkedHashMap<>();
 
-        ObjectValue value = new ObjectValue(properties);
+        JsonObjectValue value = new JsonObjectValue(properties);
 
         Assert.assertEquals("{}", value.toString());
     }

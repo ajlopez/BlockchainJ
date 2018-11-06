@@ -91,7 +91,7 @@ public class ParserTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(ValueType.OBJECT, result.getType());
 
-        ObjectValue oresult = (ObjectValue)result;
+        JsonObjectValue oresult = (JsonObjectValue)result;
 
         Assert.assertEquals(0, oresult.noProperties());
     }
@@ -118,7 +118,7 @@ public class ParserTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(ValueType.OBJECT, result.getType());
 
-        ObjectValue oresult = (ObjectValue)result;
+        JsonObjectValue oresult = (JsonObjectValue)result;
 
         Assert.assertEquals(2, oresult.noProperties());
 
@@ -146,7 +146,7 @@ public class ParserTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(ValueType.ARRAY, result.getType());
 
-        ArrayValue aresult = (ArrayValue)result;
+        JsonArrayValue aresult = (JsonArrayValue)result;
 
         Assert.assertEquals(2, aresult.size());
 
@@ -172,7 +172,7 @@ public class ParserTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(ValueType.OBJECT, result.getType());
 
-        ObjectValue oresult = (ObjectValue)result;
+        JsonObjectValue oresult = (JsonObjectValue)result;
 
         Assert.assertEquals(3, oresult.noProperties());
 

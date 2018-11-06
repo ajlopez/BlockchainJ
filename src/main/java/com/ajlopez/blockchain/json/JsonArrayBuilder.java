@@ -40,7 +40,7 @@ public class JsonArrayBuilder extends JsonBuilder {
 
     @Override
     public JsonValue build() {
-        return new ArrayValue(this.elements);
+        return new JsonArrayValue(this.elements);
     }
 
     @Override

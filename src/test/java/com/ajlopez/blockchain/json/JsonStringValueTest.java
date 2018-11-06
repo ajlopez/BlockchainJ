@@ -6,10 +6,10 @@ import org.junit.Test;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class StringValueTest {
+public class JsonStringValueTest {
     @Test
     public void createStringValue() {
-        StringValue value = new StringValue("foo");
+        JsonStringValue value = new JsonStringValue("foo");
 
         Assert.assertEquals(ValueType.STRING, value.getType());
         Assert.assertEquals("foo", value.getValue());
@@ -17,14 +17,14 @@ public class StringValueTest {
 
     @Test
     public void simpleStringValueToString() {
-        StringValue value = new StringValue("foo");
+        JsonStringValue value = new JsonStringValue("foo");
 
         Assert.assertEquals("\"foo\"", value.toString());
     }
 
     @Test
     public void simpleStringValueToStringWithEscapedCharacters() {
-        StringValue value = new StringValue("\n\r\tfoo\\\"");
+        JsonStringValue value = new JsonStringValue("\n\r\tfoo\\\"");
 
         Assert.assertEquals("\"\\n\\r\\tfoo\\\\\\\"\"", value.toString());
     }

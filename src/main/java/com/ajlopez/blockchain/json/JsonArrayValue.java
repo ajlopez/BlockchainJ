@@ -5,10 +5,10 @@ import java.util.List;
 /**
  * Created by ajlopez on 29/10/2018.
  */
-public class ArrayValue extends JsonValue {
+public class JsonArrayValue extends JsonValue {
     private List<JsonValue> values;
 
-    public ArrayValue(List<JsonValue> values) {
+    public JsonArrayValue(List<JsonValue> values) {
         super(ValueType.ARRAY, values);
         this.values = values;
     }

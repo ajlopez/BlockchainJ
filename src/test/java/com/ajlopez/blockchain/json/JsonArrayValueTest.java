@@ -9,16 +9,16 @@ import java.util.List;
 /**
  * Created by ajlopez on 29/10/2018.
  */
-public class ArrayValueTest {
+public class JsonArrayValueTest {
     @Test
     public void createArrayValueWithTwoElements() {
-        JsonValue value1 = new StringValue("foo");
-        JsonValue value2 = new NumericValue("42");
+        JsonValue value1 = new JsonStringValue("foo");
+        JsonValue value2 = new JsonNumericValue("42");
         List<JsonValue> values = new ArrayList<>();
         values.add(value1);
         values.add(value2);
 
-        ArrayValue value = new ArrayValue(values);
+        JsonArrayValue value = new JsonArrayValue(values);
 
         Assert.assertEquals(2, value.size());
         Assert.assertSame(value1, value.getValue(0));
@@ -27,13 +27,13 @@ public class ArrayValueTest {
 
     @Test
     public void arrayValueWithTwoElementsToString() {
-        JsonValue value1 = new StringValue("foo");
-        JsonValue value2 = new NumericValue("42");
+        JsonValue value1 = new JsonStringValue("foo");
+        JsonValue value2 = new JsonNumericValue("42");
         List<JsonValue> values = new ArrayList<>();
         values.add(value1);
         values.add(value2);
 
-        ArrayValue value = new ArrayValue(values);
+        JsonArrayValue value = new JsonArrayValue(values);
 
         Assert.assertEquals("[ \"foo\", 42 ]", value.toString());
     }
@@ -42,7 +42,7 @@ public class ArrayValueTest {
     public void arrayValueWithNoElementsToString() {
         List<JsonValue> values = new ArrayList<>();
 
-        ArrayValue value = new ArrayValue(values);
+        JsonArrayValue value = new JsonArrayValue(values);
 
         Assert.assertEquals("[]", value.toString());
     }
