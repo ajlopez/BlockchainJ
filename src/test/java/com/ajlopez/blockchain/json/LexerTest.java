@@ -217,6 +217,25 @@ public class LexerTest {
     }
 
     @Test
+    public void processStringAndSymbol() throws IOException, LexerException {
+        Lexer lexer = createLexer("\"foo\";");
+
+        Token token = lexer.nextToken();
+
+        Assert.assertNotNull(token);
+        Assert.assertEquals(TokenType.STRING, token.getType());
+        Assert.assertEquals("foo", token.getValue());
+
+        Token token2 = lexer.nextToken();
+
+        Assert.assertNotNull(token2);
+        Assert.assertEquals(TokenType.SYMBOL, token2.getType());
+        Assert.assertEquals(";", token2.getValue());
+
+        Assert.assertNull(lexer.nextToken());
+    }
+
+    @Test
     public void processStringWithEscapedCharacters() throws IOException, LexerException {
         Lexer lexer = createLexer("\"\\n \\r \\t \\\\ \\\"\"");
 
