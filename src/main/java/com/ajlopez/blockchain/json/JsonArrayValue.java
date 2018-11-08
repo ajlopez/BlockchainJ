@@ -9,7 +9,7 @@ public class JsonArrayValue extends JsonValue {
     private List<JsonValue> values;
 
     public JsonArrayValue(List<JsonValue> values) {
-        super(ValueType.ARRAY, values);
+        super(JsonValueType.ARRAY, values);
         this.values = values;
     }
 

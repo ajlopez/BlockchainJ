@@ -14,7 +14,7 @@ public class JsonBuilderTest {
         JsonValue result = builder.value("foo").build();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.STRING, result.getType());
+        Assert.assertEquals(JsonValueType.STRING, result.getType());
         Assert.assertEquals("foo", result.getValue());
     }
 
@@ -25,7 +25,7 @@ public class JsonBuilderTest {
         JsonValue result = builder.value(42).build();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.NUMBER, result.getType());
+        Assert.assertEquals(JsonValueType.NUMBER, result.getType());
         Assert.assertEquals("42", result.getValue());
     }
 
@@ -36,7 +36,7 @@ public class JsonBuilderTest {
         JsonValue result = builder.value(true).build();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.BOOLEAN, result.getType());
+        Assert.assertEquals(JsonValueType.BOOLEAN, result.getType());
         Assert.assertEquals(true, result.getValue());
     }
 
@@ -51,18 +51,18 @@ public class JsonBuilderTest {
                 .build();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.ARRAY, result.getType());
+        Assert.assertEquals(JsonValueType.ARRAY, result.getType());
 
         JsonArrayValue aresult = (JsonArrayValue)result;
 
         Assert.assertEquals(2, aresult.size());
 
         Assert.assertNotNull(aresult.getValue(0));
-        Assert.assertEquals(ValueType.STRING, aresult.getValue(0).getType());
+        Assert.assertEquals(JsonValueType.STRING, aresult.getValue(0).getType());
         Assert.assertEquals("foo", ((JsonStringValue)aresult.getValue(0)).getValue());
 
         Assert.assertNotNull(aresult.getValue(1));
-        Assert.assertEquals(ValueType.STRING, aresult.getValue(1).getType());
+        Assert.assertEquals(JsonValueType.STRING, aresult.getValue(1).getType());
         Assert.assertEquals("bar", ((JsonStringValue)aresult.getValue(1)).getValue());
     }
 
@@ -76,14 +76,14 @@ public class JsonBuilderTest {
                 .build();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.ARRAY, result.getType());
+        Assert.assertEquals(JsonValueType.ARRAY, result.getType());
 
         JsonArrayValue aresult = (JsonArrayValue)result;
 
         Assert.assertEquals(1, aresult.size());
 
         Assert.assertNotNull(aresult.getValue(0));
-        Assert.assertEquals(ValueType.NUMBER, aresult.getValue(0).getType());
+        Assert.assertEquals(JsonValueType.NUMBER, aresult.getValue(0).getType());
         Assert.assertEquals("42", ((JsonNumericValue)aresult.getValue(0)).getValue());
     }
 
@@ -97,14 +97,14 @@ public class JsonBuilderTest {
                 .build();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.ARRAY, result.getType());
+        Assert.assertEquals(JsonValueType.ARRAY, result.getType());
 
         JsonArrayValue aresult = (JsonArrayValue)result;
 
         Assert.assertEquals(1, aresult.size());
 
         Assert.assertNotNull(aresult.getValue(0));
-        Assert.assertEquals(ValueType.BOOLEAN, aresult.getValue(0).getType());
+        Assert.assertEquals(JsonValueType.BOOLEAN, aresult.getValue(0).getType());
         Assert.assertEquals(true, ((JsonBooleanValue)aresult.getValue(0)).getValue());
     }
 
@@ -121,18 +121,18 @@ public class JsonBuilderTest {
                 .build();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.OBJECT, result.getType());
+        Assert.assertEquals(JsonValueType.OBJECT, result.getType());
 
         JsonObjectValue oresult = (JsonObjectValue)result;
 
         Assert.assertEquals(2, oresult.noProperties());
 
         Assert.assertNotNull(oresult.getProperty("name"));
-        Assert.assertEquals(ValueType.STRING, oresult.getProperty("name").getType());
+        Assert.assertEquals(JsonValueType.STRING, oresult.getProperty("name").getType());
         Assert.assertEquals("adam", ((JsonStringValue)oresult.getProperty("name")).getValue());
 
         Assert.assertNotNull(oresult.getProperty("age"));
-        Assert.assertEquals(ValueType.NUMBER, oresult.getProperty("age").getType());
+        Assert.assertEquals(JsonValueType.NUMBER, oresult.getProperty("age").getType());
         Assert.assertEquals("900", ((JsonNumericValue)oresult.getProperty("age")).getValue());
     }
 
@@ -147,14 +147,14 @@ public class JsonBuilderTest {
                 .build();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.OBJECT, result.getType());
+        Assert.assertEquals(JsonValueType.OBJECT, result.getType());
 
         JsonObjectValue oresult = (JsonObjectValue)result;
 
         Assert.assertEquals(1, oresult.noProperties());
 
         Assert.assertNotNull(oresult.getProperty("answer"));
-        Assert.assertEquals(ValueType.NUMBER, oresult.getProperty("answer").getType());
+        Assert.assertEquals(JsonValueType.NUMBER, oresult.getProperty("answer").getType());
         Assert.assertEquals("42", ((JsonNumericValue)oresult.getProperty("answer")).getValue());
     }
 
@@ -169,14 +169,14 @@ public class JsonBuilderTest {
                 .build();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.OBJECT, result.getType());
+        Assert.assertEquals(JsonValueType.OBJECT, result.getType());
 
         JsonObjectValue oresult = (JsonObjectValue)result;
 
         Assert.assertEquals(1, oresult.noProperties());
 
         Assert.assertNotNull(oresult.getProperty("alive"));
-        Assert.assertEquals(ValueType.BOOLEAN, oresult.getProperty("alive").getType());
+        Assert.assertEquals(JsonValueType.BOOLEAN, oresult.getProperty("alive").getType());
         Assert.assertEquals(true, ((JsonBooleanValue)oresult.getProperty("alive")).getValue());
     }
 }

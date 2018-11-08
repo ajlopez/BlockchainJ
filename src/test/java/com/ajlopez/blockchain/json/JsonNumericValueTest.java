@@ -11,7 +11,7 @@ public class JsonNumericValueTest {
     public void createNumericValue() {
         JsonNumericValue value = new JsonNumericValue("42");
 
-        Assert.assertEquals(ValueType.NUMBER, value.getType());
+        Assert.assertEquals(JsonValueType.NUMBER, value.getType());
         Assert.assertEquals("42", value.getValue());
     }
 

@@ -5,7 +5,7 @@ package com.ajlopez.blockchain.json;
  */
 public class JsonBooleanValue extends JsonValue {
     public JsonBooleanValue(boolean value) {
-        super(ValueType.BOOLEAN, value);
+        super(JsonValueType.BOOLEAN, value);
     }
 
     @Override

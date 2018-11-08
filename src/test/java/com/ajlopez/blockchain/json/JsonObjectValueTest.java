@@ -24,7 +24,7 @@ public class JsonObjectValueTest {
         Assert.assertTrue(value.hasProperty("age"));
         Assert.assertFalse(value.hasProperty("weight"));
 
-        Assert.assertEquals(ValueType.OBJECT, value.getType());
+        Assert.assertEquals(JsonValueType.OBJECT, value.getType());
         Assert.assertSame(properties, value.getValue());
         Assert.assertSame(name, value.getProperty("name"));
         Assert.assertSame(age, value.getProperty("age"));

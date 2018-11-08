@@ -9,7 +9,7 @@ public class JsonObjectValue extends JsonValue {
     private Map<String, JsonValue> properties;
 
     public JsonObjectValue(Map<String, JsonValue> properties) {
-        super(ValueType.OBJECT, properties);
+        super(JsonValueType.OBJECT, properties);
         this.properties = properties;
     }
 

@@ -24,7 +24,7 @@ public class ParserTest {
         JsonValue result = parser.parseValue();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.NUMBER, result.getType());
+        Assert.assertEquals(JsonValueType.NUMBER, result.getType());
         Assert.assertEquals("42", result.getValue());
 
         Assert.assertNull(parser.parseValue());
@@ -37,7 +37,7 @@ public class ParserTest {
         JsonValue result = parser.parseValue();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.STRING, result.getType());
+        Assert.assertEquals(JsonValueType.STRING, result.getType());
         Assert.assertEquals("foo", result.getValue());
 
         Assert.assertNull(parser.parseValue());
@@ -50,7 +50,7 @@ public class ParserTest {
         JsonValue result = parser.parseValue();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.BOOLEAN, result.getType());
+        Assert.assertEquals(JsonValueType.BOOLEAN, result.getType());
         Assert.assertEquals(true, result.getValue());
 
         Assert.assertNull(parser.parseValue());
@@ -63,7 +63,7 @@ public class ParserTest {
         JsonValue result = parser.parseValue();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.BOOLEAN, result.getType());
+        Assert.assertEquals(JsonValueType.BOOLEAN, result.getType());
         Assert.assertEquals(false, result.getValue());
 
         Assert.assertNull(parser.parseValue());
@@ -89,7 +89,7 @@ public class ParserTest {
         JsonValue result = parser.parseValue();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.OBJECT, result.getType());
+        Assert.assertEquals(JsonValueType.OBJECT, result.getType());
 
         JsonObjectValue oresult = (JsonObjectValue)result;
 
@@ -116,7 +116,7 @@ public class ParserTest {
         JsonValue result = parser.parseValue();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.OBJECT, result.getType());
+        Assert.assertEquals(JsonValueType.OBJECT, result.getType());
 
         JsonObjectValue oresult = (JsonObjectValue)result;
 
@@ -125,13 +125,13 @@ public class ParserTest {
         Assert.assertTrue(oresult.hasProperty("name"));
         JsonValue pname = oresult.getProperty("name");
         Assert.assertNotNull(pname);
-        Assert.assertEquals(ValueType.STRING, pname.getType());
+        Assert.assertEquals(JsonValueType.STRING, pname.getType());
         Assert.assertEquals("adam", pname.getValue());
 
         Assert.assertTrue(oresult.hasProperty("age"));
         JsonValue page = oresult.getProperty("age");
         Assert.assertNotNull(page);
-        Assert.assertEquals(ValueType.NUMBER, page.getType());
+        Assert.assertEquals(JsonValueType.NUMBER, page.getType());
         Assert.assertEquals("900", page.getValue());
 
         Assert.assertNull(parser.parseValue());
@@ -144,7 +144,7 @@ public class ParserTest {
         JsonValue result = parser.parseValue();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.ARRAY, result.getType());
+        Assert.assertEquals(JsonValueType.ARRAY, result.getType());
 
         JsonArrayValue aresult = (JsonArrayValue)result;
 
@@ -152,12 +152,12 @@ public class ParserTest {
 
         JsonValue pname = aresult.getValue(0);
         Assert.assertNotNull(pname);
-        Assert.assertEquals(ValueType.STRING, pname.getType());
+        Assert.assertEquals(JsonValueType.STRING, pname.getType());
         Assert.assertEquals("adam", pname.getValue());
 
         JsonValue page = aresult.getValue(1);
         Assert.assertNotNull(page);
-        Assert.assertEquals(ValueType.NUMBER, page.getType());
+        Assert.assertEquals(JsonValueType.NUMBER, page.getType());
         Assert.assertEquals("900", page.getValue());
 
         Assert.assertNull(parser.parseValue());
@@ -170,7 +170,7 @@ public class ParserTest {
         JsonValue result = parser.parseValue();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(ValueType.OBJECT, result.getType());
+        Assert.assertEquals(JsonValueType.OBJECT, result.getType());
 
         JsonObjectValue oresult = (JsonObjectValue)result;
 
@@ -179,23 +179,23 @@ public class ParserTest {
         Assert.assertTrue(oresult.hasProperty("name"));
         JsonValue pname = oresult.getProperty("name");
         Assert.assertNotNull(pname);
-        Assert.assertEquals(ValueType.STRING, pname.getType());
+        Assert.assertEquals(JsonValueType.STRING, pname.getType());
         Assert.assertEquals("adam", pname.getValue());
 
         Assert.assertTrue(oresult.hasProperty("age"));
         JsonValue page = oresult.getProperty("age");
         Assert.assertNotNull(page);
-        Assert.assertEquals(ValueType.NUMBER, page.getType());
+        Assert.assertEquals(JsonValueType.NUMBER, page.getType());
         Assert.assertEquals("900", page.getValue());
 
         JsonValue pname2 = oresult.getProperty("wife","name");
         Assert.assertNotNull(pname2);
-        Assert.assertEquals(ValueType.STRING, pname2.getType());
+        Assert.assertEquals(JsonValueType.STRING, pname2.getType());
         Assert.assertEquals("eve", pname2.getValue());
 
         JsonValue page2 = oresult.getProperty("wife","age");
         Assert.assertNotNull(page2);
-        Assert.assertEquals(ValueType.NUMBER, page2.getType());
+        Assert.assertEquals(JsonValueType.NUMBER, page2.getType());
         Assert.assertEquals("800", page2.getValue());
 
         Assert.assertNull(parser.parseValue());

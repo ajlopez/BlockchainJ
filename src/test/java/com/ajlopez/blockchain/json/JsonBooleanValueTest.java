@@ -11,7 +11,7 @@ public class JsonBooleanValueTest {
     public void createFalseBooleanValue() {
         JsonBooleanValue value = new JsonBooleanValue(false);
 
-        Assert.assertEquals(ValueType.BOOLEAN, value.getType());
+        Assert.assertEquals(JsonValueType.BOOLEAN, value.getType());
         Assert.assertEquals(false, value.getValue());
     }
 
@@ -19,7 +19,7 @@ public class JsonBooleanValueTest {
     public void createTrueBooleanValue() {
         JsonBooleanValue value = new JsonBooleanValue(true);
 
-        Assert.assertEquals(ValueType.BOOLEAN, value.getType());
+        Assert.assertEquals(JsonValueType.BOOLEAN, value.getType());
         Assert.assertEquals(true, value.getValue());
     }
 

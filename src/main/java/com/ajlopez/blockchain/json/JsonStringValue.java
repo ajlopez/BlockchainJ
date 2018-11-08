@@ -5,7 +5,7 @@ package com.ajlopez.blockchain.json;
  */
 public class JsonStringValue extends JsonValue {
     public JsonStringValue(String value) {
-        super(ValueType.STRING, value);
+        super(JsonValueType.STRING, value);
     }
 
     @Override

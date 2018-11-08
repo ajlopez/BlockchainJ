@@ -11,7 +11,7 @@ public class JsonStringValueTest {
     public void createStringValue() {
         JsonStringValue value = new JsonStringValue("foo");
 
-        Assert.assertEquals(ValueType.STRING, value.getType());
+        Assert.assertEquals(JsonValueType.STRING, value.getType());
         Assert.assertEquals("foo", value.getValue());
     }
 
