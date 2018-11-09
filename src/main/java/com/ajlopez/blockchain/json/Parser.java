@@ -71,19 +71,20 @@ public class Parser {
     private JsonArrayValue parseArrayValue() throws IOException, LexerException, ParserException {
         List<JsonValue> elements = new ArrayList<>();
 
-        while (!this.tryParseSymbol("]")) {
-            JsonValue value = this.parseValue();
+        if (!this.tryParseSymbol("]"))
+            while (true) {
+                JsonValue value = this.parseValue();
 
-            elements.add(value);
+                elements.add(value);
 
-            if (this.tryParseSymbol(","))
-                continue;
+                if (this.tryParseSymbol(","))
+                    continue;
 
-            if (!this.tryParseSymbol("]"))
-                throw new ParserException("Unclosed array");
+                if (!this.tryParseSymbol("]"))
+                    throw new ParserException("Unclosed array");
 
-            break;
-        }
+                break;
+            }
 
         return new JsonArrayValue(elements);
     }
