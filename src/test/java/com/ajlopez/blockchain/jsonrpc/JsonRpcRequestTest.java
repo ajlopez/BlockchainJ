@@ -15,7 +15,7 @@ import java.io.StringReader;
 public class JsonRpcRequestTest {
     @Test
     public void createSimpleRequestFromStringReader() throws ParserException, IOException, LexerException {
-        String text = "{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_getBlockNumber\", \"params\": [] } ";
+        String text = "{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_blockNumber\", \"params\": [] } ";
         Reader reader = new StringReader(text);
 
         JsonRpcRequest request = JsonRpcRequest.fromReader(reader);
@@ -23,7 +23,7 @@ public class JsonRpcRequestTest {
         Assert.assertNotNull(request);
         Assert.assertEquals("1", request.getId());
         Assert.assertEquals("2.0", request.getVersion());
-        Assert.assertEquals("eth_getBlockNumber", request.getMethod());
+        Assert.assertEquals("eth_blockNumber", request.getMethod());
         Assert.assertNotNull(request.getParams());
         Assert.assertTrue(request.getParams().isEmpty());
     }
