@@ -21,6 +21,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [RLP Tests](https://github.com/ethereum/tests/blob/develop/RLPTests/rlptest.json)
 - [How to Build Your Own Blockchain Part 3 — Writing Nodes that Mine and Talk](https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/)
 - [Create a simple HTTP Web Server in Java](https://medium.com/@ssaurel/create-a-simple-http-web-server-in-java-3fc12b29d5fd)
+- [Function Pointers in Java](https://programming.guide/java/function-pointers-in-java.html)
 
 ## License
 
