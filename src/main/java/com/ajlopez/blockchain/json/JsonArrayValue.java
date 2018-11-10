@@ -21,6 +21,7 @@ public class JsonArrayValue extends JsonValue {
         return this.values.get(index);
     }
 
+    public List<JsonValue> getValues() { return this.values; }
 
     @Override
     public String toString() {
