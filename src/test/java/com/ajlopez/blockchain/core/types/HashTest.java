@@ -38,6 +38,17 @@ public class HashTest {
     }
 
     @Test
+    public void nullByteArrayInConstructor() {
+        try {
+            new Hash(null);
+            Assert.fail();
+        }
+        catch (IllegalArgumentException ex) {
+            Assert.assertEquals("Null byte array", ex.getMessage());
+        }
+    }
+
+    @Test
     public void hashesWithTheSameBytesAreEqual() {
         Random random = new Random();
         byte[] bytes = new byte[32];

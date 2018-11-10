@@ -13,9 +13,12 @@ public class Hash {
     private byte[] bytes;
 
     public Hash(byte[] bytes) {
+        if (bytes == null)
+            throw new IllegalArgumentException("Null byte array");
+        
         if (bytes.length > 32)
             throw new IllegalArgumentException("Too large byte array");
-        
+
         this.bytes = bytes;
     }
 
