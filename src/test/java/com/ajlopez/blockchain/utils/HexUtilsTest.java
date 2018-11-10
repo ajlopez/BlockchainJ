@@ -11,7 +11,7 @@ public class HexUtilsTest {
     public void convertBytesToHexString() {
         byte[] bytes = new byte[] { 0x01, 0x23, 0x45, 0x67, (byte)0x89, (byte)0xab, (byte)0xcd, (byte)0xef };
 
-        String result = HexUtils.bytestoHexString(bytes);
+        String result = HexUtils.bytesToHexString(bytes);
 
         Assert.assertNotNull(result);
         Assert.assertEquals("0123456789abcdef", result);
@@ -21,7 +21,7 @@ public class HexUtilsTest {
     public void convertBytesToHexStringWithPrefix() {
         byte[] bytes = new byte[] { 0x01, 0x23, 0x45, 0x67, (byte)0x89, (byte)0xab, (byte)0xcd, (byte)0xef };
 
-        String result = HexUtils.bytestoHexString(bytes, true);
+        String result = HexUtils.bytesToHexString(bytes, true);
 
         Assert.assertNotNull(result);
         Assert.assertEquals("0x0123456789abcdef", result);

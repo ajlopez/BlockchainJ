@@ -9,11 +9,11 @@ public class HexUtils {
     private HexUtils() { }
 
     // https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
-    public static String bytestoHexString(byte[] bytes) {
-        return bytestoHexString(bytes, false);
+    public static String bytesToHexString(byte[] bytes) {
+        return bytesToHexString(bytes, false);
     }
 
-    public static String bytestoHexString(byte[] bytes, boolean prefix) {
+    public static String bytesToHexString(byte[] bytes, boolean prefix) {
         int offset = prefix ? 2 : 0;
         char[] hexChars = new char[bytes.length * 2 + offset];
 
