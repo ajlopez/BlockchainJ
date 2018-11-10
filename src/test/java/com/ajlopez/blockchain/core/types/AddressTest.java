@@ -22,7 +22,7 @@ public class AddressTest {
         Assert.assertArrayEquals(bytes, address.getBytes());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void createAddressWithInvalidBytesLength() {
         Random random = new Random();
         byte[] bytes = new byte[30];
