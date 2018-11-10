@@ -23,6 +23,21 @@ public class HashTest {
     }
 
     @Test
+    public void tooLargeByteArray() {
+        Random random = new Random();
+        byte[] bytes = new byte[33];
+        random.nextBytes(bytes);
+
+        try {
+            new Hash(bytes);
+            Assert.fail();
+        }
+        catch (IllegalArgumentException ex) {
+            Assert.assertEquals("Too large byte array", ex.getMessage());
+        }
+    }
+
+    @Test
     public void hashesWithTheSameBytesAreEqual() {
         Random random = new Random();
         byte[] bytes = new byte[32];
