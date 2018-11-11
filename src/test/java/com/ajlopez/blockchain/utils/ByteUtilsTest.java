@@ -115,4 +115,17 @@ public class ByteUtilsTest {
         Assert.assertNotSame(bytes, result);
         Assert.assertArrayEquals(bytes, result);
     }
+
+    @Test
+    public void copyBytesWithPadding() {
+        byte[] bytes = new byte[] { 0x01, 0x02, 0x03, 0x05 };
+        byte[] expected = new byte[] { 0x00, 0x00, 0x01, 0x02, 0x03, 0x05 };
+
+        byte[] result = ByteUtils.copyBytes(bytes, expected.length);
+
+        Assert.assertNotNull(result);
+        Assert.assertNotSame(bytes, result);
+        Assert.assertNotSame(expected, result);
+        Assert.assertArrayEquals(expected, result);
+    }
 }
