@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.core.types;
 
+import com.ajlopez.blockchain.utils.ByteUtils;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -7,6 +9,8 @@ import java.util.Random;
  * Created by ajlopez on 31/08/2017.
  */
 public class Address {
+    public static final int ADDRESS_LENGTH = 20;
+
     private static Random random = new Random();
 
     private byte[] bytes;
@@ -17,10 +21,10 @@ public class Address {
     }
 
     public Address(byte[] bytes) {
-        if (bytes.length > 20)
+        if (bytes.length > ADDRESS_LENGTH)
             throw new IllegalArgumentException("Address too long");
 
-        this.bytes = bytes;
+        this.bytes = ByteUtils.copyBytes(bytes, ADDRESS_LENGTH);
     }
 
     public byte[] getBytes() {
