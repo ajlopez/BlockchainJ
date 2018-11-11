@@ -105,13 +105,17 @@ public class ByteUtils {
     }
 
     public static byte[] copyBytes(byte[] bytes) {
-        return copyBytes(bytes, bytes.length);
+        return copyBytes(bytes, bytes.length, false);
     }
 
     public static byte[] copyBytes(byte[] bytes, int length) {
+        return copyBytes(bytes, length, false);
+    }
+
+    public static byte[] copyBytes(byte[] bytes, int length, boolean rightPadding) {
         byte[] newbytes = new byte[length];
 
-        System.arraycopy(bytes, 0, newbytes, length - bytes.length, bytes.length);
+        System.arraycopy(bytes, 0, newbytes, rightPadding ? 0 : length - bytes.length, bytes.length);
 
         return newbytes;
     }
