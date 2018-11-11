@@ -104,4 +104,15 @@ public class ByteUtilsTest {
         Assert.assertEquals(1, result[2]);
         Assert.assertEquals(0, result[3]);
     }
+
+    @Test
+    public void copyBytes() {
+        byte[] bytes = new byte[] { 0x01, 0x02, 0x03, 0x05 };
+
+        byte[] result = ByteUtils.copyBytes(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertNotSame(bytes, result);
+        Assert.assertArrayEquals(bytes, result);
+    }
 }

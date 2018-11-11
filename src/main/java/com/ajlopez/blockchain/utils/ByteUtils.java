@@ -103,4 +103,12 @@ public class ByteUtils {
 
         return true;
     }
+
+    public static byte[] copyBytes(byte[] bytes) {
+        byte[] newbytes = new byte[bytes.length];
+
+        System.arraycopy(bytes, 0, newbytes, 0, newbytes.length);
+
+        return newbytes;
+    }
 }
