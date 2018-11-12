@@ -68,6 +68,20 @@ public class AddressTest {
     }
 
     @Test
+    public void addressWithTheSameBytesWithDifferenPaddingAreEqual() {
+        byte[] bytes1 = new byte[] { 0x01, 0x02, 0x03 };
+        byte[] bytes2 = new byte[] { 0x00, 0x01, 0x02, 0x03 };
+
+        Address address1 = new Address(bytes1);
+        Address address2 = new Address(bytes2);
+
+        Assert.assertEquals(address1, address2);
+        Assert.assertTrue(address1.equals(address2));
+        Assert.assertTrue(address2.equals(address1));
+        Assert.assertEquals(address1.hashCode(), address2.hashCode());
+    }
+
+    @Test
     public void addressesWithTheSameBytesValuesAreEqual() {
         Random random = new Random();
         byte[] bytes = new byte[20];
