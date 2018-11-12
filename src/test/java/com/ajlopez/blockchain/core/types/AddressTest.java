@@ -82,6 +82,15 @@ public class AddressTest {
     }
 
     @Test
+    public void toStringWithFewBytes() {
+        byte[] bytes = new byte[] { 0x01, 0x02, 0x03 };
+
+        Address address = new Address(bytes);
+
+        Assert.assertEquals("0x0000000000000000000000000000000000010203", address.toString());
+    }
+
+    @Test
     public void addressesWithTheSameBytesValuesAreEqual() {
         Random random = new Random();
         byte[] bytes = new byte[20];
