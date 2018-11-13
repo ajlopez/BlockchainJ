@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.core.types;
 
+import com.ajlopez.blockchain.utils.HexUtils;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -42,5 +44,10 @@ public class Hash {
     @Override
     public int hashCode() {
         return Arrays.hashCode(this.bytes);
+    }
+
+    @Override
+    public String toString() {
+        return HexUtils.bytesToHexString(this.bytes, true);
     }
 }

@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.core.types;
 
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,6 +22,18 @@ public class HashTest {
         Hash hash = new Hash(bytes);
 
         Assert.assertArrayEquals(bytes, hash.getBytes());
+    }
+
+    @Test
+    public void hashToString() {
+        Random random = new Random();
+        byte[] bytes = new byte[32];
+        random.nextBytes(bytes);
+
+        Hash hash = new Hash(bytes);
+
+        String expected = HexUtils.bytesToHexString(bytes, true);
+        Assert.assertEquals(expected, hash.toString());
     }
 
     @Test
