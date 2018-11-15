@@ -11,4 +11,8 @@ public class JsonConverter {
     public static JsonValue convert(String value) {
         return new JsonStringValue(value);
     }
+
+    public static JsonValue convert(int value) {
+        return new JsonNumericValue(value);
+    }
 }

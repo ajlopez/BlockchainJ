@@ -8,6 +8,10 @@ public class JsonNumericValue extends JsonValue {
         super(JsonValueType.NUMBER, value);
     }
 
+    public JsonNumericValue(Integer value) {
+        super(JsonValueType.NUMBER, value.toString());
+    }
+
     @Override
     public String toString() {
         return (String)this.getValue();

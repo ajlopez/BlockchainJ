@@ -15,4 +15,13 @@ public class JsonConverterTest {
         Assert.assertEquals(JsonValueType.STRING, result.getType());
         Assert.assertEquals("foo", result.getValue());
     }
+
+    @Test
+    public void convertInteger() {
+        JsonValue result = JsonConverter.convert(42);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(JsonValueType.NUMBER, result.getType());
+        Assert.assertEquals("42", result.getValue());
+    }
 }
