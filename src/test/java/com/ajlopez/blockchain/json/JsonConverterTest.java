@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.json;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,6 +39,19 @@ public class JsonConverterTest {
         Address address = new Address(bytes);
 
         JsonValue result = JsonConverter.convert(address);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(JsonValueType.STRING, result.getType());
+        Assert.assertEquals(HexUtils.bytesToHexString(bytes, true), result.getValue());
+    }
+
+    @Test
+    public void convertHash() {
+        byte[] bytes = new byte[Hash.BYTES];
+        random.nextBytes(bytes);
+        Hash hash = new Hash(bytes);
+
+        JsonValue result = JsonConverter.convert(hash);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(JsonValueType.STRING, result.getType());
