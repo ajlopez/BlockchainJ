@@ -2,10 +2,12 @@ package com.ajlopez.blockchain.json;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 /**
@@ -56,5 +58,15 @@ public class JsonConverterTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(JsonValueType.STRING, result.getType());
         Assert.assertEquals(HexUtils.bytesToHexString(bytes, true), result.getValue());
+    }
+
+    @Test
+    public void convertSimpleBigInteger() {
+        byte[] bytes = new byte[] { 0x0a };
+        JsonValue result = JsonConverter.convert(BigInteger.TEN);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(JsonValueType.STRING, result.getType());
+        Assert.assertEquals(HexUtils.bytesToHexString(ByteUtils.copyBytes(bytes, 32)), result.getValue());
     }
 }
