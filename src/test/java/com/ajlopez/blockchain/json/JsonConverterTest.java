@@ -69,4 +69,14 @@ public class JsonConverterTest {
         Assert.assertEquals(JsonValueType.STRING, result.getType());
         Assert.assertEquals(HexUtils.bytesToHexString(ByteUtils.copyBytes(bytes, 32)), result.getValue());
     }
+
+    @Test
+    public void convertPowerOfTwoBigInteger() {
+        byte[] bytes = new byte[] { 0x01, 0x00, 0x00, 0x00 };
+        JsonValue result = JsonConverter.convert(BigInteger.valueOf(256 * 256 * 256));
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(JsonValueType.STRING, result.getType());
+        Assert.assertEquals(HexUtils.bytesToHexString(ByteUtils.copyBytes(bytes, 32)), result.getValue());
+    }
 }
