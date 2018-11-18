@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain.net.messages;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,15 +8,15 @@ import java.io.*;
 /**
  * Created by ajlopez on 21/10/2018.
  */
-public class MessageOutputStreamTest {
+public class PacketOutputStreamTest {
     @Test
     public void writeSimpleBytes() throws IOException {
         byte[] bytes = new byte[] { 0x10, 0x11, 0x12 };
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        MessageOutputStream messageOutputStream = new MessageOutputStream(outputStream);
+        PacketOutputStream messageOutputStream = new PacketOutputStream(outputStream);
 
-        messageOutputStream.writeMessage(bytes);
+        messageOutputStream.writePacket(bytes);
 
         outputStream.close();
 

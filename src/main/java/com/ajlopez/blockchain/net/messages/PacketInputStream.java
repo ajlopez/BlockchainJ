@@ -7,14 +7,14 @@ import java.io.InputStream;
 /**
  * Created by ajlopez on 21/10/2018.
  */
-public class MessageInputStream {
+public class PacketInputStream {
     private DataInputStream dataInputStream;
 
-    public MessageInputStream(InputStream inputStream) {
+    public PacketInputStream(InputStream inputStream) {
         this.dataInputStream = new DataInputStream(inputStream);
     }
 
-    public byte[] readMessage() {
+    public byte[] readPacket() {
         try {
             int signature = this.dataInputStream.readInt();
 

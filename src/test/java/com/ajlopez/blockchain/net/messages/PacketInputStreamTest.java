@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.io.*;
 
-public class MessageInputStreamTest {
+public class PacketInputStreamTest {
     @Test
     public void readSimpleBytes() throws IOException {
         byte[] bytes = new byte[] { 0x10, 0x11, 0x12 };
@@ -21,9 +21,9 @@ public class MessageInputStreamTest {
         byte[] message = bytesOutputStream.toByteArray();
 
         InputStream inputStream = new ByteArrayInputStream(message);
-        MessageInputStream messageInputStream = new MessageInputStream(inputStream);
+        PacketInputStream messageInputStream = new PacketInputStream(inputStream);
 
-        byte[] result = messageInputStream.readMessage();
+        byte[] result = messageInputStream.readPacket();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(bytes.length, result.length);
@@ -31,7 +31,7 @@ public class MessageInputStreamTest {
     }
 
     @Test
-    public void readNullIfInvalidMessage() throws IOException {
+    public void readNullIfInvalidPacket() throws IOException {
         byte[] bytes = new byte[] { 0x10, 0x11, 0x12 };
         ByteArrayOutputStream bytesOutputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(bytesOutputStream);
@@ -45,9 +45,9 @@ public class MessageInputStreamTest {
         byte[] message = bytesOutputStream.toByteArray();
 
         InputStream inputStream = new ByteArrayInputStream(message);
-        MessageInputStream messageInputStream = new MessageInputStream(inputStream);
+        PacketInputStream messageInputStream = new PacketInputStream(inputStream);
 
-        byte[] result = messageInputStream.readMessage();
+        byte[] result = messageInputStream.readPacket();
 
         Assert.assertNull(result);
     }
@@ -67,9 +67,9 @@ public class MessageInputStreamTest {
         byte[] message = bytesOutputStream.toByteArray();
 
         InputStream inputStream = new ByteArrayInputStream(message);
-        MessageInputStream messageInputStream = new MessageInputStream(inputStream);
+        PacketInputStream messageInputStream = new PacketInputStream(inputStream);
 
-        byte[] result = messageInputStream.readMessage();
+        byte[] result = messageInputStream.readPacket();
 
         Assert.assertNull(result);
     }

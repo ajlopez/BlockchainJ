@@ -7,14 +7,14 @@ import java.io.OutputStream;
 /**
  * Created by ajlopez on 21/10/2018.
  */
-public class MessageOutputStream {
+public class PacketOutputStream {
     private DataOutputStream dataOutputStream;
 
-    public MessageOutputStream(OutputStream outputStream) {
+    public PacketOutputStream(OutputStream outputStream) {
         this.dataOutputStream = new DataOutputStream(outputStream);
     }
 
-    public boolean writeMessage(byte[] bytes) {
+    public boolean writePacket(byte[] bytes) {
         try {
             this.dataOutputStream.writeInt(0x01020304);
             this.dataOutputStream.writeInt(bytes.length);
