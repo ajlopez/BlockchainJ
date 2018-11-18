@@ -1,5 +1,6 @@
-package com.ajlopez.blockchain.net.messages;
+package com.ajlopez.blockchain.net.peers;
 
+import com.ajlopez.blockchain.net.peers.PacketInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 

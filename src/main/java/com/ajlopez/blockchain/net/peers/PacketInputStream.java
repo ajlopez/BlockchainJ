@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain.net.messages;
+package com.ajlopez.blockchain.net.peers;
 
 import java.io.DataInputStream;
 import java.io.IOException;
