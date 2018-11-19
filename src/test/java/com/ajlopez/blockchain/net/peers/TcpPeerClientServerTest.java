@@ -10,6 +10,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by ajlopez on 19/11/2018.
@@ -33,13 +36,7 @@ public class TcpPeerClientServerTest {
 
         nodeProcessor1.postMessage(FactoryHelper.createPeer(), message);
 
-        nodeProcessor1.start();
-        nodeProcessor2.start();
-
-        Thread.sleep(2000);
-
-        nodeProcessor2.stop();
-        nodeProcessor2.stop();
+        runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         server.stop();
 
@@ -54,5 +51,28 @@ public class TcpPeerClientServerTest {
         Assert.assertNotNull(bestBlock2);
         Assert.assertEquals(block.getNumber(), bestBlock2.getNumber());
         Assert.assertEquals(block.getHash(), bestBlock2.getHash());
+    }
+
+    private static void runNodeProcessors(NodeProcessor ...nodeProcessors) throws InterruptedException {
+        List<Semaphore> semaphores = new ArrayList<>();
+
+        for (NodeProcessor nodeProcessor : nodeProcessors) {
+            Semaphore semaphore = new Semaphore(0, true);
+
+            nodeProcessor.onEmpty(() -> {
+                semaphore.release();
+            });
+
+            semaphores.add(semaphore);
+        }
+
+        for (NodeProcessor nodeProcessor : nodeProcessors)
+            nodeProcessor.start();
+
+        for (Semaphore semaphore : semaphores)
+            semaphore.acquire();
+
+        for (NodeProcessor nodeProcessor : nodeProcessors)
+            nodeProcessor.stop();
     }
 }
