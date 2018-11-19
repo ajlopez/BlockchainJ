@@ -19,6 +19,7 @@ public class PacketOutputStream {
             this.dataOutputStream.writeInt(0x01020304);
             this.dataOutputStream.writeInt(bytes.length);
             this.dataOutputStream.write(bytes);
+            this.dataOutputStream.flush();
         }
         catch (IOException ex) {
             System.out.println(ex.getMessage());
