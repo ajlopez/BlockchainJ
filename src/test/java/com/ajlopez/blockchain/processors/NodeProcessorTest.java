@@ -6,11 +6,16 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
+import com.ajlopez.blockchain.net.peers.PeerConnection;
 import com.ajlopez.blockchain.test.PeerToPeerOutputChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -151,6 +156,39 @@ public class NodeProcessorTest {
         nodeProcessor1.postMessage(null, message1);
 
         runNodeProcessors(nodeProcessor1, nodeProcessor2);
+
+        Block result1 = blockChain1.getBestBlock();
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(block1.getHash(), result1.getHash());
+
+        Block result2 = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(block1.getHash(), result2.getHash());
+    }
+
+    @Test
+    public void processTwoBlockMessagesUsingTwoNodesConnectedByPipes() throws InterruptedException, IOException {
+        BlockChain blockChain1 = new BlockChain();
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+        BlockChain blockChain2 = new BlockChain();
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
+
+        List<PeerConnection> connections = connectNodes(nodeProcessor1, nodeProcessor2);
+
+        Block genesis = new Block(0, null);
+        Block block1 = new Block(1, genesis.getHash());
+
+        Message message0 = new BlockMessage(genesis);
+        Message message1 = new BlockMessage(block1);
+
+        nodeProcessor1.postMessage(null, message0);
+        nodeProcessor1.postMessage(null, message1);
+
+        connections.forEach(connection -> connection.start());
+        runNodeProcessors(nodeProcessor1, nodeProcessor2);
+        connections.forEach(connection -> connection.stop());
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -336,5 +374,39 @@ public class NodeProcessorTest {
 
         for (NodeProcessor nodeProcessor : nodeProcessors)
             nodeProcessor.stop();
+    }
+
+    private static List<PeerConnection> connectNodeProcessors(NodeProcessor ...nodeProcessors) throws InterruptedException, IOException {
+        List<PeerConnection> connections = new ArrayList<>();
+        int nnodes = nodeProcessors.length;
+
+        for (int k = 0; k < nnodes; k++)
+            for (int j = k + 1; j < nnodes; j++) {
+                connections.addAll(connectNodes(nodeProcessors[k], nodeProcessors[j]));
+            }
+
+        return connections;
+    }
+
+    private static List<PeerConnection> connectNodes(NodeProcessor node1, NodeProcessor node2) throws IOException {
+        PipedOutputStream outputStream1 = new PipedOutputStream();
+        PipedInputStream inputStream1 = new PipedInputStream();
+        inputStream1.connect(outputStream1);
+
+        PipedOutputStream outputStream2 = new PipedOutputStream();
+        PipedInputStream inputStream2 = new PipedInputStream();
+        inputStream2.connect(outputStream2);
+
+        PeerConnection connection1 = new PeerConnection(node1.getPeer(), inputStream1, outputStream2, node2);
+        PeerConnection connection2 = new PeerConnection(node2.getPeer(), inputStream2, outputStream1, node1);
+
+        List<PeerConnection> connections = new ArrayList<>();
+        connections.add(connection1);
+        connections.add(connection2);
+
+        node1.connectTo(node2.getPeer(), connection2);
+        node2.connectTo(node1.getPeer(), connection1);
+
+        return connections;
     }
 }
