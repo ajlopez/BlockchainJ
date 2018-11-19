@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.net.peers;
 
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -21,8 +22,11 @@ public class PacketOutputStream {
             this.dataOutputStream.write(bytes);
             this.dataOutputStream.flush();
         }
+        catch (EOFException ex) {
+            return false;
+        }
         catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println(ex);
             return false;
         }
 

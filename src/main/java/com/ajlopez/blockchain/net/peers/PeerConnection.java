@@ -38,8 +38,6 @@ public class PeerConnection implements OutputChannel {
         new Thread(this::writeProcess).start();
 
         this.started = true;
-
-        System.out.println("started");
     }
 
     public void stop() {
@@ -48,10 +46,8 @@ public class PeerConnection implements OutputChannel {
 
     private void readProcess() {
         try {
-            while (!this.stopped) {
+            while (!this.stopped)
                 this.inputChannel.postMessage(this.sender, this.messageInputStream.readMessage());
-                System.out.println("message read and post to input channel");
-            }
         }
         catch (Exception ex) {
             this.stopped = true;
@@ -63,10 +59,8 @@ public class PeerConnection implements OutputChannel {
             while (!this.stopped) {
                 Message message = queue.poll();
 
-                if (message != null) {
+                if (message != null)
                     this.messageOutputStream.writeMessage(message);
-                    System.out.println("message written");
-                }
                 else
                     Thread.sleep(100);
             }

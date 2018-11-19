@@ -175,7 +175,7 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        List<PeerConnection> connections = connectNodes(nodeProcessor1, nodeProcessor2);
+        List<PeerConnection> connections = connectNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         Block genesis = new Block(0, null);
         Block block1 = new Block(1, genesis.getHash());
@@ -251,7 +251,7 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        List<PeerConnection> connections = connectNodes(nodeProcessor1, nodeProcessor2);
+        List<PeerConnection> connections = connectNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         for (Block block : blocks)
             Assert.assertTrue(blockChain1.connectBlock(block));
@@ -311,6 +311,51 @@ public class NodeProcessorTest {
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
         runNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
+
+        Block result1 = blockChain1.getBestBlock();
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(bestBlock.getHash(), result1.getHash());
+
+        Block result2 = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(bestBlock.getHash(), result2.getHash());
+
+        Block result3 = blockChain3.getBestBlock();
+
+        Assert.assertNotNull(result3);
+        Assert.assertEquals(bestBlock.getHash(), result3.getHash());
+    }
+
+    @Test
+    public void synchronizeThreeNodesConnectedByPipes() throws InterruptedException, IOException {
+        List<Block> blocks = FactoryHelper.createBlocks(9);
+        Block bestBlock = blocks.get(9);
+
+        BlockChain blockChain1 = new BlockChain();
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+        BlockChain blockChain2 = new BlockChain();
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
+        BlockChain blockChain3 = new BlockChain();
+        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(blockChain3);
+
+        List<PeerConnection> connections = connectNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
+
+        for (Block block : blocks)
+            Assert.assertTrue(blockChain1.connectBlock(block));
+
+        for (int k = 0; k < 10; k++)
+            Assert.assertNotNull(blockChain1.getBlockByNumber(k));
+
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
+        StatusMessage statusMessage = new StatusMessage(status);
+
+        nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
+
+        connections.forEach(connection -> connection.start());
+        runNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
+        connections.forEach(connection -> connection.stop());
 
         Block result1 = blockChain1.getBestBlock();
 
