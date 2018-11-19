@@ -56,7 +56,7 @@ public class FactoryHelper {
     }
 
     public static Peer createPeer() {
-        return new Peer(HashUtilsTest.generateRandomPeerId());
+        return Peer.createRandomPeer();
     }
 
     public static NodeProcessor createNodeProcessor() {
