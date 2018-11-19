@@ -6,13 +6,14 @@ import com.ajlopez.blockchain.net.InputChannel;
 import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
+import com.ajlopez.blockchain.net.peers.PeerNode;
 
 import java.util.List;
 
 /**
  * Created by ajlopez on 14/10/2018.
  */
-public class NodeProcessor implements InputChannel {
+public class NodeProcessor implements PeerNode {
     private Peer peer;
     private InputProcessor inputProcessor;
     private OutputProcessor outputProcessor;

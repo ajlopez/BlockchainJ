@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.net.peers;
 
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.PeerId;
-import com.ajlopez.blockchain.processors.NodeProcessor;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,24 +12,22 @@ import java.util.Random;
  */
 public class TcpPeerClient {
     private final Random random = new Random();
-    private final NodeProcessor nodeProcesor;
+    private final PeerNode peerNode;
     private final String host;
     private final int port;
 
-    public TcpPeerClient(String host, int port, NodeProcessor nodeProcessor) {
+    public TcpPeerClient(String host, int port, PeerNode peerNode) {
         this.host = host;
         this.port = port;
-        this.nodeProcesor = nodeProcessor;
+        this.peerNode = peerNode;
     }
 
     public void connect() throws IOException {
         Socket socket = new Socket(this.host, this.port);
-        byte[] hashBytes = new byte[Hash.BYTES];
-        random.nextBytes(hashBytes);
-        Peer peer = new Peer(new PeerId(hashBytes));
+        Peer peer = Peer.createRandomPeer();
 
-        PeerConnection peerConnection = new PeerConnection(peer, socket.getInputStream(), socket.getOutputStream(), this.nodeProcesor);
-        this.nodeProcesor.connectTo(peer, peerConnection);
+        PeerConnection peerConnection = new PeerConnection(peer, socket.getInputStream(), socket.getOutputStream(), this.peerNode);
+        this.peerNode.connectTo(peer, peerConnection);
         peerConnection.start();
     }
 }

@@ -1,12 +1,23 @@
 package com.ajlopez.blockchain.net.peers;
 
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.PeerId;
+
+import java.util.Random;
 
 /**
  * Created by ajlopez on 04/02/2018.
  */
 public class Peer {
-    private PeerId id;
+    private static final Random random = new Random();
+
+    private final PeerId id;
+
+    public static Peer createRandomPeer() {
+        byte[] hashBytes = new byte[Hash.BYTES];
+        random.nextBytes(hashBytes);
+        return new Peer(new PeerId(hashBytes));
+    }
 
     public Peer(PeerId id) {
         this.id = id;
