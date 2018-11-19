@@ -64,6 +64,8 @@ public class PeerConnection implements OutputChannel {
                 else
                     Thread.sleep(100);
             }
+
+            this.messageOutputStream.close();
         }
         catch (Exception ex) {
             this.stopped = true;

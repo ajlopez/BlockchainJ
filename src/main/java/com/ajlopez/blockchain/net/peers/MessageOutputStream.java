@@ -3,6 +3,8 @@ package com.ajlopez.blockchain.net.peers;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.MessageEncoder;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 18/11/2018.
  */
@@ -17,5 +19,9 @@ public class MessageOutputStream {
         byte[] bytes = MessageEncoder.encode(message);
 
         this.packetOutputStream.writePacket(bytes);
+    }
+
+    public void close() throws IOException {
+        this.packetOutputStream.close();
     }
 }

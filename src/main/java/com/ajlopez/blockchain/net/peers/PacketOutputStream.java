@@ -28,4 +28,8 @@ public class PacketOutputStream {
 
         return true;
     }
+
+    public void close() throws IOException {
+        this.dataOutputStream.close();;
+    }
 }
