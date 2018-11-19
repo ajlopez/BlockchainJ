@@ -2,7 +2,7 @@ package com.ajlopez.blockchain.test;
 
 import com.ajlopez.blockchain.net.InputChannel;
 import com.ajlopez.blockchain.net.OutputChannel;
-import com.ajlopez.blockchain.net.Peer;
+import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 
 public class PeerToPeerOutputChannel implements OutputChannel {

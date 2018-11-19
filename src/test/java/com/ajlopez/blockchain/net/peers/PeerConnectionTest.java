@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain.net.peers;
 
-import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.messages.GetBlockByHashMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.MessageEncoder;

@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.net.peers;
 
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.net.Peer;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.processors.NodeProcessor;
 

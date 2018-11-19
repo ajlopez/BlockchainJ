@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.net.OutputChannel;
-import com.ajlopez.blockchain.net.Peer;
+import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.messages.Message;
 
