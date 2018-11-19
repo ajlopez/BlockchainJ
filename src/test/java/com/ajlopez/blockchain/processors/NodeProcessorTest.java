@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.net.peers.PeerConnection;
 import com.ajlopez.blockchain.test.PeerToPeerOutputChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.test.utils.NodesHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,7 +44,7 @@ public class NodeProcessorTest {
 
         nodeProcessor.postMessage(null, message);
 
-        runNodeProcessors(nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -62,7 +63,7 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             nodeProcessor.postMessage(null, message);
 
-        runNodeProcessors(nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -84,7 +85,7 @@ public class NodeProcessorTest {
         nodeProcessor.postMessage(null, message0);
         nodeProcessor.postMessage(null, message1);
 
-        runNodeProcessors(nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -103,7 +104,7 @@ public class NodeProcessorTest {
             nodeProcessor.postMessage(null, message);
         }
 
-        runNodeProcessors(nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -126,7 +127,7 @@ public class NodeProcessorTest {
         nodeProcessor.postMessage(null, message1);
         nodeProcessor.postMessage(null, message0);
 
-        runNodeProcessors(nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -154,7 +155,7 @@ public class NodeProcessorTest {
         nodeProcessor1.postMessage(null, message0);
         nodeProcessor1.postMessage(null, message1);
 
-        runNodeProcessors(nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -174,7 +175,7 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        List<PeerConnection> connections = connectNodeProcessors(nodeProcessor1, nodeProcessor2);
+        List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         Block genesis = new Block(0, null);
         Block block1 = new Block(1, genesis.getHash());
@@ -186,7 +187,7 @@ public class NodeProcessorTest {
         nodeProcessor1.postMessage(null, message1);
 
         connections.forEach(connection -> connection.start());
-        runNodeProcessors(nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
         connections.forEach(connection -> connection.stop());
 
         Block result1 = blockChain1.getBestBlock();
@@ -227,7 +228,7 @@ public class NodeProcessorTest {
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
-        runNodeProcessors(nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -250,7 +251,7 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        List<PeerConnection> connections = connectNodeProcessors(nodeProcessor1, nodeProcessor2);
+        List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         for (Block block : blocks)
             Assert.assertTrue(blockChain1.connectBlock(block));
@@ -264,7 +265,7 @@ public class NodeProcessorTest {
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
         connections.forEach(connection -> connection.start());
-        runNodeProcessors(nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
         connections.forEach(connection -> connection.stop());
 
         Block result1 = blockChain1.getBestBlock();
@@ -309,7 +310,7 @@ public class NodeProcessorTest {
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
-        runNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -339,7 +340,7 @@ public class NodeProcessorTest {
         BlockChain blockChain3 = new BlockChain();
         NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(blockChain3);
 
-        List<PeerConnection> connections = connectNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
+        List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
 
         for (Block block : blocks)
             Assert.assertTrue(blockChain1.connectBlock(block));
@@ -353,7 +354,7 @@ public class NodeProcessorTest {
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
         connections.forEach(connection -> connection.start());
-        runNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
         connections.forEach(connection -> connection.stop());
 
         Block result1 = blockChain1.getBestBlock();
@@ -382,7 +383,7 @@ public class NodeProcessorTest {
 
         nodeProcessor.postMessage(null, message);
 
-        runNodeProcessors(nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         List<Transaction> transactions = nodeProcessor.getTransactions();
 
@@ -410,7 +411,7 @@ public class NodeProcessorTest {
 
         nodeProcessor1.postMessage(null, message);
 
-        runNodeProcessors(nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         List<Transaction> transactions1 = nodeProcessor1.getTransactions();
 
@@ -433,62 +434,5 @@ public class NodeProcessorTest {
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(transaction.getHash(), result2.getHash());
-    }
-
-    private static void runNodeProcessors(NodeProcessor ...nodeProcessors) throws InterruptedException {
-        List<Semaphore> semaphores = new ArrayList<>();
-
-        for (NodeProcessor nodeProcessor : nodeProcessors) {
-            Semaphore semaphore = new Semaphore(0, true);
-
-            nodeProcessor.onEmpty(() -> {
-                semaphore.release();
-            });
-
-            semaphores.add(semaphore);
-        }
-
-        for (NodeProcessor nodeProcessor : nodeProcessors)
-            nodeProcessor.start();
-
-        for (Semaphore semaphore : semaphores)
-            semaphore.acquire();
-
-        for (NodeProcessor nodeProcessor : nodeProcessors)
-            nodeProcessor.stop();
-    }
-
-    private static List<PeerConnection> connectNodeProcessors(NodeProcessor ...nodeProcessors) throws InterruptedException, IOException {
-        List<PeerConnection> connections = new ArrayList<>();
-        int nnodes = nodeProcessors.length;
-
-        for (int k = 0; k < nnodes; k++)
-            for (int j = k + 1; j < nnodes; j++) {
-                connections.addAll(connectNodes(nodeProcessors[k], nodeProcessors[j]));
-            }
-
-        return connections;
-    }
-
-    private static List<PeerConnection> connectNodes(NodeProcessor node1, NodeProcessor node2) throws IOException {
-        PipedOutputStream outputStream1 = new PipedOutputStream();
-        PipedInputStream inputStream1 = new PipedInputStream();
-        inputStream1.connect(outputStream1);
-
-        PipedOutputStream outputStream2 = new PipedOutputStream();
-        PipedInputStream inputStream2 = new PipedInputStream();
-        inputStream2.connect(outputStream2);
-
-        PeerConnection connection1 = new PeerConnection(node1.getPeer(), inputStream1, outputStream2, node2);
-        PeerConnection connection2 = new PeerConnection(node2.getPeer(), inputStream2, outputStream1, node1);
-
-        List<PeerConnection> connections = new ArrayList<>();
-        connections.add(connection1);
-        connections.add(connection2);
-
-        node1.connectTo(node2.getPeer(), connection2);
-        node2.connectTo(node1.getPeer(), connection1);
-
-        return connections;
     }
 }
