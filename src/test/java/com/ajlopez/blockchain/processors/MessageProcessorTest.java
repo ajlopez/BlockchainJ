@@ -37,7 +37,7 @@ public class MessageProcessorTest {
     public void processBlockMessageAndRelayBlockToPeers() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
         Peer sender = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.connectToPeer(sender, channel);
@@ -70,7 +70,7 @@ public class MessageProcessorTest {
     public void processBlockMessageAndRelayBlockToOtherPeers() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
 
         Peer peer1 = FactoryHelper.createPeer();
         SimpleOutputChannel channel1 = new SimpleOutputChannel();
@@ -112,7 +112,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetBlockByHashMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
 
         Block block = new Block(0, null);
         Message blockMessage = new BlockMessage(block);
@@ -143,7 +143,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetUnknownBlockByHashMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
 
         Block block = new Block(0, null);
 
@@ -165,7 +165,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetBlockByNumberMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
 
         Block block = new Block(0, null);
         Message blockMessage = new BlockMessage(block);
@@ -195,7 +195,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetUnknownBlockByNumberMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
 
         Block block = new Block(0, null);
 
@@ -245,7 +245,7 @@ public class MessageProcessorTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
         Peer sender = FactoryHelper.createPeer();
         SimpleOutputChannel channel = new SimpleOutputChannel();
         outputProcessor.connectToPeer(sender, channel);
@@ -276,7 +276,7 @@ public class MessageProcessorTest {
     public void processStatusMessageAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
@@ -309,7 +309,7 @@ public class MessageProcessorTest {
     public void processStatusMessageTwiceWithSameHeightAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
@@ -343,7 +343,7 @@ public class MessageProcessorTest {
     public void processStatusMessageTwiceWithDifferentHeightsAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        OutputProcessor outputProcessor = new OutputProcessor();
+        SendProcessor outputProcessor = new SendProcessor();
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 

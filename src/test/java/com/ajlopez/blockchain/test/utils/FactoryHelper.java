@@ -6,7 +6,6 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -35,11 +34,11 @@ public class FactoryHelper {
         return new MessageProcessor(blockProcessor, null, null, null);
     }
 
-    public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, PeerProcessor peerProcessor, OutputProcessor outputProcessor) {
+    public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor) {
         return new MessageProcessor(blockProcessor, null, peerProcessor, outputProcessor);
     }
 
-    public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, OutputProcessor outputProcessor) {
+    public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, SendProcessor outputProcessor) {
         return new MessageProcessor(blockProcessor, null, null, outputProcessor);
     }
 
@@ -47,7 +46,7 @@ public class FactoryHelper {
         return new MessageProcessor(null, transactionProcessor, null, null);
     }
 
-    public static MessageProcessor createMessageProcessor(TransactionProcessor transactionProcessor, OutputProcessor outputProcessor) {
+    public static MessageProcessor createMessageProcessor(TransactionProcessor transactionProcessor, SendProcessor outputProcessor) {
         return new MessageProcessor(null, transactionProcessor, null, outputProcessor);
     }
 

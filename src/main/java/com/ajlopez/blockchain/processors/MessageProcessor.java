@@ -16,9 +16,9 @@ public class MessageProcessor {
     BlockProcessor blockProcessor;
     TransactionProcessor transactionProcessor;
     PeerProcessor peerProcessor;
-    OutputProcessor outputProcessor;
+    SendProcessor outputProcessor;
 
-    public MessageProcessor(BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, OutputProcessor outputProcessor) {
+    public MessageProcessor(BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor) {
         this.blockProcessor = blockProcessor;
         this.transactionProcessor = transactionProcessor;
         this.peerProcessor = peerProcessor;

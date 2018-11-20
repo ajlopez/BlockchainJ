@@ -15,7 +15,7 @@ import java.util.List;
 public class NodeProcessor implements PeerNode {
     private Peer peer;
     private ReceiveProcessor inputProcessor;
-    private OutputProcessor outputProcessor;
+    private SendProcessor outputProcessor;
     private TransactionPool transactionPool;
 
     public NodeProcessor(Peer peer, BlockChain blockChain) {
@@ -25,7 +25,7 @@ public class NodeProcessor implements PeerNode {
         this.transactionPool = new TransactionPool();
         TransactionProcessor transactionProcessor = new TransactionProcessor(this.transactionPool);
         PeerProcessor peerProcessor = new PeerProcessor();
-        this.outputProcessor = new OutputProcessor();
+        this.outputProcessor = new SendProcessor();
         MessageProcessor messageProcessor = new MessageProcessor(blockProcessor, transactionProcessor, peerProcessor, this.outputProcessor);
         this.inputProcessor = new ReceiveProcessor(messageProcessor);
     }
