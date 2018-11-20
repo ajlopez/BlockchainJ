@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class NodeProcessor implements PeerNode {
     private Peer peer;
-    private InputProcessor inputProcessor;
+    private ReceiveProcessor inputProcessor;
     private OutputProcessor outputProcessor;
     private TransactionPool transactionPool;
 
@@ -27,7 +27,7 @@ public class NodeProcessor implements PeerNode {
         PeerProcessor peerProcessor = new PeerProcessor();
         this.outputProcessor = new OutputProcessor();
         MessageProcessor messageProcessor = new MessageProcessor(blockProcessor, transactionProcessor, peerProcessor, this.outputProcessor);
-        this.inputProcessor = new InputProcessor(messageProcessor);
+        this.inputProcessor = new ReceiveProcessor(messageProcessor);
     }
 
     public Peer getPeer() {
