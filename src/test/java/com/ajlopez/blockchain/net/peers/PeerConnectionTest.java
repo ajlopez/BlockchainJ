@@ -47,7 +47,7 @@ public class PeerConnectionTest {
         peerConnection1.start();
         peerConnection2.start();
 
-        peerConnection1.postMessage(message);
+        peerConnection1.postMessage(FactoryHelper.createPeer(), message);
 
         semaphore.acquire();
 

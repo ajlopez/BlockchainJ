@@ -4,7 +4,7 @@ import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.StatusMessage;
-import com.ajlopez.blockchain.test.simples.SimpleOutputChannel;
+import com.ajlopez.blockchain.test.simples.SimpleMessageChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -18,9 +18,9 @@ import java.util.Collections;
 public class SendProcessorTest {
     @Test
     public void connectAndDisconnectPeer() {
-        SendProcessor processor = new SendProcessor();
+        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
         Peer peer = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
 
         processor.connectToPeer(peer, channel);
 
@@ -33,20 +33,18 @@ public class SendProcessorTest {
 
     @Test
     public void postMessageToNotConnectedPeer() {
-        SendProcessor processor = new SendProcessor();
+        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
         Peer peer = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
         Assert.assertFalse(processor.postMessage(peer, message));
-        Assert.assertTrue(channel.getMessages().isEmpty());
+        Assert.assertTrue(channel.getPeerMessages().isEmpty());
     }
 
     @Test
     public void postMessageWhenNoPeerIsConnected() {
-        SendProcessor processor = new SendProcessor();
-
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
         Assert.assertEquals(0, processor.postMessage(message));
@@ -54,24 +52,24 @@ public class SendProcessorTest {
 
     @Test
     public void connectToPeerAndPostMessage() {
-        SendProcessor processor = new SendProcessor();
+        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
         Peer peer = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
 
         processor.connectToPeer(peer, channel);
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
         Assert.assertTrue(processor.postMessage(peer, message));
-        Assert.assertFalse(channel.getMessages().isEmpty());
+        Assert.assertFalse(channel.getPeerMessages().isEmpty());
     }
 
     @Test
     public void connectToPeersAndPostMessage() {
-        SendProcessor processor = new SendProcessor();
+        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
         Peer peer1 = FactoryHelper.createPeer();
-        SimpleOutputChannel channel1 = new SimpleOutputChannel();
+        SimpleMessageChannel channel1 = new SimpleMessageChannel();
         Peer peer2 = FactoryHelper.createPeer();
-        SimpleOutputChannel channel2 = new SimpleOutputChannel();
+        SimpleMessageChannel channel2 = new SimpleMessageChannel();
 
         processor.connectToPeer(peer1, channel1);
         processor.connectToPeer(peer2, channel2);
@@ -80,17 +78,17 @@ public class SendProcessorTest {
 
         Assert.assertEquals(2, processor.postMessage(message));
 
-        Assert.assertFalse(channel1.getMessages().isEmpty());
-        Assert.assertFalse(channel2.getMessages().isEmpty());
+        Assert.assertFalse(channel1.getPeerMessages().isEmpty());
+        Assert.assertFalse(channel2.getPeerMessages().isEmpty());
     }
 
     @Test
     public void connectToPeersAndPostMessageSkippingOne() {
-        SendProcessor processor = new SendProcessor();
+        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
         Peer peer1 = FactoryHelper.createPeer();
-        SimpleOutputChannel channel1 = new SimpleOutputChannel();
+        SimpleMessageChannel channel1 = new SimpleMessageChannel();
         Peer peer2 = FactoryHelper.createPeer();
-        SimpleOutputChannel channel2 = new SimpleOutputChannel();
+        SimpleMessageChannel channel2 = new SimpleMessageChannel();
 
         processor.connectToPeer(peer1, channel1);
         processor.connectToPeer(peer2, channel2);
@@ -99,21 +97,21 @@ public class SendProcessorTest {
 
         Assert.assertEquals(1, processor.postMessage(message, Collections.singletonList(peer2.getId())));
 
-        Assert.assertFalse(channel1.getMessages().isEmpty());
-        Assert.assertTrue(channel2.getMessages().isEmpty());
+        Assert.assertFalse(channel1.getPeerMessages().isEmpty());
+        Assert.assertTrue(channel2.getPeerMessages().isEmpty());
     }
 
     @Test
     public void connectToPeerAndPostMessageToAnotherPeer() {
-        SendProcessor processor = new SendProcessor();
+        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
         Peer peer = FactoryHelper.createPeer();
         Peer peer2 = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
 
         processor.connectToPeer(peer, channel);
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
         Assert.assertFalse(processor.postMessage(peer2, message));
-        Assert.assertTrue(channel.getMessages().isEmpty());
+        Assert.assertTrue(channel.getPeerMessages().isEmpty());
     }
 }

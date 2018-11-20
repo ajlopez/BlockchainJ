@@ -5,8 +5,9 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
-import com.ajlopez.blockchain.test.simples.SimpleOutputChannel;
+import com.ajlopez.blockchain.test.simples.SimpleMessageChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -37,9 +38,9 @@ public class MessageProcessorTest {
     public void processBlockMessageAndRelayBlockToPeers() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        SendProcessor outputProcessor = new SendProcessor();
         Peer sender = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SendProcessor outputProcessor = new SendProcessor(sender);
+        SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
         Block block = new Block(0, null);
@@ -54,12 +55,17 @@ public class MessageProcessorTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getHash(), result.getHash());
 
-        List<Message> messages = channel.getMessages();
+        List<Pair<Peer,Message>> peerMessages = channel.getPeerMessages();
 
-        Assert.assertNotNull(messages);
-        Assert.assertEquals(1, messages.size());
+        Assert.assertNotNull(peerMessages);
+        Assert.assertEquals(1, peerMessages.size());
 
-        Message outputMessage = messages.get(0);
+        Peer senderPeer = peerMessages.get(0).getKey();
+
+        Assert.assertNotNull(sender);
+        Assert.assertEquals(sender.getId(), senderPeer.getId());
+
+        Message outputMessage = peerMessages.get(0).getValue();
 
         Assert.assertNotNull(outputMessage);
         Assert.assertEquals(MessageType.BLOCK, outputMessage.getMessageType());
@@ -70,20 +76,21 @@ public class MessageProcessorTest {
     public void processBlockMessageAndRelayBlockToOtherPeers() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        SendProcessor outputProcessor = new SendProcessor();
+        Peer sender = FactoryHelper.createPeer();
+        SendProcessor sendProcessor = new SendProcessor(sender);
 
         Peer peer1 = FactoryHelper.createPeer();
-        SimpleOutputChannel channel1 = new SimpleOutputChannel();
-        outputProcessor.connectToPeer(peer1, channel1);
+        SimpleMessageChannel channel1 = new SimpleMessageChannel();
+        sendProcessor.connectToPeer(peer1, channel1);
 
         Peer peer2 = FactoryHelper.createPeer();
-        SimpleOutputChannel channel2 = new SimpleOutputChannel();
-        outputProcessor.connectToPeer(peer2, channel2);
+        SimpleMessageChannel channel2 = new SimpleMessageChannel();
+        sendProcessor.connectToPeer(peer2, channel2);
 
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
 
-        MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
+        MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, sendProcessor);
 
         processor.processMessage(message, peer1);
 
@@ -92,17 +99,22 @@ public class MessageProcessorTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getHash(), result.getHash());
 
-        List<Message> messages1 = channel1.getMessages();
+        List<Pair<Peer, Message>> peerMessages1 = channel1.getPeerMessages();
 
-        Assert.assertNotNull(messages1);
-        Assert.assertEquals(0, messages1.size());
+        Assert.assertNotNull(peerMessages1);
+        Assert.assertEquals(0, peerMessages1.size());
 
-        List<Message> messages2 = channel2.getMessages();
+        List<Pair<Peer, Message>> peerMessages2 = channel2.getPeerMessages();
 
-        Assert.assertNotNull(messages2);
-        Assert.assertEquals(1, messages2.size());
+        Assert.assertNotNull(peerMessages2);
+        Assert.assertEquals(1, peerMessages2.size());
 
-        Message outputMessage = messages2.get(0);
+        Peer senderPeer = peerMessages2.get(0).getKey();
+
+        Assert.assertNotNull(senderPeer);
+        Assert.assertEquals(sender.getId(), senderPeer.getId());
+
+        Message outputMessage = peerMessages2.get(0).getValue();
 
         Assert.assertNotNull(outputMessage);
         Assert.assertEquals(MessageType.BLOCK, outputMessage.getMessageType());
@@ -112,7 +124,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetBlockByHashMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        SendProcessor outputProcessor = new SendProcessor();
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
 
         Block block = new Block(0, null);
         Message blockMessage = new BlockMessage(block);
@@ -124,12 +136,12 @@ public class MessageProcessorTest {
         Message message = new GetBlockByHashMessage(block.getHash());
 
         Peer sender = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
         processor.processMessage(message, sender);
 
-        Message result = channel.getMessage();
+        Message result = channel.getLastMessage();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(MessageType.BLOCK, result.getMessageType());
@@ -143,7 +155,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetUnknownBlockByHashMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        SendProcessor outputProcessor = new SendProcessor();
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
 
         Block block = new Block(0, null);
 
@@ -152,12 +164,12 @@ public class MessageProcessorTest {
         Message message = new GetBlockByHashMessage(block.getHash());
 
         Peer sender = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
         processor.processMessage(message, sender);
 
-        Message result = channel.getMessage();
+        Message result = channel.getLastMessage();
 
         Assert.assertNull(result);
     }
@@ -165,7 +177,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetBlockByNumberMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        SendProcessor outputProcessor = new SendProcessor();
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
 
         Block block = new Block(0, null);
         Message blockMessage = new BlockMessage(block);
@@ -176,12 +188,12 @@ public class MessageProcessorTest {
 
         Message getBlockMessage = new GetBlockByNumberMessage(block.getNumber());
         Peer sender = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
         processor.processMessage(getBlockMessage, sender);
 
-        Message result = channel.getMessage();
+        Message result = channel.getLastMessage();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(MessageType.BLOCK, result.getMessageType());
@@ -195,7 +207,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetUnknownBlockByNumberMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        SendProcessor outputProcessor = new SendProcessor();
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
 
         Block block = new Block(0, null);
 
@@ -203,12 +215,12 @@ public class MessageProcessorTest {
 
         Message getBlockMessage = new GetBlockByNumberMessage(block.getNumber());
         Peer sender = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
         processor.processMessage(getBlockMessage, sender);
 
-        Message result = channel.getMessage();
+        Message result = channel.getLastMessage();
 
         Assert.assertNull(result);
     }
@@ -245,9 +257,9 @@ public class MessageProcessorTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 
-        SendProcessor outputProcessor = new SendProcessor();
         Peer sender = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SendProcessor outputProcessor = new SendProcessor(sender);
+        SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(transactionProcessor, outputProcessor);
@@ -260,12 +272,7 @@ public class MessageProcessorTest {
         Assert.assertEquals(1, transactions.size());
         Assert.assertEquals(transaction, transactions.get(0));
 
-        List<Message> messages = channel.getMessages();
-
-        Assert.assertNotNull(messages);
-        Assert.assertEquals(1, messages.size());
-
-        Message outputMessage = messages.get(0);
+        Message outputMessage = channel.getLastMessage();
 
         Assert.assertNotNull(outputMessage);
         Assert.assertEquals(MessageType.TRANSACTION, outputMessage.getMessageType());
@@ -276,12 +283,12 @@ public class MessageProcessorTest {
     public void processStatusMessageAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        SendProcessor outputProcessor = new SendProcessor();
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
         Peer peer = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(peer, channel);
 
         Message message = new StatusMessage(new Status(peer.getId(), 1, 10));
@@ -291,10 +298,10 @@ public class MessageProcessorTest {
         Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
         Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peer.getId()));
 
-        Assert.assertEquals(11, channel.getMessages().size());
+        Assert.assertEquals(11, channel.getPeerMessages().size());
 
         for (int k = 0; k < 11; k++) {
-            Message msg = channel.getMessages().get(k);
+            Message msg = channel.getPeerMessages().get(k).getValue();
 
             Assert.assertNotNull(msg);
             Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER, msg.getMessageType());
@@ -309,12 +316,12 @@ public class MessageProcessorTest {
     public void processStatusMessageTwiceWithSameHeightAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        SendProcessor outputProcessor = new SendProcessor();
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
         Peer peer = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(peer, channel);
 
         Message message = new StatusMessage(new Status(peer.getId(), 1, 10));
@@ -325,10 +332,10 @@ public class MessageProcessorTest {
         Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
         Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peer.getId()));
 
-        Assert.assertEquals(11, channel.getMessages().size());
+        Assert.assertEquals(11, channel.getPeerMessages().size());
 
         for (int k = 0; k < 11; k++) {
-            Message msg = channel.getMessages().get(k);
+            Message msg = channel.getPeerMessages().get(k).getValue();
 
             Assert.assertNotNull(msg);
             Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER, msg.getMessageType());
@@ -343,12 +350,12 @@ public class MessageProcessorTest {
     public void processStatusMessageTwiceWithDifferentHeightsAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        SendProcessor outputProcessor = new SendProcessor();
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
         Peer peer = FactoryHelper.createPeer();
-        SimpleOutputChannel channel = new SimpleOutputChannel();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(peer, channel);
 
         Message message1 = new StatusMessage(new Status(peer.getId(), 1, 5));
@@ -360,10 +367,10 @@ public class MessageProcessorTest {
         Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
         Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(peer.getId()));
 
-        Assert.assertEquals(11, channel.getMessages().size());
+        Assert.assertEquals(11, channel.getPeerMessages().size());
 
         for (int k = 0; k < 11; k++) {
-            Message msg = channel.getMessages().get(k);
+            Message msg = channel.getPeerMessages().get(k).getValue();
 
             Assert.assertNotNull(msg);
             Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER, msg.getMessageType());

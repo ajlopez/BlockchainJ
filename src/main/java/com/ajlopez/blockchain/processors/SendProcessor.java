@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.net.MessageChannel;
 import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.PeerId;
@@ -14,9 +15,14 @@ import java.util.Map;
  * Created by ajlopez on 26/03/2018.
  */
 public class SendProcessor {
-    private Map<PeerId, OutputChannel> channelsByPeer = new HashMap<>();
+    private final Peer sender;
+    private Map<PeerId, MessageChannel> channelsByPeer = new HashMap<>();
 
-    public void connectToPeer(Peer receiver, OutputChannel channel) {
+    public SendProcessor(Peer sender) {
+        this.sender = sender;
+    }
+
+    public void connectToPeer(Peer receiver, MessageChannel channel) {
         channelsByPeer.put(receiver.getId(), channel);
     }
 
@@ -29,12 +35,12 @@ public class SendProcessor {
     }
 
     public boolean postMessage(Peer receiver, Message message) {
-        OutputChannel channel = channelsByPeer.get(receiver.getId());
+        MessageChannel channel = channelsByPeer.get(receiver.getId());
 
         if (channel == null)
             return false;
 
-        channel.postMessage(message);
+        channel.postMessage(this.sender, message);
 
         return true;
     }
@@ -42,10 +48,10 @@ public class SendProcessor {
     public int postMessage(Message message) {
         int sent = 0;
 
-        Collection<OutputChannel> channels = this.channelsByPeer.values();
+        Collection<MessageChannel> channels = this.channelsByPeer.values();
 
-        for (OutputChannel channel: channels) {
-            channel.postMessage(message);
+        for (MessageChannel channel: channels) {
+            channel.postMessage(this.sender, message);
             sent++;
         }
 
@@ -55,11 +61,11 @@ public class SendProcessor {
     public int postMessage(Message message, List<PeerId> toSkip) {
         int sent = 0;
 
-        for (Map.Entry<PeerId, OutputChannel> entry: this.channelsByPeer.entrySet()) {
+        for (Map.Entry<PeerId, MessageChannel> entry: this.channelsByPeer.entrySet()) {
             if (toSkip.contains(entry.getKey()))
                 continue;
 
-            entry.getValue().postMessage(message);
+            entry.getValue().postMessage(this.sender, message);
 
             sent++;
         }

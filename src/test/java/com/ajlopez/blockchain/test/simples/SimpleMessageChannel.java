@@ -29,4 +29,11 @@ public class SimpleMessageChannel implements MessageChannel {
     public List<Pair<Peer, Message>> getPeerMessages() {
         return this.peerMessages;
     }
+
+    public Message getLastMessage() {
+        if (this.peerMessages.isEmpty())
+            return null;
+
+        return this.peerMessages.get(this.peerMessages.size() - 1).getValue();
+    }
 }

@@ -7,18 +7,13 @@ import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.net.peers.PeerConnection;
-import com.ajlopez.blockchain.test.PeerToPeerOutputChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.test.utils.NodesHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 /**
  * Created by ajlopez on 14/10/2018.
@@ -142,9 +137,7 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        PeerToPeerOutputChannel channel = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2);
-
-        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel);
+        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), nodeProcessor2);
 
         Block genesis = new Block(0, null);
         Block block1 = new Block(1, genesis.getHash());
@@ -211,11 +204,8 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        PeerToPeerOutputChannel channel1 = new PeerToPeerOutputChannel(nodeProcessor2.getPeer(), nodeProcessor1);
-        PeerToPeerOutputChannel channel2 = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2);
-
-        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel2);
-        nodeProcessor2.connectTo(nodeProcessor1.getPeer(), channel1);
+        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), nodeProcessor2);
+        nodeProcessor2.connectTo(nodeProcessor1.getPeer(), nodeProcessor1);
 
         for (Block block : blocks)
             Assert.assertTrue(blockChain1.connectBlock(block));
@@ -291,13 +281,9 @@ public class NodeProcessorTest {
         BlockChain blockChain3 = new BlockChain();
         NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(blockChain3);
 
-        PeerToPeerOutputChannel channel1 = new PeerToPeerOutputChannel(nodeProcessor2.getPeer(), nodeProcessor1);
-        PeerToPeerOutputChannel channel2 = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2);
-        PeerToPeerOutputChannel channel3 = new PeerToPeerOutputChannel(nodeProcessor2.getPeer(), nodeProcessor3);
-
-        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel2);
-        nodeProcessor2.connectTo(nodeProcessor1.getPeer(), channel1);
-        nodeProcessor2.connectTo(nodeProcessor3.getPeer(), channel3);
+        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), nodeProcessor2);
+        nodeProcessor2.connectTo(nodeProcessor1.getPeer(), nodeProcessor1);
+        nodeProcessor2.connectTo(nodeProcessor3.getPeer(), nodeProcessor3);
 
         for (Block block : blocks)
             Assert.assertTrue(blockChain1.connectBlock(block));
@@ -405,9 +391,7 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor();
 
-        PeerToPeerOutputChannel channel = new PeerToPeerOutputChannel(nodeProcessor1.getPeer(), nodeProcessor2);
-
-        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), channel);
+        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), nodeProcessor2);
 
         nodeProcessor1.postMessage(null, message);
 

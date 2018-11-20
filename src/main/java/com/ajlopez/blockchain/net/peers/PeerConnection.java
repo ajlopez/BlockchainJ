@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by ajlopez on 19/11/2018.
  */
-public class PeerConnection implements OutputChannel {
+public class PeerConnection implements MessageChannel {
     private final Peer sender;
     private final MessageInputStream messageInputStream;
     private final MessageOutputStream messageOutputStream;
@@ -71,7 +71,7 @@ public class PeerConnection implements OutputChannel {
         }
     }
 
-    public void postMessage(Message message) {
+    public void postMessage(Peer peer, Message message) {
         if (!stopped)
             this.queue.add(message);
     }
