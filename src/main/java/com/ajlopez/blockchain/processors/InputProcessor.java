@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
-import com.ajlopez.blockchain.net.InputChannel;
+import com.ajlopez.blockchain.net.MessageChannel;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by ajlopez on 28/01/2018.
  */
-public class InputProcessor implements Runnable, InputChannel {
+public class InputProcessor implements Runnable, MessageChannel {
     private MessageProcessor messageProcessor;
     private BlockingQueue<MessageTask> messageTaskQueue = new LinkedBlockingDeque<>();
     private boolean stopped = false;

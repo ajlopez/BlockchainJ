@@ -3,7 +3,7 @@ package com.ajlopez.blockchain.net.peers;
 import com.ajlopez.blockchain.net.messages.GetBlockByHashMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.MessageEncoder;
-import com.ajlopez.blockchain.test.simples.SimpleInputChannel;
+import com.ajlopez.blockchain.test.simples.SimpleMessageChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -31,7 +31,7 @@ public class PeerConnectionTest {
         Peer peer1 = FactoryHelper.createPeer();
         Peer peer2 = FactoryHelper.createPeer();
 
-        SimpleInputChannel inputChannel = new SimpleInputChannel();
+        SimpleMessageChannel inputChannel = new SimpleMessageChannel();
 
         PeerConnection peerConnection1 = new PeerConnection(peer2, inputStream1, outputStream2, null);
         PeerConnection peerConnection2 = new PeerConnection(peer1, inputStream2, outputStream1, inputChannel);

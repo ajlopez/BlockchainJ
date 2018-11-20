@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.net.peers;
 
-import com.ajlopez.blockchain.net.InputChannel;
+import com.ajlopez.blockchain.net.MessageChannel;
 import com.ajlopez.blockchain.net.OutputChannel;
 import com.ajlopez.blockchain.net.messages.Message;
 
@@ -16,13 +16,13 @@ public class PeerConnection implements OutputChannel {
     private final Peer sender;
     private final MessageInputStream messageInputStream;
     private final MessageOutputStream messageOutputStream;
-    private final InputChannel inputChannel;
+    private final MessageChannel inputChannel;
 
     private Queue<Message> queue = new ConcurrentLinkedQueue<>();
     private boolean started;
     private boolean stopped;
 
-    public PeerConnection(Peer sender, InputStream inputStream, OutputStream outputStream, InputChannel inputChannel) {
+    public PeerConnection(Peer sender, InputStream inputStream, OutputStream outputStream, MessageChannel inputChannel) {
         this.sender = sender;
         this.messageInputStream = new MessageInputStream(new PacketInputStream(inputStream));
         this.messageOutputStream = new MessageOutputStream(new PacketOutputStream(outputStream));

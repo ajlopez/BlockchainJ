@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.test.simples;
 
-import com.ajlopez.blockchain.net.InputChannel;
+import com.ajlopez.blockchain.net.MessageChannel;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 import javafx.util.Pair;
@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 /**
  * Created by ajlopez on 19/11/2018.
  */
-public class SimpleInputChannel implements InputChannel {
+public class SimpleMessageChannel implements MessageChannel {
     private List<Consumer<Pair<Peer, Message>>> consumers = new ArrayList<>();
     private List<Pair<Peer, Message>> peerMessages = new ArrayList<>();
 
