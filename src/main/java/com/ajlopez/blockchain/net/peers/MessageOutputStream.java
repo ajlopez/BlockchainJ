@@ -15,8 +15,10 @@ public class MessageOutputStream {
         this.packetOutputStream = packetOutputStream;
     }
 
-    public void writeMessage(Message message) {
+    public void writeMessage(Peer sender, Message message) {
         byte[] bytes = MessageEncoder.encode(message);
+
+        // TODO sign packet using sender keys
 
         this.packetOutputStream.writePacket(bytes);
     }

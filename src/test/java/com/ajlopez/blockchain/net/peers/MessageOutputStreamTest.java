@@ -26,7 +26,7 @@ public class MessageOutputStreamTest {
         PacketOutputStream packetOutputStream = new PacketOutputStream(outputStream);
         MessageOutputStream messageOutputStream = new MessageOutputStream(packetOutputStream);
 
-        messageOutputStream.writeMessage(message);
+        messageOutputStream.writeMessage(null, message);
 
         outputStream.close();
 

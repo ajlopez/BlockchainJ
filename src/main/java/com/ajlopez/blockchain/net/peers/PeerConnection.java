@@ -58,7 +58,7 @@ public class PeerConnection implements MessageChannel {
                 Message message = queue.poll();
 
                 if (message != null)
-                    this.messageOutputStream.writeMessage(message);
+                    this.messageOutputStream.writeMessage(this.sender, message);
                 else
                     Thread.sleep(100);
             }
