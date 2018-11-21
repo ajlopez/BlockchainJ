@@ -96,32 +96,25 @@ public class MessageProcessorTest {
     @Test
     public void processGetBlockByHashMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
+        Peer originalSender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createPeer();
+        SendProcessor sendProcessor = new SendProcessor(sender);
 
         Block block = new Block(0, null);
         Message blockMessage = new BlockMessage(block);
 
-        MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
+        MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, sendProcessor);
 
         processor.processMessage(blockMessage, null);
 
         Message message = new GetBlockByHashMessage(block.getHash());
 
-        Peer sender = FactoryHelper.createPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
-        outputProcessor.connectToPeer(sender, channel);
+        sendProcessor.connectToPeer(originalSender, channel);
 
-        processor.processMessage(message, sender);
+        processor.processMessage(message, originalSender);
 
-        Message result = channel.getLastMessage();
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(MessageType.BLOCK, result.getMessageType());
-
-        BlockMessage bmessage = (BlockMessage)result;
-
-        Assert.assertNotNull(bmessage.getBlock());
-        Assert.assertEquals(block.getHash(), bmessage.getBlock().getHash());
+        expectedMessage(channel, sender, blockMessage);
     }
 
     @Test
