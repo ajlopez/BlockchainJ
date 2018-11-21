@@ -55,21 +55,7 @@ public class MessageProcessorTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getHash(), result.getHash());
 
-        List<Pair<Peer,Message>> peerMessages = channel.getPeerMessages();
-
-        Assert.assertNotNull(peerMessages);
-        Assert.assertEquals(1, peerMessages.size());
-
-        Peer senderPeer = peerMessages.get(0).getKey();
-
-        Assert.assertNotNull(sender);
-        Assert.assertEquals(sender.getId(), senderPeer.getId());
-
-        Message outputMessage = peerMessages.get(0).getValue();
-
-        Assert.assertNotNull(outputMessage);
-        Assert.assertEquals(MessageType.BLOCK, outputMessage.getMessageType());
-        Assert.assertEquals(block, ((BlockMessage)outputMessage).getBlock());
+        expectedMessage(channel, sender, message);
     }
 
     @Test
@@ -102,23 +88,9 @@ public class MessageProcessorTest {
         List<Pair<Peer, Message>> peerMessages1 = channel1.getPeerMessages();
 
         Assert.assertNotNull(peerMessages1);
-        Assert.assertEquals(0, peerMessages1.size());
+        Assert.assertTrue(peerMessages1.isEmpty());
 
-        List<Pair<Peer, Message>> peerMessages2 = channel2.getPeerMessages();
-
-        Assert.assertNotNull(peerMessages2);
-        Assert.assertEquals(1, peerMessages2.size());
-
-        Peer senderPeer = peerMessages2.get(0).getKey();
-
-        Assert.assertNotNull(senderPeer);
-        Assert.assertEquals(sender.getId(), senderPeer.getId());
-
-        Message outputMessage = peerMessages2.get(0).getValue();
-
-        Assert.assertNotNull(outputMessage);
-        Assert.assertEquals(MessageType.BLOCK, outputMessage.getMessageType());
-        Assert.assertEquals(block, ((BlockMessage)outputMessage).getBlock());
+        expectedMessage(channel2, sender, message);
     }
 
     @Test
@@ -379,5 +351,22 @@ public class MessageProcessorTest {
 
             Assert.assertEquals(k, gmsg.getNumber());
         }
+    }
+
+    private static void expectedMessage(SimpleMessageChannel channel, Peer expectedSender, Message expectedMessage) {
+        List<Pair<Peer,Message>> peerMessages = channel.getPeerMessages();
+
+        Assert.assertNotNull(peerMessages);
+        Assert.assertEquals(1, peerMessages.size());
+
+        Peer sender = peerMessages.get(0).getKey();
+
+        Assert.assertNotNull(sender);
+        Assert.assertEquals(expectedSender.getId(), sender.getId());
+
+        Message message = peerMessages.get(0).getValue();
+
+        Assert.assertNotNull(message);
+        Assert.assertArrayEquals(MessageEncoder.encode(expectedMessage), MessageEncoder.encode(message));
     }
 }
