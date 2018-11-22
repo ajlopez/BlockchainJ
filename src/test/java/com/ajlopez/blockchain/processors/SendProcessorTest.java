@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.net.messages.MessageEncoder;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.Message;
@@ -7,10 +8,12 @@ import com.ajlopez.blockchain.net.messages.StatusMessage;
 import com.ajlopez.blockchain.test.simples.SimpleMessageChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
+import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by ajlopez on 06/04/2018.
@@ -52,7 +55,8 @@ public class SendProcessorTest {
 
     @Test
     public void connectToPeerAndPostMessage() {
-        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
+        Peer sender = FactoryHelper.createPeer();
+        SendProcessor processor = new SendProcessor(sender);
         Peer peer = FactoryHelper.createPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
 
@@ -60,7 +64,17 @@ public class SendProcessorTest {
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
         Assert.assertTrue(processor.postMessage(peer, message));
-        Assert.assertFalse(channel.getPeerMessages().isEmpty());
+
+        List<Pair<Peer, Message>> peerMessages = channel.getPeerMessages();
+
+        Assert.assertNotNull(peerMessages);
+        Assert.assertFalse(peerMessages.isEmpty());
+        Assert.assertEquals(1, peerMessages.size());
+
+        Pair<Peer, Message> peerMessage = peerMessages.get(0);
+
+        Assert.assertEquals(sender, peerMessage.getKey());
+        Assert.assertArrayEquals(MessageEncoder.encode(message), MessageEncoder.encode(peerMessage.getValue()));
     }
 
     @Test
