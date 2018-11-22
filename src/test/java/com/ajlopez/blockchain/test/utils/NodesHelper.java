@@ -69,8 +69,8 @@ public class NodesHelper {
         connections.add(connection1);
         connections.add(connection2);
 
-        node1.connectTo(node2.getPeer(), connection2);
-        node2.connectTo(node1.getPeer(), connection1);
+        node1.connectTo(connection2);
+        node2.connectTo(connection1);
 
         return connections;
     }

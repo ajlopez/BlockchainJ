@@ -46,7 +46,7 @@ public class TcpPeerServer {
                 Peer peer = Peer.createRandomPeer();
 
                 PeerConnection peerConnection = new PeerConnection(peer, clientSocket.getInputStream(), clientSocket.getOutputStream(), this.peerNode);
-                peerNode.connectTo(peer, peerConnection);
+                peerNode.connectTo(peerConnection);
                 peerConnection.start();
             }
         }

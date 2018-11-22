@@ -54,7 +54,7 @@ public class NodeProcessor implements PeerNode {
         return this.transactionPool.getTransactions();
     }
 
-    public void connectTo(Peer peer, MessageChannel channel) {
-        this.sendProcessor.connectToPeer(peer, channel);
+    public void connectTo(PeerNode node) {
+        this.sendProcessor.connectToPeer(node.getPeer(), node);
     }
 }

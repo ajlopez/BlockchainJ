@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by ajlopez on 19/11/2018.
  */
-public class PeerConnection implements MessageChannel {
-    private final Peer sender;
+public class PeerConnection implements PeerNode {
+    private final Peer peer;
     private final MessageInputStream messageInputStream;
     private final MessageOutputStream messageOutputStream;
     private final MessageChannel inputChannel;
@@ -21,11 +21,19 @@ public class PeerConnection implements MessageChannel {
     private boolean started;
     private boolean stopped;
 
-    public PeerConnection(Peer sender, InputStream inputStream, OutputStream outputStream, MessageChannel inputChannel) {
-        this.sender = sender;
+    public PeerConnection(Peer peer, InputStream inputStream, OutputStream outputStream, MessageChannel inputChannel) {
+        this.peer = peer;
         this.messageInputStream = new MessageInputStream(new PacketInputStream(inputStream));
         this.messageOutputStream = new MessageOutputStream(new PacketOutputStream(outputStream));
         this.inputChannel = inputChannel;
+    }
+
+    public Peer getPeer() {
+        return this.peer;
+    }
+
+    public void connectTo(PeerNode node) {
+        // TODO rewiew if this methods is needed
     }
 
     public synchronized void start() {
@@ -45,7 +53,7 @@ public class PeerConnection implements MessageChannel {
     private void readProcess() {
         try {
             while (!this.stopped)
-                this.inputChannel.postMessage(this.sender, this.messageInputStream.readMessage());
+                this.inputChannel.postMessage(this.peer, this.messageInputStream.readMessage());
         }
         catch (Exception ex) {
             this.stopped = true;
@@ -58,7 +66,7 @@ public class PeerConnection implements MessageChannel {
                 Message message = queue.poll();
 
                 if (message != null)
-                    this.messageOutputStream.writeMessage(this.sender, message);
+                    this.messageOutputStream.writeMessage(this.peer, message);
                 else
                     Thread.sleep(100);
             }

@@ -137,7 +137,7 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), nodeProcessor2);
+        nodeProcessor1.connectTo(nodeProcessor2);
 
         Block genesis = new Block(0, null);
         Block block1 = new Block(1, genesis.getHash());
@@ -204,8 +204,8 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), nodeProcessor2);
-        nodeProcessor2.connectTo(nodeProcessor1.getPeer(), nodeProcessor1);
+        nodeProcessor1.connectTo(nodeProcessor2);
+        nodeProcessor2.connectTo(nodeProcessor1);
 
         for (Block block : blocks)
             Assert.assertTrue(blockChain1.connectBlock(block));
@@ -281,9 +281,9 @@ public class NodeProcessorTest {
         BlockChain blockChain3 = new BlockChain();
         NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(blockChain3);
 
-        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), nodeProcessor2);
-        nodeProcessor2.connectTo(nodeProcessor1.getPeer(), nodeProcessor1);
-        nodeProcessor2.connectTo(nodeProcessor3.getPeer(), nodeProcessor3);
+        nodeProcessor1.connectTo(nodeProcessor2);
+        nodeProcessor2.connectTo(nodeProcessor1);
+        nodeProcessor2.connectTo(nodeProcessor3);
 
         for (Block block : blocks)
             Assert.assertTrue(blockChain1.connectBlock(block));
@@ -391,7 +391,7 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor();
 
-        nodeProcessor1.connectTo(nodeProcessor2.getPeer(), nodeProcessor2);
+        nodeProcessor1.connectTo(nodeProcessor2);
 
         nodeProcessor1.postMessage(null, message);
 
