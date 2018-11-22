@@ -65,21 +65,13 @@ public class SendProcessorTest {
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
         Assert.assertTrue(processor.postMessage(peer, message));
 
-        List<Pair<Peer, Message>> peerMessages = channel.getPeerMessages();
-
-        Assert.assertNotNull(peerMessages);
-        Assert.assertFalse(peerMessages.isEmpty());
-        Assert.assertEquals(1, peerMessages.size());
-
-        Pair<Peer, Message> peerMessage = peerMessages.get(0);
-
-        Assert.assertEquals(sender, peerMessage.getKey());
-        Assert.assertArrayEquals(MessageEncoder.encode(message), MessageEncoder.encode(peerMessage.getValue()));
+        MessageProcessorTest.expectedMessage(channel, sender, message);
     }
 
     @Test
     public void connectToPeersAndPostMessage() {
-        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
+        Peer sender = FactoryHelper.createPeer();
+        SendProcessor processor = new SendProcessor(sender);
         Peer peer1 = FactoryHelper.createPeer();
         SimpleMessageChannel channel1 = new SimpleMessageChannel();
         Peer peer2 = FactoryHelper.createPeer();
@@ -92,13 +84,14 @@ public class SendProcessorTest {
 
         Assert.assertEquals(2, processor.postMessage(message));
 
-        Assert.assertFalse(channel1.getPeerMessages().isEmpty());
-        Assert.assertFalse(channel2.getPeerMessages().isEmpty());
+        MessageProcessorTest.expectedMessage(channel1, sender, message);
+        MessageProcessorTest.expectedMessage(channel2, sender, message);
     }
 
     @Test
     public void connectToPeersAndPostMessageSkippingOne() {
-        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
+        Peer sender = FactoryHelper.createPeer();
+        SendProcessor processor = new SendProcessor(sender);
         Peer peer1 = FactoryHelper.createPeer();
         SimpleMessageChannel channel1 = new SimpleMessageChannel();
         Peer peer2 = FactoryHelper.createPeer();
@@ -111,13 +104,14 @@ public class SendProcessorTest {
 
         Assert.assertEquals(1, processor.postMessage(message, Collections.singletonList(peer2.getId())));
 
-        Assert.assertFalse(channel1.getPeerMessages().isEmpty());
+        MessageProcessorTest.expectedMessage(channel1, sender, message);
         Assert.assertTrue(channel2.getPeerMessages().isEmpty());
     }
 
     @Test
     public void connectToPeerAndPostMessageToAnotherPeer() {
-        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
+        Peer sender = FactoryHelper.createPeer();
+        SendProcessor processor = new SendProcessor(sender);
         Peer peer = FactoryHelper.createPeer();
         Peer peer2 = FactoryHelper.createPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();

@@ -340,7 +340,7 @@ public class MessageProcessorTest {
         }
     }
 
-    private static void expectedMessage(SimpleMessageChannel channel, Peer expectedSender, Message expectedMessage) {
+    public static void expectedMessage(SimpleMessageChannel channel, Peer expectedSender, Message expectedMessage) {
         List<Pair<Peer,Message>> peerMessages = channel.getPeerMessages();
 
         Assert.assertNotNull(peerMessages);
