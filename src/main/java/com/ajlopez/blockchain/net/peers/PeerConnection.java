@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.net.peers;
 
 import com.ajlopez.blockchain.net.MessageChannel;
 import com.ajlopez.blockchain.net.messages.Message;
+import javafx.util.Pair;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,7 +18,7 @@ public class PeerConnection implements PeerNode {
     private final MessageOutputStream messageOutputStream;
     private final MessageChannel inputChannel;
 
-    private Queue<Message> queue = new ConcurrentLinkedQueue<>();
+    private Queue<Pair<Peer, Message>> queue = new ConcurrentLinkedQueue<>();
     private boolean started;
     private boolean stopped;
 
@@ -63,10 +64,10 @@ public class PeerConnection implements PeerNode {
     private void writeProcess() {
         try {
             while (!this.stopped) {
-                Message message = queue.poll();
+                Pair<Peer, Message> peerMessage = queue.poll();
 
-                if (message != null)
-                    this.messageOutputStream.writeMessage(this.peer, message);
+                if (peerMessage != null)
+                    this.messageOutputStream.writeMessage(peerMessage.getKey(), peerMessage.getValue());
                 else
                     Thread.sleep(100);
             }
@@ -80,6 +81,6 @@ public class PeerConnection implements PeerNode {
 
     public void postMessage(Peer peer, Message message) {
         if (!stopped)
-            this.queue.add(message);
+            this.queue.add(new Pair(peer, message));
     }
 }
