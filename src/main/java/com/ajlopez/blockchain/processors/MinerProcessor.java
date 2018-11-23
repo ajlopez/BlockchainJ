@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 /**
  * Created by ajlopez on 24/01/2018.
  */
-public class MinerProcessor implements Runnable {
+public class MinerProcessor {
     private BlockProcessor blockProcessor;
     private TransactionPool transactionPool;
     private List<Consumer<Block>> newMinedBlockConsumers = new ArrayList<>();
@@ -40,14 +40,14 @@ public class MinerProcessor implements Runnable {
     }
 
     public void start() {
-        new Thread(this).start();
+        new Thread(this::mineProcess).start();
     }
 
     public void stop() {
         this.stopped = true;
     }
 
-    public void run() {
+    public void mineProcess() {
         while (!this.stopped) {
             try {
                 this.process();
