@@ -1,11 +1,9 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -14,7 +12,7 @@ import java.util.function.Consumer;
 public class MinerProcessor {
     private BlockProcessor blockProcessor;
     private TransactionPool transactionPool;
-    private List<Consumer<Block>> newMinedBlockConsumers = new ArrayList<>();
+    private List<Consumer<Block>> minedBlockConsumers = new ArrayList<>();
     private boolean stopped = false;
 
     public MinerProcessor(BlockProcessor blockProcessor, TransactionPool transactionPool) {
@@ -28,11 +26,11 @@ public class MinerProcessor {
 
         this.blockProcessor.processBlock(newBlock);
 
-        emitNewMinedBlock(newBlock);
+        emitMinerBlock(newBlock);
     }
 
-    public void onNewMinedBlock(Consumer<Block> consumer) {
-        this.newMinedBlockConsumers.add(consumer);
+    public void onMinedBlock(Consumer<Block> consumer) {
+        this.minedBlockConsumers.add(consumer);
     }
 
     public Block mineBlock(Block parent, TransactionPool txpool) {
@@ -58,7 +56,7 @@ public class MinerProcessor {
         }
     }
 
-    private void emitNewMinedBlock(Block block) {
-        this.newMinedBlockConsumers.forEach(a -> a.accept(block));
+    private void emitMinerBlock(Block block) {
+        this.minedBlockConsumers.forEach(a -> a.accept(block));
     }
 }

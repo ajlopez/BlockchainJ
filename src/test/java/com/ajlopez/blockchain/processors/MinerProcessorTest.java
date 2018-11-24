@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -112,7 +111,7 @@ public class MinerProcessorTest {
 
         Semaphore sem = new Semaphore(0, true);
 
-        processor.onNewMinedBlock((block) -> {
+        processor.onMinedBlock((block) -> {
             sem.release();
         });
 
@@ -151,7 +150,7 @@ public class MinerProcessorTest {
 
         Semaphore sem = new Semaphore(0, true);
 
-        processor.onNewMinedBlock((block) -> {
+        processor.onMinedBlock((block) -> {
             sem.release();
         });
 
