@@ -3,6 +3,10 @@ package com.ajlopez.blockchain.bc;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Hash;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 /**
  * Created by ajlopez on 15/08/2017.
  */
@@ -12,6 +16,8 @@ public class BlockChain {
     private Block best;
     private BlockHashStore blocksByHash = new BlockHashStore();
     private BlockNumberStore blocksByNumber = new BlockNumberStore();
+
+    private List<Consumer<Block>> blockConsumers = new ArrayList<>();
 
     public Block getBestBlock() {
         return this.best;
@@ -36,7 +42,18 @@ public class BlockChain {
         if (this.best == null || block.getNumber() > this.best.getNumber())
             this.saveBestBlock(block);
 
+        this.emitBlock(block);
+
         return true;
+    }
+
+    private void emitBlock(Block block) {
+        for (Consumer<Block> consumer: this.blockConsumers)
+            consumer.accept(block);
+    }
+
+    public void onBlock(Consumer<Block> consumer) {
+        this.blockConsumers.add(consumer);
     }
 
     public Block getBlockByHash(Hash hash) {

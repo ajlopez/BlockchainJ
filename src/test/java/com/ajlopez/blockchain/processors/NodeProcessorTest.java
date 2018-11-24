@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by ajlopez on 14/10/2018.
@@ -219,6 +220,52 @@ public class NodeProcessorTest {
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
         NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
+
+        Block result1 = blockChain1.getBestBlock();
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(bestBlock.getHash(), result1.getHash());
+
+        Block result2 = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(bestBlock.getHash(), result2.getHash());
+    }
+
+    @Test
+    public void synchronizeTwoNodesCheckingOnBlock() throws InterruptedException {
+        List<Block> blocks = FactoryHelper.createBlocks(9);
+        Block bestBlock = blocks.get(9);
+
+        BlockChain blockChain1 = new BlockChain();
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+        BlockChain blockChain2 = new BlockChain();
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
+
+        nodeProcessor1.connectTo(nodeProcessor2);
+        nodeProcessor2.connectTo(nodeProcessor1);
+
+        Semaphore semaphore = new Semaphore(0, true);
+
+        blockChain2.onBlock(blk -> {
+            if (blk.getNumber() == bestBlock.getNumber())
+                semaphore.release();
+        });
+
+        for (Block block : blocks)
+            Assert.assertTrue(blockChain1.connectBlock(block));
+
+        for (int k = 0; k < 10; k++)
+            Assert.assertNotNull(blockChain1.getBlockByNumber(k));
+
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
+        StatusMessage statusMessage = new StatusMessage(status);
+
+        nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
+
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
+
+        semaphore.acquire();
 
         Block result1 = blockChain1.getBestBlock();
 
