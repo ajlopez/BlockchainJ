@@ -67,9 +67,7 @@ public class MinerProcessorTest {
 
     @Test
     public void processBlockWithOneTransaction() {
-        Block genesis = new Block(0, null);
-        BlockChain blockChain = new BlockChain();
-        Assert.assertTrue(blockChain.connectBlock(genesis));
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         Transaction tx = FactoryHelper.createTransaction(100);
 
@@ -82,7 +80,7 @@ public class MinerProcessorTest {
 
         Assert.assertNotNull(block);
         Assert.assertEquals(1, block.getNumber());
-        Assert.assertEquals(genesis.getHash(), block.getParentHash());
+        Assert.assertEquals(blockChain.getBlockByNumber(0).getHash(), block.getParentHash());
 
         List<Transaction> txs = block.getTransactions();
 
@@ -96,9 +94,7 @@ public class MinerProcessorTest {
 
     @Test
     public void mineOneBlockUsingStartAndStop() throws InterruptedException {
-        Block genesis = new Block(0, null);
-        BlockChain blockChain = new BlockChain();
-        Assert.assertTrue(blockChain.connectBlock(genesis));
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         Transaction tx = FactoryHelper.createTransaction(100);
 
@@ -129,7 +125,7 @@ public class MinerProcessorTest {
 
         Assert.assertNotNull(block);
         Assert.assertEquals(1, block.getNumber());
-        Assert.assertEquals(genesis.getHash(), block.getParentHash());
+        Assert.assertEquals(blockChain.getBlockByNumber(0).getHash(), block.getParentHash());
 
         List<Transaction> txs = block.getTransactions();
 
@@ -143,9 +139,7 @@ public class MinerProcessorTest {
 
     @Test
     public void mineTwoBlocksUsingStartAndStop() throws InterruptedException {
-        Block genesis = new Block(0, null);
-        BlockChain blockChain = new BlockChain();
-        Assert.assertTrue(blockChain.connectBlock(genesis));
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         TransactionPool transactionPool = new TransactionPool();
 

@@ -26,6 +26,14 @@ public class FactoryHelper {
         return new Transaction(sender, receiver, bivalue, nonce);
     }
 
+    public static BlockChain createBlockChainWithGenesis() {
+        Block genesis = new Block(0, null);
+        BlockChain blockChain = new BlockChain();
+        blockChain.connectBlock(genesis);
+
+        return blockChain;
+    }
+
     public static BlockProcessor createBlockProcessor() {
         return new BlockProcessor(new BlockChain(), new OrphanBlocks());
     }
