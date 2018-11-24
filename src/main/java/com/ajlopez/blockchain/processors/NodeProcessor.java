@@ -33,11 +33,11 @@ public class NodeProcessor implements PeerNode {
         return this.peer;
     }
 
-    public void start() {
+    public void startMessageProcessing() {
         this.receiveProcessor.start();
     }
 
-    public void stop() {
+    public void stopMessageProcessing() {
         this.receiveProcessor.stop();
     }
 

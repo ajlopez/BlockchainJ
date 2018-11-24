@@ -32,13 +32,13 @@ public class NodesHelper {
         }
 
         for (NodeProcessor nodeProcessor : nodeProcessors)
-            nodeProcessor.start();
+            nodeProcessor.startMessageProcessing();
 
         for (Semaphore semaphore : semaphores)
             semaphore.acquire();
 
         for (NodeProcessor nodeProcessor : nodeProcessors)
-            nodeProcessor.stop();
+            nodeProcessor.stopMessageProcessing();
     }
 
     public static List<PeerConnection> connectNodeProcessors(NodeProcessor ...nodeProcessors) throws InterruptedException, IOException {
