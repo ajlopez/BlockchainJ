@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.Transaction;
@@ -8,6 +9,7 @@ import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -66,20 +68,17 @@ public class MinerProcessorTest {
     @Test
     public void processBlockWithOneTransaction() {
         Block genesis = new Block(0, null);
+        BlockChain blockChain = new BlockChain();
+        Assert.assertTrue(blockChain.connectBlock(genesis));
 
         Transaction tx = FactoryHelper.createTransaction(100);
 
         TransactionPool transactionPool = new TransactionPool();
         transactionPool.addTransaction(tx);
 
-        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        blockProcessor.processBlock(genesis);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool);
 
-        MinerProcessor processor = new MinerProcessor(blockProcessor, transactionPool);
-
-        processor.process();
-
-        Block block = blockProcessor.getBestBlock();
+        Block block = processor.process();
 
         Assert.assertNotNull(block);
         Assert.assertEquals(1, block.getNumber());
@@ -98,20 +97,22 @@ public class MinerProcessorTest {
     @Test
     public void mineOneBlockUsingStartAndStop() throws InterruptedException {
         Block genesis = new Block(0, null);
+        BlockChain blockChain = new BlockChain();
+        Assert.assertTrue(blockChain.connectBlock(genesis));
 
         Transaction tx = FactoryHelper.createTransaction(100);
 
         TransactionPool transactionPool = new TransactionPool();
         transactionPool.addTransaction(tx);
 
-        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        blockProcessor.processBlock(genesis);
-
-        MinerProcessor processor = new MinerProcessor(blockProcessor, transactionPool);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool);
 
         Semaphore sem = new Semaphore(0, true);
 
-        processor.onMinedBlock((block) -> {
+        List<Block> minedBlocks = new ArrayList<>();
+
+        processor.onMinedBlock((blk) -> {
+            minedBlocks.add(blk);
             sem.release();
         });
 
@@ -121,7 +122,10 @@ public class MinerProcessorTest {
 
         processor.stop();
 
-        Block block = blockProcessor.getBestBlock();
+        Assert.assertFalse(minedBlocks.isEmpty());
+        Assert.assertEquals(1, minedBlocks.size());
+
+        Block block = minedBlocks.get(0);
 
         Assert.assertNotNull(block);
         Assert.assertEquals(1, block.getNumber());
@@ -140,17 +144,19 @@ public class MinerProcessorTest {
     @Test
     public void mineTwoBlocksUsingStartAndStop() throws InterruptedException {
         Block genesis = new Block(0, null);
+        BlockChain blockChain = new BlockChain();
+        Assert.assertTrue(blockChain.connectBlock(genesis));
 
         TransactionPool transactionPool = new TransactionPool();
 
-        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        blockProcessor.processBlock(genesis);
-
-        MinerProcessor processor = new MinerProcessor(blockProcessor, transactionPool);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool);
 
         Semaphore sem = new Semaphore(0, true);
 
+        List<Block> minedBlocks = new ArrayList<>();
+
         processor.onMinedBlock((block) -> {
+            minedBlocks.add(block);
             sem.release();
         });
 
@@ -161,10 +167,18 @@ public class MinerProcessorTest {
 
         processor.stop();
 
-        Block block = blockProcessor.getBestBlock();
+        Assert.assertFalse(minedBlocks.isEmpty());
+        Assert.assertEquals(2, minedBlocks.size());
 
-        Assert.assertNotNull(block);
-        Assert.assertEquals(2, block.getNumber());
+        Block block1 = minedBlocks.get(0);
+
+        Assert.assertNotNull(block1);
+        Assert.assertEquals(1, block1.getNumber());
+
+        Block block2 = minedBlocks.get(1);
+
+        Assert.assertNotNull(block2);
+        Assert.assertEquals(1, block1.getNumber());
 
         Assert.assertTrue(transactionPool.getTransactions().isEmpty());
     }
