@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
@@ -16,6 +17,7 @@ public class NodeProcessor implements PeerNode {
     private ReceiveProcessor receiveProcessor;
     private SendProcessor sendProcessor;
     private TransactionPool transactionPool;
+    private MinerProcessor minerProcessor;
 
     public NodeProcessor(Peer peer, BlockChain blockChain) {
         this.peer = peer;
@@ -27,18 +29,30 @@ public class NodeProcessor implements PeerNode {
         this.sendProcessor = new SendProcessor(this.peer);
         MessageProcessor messageProcessor = new MessageProcessor(blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor);
         this.receiveProcessor = new ReceiveProcessor(messageProcessor);
+        this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool);
+        this.minerProcessor.onMinedBlock(blk -> {
+            this.postMessage(this.peer, new BlockMessage(blk));
+        });
     }
 
     public Peer getPeer() {
         return this.peer;
     }
 
-    public void startMessageProcessing() {
+    public void startMessagingProcess() {
         this.receiveProcessor.start();
     }
 
-    public void stopMessageProcessing() {
+    public void stopMessagingProcess() {
         this.receiveProcessor.stop();
+    }
+
+    public void startMiningProcess() {
+        this.minerProcessor.start();
+    }
+
+    public void stopMiningProcess() {
+        this.minerProcessor.stop();
     }
 
     public void onEmpty(Runnable action) {

@@ -49,6 +49,31 @@ public class NodeProcessorTest {
     }
 
     @Test
+    public void mineBlock() throws InterruptedException {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
+
+        Semaphore semaphore = new Semaphore(0, true);
+
+        blockChain.onBlock(blk -> {
+            semaphore.release();
+        });
+
+        nodeProcessor.startMessagingProcess();
+        nodeProcessor.startMiningProcess();
+
+        semaphore.acquire();
+
+        nodeProcessor.stopMiningProcess();
+        nodeProcessor.stopMessagingProcess();
+
+        Block block1 = blockChain.getBlockByNumber(1);
+
+        Assert.assertNotNull(block1);
+        Assert.assertEquals(1, block1.getNumber());
+    }
+
+    @Test
     public void processTenRepeatedBlockMessages() throws InterruptedException {
         BlockChain blockChain = new BlockChain();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
