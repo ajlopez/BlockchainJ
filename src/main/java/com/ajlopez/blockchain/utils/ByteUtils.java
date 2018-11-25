@@ -17,7 +17,7 @@ public class ByteUtils {
     public static byte[] unsignedLongToBytes(long value) {
         byte[] result = new byte[Long.BYTES];
 
-        for (int k = Long.BYTES; k-- > 0;) {
+        for (int k = Long.BYTES; value != 0 && k-- > 0;) {
             result[k] = (byte)(value & 0xff);
             value >>= 8;
         }
@@ -45,7 +45,7 @@ public class ByteUtils {
     }
 
     public static void unsignedIntegerToBytes(int value, byte[] bytes, int offset) {
-        for (int k = Integer.BYTES; k-- > 0;) {
+        for (int k = Integer.BYTES; value != 0 && k-- > 0;) {
             bytes[k + offset] = (byte)(value & 0xff);
             value >>= 8;
         }
@@ -88,7 +88,7 @@ public class ByteUtils {
     public static byte[] unsignedShortToBytes(short value) {
         byte[] result = new byte[Short.BYTES];
 
-        for (int k = Short.BYTES; k-- > 0;) {
+        for (int k = Short.BYTES; value != 0 && k-- > 0;) {
             result[k] = (byte)(value & 0xff);
             value >>= 8;
         }
