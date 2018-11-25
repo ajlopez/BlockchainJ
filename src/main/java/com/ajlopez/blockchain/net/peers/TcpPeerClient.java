@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.net.peers;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Random;
 
 /**
  * Created by ajlopez on 19/11/2018.
