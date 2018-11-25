@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.net.peers.Peer;
@@ -56,6 +57,32 @@ public class MessageProcessorTest {
         Assert.assertEquals(block.getHash(), result.getHash());
 
         expectedMessage(channel, sender, message);
+    }
+
+    @Test
+    public void processOrphanBlockMessageAndSendGetBlockByHashToSender() {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor(blockChain);
+
+        Peer sender = FactoryHelper.createPeer();
+        SendProcessor outputProcessor = new SendProcessor(sender);
+        SimpleMessageChannel channel = new SimpleMessageChannel();
+        outputProcessor.connectToPeer(sender, channel);
+
+        Block block1 = new Block(1, blockChain.getBestBlock().getHash());
+        Block block2 = new Block(2, block1.getHash());
+        Message message = new BlockMessage(block2);
+
+        MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
+
+        processor.processMessage(message, sender);
+
+        Block result = blockProcessor.getBestBlock();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(0, result.getNumber());
+
+        expectedMessage(channel, sender, new GetBlockByHashMessage(block1.getHash()));
     }
 
     @Test

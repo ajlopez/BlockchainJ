@@ -38,6 +38,10 @@ public class FactoryHelper {
         return new BlockProcessor(new BlockChain(), new OrphanBlocks());
     }
 
+    public static BlockProcessor createBlockProcessor(BlockChain blockChain) {
+        return new BlockProcessor(blockChain, new OrphanBlocks());
+    }
+
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor) {
         return new MessageProcessor(blockProcessor, null, null, null);
     }

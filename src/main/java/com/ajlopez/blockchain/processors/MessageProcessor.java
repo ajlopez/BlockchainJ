@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.*;
@@ -58,6 +59,15 @@ public class MessageProcessor {
 
             nprocessed++;
         }
+
+        if (nprocessed > 0)
+            return;
+
+        BlockHash blockHash = message.getBlock().getHash();
+        BlockHash ancestorHash = this.blockProcessor.getUnknownAncestorHash(blockHash);
+
+        if (ancestorHash != null && !ancestorHash.equals(blockHash))
+            this.outputProcessor.postMessage(sender, new GetBlockByHashMessage(ancestorHash));
     }
 
     private void processTransactionMessage(TransactionMessage message, Peer sender) {
