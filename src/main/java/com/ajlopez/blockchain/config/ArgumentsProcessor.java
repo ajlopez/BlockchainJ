@@ -1,7 +1,5 @@
 package com.ajlopez.blockchain.config;
 
-import com.ajlopez.blockchain.store.HashMapStore;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +8,7 @@ import java.util.Map;
  * Created by ajlopez on 25/11/2018.
  */
 public class ArgumentsProcessor {
-    private Map<String, Object> values = new HashMap();
+    private Map<String, String> values = new HashMap();
     private Map<String, Object> defaults = new HashMap<>();
     private Map<String, String> shortNames = new HashMap<>();
 
@@ -20,7 +18,8 @@ public class ArgumentsProcessor {
     }
 
     public void defineInteger(String shortName, String fullName, int defaultValue) {
-
+        this.defaults.put(fullName, defaultValue);
+        this.shortNames.put(shortName, fullName);
     }
 
     public void defineBoolean(String shortName, String fullName, boolean defaultValue) {
@@ -62,7 +61,10 @@ public class ArgumentsProcessor {
     }
 
     public int getInteger(String name) {
-        return 0;
+        if (this.values.containsKey(name))
+            return Integer.parseInt(this.values.get(name));
+
+        return (int)this.defaults.get(name);
     }
 
     public boolean getBoolean(String name) {

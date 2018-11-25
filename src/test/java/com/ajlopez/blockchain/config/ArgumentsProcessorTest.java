@@ -55,4 +55,41 @@ public class ArgumentsProcessorTest {
         Assert.assertNotNull(result);
         Assert.assertEquals("localhost:4000", result);
     }
+
+    @Test
+    public void defineIntegerAndGetDefaultValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineInteger("p", "port", 3000);
+
+        int result = processor.getInteger("port");
+
+        Assert.assertEquals(3000, result);
+    }
+
+    @Test
+    public void defineIntegerProcessArgumentsAndGetValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineInteger("p", "port", 3000);
+
+        processor.processArguments(new String[] { "--port", "4000" });
+
+        int result = processor.getInteger("port");
+
+        Assert.assertEquals(4000, result);
+    }
+
+    @Test
+    public void defineIntegerProcessArgumentWithShortNameAndGetValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineInteger("p", "port", 3000);
+
+        processor.processArguments(new String[] { "-p", "4000" });
+
+        int result = processor.getInteger("port");
+
+        Assert.assertEquals(4000, result);
+    }
 }
