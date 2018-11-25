@@ -147,6 +147,18 @@ public class ArgumentsProcessorTest {
     }
 
     @Test
+    public void defineStringListAndGetEmptyDefaultValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineStringList("p", "peers", "");
+
+        List<String> result  = processor.getStringList("peers");
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+    }
+
+    @Test
     public void defineStringListProcessArgumentsAndGetValue() {
         ArgumentsProcessor processor = new ArgumentsProcessor();
 

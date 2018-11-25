@@ -83,6 +83,11 @@ public class ArgumentsProcessor {
     }
 
     public List<String> getStringList(String name) {
-        return Arrays.asList(this.getString(name).split("\\,"));
+        String[] values = this.getString(name).split("\\,");
+
+        if (values != null && values.length == 1 && values[0].isEmpty())
+            return Collections.emptyList();
+
+        return Arrays.asList(values);
     }
 }
