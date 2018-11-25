@@ -10,7 +10,7 @@ public class AccountState {
     private long nonce;
 
     public AccountState() {
-        this.balance = BigInteger.ZERO;
+        this(BigInteger.ZERO, 0);
     }
 
     public AccountState(BigInteger balance, long nonce) {
