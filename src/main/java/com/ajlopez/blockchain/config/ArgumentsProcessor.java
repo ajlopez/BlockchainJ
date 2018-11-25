@@ -1,8 +1,6 @@
 package com.ajlopez.blockchain.config;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ajlopez on 25/11/2018.
@@ -11,6 +9,7 @@ public class ArgumentsProcessor {
     private Map<String, String> values = new HashMap();
     private Map<String, Object> defaults = new HashMap<>();
     private Map<String, String> shortNames = new HashMap<>();
+    private Set<String> booleans = new HashSet<>();
 
     public void defineString(String shortName, String fullName, String defaultValue) {
         this.defaults.put(fullName, defaultValue);
@@ -23,7 +22,9 @@ public class ArgumentsProcessor {
     }
 
     public void defineBoolean(String shortName, String fullName, boolean defaultValue) {
-
+        this.defaults.put(fullName, defaultValue);
+        this.shortNames.put(shortName, fullName);
+        this.booleans.add(fullName);
     }
 
     public void defineStringList(String shortName, String fullName, String defaultValue) {
@@ -37,7 +38,10 @@ public class ArgumentsProcessor {
             if (arg.startsWith("--")) {
                 String name = arg.substring(2);
 
-                this.values.put(name, args[++k]);
+                if (this.booleans.contains(name))
+                    this.values.put(name, String.valueOf((!((boolean)this.defaults.get(name)))));
+                else
+                    this.values.put(name, args[++k]);
 
                 continue;
             }
@@ -46,7 +50,10 @@ public class ArgumentsProcessor {
                 String shortName = arg.substring(1);
                 String name = this.shortNames.get(shortName);
 
-                this.values.put(name, args[++k]);
+                if (this.booleans.contains(name))
+                    this.values.put(name, String.valueOf((!((boolean)this.defaults.get(name)))));
+                else
+                    this.values.put(name, args[++k]);
 
                 continue;
             }
@@ -68,7 +75,10 @@ public class ArgumentsProcessor {
     }
 
     public boolean getBoolean(String name) {
-        return false;
+        if (this.values.containsKey(name))
+            return Boolean.parseBoolean(this.values.get(name));
+
+        return (boolean)this.defaults.get(name);
     }
 
     public List<String> getStringList(String name) {

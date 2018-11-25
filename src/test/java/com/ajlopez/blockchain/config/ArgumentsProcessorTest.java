@@ -92,4 +92,41 @@ public class ArgumentsProcessorTest {
 
         Assert.assertEquals(4000, result);
     }
+
+    @Test
+    public void defineBooleanAndGetDefaultValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineBoolean("m", "miner", false);
+
+        boolean result = processor.getBoolean("miner");
+
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void defineBooleanProcessArgumentsAndGetValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineBoolean("m", "miner", false);
+
+        processor.processArguments(new String[] { "--miner" });
+
+        boolean result = processor.getBoolean("miner");
+
+        Assert.assertEquals(true, result);
+    }
+
+    @Test
+    public void defineBooleanProcessArgumentWithShortNameAndGetValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineBoolean("m", "miner", false);
+
+        processor.processArguments(new String[] { "-m" });
+
+        boolean result = processor.getBoolean("miner");
+
+        Assert.assertEquals(true, result);
+    }
 }
