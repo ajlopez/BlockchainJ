@@ -1,8 +1,5 @@
 package com.ajlopez.blockchain.net.peers;
 
-import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.net.PeerId;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Random;
@@ -11,7 +8,6 @@ import java.util.Random;
  * Created by ajlopez on 19/11/2018.
  */
 public class TcpPeerClient {
-    private final Random random = new Random();
     private final PeerNode peerNode;
     private final String host;
     private final int port;
