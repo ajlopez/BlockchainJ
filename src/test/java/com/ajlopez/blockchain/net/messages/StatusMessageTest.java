@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.net.messages;
 
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -12,7 +12,7 @@ import org.junit.Test;
 public class StatusMessageTest {
     @Test
     public void createWithData() {
-        Hash nodeid = HashUtilsTest.generateRandomHash();
+        PeerId nodeid = HashUtilsTest.generateRandomPeerId();
         StatusMessage message = new StatusMessage(new Status(nodeid, 2, 3));
 
         Assert.assertEquals(nodeid, message.getStatus().getNodeId());

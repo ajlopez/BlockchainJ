@@ -1,8 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
-import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,7 +9,7 @@ import org.junit.Test;
 public class StatusEncoderTest {
     @Test
     public void encodeDecodeStatus() {
-        Hash nodeid = HashUtilsTest.generateRandomHash();
+        PeerId nodeid = HashUtilsTest.generateRandomPeerId();
         Status status = new Status(nodeid, 2, 3);
 
         byte[] bytes = StatusEncoder.encode(status);

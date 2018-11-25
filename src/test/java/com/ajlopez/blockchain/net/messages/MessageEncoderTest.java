@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
+import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -130,8 +131,8 @@ public class MessageEncoderTest {
 
     @Test
     public void encodeAndDecodeStatusMessage() {
-        Hash nodeid = HashUtilsTest.generateRandomHash();
-        Message message = new StatusMessage(new Status(nodeid, 2, 3));
+        PeerId nodeId = HashUtilsTest.generateRandomPeerId();
+        Message message = new StatusMessage(new Status(nodeId, 2, 3));
 
         byte[] bytes = MessageEncoder.encode(message);
 
@@ -144,7 +145,7 @@ public class MessageEncoderTest {
 
         StatusMessage sresult = (StatusMessage)result;
 
-        Assert.assertEquals(nodeid, sresult.getStatus().getNodeId());
+        Assert.assertEquals(nodeId, sresult.getStatus().getNodeId());
         Assert.assertEquals(2, sresult.getStatus().getNetworkNumber());
         Assert.assertEquals(3, sresult.getStatus().getBestBlockNumber());
     }
