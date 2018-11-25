@@ -12,8 +12,8 @@ import java.util.List;
  * Created by ajlopez on 12/08/2017.
  */
 public class Block {
-    private BlockHeader header;
-    private List<Transaction> transactions;
+    private final BlockHeader header;
+    private final List<Transaction> transactions;
 
     public Block(Block parent, List<Transaction> txs) {
         this(parent.getNumber() + 1, parent.getHash(), txs);
