@@ -17,6 +17,8 @@ public class NodeRunner {
     }
 
     public void start() {
+        System.out.println(String.format("Starting node %s", this.nodeProcessor.getPeer().getId()));
+
         this.nodeProcessor.startMessagingProcess();
 
         if (this.miner)
@@ -28,5 +30,7 @@ public class NodeRunner {
             this.nodeProcessor.stopMiningProcess();
 
         this.nodeProcessor.stopMessagingProcess();
+
+        System.out.println(String.format("Stopping node %s", this.nodeProcessor.getPeer().getId()));
     }
 }

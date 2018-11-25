@@ -23,6 +23,7 @@ public class Start {
         NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"));
 
         runner.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
     }
 
     public static ArgumentsProcessor processArguments(String[] args) {
