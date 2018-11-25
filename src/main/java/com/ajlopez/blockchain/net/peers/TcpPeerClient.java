@@ -17,12 +17,17 @@ public class TcpPeerClient {
         this.peerNode = peerNode;
     }
 
-    public void connect() throws IOException {
+    public PeerNode connect() throws IOException {
         Socket socket = new Socket(this.host, this.port);
         Peer peer = Peer.createRandomPeer();
 
         PeerConnection peerConnection = new PeerConnection(peer, socket.getInputStream(), socket.getOutputStream(), this.peerNode);
-        this.peerNode.connectTo(peerConnection);
+
+        if (this.peerNode != null)
+            this.peerNode.connectTo(peerConnection);
+
         peerConnection.start();
+
+        return peerConnection;
     }
 }

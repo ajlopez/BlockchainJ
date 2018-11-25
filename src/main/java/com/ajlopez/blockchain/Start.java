@@ -17,7 +17,7 @@ public class Start {
 
         blockChain.onBlock(Start::printBlock);
 
-        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"));
+        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"));
 
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
