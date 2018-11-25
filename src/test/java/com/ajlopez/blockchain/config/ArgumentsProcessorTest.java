@@ -27,4 +27,18 @@ public class ArgumentsProcessorTest {
         Assert.assertNotNull(result);
         Assert.assertEquals("localhost:3000", result);
     }
+
+    @Test
+    public void defineStringProcessArgumentsAndGetValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineString("p", "peer", "localhost:3000");
+
+        processor.processArguments(new String[] { "--peer", "localhost:4000" });
+
+        String result = processor.getString("peer");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("localhost:4000", result);
+    }
 }

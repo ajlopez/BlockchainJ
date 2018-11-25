@@ -30,10 +30,23 @@ public class ArgumentsProcessor {
     }
 
     public void processArguments(String[] args) {
+        for (int k = 0; k < args.length; k++) {
+            String arg = args[k];
 
+            if (arg.startsWith("--")) {
+                String name = arg.substring(2);
+
+                this.values.put(name, args[++k]);
+
+                continue;
+            }
+        }
     }
 
     public String getString(String name) {
+        if (this.values.containsKey(name))
+            return (String)this.values.get(name);
+
         return (String)this.defaults.get(name);
     }
 
