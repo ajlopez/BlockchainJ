@@ -3,9 +3,6 @@ package com.ajlopez.blockchain;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.net.peers.Peer;
-import com.ajlopez.blockchain.net.peers.TcpPeerServer;
-import com.ajlopez.blockchain.processors.NodeProcessor;
 
 /**
  * Created by ajlopez on 24/11/2018.
