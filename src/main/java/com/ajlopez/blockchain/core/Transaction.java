@@ -11,10 +11,11 @@ import java.math.BigInteger;
  * Created by ajlopez on 12/08/2017.
  */
 public class Transaction {
-    private Address sender;
-    private Address receiver;
-    private BigInteger value;
-    private long nonce;
+    private final Address sender;
+    private final Address receiver;
+    private final BigInteger value;
+    private final long nonce;
+
     private Hash hash;
 
     public Transaction(Address sender, Address receiver, BigInteger value, long nonce) {
