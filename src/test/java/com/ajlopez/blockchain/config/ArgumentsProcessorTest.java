@@ -3,6 +3,8 @@ package com.ajlopez.blockchain.config;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * Created by ajlopez on 25/11/2018.
  */
@@ -128,5 +130,53 @@ public class ArgumentsProcessorTest {
         boolean result = processor.getBoolean("miner");
 
         Assert.assertEquals(true, result);
+    }
+
+    @Test
+    public void defineStringListAndGetDefaultValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineStringList("p", "peers", "localhost:3000,localhost:3001");
+
+        List<String> result  = processor.getStringList("peers");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.size());
+        Assert.assertEquals("localhost:3000", result.get(0));
+        Assert.assertEquals("localhost:3001", result.get(1));
+    }
+
+    @Test
+    public void defineStringListProcessArgumentsAndGetValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineStringList("p", "peers", "localhost:3000,localhost:3001");
+
+        processor.processArguments(new String[] { "--peers", "localhost:1000,localhost:1001,localhost:1002" });
+
+        List<String> result = processor.getStringList("peers");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(3, result.size());
+        Assert.assertEquals("localhost:1000", result.get(0));
+        Assert.assertEquals("localhost:1001", result.get(1));
+        Assert.assertEquals("localhost:1002", result.get(2));
+    }
+
+    @Test
+    public void defineStringListProcessArgumentWithShortNameAndGetValue() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineStringList("p", "peers", "localhost:3000,localhost:3001");
+
+        processor.processArguments(new String[] { "-p", "localhost:1000,localhost:1001,localhost:1002" });
+
+        List<String> result = processor.getStringList("peers");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(3, result.size());
+        Assert.assertEquals("localhost:1000", result.get(0));
+        Assert.assertEquals("localhost:1001", result.get(1));
+        Assert.assertEquals("localhost:1002", result.get(2));
     }
 }

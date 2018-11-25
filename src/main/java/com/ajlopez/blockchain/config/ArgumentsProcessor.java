@@ -28,7 +28,8 @@ public class ArgumentsProcessor {
     }
 
     public void defineStringList(String shortName, String fullName, String defaultValue) {
-
+        this.defaults.put(fullName, defaultValue);
+        this.shortNames.put(shortName, fullName);
     }
 
     public void processArguments(String[] args) {
@@ -82,6 +83,6 @@ public class ArgumentsProcessor {
     }
 
     public List<String> getStringList(String name) {
-        return null;
+        return Arrays.asList(this.getString(name).split("\\,"));
     }
 }
