@@ -26,10 +26,16 @@ public class TcpPeerClientServerTest {
         BlockChain blockChain2 = new BlockChain();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
-        TcpPeerServer server = new TcpPeerServer(3000, nodeProcessor2);
+        Semaphore semaphore = new Semaphore(0, true);
+
+        blockChain2.onBlock(blk -> {
+            semaphore.release();
+        });
+
+        TcpPeerServer server = new TcpPeerServer(4000, nodeProcessor2);
         server.start();
 
-        TcpPeerClient client = new TcpPeerClient("localhost", 3000, nodeProcessor1);
+        TcpPeerClient client = new TcpPeerClient("localhost", 4000, nodeProcessor1);
         client.connect();
 
         Block block = new Block(0, null);
@@ -38,6 +44,8 @@ public class TcpPeerClientServerTest {
         nodeProcessor1.postMessage(FactoryHelper.createPeer(), message);
 
         NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
+
+        semaphore.acquire();
 
         server.stop();
 
