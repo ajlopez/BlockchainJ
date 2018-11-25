@@ -19,7 +19,7 @@ import java.io.IOException;
 public class MessageOutputStreamTest {
     @Test
     public void writeSimpleMessage() throws IOException {
-        Message message = new GetBlockByHashMessage(HashUtilsTest.generateRandomHash());
+        Message message = new GetBlockByHashMessage(HashUtilsTest.generateRandomBlockHash());
         byte[] bytes = MessageEncoder.encode(message);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

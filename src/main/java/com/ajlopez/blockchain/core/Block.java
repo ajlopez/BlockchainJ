@@ -49,7 +49,7 @@ public class Block {
         return this.header.getHash();
     }
 
-    public Hash getParentHash() {
+    public BlockHash getParentHash() {
         return this.header.getParentHash();
     }
 

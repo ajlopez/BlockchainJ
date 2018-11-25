@@ -25,7 +25,7 @@ public class BlockProcessorTest {
     public void noBlockByHash() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Assert.assertNull(processor.getBlockByHash(HashUtilsTest.generateRandomHash()));
+        Assert.assertNull(processor.getBlockByHash(HashUtilsTest.generateRandomBlockHash()));
     }
 
     @Test
@@ -39,21 +39,21 @@ public class BlockProcessorTest {
     public void notChainedBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Assert.assertFalse(processor.isChainedBlock(HashUtilsTest.generateRandomHash()));
+        Assert.assertFalse(processor.isChainedBlock(HashUtilsTest.generateRandomBlockHash()));
     }
 
     @Test
     public void notOrphanBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Assert.assertFalse(processor.isOrphanBlock(HashUtilsTest.generateRandomHash()));
+        Assert.assertFalse(processor.isOrphanBlock(HashUtilsTest.generateRandomBlockHash()));
     }
 
     @Test
     public void unknownBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Assert.assertFalse(processor.isKnownBlock(HashUtilsTest.generateRandomHash()));
+        Assert.assertFalse(processor.isKnownBlock(HashUtilsTest.generateRandomBlockHash()));
     }
 
     @Test
@@ -115,6 +115,46 @@ public class BlockProcessorTest {
         Assert.assertTrue(connectedBlocks.isEmpty());
 
         Assert.assertNull(processor.getBestBlock());
+    }
+
+    @Test
+    public void getUnknownAncestorHash() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()));
+
+        List<Block> connectedBlocks = processor.processBlock(block);
+
+        Assert.assertNotNull(connectedBlocks);
+        Assert.assertTrue(connectedBlocks.isEmpty());
+
+        Assert.assertNull(processor.getBestBlock());
+
+        BlockHash hash = processor.getUnknownAncestorHash(block.getHash());
+
+        Assert.assertNotNull(hash);
+        Assert.assertEquals(block.getParentHash(), hash);
+    }
+
+    @Test
+    public void getNotOrphanUnknownAncestorHash() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()));
+
+        BlockHash hash = processor.getUnknownAncestorHash(block.getHash());
+
+        Assert.assertNotNull(hash);
+        Assert.assertEquals(block.getHash(), hash);
+    }
+
+    @Test
+    public void getNullUnknownAncestorHash() {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        BlockHash hash = processor.getUnknownAncestorHash(null);
+
+        Assert.assertNull(hash);
     }
 
     @Test

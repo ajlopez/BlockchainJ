@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.utils;
 
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.PeerId;
 import org.junit.Assert;
@@ -25,6 +26,13 @@ public class HashUtilsTest {
         Random random = new Random();
         random.nextBytes(bytes);
         return new Hash(bytes);
+    }
+
+    public static BlockHash generateRandomBlockHash() {
+        byte[] bytes = new byte[32];
+        Random random = new Random();
+        random.nextBytes(bytes);
+        return new BlockHash(bytes);
     }
 
     public static PeerId generateRandomPeerId() {

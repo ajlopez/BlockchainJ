@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 
 import java.util.ArrayList;
@@ -12,17 +13,17 @@ import java.util.Map;
  * Created by ajlopez on 16/12/2017.
  */
 public class OrphanBlocks {
-    private Map<Hash, Block> orphansByHash = new HashMap<>();
-    private Map<Hash, List<Block>> orphansByParent = new HashMap<>();
+    private Map<BlockHash, Block> orphansByHash = new HashMap<>();
+    private Map<BlockHash, List<Block>> orphansByParent = new HashMap<>();
 
-    public boolean isKnownOrphan(Hash hash) {
+    public boolean isKnownOrphan(BlockHash hash) {
         return this.orphansByHash.containsKey(hash);
     }
 
     public void addToOrphans(Block block) {
         this.orphansByHash.put(block.getHash(), block);
 
-        Hash parentHash = block.getParentHash();
+        BlockHash parentHash = block.getParentHash();
 
         if (!this.orphansByParent.containsKey(parentHash))
             this.orphansByParent.put(parentHash, new ArrayList<>());
@@ -48,5 +49,12 @@ public class OrphanBlocks {
 
         if (siblings.isEmpty())
             this.orphansByParent.remove(block.getParentHash());
+    }
+
+    public BlockHash getUnknownAncestorHash(BlockHash hash) {
+        while (hash != null && this.orphansByHash.containsKey(hash))
+            hash = this.orphansByHash.get(hash).getParentHash();
+
+        return hash;
     }
 }

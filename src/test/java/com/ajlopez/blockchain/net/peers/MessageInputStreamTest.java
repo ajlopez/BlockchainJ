@@ -15,7 +15,7 @@ import java.io.*;
 public class MessageInputStreamTest {
     @Test
     public void readMessage() throws IOException {
-        Message message = new GetBlockByHashMessage(HashUtilsTest.generateRandomHash());
+        Message message = new GetBlockByHashMessage(HashUtilsTest.generateRandomBlockHash());
         byte[] bytes = MessageEncoder.encode(message);
         ByteArrayOutputStream bytesOutputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(bytesOutputStream);

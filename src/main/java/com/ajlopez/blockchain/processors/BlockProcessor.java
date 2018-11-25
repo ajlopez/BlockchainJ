@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class BlockProcessor {
     }
 
     public List<Block> processBlock(Block block) {
-        Hash hash = block.getHash();
+        BlockHash hash = block.getHash();
 
         if (this.orphanBlocks.isKnownOrphan(hash))
             return emptyList;
@@ -62,7 +63,7 @@ public class BlockProcessor {
         return this.blockChain.getBestBlockNumber();
     }
 
-    public Block getBlockByHash(Hash hash) {
+    public Block getBlockByHash(BlockHash hash) {
         return this.blockChain.getBlockByHash(hash);
     }
 
@@ -70,16 +71,20 @@ public class BlockProcessor {
         return this.blockChain.getBlockByNumber(number);
     }
 
-    public boolean isChainedBlock(Hash hash) {
+    public boolean isChainedBlock(BlockHash hash) {
         return this.blockChain.isChainedBlock(hash);
     }
 
-    public boolean isOrphanBlock(Hash hash) {
+    public boolean isOrphanBlock(BlockHash hash) {
         return this.orphanBlocks.isKnownOrphan(hash);
     }
 
-    public boolean isKnownBlock(Hash hash) {
+    public boolean isKnownBlock(BlockHash hash) {
         return this.isChainedBlock(hash) || this.isOrphanBlock(hash);
+    }
+
+    public BlockHash getUnknownAncestorHash(BlockHash hash) {
+        return this.orphanBlocks.getUnknownAncestorHash(hash);
     }
 
     public void onNewBestBlock(Consumer<Block> consumer) {
