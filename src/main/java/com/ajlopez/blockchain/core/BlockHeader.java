@@ -9,10 +9,11 @@ import com.ajlopez.blockchain.utils.HashUtils;
  * Created by ajlopez on 12/08/2017.
  */
 public class BlockHeader {
-    private long number;
-    private BlockHash parentHash;
+    private final long number;
+    private final BlockHash parentHash;
+    private final Hash transactionsHash;
+
     private BlockHash hash;
-    private Hash transactionsHash;
 
     public BlockHeader(long number, BlockHash parentHash, Hash transactionsHash) {
         if (number < 0)
