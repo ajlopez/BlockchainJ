@@ -5,6 +5,17 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+// from https://www.baeldung.com/gradle-fat-jar
+
+task customFatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.ajlopez.blockchain.Start'
+    }
+    baseName = 'all-in-one-jar'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 repositories {
     mavenCentral()
 }
