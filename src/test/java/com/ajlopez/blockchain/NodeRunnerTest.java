@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -18,7 +19,7 @@ import java.util.concurrent.Semaphore;
  */
 public class NodeRunnerTest {
     @Test
-    public void mineBlockUsingOneRunner() throws InterruptedException {
+    public void mineBlockUsingOneRunner() throws InterruptedException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         Semaphore semaphore = new Semaphore(0, true);
@@ -27,7 +28,7 @@ public class NodeRunnerTest {
             semaphore.release();
         });
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 0);
+        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList());
 
         runner.start();
 
@@ -51,7 +52,7 @@ public class NodeRunnerTest {
             semaphore.release();
         });
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 3000);
+        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList());
 
         runner.start();
 
@@ -73,5 +74,33 @@ public class NodeRunnerTest {
         Assert.assertNotNull(bestBlock);
         Assert.assertEquals(1, bestBlock.getNumber());
         Assert.assertEquals(block.getHash(), bestBlock.getHash());
+    }
+
+    @Test
+    public void connectTwoNodeRunners() throws InterruptedException, IOException {
+        BlockChain blockChain1 = FactoryHelper.createBlockChainWithGenesis();
+        BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis();
+
+        Semaphore semaphore = new Semaphore(0, true);
+
+        blockChain2.onBlock(blk -> {
+            semaphore.release();
+        });
+
+        NodeRunner runner1 = new NodeRunner(blockChain1, true, 3001, null);
+        NodeRunner runner2 = new NodeRunner(blockChain2, false, 0, Collections.singletonList("localhost:3001"));
+
+        runner1.start();
+        runner2.start();
+
+        semaphore.acquire();
+
+        runner2.stop();
+        runner1.stop();
+
+        Block bestBlock = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(bestBlock);
+        Assert.assertTrue(bestBlock.getNumber() > 0);
     }
 }
