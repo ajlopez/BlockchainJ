@@ -19,19 +19,10 @@ public class Start {
         ArgumentsProcessor argsproc = processArguments(args);
 
         blockChain.onBlock(Start::printBlock);
-        NodeProcessor processor = new NodeProcessor(Peer.createRandomPeer(), blockChain);
 
-        processor.startMessagingProcess();
+        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"));
 
-        int port = argsproc.getInteger("port");
-
-        if (port > 0) {
-            TcpPeerServer server = new TcpPeerServer(port, processor);
-            server.start();
-        }
-
-        if (argsproc.getBoolean("miner"))
-            processor.startMiningProcess();
+        runner.start();
     }
 
     public static ArgumentsProcessor processArguments(String[] args) {
