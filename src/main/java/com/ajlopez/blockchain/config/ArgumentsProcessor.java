@@ -12,9 +12,11 @@ import java.util.Map;
 public class ArgumentsProcessor {
     private Map<String, Object> values = new HashMap();
     private Map<String, Object> defaults = new HashMap<>();
+    private Map<String, String> shortNames = new HashMap<>();
 
     public void defineString(String shortName, String fullName, String defaultValue) {
         this.defaults.put(fullName, defaultValue);
+        this.shortNames.put(shortName, fullName);
     }
 
     public void defineInteger(String shortName, String fullName, int defaultValue) {
@@ -35,6 +37,15 @@ public class ArgumentsProcessor {
 
             if (arg.startsWith("--")) {
                 String name = arg.substring(2);
+
+                this.values.put(name, args[++k]);
+
+                continue;
+            }
+
+            if (arg.startsWith("-")) {
+                String shortName = arg.substring(1);
+                String name = this.shortNames.get(shortName);
 
                 this.values.put(name, args[++k]);
 
