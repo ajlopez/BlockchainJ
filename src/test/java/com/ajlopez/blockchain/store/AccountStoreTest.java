@@ -17,7 +17,7 @@ public class AccountStoreTest {
         Address address = new Address(new byte[] { 0x01, 0x02 });
 
         Account result = store.getAccount(address);
-        
+
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.ZERO, result.getBalance());
         Assert.assertEquals(0, result.getNonce());
