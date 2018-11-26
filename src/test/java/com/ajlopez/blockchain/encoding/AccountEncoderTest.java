@@ -14,11 +14,11 @@ public class AccountEncoderTest {
     public void encodeDecodeAccountStateWithZeroBalanceAndZeroNonce() {
         Account state = new Account();
 
-        byte[] encoded = AccountStateEncoder.encode(state);
+        byte[] encoded = AccountEncoder.encode(state);
 
         Assert.assertNotNull(encoded);
 
-        Account result = AccountStateEncoder.decode(encoded);
+        Account result = AccountEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.ZERO, result.getBalance());
@@ -29,11 +29,11 @@ public class AccountEncoderTest {
     public void encodeDecodeAccountStateWithNonZeroBalance() {
         Account account = new Account(BigInteger.TEN, 0);
 
-        byte[] encoded = AccountStateEncoder.encode(account);
+        byte[] encoded = AccountEncoder.encode(account);
 
         Assert.assertNotNull(encoded);
 
-        Account result = AccountStateEncoder.decode(encoded);
+        Account result = AccountEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.TEN, result.getBalance());
@@ -44,11 +44,11 @@ public class AccountEncoderTest {
     public void encodeDecodeAccountStateWithNonZeroNonce() {
         Account account = new Account(BigInteger.ZERO, 42);
 
-        byte[] encoded = AccountStateEncoder.encode(account);
+        byte[] encoded = AccountEncoder.encode(account);
 
         Assert.assertNotNull(encoded);
 
-        Account result = AccountStateEncoder.decode(encoded);
+        Account result = AccountEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.ZERO, result.getBalance());
