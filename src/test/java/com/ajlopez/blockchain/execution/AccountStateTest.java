@@ -1,9 +1,11 @@
 package com.ajlopez.blockchain.execution;
 
+import com.ajlopez.blockchain.core.Account;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.util.BitSet;
 
 /**
  * Created by ajlopez on 26/11/2018.
@@ -77,5 +79,16 @@ public class AccountStateTest {
         AccountState accstate = new AccountState();
 
         accstate.subtractFromBalance(BigInteger.TEN);
+    }
+
+    @Test
+    public void createFromAccount() {
+        Account account = new Account(BigInteger.TEN, 42);
+
+        AccountState result = AccountState.fromAccount(account);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.TEN, result.getBalance());
+        Assert.assertEquals(42, result.getNonce());
     }
 }

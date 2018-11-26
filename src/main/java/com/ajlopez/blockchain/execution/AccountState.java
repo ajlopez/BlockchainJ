@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.execution;
 
+import com.ajlopez.blockchain.core.Account;
+
 import java.math.BigInteger;
 
 /**
@@ -8,6 +10,10 @@ import java.math.BigInteger;
 public class AccountState {
     private BigInteger balance;
     private long nonce;
+
+    public static AccountState fromAccount(Account account) {
+        return new AccountState(account.getBalance(), account.getNonce());
+    }
 
     public AccountState() {
         this(BigInteger.ZERO, 0);
