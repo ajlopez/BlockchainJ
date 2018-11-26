@@ -88,4 +88,8 @@ public class FactoryHelper {
 
         return blocks;
     }
+
+    public static Address createRandomAddress() {
+        return new Address();
+    }
 }
