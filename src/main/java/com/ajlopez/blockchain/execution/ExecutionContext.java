@@ -41,6 +41,10 @@ public class ExecutionContext {
         this.accountStates.clear();
     }
 
+    public void rollback() {
+        this.accountStates.clear();
+    }
+
     private AccountState getAccountState(Address address) {
         if (this.accountStates.containsKey(address))
             return this.accountStates.get(address);
