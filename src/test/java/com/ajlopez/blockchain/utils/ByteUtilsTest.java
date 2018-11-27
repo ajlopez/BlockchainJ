@@ -141,4 +141,17 @@ public class ByteUtilsTest {
         Assert.assertNotSame(expected, result);
         Assert.assertArrayEquals(expected, result);
     }
+
+    @Test
+    public void numberOfLeadingZeroes() {
+        Assert.assertEquals(0, ByteUtils.numberOfLeadingZeroes(new byte[0]));
+        Assert.assertEquals(0, ByteUtils.numberOfLeadingZeroes(new byte[] { 0x01 }));
+        Assert.assertEquals(0, ByteUtils.numberOfLeadingZeroes(new byte[] { 0x01, 0x02 }));
+
+        Assert.assertEquals(1, ByteUtils.numberOfLeadingZeroes(new byte[] { 0x00 }));
+        Assert.assertEquals(1, ByteUtils.numberOfLeadingZeroes(new byte[] { 0x00, 0x01, 0x00 }));
+
+        Assert.assertEquals(2, ByteUtils.numberOfLeadingZeroes(new byte[] { 0x00, 0x00 }));
+        Assert.assertEquals(2, ByteUtils.numberOfLeadingZeroes(new byte[] { 0x00, 0x00, 0x01, 0x00 }));
+    }
 }

@@ -119,4 +119,14 @@ public class ByteUtils {
 
         return newbytes;
     }
+
+    public static int numberOfLeadingZeroes(byte[] bytes) {
+        int nbytes = bytes.length;
+
+        for (int n = 0; n < nbytes; n++)
+            if (bytes[n] != 0)
+                return n;
+            
+        return nbytes;
+    }
 }
