@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain.processors;
 
-import com.ajlopez.blockchain.net.messages.MessageEncoder;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.Message;
@@ -8,12 +7,10 @@ import com.ajlopez.blockchain.net.messages.StatusMessage;
 import com.ajlopez.blockchain.test.simples.SimpleMessageChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
-import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by ajlopez on 06/04/2018.
@@ -21,8 +18,8 @@ import java.util.List;
 public class SendProcessorTest {
     @Test
     public void connectAndDisconnectPeer() {
-        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
-        Peer peer = FactoryHelper.createPeer();
+        SendProcessor processor = new SendProcessor(FactoryHelper.createRandomPeer());
+        Peer peer = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
 
         processor.connectToPeer(peer, channel);
@@ -36,8 +33,8 @@ public class SendProcessorTest {
 
     @Test
     public void postMessageToNotConnectedPeer() {
-        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
-        Peer peer = FactoryHelper.createPeer();
+        SendProcessor processor = new SendProcessor(FactoryHelper.createRandomPeer());
+        Peer peer = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
@@ -47,7 +44,7 @@ public class SendProcessorTest {
 
     @Test
     public void postMessageWhenNoPeerIsConnected() {
-        SendProcessor processor = new SendProcessor(FactoryHelper.createPeer());
+        SendProcessor processor = new SendProcessor(FactoryHelper.createRandomPeer());
 
         Message message = new StatusMessage(new Status(HashUtilsTest.generateRandomPeerId(), 1, 10));
         Assert.assertEquals(0, processor.postMessage(message));
@@ -55,9 +52,9 @@ public class SendProcessorTest {
 
     @Test
     public void connectToPeerAndPostMessage() {
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor processor = new SendProcessor(sender);
-        Peer peer = FactoryHelper.createPeer();
+        Peer peer = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
 
         processor.connectToPeer(peer, channel);
@@ -70,11 +67,11 @@ public class SendProcessorTest {
 
     @Test
     public void connectToPeersAndPostMessage() {
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor processor = new SendProcessor(sender);
-        Peer peer1 = FactoryHelper.createPeer();
+        Peer peer1 = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel1 = new SimpleMessageChannel();
-        Peer peer2 = FactoryHelper.createPeer();
+        Peer peer2 = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel2 = new SimpleMessageChannel();
 
         processor.connectToPeer(peer1, channel1);
@@ -90,11 +87,11 @@ public class SendProcessorTest {
 
     @Test
     public void connectToPeersAndPostMessageSkippingOne() {
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor processor = new SendProcessor(sender);
-        Peer peer1 = FactoryHelper.createPeer();
+        Peer peer1 = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel1 = new SimpleMessageChannel();
-        Peer peer2 = FactoryHelper.createPeer();
+        Peer peer2 = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel2 = new SimpleMessageChannel();
 
         processor.connectToPeer(peer1, channel1);
@@ -110,10 +107,10 @@ public class SendProcessorTest {
 
     @Test
     public void connectToPeerAndPostMessageToAnotherPeer() {
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor processor = new SendProcessor(sender);
-        Peer peer = FactoryHelper.createPeer();
-        Peer peer2 = FactoryHelper.createPeer();
+        Peer peer = FactoryHelper.createRandomPeer();
+        Peer peer2 = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
 
         processor.connectToPeer(peer, channel);

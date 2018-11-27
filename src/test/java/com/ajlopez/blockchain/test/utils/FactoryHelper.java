@@ -62,7 +62,7 @@ public class FactoryHelper {
         return new MessageProcessor(null, transactionProcessor, null, outputProcessor);
     }
 
-    public static Peer createPeer() {
+    public static Peer createRandomPeer() {
         return Peer.createRandomPeer();
     }
 
@@ -71,7 +71,7 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
-        return new NodeProcessor(createPeer(), blockChain);
+        return new NodeProcessor(createRandomPeer(), blockChain);
     }
 
     public static List<Block> createBlocks(int nblocks) {

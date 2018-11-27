@@ -23,7 +23,7 @@ public class NodeProcessorTest {
     @Test
     public void createWithPeer() {
         BlockChain blockChain = new BlockChain();
-        Peer peer = FactoryHelper.createPeer();
+        Peer peer = FactoryHelper.createRandomPeer();
 
         NodeProcessor nodeProcessor = new NodeProcessor(peer, blockChain);
 
@@ -38,7 +38,7 @@ public class NodeProcessorTest {
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
 
-        nodeProcessor.postMessage(null, message);
+        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
@@ -82,7 +82,7 @@ public class NodeProcessorTest {
         Message message = new BlockMessage(block);
 
         for (int k = 0; k < 10; k++)
-            nodeProcessor.postMessage(null, message);
+            nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
@@ -103,8 +103,8 @@ public class NodeProcessorTest {
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
 
-        nodeProcessor.postMessage(null, message0);
-        nodeProcessor.postMessage(null, message1);
+        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message0);
+        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message1);
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
@@ -122,7 +122,7 @@ public class NodeProcessorTest {
 
         for (Block block: blocks) {
             Message message = new BlockMessage(block);
-            nodeProcessor.postMessage(null, message);
+            nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
         }
 
         NodesHelper.runNodeProcessors(nodeProcessor);
@@ -145,8 +145,8 @@ public class NodeProcessorTest {
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
 
-        nodeProcessor.postMessage(null, message1);
-        nodeProcessor.postMessage(null, message0);
+        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message1);
+        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message0);
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
@@ -439,7 +439,7 @@ public class NodeProcessorTest {
         BlockChain blockChain = new BlockChain();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
-        nodeProcessor.postMessage(null, message);
+        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 

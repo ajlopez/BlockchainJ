@@ -11,8 +11,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -41,7 +39,7 @@ public class TcpPeerClientServerTest {
         Block block = new Block(0, null);
         Message message = new BlockMessage(block);
 
-        nodeProcessor1.postMessage(FactoryHelper.createPeer(), message);
+        nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);
 
         NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
 

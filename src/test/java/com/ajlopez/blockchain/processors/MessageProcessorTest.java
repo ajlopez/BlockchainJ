@@ -39,7 +39,7 @@ public class MessageProcessorTest {
     public void processBlockMessageAndRelayBlockToPeers() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(sender);
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
@@ -64,7 +64,7 @@ public class MessageProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor(blockChain);
 
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(sender);
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
@@ -89,14 +89,14 @@ public class MessageProcessorTest {
     public void processBlockMessageAndRelayBlockToOtherPeers() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor sendProcessor = new SendProcessor(sender);
 
-        Peer peer1 = FactoryHelper.createPeer();
+        Peer peer1 = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel1 = new SimpleMessageChannel();
         sendProcessor.connectToPeer(peer1, channel1);
 
-        Peer peer2 = FactoryHelper.createPeer();
+        Peer peer2 = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel2 = new SimpleMessageChannel();
         sendProcessor.connectToPeer(peer2, channel2);
 
@@ -123,8 +123,8 @@ public class MessageProcessorTest {
     @Test
     public void processGetBlockByHashMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        Peer originalSender = FactoryHelper.createPeer();
-        Peer sender = FactoryHelper.createPeer();
+        Peer originalSender = FactoryHelper.createRandomPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor sendProcessor = new SendProcessor(sender);
 
         Block block = new Block(0, null);
@@ -147,7 +147,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetUnknownBlockByHashMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
 
         Block block = new Block(0, null);
 
@@ -155,7 +155,7 @@ public class MessageProcessorTest {
 
         Message message = new GetBlockByHashMessage(block.getHash());
 
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
@@ -169,7 +169,7 @@ public class MessageProcessorTest {
     @Test
     public void processGetBlockByNumberMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(sender);
 
         Block block = new Block(0, null);
@@ -181,7 +181,7 @@ public class MessageProcessorTest {
 
         Message getBlockMessage = new GetBlockByNumberMessage(block.getNumber());
         SimpleMessageChannel channel = new SimpleMessageChannel();
-        Peer originalSender = FactoryHelper.createPeer();
+        Peer originalSender = FactoryHelper.createRandomPeer();
         outputProcessor.connectToPeer(originalSender, channel);
 
         processor.processMessage(getBlockMessage, originalSender);
@@ -192,14 +192,14 @@ public class MessageProcessorTest {
     @Test
     public void processGetUnknownBlockByNumberMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
 
         Block block = new Block(0, null);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
 
         Message getBlockMessage = new GetBlockByNumberMessage(block.getNumber());
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
@@ -242,15 +242,15 @@ public class MessageProcessorTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 
-        Peer sender = FactoryHelper.createPeer();
+        Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(sender);
         SimpleMessageChannel channel = new SimpleMessageChannel();
-        Peer receiver = FactoryHelper.createPeer();
+        Peer receiver = FactoryHelper.createRandomPeer();
         outputProcessor.connectToPeer(receiver, channel);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(transactionProcessor, outputProcessor);
 
-        processor.processMessage(message, FactoryHelper.createPeer());
+        processor.processMessage(message, FactoryHelper.createRandomPeer());
 
         List<Transaction> transactions = pool.getTransactions();
 
@@ -265,11 +265,11 @@ public class MessageProcessorTest {
     public void processStatusMessageAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createPeer());
+        SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
-        Peer receiver = FactoryHelper.createPeer();
+        Peer receiver = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(receiver, channel);
 
@@ -298,12 +298,12 @@ public class MessageProcessorTest {
     public void processStatusMessageTwiceWithSameHeightAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        Peer firstPeer = FactoryHelper.createPeer();
+        Peer firstPeer = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(firstPeer);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
-        Peer secondPeer = FactoryHelper.createPeer();
+        Peer secondPeer = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(secondPeer, channel);
 
@@ -334,12 +334,12 @@ public class MessageProcessorTest {
     public void processStatusMessageTwiceWithDifferentHeightsAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor();
-        Peer firstPeer = FactoryHelper.createPeer();
+        Peer firstPeer = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(firstPeer);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
 
-        Peer secondPeer = FactoryHelper.createPeer();
+        Peer secondPeer = FactoryHelper.createRandomPeer();
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(secondPeer, channel);
 

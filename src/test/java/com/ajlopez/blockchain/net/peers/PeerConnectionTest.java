@@ -28,8 +28,8 @@ public class PeerConnectionTest {
         PipedInputStream inputStream2 = new PipedInputStream();
         inputStream2.connect(outputStream2);
 
-        Peer peer1 = FactoryHelper.createPeer();
-        Peer peer2 = FactoryHelper.createPeer();
+        Peer peer1 = FactoryHelper.createRandomPeer();
+        Peer peer2 = FactoryHelper.createRandomPeer();
 
         SimpleMessageChannel inputChannel = new SimpleMessageChannel();
 
@@ -47,7 +47,7 @@ public class PeerConnectionTest {
         peerConnection1.start();
         peerConnection2.start();
 
-        peerConnection1.postMessage(FactoryHelper.createPeer(), message);
+        peerConnection1.postMessage(FactoryHelper.createRandomPeer(), message);
 
         semaphore.acquire();
 
