@@ -11,6 +11,8 @@ public class AccountState {
     private BigInteger balance;
     private long nonce;
 
+    private boolean changed;
+
     public static AccountState fromAccount(Account account) {
         return new AccountState(account.getBalance(), account.getNonce());
     }
@@ -41,27 +43,40 @@ public class AccountState {
 
     public void incrementNonce() {
         this.nonce++;
+        this.changed = true;
     }
 
     public void addToBalance(BigInteger amount) {
+        if (amount.equals(BigInteger.ZERO))
+            return;
+
         BigInteger newbalance = this.balance.add(amount);
 
         if (newbalance.compareTo(BigInteger.ZERO) < 0)
             throw new IllegalStateException("Invalid balance");
 
         this.balance = newbalance;
+        this.changed = true;
     }
 
     public void subtractFromBalance(BigInteger amount) {
+        if (amount.equals(BigInteger.ZERO))
+            return;
+
         BigInteger newbalance = this.balance.subtract(amount);
 
         if (newbalance.compareTo(BigInteger.ZERO) < 0)
             throw new IllegalStateException("Invalid balance");
 
         this.balance = newbalance;
+        this.changed = true;
     }
 
     public Account toAccount() {
         return new Account(this.balance, this.nonce);
+    }
+
+    public boolean wasChanged() {
+        return this.changed;
     }
 }

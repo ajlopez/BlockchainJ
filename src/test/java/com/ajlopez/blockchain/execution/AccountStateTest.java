@@ -13,48 +13,86 @@ import java.util.BitSet;
 public class AccountStateTest {
     @Test
     public void createWithZeroBalanceAndZeroNonce() {
-        AccountState accstate = new AccountState();
+        AccountState accountState = new AccountState();
 
-        Assert.assertEquals(BigInteger.ZERO, accstate.getBalance());
-        Assert.assertEquals(0, accstate.getNonce());
+        Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
+        Assert.assertEquals(0, accountState.getNonce());
+        Assert.assertFalse(accountState.wasChanged());
     }
 
     @Test
     public void createWithNullBalanceAndNonZeroNonce() {
-        AccountState accstate = new AccountState(null, 42);
+        AccountState accountState = new AccountState(null, 42);
 
-        Assert.assertEquals(BigInteger.ZERO, accstate.getBalance());
-        Assert.assertEquals(42, accstate.getNonce());
+        Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
+        Assert.assertEquals(42, accountState.getNonce());
+        Assert.assertFalse(accountState.wasChanged());
     }
 
     @Test
     public void addToBalance() {
-        AccountState accstate = new AccountState();
+        AccountState accountState = new AccountState();
 
-        accstate.addToBalance(BigInteger.TEN);
-        Assert.assertEquals(BigInteger.TEN, accstate.getBalance());
+        accountState.addToBalance(BigInteger.TEN);
+        Assert.assertEquals(BigInteger.TEN, accountState.getBalance());
+        Assert.assertTrue(accountState.wasChanged());
+    }
+
+    @Test
+    public void addZeroToBalance() {
+        AccountState accountState = new AccountState();
+
+        accountState.addToBalance(BigInteger.ZERO);
+        Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
+        Assert.assertFalse(accountState.wasChanged());
     }
 
     @Test
     public void incrementNonce() {
-        AccountState accstate = new AccountState();
+        AccountState accountState = new AccountState();
 
-        Assert.assertEquals(0, accstate.getNonce());
-        accstate.incrementNonce();
-        Assert.assertEquals(1, accstate.getNonce());
-        accstate.incrementNonce();
-        Assert.assertEquals(2, accstate.getNonce());
-        accstate.incrementNonce();
-        Assert.assertEquals(3, accstate.getNonce());
+        Assert.assertEquals(0, accountState.getNonce());
+        accountState.incrementNonce();
+        Assert.assertTrue(accountState.wasChanged());
+
+        Assert.assertEquals(1, accountState.getNonce());
+        accountState.incrementNonce();
+        Assert.assertTrue(accountState.wasChanged());
+
+        Assert.assertEquals(2, accountState.getNonce());
+        accountState.incrementNonce();
+        Assert.assertEquals(3, accountState.getNonce());
+        Assert.assertTrue(accountState.wasChanged());
     }
 
     @Test
     public void addToAndSubtractFromBalance() {
-        AccountState accstate = new AccountState();
+        AccountState accountState = new AccountState();
 
-        accstate.addToBalance(BigInteger.TEN);
-        accstate.subtractFromBalance(BigInteger.ONE);
-        Assert.assertEquals(9, accstate.getBalance().intValue());
+        accountState.addToBalance(BigInteger.TEN);
+        Assert.assertTrue(accountState.wasChanged());
+
+        accountState.subtractFromBalance(BigInteger.ONE);
+        Assert.assertEquals(9, accountState.getBalance().intValue());
+        Assert.assertTrue(accountState.wasChanged());
+    }
+
+    @Test
+    public void subtractFromBalance() {
+        AccountState accountState = new AccountState(BigInteger.TEN, 42);
+
+        accountState.subtractFromBalance(BigInteger.ONE);
+        Assert.assertEquals(BigInteger.valueOf(9), accountState.getBalance());
+        Assert.assertTrue(accountState.wasChanged());
+    }
+
+    @Test
+    public void subtractZeroFromBalance() {
+        AccountState accountState = new AccountState(BigInteger.TEN, 42);
+
+        accountState.subtractFromBalance(BigInteger.ZERO);
+        Assert.assertEquals(BigInteger.TEN, accountState.getBalance());
+        Assert.assertFalse(accountState.wasChanged());
     }
 
     @Test(expected = IllegalStateException.class)
@@ -90,5 +128,6 @@ public class AccountStateTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.TEN, result.getBalance());
         Assert.assertEquals(42, result.getNonce());
+        Assert.assertFalse(result.wasChanged());
     }
 }
