@@ -79,6 +79,85 @@ public class ExecutionContextTest {
     }
 
     @Test
+    public void incrementNonceAccount() {
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+
+        Account account = new Account(BigInteger.valueOf(1000), 41);
+        accountStore.putAccount(address, account);
+
+        ExecutionContext executionContext = new ExecutionContext(accountStore);
+
+        executionContext.incrementNonce(address);
+
+        long nonce = executionContext.getNonce(address);
+        Assert.assertEquals(42, nonce);
+
+        long originalNonce = accountStore.getAccount(address).getNonce();
+        Assert.assertEquals(41, originalNonce);
+    }
+
+    @Test
+    public void incrementNonceAccountAndCommit() {
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+
+        Account account = new Account(BigInteger.valueOf(1000), 41);
+        accountStore.putAccount(address, account);
+
+        ExecutionContext executionContext = new ExecutionContext(accountStore);
+
+        executionContext.incrementNonce(address);
+        executionContext.commit();
+
+        long nonce = executionContext.getNonce(address);
+        Assert.assertEquals(42, nonce);
+
+        long updatedNonce = accountStore.getAccount(address).getNonce();
+        Assert.assertEquals(42, updatedNonce);
+    }
+
+    @Test
+    public void incrementNonceAccountAndRollback() {
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+
+        Account account = new Account(BigInteger.valueOf(1000), 41);
+        accountStore.putAccount(address, account);
+
+        ExecutionContext executionContext = new ExecutionContext(accountStore);
+
+        executionContext.incrementNonce(address);
+        executionContext.rollback();
+
+        long nonce = executionContext.getNonce(address);
+        Assert.assertEquals(41, nonce);
+
+        long updatedNonce = accountStore.getAccount(address).getNonce();
+        Assert.assertEquals(41, updatedNonce);
+    }
+
+    @Test
+    public void getNonceFromNewAccountAndCommit() {
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+
+        Hash originalHash = accountStore.getHash();
+
+        ExecutionContext executionContext = new ExecutionContext(accountStore);
+
+        long nonce = executionContext.getNonce(address);
+        Assert.assertEquals(0, nonce);
+
+        executionContext.commit();
+
+        long originalNonce = accountStore.getAccount(address).getNonce();
+        Assert.assertEquals(0, originalNonce);
+
+        Assert.assertEquals(originalHash, accountStore.getHash());
+    }
+
+    @Test
     public void transferToAccount() {
         AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();

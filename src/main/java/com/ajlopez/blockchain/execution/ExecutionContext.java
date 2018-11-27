@@ -26,8 +26,18 @@ public class ExecutionContext {
         receiver.addToBalance(amount);
     }
 
+    public void incrementNonce(Address address) {
+        AccountState accountState = this.getAccountState(address);
+
+        accountState.incrementNonce();
+    }
+
     public BigInteger getBalance(Address address) {
         return this.getAccountState(address).getBalance();
+    }
+
+    public long getNonce(Address address) {
+        return this.getAccountState(address).getNonce();
     }
 
     public void commit() {
