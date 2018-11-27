@@ -35,6 +35,9 @@ public class ExecutionContext {
             Address address = entry.getKey();
             AccountState accountState = entry.getValue();
 
+            if (!accountState.wasChanged())
+                continue;
+
             this.accountStore.putAccount(address, accountState.toAccount());
         }
 

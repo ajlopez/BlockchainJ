@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.store;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.state.Trie;
 
@@ -30,5 +31,9 @@ public class AccountStore {
         byte[] value = AccountEncoder.encode(account);
 
         this.trie = this.trie.put(key, value);
+    }
+
+    public Hash getHash() {
+        return this.trie.getHash();
     }
 }

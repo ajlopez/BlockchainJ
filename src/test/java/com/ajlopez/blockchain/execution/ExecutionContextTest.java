@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -24,6 +25,57 @@ public class ExecutionContextTest {
         
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.ZERO, result);
+    }
+
+    @Test
+    public void getBalanceFromAccountAndCommitDoesNotChangeStore() {
+        AccountStore accountStore = new AccountStore(new Trie());
+        Account account = new Account(BigInteger.TEN, 42);
+        Address address = FactoryHelper.createRandomAddress();
+
+        accountStore.putAccount(address, account);
+
+        Hash originalHash = accountStore.getHash();
+
+        ExecutionContext executionContext = new ExecutionContext(accountStore);
+
+        BigInteger result = executionContext.getBalance(address);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.TEN, result);
+
+        executionContext.commit();
+
+        BigInteger result2 = accountStore.getAccount(address).getBalance();
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(BigInteger.TEN, result2);
+
+        Assert.assertEquals(originalHash, accountStore.getHash());
+    }
+
+    @Test
+    public void getZeroBalanceFromAccountAndCommitDoesNotChangeStore() {
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+
+        Hash originalHash = accountStore.getHash();
+
+        ExecutionContext executionContext = new ExecutionContext(accountStore);
+
+        BigInteger result = executionContext.getBalance(address);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.ZERO, result);
+
+        executionContext.commit();
+
+        BigInteger result2 = accountStore.getAccount(address).getBalance();
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(BigInteger.ZERO, result2);
+
+        Assert.assertEquals(originalHash, accountStore.getHash());
     }
 
     @Test
