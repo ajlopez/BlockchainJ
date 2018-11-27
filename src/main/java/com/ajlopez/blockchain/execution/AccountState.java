@@ -60,4 +60,8 @@ public class AccountState {
 
         this.balance = newbalance;
     }
+
+    public Account toAccount() {
+        return new Account(this.balance, this.nonce);
+    }
 }

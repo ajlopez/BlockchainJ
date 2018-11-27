@@ -30,6 +30,17 @@ public class ExecutionContext {
         return this.getAccountState(address).getBalance();
     }
 
+    public void commit() {
+        for (Map.Entry<Address, AccountState> entry : this.accountStates.entrySet()) {
+            Address address = entry.getKey();
+            AccountState accountState = entry.getValue();
+
+            this.accountStore.putAccount(address, accountState.toAccount());
+        }
+
+        this.accountStates.clear();
+    }
+
     private AccountState getAccountState(Address address) {
         if (this.accountStates.containsKey(address))
             return this.accountStates.get(address);
