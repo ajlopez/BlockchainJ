@@ -1,7 +1,5 @@
 package com.ajlopez.blockchain.core.types;
 
-import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +14,7 @@ public class HashTest {
     @Test
     public void createHash() {
         Random random = new Random();
-        byte[] bytes = new byte[32];
+        byte[] bytes = new byte[Hash.HASH_BYTES];
         random.nextBytes(bytes);
 
         Hash hash = new Hash(bytes);
@@ -27,7 +25,7 @@ public class HashTest {
     @Test
     public void hashToString() {
         Random random = new Random();
-        byte[] bytes = new byte[32];
+        byte[] bytes = new byte[Hash.HASH_BYTES];
         random.nextBytes(bytes);
 
         Hash hash = new Hash(bytes);
@@ -39,7 +37,7 @@ public class HashTest {
     @Test
     public void tooLargeByteArray() {
         Random random = new Random();
-        byte[] bytes = new byte[33];
+        byte[] bytes = new byte[Hash.HASH_BYTES + 1];
         random.nextBytes(bytes);
 
         try {
@@ -65,7 +63,7 @@ public class HashTest {
     @Test
     public void hashesWithTheSameBytesAreEqual() {
         Random random = new Random();
-        byte[] bytes = new byte[32];
+        byte[] bytes = new byte[Hash.HASH_BYTES];
         random.nextBytes(bytes);
 
         Hash hash1 = new Hash(bytes);
@@ -80,7 +78,7 @@ public class HashTest {
     @Test
     public void hashesWithTheSameBytesValuesAreEqual() {
         Random random = new Random();
-        byte[] bytes = new byte[32];
+        byte[] bytes = new byte[Hash.HASH_BYTES];
         random.nextBytes(bytes);
         byte[] bytes2 = Arrays.copyOf(bytes, bytes.length);
 
@@ -96,12 +94,13 @@ public class HashTest {
     @Test
     public void notEqual() {
         Random random = new Random();
-        byte[] bytes = new byte[32];
+        byte[] bytes = new byte[Hash.HASH_BYTES];
         random.nextBytes(bytes);
 
         Hash hash = new Hash(bytes);
 
         Assert.assertFalse(hash.equals(null));
         Assert.assertFalse(hash.equals("foo"));
+        Assert.assertFalse(hash.equals(new BlockHash(bytes)));
     }
 }
