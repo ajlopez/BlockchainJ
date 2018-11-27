@@ -10,62 +10,20 @@ import java.util.Map;
 /**
  * Created by ajlopez on 26/11/2018.
  */
-public class ExecutionContext {
+public class ExecutionContext extends AbstractExecutionContext {
     private AccountStore accountStore;
-    private Map<Address, AccountState> accountStates = new HashMap<>();
 
     public ExecutionContext(AccountStore accountStore) {
         this.accountStore = accountStore;
     }
 
-    public void transfer(Address senderAddress, Address receiverAddress, BigInteger amount) {
-        AccountState sender = this.getAccountState(senderAddress);
-        AccountState receiver = this.getAccountState(receiverAddress);
-
-        sender.subtractFromBalance(amount);
-        receiver.addToBalance(amount);
+    @Override
+    protected AccountState retrieveAccountState(Address address) {
+        return AccountState.fromAccount(this.accountStore.getAccount(address));
     }
 
-    public void incrementNonce(Address address) {
-        AccountState accountState = this.getAccountState(address);
-
-        accountState.incrementNonce();
-    }
-
-    public BigInteger getBalance(Address address) {
-        return this.getAccountState(address).getBalance();
-    }
-
-    public long getNonce(Address address) {
-        return this.getAccountState(address).getNonce();
-    }
-
-    public void commit() {
-        for (Map.Entry<Address, AccountState> entry : this.accountStates.entrySet()) {
-            Address address = entry.getKey();
-            AccountState accountState = entry.getValue();
-
-            if (!accountState.wasChanged())
-                continue;
-
-            this.accountStore.putAccount(address, accountState.toAccount());
-        }
-
-        this.accountStates.clear();
-    }
-
-    public void rollback() {
-        this.accountStates.clear();
-    }
-
-    private AccountState getAccountState(Address address) {
-        if (this.accountStates.containsKey(address))
-            return this.accountStates.get(address);
-
-        AccountState accountState = AccountState.fromAccount(this.accountStore.getAccount(address));
-
-        this.accountStates.put(address, accountState);
-
-        return accountState;
+    @Override
+    protected void updateAccountState(Address address, AccountState accountState) {
+        this.accountStore.putAccount(address, accountState.toAccount());
     }
 }
