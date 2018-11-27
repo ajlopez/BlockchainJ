@@ -39,6 +39,32 @@ public class AccountStateTest {
     }
 
     @Test
+    public void cloneWithInitialBalanceAndNonce() {
+        AccountState accountState = new AccountState(BigInteger.TEN, 42);
+
+        AccountState result = accountState.cloneState();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.TEN, result.getBalance());
+        Assert.assertEquals(42, result.getNonce());
+        Assert.assertFalse(result.wasChanged());
+    }
+
+    @Test
+    public void cloneWithInitialBalanceAndNonceAfterIncrementNonce() {
+        AccountState accountState = new AccountState(BigInteger.TEN, 41);
+
+        accountState.incrementNonce();
+
+        AccountState result = accountState.cloneState();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.TEN, result.getBalance());
+        Assert.assertEquals(42, result.getNonce());
+        Assert.assertTrue(result.wasChanged());
+    }
+
+    @Test
     public void addZeroToBalance() {
         AccountState accountState = new AccountState();
 

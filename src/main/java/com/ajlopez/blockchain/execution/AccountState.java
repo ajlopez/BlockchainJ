@@ -79,4 +79,12 @@ public class AccountState {
     public boolean wasChanged() {
         return this.changed;
     }
+
+    public AccountState cloneState() {
+        AccountState clonedState = new AccountState(this.balance, this.nonce);
+
+        clonedState.changed = this.changed;
+
+        return clonedState;
+    }
 }

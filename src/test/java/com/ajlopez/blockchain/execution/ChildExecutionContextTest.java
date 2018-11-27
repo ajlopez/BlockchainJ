@@ -166,8 +166,11 @@ public class ChildExecutionContextTest {
         long nonce = executionContext.getNonce(address);
         Assert.assertEquals(41, nonce);
 
-        long updatedNonce = accountStore.getAccount(address).getNonce();
-        Assert.assertEquals(41, updatedNonce);
+        long parentNonce = parentExecutionContext.getNonce(address);
+        Assert.assertEquals(41, parentNonce);
+
+        long originalNonce = accountStore.getAccount(address).getNonce();
+        Assert.assertEquals(41, originalNonce);
     }
 
     @Test
@@ -223,7 +226,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void transferToAccountAndCommit() {
+    public void transferToAccountAndCommitOneLevel() {
         AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -245,13 +248,21 @@ public class ChildExecutionContextTest {
         Assert.assertNotNull(receiverBalance);
         Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
 
+        BigInteger senderBalance2 = parentExecutionContext.getBalance(senderAddress);
+        Assert.assertNotNull(senderBalance2);
+        Assert.assertEquals(BigInteger.valueOf(1000 - 100), senderBalance2);
+
+        BigInteger receiverBalance2 = parentExecutionContext.getBalance(receiverAddress);
+        Assert.assertNotNull(receiverBalance2);
+        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance2);
+
         Account sender2 = accountStore.getAccount(senderAddress);
         Assert.assertNotNull(sender2);
-        Assert.assertEquals(BigInteger.valueOf(1000 - 100), sender2.getBalance());
+        Assert.assertEquals(BigInteger.valueOf(1000), sender2.getBalance());
 
         Account receiver2 = accountStore.getAccount(receiverAddress);
         Assert.assertNotNull(receiver2);
-        Assert.assertEquals(BigInteger.valueOf(100), receiver2.getBalance());
+        Assert.assertEquals(BigInteger.ZERO, receiver2.getBalance());
     }
 
     @Test

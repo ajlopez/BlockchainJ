@@ -15,7 +15,7 @@ public class ChildExecutionContext extends AbstractExecutionContext {
 
     @Override
     protected AccountState retrieveAccountState(Address address) {
-        return this.parentContext.getAccountState(address);
+        return this.parentContext.getAccountState(address).cloneState();
     }
 
     @Override
