@@ -10,10 +10,10 @@ import java.util.Map;
 /**
  * Created by ajlopez on 26/11/2018.
  */
-public class ExecutionContext extends AbstractExecutionContext {
+public class TopExecutionContext extends AbstractExecutionContext {
     private AccountStore accountStore;
 
-    public ExecutionContext(AccountStore accountStore) {
+    public TopExecutionContext(AccountStore accountStore) {
         this.accountStore = accountStore;
     }
 

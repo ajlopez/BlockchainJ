@@ -52,18 +52,22 @@ public abstract class AbstractExecutionContext {
         this.accountStates.clear();
     }
 
-    private AccountState getAccountState(Address address) {
+    AccountState getAccountState(Address address) {
         if (this.accountStates.containsKey(address))
             return this.accountStates.get(address);
 
         AccountState accountState = this.retrieveAccountState(address);
 
-        this.accountStates.put(address, accountState);
+        this.putAccountState(address, accountState);
 
         return accountState;
     }
 
-    protected abstract AccountState retrieveAccountState(Address address);
+    void putAccountState(Address address, AccountState accountState) {
+        this.accountStates.put(address, accountState);
+    }
 
-    protected abstract void updateAccountState(Address address, AccountState accountState);
+    abstract AccountState retrieveAccountState(Address address);
+
+    abstract void updateAccountState(Address address, AccountState accountState);
 }
