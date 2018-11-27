@@ -14,7 +14,7 @@ public class AddressTest {
     @Test
     public void createAddress() {
         Random random = new Random();
-        byte[] bytes = new byte[20];
+        byte[] bytes = new byte[Address.ADDRESS_BYTES];
         random.nextBytes(bytes);
 
         Address address = new Address(bytes);
@@ -36,7 +36,7 @@ public class AddressTest {
         Address address = new Address();
 
         Assert.assertNotNull(address.getBytes());
-        Assert.assertEquals(20, address.getBytes().length);
+        Assert.assertEquals(Address.ADDRESS_BYTES, address.getBytes().length);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class AddressTest {
     @Test
     public void addressWithTheSameBytesAreEqual() {
         Random random = new Random();
-        byte[] bytes = new byte[20];
+        byte[] bytes = new byte[Address.ADDRESS_BYTES];
         random.nextBytes(bytes);
 
         Address address1 = new Address(bytes);
@@ -92,7 +92,7 @@ public class AddressTest {
     @Test
     public void addressesWithTheSameBytesValuesAreEqual() {
         Random random = new Random();
-        byte[] bytes = new byte[20];
+        byte[] bytes = new byte[Address.ADDRESS_BYTES];
         random.nextBytes(bytes);
         byte[] bytes2 = Arrays.copyOf(bytes, bytes.length);
 
@@ -108,7 +108,7 @@ public class AddressTest {
     @Test
     public void notEqual() {
         Random random = new Random();
-        byte[] bytes = new byte[20];
+        byte[] bytes = new byte[Address.ADDRESS_BYTES];
         random.nextBytes(bytes);
 
         Address address = new Address(bytes);
