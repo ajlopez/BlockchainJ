@@ -36,7 +36,7 @@ public class JsonConverterTest {
 
     @Test
     public void convertAddress() {
-        byte[] bytes = new byte[Address.ADDRESS_LENGTH];
+        byte[] bytes = new byte[Address.ADDRESS_BYTES];
         random.nextBytes(bytes);
         Address address = new Address(bytes);
 
@@ -49,7 +49,7 @@ public class JsonConverterTest {
 
     @Test
     public void convertHash() {
-        byte[] bytes = new byte[Hash.BYTES];
+        byte[] bytes = new byte[Hash.HASH_BYTES];
         random.nextBytes(bytes);
         Hash hash = new Hash(bytes);
 

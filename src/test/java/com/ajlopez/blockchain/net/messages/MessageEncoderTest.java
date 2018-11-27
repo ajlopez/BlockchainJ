@@ -93,7 +93,7 @@ public class MessageEncoderTest {
         byte[] bytes = MessageEncoder.encode(message);
 
         Assert.assertNotNull(bytes);
-        Assert.assertEquals(1 + Integer.BYTES + Hash.BYTES, bytes.length);
+        Assert.assertEquals(1 + Integer.BYTES + Hash.HASH_BYTES, bytes.length);
 
         Message result = MessageEncoder.decode(bytes);
 

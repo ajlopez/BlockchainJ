@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain.core.types;
 
-import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -43,12 +42,12 @@ public class AddressTest {
     @Test
     public void createAddressWithFewBytes() {
         byte[] bytes = new byte[] { 0x01, 0x02 };
-        byte[] expected = ByteUtils.copyBytes(bytes, Address.ADDRESS_LENGTH);
+        byte[] expected = ByteUtils.copyBytes(bytes, Address.ADDRESS_BYTES);
 
         Address address = new Address(bytes);
 
         Assert.assertNotNull(address.getBytes());
-        Assert.assertEquals(Address.ADDRESS_LENGTH, address.getBytes().length);
+        Assert.assertEquals(Address.ADDRESS_BYTES, address.getBytes().length);
         Assert.assertArrayEquals(expected, address.getBytes());
     }
 

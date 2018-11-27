@@ -126,7 +126,7 @@ public class ByteUtils {
         for (int n = 0; n < nbytes; n++)
             if (bytes[n] != 0)
                 return n;
-            
+
         return nbytes;
     }
 }

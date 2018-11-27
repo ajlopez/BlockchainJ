@@ -1,57 +1,32 @@
 package com.ajlopez.blockchain.core.types;
 
-import com.ajlopez.blockchain.utils.ByteUtils;
-import com.ajlopez.blockchain.utils.HexUtils;
-
-import java.util.Arrays;
 import java.util.Random;
 
 /**
  * Created by ajlopez on 31/08/2017.
  */
-public class Address {
-    public static final int ADDRESS_LENGTH = 20;
+public class Address extends AbstractBytesValue {
+    public static final int ADDRESS_BYTES = 20;
 
     private static Random random = new Random();
 
-    private byte[] bytes;
-
     public Address() {
-        this.bytes = new byte[20];
-        random.nextBytes(this.bytes);
+        super(randomBytes(), ADDRESS_BYTES);
     }
 
     public Address(byte[] bytes) {
-        if (bytes.length > ADDRESS_LENGTH)
-            throw new IllegalArgumentException("Address too long");
-
-        this.bytes = ByteUtils.copyBytes(bytes, ADDRESS_LENGTH);
-    }
-
-    public byte[] getBytes() {
-        return this.bytes;
+        super(bytes, ADDRESS_BYTES);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-
-        if (!(obj instanceof Address))
-            return false;
-
-        Address address = (Address)obj;
-
-        return Arrays.equals(this.bytes, address.bytes);
+    public int hashOffset() {
+        return 23;
     }
 
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(this.bytes);
-    }
+    private static byte[] randomBytes() {
+        byte[] bytes = new byte[ADDRESS_BYTES];
+        random.nextBytes(bytes);
 
-    @Override
-    public String toString() {
-        return HexUtils.bytesToHexString(this.bytes, true);
+        return bytes;
     }
 }
