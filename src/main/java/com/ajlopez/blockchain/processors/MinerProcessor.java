@@ -12,9 +12,10 @@ import java.util.function.Consumer;
  * Created by ajlopez on 24/01/2018.
  */
 public class MinerProcessor {
-    private BlockChain blockChain;
-    private TransactionPool transactionPool;
-    private List<Consumer<Block>> minedBlockConsumers = new ArrayList<>();
+    private final BlockChain blockChain;
+    private final TransactionPool transactionPool;
+    private final List<Consumer<Block>> minedBlockConsumers = new ArrayList<>();
+
     private boolean stopped = false;
 
     public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool) {
