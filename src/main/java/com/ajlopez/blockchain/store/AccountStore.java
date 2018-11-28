@@ -33,7 +33,7 @@ public class AccountStore {
         this.trie = this.trie.put(key, value);
     }
 
-    public Hash getHash() {
+    public Hash getRootHash() {
         return this.trie.getHash();
     }
 }

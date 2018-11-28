@@ -36,7 +36,7 @@ public class ChildExecutionContextTest {
 
         accountStore.putAccount(address, account);
 
-        Hash originalHash = accountStore.getHash();
+        Hash originalHash = accountStore.getRootHash();
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
@@ -53,7 +53,7 @@ public class ChildExecutionContextTest {
         Assert.assertNotNull(result2);
         Assert.assertEquals(BigInteger.TEN, result2);
 
-        Assert.assertEquals(originalHash, accountStore.getHash());
+        Assert.assertEquals(originalHash, accountStore.getRootHash());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Hash originalHash = accountStore.getHash();
+        Hash originalHash = accountStore.getRootHash();
 
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -79,7 +79,7 @@ public class ChildExecutionContextTest {
         Assert.assertNotNull(result2);
         Assert.assertEquals(BigInteger.ZERO, result2);
 
-        Assert.assertEquals(originalHash, accountStore.getHash());
+        Assert.assertEquals(originalHash, accountStore.getRootHash());
     }
 
     @Test
@@ -178,7 +178,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Hash originalHash = accountStore.getHash();
+        Hash originalHash = accountStore.getRootHash();
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
@@ -191,7 +191,7 @@ public class ChildExecutionContextTest {
         long originalNonce = accountStore.getAccount(address).getNonce();
         Assert.assertEquals(0, originalNonce);
 
-        Assert.assertEquals(originalHash, accountStore.getHash());
+        Assert.assertEquals(originalHash, accountStore.getRootHash());
     }
 
     @Test

@@ -35,7 +35,7 @@ public class TopExecutionContextTest {
 
         accountStore.putAccount(address, account);
 
-        Hash originalHash = accountStore.getHash();
+        Hash originalHash = accountStore.getRootHash();
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore);
 
@@ -51,7 +51,7 @@ public class TopExecutionContextTest {
         Assert.assertNotNull(result2);
         Assert.assertEquals(BigInteger.TEN, result2);
 
-        Assert.assertEquals(originalHash, accountStore.getHash());
+        Assert.assertEquals(originalHash, accountStore.getRootHash());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Hash originalHash = accountStore.getHash();
+        Hash originalHash = accountStore.getRootHash();
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore);
 
@@ -75,7 +75,7 @@ public class TopExecutionContextTest {
         Assert.assertNotNull(result2);
         Assert.assertEquals(BigInteger.ZERO, result2);
 
-        Assert.assertEquals(originalHash, accountStore.getHash());
+        Assert.assertEquals(originalHash, accountStore.getRootHash());
     }
 
     @Test
@@ -142,7 +142,7 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Hash originalHash = accountStore.getHash();
+        Hash originalHash = accountStore.getRootHash();
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore);
 
@@ -154,7 +154,7 @@ public class TopExecutionContextTest {
         long originalNonce = accountStore.getAccount(address).getNonce();
         Assert.assertEquals(0, originalNonce);
 
-        Assert.assertEquals(originalHash, accountStore.getHash());
+        Assert.assertEquals(originalHash, accountStore.getRootHash());
     }
 
     @Test
