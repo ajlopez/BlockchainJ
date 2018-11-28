@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by ajlopez on 27/11/2018.
  */
-public class TransactionExecutionTest {
+public class TransactionExecutorTest {
     @Test
     public void executeTransaction() {
         AccountStore accountStore = new AccountStore(new Trie());
