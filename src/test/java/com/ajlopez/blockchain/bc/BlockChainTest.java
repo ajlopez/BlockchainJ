@@ -38,7 +38,7 @@ public class BlockChainTest {
     @Test
     public void addFirstBlock() {
         BlockChain blockChain = new BlockChain();
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
 
         Assert.assertTrue(blockChain.connectBlock(block));
 
@@ -54,8 +54,8 @@ public class BlockChainTest {
     @Test
     public void addSecondBlock() {
         BlockChain blockChain = new BlockChain();
-        Block genesis = new Block(0, null);
-        Block block = new Block(1, genesis.getHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
@@ -72,8 +72,8 @@ public class BlockChainTest {
     @Test
     public void addSecondBlockTwice() {
         BlockChain blockChain = new BlockChain();
-        Block genesis = new Block(0, null);
-        Block block = new Block(1, genesis.getHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
@@ -86,8 +86,8 @@ public class BlockChainTest {
     @Test
     public void addFirstBlockTwice() {
         BlockChain blockChain = new BlockChain();
-        Block genesis = new Block(0, null);
-        Block block = new Block(1, genesis.getHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
@@ -100,8 +100,8 @@ public class BlockChainTest {
     @Test
     public void rejectBlockIfNotChild() {
         BlockChain blockChain = new BlockChain();
-        Block genesis = new Block(0, null);
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()));
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash());
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertFalse(blockChain.connectBlock(block));
@@ -114,10 +114,10 @@ public class BlockChainTest {
     @Test
     public void switchToABetterFork() {
         BlockChain blockChain = new BlockChain();
-        Block genesis = new Block(0, null);
-        Block block1 = new Block(1, genesis.getHash());
-        Block block1b = new Block(1, genesis.getHash());
-        Block block2b = new Block(2, block1b.getHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
+        Block block1b = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
+        Block block2b = new Block(2, block1b.getHash(), HashUtilsTest.generateRandomHash());
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block1));

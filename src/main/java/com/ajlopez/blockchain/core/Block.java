@@ -15,16 +15,16 @@ public class Block {
     private final BlockHeader header;
     private final List<Transaction> transactions;
 
-    public Block(Block parent, List<Transaction> txs) {
-        this(parent.getNumber() + 1, parent.getHash(), txs);
+    public Block(Block parent, List<Transaction> txs, Hash stateRootHash) {
+        this(parent.getNumber() + 1, parent.getHash(), txs, stateRootHash);
     }
 
-    public Block(long number, BlockHash parentHash) {
-        this(number, parentHash, new ArrayList<>());
+    public Block(long number, BlockHash parentHash, Hash stateRootHash) {
+        this(number, parentHash, new ArrayList<>(), stateRootHash);
     }
 
-    public Block(long number, BlockHash parentHash, List<Transaction> txs) {
-        this(new BlockHeader(number, parentHash, HashUtils.calculateHash(TransactionEncoder.encode(txs))), txs);
+    public Block(long number, BlockHash parentHash, List<Transaction> txs, Hash stateRootHash) {
+        this(new BlockHeader(number, parentHash, HashUtils.calculateHash(TransactionEncoder.encode(txs)), stateRootHash), txs);
     }
 
     public Block(BlockHeader header, List<Transaction> transactions)

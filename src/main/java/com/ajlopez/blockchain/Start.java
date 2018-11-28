@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Start {
     public static void main(String[] args) throws IOException {
         BlockChain blockChain = new BlockChain();
-        Block genesis = new Block(0, null);
+        Block genesis = new Block(0, null, null);
         blockChain.connectBlock(genesis);
 
         ArgumentsProcessor argsproc = processArguments(args);

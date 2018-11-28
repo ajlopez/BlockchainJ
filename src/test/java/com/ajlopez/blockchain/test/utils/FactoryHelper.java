@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
+import com.ajlopez.blockchain.utils.HashUtilsTest;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class FactoryHelper {
     }
 
     public static BlockChain createBlockChainWithGenesis() {
-        Block genesis = new Block(0, null);
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
         BlockChain blockChain = new BlockChain();
         blockChain.connectBlock(genesis);
 
@@ -77,12 +78,12 @@ public class FactoryHelper {
     public static List<Block> createBlocks(int nblocks) {
         List<Block> blocks = new ArrayList<>();
 
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
 
         blocks.add(block);
 
         for (int k = 0; k < nblocks; k++) {
-            block = new Block(block.getNumber() + 1, block.getHash());
+            block = new Block(block.getNumber() + 1, block.getHash(), HashUtilsTest.generateRandomHash());
             blocks.add(block);
         }
 

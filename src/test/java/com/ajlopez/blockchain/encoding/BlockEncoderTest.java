@@ -20,7 +20,8 @@ public class BlockEncoderTest {
     @Test
     public void encodeDecodeBlock() {
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(42, parentHash);
+        Hash stateRootHash = HashUtilsTest.generateRandomHash();
+        Block block = new Block(42, parentHash, stateRootHash);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -45,7 +46,8 @@ public class BlockEncoderTest {
         txs.add(tx);
 
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(42, parentHash, txs);
+        Hash stateRootHash = HashUtilsTest.generateRandomHash();
+        Block block = new Block(42, parentHash, txs, stateRootHash);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -77,7 +79,8 @@ public class BlockEncoderTest {
         txs.add(tx2);
 
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(42, parentHash, txs);
+        Hash stateRootHash = HashUtilsTest.generateRandomHash();
+        Block block = new Block(42, parentHash, txs, stateRootHash);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -107,8 +110,9 @@ public class BlockEncoderTest {
     @Test
     public void encodeTwoBlocks() {
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(42, parentHash);
-        Block block2 = new Block(0, null);
+        Hash stateRootHash = HashUtilsTest.generateRandomHash();
+        Block block1 = new Block(42, parentHash, stateRootHash);
+        Block block2 = new Block(0, null, stateRootHash);
 
         byte[] encoded1 = BlockEncoder.encode(block1);
         byte[] encoded2 = BlockEncoder.encode(block2);

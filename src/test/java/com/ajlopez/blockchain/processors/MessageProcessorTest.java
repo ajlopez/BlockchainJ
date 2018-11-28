@@ -3,11 +3,13 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.test.simples.SimpleMessageChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtilsTest;
 import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,7 +24,7 @@ public class MessageProcessorTest {
     public void processBlockMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, Hash.emptyHash);
         Message message = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor);
@@ -44,7 +46,7 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
         Message message = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
@@ -69,8 +71,8 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
-        Block block1 = new Block(1, blockChain.getBestBlock().getHash());
-        Block block2 = new Block(2, block1.getHash());
+        Block block1 = new Block(1, blockChain.getBestBlock().getHash(), HashUtilsTest.generateRandomHash());
+        Block block2 = new Block(2, block1.getHash(), HashUtilsTest.generateRandomHash());
         Message message = new BlockMessage(block2);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
@@ -100,7 +102,7 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel2 = new SimpleMessageChannel();
         sendProcessor.connectToPeer(peer2, channel2);
 
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
         Message message = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, sendProcessor);
@@ -127,7 +129,7 @@ public class MessageProcessorTest {
         Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor sendProcessor = new SendProcessor(sender);
 
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
         Message blockMessage = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, sendProcessor);
@@ -149,7 +151,7 @@ public class MessageProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
 
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
 
@@ -172,7 +174,7 @@ public class MessageProcessorTest {
         Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(sender);
 
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
         Message blockMessage = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
@@ -194,7 +196,7 @@ public class MessageProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
 
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
 

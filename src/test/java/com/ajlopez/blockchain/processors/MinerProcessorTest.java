@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -23,7 +24,7 @@ public class MinerProcessorTest {
         MinerProcessor processor = new MinerProcessor(null, transactionPool);
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block parent = new Block(1L, hash);
+        Block parent = new Block(1L, hash, Hash.emptyHash);
 
         Block block = processor.mineBlock(parent, transactionPool);
 
@@ -40,7 +41,7 @@ public class MinerProcessorTest {
     @Test
     public void mineBlockWithOneTransaction() {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block parent = new Block(1L, hash);
+        Block parent = new Block(1L, hash, Hash.emptyHash);
 
         Transaction tx = FactoryHelper.createTransaction(100);
 

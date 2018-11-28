@@ -15,8 +15,9 @@ public class BlockHeaderEncoder {
         byte[] rlpNumber = RLP.encode(ByteUtils.unsignedLongToBytes(header.getNumber()));
         byte[] rlpParentHash = RLP.encode(header.getParentHash().getBytes());
         byte[] rlpTransactionsHash = RLP.encode(header.getTransactionsHash().getBytes());
+        byte[] rlpStateRootHash = RLP.encode(header.getStateRootHash().getBytes());
 
-        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsHash);
+        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsHash, rlpStateRootHash);
     }
 
     public static BlockHeader decode(byte[] encoded) {
@@ -24,7 +25,8 @@ public class BlockHeaderEncoder {
         byte[] number = RLP.decode(bytes[0]);
         byte[] parentHash = RLP.decode(bytes[1]);
         byte[] transactionsHash = RLP.decode(bytes[2]);
+        byte[] stateRootHash = RLP.decode(bytes[3]);
 
-        return new BlockHeader(ByteUtils.bytesToUnsignedLong(number), new BlockHash(parentHash), new Hash(transactionsHash));
+        return new BlockHeader(ByteUtils.bytesToUnsignedLong(number), new BlockHash(parentHash), new Hash(transactionsHash), new Hash(stateRootHash));
     }
 }

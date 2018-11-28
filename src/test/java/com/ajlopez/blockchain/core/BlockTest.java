@@ -18,7 +18,7 @@ public class BlockTest {
     @Test
     public void createWithNumberAndParentHash() {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash);
+        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash());
 
         Assert.assertEquals(1L, block.getNumber());
         Assert.assertEquals(hash, block.getParentHash());
@@ -28,7 +28,7 @@ public class BlockTest {
     @Test
     public void noTransactions() {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash);
+        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash());
 
         List<Transaction> transactions = block.getTransactions();
 
@@ -38,8 +38,8 @@ public class BlockTest {
 
     @Test
     public void blockWithDifferentParentHashesHaveDifferentHashes() {
-        Block block1 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()));
-        Block block2 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()));
+        Block block1 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash());
+        Block block2 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash());
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -47,8 +47,8 @@ public class BlockTest {
     @Test
     public void blockWithDifferentNumbersHaveDifferentHashes() {
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1L, parentHash);
-        Block block2 = new Block(2L, parentHash);
+        Block block1 = new Block(1L, parentHash, HashUtilsTest.generateRandomHash());
+        Block block2 = new Block(2L, parentHash, HashUtilsTest.generateRandomHash());
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -69,8 +69,8 @@ public class BlockTest {
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
 
-        Block block1 = new Block(1L, hash, txs1);
-        Block block2 = new Block(1L, hash, txs2);
+        Block block1 = new Block(1L, hash, txs1, HashUtilsTest.generateRandomHash());
+        Block block2 = new Block(1L, hash, txs2, HashUtilsTest.generateRandomHash());
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -87,7 +87,7 @@ public class BlockTest {
         txs.add(tx);
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash, txs);
+        Block block = new Block(1L, hash, txs, HashUtilsTest.generateRandomHash());
 
         List<Transaction> transactions = block.getTransactions();
 

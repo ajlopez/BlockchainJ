@@ -12,16 +12,18 @@ public class BlockHeader {
     private final long number;
     private final BlockHash parentHash;
     private final Hash transactionsHash;
+    private final Hash stateRootHash;
 
     private BlockHash hash;
 
-    public BlockHeader(long number, BlockHash parentHash, Hash transactionsHash) {
+    public BlockHeader(long number, BlockHash parentHash, Hash transactionsHash, Hash stateRootHash) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
         this.number = number;
         this.parentHash = parentHash == null ? new BlockHash(Hash.emptyHash) : parentHash;
         this.transactionsHash = transactionsHash;
+        this.stateRootHash = stateRootHash;
     }
 
     public long getNumber() {
@@ -40,6 +42,10 @@ public class BlockHeader {
     }
 
     public Hash getTransactionsHash() { return this.transactionsHash; }
+
+    public Hash getStateRootHash() {
+        return this.stateRootHash;
+    }
 
     private BlockHash calculateHash() {
         return new BlockHash(HashUtils.calculateHash(BlockHeaderEncoder.encode(this)));

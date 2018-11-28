@@ -19,7 +19,7 @@ public class MessageEncoderTest {
     @Test
     public void encodeBlockMessage() {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash);
+        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash());
 
         BlockMessage message = new BlockMessage(block);
 
@@ -39,7 +39,7 @@ public class MessageEncoderTest {
     @Test
     public void encodeAndDecodeBlockMessage() {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash);
+        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash());
 
         BlockMessage message = new BlockMessage(block);
 

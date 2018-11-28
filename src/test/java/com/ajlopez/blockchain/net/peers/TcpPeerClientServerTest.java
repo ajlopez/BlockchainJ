@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.processors.NodeProcessor;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.test.utils.NodesHelper;
+import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class TcpPeerClientServerTest {
         TcpPeerClient client = new TcpPeerClient("localhost", 4000, nodeProcessor1);
         client.connect();
 
-        Block block = new Block(0, null);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
         Message message = new BlockMessage(block);
 
         nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);

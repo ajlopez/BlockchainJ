@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Hash;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class MinerProcessor {
     }
 
     public Block mineBlock(Block parent, TransactionPool txpool) {
-        return new Block(parent, txpool.getTransactions());
+        return new Block(parent, txpool.getTransactions(), Hash.emptyHash);
     }
 
     public void start() {
