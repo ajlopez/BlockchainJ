@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,6 +52,48 @@ public class TransactionExecutionTest {
         Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
 
         Assert.assertEquals(1, accountStore.getAccount(receiverAddress).getNonce());
+        Assert.assertEquals(0, accountStore.getAccount(senderAddress).getNonce());
+    }
+
+    @Test
+    public void executeTwoTransactions() {
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        Account sender = new Account(BigInteger.valueOf(1000), 0);
+
+        accountStore.putAccount(senderAddress, sender);
+
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0 );
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 1 );
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction1);
+        transactions.add(transaction2);
+
+        TransactionExecutor executor = new TransactionExecutor(accountStore);
+
+        List<Transaction> result = executor.executeTransactions(transactions);
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(2, result.size());
+
+        Transaction tresult1 = result.get(0);
+        Assert.assertEquals(transaction1, tresult1);
+        Transaction tresult2 = result.get(1);
+        Assert.assertEquals(transaction2, tresult2);
+
+        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Assert.assertNotNull(senderBalance);
+        Assert.assertEquals(BigInteger.valueOf(1000 - 150), senderBalance);
+
+        BigInteger receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
+        Assert.assertNotNull(receiverAddress);
+        Assert.assertEquals(BigInteger.valueOf(150), receiverBalance);
+
+        Assert.assertEquals(2, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(0, accountStore.getAccount(senderAddress).getNonce());
     }
 }
