@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -28,7 +29,7 @@ public class FactoryHelper {
     }
 
     public static BlockChain createBlockChainWithGenesis() {
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block genesis = new Block(0, null, Hash.emptyHash);
         BlockChain blockChain = new BlockChain();
         blockChain.connectBlock(genesis);
 

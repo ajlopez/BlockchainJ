@@ -2,6 +2,7 @@ package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
@@ -57,7 +58,7 @@ public class NodeRunnerTest {
 
         runner.start();
 
-        Block block = new Block(1, blockChain.getBestBlock().getHash(), HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, blockChain.getBestBlock().getHash(), Hash.emptyHash);
         Message message = new BlockMessage(block);
 
         TcpPeerClient tcpPeerClient = new TcpPeerClient("127.0.0.1", 3000, null);
