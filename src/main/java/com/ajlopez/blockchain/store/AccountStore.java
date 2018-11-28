@@ -36,4 +36,8 @@ public class AccountStore {
     public Hash getRootHash() {
         return this.trie.getHash();
     }
+
+    public void save() {
+        this.trie.save();
+    }
 }

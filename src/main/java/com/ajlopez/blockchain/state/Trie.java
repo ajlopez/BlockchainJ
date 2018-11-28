@@ -250,6 +250,9 @@ public class Trie {
 
         Hash hash = this.hashes[k];
 
+        if (hash == null)
+            return null;
+
         Trie trie = this.store.retrieve(hash);
 
         this.nodes = new Trie[ARITY];

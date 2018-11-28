@@ -26,14 +26,16 @@ public class FactoryHelper {
         Address sender = new Address();
         Address receiver = new Address();
         BigInteger bivalue = BigInteger.valueOf(value);
-        Random random = new Random();
-        int nonce = Math.abs(random.nextInt());
 
-        return new Transaction(sender, receiver, bivalue, nonce);
+        return new Transaction(sender, receiver, bivalue, 0);
     }
 
     public static BlockChain createBlockChainWithGenesis() {
-        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH);
+        return createBlockChainWithGenesis(Trie.EMPTY_TRIE_HASH);
+    }
+
+    public static BlockChain createBlockChainWithGenesis(Hash initialHash) {
+        Block genesis = new Block(0, null, initialHash);
         BlockChain blockChain = new BlockChain();
         blockChain.connectBlock(genesis);
 
