@@ -176,4 +176,40 @@ public class TransactionExecutorTest {
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
     }
+
+    @Test
+    public void execute999Transactions() {
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        List<Address> addresses = new ArrayList<>();
+
+        for (int k = 0; k < 1000; k++)
+            addresses.add(FactoryHelper.createRandomAddress());
+
+        Account account = new Account(BigInteger.valueOf(1001), 0);
+
+        accountStore.putAccount(addresses.get(0), account);
+
+        List<Transaction> transactions = new ArrayList<>();
+
+        for (int k = 0; k < 1000 - 1; k++) {
+            Transaction transaction = new Transaction(addresses.get(k), addresses.get(k + 1), BigInteger.valueOf(1000 - k), 0);
+            transactions.add(transaction);
+        }
+
+        TransactionExecutor transactionExecutor = new TransactionExecutor(accountStore);
+
+        long millis = System.currentTimeMillis();
+        List<Transaction> executed = transactionExecutor.executeTransactions(transactions);
+        millis = System.currentTimeMillis() - millis;
+        System.out.println(millis);
+
+        millis = System.currentTimeMillis();
+        accountStore.getRootHash();
+        millis = System.currentTimeMillis() - millis;
+        System.out.println(millis);
+
+        Assert.assertNotNull(executed);
+        Assert.assertEquals(transactions.size(), executed.size());
+    }
 }
