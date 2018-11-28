@@ -5,6 +5,8 @@ import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.net.peers.TcpPeerServer;
 import com.ajlopez.blockchain.processors.NodeProcessor;
+import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.TrieStore;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +27,7 @@ public class NodeRunner {
         this.port = port;
         this.peers = peers;
 
-        this.nodeProcessor = new NodeProcessor(Peer.createRandomPeer(), blockChain);
+        this.nodeProcessor = new NodeProcessor(Peer.createRandomPeer(), blockChain, new TrieStore(new HashMapStore()));
 
         if (this.port > 0)
             this.tcpPeerServer = new TcpPeerServer(this.port, this.nodeProcessor);

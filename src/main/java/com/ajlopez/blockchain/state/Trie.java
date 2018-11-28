@@ -11,6 +11,7 @@ import java.util.Arrays;
  * Created by ajlopez on 12/08/2017.
  */
 public class Trie {
+    public static final Hash EMPTY_TRIE_HASH = new Trie().getHash();
     private static final int ARITY = 16;
 
     private byte[] value;

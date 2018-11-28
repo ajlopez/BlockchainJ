@@ -5,6 +5,9 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -21,10 +24,10 @@ public class MinerProcessorTest {
     @Test
     public void mineBlockWithNoTransactions() {
         TransactionPool transactionPool = new TransactionPool();
-        MinerProcessor processor = new MinerProcessor(null, transactionPool);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, new TrieStore(new HashMapStore()));
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block parent = new Block(1L, hash, Hash.emptyHash);
+        Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH);
 
         Block block = processor.mineBlock(parent, transactionPool);
 
@@ -48,7 +51,7 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         transactionPool.addTransaction(tx);
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, new TrieStore(new HashMapStore()));
 
         Block block = processor.mineBlock(parent, transactionPool);
 
@@ -75,7 +78,7 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         transactionPool.addTransaction(tx);
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new TrieStore(new HashMapStore()));
 
         Block block = processor.process();
 
@@ -102,7 +105,7 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         transactionPool.addTransaction(tx);
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new TrieStore(new HashMapStore()));
 
         Semaphore sem = new Semaphore(0, true);
 
@@ -144,7 +147,7 @@ public class MinerProcessorTest {
 
         TransactionPool transactionPool = new TransactionPool();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new TrieStore(new HashMapStore()));
 
         Semaphore sem = new Semaphore(0, true);
 

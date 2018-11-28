@@ -18,6 +18,9 @@ public class TrieStore {
     }
 
     public Trie retrieve(Hash hash) {
+        if (hash.equals(Trie.EMPTY_TRIE_HASH))
+            return new Trie(this);
+
         byte[] encoded = this.store.getValue(hash.getBytes());
 
         // TODO add hash

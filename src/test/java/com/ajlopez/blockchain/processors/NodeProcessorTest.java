@@ -26,7 +26,7 @@ public class NodeProcessorTest {
         BlockChain blockChain = new BlockChain();
         Peer peer = FactoryHelper.createRandomPeer();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(peer, blockChain);
+        NodeProcessor nodeProcessor = new NodeProcessor(peer, blockChain, null);
 
         Assert.assertSame(peer, nodeProcessor.getPeer());
     }

@@ -7,10 +7,14 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
+import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -29,7 +33,7 @@ public class FactoryHelper {
     }
 
     public static BlockChain createBlockChainWithGenesis() {
-        Block genesis = new Block(0, null, Hash.emptyHash);
+        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH);
         BlockChain blockChain = new BlockChain();
         blockChain.connectBlock(genesis);
 
@@ -73,7 +77,7 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
-        return new NodeProcessor(createRandomPeer(), blockChain);
+        return new NodeProcessor(createRandomPeer(), blockChain, new TrieStore(new HashMapStore()));
     }
 
     public static List<Block> createBlocks(int nblocks) {
