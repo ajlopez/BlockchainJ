@@ -27,10 +27,13 @@ public class TransactionExecutor {
         List<Transaction> executed = new ArrayList<>();
 
         for (Transaction transaction : transactions) {
+            if (transaction.getNonce() != this.topExecutionContext.getNonce(transaction.getSender()))
+                continue;
+
             AbstractExecutionContext context = new ChildExecutionContext(this.topExecutionContext);
 
             context.transfer(transaction.getSender(), transaction.getReceiver(), transaction.getValue());
-            context.incrementNonce(transaction.getReceiver());
+            context.incrementNonce(transaction.getSender());
             context.commit();
 
             executed.add(transaction);
