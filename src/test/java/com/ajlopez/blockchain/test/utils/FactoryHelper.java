@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test.utils;
 
+import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
@@ -8,6 +9,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -31,11 +33,14 @@ public class FactoryHelper {
     }
 
     public static BlockChain createBlockChainWithGenesis() {
-        return createBlockChainWithGenesis(Trie.EMPTY_TRIE_HASH);
+        return createBlockChainWithGenesis(GenesisGenerator.generateGenesis());
     }
 
-    public static BlockChain createBlockChainWithGenesis(Hash initialHash) {
-        Block genesis = new Block(0, null, initialHash);
+    public static BlockChain createBlockChainWithGenesis(AccountStore accountStore) {
+        return createBlockChainWithGenesis(GenesisGenerator.generateGenesis(accountStore));
+    }
+
+    public static BlockChain createBlockChainWithGenesis(Block genesis) {
         BlockChain blockChain = new BlockChain();
         blockChain.connectBlock(genesis);
 
