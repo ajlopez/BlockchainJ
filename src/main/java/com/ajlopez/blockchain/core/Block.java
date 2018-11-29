@@ -53,6 +53,10 @@ public class Block {
         return this.header.getParentHash();
     }
 
+    public Hash getStateRootHash() {
+        return this.header.getStateRootHash();
+    }
+
     public List<Transaction> getTransactions() {
         return this.transactions;
     }
