@@ -24,7 +24,7 @@ public class MessageProcessorTest {
     public void processBlockMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(0, null, Hash.emptyHash);
+        Block block = new Block(0, null, Hash.EMPTY_HASH);
         Message message = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor);

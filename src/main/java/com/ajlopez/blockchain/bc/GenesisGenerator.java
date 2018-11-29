@@ -13,6 +13,6 @@ public class GenesisGenerator {
     }
 
     public static Block generateGenesis() {
-        return new Block(0, BlockHash.emptyBlockHash, Trie.EMPTY_TRIE_HASH);
+        return new Block(0, BlockHash.EMPTY_BLOCK_HASH, Trie.EMPTY_TRIE_HASH);
     }
 }

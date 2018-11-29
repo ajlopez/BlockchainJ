@@ -5,7 +5,7 @@ package com.ajlopez.blockchain.core.types;
  */
 public class Hash extends AbstractBytesValue {
     public static final int HASH_BYTES = 32;
-    public static Hash emptyHash = new Hash(new byte[HASH_BYTES]);
+    public static Hash EMPTY_HASH = new Hash(new byte[HASH_BYTES]);
 
     public Hash(byte[] bytes) {
         super(bytes, HASH_BYTES);

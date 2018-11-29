@@ -17,7 +17,7 @@ public class GenesisGeneratorTest {
         Assert.assertNotNull(genesis);
         Assert.assertEquals(0, genesis.getNumber());
         Assert.assertNotNull(genesis.getParentHash());
-        Assert.assertEquals(BlockHash.emptyBlockHash, genesis.getParentHash());
+        Assert.assertEquals(BlockHash.EMPTY_BLOCK_HASH, genesis.getParentHash());
         Assert.assertNotNull(genesis.getStateRootHash());
         Assert.assertEquals(Trie.EMPTY_TRIE_HASH, genesis.getStateRootHash());
         Assert.assertNotNull(genesis.getTransactions());

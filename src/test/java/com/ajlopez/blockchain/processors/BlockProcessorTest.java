@@ -61,7 +61,7 @@ public class BlockProcessorTest {
     public void addFirstBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(0, null, Hash.emptyHash);
+        Block block = new Block(0, null, Hash.EMPTY_HASH);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -85,7 +85,7 @@ public class BlockProcessorTest {
 
         processor.onNewBestBlock(consumer);
 
-        Block block = new Block(0, null, Hash.emptyHash);
+        Block block = new Block(0, null, Hash.EMPTY_HASH);
 
         List<Block> processedBlocks = processor.processBlock(block);
 

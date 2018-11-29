@@ -21,7 +21,7 @@ public class BlockHeader {
             throw new IllegalStateException("Negative number in block header");
 
         this.number = number;
-        this.parentHash = parentHash == null ? new BlockHash(Hash.emptyHash) : parentHash;
+        this.parentHash = parentHash == null ? new BlockHash(Hash.EMPTY_HASH) : parentHash;
         this.transactionsHash = transactionsHash;
         this.stateRootHash = stateRootHash;
     }
