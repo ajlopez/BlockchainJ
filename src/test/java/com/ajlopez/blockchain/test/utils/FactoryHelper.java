@@ -32,6 +32,16 @@ public class FactoryHelper {
         return new Transaction(sender, receiver, bivalue, 0);
     }
 
+    public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks) {
+        Block block = blockChain.getBestBlock();
+
+        for (int k = 0; k < nblocks; k++) {
+            Block newBlock = new Block(block.getNumber() + 1, block.getHash(), block.getStateRootHash());
+            blockChain.connectBlock(newBlock);
+            block = newBlock;
+        }
+    }
+
     public static BlockChain createBlockChainWithGenesis() {
         return createBlockChainWithGenesis(GenesisGenerator.generateGenesis());
     }

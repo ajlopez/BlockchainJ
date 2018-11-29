@@ -60,4 +60,96 @@ public class TcpPeerClientServerTest {
         Assert.assertEquals(block.getNumber(), bestBlock2.getNumber());
         Assert.assertEquals(block.getHash(), bestBlock2.getHash());
     }
+
+    @Test
+    public void connectClientServerAndSynchronizeClient() throws IOException, InterruptedException {
+        BlockChain blockChain1 = FactoryHelper.createBlockChainWithGenesis();
+        FactoryHelper.extendBlockChainWithBlocks(blockChain1, 10);
+
+        Assert.assertEquals(10, blockChain1.getBestBlockNumber());
+
+        Block block = blockChain1.getBestBlock();
+
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+        BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis();
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
+
+        Semaphore semaphore = new Semaphore(0, true);
+
+        blockChain2.onBlock(blk -> {
+            if (blk.getNumber() == 10)
+                semaphore.release();
+        });
+
+        TcpPeerServer server = new TcpPeerServer(4001, nodeProcessor2);
+        server.start();
+
+        TcpPeerClient client = new TcpPeerClient("localhost", 4001, nodeProcessor1);
+        client.connect();
+
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
+
+        semaphore.acquire();
+
+        server.stop();
+
+        Block bestBlock1 = blockChain1.getBestBlock();
+
+        Assert.assertNotNull(bestBlock1);
+        Assert.assertEquals(block.getNumber(), bestBlock1.getNumber());
+        Assert.assertEquals(block.getHash(), bestBlock1.getHash());
+
+        Block bestBlock2 = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(bestBlock2);
+        Assert.assertEquals(block.getNumber(), bestBlock2.getNumber());
+        Assert.assertEquals(block.getHash(), bestBlock2.getHash());
+    }
+
+    @Test
+    public void connectClientServerAndSynchronizeServer() throws IOException, InterruptedException {
+        BlockChain blockChain1 = FactoryHelper.createBlockChainWithGenesis();
+
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+
+        BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis();
+        FactoryHelper.extendBlockChainWithBlocks(blockChain2, 10);
+
+        Assert.assertEquals(10, blockChain2.getBestBlockNumber());
+
+        Block block = blockChain2.getBestBlock();
+
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
+
+        Semaphore semaphore = new Semaphore(0, true);
+
+        blockChain1.onBlock(blk -> {
+            if (blk.getNumber() == 10)
+                semaphore.release();
+        });
+
+        TcpPeerServer server = new TcpPeerServer(4002, nodeProcessor2);
+        server.start();
+
+        TcpPeerClient client = new TcpPeerClient("localhost", 4002, nodeProcessor1);
+        client.connect();
+
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
+
+        semaphore.acquire();
+
+        server.stop();
+
+        Block bestBlock1 = blockChain1.getBestBlock();
+
+        Assert.assertNotNull(bestBlock1);
+        Assert.assertEquals(block.getNumber(), bestBlock1.getNumber());
+        Assert.assertEquals(block.getHash(), bestBlock1.getHash());
+
+        Block bestBlock2 = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(bestBlock2);
+        Assert.assertEquals(block.getNumber(), bestBlock2.getNumber());
+        Assert.assertEquals(block.getHash(), bestBlock2.getHash());
+    }
 }
