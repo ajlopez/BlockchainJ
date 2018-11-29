@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.net.peers;
 
 import com.ajlopez.blockchain.net.MessageChannel;
+import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.Message;
 import javafx.util.Pair;
 
@@ -35,6 +36,11 @@ public class PeerConnection implements PeerNode {
 
     public void connectTo(PeerNode node) {
         // TODO rewiew if this methods is needed
+    }
+
+    public Status getStatus() {
+        // TODO rewiew if this methods is needed
+        return null;
     }
 
     public synchronized void start() {

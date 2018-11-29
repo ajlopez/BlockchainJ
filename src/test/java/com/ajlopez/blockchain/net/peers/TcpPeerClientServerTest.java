@@ -20,9 +20,9 @@ import java.util.concurrent.Semaphore;
 public class TcpPeerClientServerTest {
     @Test
     public void connectClientServer() throws IOException, InterruptedException {
-        BlockChain blockChain1 = new BlockChain();
+        BlockChain blockChain1 = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
-        BlockChain blockChain2 = new BlockChain();
+        BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
         Semaphore semaphore = new Semaphore(0, true);
@@ -37,7 +37,7 @@ public class TcpPeerClientServerTest {
         TcpPeerClient client = new TcpPeerClient("localhost", 4000, nodeProcessor1);
         client.connect();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, blockChain1.getBestBlock().getHash(), HashUtilsTest.generateRandomHash());
         Message message = new BlockMessage(block);
 
         nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);

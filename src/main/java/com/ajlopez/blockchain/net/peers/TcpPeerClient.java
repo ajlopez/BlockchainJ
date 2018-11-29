@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.net.peers;
 
+import com.ajlopez.blockchain.net.messages.StatusMessage;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -23,8 +25,10 @@ public class TcpPeerClient {
 
         PeerConnection peerConnection = new PeerConnection(peer, socket.getInputStream(), socket.getOutputStream(), this.peerNode);
 
-        if (this.peerNode != null)
+        if (this.peerNode != null) {
+            peerConnection.postMessage(this.peerNode.getPeer(), new StatusMessage(this.peerNode.getStatus()));
             this.peerNode.connectTo(peerConnection);
+        }
 
         peerConnection.start();
 

@@ -1,7 +1,9 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
@@ -14,21 +16,22 @@ import java.util.List;
  * Created by ajlopez on 14/10/2018.
  */
 public class NodeProcessor implements PeerNode {
-    private Peer peer;
-    private ReceiveProcessor receiveProcessor;
-    private SendProcessor sendProcessor;
-    private TransactionPool transactionPool;
-    private MinerProcessor minerProcessor;
+    private final Peer peer;
+    private final ReceiveProcessor receiveProcessor;
+    private final SendProcessor sendProcessor;
+    private final TransactionPool transactionPool;
+    private final MinerProcessor minerProcessor;
+    private final BlockProcessor blockProcessor;
 
     public NodeProcessor(Peer peer, BlockChain blockChain, TrieStore accountTrieStore) {
         this.peer = peer;
         OrphanBlocks orphanBlocks = new OrphanBlocks();
-        BlockProcessor blockProcessor = new BlockProcessor(blockChain, orphanBlocks);
+        this.blockProcessor = new BlockProcessor(blockChain, orphanBlocks);
         this.transactionPool = new TransactionPool();
         TransactionProcessor transactionProcessor = new TransactionProcessor(this.transactionPool);
         PeerProcessor peerProcessor = new PeerProcessor();
         this.sendProcessor = new SendProcessor(this.peer);
-        MessageProcessor messageProcessor = new MessageProcessor(blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor);
+        MessageProcessor messageProcessor = new MessageProcessor(this.blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor);
         this.receiveProcessor = new ReceiveProcessor(messageProcessor);
         this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, accountTrieStore);
         this.minerProcessor.onMinedBlock(blk -> {
@@ -70,5 +73,11 @@ public class NodeProcessor implements PeerNode {
 
     public void connectTo(PeerNode node) {
         this.sendProcessor.connectToPeer(node.getPeer(), node);
+    }
+
+    public Status getStatus() {
+        Block bestBlock = this.blockProcessor.getBestBlock();
+
+        return new Status(this.peer.getId(), 0, bestBlock.getNumber());
     }
 }
