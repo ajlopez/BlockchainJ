@@ -3,6 +3,7 @@ package com.ajlopez.blockchain;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.state.Trie;
 
 import java.io.IOException;
 
@@ -12,7 +13,7 @@ import java.io.IOException;
 public class Start {
     public static void main(String[] args) throws IOException {
         BlockChain blockChain = new BlockChain();
-        Block genesis = new Block(0, null, null);
+        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH);
         blockChain.connectBlock(genesis);
 
         ArgumentsProcessor argsproc = processArguments(args);
