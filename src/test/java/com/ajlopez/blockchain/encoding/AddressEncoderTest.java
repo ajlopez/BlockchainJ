@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import org.junit.Test;
 public class AddressEncoderTest {
     @Test
     public void encodeDecodeAddress() {
-        Address address = new Address();
+        Address address = FactoryHelper.createRandomAddress();
 
         byte[] encoded = AddressEncoder.encode(address);
 

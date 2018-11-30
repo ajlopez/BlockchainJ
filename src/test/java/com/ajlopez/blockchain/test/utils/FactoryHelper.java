@@ -38,9 +38,13 @@ public class FactoryHelper {
         return new BlockHash(createRandomBytes(BlockHash.HASH_BYTES));
     }
 
+    public static Address createRandomAddress() {
+        return new Address(createRandomBytes(Address.ADDRESS_BYTES));
+    }
+
     public static Transaction createTransaction(int value) {
-        Address sender = new Address();
-        Address receiver = new Address();
+        Address sender = createRandomAddress();
+        Address receiver = createRandomAddress();
         BigInteger bivalue = BigInteger.valueOf(value);
 
         return new Transaction(sender, receiver, bivalue, 0);
@@ -124,9 +128,5 @@ public class FactoryHelper {
         }
 
         return blocks;
-    }
-
-    public static Address createRandomAddress() {
-        return new Address();
     }
 }

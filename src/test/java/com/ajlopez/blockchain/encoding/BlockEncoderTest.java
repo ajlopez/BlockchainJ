@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.*;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,11 +37,7 @@ public class BlockEncoderTest {
 
     @Test
     public void encodeDecodeBlockWithOneTransaction() {
-        Address sender = new Address();
-        Address receiver = new Address();
-        BigInteger value = BigInteger.ONE;
-
-        Transaction tx = new Transaction(sender, receiver, value, 0);
+        Transaction tx = FactoryHelper.createTransaction(42);
 
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx);
@@ -68,11 +65,8 @@ public class BlockEncoderTest {
 
     @Test
     public void encodeDecodeBlockWithTwoTransactions() {
-        Address account1 = new Address();
-        Address account2 = new Address();
-
-        Transaction tx1 = new Transaction(account1, account2, BigInteger.ONE, 0);
-        Transaction tx2 = new Transaction(account2, account1, BigInteger.TEN, 1);
+        Transaction tx1 = FactoryHelper.createTransaction(42);
+        Transaction tx2 = FactoryHelper.createTransaction(144);
 
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx1);

@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.core;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,8 +14,8 @@ import java.math.BigInteger;
 public class TransactionTest {
     @Test
     public void createTransaction() {
-        Address sender = new Address();
-        Address receiver = new Address();
+        Address sender = FactoryHelper.createRandomAddress();
+        Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
         Transaction tx = new Transaction(sender, receiver, value, 42);
@@ -29,8 +30,8 @@ public class TransactionTest {
 
     @Test
     public void createTransactionWithNullValue() {
-        Address sender = new Address();
-        Address receiver = new Address();
+        Address sender = FactoryHelper.createRandomAddress();
+        Address receiver = FactoryHelper.createRandomAddress();
 
         Transaction tx = new Transaction(sender, receiver, null, 42);
 
@@ -44,8 +45,8 @@ public class TransactionTest {
 
     @Test(expected = IllegalStateException.class)
     public void createTransactionWithNegativeNonce() {
-        Address sender = new Address();
-        Address receiver = new Address();
+        Address sender = FactoryHelper.createRandomAddress();
+        Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
         new Transaction(sender, receiver, value, -1);
@@ -53,7 +54,7 @@ public class TransactionTest {
 
     @Test(expected = IllegalStateException.class)
     public void createTransactionWithNoSender() {
-        Address receiver = new Address();
+        Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
         new Transaction(null, receiver, value, 42);
@@ -61,7 +62,7 @@ public class TransactionTest {
 
     @Test(expected = IllegalStateException.class)
     public void createTransactionWithNoReceiver() {
-        Address sender = new Address();
+        Address sender = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
         new Transaction(sender, null, value, 42);
@@ -69,8 +70,8 @@ public class TransactionTest {
 
     @Test(expected = IllegalStateException.class)
     public void createTransactionWithNegativeValue() {
-        Address sender = new Address();
-        Address receiver = new Address();
+        Address sender = FactoryHelper.createRandomAddress();
+        Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE.negate();
 
         new Transaction(sender, receiver, value, 42);

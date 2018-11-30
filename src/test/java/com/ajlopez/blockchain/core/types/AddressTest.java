@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.core.types;
 
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,7 +34,7 @@ public class AddressTest {
 
     @Test
     public void createAddressWithInitialBytes() {
-        Address address = new Address();
+        Address address = FactoryHelper.createRandomAddress();
 
         Assert.assertNotNull(address.getBytes());
         Assert.assertEquals(Address.ADDRESS_BYTES, address.getBytes().length);

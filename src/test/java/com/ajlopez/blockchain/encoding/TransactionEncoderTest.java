@@ -1,12 +1,9 @@
 package com.ajlopez.blockchain.encoding;
 
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.math.BigInteger;
 
 /**
  * Created by ajlopezo on 04/10/2017.
@@ -14,11 +11,7 @@ import java.math.BigInteger;
 public class TransactionEncoderTest {
     @Test
     public void encodeDecodeTransaction() {
-        Address sender = new Address();
-        Address receiver = new Address();
-        BigInteger value = BigInteger.ONE;
-
-        Transaction tx = new Transaction(sender, receiver, value, 42);
+        Transaction tx = FactoryHelper.createTransaction(42);
 
         byte[] encoded = TransactionEncoder.encode(tx);
 

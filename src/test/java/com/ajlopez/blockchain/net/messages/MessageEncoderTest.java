@@ -108,8 +108,8 @@ public class MessageEncoderTest {
 
     @Test
     public void encodeAndDecodeTransactionMessage() {
-        Address sender = new Address();
-        Address receiver = new Address();
+        Address sender = FactoryHelper.createRandomAddress();
+        Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
         Transaction tx = new Transaction(sender, receiver, value, 42);

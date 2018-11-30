@@ -1,13 +1,11 @@
 package com.ajlopez.blockchain.core;
 
-import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,11 +53,8 @@ public class BlockTest {
 
     @Test
     public void blockWithDifferentTransactionsHaveDifferentHashes() {
-        Address sender = new Address();
-        Address receiver = new Address();
-
-        Transaction tx1 = new Transaction(sender, receiver, BigInteger.ONE, 0);
-        Transaction tx2 = new Transaction(sender, receiver, BigInteger.TEN, 1);
+        Transaction tx1 = FactoryHelper.createTransaction(42);
+        Transaction tx2 = FactoryHelper.createTransaction(144);
 
         List<Transaction> txs1 = new ArrayList<>();
         List<Transaction> txs2 = new ArrayList<>();
@@ -77,11 +72,7 @@ public class BlockTest {
 
     @Test
     public void withOneTransaction() {
-        Address sender = new Address();
-        Address receiver = new Address();
-        BigInteger value = BigInteger.ONE;
-
-        Transaction tx = new Transaction(sender, receiver, value, 0);
+        Transaction tx = FactoryHelper.createTransaction(42);
 
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx);

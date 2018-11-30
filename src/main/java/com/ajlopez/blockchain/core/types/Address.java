@@ -8,12 +8,6 @@ import java.util.Random;
 public class Address extends AbstractBytesValue {
     public static final int ADDRESS_BYTES = 20;
 
-    private static Random random = new Random();
-
-    public Address() {
-        super(randomBytes(), ADDRESS_BYTES);
-    }
-
     public Address(byte[] bytes) {
         super(bytes, ADDRESS_BYTES);
     }
@@ -21,12 +15,5 @@ public class Address extends AbstractBytesValue {
     @Override
     public int hashOffset() {
         return 23;
-    }
-
-    private static byte[] randomBytes() {
-        byte[] bytes = new byte[ADDRESS_BYTES];
-        random.nextBytes(bytes);
-
-        return bytes;
     }
 }
