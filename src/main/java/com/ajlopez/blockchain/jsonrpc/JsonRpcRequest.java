@@ -10,10 +10,10 @@ import java.util.List;
  * Created by ajlopez on 10/11/2018.
  */
 public class JsonRpcRequest {
-    private String id;
-    private String version;
-    private String method;
-    private List<JsonValue> params;
+    private final String id;
+    private final String version;
+    private final String method;
+    private final List<JsonValue> params;
 
     public static JsonRpcRequest fromReader(Reader reader) throws ParserException, IOException, LexerException {
         JsonObjectValue json = (JsonObjectValue)(new Parser(reader)).parseValue();
