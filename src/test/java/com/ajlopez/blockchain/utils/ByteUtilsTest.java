@@ -154,4 +154,12 @@ public class ByteUtilsTest {
         Assert.assertEquals(2, ByteUtils.numberOfLeadingZeroes(new byte[] { 0x00, 0x00 }));
         Assert.assertEquals(2, ByteUtils.numberOfLeadingZeroes(new byte[] { 0x00, 0x00, 0x01, 0x00 }));
     }
+
+    @Test
+    public void removeLeadingZeroes() {
+        Assert.assertArrayEquals(new byte[] { 0x01, 0x02, 0x03 }, ByteUtils.removeLeadingZeroes(new byte[] { 0x01, 0x02, 0x03 }));
+        Assert.assertArrayEquals(new byte[] { 0x01, 0x02, 0x03 }, ByteUtils.removeLeadingZeroes(new byte[] { 0x00, 0x01, 0x02, 0x03 }));
+        Assert.assertArrayEquals(new byte[] { 0x01, 0x02, 0x03 }, ByteUtils.removeLeadingZeroes(new byte[] { 0x00, 0x00, 0x00, 0x01, 0x02, 0x03 }));
+        Assert.assertArrayEquals(new byte[] { }, ByteUtils.removeLeadingZeroes(new byte[] { 0x00, 0x00, 0x00, 0x00 }));
+    }
 }

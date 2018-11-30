@@ -4,6 +4,8 @@ package com.ajlopez.blockchain.utils;
  * Created by ajlopez on 23/09/2017.
  */
 public class ByteUtils {
+    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+
     private ByteUtils() { }
 
     public static boolean equals(byte[] bytes, int offset, byte[] bytes2, int offset2, int length) {
@@ -128,5 +130,21 @@ public class ByteUtils {
                 return n;
 
         return nbytes;
+    }
+
+    public static byte[] removeLeadingZeroes(byte[] bytes) {
+        int nbytes = bytes.length;
+        int nzeroes = numberOfLeadingZeroes(bytes);
+
+        if (nzeroes == nbytes)
+            return EMPTY_BYTE_ARRAY;
+
+        if (nzeroes == 0)
+            return bytes;
+
+        byte[] newbytes = new byte[nbytes - nzeroes];
+        System.arraycopy(bytes, nzeroes, newbytes, 0, newbytes.length);
+
+        return newbytes;
     }
 }
