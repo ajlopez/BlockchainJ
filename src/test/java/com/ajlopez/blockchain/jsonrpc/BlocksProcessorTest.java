@@ -16,7 +16,24 @@ import java.util.List;
  */
 public class BlocksProcessorTest {
     @Test
-    public void blockNumber() {
+    public void blockNumberUsingBlockchainGenesis() {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+
+        List<JsonValue> params = new ArrayList<>();
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_blockNumber", params);
+
+        BlocksProcessor processor = new BlocksProcessor(blockChain);
+
+        JsonRpcResponse response = processor.processRequest(request);
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals(request.getId(), response.getId());
+        Assert.assertEquals(request.getVersion(), response.getVersion());
+        Assert.assertEquals("\"0x00\"", response.getResult().toString());
+    }
+
+    @Test
+    public void blockNumberUsingBlockchainWithTenBlocks() {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
