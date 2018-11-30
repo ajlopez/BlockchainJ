@@ -32,6 +32,21 @@ public class NodeProcessorTest {
     }
 
     @Test
+    public void getStatus() {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        Peer peer = FactoryHelper.createRandomPeer();
+
+        NodeProcessor nodeProcessor = new NodeProcessor(peer, blockChain, null);
+
+        Status result = nodeProcessor.getStatus();
+        
+        Assert.assertNotNull(result);
+        Assert.assertEquals(blockChain.getBestBlockNumber(), result.getBestBlockNumber());
+        Assert.assertEquals(0, result.getNetworkNumber());
+        Assert.assertEquals(peer.getId(), result.getNodeId());
+    }
+
+    @Test
     public void processBlockMessage() throws InterruptedException {
         BlockChain blockChain = new BlockChain();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
