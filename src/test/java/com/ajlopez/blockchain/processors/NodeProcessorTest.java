@@ -42,6 +42,7 @@ public class NodeProcessorTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(blockChain.getBestBlockNumber(), result.getBestBlockNumber());
+        Assert.assertEquals(blockChain.getBestBlock().getHash(), result.getBestBlockHash());
         Assert.assertEquals(0, result.getNetworkNumber());
         Assert.assertEquals(peer.getId(), result.getPeerId());
     }
@@ -255,7 +256,7 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9, FactoryHelper.createRandomBlockHash());
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -299,7 +300,7 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9, FactoryHelper.createRandomBlockHash());
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -337,7 +338,7 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9, FactoryHelper.createRandomBlockHash());
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -379,7 +380,7 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9, FactoryHelper.createRandomBlockHash());
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -422,7 +423,7 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9);
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 1,9, FactoryHelper.createRandomBlockHash());
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);

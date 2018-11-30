@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
@@ -24,6 +25,19 @@ import java.util.Random;
  * Created by ajlopez on 26/01/2018.
  */
 public class FactoryHelper {
+    private static Random random = new Random();
+
+    public static byte[] createRandomBytes(int length) {
+        byte[] bytes = new byte[length];
+        random.nextBytes(bytes);
+
+        return bytes;
+    }
+
+    public static BlockHash createRandomBlockHash() {
+        return new BlockHash(createRandomBytes(BlockHash.HASH_BYTES));
+    }
+
     public static Transaction createTransaction(int value) {
         Address sender = new Address();
         Address receiver = new Address();

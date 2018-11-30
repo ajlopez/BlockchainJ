@@ -275,7 +275,7 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(receiver, channel);
 
-        Message message = new StatusMessage(new Status(receiver.getId(), 1, 10));
+        Message message = new StatusMessage(new Status(receiver.getId(), 1, 10, FactoryHelper.createRandomBlockHash()));
 
         processor.processMessage(message, receiver);
 
@@ -309,7 +309,7 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(secondPeer, channel);
 
-        Message message = new StatusMessage(new Status(secondPeer.getId(), 1, 10));
+        Message message = new StatusMessage(new Status(secondPeer.getId(), 1, 10, FactoryHelper.createRandomBlockHash()));
 
         processor.processMessage(message, secondPeer);
         processor.processMessage(message, secondPeer);
@@ -345,8 +345,8 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(secondPeer, channel);
 
-        Message message1 = new StatusMessage(new Status(secondPeer.getId(), 1, 5));
-        Message message2 = new StatusMessage(new Status(secondPeer.getId(), 1, 10));
+        Message message1 = new StatusMessage(new Status(secondPeer.getId(), 1, 5, FactoryHelper.createRandomBlockHash()));
+        Message message2 = new StatusMessage(new Status(secondPeer.getId(), 1, 10, FactoryHelper.createRandomBlockHash()));
 
         processor.processMessage(message1, secondPeer);
         processor.processMessage(message2, secondPeer);

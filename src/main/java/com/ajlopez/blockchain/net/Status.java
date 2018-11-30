@@ -1,14 +1,19 @@
 package com.ajlopez.blockchain.net;
 
+import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Hash;
+
 public class Status {
     private PeerId peerId;
     private long networkNumber;
     private long bestBlockNumber;
+    private BlockHash bestBlockHash;
 
-    public Status(PeerId peerId, long networkNumber, long bestBlockNumber) {
+    public Status(PeerId peerId, long networkNumber, long bestBlockNumber, BlockHash bestBlockHash) {
         this.peerId = peerId;
         this.networkNumber = networkNumber;
         this.bestBlockNumber = bestBlockNumber;
+        this.bestBlockHash = bestBlockHash;
     }
 
     public PeerId getPeerId() {
@@ -22,4 +27,6 @@ public class Status {
     public long getBestBlockNumber() {
         return this.bestBlockNumber;
     }
+
+    public Hash getBestBlockHash() { return this.bestBlockHash; }
 }

@@ -79,6 +79,6 @@ public class NodeProcessor implements PeerNode {
         Block bestBlock = this.blockProcessor.getBestBlock();
 
         // TODO determine network number
-        return new Status(this.peer.getId(), 0, bestBlock.getNumber());
+        return new Status(this.peer.getId(), 0, bestBlock.getNumber(), bestBlock.getHash());
     }
 }
