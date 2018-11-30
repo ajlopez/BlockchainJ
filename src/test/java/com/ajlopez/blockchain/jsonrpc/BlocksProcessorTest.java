@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.json.JsonConverter;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -65,6 +67,20 @@ public class BlocksProcessorTest {
 
         exception.expect(UnsupportedOperationException.class);
         exception.expectMessage("Unknown method 'eth_foo'");
+        processor.processRequest(request);
+    }
+
+    @Test
+    public void invalidNumberOfParameters() {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+
+        List<JsonValue> params = Collections.singletonList(JsonConverter.convert("foo"));
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_blockNumber", params);
+
+        BlocksProcessor processor = new BlocksProcessor(blockChain);
+
+        exception.expect(UnsupportedOperationException.class);
+        exception.expectMessage("Invalid number of parameters: expected 0 found 1");
         processor.processRequest(request);
     }
 }
