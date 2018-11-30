@@ -1,6 +1,9 @@
 package com.ajlopez.blockchain.jsonrpc;
 
+import com.ajlopez.blockchain.json.JsonConverter;
 import com.ajlopez.blockchain.json.JsonValue;
+import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.utils.HexUtils;
 
 /**
  * Created by ajlopez on 11/30/2018.
@@ -9,6 +12,12 @@ public class JsonRpcResponse {
     private final String id;
     private final String version;
     private final JsonValue result;
+
+    public static JsonRpcResponse createResponse(JsonRpcRequest request, long result) {
+        JsonValue value = JsonConverter.convert(HexUtils.bytesToHexString(ByteUtils.unsignedLongToNormalizedBytes(result), true));
+
+        return new JsonRpcResponse(request.getId(), request.getVersion(), value);
+    }
 
     public JsonRpcResponse(String id, String version, JsonValue result) {
         this.id = id;

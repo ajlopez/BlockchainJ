@@ -6,7 +6,7 @@ import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 /**
- * Created by Angel on 11/30/2018.
+ * Created by ajlopez on 30/11/2018.
  */
 public class BlocksProcessor implements JsonRpcProcessor {
     private final BlockChain blockChain;
@@ -26,6 +26,6 @@ public class BlocksProcessor implements JsonRpcProcessor {
         if (nparams != 0)
             throw new UnsupportedOperationException(String.format("Invalid number of parameters: expected %d found %d", 0, nparams));
 
-        return new JsonRpcResponse(request.getId(), request.getVersion(), JsonConverter.convert(HexUtils.bytesToHexString(ByteUtils.unsignedLongToNormalizedBytes(this.blockChain.getBestBlockNumber()), true)));
+        return JsonRpcResponse.createResponse(request, this.blockChain.getBestBlockNumber());
     }
 }
