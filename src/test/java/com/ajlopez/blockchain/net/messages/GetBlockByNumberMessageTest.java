@@ -14,6 +14,6 @@ public class GetBlockByNumberMessageTest {
 
         Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER, message.getMessageType());
         Assert.assertEquals(12345678L, message.getNumber());
-        Assert.assertArrayEquals(ByteUtils.unsignedLongToBytes(12345678L), message.getPayload());
+        Assert.assertArrayEquals(ByteUtils.unsignedLongToNormalizedBytes(12345678L), message.getPayload());
     }
 }

@@ -18,7 +18,7 @@ public class TransactionEncoder {
         byte[] rlpSender = RLP.encode(transaction.getSender().getBytes());
         byte[] rlpReceiver = RLP.encode(transaction.getReceiver().getBytes());
         byte[] rlpValue = RLP.encode(transaction.getValue().toByteArray());
-        byte[] rlpNonce = RLP.encode(ByteUtils.unsignedLongToBytes(transaction.getNonce()));
+        byte[] rlpNonce = RLP.encode(ByteUtils.unsignedLongToNormalizedBytes(transaction.getNonce()));
 
         return RLP.encodeList(rlpSender, rlpReceiver, rlpValue, rlpNonce);
     }

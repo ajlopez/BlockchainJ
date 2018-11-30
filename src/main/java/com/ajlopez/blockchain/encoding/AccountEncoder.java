@@ -13,7 +13,7 @@ public class AccountEncoder {
 
     public static byte[] encode(Account state) {
         byte[] rlpBalance = RLP.encode(state.getBalance().toByteArray());
-        byte[] rlpNonce = RLP.encode(ByteUtils.unsignedLongToBytes(state.getNonce()));
+        byte[] rlpNonce = RLP.encode(ByteUtils.unsignedLongToNormalizedBytes(state.getNonce()));
 
         return RLP.encodeList(rlpBalance, rlpNonce);
     }

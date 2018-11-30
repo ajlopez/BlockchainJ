@@ -19,6 +19,6 @@ public class GetBlockByNumberMessage extends Message {
 
     @Override
     public byte[] getPayload() {
-        return ByteUtils.unsignedLongToBytes(this.number);
+        return ByteUtils.unsignedLongToNormalizedBytes(this.number);
     }
 }

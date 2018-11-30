@@ -65,9 +65,9 @@ public class MessageEncoderTest {
         Assert.assertNotNull(bytes);
         Assert.assertNotEquals(0, bytes.length);
 
-        Assert.assertEquals(1 + Integer.BYTES + Long.BYTES, bytes.length);
+        Assert.assertEquals(1 + Integer.BYTES + 1, bytes.length);
         Assert.assertEquals(MessageType.GET_BLOCK_BY_NUMBER.ordinal(), bytes[0]);
-        Assert.assertTrue(ByteUtils.equals(ByteUtils.unsignedIntegerToBytes(Long.BYTES), 0, bytes, 1, Integer.BYTES));
+        Assert.assertTrue(ByteUtils.equals(ByteUtils.unsignedIntegerToBytes(1), 0, bytes, 1, Integer.BYTES));
     }
 
     @Test

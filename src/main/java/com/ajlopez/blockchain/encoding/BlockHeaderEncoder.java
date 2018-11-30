@@ -12,7 +12,7 @@ public class BlockHeaderEncoder {
     private BlockHeaderEncoder() {}
 
     public static byte[] encode(BlockHeader header) {
-        byte[] rlpNumber = RLP.encode(ByteUtils.unsignedLongToBytes(header.getNumber()));
+        byte[] rlpNumber = RLP.encode(ByteUtils.unsignedLongToNormalizedBytes(header.getNumber()));
         byte[] rlpParentHash = RLP.encode(header.getParentHash().getBytes());
         byte[] rlpTransactionsHash = RLP.encode(header.getTransactionsHash().getBytes());
         byte[] rlpStateRootHash = RLP.encode(header.getStateRootHash().getBytes());
