@@ -1,20 +1,24 @@
 package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.bc.BlockChain;
-import com.ajlopez.blockchain.json.JsonBuilder;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by ajlopez on 30/11/2018.
  */
 public class BlocksProcessorTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void blockNumberUsingBlockchainGenesis() {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
@@ -48,5 +52,19 @@ public class BlocksProcessorTest {
         Assert.assertEquals(request.getId(), response.getId());
         Assert.assertEquals(request.getVersion(), response.getVersion());
         Assert.assertEquals("\"0x0a\"", response.getResult().toString());
+    }
+
+    @Test
+    public void unknownMethod() {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+
+        List<JsonValue> params = new ArrayList<>();
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);
+
+        BlocksProcessor processor = new BlocksProcessor(blockChain);
+
+        exception.expect(UnsupportedOperationException.class);
+        exception.expectMessage("Unknown method 'eth_foo'");
+        processor.processRequest(request);
     }
 }

@@ -18,6 +18,11 @@ public class BlocksProcessor implements JsonRpcProcessor {
     }
 
     public JsonRpcResponse processRequest(JsonRpcRequest request) {
+        String method = request.getMethod();
+
+        if (!"eth_blockNumber".equals(method))
+            throw new UnsupportedOperationException(String.format("Unknown method '%s'", method));
+
         return new JsonRpcResponse(request.getId(), request.getVersion(), JsonConverter.convert(HexUtils.bytesToHexString(ByteUtils.unsignedLongToNormalizedBytes(this.blockChain.getBestBlockNumber()), true)));
     }
 }
