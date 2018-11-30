@@ -1,7 +1,9 @@
 package com.ajlopez.blockchain.newvm;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Stack;
 
@@ -9,6 +11,10 @@ import java.util.Stack;
  * Created by ajlopez on 12/08/2017.
  */
 public class VirtualMachineTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void executeEmptyOpCodes() throws VirtualMachineException {
         VirtualMachine vm = new VirtualMachine(null);
@@ -366,17 +372,21 @@ public class VirtualMachineTest {
         Assert.assertArrayEquals(new byte[] { 0x02 }, stack.pop());
     }
 
-    @Test(expected = VirtualMachineException.class)
+    @Test
     public void executeJumpWithoutJumpDestRaiseException() throws VirtualMachineException {
         VirtualMachine vm = new VirtualMachine(null);
 
+        exception.expect(VirtualMachineException.class);
+        exception.expectMessage("Invalid jump");
         vm.execute(new byte[] { OpCodes.OP_JUMP, 0x01, 0x06, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02 });
     }
 
-    @Test(expected = VirtualMachineException.class)
+    @Test
     public void executeJumpToFalseJumpDestRaiseException() throws VirtualMachineException {
         VirtualMachine vm = new VirtualMachine(null);
 
+        exception.expect(VirtualMachineException.class);
+        exception.expectMessage("Invalid jump");
         vm.execute(new byte[] { OpCodes.OP_JUMP, 0x01, 0x06, OpCodes.OP_PUSH, 0x02, 0x01, OpCodes.OP_JUMPDEST });
     }
 
@@ -393,16 +403,12 @@ public class VirtualMachineTest {
         Assert.assertArrayEquals(new byte[] { 0x02 }, stack.pop());
     }
 
-    @Test(expected = VirtualMachineException.class)
+    @Test
     public void executeJumpIfZeroWithoutJumpDestRaiseException() throws VirtualMachineException {
         VirtualMachine vm = new VirtualMachine(null);
 
+        exception.expect(VirtualMachineException.class);
+        exception.expectMessage("Invalid jump");
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x00, OpCodes.OP_JUMPI, 0x01, 0x09, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_ADD, OpCodes.OP_PUSH, 0x01, 0x02 });
-
-        Stack<byte[]> stack = vm.getStack();
-
-        Assert.assertFalse(stack.isEmpty());
-        Assert.assertEquals(1, stack.size());
-        Assert.assertArrayEquals(new byte[] { 0x02 }, stack.pop());
     }
 }
