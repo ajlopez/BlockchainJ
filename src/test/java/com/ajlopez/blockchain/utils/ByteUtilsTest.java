@@ -162,4 +162,12 @@ public class ByteUtilsTest {
         Assert.assertArrayEquals(new byte[] { 0x01, 0x02, 0x03 }, ByteUtils.removeLeadingZeroes(new byte[] { 0x00, 0x00, 0x00, 0x01, 0x02, 0x03 }));
         Assert.assertArrayEquals(new byte[] { }, ByteUtils.removeLeadingZeroes(new byte[] { 0x00, 0x00, 0x00, 0x00 }));
     }
+
+    @Test
+    public void normalizedBytes() {
+        Assert.assertArrayEquals(new byte[] { 0x01, 0x02, 0x03 }, ByteUtils.normalizedBytes(new byte[] { 0x01, 0x02, 0x03 }));
+        Assert.assertArrayEquals(new byte[] { 0x01, 0x02, 0x03 }, ByteUtils.normalizedBytes(new byte[] { 0x00, 0x01, 0x02, 0x03 }));
+        Assert.assertArrayEquals(new byte[] { 0x01, 0x02, 0x03 }, ByteUtils.normalizedBytes(new byte[] { 0x00, 0x00, 0x00, 0x01, 0x02, 0x03 }));
+        Assert.assertArrayEquals(new byte[] { 0x00 }, ByteUtils.normalizedBytes(new byte[] { 0x00, 0x00, 0x00, 0x00 }));
+    }
 }

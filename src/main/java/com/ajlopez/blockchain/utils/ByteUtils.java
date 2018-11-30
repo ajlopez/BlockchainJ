@@ -5,6 +5,7 @@ package com.ajlopez.blockchain.utils;
  */
 public class ByteUtils {
     public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+    public static final byte[] ZERO_BYTE_ARRAY = new byte[1];
 
     private ByteUtils() { }
 
@@ -25,6 +26,10 @@ public class ByteUtils {
         }
 
         return result;
+    }
+
+    public static byte[] unsignedLongToNormalizedBytes(long value) {
+        return normalizedBytes(unsignedLongToBytes(value));
     }
 
     public static long bytesToUnsignedLong(byte[] bytes) {
@@ -144,6 +149,15 @@ public class ByteUtils {
 
         byte[] newbytes = new byte[nbytes - nzeroes];
         System.arraycopy(bytes, nzeroes, newbytes, 0, newbytes.length);
+
+        return newbytes;
+    }
+
+    public static byte[] normalizedBytes(byte[] bytes) {
+        byte[] newbytes = removeLeadingZeroes(bytes);
+
+        if (newbytes.length == 0)
+            return ZERO_BYTE_ARRAY;
 
         return newbytes;
     }
