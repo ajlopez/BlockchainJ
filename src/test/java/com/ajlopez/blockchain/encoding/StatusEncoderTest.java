@@ -20,7 +20,7 @@ public class StatusEncoderTest {
         Status result = StatusEncoder.decode(bytes);
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(nodeid, result.getNodeId());
+        Assert.assertEquals(nodeid, result.getPeerId());
         Assert.assertEquals(2, result.getNetworkNumber());
         Assert.assertEquals(3, result.getBestBlockNumber());
     }

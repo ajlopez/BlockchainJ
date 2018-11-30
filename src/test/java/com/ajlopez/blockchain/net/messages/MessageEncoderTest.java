@@ -145,7 +145,7 @@ public class MessageEncoderTest {
 
         StatusMessage sresult = (StatusMessage)result;
 
-        Assert.assertEquals(nodeId, sresult.getStatus().getNodeId());
+        Assert.assertEquals(nodeId, sresult.getStatus().getPeerId());
         Assert.assertEquals(2, sresult.getStatus().getNetworkNumber());
         Assert.assertEquals(3, sresult.getStatus().getBestBlockNumber());
     }

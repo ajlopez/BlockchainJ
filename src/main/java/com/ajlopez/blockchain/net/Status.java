@@ -1,18 +1,18 @@
 package com.ajlopez.blockchain.net;
 
 public class Status {
-    private PeerId nodeId;
+    private PeerId peerId;
     private long networkNumber;
     private long bestBlockNumber;
 
-    public Status(PeerId nodeId, long networkNumber, long bestBlockNumber) {
-        this.nodeId = nodeId;
+    public Status(PeerId peerId, long networkNumber, long bestBlockNumber) {
+        this.peerId = peerId;
         this.networkNumber = networkNumber;
         this.bestBlockNumber = bestBlockNumber;
     }
 
-    public PeerId getNodeId() {
-        return this.nodeId;
+    public PeerId getPeerId() {
+        return this.peerId;
     }
 
     public long getNetworkNumber() {

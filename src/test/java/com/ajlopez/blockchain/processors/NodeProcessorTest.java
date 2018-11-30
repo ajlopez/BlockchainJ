@@ -39,11 +39,11 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = new NodeProcessor(peer, blockChain, null);
 
         Status result = nodeProcessor.getStatus();
-        
+
         Assert.assertNotNull(result);
         Assert.assertEquals(blockChain.getBestBlockNumber(), result.getBestBlockNumber());
         Assert.assertEquals(0, result.getNetworkNumber());
-        Assert.assertEquals(peer.getId(), result.getNodeId());
+        Assert.assertEquals(peer.getId(), result.getPeerId());
     }
 
     @Test

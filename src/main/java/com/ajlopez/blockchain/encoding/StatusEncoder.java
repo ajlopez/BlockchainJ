@@ -10,7 +10,7 @@ public class StatusEncoder {
     }
 
     public static byte[] encode(Status status) {
-        byte[] rlpNodeId = RLP.encode(status.getNodeId().getBytes());
+        byte[] rlpNodeId = RLP.encode(status.getPeerId().getBytes());
         byte[] rlpNetworkNumber = RLP.encode(ByteUtils.unsignedLongToBytes(status.getNetworkNumber()));
         byte[] rlpBestBlockNumber = RLP.encode(ByteUtils.unsignedLongToBytes(status.getBestBlockNumber()));
 

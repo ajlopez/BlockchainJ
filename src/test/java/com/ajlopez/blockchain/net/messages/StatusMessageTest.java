@@ -15,7 +15,7 @@ public class StatusMessageTest {
         PeerId nodeid = HashUtilsTest.generateRandomPeerId();
         StatusMessage message = new StatusMessage(new Status(nodeid, 2, 3));
 
-        Assert.assertEquals(nodeid, message.getStatus().getNodeId());
+        Assert.assertEquals(nodeid, message.getStatus().getPeerId());
         Assert.assertEquals(2, message.getStatus().getNetworkNumber());
         Assert.assertEquals(3, message.getStatus().getBestBlockNumber());
     }
