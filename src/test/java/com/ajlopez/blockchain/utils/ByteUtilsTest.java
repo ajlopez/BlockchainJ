@@ -179,4 +179,13 @@ public class ByteUtilsTest {
         Assert.assertArrayEquals(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xff }, ByteUtils.unsignedLongToBytes(255));
         Assert.assertArrayEquals(new byte[] { 0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }, ByteUtils.unsignedLongToBytes(Long.MAX_VALUE));
     }
+
+    @Test
+    public void unsignedLongToNormalizedBytes() {
+        Assert.assertArrayEquals(new byte[] { 0x00 }, ByteUtils.unsignedLongToNormalizedBytes(0));
+        Assert.assertArrayEquals(new byte[] { 0x01 }, ByteUtils.unsignedLongToNormalizedBytes(1));
+        Assert.assertArrayEquals(new byte[] { 0x02 }, ByteUtils.unsignedLongToNormalizedBytes(2));
+        Assert.assertArrayEquals(new byte[] { (byte)0xff }, ByteUtils.unsignedLongToNormalizedBytes(255));
+        Assert.assertArrayEquals(new byte[] { 0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }, ByteUtils.unsignedLongToNormalizedBytes(Long.MAX_VALUE));
+    }
 }
