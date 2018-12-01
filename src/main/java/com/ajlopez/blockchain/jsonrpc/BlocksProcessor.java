@@ -14,11 +14,9 @@ public class BlocksProcessor implements JsonRpcProcessor {
 
     @Override
     public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
-        String method = request.getMethod();
-
         if (request.check("eth_blockNumber", 0))
             return JsonRpcResponse.createResponse(request, this.blockChain.getBestBlockNumber());
 
-        throw new JsonRpcException(String.format("Unknown method '%s'", method));
+        throw new JsonRpcException(String.format("Unknown method '%s'", request.getMethod()));
     }
 }

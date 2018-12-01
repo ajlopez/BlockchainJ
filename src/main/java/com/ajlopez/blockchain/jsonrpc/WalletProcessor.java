@@ -10,6 +10,9 @@ import java.util.Collections;
 public class WalletProcessor implements JsonRpcProcessor {
     @Override
     public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
-        return JsonRpcResponse.createResponse(request, new JsonArrayValue(Collections.emptyList()));
+        if (request.check("eth_accounts", 0))
+            return JsonRpcResponse.createResponse(request, new JsonArrayValue(Collections.emptyList()));
+
+        throw new JsonRpcException(String.format("Unknown method '%s'", request.getMethod()));
     }
 }
