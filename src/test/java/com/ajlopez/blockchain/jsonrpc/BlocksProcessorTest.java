@@ -65,7 +65,7 @@ public class BlocksProcessorTest {
 
         BlocksProcessor processor = new BlocksProcessor(blockChain);
 
-        exception.expect(UnsupportedOperationException.class);
+        exception.expect(JsonRpcException.class);
         exception.expectMessage("Unknown method 'eth_foo'");
         processor.processRequest(request);
     }
