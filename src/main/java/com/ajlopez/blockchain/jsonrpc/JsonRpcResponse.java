@@ -16,7 +16,11 @@ public class JsonRpcResponse {
     public static JsonRpcResponse createResponse(JsonRpcRequest request, long result) {
         JsonValue value = JsonConverter.convert(HexUtils.bytesToHexString(ByteUtils.unsignedLongToNormalizedBytes(result), true));
 
-        return new JsonRpcResponse(request.getId(), request.getVersion(), value);
+        return createResponse(request, value);
+    }
+
+    public static JsonRpcResponse createResponse(JsonRpcRequest request, JsonValue result) {
+        return new JsonRpcResponse(request.getId(), request.getVersion(), result);
     }
 
     public JsonRpcResponse(String id, String version, JsonValue result) {

@@ -12,6 +12,7 @@ public class BlocksProcessor implements JsonRpcProcessor {
         this.blockChain = blockChain;
     }
 
+    @Override
     public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
         String method = request.getMethod();
 
