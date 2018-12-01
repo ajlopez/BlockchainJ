@@ -1,17 +1,15 @@
 package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.json.JsonArrayValue;
 import com.ajlopez.blockchain.json.JsonBuilder;
 import com.ajlopez.blockchain.json.JsonValue;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by ajlopez on 01/12/2018.
  */
-public class WalletProcessor implements JsonRpcProcessor {
+public class WalletProcessor extends AbstractJsonRpcProcessor {
     private final List<Address> addresses;
 
     public WalletProcessor(List<Address> addresses) {
@@ -23,7 +21,7 @@ public class WalletProcessor implements JsonRpcProcessor {
         if (request.check("eth_accounts", 0))
             return JsonRpcResponse.createResponse(request, this.addressToJsonArray());
 
-        throw new JsonRpcException(String.format("Unknown method '%s'", request.getMethod()));
+        return super.processRequest(request);
     }
 
     private JsonValue addressToJsonArray() {
