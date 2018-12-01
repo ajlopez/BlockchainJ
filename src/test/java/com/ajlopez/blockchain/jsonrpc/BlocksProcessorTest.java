@@ -22,7 +22,7 @@ public class BlocksProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void blockNumberUsingBlockchainGenesis() {
+    public void blockNumberUsingBlockchainGenesis() throws JsonRpcException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         List<JsonValue> params = new ArrayList<>();
@@ -39,7 +39,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void blockNumberUsingBlockchainWithTenBlocks() {
+    public void blockNumberUsingBlockchainWithTenBlocks() throws JsonRpcException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -57,7 +57,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void unknownMethod() {
+    public void unknownMethod() throws JsonRpcException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         List<JsonValue> params = new ArrayList<>();
@@ -71,7 +71,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void invalidNumberOfParameters() {
+    public void invalidNumberOfParameters() throws JsonRpcException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         List<JsonValue> params = Collections.singletonList(JsonConverter.convert("foo"));
@@ -79,7 +79,7 @@ public class BlocksProcessorTest {
 
         BlocksProcessor processor = new BlocksProcessor(blockChain);
 
-        exception.expect(UnsupportedOperationException.class);
+        exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 0 found 1");
         processor.processRequest(request);
     }

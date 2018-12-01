@@ -1,9 +1,6 @@
 package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.bc.BlockChain;
-import com.ajlopez.blockchain.json.JsonConverter;
-import com.ajlopez.blockchain.utils.ByteUtils;
-import com.ajlopez.blockchain.utils.HexUtils;
 
 /**
  * Created by ajlopez on 30/11/2018.
@@ -15,7 +12,7 @@ public class BlocksProcessor implements JsonRpcProcessor {
         this.blockChain = blockChain;
     }
 
-    public JsonRpcResponse processRequest(JsonRpcRequest request) {
+    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
         String method = request.getMethod();
 
         if (request.check("eth_blockNumber", 0))
