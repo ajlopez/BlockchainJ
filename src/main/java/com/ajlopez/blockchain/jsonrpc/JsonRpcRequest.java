@@ -48,4 +48,14 @@ public class JsonRpcRequest {
     public List<JsonValue> getParams() {
         return this.params;
     }
+
+    public boolean check(String method, int arity) {
+        if (!this.method.equals(method))
+            return false;
+
+        if (arity != this.params.size())
+            throw new UnsupportedOperationException(String.format("Invalid number of parameters: expected %d found %d", arity, this.params.size()));
+
+        return true;
+    }
 }

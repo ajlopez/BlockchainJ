@@ -18,14 +18,9 @@ public class BlocksProcessor implements JsonRpcProcessor {
     public JsonRpcResponse processRequest(JsonRpcRequest request) {
         String method = request.getMethod();
 
-        if (!"eth_blockNumber".equals(method))
-            throw new UnsupportedOperationException(String.format("Unknown method '%s'", method));
+        if (request.check("eth_blockNumber", 0))
+            return JsonRpcResponse.createResponse(request, this.blockChain.getBestBlockNumber());
 
-        int nparams = request.getParams().size();
-
-        if (nparams != 0)
-            throw new UnsupportedOperationException(String.format("Invalid number of parameters: expected %d found %d", 0, nparams));
-
-        return JsonRpcResponse.createResponse(request, this.blockChain.getBestBlockNumber());
+        throw new UnsupportedOperationException(String.format("Unknown method '%s'", method));
     }
 }
