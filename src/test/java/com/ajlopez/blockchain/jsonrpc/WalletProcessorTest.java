@@ -1,9 +1,11 @@
 package com.ajlopez.blockchain.jsonrpc;
 
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.json.JsonArrayValue;
 import com.ajlopez.blockchain.json.JsonConverter;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.json.JsonValueType;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,11 +24,11 @@ public class WalletProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void returnsEmptyArray() throws JsonRpcException {
+    public void getNoAccount() throws JsonRpcException {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_accounts", params);
 
-        WalletProcessor processor = new WalletProcessor();
+        WalletProcessor processor = new WalletProcessor(Collections.emptyList());
 
         JsonRpcResponse response = processor.processRequest(request);
 
@@ -42,11 +44,41 @@ public class WalletProcessorTest {
     }
 
     @Test
+    public void getAccounts() throws JsonRpcException {
+        List<Address> addresses = FactoryHelper.createRandomAddresses(10);
+
+        List<JsonValue> params = new ArrayList<>();
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_accounts", params);
+
+        WalletProcessor processor = new WalletProcessor(addresses);
+
+        JsonRpcResponse response = processor.processRequest(request);
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals(request.getId(), response.getId());
+        Assert.assertEquals(request.getVersion(), response.getVersion());
+
+        JsonValue result = response.getResult();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(JsonValueType.ARRAY, result.getType());
+
+        JsonArrayValue aresult = (JsonArrayValue)result;
+
+        Assert.assertEquals(10, aresult.size());
+
+        int k = 0;
+
+        for (Address address : addresses)
+            Assert.assertEquals(address.toString(), aresult.getValue(k++).getValue());
+    }
+
+    @Test
     public void unknownMethod() throws JsonRpcException {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);
 
-        WalletProcessor processor = new WalletProcessor();
+        WalletProcessor processor = new WalletProcessor(Collections.emptyList());
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Unknown method 'eth_foo'");
@@ -58,7 +90,7 @@ public class WalletProcessorTest {
         List<JsonValue> params = Collections.singletonList(JsonConverter.convert("foo"));
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_accounts", params);
 
-        WalletProcessor processor = new WalletProcessor();
+        WalletProcessor processor = new WalletProcessor(Collections.emptyList());
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 0 found 1");

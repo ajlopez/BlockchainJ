@@ -42,6 +42,15 @@ public class FactoryHelper {
         return new Address(createRandomBytes(Address.ADDRESS_BYTES));
     }
 
+    public static List<Address> createRandomAddresses(int n) {
+        List<Address> addresses = new ArrayList<>(n);
+
+        for (int k = 0; k < n; k++)
+            addresses.add(createRandomAddress());
+
+        return addresses;
+    }
+
     public static Transaction createTransaction(int value) {
         Address sender = createRandomAddress();
         Address receiver = createRandomAddress();
