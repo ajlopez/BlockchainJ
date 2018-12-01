@@ -18,6 +18,6 @@ public class TransactionProcessorTest {
 
         processor.processTransaction(transaction);
 
-        Assert.assertTrue(pool.containsTransaction(transaction));
+        Assert.assertTrue(pool.getTransactions().contains(transaction));
     }
 }

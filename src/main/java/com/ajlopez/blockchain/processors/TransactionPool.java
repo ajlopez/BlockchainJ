@@ -16,8 +16,10 @@ public class TransactionPool {
         if (transaction == null)
             throw new IllegalArgumentException("Null transaction");
 
-        if (!this.transactions.add(transaction))
-            return emptyList;
+        synchronized (this.transactions) {
+            if (!this.transactions.add(transaction))
+                return emptyList;
+        }
 
         return Collections.singletonList(transaction);
     }
@@ -26,17 +28,17 @@ public class TransactionPool {
         if (transaction == null)
             throw new IllegalArgumentException("Null transaction");
 
-        this.transactions.remove(transaction);
-    }
-
-    public boolean containsTransaction(Transaction transaction) {
-        return this.transactions.contains(transaction);
+        synchronized (this.transactions) {
+            this.transactions.remove(transaction);
+        }
     }
 
     public List<Transaction> getTransactions() {
         List<Transaction> list = new ArrayList<Transaction>();
 
-        list.addAll(this.transactions);
+        synchronized (this.transactions) {
+            list.addAll(this.transactions);
+        }
 
         return list;
     }
