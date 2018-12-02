@@ -28,6 +28,8 @@ public class AccountsProcessor extends AbstractJsonRpcProcessor {
         if (request.check("eth_getBalance", 1, 2))
             return getBalance(request);
 
+        request.check("eth_getTransactionCount", 1, 2);
+
         return super.processRequest(request);
     }
 

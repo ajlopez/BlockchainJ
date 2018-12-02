@@ -177,4 +177,32 @@ public class AccountsProcessorTest {
 
         Assert.assertEquals(expectedBalance, (new BigInteger(1, bytes)).longValue());
     }
+
+    @Test
+    public void getTransactionCountWithNoParameter() throws JsonRpcException {
+        List<JsonValue> params = Collections.emptyList();
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
+
+        AccountsProcessor processor = new AccountsProcessor(null, null);
+
+        exception.expect(JsonRpcException.class);
+        exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 0");
+        processor.processRequest(request);
+    }
+
+    @Test
+    public void getTransactionCountWithThreeParameters() throws JsonRpcException {
+        List<JsonValue> params = new ArrayList();
+        params.add(new JsonStringValue("foo"));
+        params.add(new JsonStringValue("bar"));
+        params.add(new JsonStringValue("foobar"));
+
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
+
+        AccountsProcessor processor = new AccountsProcessor(null, null);
+
+        exception.expect(JsonRpcException.class);
+        exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 3");
+        processor.processRequest(request);
+    }
 }
