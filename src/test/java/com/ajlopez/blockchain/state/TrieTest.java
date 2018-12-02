@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.state;
 
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
@@ -102,6 +103,24 @@ public class TrieTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(trie.getHash(), result.getHash());
+    }
+
+    @Test
+    public void putKeyValueTwice() {
+        byte[] value1 = new byte[Hash.HASH_BYTES];
+        random.nextBytes(value1);
+        byte[] value2 = new byte[Hash.HASH_BYTES];
+        random.nextBytes(value2);
+
+        byte[] key = new byte[Address.ADDRESS_BYTES];
+        random.nextBytes(key);
+
+        Trie trie1 = new Trie().put(key, value1);
+        Trie trie2 = trie1.put(key, value2);
+
+        Assert.assertArrayEquals(value1, trie1.get(key));
+        Assert.assertArrayEquals(value2, trie2.get(key));
+        Assert.assertNotEquals(trie1.getHash(), trie2.getHash());
     }
 
     @Test
