@@ -283,17 +283,20 @@ public class Trie {
 
         int offset = getOffset(key, position);
 
-        Trie[] children = copyNodes(this.nodes, true);
+        Trie[] childNodes = copyNodes(this.nodes, true);
+        Hash[] childHashes = copyHashes(this.hashes, true);
 
-        if (children[offset] == null)
-            children[offset] = new Trie(this.store).put(key, position + 1, value);
+        childHashes[offset] = null;
+
+        if (childNodes[offset] == null)
+            childNodes[offset] = new Trie(this.store).put(key, position + 1, value);
         else
-            children[offset] = children[offset].put(key, position + 1, value);
+            childNodes[offset] = childNodes[offset].put(key, position + 1, value);
 
-        if (noNodes(children))
-            children = null;
+        if (noNodes(childNodes))
+            childNodes = null;
 
-        return createNewTrie(children, this.hashes, this.value, false, this.store);
+        return createNewTrie(childNodes, childHashes, this.value, false, this.store);
     }
 
     private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, boolean copy, TrieStore store) {
@@ -322,6 +325,13 @@ public class Trie {
             return create ? new Trie[ARITY] : null;
 
         return Arrays.copyOf(nodes, ARITY);
+    }
+
+    private static Hash[] copyHashes(Hash[] hashes, boolean create) {
+        if (hashes == null)
+            return create ? new Hash[ARITY] : null;
+
+        return Arrays.copyOf(hashes, ARITY);
     }
 
     private static int getOffset(byte[] key, int position) {

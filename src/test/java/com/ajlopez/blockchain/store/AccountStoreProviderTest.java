@@ -50,12 +50,9 @@ public class AccountStoreProviderTest {
 
         Account account2 = new Account(BigInteger.TEN, 42);
 
-        Assert.assertFalse(Arrays.equals(AccountEncoder.encode(account1), AccountEncoder.encode(account2)));
-
         accountStore.putAccount(address, account2);
         Hash hash2 = accountStore.getRootHash();
         accountStore.save();
-        Assert.assertEquals(BigInteger.TEN, accountStore.getAccount(address).getBalance());
 
         Assert.assertNotEquals(hash0, hash1);
         Assert.assertNotEquals(hash0, hash2);
