@@ -106,6 +106,148 @@ public class AccountsProcessorTest {
         }
     }
 
+    @Test
+    public void getTransactionCountWithNoParameter() throws JsonRpcException {
+        List<JsonValue> params = Collections.emptyList();
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
+
+        AccountsProcessor processor = new AccountsProcessor(null, null);
+
+        exception.expect(JsonRpcException.class);
+        exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 0");
+        processor.processRequest(request);
+    }
+
+    @Test
+    public void getTransactionCountWithThreeParameters() throws JsonRpcException {
+        List<JsonValue> params = new ArrayList();
+        params.add(new JsonStringValue("foo"));
+        params.add(new JsonStringValue("bar"));
+        params.add(new JsonStringValue("foobar"));
+
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
+
+        AccountsProcessor processor = new AccountsProcessor(null, null);
+
+        exception.expect(JsonRpcException.class);
+        exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 3");
+        processor.processRequest(request);
+    }
+
+    @Test
+    public void getTransactionCounts() throws JsonRpcException {
+        Address sender = FactoryHelper.createRandomAddress();
+        Address receiver = FactoryHelper.createRandomAddress();
+
+        long initialBalance = 1000000;
+        long transferAmount = 1000;
+        int nblocks = 10;
+
+        AccountsProcessor processor = createProcessor(sender, receiver, initialBalance, transferAmount, nblocks);
+
+        checkTransactionCount(processor, sender, "earliest", 0);
+        checkTransactionCount(processor, receiver, "earliest", 0);
+
+        checkTransactionCount(processor, sender, "latest", nblocks);
+        checkTransactionCount(processor, receiver, "latest", 0);
+
+        checkTransactionCount(processor, sender,nblocks);
+        checkTransactionCount(processor, receiver,0);
+
+        for (int k = 0; k <= nblocks; k++) {
+            String decimalBlockId = Integer.toString(k);
+            String hexadecimalBlockId = "0x" + Integer.toString(k, 16);
+
+            checkTransactionCount(processor, sender, decimalBlockId, k);
+            checkTransactionCount(processor, receiver, decimalBlockId, 0);
+
+            checkTransactionCount(processor, sender, hexadecimalBlockId, k);
+            checkTransactionCount(processor, receiver, hexadecimalBlockId, 0);
+        }
+    }
+
+    private static void checkBalance(AccountsProcessor processor, Address address, String blockId, long expectedBalance) throws JsonRpcException {
+        JsonStringValue addressValue = new JsonStringValue(address.toString());
+        JsonStringValue blockIdValue = new JsonStringValue(blockId);
+
+        List<JsonValue> params = new ArrayList<>();
+        params.add(addressValue);
+        params.add(blockIdValue);
+
+        JsonRpcRequest request = new JsonRpcRequest("1", "2.0", "eth_getBalance", params);
+
+        checkBalanceResponse(processor.processRequest(request), expectedBalance);
+    }
+
+    private static void checkBalance(AccountsProcessor processor, Address address, long expectedBalance) throws JsonRpcException {
+        JsonStringValue addressValue = new JsonStringValue(address.toString());
+
+        List<JsonValue> params = new ArrayList<>();
+        params.add(addressValue);
+
+        JsonRpcRequest request = new JsonRpcRequest("1", "2.0", "eth_getBalance", params);
+
+        checkBalanceResponse(processor.processRequest(request), expectedBalance);
+    }
+
+    private static void checkBalanceResponse(JsonRpcResponse response, long expectedBalance) {
+        Assert.assertNotNull(response);
+
+        JsonValue result = response.getResult();
+        Assert.assertNotNull(result);
+
+        Assert.assertEquals(JsonValueType.STRING, result.getType());
+
+        String value = (String)result.getValue();
+
+        Assert.assertTrue(value.startsWith("0x"));
+
+        byte[] bytes = HexUtils.hexStringToBytes(value);
+
+        Assert.assertEquals(expectedBalance, (new BigInteger(1, bytes)).longValue());
+    }
+
+    private static void checkTransactionCount(AccountsProcessor processor, Address address, String blockId, long expectedNonce) throws JsonRpcException {
+        JsonStringValue addressValue = new JsonStringValue(address.toString());
+        JsonStringValue blockIdValue = new JsonStringValue(blockId);
+
+        List<JsonValue> params = new ArrayList<>();
+        params.add(addressValue);
+        params.add(blockIdValue);
+
+        JsonRpcRequest request = new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
+
+        checkTransactionCountResponse(processor.processRequest(request), expectedNonce);
+    }
+
+    private static void checkTransactionCount(AccountsProcessor processor, Address address, long expectedNonce) throws JsonRpcException {
+        JsonStringValue addressValue = new JsonStringValue(address.toString());
+
+        List<JsonValue> params = new ArrayList<>();
+        params.add(addressValue);
+
+        JsonRpcRequest request = new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
+
+        checkTransactionCountResponse(processor.processRequest(request), expectedNonce);
+    }
+
+    private static void checkTransactionCountResponse(JsonRpcResponse response, long expectedNonce) {
+        Assert.assertNotNull(response);
+
+        JsonValue result = response.getResult();
+        Assert.assertNotNull(result);
+
+        Assert.assertEquals(JsonValueType.STRING, result.getType());
+
+        String value = (String)result.getValue();
+
+        Assert.assertTrue(value.startsWith("0x"));
+
+        byte[] bytes = HexUtils.hexStringToBytes(value);
+
+        Assert.assertEquals(expectedNonce, (new BigInteger(1, bytes)).longValue());
+    }
+
     private static AccountsProcessor createProcessor(Address sender, Address receiver, long initialBalance, long transferAmount, int nblocks) {
         TrieStore accountTrieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(accountTrieStore.retrieve(Trie.EMPTY_TRIE_HASH));
@@ -135,74 +277,5 @@ public class AccountsProcessorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(accountTrieStore);
 
         return new AccountsProcessor(accountStoreProvider, blocksProvider);
-    }
-
-    private static void checkBalance(AccountsProcessor processor, Address address, String blockId, long expectedBalance) throws JsonRpcException {
-        JsonStringValue addressValue = new JsonStringValue(address.toString());
-        JsonStringValue blockIdValue = new JsonStringValue(blockId);
-
-        List<JsonValue> params = new ArrayList<>();
-        params.add(addressValue);
-        params.add(blockIdValue);
-
-        JsonRpcRequest request = new JsonRpcRequest("1", "2.0", "eth_getBalance", params);
-
-        checkResponse(processor.processRequest(request), expectedBalance);
-    }
-
-    private static void checkBalance(AccountsProcessor processor, Address address, long expectedBalance) throws JsonRpcException {
-        JsonStringValue addressValue = new JsonStringValue(address.toString());
-
-        List<JsonValue> params = new ArrayList<>();
-        params.add(addressValue);
-
-        JsonRpcRequest request = new JsonRpcRequest("1", "2.0", "eth_getBalance", params);
-
-        checkResponse(processor.processRequest(request), expectedBalance);
-    }
-
-    private static void checkResponse(JsonRpcResponse response, long expectedBalance) {
-        Assert.assertNotNull(response);
-
-        JsonValue result = response.getResult();
-        Assert.assertNotNull(result);
-
-        Assert.assertEquals(JsonValueType.STRING, result.getType());
-
-        String value = (String)result.getValue();
-
-        Assert.assertTrue(value.startsWith("0x"));
-
-        byte[] bytes = HexUtils.hexStringToBytes(value);
-
-        Assert.assertEquals(expectedBalance, (new BigInteger(1, bytes)).longValue());
-    }
-
-    @Test
-    public void getTransactionCountWithNoParameter() throws JsonRpcException {
-        List<JsonValue> params = Collections.emptyList();
-        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
-
-        AccountsProcessor processor = new AccountsProcessor(null, null);
-
-        exception.expect(JsonRpcException.class);
-        exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 0");
-        processor.processRequest(request);
-    }
-
-    @Test
-    public void getTransactionCountWithThreeParameters() throws JsonRpcException {
-        List<JsonValue> params = new ArrayList();
-        params.add(new JsonStringValue("foo"));
-        params.add(new JsonStringValue("bar"));
-        params.add(new JsonStringValue("foobar"));
-
-        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
-
-        AccountsProcessor processor = new AccountsProcessor(null, null);
-
-        exception.expect(JsonRpcException.class);
-        exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 3");
-        processor.processRequest(request);
     }
 }
