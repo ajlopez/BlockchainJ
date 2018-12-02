@@ -19,6 +19,12 @@ public class JsonRpcResponse {
         return createResponse(request, value);
     }
 
+    public static JsonRpcResponse createResponse(JsonRpcRequest request, String result) {
+        JsonValue value = JsonConverter.convert(result);
+
+        return createResponse(request, value);
+    }
+
     public static JsonRpcResponse createResponse(JsonRpcRequest request, JsonValue result) {
         return new JsonRpcResponse(request.getId(), request.getVersion(), result);
     }
