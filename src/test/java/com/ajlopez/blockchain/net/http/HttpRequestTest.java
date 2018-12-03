@@ -17,7 +17,7 @@ public class HttpRequestTest {
         Reader reader = new StringReader("foo");
 
         HttpRequest request = new HttpRequest(method, resource, reader);
-        
+
         Assert.assertEquals(method, request.getMethod());
         Assert.assertEquals(resource, request.getResource());
         Assert.assertEquals(reader, request.getReader());
