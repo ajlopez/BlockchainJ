@@ -10,7 +10,7 @@ import java.io.StringReader;
 /**
  * Created by ajlopez on 03/12/2018.
  */
-public class HttpRequestParserTest {
+public class HttpRequestJsonParserTest {
     @Test
     public void parseSimpleRequest() throws IOException {
         Reader reader = new StringReader("POST / HTTP 1.1\r\n\r\nfoo\r\n");

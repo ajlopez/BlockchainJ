@@ -9,17 +9,17 @@ import java.io.StringReader;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class ParserTest {
+public class JsonParserTest {
     @Test
-    public void parseEmptyStringAsNull() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("");
+    public void parseEmptyStringAsNull() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("");
 
         Assert.assertNull(parser.parseValue());
     }
 
     @Test
-    public void parseIntegerAsNumericValue() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("42");
+    public void parseIntegerAsNumericValue() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("42");
 
         JsonValue result = parser.parseValue();
 
@@ -31,8 +31,8 @@ public class ParserTest {
     }
 
     @Test
-    public void parseStringAsStringValue() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("\"foo\"");
+    public void parseStringAsStringValue() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("\"foo\"");
 
         JsonValue result = parser.parseValue();
 
@@ -44,8 +44,8 @@ public class ParserTest {
     }
 
     @Test
-    public void parseTrueAsBooleanValue() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("true");
+    public void parseTrueAsBooleanValue() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("true");
 
         JsonValue result = parser.parseValue();
 
@@ -57,8 +57,8 @@ public class ParserTest {
     }
 
     @Test
-    public void parseFalseAsBooleanValue() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("false");
+    public void parseFalseAsBooleanValue() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("false");
 
         JsonValue result = parser.parseValue();
 
@@ -70,21 +70,21 @@ public class ParserTest {
     }
 
     @Test
-    public void parseInvalidName() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("foo");
+    public void parseInvalidName() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("foo");
 
         try {
             parser.parseValue();
             Assert.fail();
         }
-        catch (ParserException ex) {
+        catch (JsonParserException ex) {
             Assert.assertEquals("Invalid value 'foo'", ex.getMessage());
         }
     }
 
     @Test
-    public void parseEmptyObject() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("{}");
+    public void parseEmptyObject() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("{}");
 
         JsonValue result = parser.parseValue();
 
@@ -97,21 +97,21 @@ public class ParserTest {
     }
 
     @Test
-    public void parseUnclosedObject() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("{");
+    public void parseUnclosedObject() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("{");
 
         try {
             parser.parseValue();
             Assert.fail();
         }
-        catch (ParserException ex) {
+        catch (JsonParserException ex) {
             Assert.assertEquals("Expected string", ex.getMessage());
         }
     }
 
     @Test
-    public void parseObjectWithTwoProperties() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("{ \"name\": \"adam\", \"age\": 900 }");
+    public void parseObjectWithTwoProperties() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("{ \"name\": \"adam\", \"age\": 900 }");
 
         JsonValue result = parser.parseValue();
 
@@ -138,8 +138,8 @@ public class ParserTest {
     }
 
     @Test
-    public void parseArrayWithTwoElements() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("[ \"adam\", 900 ]");
+    public void parseArrayWithTwoElements() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("[ \"adam\", 900 ]");
 
         JsonValue result = parser.parseValue();
 
@@ -164,8 +164,8 @@ public class ParserTest {
     }
 
     @Test
-    public void parseObjectWithNestedObject() throws IOException, LexerException, ParserException {
-        Parser parser = createParser("{ \"name\": \"adam\", \"age\": 900, \"wife\": { \"name\": \"eve\", \"age\": 800 } }");
+    public void parseObjectWithNestedObject() throws IOException, JsonLexerException, JsonParserException {
+        JsonParser parser = createParser("{ \"name\": \"adam\", \"age\": 900, \"wife\": { \"name\": \"eve\", \"age\": 800 } }");
 
         JsonValue result = parser.parseValue();
 
@@ -201,7 +201,7 @@ public class ParserTest {
         Assert.assertNull(parser.parseValue());
     }
 
-    private static Parser createParser(String text) {
-        return new Parser(new StringReader(text));
+    private static JsonParser createParser(String text) {
+        return new JsonParser(new StringReader(text));
     }
 }

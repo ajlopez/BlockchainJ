@@ -15,8 +15,8 @@ public class JsonRpcRequest {
     private final String method;
     private final List<JsonValue> params;
 
-    public static JsonRpcRequest fromReader(Reader reader) throws ParserException, IOException, LexerException {
-        JsonObjectValue json = (JsonObjectValue)(new Parser(reader)).parseValue();
+    public static JsonRpcRequest fromReader(Reader reader) throws JsonParserException, IOException, JsonLexerException {
+        JsonObjectValue json = (JsonObjectValue)(new JsonParser(reader)).parseValue();
 
         return new JsonRpcRequest(
                 json.getProperty("id").getValue().toString(),

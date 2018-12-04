@@ -7,12 +7,12 @@ import java.util.Stack;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class Lexer {
+public class JsonLexer {
     private Reader reader;
     private Stack<Token> tokens = new Stack<>();
     private Stack<Character> chars = new Stack<>();
 
-    public Lexer(Reader reader) {
+    public JsonLexer(Reader reader) {
         this.reader = reader;
     }
 
@@ -20,7 +20,7 @@ public class Lexer {
         this.tokens.push(token);
     }
 
-    public Token nextToken() throws IOException, LexerException {
+    public Token nextToken() throws IOException, JsonLexerException {
         if (!this.tokens.isEmpty())
             return this.tokens.pop();
 
@@ -44,7 +44,7 @@ public class Lexer {
         return new Token(TokenType.SYMBOL, buffer.toString());
     }
 
-    private Token nextString() throws IOException, LexerException {
+    private Token nextString() throws IOException, JsonLexerException {
         StringBuffer buffer = new StringBuffer();
 
         Character ch;
@@ -76,7 +76,7 @@ public class Lexer {
         }
 
         if (ch == null)
-            throw new LexerException("Unclosed string");
+            throw new JsonLexerException("Unclosed string");
 
         return new Token(TokenType.STRING, buffer.toString());
     }
