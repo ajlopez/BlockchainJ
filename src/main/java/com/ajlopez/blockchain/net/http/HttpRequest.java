@@ -23,5 +23,7 @@ public class HttpRequest {
 
     public String getResource() { return this.resource; }
 
+    public Map<String, String> getHeaders() { return this.headers; }
+
     public Reader getReader() { return this.reader; }
 }
