@@ -23,6 +23,6 @@ public class HttpRequestParser {
             if (line.trim().isEmpty())
                 break;
 
-        return new HttpRequest(method, resource, breader);
+        return new HttpRequest(method, resource, null, breader);
     }
 }
