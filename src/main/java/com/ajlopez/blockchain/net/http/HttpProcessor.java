@@ -31,7 +31,7 @@ public class HttpProcessor {
         HttpRequest request = parser.parse(this.reader);
 
         if (request.getMethod().equals("POST")) {
-            JsonParser jparser = new JsonParser(this.reader);
+            JsonParser jparser = new JsonParser(request.getReader());
             JsonValue jvalue = jparser.parseValue();
 
             if (jvalue.getType() == JsonValueType.OBJECT) {

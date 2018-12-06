@@ -23,7 +23,7 @@ public class HttpProcessorTest {
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
         BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
 
-        String input = "POST /\r\n\r\n{ \"id\": 1, \"version\": \"2.0\", \"method\": \"eth_blockNumber\", \"params:\": [] }";
+        String input = "POST /\r\n\r\n{ \"id\": 1, \"version\": \"2.0\", \"method\": \"eth_blockNumber\", \"params\": [] }";
         StringWriter writer = new StringWriter();
 
         HttpProcessor processor = new HttpProcessor(blocksProcessor,  new StringReader(input), writer);
