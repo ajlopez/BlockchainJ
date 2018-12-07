@@ -49,7 +49,17 @@ public class HttpProcessor {
 
                     JsonRpcResponse jsonresponse = this.jsonRpcProcessor.processRequest(jsonrequest);
 
-                    this.writer.write(jsonresponse.toString());
+                    JsonBuilder builder = new JsonBuilder();
+                    JsonValue response = builder.object()
+                            .name("id")
+                            .value(jsonresponse.getId())
+                            .name("version")
+                            .value(jsonresponse.getVersion())
+                            .name("result")
+                            .value(jsonresponse.getResult())
+                            .build();
+
+                    this.writer.write(response.toString());
                     this.writer.flush();
                 }
             }

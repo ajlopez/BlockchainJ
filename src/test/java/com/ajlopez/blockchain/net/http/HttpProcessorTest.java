@@ -34,5 +34,6 @@ public class HttpProcessorTest {
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals("{ \"id\": \"1\", \"version\": \"2.0\", \"result\": \"0x0a\" }", result);
     }
 }
