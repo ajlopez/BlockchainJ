@@ -9,31 +9,31 @@ import java.io.StringReader;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class LexerTest {
+public class JsonLexerTest {
     @Test
-    public void processEmptyString() throws IOException, LexerException {
-        Lexer lexer = createLexer("");
+    public void processEmptyString() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("");
 
         Assert.assertNull(lexer.nextToken());
     }
 
     @Test
-    public void processBlankString() throws IOException, LexerException {
-        Lexer lexer = createLexer("   ");
+    public void processBlankString() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("   ");
 
         Assert.assertNull(lexer.nextToken());
     }
 
     @Test
-    public void processBlankStringWithNewLineCarriageReturn() throws IOException, LexerException {
-        Lexer lexer = createLexer(" \r\n  ");
+    public void processBlankStringWithNewLineCarriageReturn() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer(" \r\n  ");
 
         Assert.assertNull(lexer.nextToken());
     }
 
     @Test
-    public void processSimpleName() throws IOException, LexerException {
-        Lexer lexer = createLexer("adam");
+    public void processSimpleName() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("adam");
 
         Token token = lexer.nextToken();
 
@@ -45,8 +45,8 @@ public class LexerTest {
     }
 
     @Test
-    public void pushToken() throws IOException, LexerException {
-        Lexer lexer = createLexer("adam");
+    public void pushToken() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("adam");
 
         Token original = lexer.nextToken();
 
@@ -62,8 +62,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processSimpleNameWithWhitespaces() throws IOException, LexerException {
-        Lexer lexer = createLexer("  adam   ");
+    public void processSimpleNameWithWhitespaces() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("  adam   ");
 
         Token token = lexer.nextToken();
 
@@ -75,8 +75,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processSimpleNameWithInitialUnderscore() throws IOException, LexerException {
-        Lexer lexer = createLexer("_name");
+    public void processSimpleNameWithInitialUnderscore() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("_name");
 
         Token token = lexer.nextToken();
 
@@ -88,8 +88,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processSimpleNameWithFinalUnderscore() throws IOException, LexerException {
-        Lexer lexer = createLexer("name_");
+    public void processSimpleNameWithFinalUnderscore() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("name_");
 
         Token token = lexer.nextToken();
 
@@ -101,8 +101,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processSimpleNameWithManyUnderscores() throws IOException, LexerException {
-        Lexer lexer = createLexer("_first_name_");
+    public void processSimpleNameWithManyUnderscores() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("_first_name_");
 
         Token token = lexer.nextToken();
 
@@ -114,8 +114,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processSimpleNameWithDigits() throws IOException, LexerException {
-        Lexer lexer = createLexer("foo42");
+    public void processSimpleNameWithDigits() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("foo42");
 
         Token token = lexer.nextToken();
 
@@ -127,8 +127,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processSimpleNumber() throws IOException, LexerException {
-        Lexer lexer = createLexer("42");
+    public void processSimpleNumber() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("42");
 
         Token token = lexer.nextToken();
 
@@ -140,8 +140,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processSimpleNumberWithWhitespaces() throws IOException, LexerException {
-        Lexer lexer = createLexer("   42   ");
+    public void processSimpleNumberWithWhitespaces() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("   42   ");
 
         Token token = lexer.nextToken();
 
@@ -153,8 +153,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processSymbol() throws IOException, LexerException {
-        Lexer lexer = createLexer(";");
+    public void processSymbol() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer(";");
 
         Token token = lexer.nextToken();
 
@@ -166,8 +166,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processNameAndSymbol() throws IOException, LexerException {
-        Lexer lexer = createLexer("name;");
+    public void processNameAndSymbol() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("name;");
 
         Token token = lexer.nextToken();
 
@@ -185,8 +185,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processNumberAndSymbol() throws IOException, LexerException {
-        Lexer lexer = createLexer("42;");
+    public void processNumberAndSymbol() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("42;");
 
         Token token = lexer.nextToken();
 
@@ -204,8 +204,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processString() throws IOException, LexerException {
-        Lexer lexer = createLexer("\"foo\"");
+    public void processString() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("\"foo\"");
 
         Token token = lexer.nextToken();
 
@@ -217,8 +217,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processStringAndSymbol() throws IOException, LexerException {
-        Lexer lexer = createLexer("\"foo\";");
+    public void processStringAndSymbol() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("\"foo\";");
 
         Token token = lexer.nextToken();
 
@@ -236,8 +236,8 @@ public class LexerTest {
     }
 
     @Test
-    public void processStringWithEscapedCharacters() throws IOException, LexerException {
-        Lexer lexer = createLexer("\"\\n \\r \\t \\\\ \\\"\"");
+    public void processStringWithEscapedCharacters() throws IOException, JsonLexerException {
+        JsonLexer lexer = createLexer("\"\\n \\r \\t \\\\ \\\"\"");
 
         Token token = lexer.nextToken();
 
@@ -250,18 +250,18 @@ public class LexerTest {
 
     @Test
     public void processUnclosedString() throws IOException {
-        Lexer lexer = createLexer("\"foo");
+        JsonLexer lexer = createLexer("\"foo");
 
         try {
             lexer.nextToken();
             Assert.fail();
         }
-        catch (LexerException ex) {
+        catch (JsonLexerException ex) {
             Assert.assertEquals("Unclosed string", ex.getMessage());
         }
     }
 
-    private static Lexer createLexer(String text) {
-        return new Lexer(new StringReader(text));
+    private static JsonLexer createLexer(String text) {
+        return new JsonLexer(new StringReader(text));
     }
 }

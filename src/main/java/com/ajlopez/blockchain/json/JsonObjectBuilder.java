@@ -40,6 +40,13 @@ public class JsonObjectBuilder extends JsonBuilder {
     }
 
     @Override
+    public JsonBuilder value(JsonValue value) {
+        properties.put(this.name, value);
+
+        return this;
+    }
+
+    @Override
     public JsonBuilder name(String name) {
         this.name = name;
 

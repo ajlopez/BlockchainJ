@@ -3,8 +3,8 @@ package com.ajlopez.blockchain.json;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class LexerException extends Exception {
-    public LexerException(String message) {
+public class JsonLexerException extends Exception {
+    public JsonLexerException(String message) {
         super(message);
     }
 }

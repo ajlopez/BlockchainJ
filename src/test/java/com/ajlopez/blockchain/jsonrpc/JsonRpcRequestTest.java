@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.jsonrpc;
 
-import com.ajlopez.blockchain.json.LexerException;
-import com.ajlopez.blockchain.json.ParserException;
+import com.ajlopez.blockchain.json.JsonLexerException;
+import com.ajlopez.blockchain.json.JsonParserException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ import java.io.StringReader;
  */
 public class JsonRpcRequestTest {
     @Test
-    public void createSimpleRequestFromStringReader() throws ParserException, IOException, LexerException {
+    public void createSimpleRequestFromStringReader() throws JsonParserException, IOException, JsonLexerException {
         String text = "{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_blockNumber\", \"params\": [] } ";
         Reader reader = new StringReader(text);
 

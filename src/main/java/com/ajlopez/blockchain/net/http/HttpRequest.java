@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.net.http;
 
 import java.io.Reader;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,6 +22,8 @@ public class HttpRequest {
     public String getMethod() { return this.method; }
 
     public String getResource() { return this.resource; }
+
+    public Map<String, String> getHeaders() { return this.headers; }
 
     public Reader getReader() { return this.reader; }
 }

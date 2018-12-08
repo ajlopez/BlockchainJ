@@ -10,14 +10,14 @@ import java.util.Map;
 /**
  * Created by ajlopez on 27/10/2018.
  */
-public class Parser {
-    private Lexer lexer;
+public class JsonParser {
+    private JsonLexer lexer;
 
-    public Parser(Reader reader) {
-        this.lexer = new Lexer(reader);
+    public JsonParser(Reader reader) {
+        this.lexer = new JsonLexer(reader);
     }
 
-    public JsonValue parseValue() throws IOException, LexerException, ParserException {
+    public JsonValue parseValue() throws IOException, JsonLexerException, JsonParserException {
         Token token = this.lexer.nextToken();
 
         if (token == null)
@@ -40,17 +40,17 @@ public class Parser {
                 return this.parseArrayValue();
         }
 
-        throw new ParserException(String.format("Invalid value '%s'", token.getValue()));
+        throw new JsonParserException(String.format("Invalid value '%s'", token.getValue()));
     }
 
-    private JsonObjectValue parseObjectValue() throws IOException, LexerException, ParserException {
+    private JsonObjectValue parseObjectValue() throws IOException, JsonLexerException, JsonParserException {
         Map<String, JsonValue> properties = new LinkedHashMap<>();
 
         while (!this.tryParseSymbol("}")) {
             String name = this.parseString();
 
             if (!this.tryParseSymbol(":"))
-                throw new ParserException("Expected ':'");
+                throw new JsonParserException("Expected ':'");
 
             JsonValue value = this.parseValue();
 
@@ -60,7 +60,7 @@ public class Parser {
                 continue;
 
             if (!this.tryParseSymbol("}"))
-                throw new ParserException("Unclosed object");
+                throw new JsonParserException("Unclosed object");
 
             break;
         }
@@ -68,7 +68,7 @@ public class Parser {
         return new JsonObjectValue(properties);
     }
 
-    private JsonArrayValue parseArrayValue() throws IOException, LexerException, ParserException {
+    private JsonArrayValue parseArrayValue() throws IOException, JsonLexerException, JsonParserException {
         List<JsonValue> elements = new ArrayList<>();
 
         if (!this.tryParseSymbol("]"))
@@ -81,7 +81,7 @@ public class Parser {
                     continue;
 
                 if (!this.tryParseSymbol("]"))
-                    throw new ParserException("Unclosed array");
+                    throw new JsonParserException("Unclosed array");
 
                 break;
             }
@@ -89,16 +89,16 @@ public class Parser {
         return new JsonArrayValue(elements);
     }
 
-    private String parseString() throws ParserException, IOException, LexerException {
+    private String parseString() throws JsonParserException, IOException, JsonLexerException {
         Token token = this.lexer.nextToken();
 
         if (token == null || token.getType() != TokenType.STRING)
-            throw new ParserException ("Expected string");
+            throw new JsonParserException("Expected string");
 
         return token.getValue();
     }
 
-    private boolean tryParseSymbol(String symbol) throws IOException, LexerException {
+    private boolean tryParseSymbol(String symbol) throws IOException, JsonLexerException {
         Token token = this.lexer.nextToken();
 
         if (token == null)
