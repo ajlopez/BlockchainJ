@@ -26,4 +26,36 @@ public class HexUtilsTest {
         Assert.assertNotNull(result);
         Assert.assertEquals("0x0123456789abcdef", result);
     }
+
+    @Test
+    public void convertHexadecimalStringToBytes() {
+        byte[] result = HexUtils.hexStringToBytes("ff0102");
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(new byte[] { (byte)0xff, 0x01, 0x02 }, result);
+    }
+
+    @Test
+    public void convertHexadecimalStringToBytesUsingUppercaseHexadecimalDigits() {
+        byte[] result = HexUtils.hexStringToBytes("FF0102");
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(new byte[] { (byte)0xff, 0x01, 0x02 }, result);
+    }
+
+    @Test
+    public void convertHexadecimalStringToBytesUsingPrefix() {
+        byte[] result = HexUtils.hexStringToBytes("0xff0102");
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(new byte[] { (byte)0xff, 0x01, 0x02 }, result);
+    }
+
+    @Test
+    public void convertHexadecimalStringToBytesUsingUppercasePrefix() {
+        byte[] result = HexUtils.hexStringToBytes("0Xff0102");
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(new byte[] { (byte)0xff, 0x01, 0x02 }, result);
+    }
 }

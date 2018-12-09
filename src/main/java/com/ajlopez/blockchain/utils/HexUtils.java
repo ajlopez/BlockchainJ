@@ -33,7 +33,7 @@ public class HexUtils {
 
     // https://stackoverflow.com/questions/140131/convert-a-string-representation-of-a-hex-dump-to-a-byte-array-using-java
     public static byte[] hexStringToBytes(String s) {
-        if (s.startsWith("0x"))
+        if (s.startsWith("0x") || s.startsWith("0X"))
             s = s.substring(2);
 
         int len = s.length();
