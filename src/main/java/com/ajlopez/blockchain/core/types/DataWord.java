@@ -39,6 +39,18 @@ public class DataWord extends AbstractBytesValue {
         return new DataWord(newbytes);
     }
 
+    public DataWord sub(DataWord word) {
+        byte[] newbytes = new byte[DATAWORD_BYTES];
+
+        for (int k = DATAWORD_BYTES - 1, overflow = 1; k >= 0; k--) {
+            int v = (this.bytes[k] & 0xff) + (((byte)~word.bytes[k]) & 0xff) + overflow;
+            newbytes[k] = (byte) v;
+            overflow = v >>> 8;
+        }
+
+        return new DataWord(newbytes);
+    }
+
     @Override
     public int hashOffset() {
         return 29;

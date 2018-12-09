@@ -128,7 +128,7 @@ public class DataWordTest {
     }
 
     @Test
-    public void addTwoShortDataWordsWithFullOverflow() {
+    public void addTwoDataWordsWithFullOverflow() {
         DataWord word1 = DataWord.fromHexadecimalString("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         DataWord word2 = DataWord.fromHexadecimalString("01");
 
@@ -136,5 +136,38 @@ public class DataWordTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals("0x00", result.toNormalizedString());
+    }
+
+    @Test
+    public void subtractTwoShortDataWords() {
+        DataWord word1 = DataWord.fromHexadecimalString("0100");
+        DataWord word2 = DataWord.fromHexadecimalString("01");
+
+        DataWord result = word1.sub(word2);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0xff", result.toNormalizedString());
+    }
+
+    @Test
+    public void subtractTwoDataWords() {
+        DataWord word1 = DataWord.fromHexadecimalString("0101");
+        DataWord word2 = DataWord.fromHexadecimalString("01");
+
+        DataWord result = word1.sub(word2);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0x0100", result.toNormalizedString());
+    }
+
+    @Test
+    public void subtractOneFromZero() {
+        DataWord word1 = DataWord.fromHexadecimalString("00");
+        DataWord word2 = DataWord.fromHexadecimalString("01");
+
+        DataWord result = word1.sub(word2);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", result.toNormalizedString());
     }
 }
