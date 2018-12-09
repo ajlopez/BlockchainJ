@@ -3,7 +3,7 @@ package com.ajlopez.blockchain.vms.newvm;
 import com.ajlopez.blockchain.state.Trie;
 
 /**
- * Created by ajloopez on 20/11/2017.
+ * Created by ajlopez on 20/11/2017.
  */
 public class Storage {
     private Trie trie = new Trie();
