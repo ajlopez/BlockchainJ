@@ -61,7 +61,7 @@ public class DataWordTest {
     }
 
     @Test
-    public void dataWordesWithTheSameBytesAreEqual() {
+    public void dataWordsWithTheSameBytesAreEqual() {
         Random random = new Random();
         byte[] bytes = new byte[DataWord.DATAWORD_BYTES];
         random.nextBytes(bytes);
@@ -76,7 +76,7 @@ public class DataWordTest {
     }
 
     @Test
-    public void dataWordesWithTheSameBytesValuesAreEqual() {
+    public void dataWordsWithTheSameBytesValuesAreEqual() {
         Random random = new Random();
         byte[] bytes = new byte[DataWord.DATAWORD_BYTES];
         random.nextBytes(bytes);
@@ -103,5 +103,38 @@ public class DataWordTest {
         Assert.assertFalse(dataWord.equals("foo"));
         Assert.assertFalse(dataWord.equals(new Hash(bytes)));
         Assert.assertFalse(dataWord.equals(new BlockHash(bytes)));
+    }
+
+    @Test
+    public void addTwoShortDataWords() {
+        DataWord word1 = DataWord.fromHexadecimalString("0103");
+        DataWord word2 = DataWord.fromHexadecimalString("010305");
+
+        DataWord result = word1.add(word2);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0x010408", result.toNormalizedString());
+    }
+
+    @Test
+    public void addTwoShortDataWordsWithOverflow() {
+        DataWord word1 = DataWord.fromHexadecimalString("ff");
+        DataWord word2 = DataWord.fromHexadecimalString("01");
+
+        DataWord result = word1.add(word2);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0x0100", result.toNormalizedString());
+    }
+
+    @Test
+    public void addTwoShortDataWordsWithFullOverflow() {
+        DataWord word1 = DataWord.fromHexadecimalString("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        DataWord word2 = DataWord.fromHexadecimalString("01");
+
+        DataWord result = word1.add(word2);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0x00", result.toNormalizedString());
     }
 }
