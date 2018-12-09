@@ -18,7 +18,10 @@ public abstract class AbstractBytesValue {
         if (bytes.length > length)
             throw new IllegalArgumentException("Too large byte array");
 
-        this.bytes = ByteUtils.copyBytes(bytes, length, false);
+        if (bytes.length == length)
+            this.bytes = bytes;
+        else
+            this.bytes = ByteUtils.copyBytes(bytes, length, false);
     }
 
     public byte[] getBytes() {
