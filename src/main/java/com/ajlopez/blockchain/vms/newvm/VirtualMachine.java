@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain.newvm;
+package com.ajlopez.blockchain.vms.newvm;
 
 import com.ajlopez.blockchain.utils.ByteUtils;
 
@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Stack;
 
-import static com.ajlopez.blockchain.newvm.OpCodes.*;
+import static com.ajlopez.blockchain.vms.newvm.OpCodes.*;
 
 /**
  * Created by ajloepz on 12/08/2017.

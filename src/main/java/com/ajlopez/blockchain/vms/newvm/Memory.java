@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain.newvm;
+package com.ajlopez.blockchain.vms.newvm;
 
 /**
  * Created by ajlopez on 26/11/2017.

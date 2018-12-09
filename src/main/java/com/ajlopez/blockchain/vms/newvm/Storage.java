@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain.newvm;
+package com.ajlopez.blockchain.vms.newvm;
 
 import com.ajlopez.blockchain.state.Trie;
 
