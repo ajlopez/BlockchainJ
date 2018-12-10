@@ -28,7 +28,7 @@ public class VirtualMachineTest {
     public void executePushOneByte() {
         VirtualMachine virtualMachine = new VirtualMachine();
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01 });
+        virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01});
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -48,7 +48,7 @@ public class VirtualMachineTest {
             byte[] value = FactoryHelper.createRandomBytes(k + 1);
             byte[] opcodes = new byte[k + 2];
 
-            opcodes[0] = (byte)(OpCodes.PUSH1 + k);
+            opcodes[0] = (byte) (OpCodes.PUSH1 + k);
             System.arraycopy(value, 0, opcodes, 1, k + 1);
 
             VirtualMachine virtualMachine = new VirtualMachine();
@@ -66,5 +66,23 @@ public class VirtualMachineTest {
             Assert.assertNotNull(result);
             Assert.assertEquals(DataWord.fromBytes(value, 0, value.length), result);
         }
+    }
+
+    @Test
+    public void executeAdd() {
+        VirtualMachine virtualMachine = new VirtualMachine();
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+
+        DataWord result = stack.pop();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0x03", result.toNormalizedString());
     }
 }

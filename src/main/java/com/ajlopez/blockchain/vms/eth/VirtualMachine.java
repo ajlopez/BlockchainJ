@@ -17,6 +17,12 @@ public class VirtualMachine {
             byte bytecode = bytecodes[k];
 
             switch (bytecode) {
+                case OpCodes.ADD:
+                    DataWord word1 = this.stack.pop();
+                    DataWord word2 = this.stack.pop();
+                    this.stack.push(word1.add(word2));
+                    break;
+
                 case OpCodes.PUSH1:
                 case OpCodes.PUSH2:
                 case OpCodes.PUSH3:
@@ -52,6 +58,7 @@ public class VirtualMachine {
                     int lb = bytecode - OpCodes.PUSH1 + 1;
                     this.stack.push(DataWord.fromBytes(bytecodes, k + 1, lb));
                     k += lb;
+                    break;
             }
         }
     }
