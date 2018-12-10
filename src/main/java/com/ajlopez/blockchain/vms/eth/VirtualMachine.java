@@ -67,7 +67,22 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.DUP1:
-                    this.stack.push(this.stack.peek());
+                case OpCodes.DUP2:
+                case OpCodes.DUP3:
+                case OpCodes.DUP4:
+                case OpCodes.DUP5:
+                case OpCodes.DUP6:
+                case OpCodes.DUP7:
+                case OpCodes.DUP8:
+                case OpCodes.DUP9:
+                case OpCodes.DUP10:
+                case OpCodes.DUP11:
+                case OpCodes.DUP12:
+                case OpCodes.DUP13:
+                case OpCodes.DUP14:
+                case OpCodes.DUP15:
+                case OpCodes.DUP16:
+                    this.stack.push(this.stack.get(bytecode - OpCodes.DUP1));
                     break;
             }
         }

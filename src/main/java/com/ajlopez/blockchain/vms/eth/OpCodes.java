@@ -57,4 +57,19 @@ public class OpCodes {
     public static final byte PUSH32 = 0x7f;
 
     public static final byte DUP1 = (byte)0x80;
+    public static final byte DUP2 = (byte)0x81;
+    public static final byte DUP3 = (byte)0x82;
+    public static final byte DUP4 = (byte)0x83;
+    public static final byte DUP5 = (byte)0x84;
+    public static final byte DUP6 = (byte)0x85;
+    public static final byte DUP7 = (byte)0x86;
+    public static final byte DUP8 = (byte)0x87;
+    public static final byte DUP9 = (byte)0x88;
+    public static final byte DUP10 = (byte)0x89;
+    public static final byte DUP11 = (byte)0x8a;
+    public static final byte DUP12 = (byte)0x8b;
+    public static final byte DUP13 = (byte)0x8c;
+    public static final byte DUP14 = (byte)0x8d;
+    public static final byte DUP15 = (byte)0x8e;
+    public static final byte DUP16 = (byte)0x8f;
 }
