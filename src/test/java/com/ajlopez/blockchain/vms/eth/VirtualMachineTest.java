@@ -104,4 +104,40 @@ public class VirtualMachineTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(DataWord.ZERO, result);
     }
+
+    @Test
+    public void executeSub() {
+        VirtualMachine virtualMachine = new VirtualMachine();
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.SUB });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+
+        DataWord result = stack.pop();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(DataWord.ONE, result);
+    }
+
+    @Test
+    public void executeSubWithUnderflow() {
+        VirtualMachine virtualMachine = new VirtualMachine();
+        byte[] bytecodes = HexUtils.hexStringToBytes("6001600003");
+        virtualMachine.execute(bytecodes);
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+
+        DataWord result = stack.pop();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", result.toNormalizedString());
+    }
 }

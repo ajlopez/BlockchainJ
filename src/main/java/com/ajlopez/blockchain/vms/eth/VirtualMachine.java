@@ -23,6 +23,12 @@ public class VirtualMachine {
                     this.stack.push(word1.add(word2));
                     break;
 
+                case OpCodes.SUB:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+                    this.stack.push(word1.sub(word2));
+                    break;
+
                 case OpCodes.PUSH1:
                 case OpCodes.PUSH2:
                 case OpCodes.PUSH3:
