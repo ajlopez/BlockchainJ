@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.vms.eth;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -84,5 +85,23 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals("0x03", result.toNormalizedString());
+    }
+
+    @Test
+    public void executeAddWithOverflow() {
+        VirtualMachine virtualMachine = new VirtualMachine();
+        byte[] bytecodes = HexUtils.hexStringToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600101");
+        virtualMachine.execute(bytecodes);
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+
+        DataWord result = stack.pop();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(DataWord.ZERO, result);
     }
 }
