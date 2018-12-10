@@ -55,4 +55,6 @@ public class OpCodes {
     public static final byte PUSH30 = 0x7d;
     public static final byte PUSH31 = 0x7e;
     public static final byte PUSH32 = 0x7f;
+
+    public static final byte DUP1 = (byte)0x80;
 }

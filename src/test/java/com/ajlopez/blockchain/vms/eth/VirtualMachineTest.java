@@ -140,4 +140,20 @@ public class VirtualMachineTest {
         Assert.assertNotNull(result);
         Assert.assertEquals("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", result.toNormalizedString());
     }
+
+    @Test
+    public void executeDupTopOfStack() {
+        VirtualMachine virtualMachine = new VirtualMachine();
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.DUP1 });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(2, stack.size());
+
+        Assert.assertEquals(DataWord.ONE, stack.pop());
+        Assert.assertEquals(DataWord.ONE, stack.pop());
+    }
 }

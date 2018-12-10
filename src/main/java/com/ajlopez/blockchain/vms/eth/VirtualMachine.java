@@ -65,6 +65,10 @@ public class VirtualMachine {
                     this.stack.push(DataWord.fromBytes(bytecodes, k + 1, lb));
                     k += lb;
                     break;
+
+                case OpCodes.DUP1:
+                    this.stack.push(this.stack.peek());
+                    break;
             }
         }
     }
