@@ -8,10 +8,20 @@ import com.ajlopez.blockchain.utils.HexUtils;
  */
 public class DataWord extends AbstractBytesValue {
     public static final int DATAWORD_BYTES = 32;
+
     public static final DataWord ZERO = new DataWord(new byte[0]);
+    public static final DataWord ONE = new DataWord(new byte[] { 0x01 });
 
     public static DataWord fromHexadecimalString(String value) {
         return new DataWord(HexUtils.hexStringToBytes(value));
+    }
+
+    public static DataWord fromBytes(byte[] bytes, int offset, int length) {
+        byte[] newbytes = new byte[DATAWORD_BYTES];
+
+        System.arraycopy(bytes, offset, newbytes, DATAWORD_BYTES - length, length);
+
+        return new DataWord(newbytes);
     }
 
     public DataWord(byte[] value) {

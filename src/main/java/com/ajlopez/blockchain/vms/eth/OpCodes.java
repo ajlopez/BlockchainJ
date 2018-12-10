@@ -21,4 +21,6 @@ public class OpCodes {
     public static final byte MULMOD = 0x09;
     public static final byte EXP = 0x0a;
     public static final byte SIGNEXTEND = 0x0b;
+
+    public static final byte PUSH1 = 0x60;
 }
