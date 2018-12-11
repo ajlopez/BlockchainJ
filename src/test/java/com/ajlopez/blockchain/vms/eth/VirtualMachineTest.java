@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +14,7 @@ import java.util.Stack;
 public class VirtualMachineTest {
     @Test
     public void executeEmptyCode() {
-        VirtualMachine virtualMachine = new VirtualMachine();
+        VirtualMachine virtualMachine = new VirtualMachine(null);
 
         virtualMachine.execute(new byte[0]);
 
@@ -27,7 +26,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executePushOneByte() {
-        VirtualMachine virtualMachine = new VirtualMachine();
+        VirtualMachine virtualMachine = new VirtualMachine(null);
 
         virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01});
 
@@ -52,7 +51,7 @@ public class VirtualMachineTest {
             opcodes[0] = (byte) (OpCodes.PUSH1 + k);
             System.arraycopy(value, 0, opcodes, 1, k + 1);
 
-            VirtualMachine virtualMachine = new VirtualMachine();
+            VirtualMachine virtualMachine = new VirtualMachine(null);
 
             virtualMachine.execute(opcodes);
 
@@ -71,7 +70,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAdd() {
-        VirtualMachine virtualMachine = new VirtualMachine();
+        VirtualMachine virtualMachine = new VirtualMachine(null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
 
@@ -89,7 +88,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAddWithOverflow() {
-        VirtualMachine virtualMachine = new VirtualMachine();
+        VirtualMachine virtualMachine = new VirtualMachine(null);
         byte[] bytecodes = HexUtils.hexStringToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600101");
         virtualMachine.execute(bytecodes);
 
@@ -107,7 +106,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSub() {
-        VirtualMachine virtualMachine = new VirtualMachine();
+        VirtualMachine virtualMachine = new VirtualMachine(null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.SUB });
 
@@ -125,7 +124,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSubWithUnderflow() {
-        VirtualMachine virtualMachine = new VirtualMachine();
+        VirtualMachine virtualMachine = new VirtualMachine(null);
         byte[] bytecodes = HexUtils.hexStringToBytes("6001600003");
         virtualMachine.execute(bytecodes);
 
@@ -143,7 +142,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeDupTopOfStack() {
-        VirtualMachine virtualMachine = new VirtualMachine();
+        VirtualMachine virtualMachine = new VirtualMachine(null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.DUP1 });
 
@@ -160,7 +159,7 @@ public class VirtualMachineTest {
     @Test
     public void executeDups() {
         for (int k = 0; k < 16; k++) {
-            VirtualMachine virtualMachine = new VirtualMachine();
+            VirtualMachine virtualMachine = new VirtualMachine(null);
 
             byte[][] values = new byte[k + 1][];
 
@@ -193,7 +192,7 @@ public class VirtualMachineTest {
     @Test
     public void executeSwaps() {
         for (int k = 0; k < 16; k++) {
-            VirtualMachine virtualMachine = new VirtualMachine();
+            VirtualMachine virtualMachine = new VirtualMachine(null);
 
             byte[][] values = new byte[k + 2][];
 
@@ -226,7 +225,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executePop() {
-        VirtualMachine virtualMachine = new VirtualMachine();
+        VirtualMachine virtualMachine = new VirtualMachine(null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.POP });
 
@@ -240,5 +239,23 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(DataWord.ONE, result);
+    }
+
+    @Test
+    public void executeStorageLoad() {
+        Storage storage = new MapStorage();
+
+        storage.setValue(DataWord.ONE, DataWord.fromUnsignedInteger(42));
+
+        VirtualMachine virtualMachine = new VirtualMachine(storage);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.SLOAD });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), stack.pop());
     }
 }

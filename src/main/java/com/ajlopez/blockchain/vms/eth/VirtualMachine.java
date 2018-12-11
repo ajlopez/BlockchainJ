@@ -8,7 +8,12 @@ import java.util.Stack;
  * Created by ajlopez on 10/12/2018.
  */
 public class VirtualMachine {
+    private final Storage storage;
     private final Stack<DataWord> stack = new Stack<>();
+
+    public VirtualMachine(Storage storage) {
+        this.storage = storage;
+    }
 
     public void execute(byte[] bytecodes) {
         int l = bytecodes.length;
@@ -32,7 +37,12 @@ public class VirtualMachine {
                 case OpCodes.POP:
                     this.stack.pop();
                     break;
-                    
+
+                case OpCodes.SLOAD:
+                    word1 = this.stack.pop();
+                    this.stack.push(this.storage.getValue(word1));
+                    break;
+
                 case OpCodes.PUSH1:
                 case OpCodes.PUSH2:
                 case OpCodes.PUSH3:

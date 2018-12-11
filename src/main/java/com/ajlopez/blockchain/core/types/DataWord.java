@@ -12,6 +12,10 @@ public class DataWord extends AbstractBytesValue {
     public static final DataWord ZERO = new DataWord(new byte[0]);
     public static final DataWord ONE = new DataWord(new byte[] { 0x01 });
 
+    public static DataWord fromUnsignedInteger(int value) {
+        return new DataWord(ByteUtils.unsignedIntegerToBytes(value));
+    }
+
     public static DataWord fromHexadecimalString(String value) {
         return new DataWord(HexUtils.hexStringToBytes(value));
     }
