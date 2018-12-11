@@ -22,6 +22,8 @@ public class OpCodes {
     public static final byte EXP = 0x0a;
     public static final byte SIGNEXTEND = 0x0b;
 
+    public static final byte POP = 0x50;
+
     public static final byte PUSH1 = 0x60;
     public static final byte PUSH2 = 0x61;
     public static final byte PUSH3 = 0x62;

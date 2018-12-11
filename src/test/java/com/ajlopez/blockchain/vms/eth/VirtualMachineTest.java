@@ -223,4 +223,22 @@ public class VirtualMachineTest {
             Assert.assertEquals(DataWord.fromBytes(values[values.length - 1], 0, values[values.length - 1].length), stack.get(0));
         }
     }
+
+    @Test
+    public void executePop() {
+        VirtualMachine virtualMachine = new VirtualMachine();
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.POP });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+
+        DataWord result = stack.pop();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(DataWord.ONE, result);
+    }
 }
