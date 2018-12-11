@@ -45,4 +45,16 @@ public class MemoryTest {
         Assert.assertEquals(DataWord.fromUnsignedInteger(42), memory.getValue(144));
         Assert.assertEquals(DataWord.fromUnsignedInteger(100), memory.getValue(200));
     }
+
+    @Test
+    public void setTwoBytesAndGetValue() {
+        Memory memory = new Memory();
+
+        memory.setByte(0, (byte)0x01);
+        memory.setByte(1, (byte)0x02);
+
+        Assert.assertEquals(2, memory.size());
+
+        Assert.assertEquals("0x0102000000000000000000000000000000000000000000000000000000000000", memory.getValue(0).toNormalizedString());
+    }
 }

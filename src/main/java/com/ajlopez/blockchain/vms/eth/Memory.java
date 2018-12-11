@@ -15,10 +15,25 @@ public class Memory {
     }
 
     public DataWord getValue(int address) {
-        if (address + DataWord.DATAWORD_BYTES <= this.size())
+        int size = this.size();
+
+        if (address + DataWord.DATAWORD_BYTES <= size)
             return DataWord.fromBytes(this.bytes, address, DataWord.DATAWORD_BYTES);
 
+        if (address < size) {
+            byte[] dbytes = new byte[DataWord.DATAWORD_BYTES];
+            System.arraycopy(this.bytes, address, dbytes, 0, size - address);
+
+            return new DataWord(dbytes);
+        }
+
         return DataWord.ZERO;
+    }
+
+    public void setByte(int address, byte value) {
+        ensureSize(address + 1);
+
+        this.bytes[address] = value;
     }
 
     public int size() {
