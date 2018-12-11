@@ -43,6 +43,12 @@ public class VirtualMachine {
                     this.stack.push(this.storage.getValue(word1));
                     break;
 
+                case OpCodes.SSTORE:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+                    this.storage.setValue(word1, word2);
+                    break;
+
                 case OpCodes.PUSH1:
                 case OpCodes.PUSH2:
                 case OpCodes.PUSH3:

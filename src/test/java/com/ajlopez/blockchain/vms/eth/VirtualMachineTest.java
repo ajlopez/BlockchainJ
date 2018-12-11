@@ -258,4 +258,20 @@ public class VirtualMachineTest {
         Assert.assertEquals(1, stack.size());
         Assert.assertEquals(DataWord.fromUnsignedInteger(42), stack.pop());
     }
+
+    @Test
+    public void executeStorageStorage() {
+        Storage storage = new MapStorage();
+
+        VirtualMachine virtualMachine = new VirtualMachine(storage);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), storage.getValue(DataWord.ONE));
+    }
 }
