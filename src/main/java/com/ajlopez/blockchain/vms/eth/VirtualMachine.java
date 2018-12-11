@@ -9,6 +9,7 @@ import java.util.Stack;
  */
 public class VirtualMachine {
     private final Storage storage;
+    private final Memory memory = new Memory();
     private final Stack<DataWord> stack = new Stack<>();
 
     public VirtualMachine(Storage storage) {
@@ -36,6 +37,17 @@ public class VirtualMachine {
 
                 case OpCodes.POP:
                     this.stack.pop();
+                    break;
+
+                case OpCodes.MLOAD:
+                    word1 = this.stack.pop();
+                    this.stack.push(this.memory.getValue(word1.asUnsignedInteger()));
+                    break;
+
+                case OpCodes.MSTORE:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+                    this.memory.setValue(word1.asUnsignedInteger(), word2);
                     break;
 
                 case OpCodes.SLOAD:
@@ -137,5 +149,9 @@ public class VirtualMachine {
 
     public Stack<DataWord> getStack() {
         return this.stack;
+    }
+
+    public Memory getMemory() {
+        return this.memory;
     }
 }

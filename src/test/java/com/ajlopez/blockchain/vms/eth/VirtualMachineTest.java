@@ -274,4 +274,38 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(DataWord.fromUnsignedInteger(42), storage.getValue(DataWord.ONE));
     }
+
+    @Test
+    public void executeMemoryStore() {
+        VirtualMachine virtualMachine = new VirtualMachine(null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), memory.getValue(1));
+    }
+
+    @Test
+    public void executeMemoryStoreAndMemoryLoad() {
+        VirtualMachine virtualMachine = new VirtualMachine(null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.MLOAD });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), stack.pop());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), memory.getValue(1));
+    }
 }

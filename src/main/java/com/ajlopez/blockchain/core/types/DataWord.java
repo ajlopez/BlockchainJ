@@ -40,6 +40,10 @@ public class DataWord extends AbstractBytesValue {
         return HexUtils.bytesToHexString(this.toNormalizedBytes(), true);
     }
 
+    public int asUnsignedInteger() {
+        return ByteUtils.bytesToUnsignedInteger(this.bytes, DataWord.DATAWORD_BYTES - Integer.BYTES);
+    }
+
     // From : http://stackoverflow.com/a/24023466/459349
     public DataWord add(DataWord word) {
         byte[] newbytes = new byte[DATAWORD_BYTES];

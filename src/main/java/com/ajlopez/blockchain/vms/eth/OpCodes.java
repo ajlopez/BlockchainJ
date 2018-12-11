@@ -23,7 +23,9 @@ public class OpCodes {
     public static final byte SIGNEXTEND = 0x0b;
 
     public static final byte POP = 0x50;
-
+    public static final byte MLOAD = 0x51;
+    public static final byte MSTORE = 0x52;
+    public static final byte MSTORE8 = 0x53;
     public static final byte SLOAD = 0x54;
     public static final byte SSTORE = 0x55;
 
