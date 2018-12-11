@@ -50,6 +50,12 @@ public class VirtualMachine {
                     this.memory.setValue(word1.asUnsignedInteger(), word2);
                     break;
 
+                case OpCodes.MSTORE8:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+                    this.memory.setByte(word1.asUnsignedInteger(), word2.getBytes()[DataWord.DATAWORD_BYTES - 1]);
+                    break;
+
                 case OpCodes.SLOAD:
                     word1 = this.stack.pop();
                     this.stack.push(this.storage.getValue(word1));

@@ -308,4 +308,20 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(DataWord.fromUnsignedInteger(42), memory.getValue(1));
     }
+
+    @Test
+    public void executeMemoryStoreByte() {
+        VirtualMachine virtualMachine = new VirtualMachine(null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE8 });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertEquals("0x2a000000000000000000000000000000000000000000000000000000000000", memory.getValue(0).toNormalizedString());
+    }
 }
