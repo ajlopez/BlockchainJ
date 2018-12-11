@@ -72,4 +72,21 @@ public class OpCodes {
     public static final byte DUP14 = (byte)0x8d;
     public static final byte DUP15 = (byte)0x8e;
     public static final byte DUP16 = (byte)0x8f;
+
+    public static final byte SWAP1 = (byte)0x90;
+    public static final byte SWAP2 = (byte)0x91;
+    public static final byte SWAP3 = (byte)0x92;
+    public static final byte SWAP4 = (byte)0x93;
+    public static final byte SWAP5 = (byte)0x94;
+    public static final byte SWAP6 = (byte)0x95;
+    public static final byte SWAP7 = (byte)0x96;
+    public static final byte SWAP8 = (byte)0x97;
+    public static final byte SWAP9 = (byte)0x98;
+    public static final byte SWAP10 = (byte)0x99;
+    public static final byte SWAP11 = (byte)0x9a;
+    public static final byte SWAP12 = (byte)0x9b;
+    public static final byte SWAP13 = (byte)0x9c;
+    public static final byte SWAP14 = (byte)0x9d;
+    public static final byte SWAP15 = (byte)0x9e;
+    public static final byte SWAP16 = (byte)0x9f;
 }

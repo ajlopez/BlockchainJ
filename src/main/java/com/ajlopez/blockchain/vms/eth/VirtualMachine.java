@@ -82,7 +82,34 @@ public class VirtualMachine {
                 case OpCodes.DUP14:
                 case OpCodes.DUP15:
                 case OpCodes.DUP16:
-                    this.stack.push(this.stack.get(bytecode - OpCodes.DUP1));
+                    this.stack.push(this.stack.get(this.stack.size() - 1 - (bytecode - OpCodes.DUP1)));
+                    break;
+
+                case OpCodes.SWAP1:
+                case OpCodes.SWAP2:
+                case OpCodes.SWAP3:
+                case OpCodes.SWAP4:
+                case OpCodes.SWAP5:
+                case OpCodes.SWAP6:
+                case OpCodes.SWAP7:
+                case OpCodes.SWAP8:
+                case OpCodes.SWAP9:
+                case OpCodes.SWAP10:
+                case OpCodes.SWAP11:
+                case OpCodes.SWAP12:
+                case OpCodes.SWAP13:
+                case OpCodes.SWAP14:
+                case OpCodes.SWAP15:
+                case OpCodes.SWAP16:
+                    int size = this.stack.size();
+                    int offset = bytecode - OpCodes.SWAP1 + 1;
+
+                    word1 = this.stack.get(size - 1);
+                    word2 = this.stack.get(size - 1 - offset);
+
+                    this.stack.set(size - 1, word2);
+                    this.stack.set(size - 1 - offset, word1);
+
                     break;
             }
         }

@@ -186,7 +186,41 @@ public class VirtualMachineTest {
             Assert.assertFalse(stack.isEmpty());
             Assert.assertEquals(k + 2, stack.size());
 
-            Assert.assertEquals(DataWord.fromBytes(values[0], 0, values[0].length), stack.get(0));
+            Assert.assertEquals(DataWord.fromBytes(values[0], 0, values[0].length), stack.pop());
+        }
+    }
+
+    @Test
+    public void executeSwaps() {
+        for (int k = 0; k < 16; k++) {
+            VirtualMachine virtualMachine = new VirtualMachine();
+
+            byte[][] values = new byte[k + 2][];
+
+            for (int j = 0; j < values.length; j++)
+                values[j] = FactoryHelper.createRandomBytes(DataWord.DATAWORD_BYTES);
+
+            byte[] bytecodes = new byte[(k + 2) * (DataWord.DATAWORD_BYTES + 1) + 1];
+
+            for (int j = 0; j < values.length; j++) {
+                int offset = j * (DataWord.DATAWORD_BYTES + 1);
+
+                bytecodes[offset] = OpCodes.PUSH32;
+                System.arraycopy(values[j], 0, bytecodes, offset + 1, values[j].length);
+            }
+
+            bytecodes[bytecodes.length - 1] = (byte)(OpCodes.SWAP1 + k);
+
+            virtualMachine.execute(bytecodes);
+
+            Stack<DataWord> stack = virtualMachine.getStack();
+
+            Assert.assertNotNull(stack);
+            Assert.assertFalse(stack.isEmpty());
+            Assert.assertEquals(k + 2, stack.size());
+
+            Assert.assertEquals(DataWord.fromBytes(values[0], 0, values[0].length), stack.peek());
+            Assert.assertEquals(DataWord.fromBytes(values[values.length - 1], 0, values[values.length - 1].length), stack.get(0));
         }
     }
 }
