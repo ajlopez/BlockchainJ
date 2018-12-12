@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -87,6 +88,14 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeAddOperations() {
+        executeBinaryOp(0, 0, OpCodes.ADD, 0);
+        executeBinaryOp(1, 2, OpCodes.ADD, 3);
+        executeBinaryOp(40, 2, OpCodes.ADD, 42);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.ADD, 1024 * 1024 * 1024 + 1);
+    }
+
+    @Test
     public void executeAddWithOverflow() {
         VirtualMachine virtualMachine = new VirtualMachine(null);
         byte[] bytecodes = HexUtils.hexStringToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600101");
@@ -120,6 +129,14 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(DataWord.ONE, result);
+    }
+
+    @Test
+    public void executeSubOperations() {
+        executeBinaryOp(0, 0, OpCodes.SUB, 0);
+        executeBinaryOp(1, 3, OpCodes.SUB, 2);
+        executeBinaryOp(2, 44, OpCodes.SUB, 42);
+        executeBinaryOp(1, 1024 * 1024 * 1024 + 1, OpCodes.SUB, 1024 * 1024 * 1024);
     }
 
     @Test
@@ -342,5 +359,28 @@ public class VirtualMachineTest {
         Memory memory = virtualMachine.getMemory();
 
         Assert.assertEquals("0x2a000000000000000000000000000000000000000000000000000000000000", memory.getValue(0).toNormalizedString());
+    }
+
+    private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected) {
+        byte[] boperand1 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand1));
+        byte[] boperand2 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand2));
+
+        byte[] bytecodes = new byte[3 + boperand1.length + boperand2.length];
+
+        bytecodes[0] = (byte)(OpCodes.PUSH1 + boperand1.length - 1);
+        System.arraycopy(boperand1, 0, bytecodes, 1, boperand1.length);
+        bytecodes[boperand1.length + 1] = (byte)(OpCodes.PUSH1 + boperand2.length - 1);
+        System.arraycopy(boperand2, 0, bytecodes, 2 + boperand1.length, boperand2.length);
+        bytecodes[bytecodes.length - 1] = opcode;
+
+        VirtualMachine virtualMachine = new VirtualMachine(null);
+
+        virtualMachine.execute(bytecodes);
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(expected), stack.pop());
     }
 }
