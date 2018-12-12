@@ -170,4 +170,28 @@ public class DataWordTest {
         Assert.assertNotNull(result);
         Assert.assertEquals("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", result.toNormalizedString());
     }
+
+    @Test
+    public void compareDataWords() {
+        DataWord word1 = DataWord.fromUnsignedInteger(1);
+        DataWord word2 = DataWord.fromUnsignedInteger(42);
+        DataWord word3 = DataWord.fromHexadecimalString("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        DataWord word4 = DataWord.ONE;
+
+        Assert.assertTrue(word1.compareTo(word1) == 0);
+        Assert.assertTrue(word2.compareTo(word2) == 0);
+        Assert.assertTrue(word3.compareTo(word3) == 0);
+
+        Assert.assertTrue(word1.compareTo(word4) == 0);
+        Assert.assertTrue(word1.compareTo(word2) < 0);
+        Assert.assertTrue(word1.compareTo(word3) < 0);
+
+        Assert.assertTrue(word2.compareTo(word4) > 0);
+        Assert.assertTrue(word2.compareTo(word1) > 0);
+        Assert.assertTrue(word2.compareTo(word3) < 0);
+
+        Assert.assertTrue(word3.compareTo(word4) > 0);
+        Assert.assertTrue(word3.compareTo(word1) > 0);
+        Assert.assertTrue(word3.compareTo(word2) > 0);
+    }
 }

@@ -6,7 +6,7 @@ import com.ajlopez.blockchain.utils.HexUtils;
 /**
  * Created by ajlopez on 27/11/2018.
  */
-public class DataWord extends AbstractBytesValue {
+public class DataWord extends AbstractBytesValue implements Comparable<DataWord> {
     public static final int DATAWORD_BYTES = 32;
 
     public static final DataWord ZERO = new DataWord(new byte[0]);
@@ -72,5 +72,17 @@ public class DataWord extends AbstractBytesValue {
     @Override
     public int hashOffset() {
         return 29;
+    }
+
+    @Override
+    public int compareTo(DataWord word) {
+        for (int k = 0; k < DATAWORD_BYTES; k++) {
+            int r = Integer.compare(this.bytes[k] & 0xff, word.bytes[k] & 0xff);
+
+            if (r != 0)
+                return r;
+        }
+
+        return 0;
     }
 }
