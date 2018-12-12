@@ -310,6 +310,25 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeMemoryStoreAndMemorySize() {
+        VirtualMachine virtualMachine = new VirtualMachine(null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.MSIZE });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(1 + DataWord.DATAWORD_BYTES), stack.pop());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), memory.getValue(1));
+        Assert.assertEquals(1 + DataWord.DATAWORD_BYTES, memory.size());
+    }
+
+    @Test
     public void executeMemoryStoreByte() {
         VirtualMachine virtualMachine = new VirtualMachine(null);
 

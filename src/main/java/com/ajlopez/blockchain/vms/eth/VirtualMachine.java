@@ -67,6 +67,10 @@ public class VirtualMachine {
                     this.storage.setValue(word1, word2);
                     break;
 
+                case OpCodes.MSIZE:
+                    this.stack.push(DataWord.fromUnsignedInteger(this.memory.size()));
+                    break;
+
                 case OpCodes.PUSH1:
                 case OpCodes.PUSH2:
                 case OpCodes.PUSH3:

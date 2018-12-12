@@ -29,6 +29,8 @@ public class OpCodes {
     public static final byte SLOAD = 0x54;
     public static final byte SSTORE = 0x55;
 
+    public static final byte MSIZE = 0x59;
+
     public static final byte PUSH1 = 0x60;
     public static final byte PUSH2 = 0x61;
     public static final byte PUSH3 = 0x62;
