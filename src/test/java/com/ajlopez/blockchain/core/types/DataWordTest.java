@@ -194,4 +194,20 @@ public class DataWordTest {
         Assert.assertTrue(word3.compareTo(word1) > 0);
         Assert.assertTrue(word3.compareTo(word2) > 0);
     }
+
+    @Test
+    public void executeOrOperations() {
+        executeOr("01", "01", "01");
+        executeOr("02", "04", "06");
+        executeOr("ff", "ff00", "ffff");
+    }
+
+    private static void executeOr(String operand1, String operand2, String expected) {
+        DataWord word1 = DataWord.fromHexadecimalString(operand1);
+        DataWord word2 = DataWord.fromHexadecimalString(operand2);
+
+        DataWord result = word1.or(word2);
+
+        Assert.assertEquals(DataWord.fromHexadecimalString(expected), result);
+    }
 }
