@@ -27,6 +27,9 @@ public class OpCodes {
 
     public static final byte EQ = 0x14;
 
+    public static final byte AND = 0x16;
+    public static final byte OR = 0x17;
+
     public static final byte POP = 0x50;
     public static final byte MLOAD = 0x51;
     public static final byte MSTORE = 0x52;
