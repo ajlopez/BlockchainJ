@@ -361,6 +361,22 @@ public class VirtualMachineTest {
         Assert.assertEquals("0x2a000000000000000000000000000000000000000000000000000000000000", memory.getValue(0).toNormalizedString());
     }
 
+    @Test
+    public void executeLessThanOperations() {
+        executeBinaryOp(0, 0, OpCodes.LT, 0);
+        executeBinaryOp(1, 2, OpCodes.LT, 0);
+        executeBinaryOp(40, 2, OpCodes.LT, 1);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.LT, 1);
+    }
+
+    @Test
+    public void executeGreaterThanOperations() {
+        executeBinaryOp(0, 0, OpCodes.GT, 0);
+        executeBinaryOp(1, 2, OpCodes.GT, 1);
+        executeBinaryOp(40, 2, OpCodes.GT, 0);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.GT, 0);
+    }
+
     private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected) {
         byte[] boperand1 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand1));
         byte[] boperand2 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand2));
