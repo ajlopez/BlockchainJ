@@ -73,7 +73,18 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         byte[] newbytes = new byte[DATAWORD_BYTES];
 
         for (int k = DATAWORD_BYTES - 1; k >= 0; k--) {
-            int v = this.bytes[k] |word.bytes[k];
+            int v = this.bytes[k] | word.bytes[k];
+            newbytes[k] = (byte) v;
+        }
+
+        return new DataWord(newbytes);
+    }
+
+    public DataWord and(DataWord word) {
+        byte[] newbytes = new byte[DATAWORD_BYTES];
+
+        for (int k = DATAWORD_BYTES - 1; k >= 0; k--) {
+            int v = this.bytes[k] & word.bytes[k];
             newbytes[k] = (byte) v;
         }
 

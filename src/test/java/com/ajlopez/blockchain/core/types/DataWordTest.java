@@ -202,11 +202,30 @@ public class DataWordTest {
         executeOr("ff", "ff00", "ffff");
     }
 
+    @Test
+    public void executeAndOperations() {
+        executeAnd("01", "01", "01");
+        executeAnd("02", "04", "00");
+        executeAnd("03", "05", "01");
+        executeAnd("ff", "ff00", "00");
+        executeAnd("ffff", "ffff", "ffff");
+        executeAnd("ffffff", "ff00", "ff00");
+    }
+
     private static void executeOr(String operand1, String operand2, String expected) {
         DataWord word1 = DataWord.fromHexadecimalString(operand1);
         DataWord word2 = DataWord.fromHexadecimalString(operand2);
 
         DataWord result = word1.or(word2);
+
+        Assert.assertEquals(DataWord.fromHexadecimalString(expected), result);
+    }
+
+    private static void executeAnd(String operand1, String operand2, String expected) {
+        DataWord word1 = DataWord.fromHexadecimalString(operand1);
+        DataWord word2 = DataWord.fromHexadecimalString(operand2);
+
+        DataWord result = word1.and(word2);
 
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), result);
     }
