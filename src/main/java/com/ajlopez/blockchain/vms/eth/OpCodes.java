@@ -25,6 +25,8 @@ public class OpCodes {
     public static final byte LT = 0x10;
     public static final byte GT = 0x11;
 
+    public static final byte EQ = 0x14;
+
     public static final byte POP = 0x50;
     public static final byte MLOAD = 0x51;
     public static final byte MSTORE = 0x52;

@@ -377,6 +377,15 @@ public class VirtualMachineTest {
         executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.GT, 0);
     }
 
+    @Test
+    public void executeEqualsOperations() {
+        executeBinaryOp(0, 0, OpCodes.EQ, 1);
+        executeBinaryOp(1, 2, OpCodes.EQ, 0);
+        executeBinaryOp(42, 42, OpCodes.EQ, 1);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.EQ, 0);
+        executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.EQ, 1);
+    }
+
     private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected) {
         byte[] boperand1 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand1));
         byte[] boperand2 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand2));
