@@ -70,6 +70,23 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeProgramCounter() {
+        VirtualMachine virtualMachine = new VirtualMachine(null);
+
+        virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PC });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(3, stack.size());
+
+        Assert.assertEquals(DataWord.fromUnsignedInteger(4), stack.pop());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(2), stack.pop());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(1), stack.pop());
+    }
+
+    @Test
     public void executeAdd() {
         VirtualMachine virtualMachine = new VirtualMachine(null);
 

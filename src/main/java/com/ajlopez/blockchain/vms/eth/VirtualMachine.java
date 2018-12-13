@@ -19,8 +19,8 @@ public class VirtualMachine {
     public void execute(byte[] bytecodes) {
         int l = bytecodes.length;
 
-        for (int k = 0; k < l; k++) {
-            byte bytecode = bytecodes[k];
+        for (int pc = 0; pc < l; pc++) {
+            byte bytecode = bytecodes[pc];
 
             switch (bytecode) {
                 case OpCodes.ADD:
@@ -85,6 +85,10 @@ public class VirtualMachine {
                     this.storage.setValue(word1, word2);
                     break;
 
+                case OpCodes.PC:
+                    this.stack.push(DataWord.fromUnsignedInteger(pc));
+                    break;
+
                 case OpCodes.MSIZE:
                     this.stack.push(DataWord.fromUnsignedInteger(this.memory.size()));
                     break;
@@ -122,8 +126,8 @@ public class VirtualMachine {
                 case OpCodes.PUSH31:
                 case OpCodes.PUSH32:
                     int lb = bytecode - OpCodes.PUSH1 + 1;
-                    this.stack.push(DataWord.fromBytes(bytecodes, k + 1, lb));
-                    k += lb;
+                    this.stack.push(DataWord.fromBytes(bytecodes, pc + 1, lb));
+                    pc += lb;
                     break;
 
                 case OpCodes.DUP1:
