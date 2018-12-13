@@ -31,6 +31,8 @@ public class OpCodes {
     public static final byte OR = 0x17;
     public static final byte XOR = 0x18;
 
+    public static final byte BYTE = 0x1a;
+
     public static final byte POP = 0x50;
     public static final byte MLOAD = 0x51;
     public static final byte MSTORE = 0x52;

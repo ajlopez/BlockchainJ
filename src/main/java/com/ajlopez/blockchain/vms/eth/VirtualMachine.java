@@ -71,6 +71,18 @@ public class VirtualMachine {
                     this.stack.push(word1.xor(word2));
                     break;
 
+                case OpCodes.BYTE:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+
+                    int nbyte = word1.getBytes()[DataWord.DATAWORD_BYTES - 1] & 0xff;
+
+                    if (word1.isUnsignedInteger() && nbyte < 32)
+                        this.stack.push(DataWord.fromUnsignedInteger(word2.getBytes()[nbyte] & 0xff));
+                    else
+                        this.stack.push(DataWord.ZERO);
+                    break;
+
                 case OpCodes.POP:
                     this.stack.pop();
                     break;

@@ -433,6 +433,16 @@ public class VirtualMachineTest {
         executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.XOR, 0);
     }
 
+    @Test
+    public void executeByteOperations() {
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "00", OpCodes.BYTE, "01");
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "01", OpCodes.BYTE, "02");
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "02", OpCodes.BYTE, "03");
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "1f", OpCodes.BYTE, "20");
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "2a", OpCodes.BYTE, "00");
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1fff", "1f", OpCodes.BYTE, "ff");
+    }
+
     private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected) {
         byte[] boperand1 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand1));
         byte[] boperand2 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand2));
@@ -454,5 +464,28 @@ public class VirtualMachineTest {
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
         Assert.assertEquals(DataWord.fromUnsignedInteger(expected), stack.pop());
+    }
+
+    private static void executeBinaryOp(String operand1, String operand2, byte opcode, String expected) {
+        byte[] boperand1 = DataWord.fromHexadecimalString(operand1).toNormalizedBytes();
+        byte[] boperand2 = DataWord.fromHexadecimalString(operand2).toNormalizedBytes();
+
+        byte[] bytecodes = new byte[3 + boperand1.length + boperand2.length];
+
+        bytecodes[0] = (byte)(OpCodes.PUSH1 + boperand1.length - 1);
+        System.arraycopy(boperand1, 0, bytecodes, 1, boperand1.length);
+        bytecodes[boperand1.length + 1] = (byte)(OpCodes.PUSH1 + boperand2.length - 1);
+        System.arraycopy(boperand2, 0, bytecodes, 2 + boperand1.length, boperand2.length);
+        bytecodes[bytecodes.length - 1] = opcode;
+
+        VirtualMachine virtualMachine = new VirtualMachine(null);
+
+        virtualMachine.execute(bytecodes);
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
     }
 }
