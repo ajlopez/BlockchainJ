@@ -91,6 +91,17 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return new DataWord(newbytes);
     }
 
+    public DataWord xor(DataWord word) {
+        byte[] newbytes = new byte[DATAWORD_BYTES];
+
+        for (int k = DATAWORD_BYTES - 1; k >= 0; k--) {
+            int v = this.bytes[k] ^ word.bytes[k];
+            newbytes[k] = (byte) v;
+        }
+
+        return new DataWord(newbytes);
+    }
+
     @Override
     public int hashOffset() {
         return 29;

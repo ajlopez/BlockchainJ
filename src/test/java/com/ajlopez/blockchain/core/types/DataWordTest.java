@@ -212,6 +212,16 @@ public class DataWordTest {
         executeAnd("ffffff", "ff00", "ff00");
     }
 
+    @Test
+    public void executeXorOperations() {
+        executeXor("01", "01", "00");
+        executeXor("02", "04", "06");
+        executeXor("03", "05", "06");
+        executeXor("ff", "ff00", "ffff");
+        executeXor("ffff", "ffff", "00");
+        executeXor("ffffff", "ff00", "ff00ff");
+    }
+
     private static void executeOr(String operand1, String operand2, String expected) {
         DataWord word1 = DataWord.fromHexadecimalString(operand1);
         DataWord word2 = DataWord.fromHexadecimalString(operand2);
@@ -226,6 +236,15 @@ public class DataWordTest {
         DataWord word2 = DataWord.fromHexadecimalString(operand2);
 
         DataWord result = word1.and(word2);
+
+        Assert.assertEquals(DataWord.fromHexadecimalString(expected), result);
+    }
+
+    private static void executeXor(String operand1, String operand2, String expected) {
+        DataWord word1 = DataWord.fromHexadecimalString(operand1);
+        DataWord word2 = DataWord.fromHexadecimalString(operand2);
+
+        DataWord result = word1.xor(word2);
 
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), result);
     }
