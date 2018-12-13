@@ -65,6 +65,12 @@ public class VirtualMachine {
                     this.stack.push(word1.or(word2));
                     break;
 
+                case OpCodes.XOR:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+                    this.stack.push(word1.xor(word2));
+                    break;
+
                 case OpCodes.POP:
                     this.stack.pop();
                     break;
