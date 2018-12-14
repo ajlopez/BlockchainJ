@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.core.types;
 
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -247,6 +249,15 @@ public class DataWordTest {
         Assert.assertFalse(DataWord.fromHexadecimalString("7fffffff").isZero());
         Assert.assertFalse(DataWord.fromHexadecimalString("ffffffff").isZero());
         Assert.assertFalse(DataWord.fromHexadecimalString("0100000000").isZero());
+    }
+
+    @Test
+    public void fromAddress() {
+        Address address = FactoryHelper.createRandomAddress();
+
+        DataWord word = DataWord.fromAddress(address);
+
+        Assert.assertArrayEquals(ByteUtils.normalizedBytes(address.getBytes()), word.toNormalizedBytes());
     }
 
     private static void executeNot(String operand, String expected) {
