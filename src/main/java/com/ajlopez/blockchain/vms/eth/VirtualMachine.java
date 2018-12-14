@@ -76,6 +76,10 @@ public class VirtualMachine {
                     this.stack.push(word1.xor(word2));
                     break;
 
+                case OpCodes.NOT:
+                    this.stack.push(this.stack.pop().not());
+                    break;
+
                 case OpCodes.BYTE:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();

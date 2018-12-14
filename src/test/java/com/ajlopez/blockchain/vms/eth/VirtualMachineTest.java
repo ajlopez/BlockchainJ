@@ -450,6 +450,13 @@ public class VirtualMachineTest {
         executeUnaryOp(1024 * 1024 * 1024, OpCodes.ISZERO, 0);
     }
 
+    @Test
+    public void executeNotOperations() {
+        executeUnaryOp("00", OpCodes.NOT, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        executeUnaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.NOT, "00");
+        executeUnaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00", OpCodes.NOT, "ff");
+    }
+
     private static void executeUnaryOp(int operand, byte opcode, int expected) {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
@@ -468,6 +475,26 @@ public class VirtualMachineTest {
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
         Assert.assertEquals(DataWord.fromUnsignedInteger(expected), stack.pop());
+    }
+
+    private static void executeUnaryOp(String operand, byte opcode, String expected) {
+        byte[] boperand = DataWord.fromHexadecimalString(operand).toNormalizedBytes();
+
+        byte[] bytecodes = new byte[2 + boperand.length];
+
+        bytecodes[0] = (byte)(OpCodes.PUSH1 + boperand.length - 1);
+        System.arraycopy(boperand, 0, bytecodes, 1, boperand.length);
+        bytecodes[boperand.length + 1] = opcode;
+
+        VirtualMachine virtualMachine = new VirtualMachine(null);
+
+        virtualMachine.execute(bytecodes);
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
     }
 
     private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected) {
