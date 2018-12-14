@@ -260,6 +260,23 @@ public class DataWordTest {
         Assert.assertArrayEquals(ByteUtils.normalizedBytes(address.getBytes()), word.toNormalizedBytes());
     }
 
+    @Test
+    public void toAddress() {
+        byte[] bytes = FactoryHelper.createRandomBytes(DataWord.DATAWORD_BYTES);
+
+        DataWord word = DataWord.fromBytes(bytes, 0, bytes.length);
+
+        Address address = word.toAddress();
+
+        Assert.assertNotNull(address);
+
+        byte[] addrbytes = address.getBytes();
+        byte[] wordbytes = word.getBytes();
+
+        for (int k = 0; k < Address.ADDRESS_BYTES; k++)
+            Assert.assertEquals(wordbytes[k + DataWord.DATAWORD_BYTES - Address.ADDRESS_BYTES], addrbytes[k]);
+    }
+
     private static void executeNot(String operand, String expected) {
         DataWord word = DataWord.fromHexadecimalString(operand);
 

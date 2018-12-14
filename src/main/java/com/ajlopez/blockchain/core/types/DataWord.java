@@ -46,6 +46,14 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return HexUtils.bytesToHexString(this.toNormalizedBytes(), true);
     }
 
+    public Address toAddress() {
+        byte[] newbytes = new byte[Address.ADDRESS_BYTES];
+
+        System.arraycopy(this.bytes, DATAWORD_BYTES - Address.ADDRESS_BYTES, newbytes, 0, Address.ADDRESS_BYTES);
+
+        return new Address(newbytes);
+    }
+
     public int asUnsignedInteger() {
         return ByteUtils.bytesToUnsignedInteger(this.bytes, DataWord.DATAWORD_BYTES - Integer.BYTES);
     }
