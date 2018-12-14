@@ -232,6 +232,16 @@ public class DataWordTest {
         Assert.assertFalse(DataWord.fromHexadecimalString("0100000000").isUnsignedInteger());
     }
 
+    @Test
+    public void isZero() {
+        Assert.assertTrue(DataWord.fromHexadecimalString("00").isZero());
+
+        Assert.assertTrue(DataWord.fromHexadecimalString("0100").isZero());
+        Assert.assertTrue(DataWord.fromHexadecimalString("7fffffff").isZero());
+        Assert.assertFalse(DataWord.fromHexadecimalString("ffffffff").isZero());
+        Assert.assertFalse(DataWord.fromHexadecimalString("0100000000").isZero());
+    }
+
     private static void executeOr(String operand1, String operand2, String expected) {
         DataWord word1 = DataWord.fromHexadecimalString(operand1);
         DataWord word2 = DataWord.fromHexadecimalString(operand2);

@@ -113,6 +113,16 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return true;
     }
 
+    public boolean isZero() {
+        int nbytes = this.bytes.length;
+
+        for (int k = 0; k < nbytes; k++)
+            if (this.bytes[k] != 0)
+                return false;
+
+        return true;
+    }
+
     @Override
     public int hashOffset() {
         return 29;
