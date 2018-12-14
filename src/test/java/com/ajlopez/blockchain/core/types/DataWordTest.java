@@ -223,6 +223,13 @@ public class DataWordTest {
     }
 
     @Test
+    public void executeNotOperations() {
+        executeNot("00", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        executeNot("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "00");
+        executeNot("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00", "ff");
+    }
+
+    @Test
     public void isUnsignedInteger() {
         Assert.assertTrue(DataWord.fromHexadecimalString("00").isUnsignedInteger());
         Assert.assertTrue(DataWord.fromHexadecimalString("0100").isUnsignedInteger());
@@ -236,10 +243,18 @@ public class DataWordTest {
     public void isZero() {
         Assert.assertTrue(DataWord.fromHexadecimalString("00").isZero());
 
-        Assert.assertTrue(DataWord.fromHexadecimalString("0100").isZero());
-        Assert.assertTrue(DataWord.fromHexadecimalString("7fffffff").isZero());
+        Assert.assertFalse(DataWord.fromHexadecimalString("0100").isZero());
+        Assert.assertFalse(DataWord.fromHexadecimalString("7fffffff").isZero());
         Assert.assertFalse(DataWord.fromHexadecimalString("ffffffff").isZero());
         Assert.assertFalse(DataWord.fromHexadecimalString("0100000000").isZero());
+    }
+
+    private static void executeNot(String operand, String expected) {
+        DataWord word = DataWord.fromHexadecimalString(operand);
+
+        DataWord result = word.not();
+
+        Assert.assertEquals(DataWord.fromHexadecimalString(expected), result);
     }
 
     private static void executeOr(String operand1, String operand2, String expected) {

@@ -102,6 +102,15 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return new DataWord(newbytes);
     }
 
+    public DataWord not() {
+        byte[] newbytes = new byte[DATAWORD_BYTES];
+
+        for (int k = DATAWORD_BYTES - 1; k >= 0; k--)
+            newbytes[k] = (byte)(this.bytes[k] ^ 0xff);
+
+        return new DataWord(newbytes);
+    }
+
     public boolean isUnsignedInteger() {
         for (int k = 0; k < DATAWORD_BYTES - Integer.BYTES; k++)
             if (this.bytes[k] != 0)

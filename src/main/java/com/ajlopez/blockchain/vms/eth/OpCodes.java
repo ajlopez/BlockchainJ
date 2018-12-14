@@ -30,7 +30,7 @@ public class OpCodes {
     public static final byte AND = 0x16;
     public static final byte OR = 0x17;
     public static final byte XOR = 0x18;
-
+    public static final byte NOT = 0x19;
     public static final byte BYTE = 0x1a;
 
     public static final byte POP = 0x50;
