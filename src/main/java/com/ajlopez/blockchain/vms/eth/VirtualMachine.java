@@ -8,11 +8,13 @@ import java.util.Stack;
  * Created by ajlopez on 10/12/2018.
  */
 public class VirtualMachine {
+    private final ProgramEnvironment programEnvironment;
     private final Storage storage;
     private final Memory memory = new Memory();
     private final Stack<DataWord> stack = new Stack<>();
 
-    public VirtualMachine(Storage storage) {
+    public VirtualMachine(ProgramEnvironment programEnvironment, Storage storage) {
+        this.programEnvironment = programEnvironment;
         this.storage = storage;
     }
 
@@ -90,6 +92,18 @@ public class VirtualMachine {
                         this.stack.push(DataWord.fromUnsignedInteger(word2.getBytes()[nbyte] & 0xff));
                     else
                         this.stack.push(DataWord.ZERO);
+                    break;
+
+                case OpCodes.ADDRESS:
+                    this.stack.push(DataWord.fromAddress(this.programEnvironment.getAddress()));
+                    break;
+
+                case OpCodes.ORIGIN:
+                    this.stack.push(DataWord.fromAddress(this.programEnvironment.getOrigin()));
+                    break;
+
+                case OpCodes.CALLER:
+                    this.stack.push(DataWord.fromAddress(this.programEnvironment.getCaller()));
                     break;
 
                 case OpCodes.POP:

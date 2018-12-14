@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.vms.eth;
 
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
@@ -15,7 +16,7 @@ import java.util.Stack;
 public class VirtualMachineTest {
     @Test
     public void executeEmptyCode() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[0]);
 
@@ -27,7 +28,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executePushOneByte() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01});
 
@@ -52,7 +53,7 @@ public class VirtualMachineTest {
             opcodes[0] = (byte) (OpCodes.PUSH1 + k);
             System.arraycopy(value, 0, opcodes, 1, k + 1);
 
-            VirtualMachine virtualMachine = new VirtualMachine(null);
+            VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
             virtualMachine.execute(opcodes);
 
@@ -71,7 +72,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeProgramCounter() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PC });
 
@@ -88,7 +89,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAdd() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
 
@@ -114,7 +115,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAddWithOverflow() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
         byte[] bytecodes = HexUtils.hexStringToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600101");
         virtualMachine.execute(bytecodes);
 
@@ -132,7 +133,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSub() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.SUB });
 
@@ -158,7 +159,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSubWithUnderflow() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
         byte[] bytecodes = HexUtils.hexStringToBytes("6001600003");
         virtualMachine.execute(bytecodes);
 
@@ -176,7 +177,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeDupTopOfStack() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.DUP1 });
 
@@ -193,7 +194,7 @@ public class VirtualMachineTest {
     @Test
     public void executeDups() {
         for (int k = 0; k < 16; k++) {
-            VirtualMachine virtualMachine = new VirtualMachine(null);
+            VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
             byte[][] values = new byte[k + 1][];
 
@@ -226,7 +227,7 @@ public class VirtualMachineTest {
     @Test
     public void executeSwaps() {
         for (int k = 0; k < 16; k++) {
-            VirtualMachine virtualMachine = new VirtualMachine(null);
+            VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
             byte[][] values = new byte[k + 2][];
 
@@ -259,7 +260,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executePop() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.POP });
 
@@ -281,7 +282,7 @@ public class VirtualMachineTest {
 
         storage.setValue(DataWord.ONE, DataWord.fromUnsignedInteger(42));
 
-        VirtualMachine virtualMachine = new VirtualMachine(storage);
+        VirtualMachine virtualMachine = new VirtualMachine(null, storage);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.SLOAD });
 
@@ -297,7 +298,7 @@ public class VirtualMachineTest {
     public void executeStorageStorage() {
         Storage storage = new MapStorage();
 
-        VirtualMachine virtualMachine = new VirtualMachine(storage);
+        VirtualMachine virtualMachine = new VirtualMachine(null, storage);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
 
@@ -311,7 +312,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMemoryStore() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE });
 
@@ -327,7 +328,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMemoryStoreAndMemoryLoad() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.MLOAD });
 
@@ -345,7 +346,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMemoryStoreAndMemorySize() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.MSIZE });
 
@@ -364,7 +365,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMemoryStoreByte() {
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE8 });
 
@@ -457,6 +458,27 @@ public class VirtualMachineTest {
         executeUnaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00", OpCodes.NOT, "ff");
     }
 
+    @Test
+    public void executeAddressOriginCallerOperations() {
+        Address address = FactoryHelper.createRandomAddress();
+        Address origin = FactoryHelper.createRandomAddress();
+        Address caller = FactoryHelper.createRandomAddress();
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(address, origin, caller);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.ADDRESS, OpCodes.ORIGIN, OpCodes.CALLER });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(3, stack.size());
+        Assert.assertEquals(DataWord.fromAddress(caller), stack.pop());
+        Assert.assertEquals(DataWord.fromAddress(origin), stack.pop());
+        Assert.assertEquals(DataWord.fromAddress(address), stack.pop());
+    }
+
     private static void executeUnaryOp(int operand, byte opcode, int expected) {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
@@ -466,7 +488,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand, 0, bytecodes, 1, boperand.length);
         bytecodes[boperand.length + 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(bytecodes);
 
@@ -486,7 +508,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand, 0, bytecodes, 1, boperand.length);
         bytecodes[boperand.length + 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(bytecodes);
 
@@ -509,7 +531,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand2, 0, bytecodes, 2 + boperand1.length, boperand2.length);
         bytecodes[bytecodes.length - 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(bytecodes);
 
@@ -532,7 +554,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand2, 0, bytecodes, 2 + boperand1.length, boperand2.length);
         bytecodes[bytecodes.length - 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(bytecodes);
 

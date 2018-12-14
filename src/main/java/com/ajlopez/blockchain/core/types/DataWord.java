@@ -28,6 +28,12 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return new DataWord(newbytes);
     }
 
+    public static DataWord fromAddress(Address address) {
+        byte[] bytes = address.getBytes();
+
+        return fromBytes(bytes, 0, bytes.length);
+    }
+
     public DataWord(byte[] value) {
         super(value, DATAWORD_BYTES);
     }

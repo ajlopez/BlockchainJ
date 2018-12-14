@@ -33,6 +33,11 @@ public class OpCodes {
     public static final byte NOT = 0x19;
     public static final byte BYTE = 0x1a;
 
+    public static final byte ADDRESS = 0x30;
+
+    public static final byte ORIGIN = 0x32;
+    public static final byte CALLER = 0x33;
+
     public static final byte POP = 0x50;
     public static final byte MLOAD = 0x51;
     public static final byte MSTORE = 0x52;
