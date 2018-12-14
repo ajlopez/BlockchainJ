@@ -26,7 +26,7 @@ public class OpCodes {
     public static final byte GT = 0x11;
 
     public static final byte EQ = 0x14;
-
+    public static final byte ISZERO = 0x15;
     public static final byte AND = 0x16;
     public static final byte OR = 0x17;
     public static final byte XOR = 0x18;

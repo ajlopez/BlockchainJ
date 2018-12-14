@@ -443,6 +443,33 @@ public class VirtualMachineTest {
         executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1fff", "1f", OpCodes.BYTE, "ff");
     }
 
+    @Test
+    public void executeIsZeroOperations() {
+        executeUnaryOp(0, OpCodes.ISZERO, 1);
+        executeUnaryOp(42, OpCodes.ISZERO, 0);
+        executeUnaryOp(1024 * 1024 * 1024, OpCodes.ISZERO, 0);
+    }
+
+    private static void executeUnaryOp(int operand, byte opcode, int expected) {
+        byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
+
+        byte[] bytecodes = new byte[2 + boperand.length];
+
+        bytecodes[0] = (byte)(OpCodes.PUSH1 + boperand.length - 1);
+        System.arraycopy(boperand, 0, bytecodes, 1, boperand.length);
+        bytecodes[boperand.length + 1] = opcode;
+
+        VirtualMachine virtualMachine = new VirtualMachine(null);
+
+        virtualMachine.execute(bytecodes);
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(expected), stack.pop());
+    }
+
     private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected) {
         byte[] boperand1 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand1));
         byte[] boperand2 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand2));
