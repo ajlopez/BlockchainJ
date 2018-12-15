@@ -89,7 +89,12 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         BigInteger value1 = new BigInteger(1, this.bytes);
         BigInteger value2 = new BigInteger(1, word.bytes);
 
-        return new DataWord(value1.multiply(value2).toByteArray());
+        byte[] newbytes = value1.multiply(value2).toByteArray();
+
+        if (newbytes.length > DATAWORD_BYTES)
+            return DataWord.fromBytes(newbytes, newbytes.length - DATAWORD_BYTES, DATAWORD_BYTES);
+
+        return new DataWord(newbytes);
     }
 
     public DataWord or(DataWord word) {

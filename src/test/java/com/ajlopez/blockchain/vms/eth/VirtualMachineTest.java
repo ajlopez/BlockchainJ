@@ -145,7 +145,7 @@ public class VirtualMachineTest {
         executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.MUL, 1024 * 1024 * 1024);
 
         executeBinaryOp("0100000000", "0100000000", OpCodes.MUL, "010000000000000000");
-        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MUL, "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2");
+        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MUL, "01");
     }
 
     @Test
