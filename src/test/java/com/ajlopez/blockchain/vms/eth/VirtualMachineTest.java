@@ -521,12 +521,21 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeJumpWithNotIntegerTargetRaiseException() throws VirtualMachineException {
+    public void executeJumpWithNot32BitsIntegerTargetRaiseException() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         exception.expect(VirtualMachineException.class);
         exception.expectMessage("Invalid jump");
         virtualMachine.execute(new byte[] { OpCodes.PUSH5, 0x01, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+    }
+
+    @Test
+    public void executeJumpWithTwoLarge32BitsIntegerTargetRaiseException() throws VirtualMachineException {
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        exception.expect(VirtualMachineException.class);
+        exception.expectMessage("Invalid jump");
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, (byte)0xff, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
     }
 
     private static void executeUnaryOp(int operand, byte opcode, int expected) throws VirtualMachineException {

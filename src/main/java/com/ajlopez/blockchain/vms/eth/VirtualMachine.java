@@ -149,7 +149,7 @@ public class VirtualMachine {
 
                     int newpc = word.asUnsignedInteger();
 
-                    if (bytecodes[newpc] != OpCodes.JUMPDEST)
+                    if (newpc >= bytecodes.length || bytecodes[newpc] != OpCodes.JUMPDEST)
                         throw new VirtualMachineException("Invalid jump");
 
                     pc = newpc - 1;
