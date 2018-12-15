@@ -144,15 +144,8 @@ public class VirtualMachine {
                 case OpCodes.JUMP:
                     word = this.stack.pop();
 
-                    if (!word.isUnsignedInteger())
-                        throw new VirtualMachineException("Invalid jump");
+                    pc = getNewPc(bytecodes, word);
 
-                    int newpc = word.asUnsignedInteger();
-
-                    if (newpc >= bytecodes.length || bytecodes[newpc] != OpCodes.JUMPDEST)
-                        throw new VirtualMachineException("Invalid jump");
-
-                    pc = newpc - 1;
                     break;
 
                 case OpCodes.JUMPI:
@@ -162,15 +155,8 @@ public class VirtualMachine {
                     if (word2.isZero())
                         break;
 
-                    if (!word1.isUnsignedInteger())
-                        throw new VirtualMachineException("Invalid jump");
+                    pc = getNewPc(bytecodes, word1);
 
-                    newpc = word1.asUnsignedInteger();
-
-                    if (newpc >= bytecodes.length || bytecodes[newpc] != OpCodes.JUMPDEST)
-                        throw new VirtualMachineException("Invalid jump");
-
-                    pc = newpc - 1;
                     break;
 
                 case OpCodes.PC:
@@ -265,6 +251,20 @@ public class VirtualMachine {
                     break;
             }
         }
+    }
+
+    private int getNewPc(byte[] bytecodes, DataWord word1) throws VirtualMachineException {
+        int newpc;
+
+        if (!word1.isUnsignedInteger())
+            throw new VirtualMachineException("Invalid jump");
+
+        newpc = word1.asUnsignedInteger();
+
+        if (newpc >= bytecodes.length || bytecodes[newpc] != OpCodes.JUMPDEST)
+            throw new VirtualMachineException("Invalid jump");
+
+        return newpc - 1;
     }
 
     public Stack<DataWord> getStack() {
