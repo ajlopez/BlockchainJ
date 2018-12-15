@@ -142,7 +142,12 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.JUMP:
-                    int newpc = this.stack.pop().asUnsignedInteger();
+                    word = this.stack.pop();
+
+                    if (!word.isUnsignedInteger())
+                        throw new VirtualMachineException("Invalid jump");
+
+                    int newpc = word.asUnsignedInteger();
 
                     if (bytecodes[newpc] != OpCodes.JUMPDEST)
                         throw new VirtualMachineException("Invalid jump");
