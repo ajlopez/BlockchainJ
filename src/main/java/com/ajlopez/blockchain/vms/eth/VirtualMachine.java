@@ -155,6 +155,24 @@ public class VirtualMachine {
                     pc = newpc - 1;
                     break;
 
+                case OpCodes.JUMPI:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+
+                    if (word2.isZero())
+                        break;
+
+                    if (!word1.isUnsignedInteger())
+                        throw new VirtualMachineException("Invalid jump");
+
+                    newpc = word1.asUnsignedInteger();
+
+                    if (newpc >= bytecodes.length || bytecodes[newpc] != OpCodes.JUMPDEST)
+                        throw new VirtualMachineException("Invalid jump");
+
+                    pc = newpc - 1;
+                    break;
+
                 case OpCodes.PC:
                     this.stack.push(DataWord.fromUnsignedInteger(pc));
                     break;

@@ -538,6 +538,47 @@ public class VirtualMachineTest {
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, (byte)0xff, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
     }
 
+    @Test
+    public void executeConditionalJumpOperation() throws VirtualMachineException {
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), stack.pop());
+    }
+
+    @Test
+    public void executeConditionalJumpWithoutJumpDestRaiseException() throws VirtualMachineException {
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        exception.expect(VirtualMachineException.class);
+        exception.expectMessage("Invalid jump");
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+    }
+
+    @Test
+    public void executeConditionalJumpWithNot32BitsIntegerTargetRaiseException() throws VirtualMachineException {
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        exception.expect(VirtualMachineException.class);
+        exception.expectMessage("Invalid jump");
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH5, 0x01, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+    }
+
+    @Test
+    public void executeConditionalJumpWithTwoLarge32BitsIntegerTargetRaiseException() throws VirtualMachineException {
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        exception.expect(VirtualMachineException.class);
+        exception.expectMessage("Invalid jump");
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 1, OpCodes.PUSH1, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+    }
+
     private static void executeUnaryOp(int operand, byte opcode, int expected) throws VirtualMachineException {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
