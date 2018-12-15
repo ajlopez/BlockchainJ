@@ -13,10 +13,11 @@ public class BlockHeader {
     private final BlockHash parentHash;
     private final Hash transactionsHash;
     private final Hash stateRootHash;
+    private final long timestamp;
 
     private BlockHash hash;
 
-    public BlockHeader(long number, BlockHash parentHash, Hash transactionsHash, Hash stateRootHash) {
+    public BlockHeader(long number, BlockHash parentHash, Hash transactionsHash, Hash stateRootHash, long timestamp) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
@@ -24,11 +25,14 @@ public class BlockHeader {
         this.parentHash = parentHash == null ? new BlockHash(Hash.EMPTY_HASH) : parentHash;
         this.transactionsHash = transactionsHash;
         this.stateRootHash = stateRootHash;
+        this.timestamp = timestamp;
     }
 
     public long getNumber() {
         return this.number;
     }
+
+    public long getTimestamp() { return this.timestamp; }
 
     public BlockHash getHash() {
         if (this.hash == null)

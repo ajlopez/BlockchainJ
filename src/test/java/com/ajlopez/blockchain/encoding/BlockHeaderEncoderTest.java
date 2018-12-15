@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.encoding;
 import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,7 +16,7 @@ public class BlockHeaderEncoderTest {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash transactionsHash = HashUtilsTest.generateRandomHash();
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        BlockHeader header = new BlockHeader(42, hash, transactionsHash, stateRootHash);
+        BlockHeader header = new BlockHeader(42, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 

@@ -1,11 +1,9 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
-import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -54,7 +52,7 @@ public class MinerProcessor {
 
         List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions());
 
-        return new Block(parent, transactions, accountStore.getRootHash());
+        return new Block(parent, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000);
     }
 
     public void start() {

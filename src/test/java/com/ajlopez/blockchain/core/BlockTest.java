@@ -16,7 +16,7 @@ public class BlockTest {
     @Test
     public void createWithNumberAndParentHash() {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Assert.assertEquals(1L, block.getNumber());
         Assert.assertEquals(hash, block.getParentHash());
@@ -26,7 +26,7 @@ public class BlockTest {
     @Test
     public void noTransactions() {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         List<Transaction> transactions = block.getTransactions();
 
@@ -36,8 +36,8 @@ public class BlockTest {
 
     @Test
     public void blockWithDifferentParentHashesHaveDifferentHashes() {
-        Block block1 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash());
-        Block block2 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash());
+        Block block1 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block2 = new Block(1L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -45,8 +45,8 @@ public class BlockTest {
     @Test
     public void blockWithDifferentNumbersHaveDifferentHashes() {
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1L, parentHash, HashUtilsTest.generateRandomHash());
-        Block block2 = new Block(2L, parentHash, HashUtilsTest.generateRandomHash());
+        Block block1 = new Block(1L, parentHash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block2 = new Block(2L, parentHash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -64,8 +64,8 @@ public class BlockTest {
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
 
-        Block block1 = new Block(1L, hash, txs1, HashUtilsTest.generateRandomHash());
-        Block block2 = new Block(1L, hash, txs2, HashUtilsTest.generateRandomHash());
+        Block block1 = new Block(1L, hash, txs1, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block2 = new Block(1L, hash, txs2, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -78,7 +78,7 @@ public class BlockTest {
         txs.add(tx);
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash, txs, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1L, hash, txs, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         List<Transaction> transactions = block.getTransactions();
 

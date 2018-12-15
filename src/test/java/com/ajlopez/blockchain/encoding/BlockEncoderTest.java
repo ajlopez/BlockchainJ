@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.*;
-import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -9,7 +8,6 @@ import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +20,7 @@ public class BlockEncoderTest {
     public void encodeDecodeBlock() {
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        Block block = new Block(42, parentHash, stateRootHash);
+        Block block = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -44,7 +42,7 @@ public class BlockEncoderTest {
 
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        Block block = new Block(42, parentHash, txs, stateRootHash);
+        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -74,7 +72,7 @@ public class BlockEncoderTest {
 
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        Block block = new Block(42, parentHash, txs, stateRootHash);
+        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -105,8 +103,8 @@ public class BlockEncoderTest {
     public void encodeTwoBlocks() {
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        Block block1 = new Block(42, parentHash, stateRootHash);
-        Block block2 = new Block(0, null, stateRootHash);
+        Block block1 = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000);
+        Block block2 = new Block(0, null, stateRootHash, System.currentTimeMillis() / 1000);
 
         byte[] encoded1 = BlockEncoder.encode(block1);
         byte[] encoded2 = BlockEncoder.encode(block2);

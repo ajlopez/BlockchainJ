@@ -37,7 +37,7 @@ public class TcpPeerClientServerTest {
         TcpPeerClient client = new TcpPeerClient("localhost", 4000, nodeProcessor1);
         client.connect();
 
-        Block block = new Block(1, blockChain1.getBestBlock().getHash(), HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, blockChain1.getBestBlock().getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
         Message message = new BlockMessage(block);
 
         nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);

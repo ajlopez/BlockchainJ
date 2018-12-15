@@ -61,7 +61,7 @@ public class BlockProcessorTest {
     public void addFirstBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(0, null, Hash.EMPTY_HASH);
+        Block block = new Block(0, null, Hash.EMPTY_HASH, System.currentTimeMillis() / 1000);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -85,7 +85,7 @@ public class BlockProcessorTest {
 
         processor.onNewBestBlock(consumer);
 
-        Block block = new Block(0, null, Hash.EMPTY_HASH);
+        Block block = new Block(0, null, Hash.EMPTY_HASH, System.currentTimeMillis() / 1000);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -108,7 +108,7 @@ public class BlockProcessorTest {
     public void addOrphanBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         List<Block> connectedBlocks = processor.processBlock(block);
 
@@ -122,7 +122,7 @@ public class BlockProcessorTest {
     public void getUnknownAncestorHash() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         List<Block> connectedBlocks = processor.processBlock(block);
 
@@ -141,7 +141,7 @@ public class BlockProcessorTest {
     public void getNotOrphanUnknownAncestorHash() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         BlockHash hash = processor.getUnknownAncestorHash(block.getHash());
 
@@ -163,7 +163,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         BlockConsumer consumer = new BlockConsumer();
 
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash());
+        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         processor.onNewBestBlock(consumer);
         processor.processBlock(block);
@@ -176,10 +176,10 @@ public class BlockProcessorTest {
     public void switchToABetterForkUsingOrphan() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
-        Block block2 = new Block(2, block1.getHash(), HashUtilsTest.generateRandomHash());
-        Block block3 = new Block(3, block2.getHash(), HashUtilsTest.generateRandomHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block2 = new Block(2, block1.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block3 = new Block(3, block2.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         processor.processBlock(genesis);
         processor.processBlock(block1);
@@ -209,10 +209,10 @@ public class BlockProcessorTest {
     public void switchToABetterForkUsingOrphanAndEmitNewBestBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
-        Block block2 = new Block(2, block1.getHash(), HashUtilsTest.generateRandomHash());
-        Block block3 = new Block(3, block2.getHash(), HashUtilsTest.generateRandomHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block2 = new Block(2, block1.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block3 = new Block(3, block2.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         processor.processBlock(genesis);
         processor.processBlock(block1);

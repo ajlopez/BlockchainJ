@@ -15,7 +15,7 @@ public class BlockHeaderTest {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash transactionsHash = HashUtilsTest.generateRandomHash();
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        BlockHeader header = new BlockHeader(1L, hash, transactionsHash, stateRootHash);
+        BlockHeader header = new BlockHeader(1L, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000);
 
         Assert.assertEquals(1L, header.getNumber());
         Assert.assertEquals(hash, header.getParentHash());
@@ -25,8 +25,8 @@ public class BlockHeaderTest {
 
     @Test
     public void twoDifferentHeadersHaveDifferentHashes() {
-        BlockHeader header1 = new BlockHeader(1L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), HashUtilsTest.generateRandomHash());
-        BlockHeader header2 = new BlockHeader(2L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), HashUtilsTest.generateRandomHash());
+        BlockHeader header1 = new BlockHeader(1L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        BlockHeader header2 = new BlockHeader(2L, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Assert.assertNotEquals(header1.getHash(), header2.getHash());
     }
@@ -37,6 +37,6 @@ public class BlockHeaderTest {
         Hash transactionsHash = HashUtilsTest.generateRandomHash();
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
 
-        new BlockHeader(-1L, hash, transactionsHash, stateRootHash);
+        new BlockHeader(-1L, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000);
     }
 }

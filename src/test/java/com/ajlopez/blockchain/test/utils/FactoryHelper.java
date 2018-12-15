@@ -6,10 +6,8 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
-import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
@@ -17,7 +15,6 @@ import com.ajlopez.blockchain.utils.HashUtilsTest;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -63,7 +60,7 @@ public class FactoryHelper {
         Block block = blockChain.getBestBlock();
 
         for (int k = 0; k < nblocks; k++) {
-            Block newBlock = new Block(block.getNumber() + 1, block.getHash(), block.getStateRootHash());
+            Block newBlock = new Block(block.getNumber() + 1, block.getHash(), block.getStateRootHash(), System.currentTimeMillis() / 1000);
             blockChain.connectBlock(newBlock);
             block = newBlock;
         }
@@ -127,12 +124,12 @@ public class FactoryHelper {
     public static List<Block> createBlocks(int nblocks) {
         List<Block> blocks = new ArrayList<>();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         blocks.add(block);
 
         for (int k = 0; k < nblocks; k++) {
-            block = new Block(block.getNumber() + 1, block.getHash(), HashUtilsTest.generateRandomHash());
+            block = new Block(block.getNumber() + 1, block.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
             blocks.add(block);
         }
 

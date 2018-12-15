@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
@@ -15,7 +14,7 @@ public class BlockMessageTest {
     @Test
     public void createWithBlock() {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash());
+        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         BlockMessage message = new BlockMessage(block);
 

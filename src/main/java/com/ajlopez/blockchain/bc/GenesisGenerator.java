@@ -18,6 +18,6 @@ public class GenesisGenerator {
     }
 
     public static Block generateGenesis(AccountStore accountStore) {
-        return new Block(0, BlockHash.EMPTY_BLOCK_HASH, accountStore.getRootHash());
+        return new Block(0, BlockHash.EMPTY_BLOCK_HASH, accountStore.getRootHash(), 0);
     }
 }

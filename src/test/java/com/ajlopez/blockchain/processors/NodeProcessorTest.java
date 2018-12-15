@@ -52,7 +52,7 @@ public class NodeProcessorTest {
         BlockChain blockChain = new BlockChain();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
         Message message = new BlockMessage(block);
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
@@ -95,7 +95,7 @@ public class NodeProcessorTest {
         BlockChain blockChain = new BlockChain();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
         Message message = new BlockMessage(block);
 
         for (int k = 0; k < 10; k++)
@@ -114,8 +114,8 @@ public class NodeProcessorTest {
         BlockChain blockChain = new BlockChain();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -156,8 +156,8 @@ public class NodeProcessorTest {
         BlockChain blockChain = new BlockChain();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -182,8 +182,8 @@ public class NodeProcessorTest {
 
         nodeProcessor1.connectTo(nodeProcessor2);
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -213,8 +213,8 @@ public class NodeProcessorTest {
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);

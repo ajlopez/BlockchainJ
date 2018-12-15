@@ -21,7 +21,7 @@ public class ReceiveProcessorTest {
     public void processBlockMessage() throws InterruptedException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
         Message message = new BlockMessage(block);
 
         MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(blockProcessor);
@@ -51,8 +51,8 @@ public class ReceiveProcessorTest {
     public void processTwoConsecutiveBlockMessages() throws InterruptedException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -86,8 +86,8 @@ public class ReceiveProcessorTest {
     public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash());
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash());
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -121,7 +121,7 @@ public class ReceiveProcessorTest {
     public void processTenRepeatedBlockMessage() throws InterruptedException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash());
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
         Message message = new BlockMessage(block);
 
         MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(blockProcessor);

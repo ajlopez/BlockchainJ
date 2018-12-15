@@ -267,7 +267,7 @@ public class AccountsProcessorTest {
             transactions = transactionExecutor.executeTransactions(transactions);
 
             Block parent = blockChain.getBestBlock();
-            Block block = new Block(parent.getNumber() + 1, parent.getHash(), transactions, transactionExecutor.getHashRoot());
+            Block block = new Block(parent.getNumber() + 1, parent.getHash(), transactions, transactionExecutor.getHashRoot(), System.currentTimeMillis() / 1000);
             accountStore.save();
 
             blockChain.connectBlock(block);
