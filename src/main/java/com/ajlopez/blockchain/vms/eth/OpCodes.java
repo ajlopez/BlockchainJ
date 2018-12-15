@@ -44,6 +44,7 @@ public class OpCodes {
     public static final byte MSTORE8 = 0x53;
     public static final byte SLOAD = 0x54;
     public static final byte SSTORE = 0x55;
+    public static final byte JUMP = 0x56;
 
     public static final byte PC = 0x58;
     public static final byte MSIZE = 0x59;

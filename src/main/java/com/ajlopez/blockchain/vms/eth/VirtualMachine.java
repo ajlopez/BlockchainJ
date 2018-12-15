@@ -25,6 +25,9 @@ public class VirtualMachine {
             byte bytecode = bytecodes[pc];
 
             switch (bytecode) {
+                case OpCodes.STOP:
+                    return;
+
                 case OpCodes.ADD:
                     DataWord word1 = this.stack.pop();
                     DataWord word2 = this.stack.pop();

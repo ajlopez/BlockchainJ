@@ -479,6 +479,18 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromAddress(address), stack.pop());
     }
 
+    @Test
+    public void executeStopOperation() {
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.STOP, OpCodes.PUSH1, 0x01 });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+    }
+
     private static void executeUnaryOp(int operand, byte opcode, int expected) {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
