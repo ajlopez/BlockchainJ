@@ -18,7 +18,7 @@ public class VirtualMachine {
         this.storage = storage;
     }
 
-    public void execute(byte[] bytecodes) {
+    public void execute(byte[] bytecodes) throws VirtualMachineException {
         int l = bytecodes.length;
 
         for (int pc = 0; pc < l; pc++) {
@@ -142,7 +142,12 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.JUMP:
-                    pc = this.stack.pop().asUnsignedInteger() - 1;
+                    int newpc = this.stack.pop().asUnsignedInteger();
+
+                    if (bytecodes[newpc] != OpCodes.JUMPDEST)
+                        throw new VirtualMachineException("Invalid jump");
+
+                    pc = newpc - 1;
                     break;
 
                 case OpCodes.PC:
