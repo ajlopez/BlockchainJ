@@ -491,6 +491,20 @@ public class VirtualMachineTest {
         Assert.assertTrue(stack.isEmpty());
     }
 
+    @Test
+    public void executeJumpOperation() {
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMP, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), stack.pop());
+    }
+
     private static void executeUnaryOp(int operand, byte opcode, int expected) {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 

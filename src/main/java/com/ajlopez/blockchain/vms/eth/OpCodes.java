@@ -49,6 +49,8 @@ public class OpCodes {
     public static final byte PC = 0x58;
     public static final byte MSIZE = 0x59;
 
+    public static final byte JUMPDEST = 0x5b;
+
     public static final byte PUSH1 = 0x60;
     public static final byte PUSH2 = 0x61;
     public static final byte PUSH3 = 0x62;

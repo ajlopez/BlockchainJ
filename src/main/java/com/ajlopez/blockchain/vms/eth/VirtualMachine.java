@@ -141,6 +141,10 @@ public class VirtualMachine {
                     this.storage.setValue(word1, word2);
                     break;
 
+                case OpCodes.JUMP:
+                    pc = this.stack.pop().asUnsignedInteger() - 1;
+                    break;
+
                 case OpCodes.PC:
                     this.stack.push(DataWord.fromUnsignedInteger(pc));
                     break;
