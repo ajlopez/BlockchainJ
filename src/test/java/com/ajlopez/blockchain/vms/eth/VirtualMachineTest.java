@@ -138,6 +138,17 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeMulOperations() throws VirtualMachineException {
+        executeBinaryOp(0, 0, OpCodes.MUL, 0);
+        executeBinaryOp(1, 2, OpCodes.MUL, 2);
+        executeBinaryOp(21, 2, OpCodes.MUL, 42);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.MUL, 1024 * 1024 * 1024);
+
+        executeBinaryOp("0100000000", "0100000000", OpCodes.MUL, "010000000000000000");
+        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MUL, "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2");
+    }
+
+    @Test
     public void executeSub() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 

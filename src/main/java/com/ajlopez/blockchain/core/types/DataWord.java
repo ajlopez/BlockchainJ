@@ -3,6 +3,8 @@ package com.ajlopez.blockchain.core.types;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 
+import java.math.BigInteger;
+
 /**
  * Created by ajlopez on 27/11/2018.
  */
@@ -81,6 +83,13 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         }
 
         return new DataWord(newbytes);
+    }
+
+    public DataWord mul(DataWord word) {
+        BigInteger value1 = new BigInteger(1, this.bytes);
+        BigInteger value2 = new BigInteger(1, word.bytes);
+
+        return new DataWord(value1.multiply(value2).toByteArray());
     }
 
     public DataWord or(DataWord word) {

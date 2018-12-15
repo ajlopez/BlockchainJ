@@ -34,6 +34,12 @@ public class VirtualMachine {
                     this.stack.push(word1.add(word2));
                     break;
 
+                case OpCodes.MUL:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+                    this.stack.push(word1.mul(word2));
+                    break;
+
                 case OpCodes.SUB:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
