@@ -149,6 +149,17 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeDivOperations() throws VirtualMachineException {
+        executeBinaryOp(0, 0, OpCodes.DIV, 0);
+        executeBinaryOp(1, 2, OpCodes.DIV, 2);
+        executeBinaryOp(2, 84, OpCodes.DIV, 42);
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.DIV, 1024 * 1024 * 1024);
+
+        executeBinaryOp("0100000000", "010000000000000000", OpCodes.DIV, "0100000000");
+        executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.DIV, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+    }
+
+    @Test
     public void executeSub() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 

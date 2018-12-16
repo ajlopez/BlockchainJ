@@ -46,6 +46,17 @@ public class VirtualMachine {
                     this.stack.push(word1.sub(word2));
                     break;
 
+                case OpCodes.DIV:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+
+                    if (word2.isZero())
+                        this.stack.push(DataWord.ZERO);
+                    else
+                        this.stack.push(word1.div(word2));
+
+                    break;
+
                 case OpCodes.LT:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
