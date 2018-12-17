@@ -103,6 +103,9 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
 
         byte[] newbytes = value1.divide(value2).toByteArray();
 
+        if (newbytes.length > DATAWORD_BYTES)
+            return DataWord.fromBytes(newbytes, newbytes.length - DATAWORD_BYTES, DATAWORD_BYTES);
+
         return new DataWord(newbytes);
     }
 
