@@ -160,6 +160,19 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeModOperations() throws VirtualMachineException {
+        executeBinaryOp(0, 0, OpCodes.MOD, 0);
+        executeBinaryOp(1, 2, OpCodes.MOD, 0);
+        executeBinaryOp(2, 3, OpCodes.MOD, 1);
+        executeBinaryOp(2, 84, OpCodes.MOD, 0);
+        executeBinaryOp(5, 84, OpCodes.MOD, 4);
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.MOD, 0);
+
+        executeBinaryOp("0100000000", "010000000000000000", OpCodes.MOD, "00");
+        executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MOD, "00");
+    }
+
+    @Test
     public void executeSub() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
