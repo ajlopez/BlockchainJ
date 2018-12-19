@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.DataWord;
 
 /**
  * Created by ajlopez on 14/12/2018.
@@ -9,11 +10,13 @@ public class ProgramEnvironment {
     private final Address address;
     private final Address origin;
     private final Address caller;
+    private final DataWord value;
 
-    public ProgramEnvironment(Address address, Address origin, Address caller) {
+    public ProgramEnvironment(Address address, Address origin, Address caller, DataWord value) {
         this.address = address;
         this.origin = origin;
         this.caller = caller;
+        this.value = value;
     }
 
     public Address getAddress() { return this.address; }
@@ -21,4 +24,6 @@ public class ProgramEnvironment {
     public Address getOrigin() { return this.origin; }
 
     public Address getCaller() { return this.caller; }
+
+    public DataWord getValue() { return this.value; }
 }

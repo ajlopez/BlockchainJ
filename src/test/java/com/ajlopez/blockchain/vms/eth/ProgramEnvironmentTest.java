@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,10 +16,11 @@ public class ProgramEnvironmentTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        ProgramEnvironment environment = new ProgramEnvironment(address, origin, caller);
+        ProgramEnvironment environment = new ProgramEnvironment(address, origin, caller, DataWord.ONE);
 
         Assert.assertEquals(address, environment.getAddress());
         Assert.assertEquals(origin, environment.getOrigin());
         Assert.assertEquals(caller, environment.getCaller());
+        Assert.assertEquals(DataWord.ONE, environment.getValue());
     }
 }
