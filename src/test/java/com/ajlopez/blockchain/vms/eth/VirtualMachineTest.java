@@ -500,21 +500,22 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeAddressOriginCallerOperations() throws VirtualMachineException {
+    public void executeAddressOriginCallerCallValueOperations() throws VirtualMachineException {
         Address address = FactoryHelper.createRandomAddress();
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(address, origin, caller, DataWord.ZERO);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(address, origin, caller, DataWord.ONE);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.ADDRESS, OpCodes.ORIGIN, OpCodes.CALLER });
+        virtualMachine.execute(new byte[] { OpCodes.ADDRESS, OpCodes.ORIGIN, OpCodes.CALLER, OpCodes.CALLVALUE });
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
         Assert.assertNotNull(stack);
-        Assert.assertEquals(3, stack.size());
+        Assert.assertEquals(4, stack.size());
+        Assert.assertEquals(DataWord.ONE, stack.pop());
         Assert.assertEquals(DataWord.fromAddress(caller), stack.pop());
         Assert.assertEquals(DataWord.fromAddress(origin), stack.pop());
         Assert.assertEquals(DataWord.fromAddress(address), stack.pop());
