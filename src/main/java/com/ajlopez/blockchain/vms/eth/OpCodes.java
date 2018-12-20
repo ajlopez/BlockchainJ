@@ -39,6 +39,8 @@ public class OpCodes {
     public static final byte CALLER = 0x33;
     public static final byte CALLVALUE = 0x34;
 
+    public static final byte CODESIZE = 0x38;
+
     public static final byte POP = 0x50;
     public static final byte MLOAD = 0x51;
     public static final byte MSTORE = 0x52;

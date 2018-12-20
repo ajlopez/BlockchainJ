@@ -522,6 +522,19 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeCodeSizeOperation() throws VirtualMachineException {
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.CODESIZE, OpCodes.STOP });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.TWO, stack.pop());
+    }
+
+    @Test
     public void executeStopOperation() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 

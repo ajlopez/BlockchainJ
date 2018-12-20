@@ -127,7 +127,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.ADDRESS:
-                    this.stack.push(this.programEnvironment.getValue());
+                    this.stack.push(DataWord.fromAddress(this.programEnvironment.getAddress()));
                     break;
 
                 case OpCodes.ORIGIN:
@@ -140,6 +140,10 @@ public class VirtualMachine {
 
                 case OpCodes.CALLVALUE:
                     this.stack.push(this.programEnvironment.getValue());
+                    break;
+
+                case OpCodes.CODESIZE:
+                    this.stack.push(DataWord.fromUnsignedInteger(bytecodes.length));
                     break;
 
                 case OpCodes.POP:

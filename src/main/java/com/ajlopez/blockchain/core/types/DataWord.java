@@ -13,6 +13,7 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
 
     public static final DataWord ZERO = new DataWord(new byte[0]);
     public static final DataWord ONE = new DataWord(new byte[] { 0x01 });
+    public static final DataWord TWO = new DataWord(new byte[] { 0x02 });
 
     public static DataWord fromUnsignedInteger(int value) {
         return new DataWord(ByteUtils.unsignedIntegerToBytes(value));
