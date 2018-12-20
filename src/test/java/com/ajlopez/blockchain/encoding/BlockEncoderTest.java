@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.*;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -20,7 +21,9 @@ public class BlockEncoderTest {
     public void encodeDecodeBlock() {
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        Block block = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000);
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -42,7 +45,9 @@ public class BlockEncoderTest {
 
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000);
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -72,7 +77,9 @@ public class BlockEncoderTest {
 
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000);
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -103,8 +110,10 @@ public class BlockEncoderTest {
     public void encodeTwoBlocks() {
         BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        Block block1 = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000);
-        Block block2 = new Block(0, null, stateRootHash, System.currentTimeMillis() / 1000);
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block1 = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
+        Block block2 = new Block(0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
 
         byte[] encoded1 = BlockEncoder.encode(block1);
         byte[] encoded2 = BlockEncoder.encode(block2);

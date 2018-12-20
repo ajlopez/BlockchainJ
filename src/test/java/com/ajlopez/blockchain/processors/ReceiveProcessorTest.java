@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.TransactionMessage;
@@ -20,8 +21,9 @@ public class ReceiveProcessorTest {
     @Test
     public void processBlockMessage() throws InterruptedException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
         Message message = new BlockMessage(block);
 
         MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(blockProcessor);
@@ -50,9 +52,10 @@ public class ReceiveProcessorTest {
     @Test
     public void processTwoConsecutiveBlockMessages() throws InterruptedException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -85,9 +88,10 @@ public class ReceiveProcessorTest {
     @Test
     public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
+        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -120,8 +124,10 @@ public class ReceiveProcessorTest {
     @Test
     public void processTenRepeatedBlockMessage() throws InterruptedException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+
         Message message = new BlockMessage(block);
 
         MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(blockProcessor);

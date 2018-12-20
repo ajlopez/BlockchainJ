@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -18,6 +19,6 @@ public class GenesisGenerator {
     }
 
     public static Block generateGenesis(AccountStore accountStore) {
-        return new Block(0, BlockHash.EMPTY_BLOCK_HASH, accountStore.getRootHash(), 0);
+        return new Block(0, BlockHash.EMPTY_BLOCK_HASH, accountStore.getRootHash(), 0, Address.ZERO);
     }
 }

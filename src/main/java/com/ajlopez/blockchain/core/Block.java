@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.core;
 
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
@@ -15,16 +16,16 @@ public class Block {
     private final BlockHeader header;
     private final List<Transaction> transactions;
 
-    public Block(Block parent, List<Transaction> txs, Hash stateRootHash, long timestamp) {
-        this(parent.getNumber() + 1, parent.getHash(), txs, stateRootHash, timestamp);
+    public Block(Block parent, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase) {
+        this(parent.getNumber() + 1, parent.getHash(), txs, stateRootHash, timestamp, coinbase);
     }
 
-    public Block(long number, BlockHash parentHash, Hash stateRootHash, long timestamp) {
-        this(number, parentHash, new ArrayList<>(), stateRootHash, timestamp);
+    public Block(long number, BlockHash parentHash, Hash stateRootHash, long timestamp, Address coinbase) {
+        this(number, parentHash, new ArrayList<>(), stateRootHash, timestamp, coinbase);
     }
 
-    public Block(long number, BlockHash parentHash, List<Transaction> txs, Hash stateRootHash, long timestamp) {
-        this(new BlockHeader(number, parentHash, HashUtils.calculateHash(TransactionEncoder.encode(txs)), stateRootHash, timestamp), txs);
+    public Block(long number, BlockHash parentHash, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase) {
+        this(new BlockHeader(number, parentHash, HashUtils.calculateHash(TransactionEncoder.encode(txs)), stateRootHash, timestamp, coinbase), txs);
     }
 
     public Block(BlockHeader header, List<Transaction> transactions)
@@ -48,6 +49,8 @@ public class Block {
     public BlockHash getHash() {
         return this.header.getHash();
     }
+
+    public Address getCoinbase() { return this.header.getCoinbase(); }
 
     public BlockHash getParentHash() {
         return this.header.getParentHash();

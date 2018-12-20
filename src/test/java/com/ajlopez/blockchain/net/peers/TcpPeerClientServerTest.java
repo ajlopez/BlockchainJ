@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.net.peers;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.processors.NodeProcessor;
@@ -36,8 +37,9 @@ public class TcpPeerClientServerTest {
 
         TcpPeerClient client = new TcpPeerClient("localhost", 4000, nodeProcessor1);
         client.connect();
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, blockChain1.getBestBlock().getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block = new Block(1, blockChain1.getBestBlock().getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
         Message message = new BlockMessage(block);
 
         nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);

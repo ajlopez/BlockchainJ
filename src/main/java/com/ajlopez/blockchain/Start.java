@@ -4,7 +4,9 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.io.IOException;
 
@@ -21,7 +23,11 @@ public class Start {
 
         blockChain.onBlock(Start::printBlock);
 
-        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"));
+        String coinbaseText = argsproc.getString("coinbase");
+
+        Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
+
+        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"), coinbase);
 
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
@@ -33,6 +39,7 @@ public class Start {
         processor.defineInteger("p", "port", 0);
         processor.defineStringList("ps", "peers", "");
         processor.defineBoolean("m", "miner", false);
+        processor.defineString("k", "coinbase", "");
 
         processor.processArguments(args);
 

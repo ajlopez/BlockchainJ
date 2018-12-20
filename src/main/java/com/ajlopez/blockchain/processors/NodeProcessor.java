@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.peers.Peer;
@@ -23,7 +24,7 @@ public class NodeProcessor implements PeerNode {
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(Peer peer, BlockChain blockChain, TrieStore accountTrieStore) {
+    public NodeProcessor(Peer peer, BlockChain blockChain, TrieStore accountTrieStore, Address coinbase) {
         this.peer = peer;
         OrphanBlocks orphanBlocks = new OrphanBlocks();
         this.blockProcessor = new BlockProcessor(blockChain, orphanBlocks);
@@ -33,7 +34,7 @@ public class NodeProcessor implements PeerNode {
         this.sendProcessor = new SendProcessor(this.peer);
         MessageProcessor messageProcessor = new MessageProcessor(this.blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor);
         this.receiveProcessor = new ReceiveProcessor(messageProcessor);
-        this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, accountTrieStore);
+        this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, accountTrieStore, coinbase);
         this.minerProcessor.onMinedBlock(blk -> {
             this.postMessage(this.peer, new BlockMessage(blk));
         });

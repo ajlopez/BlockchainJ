@@ -1,8 +1,11 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.BlockHeader;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +19,9 @@ public class BlockHeaderEncoderTest {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Hash transactionsHash = HashUtilsTest.generateRandomHash();
         Hash stateRootHash = HashUtilsTest.generateRandomHash();
-        BlockHeader header = new BlockHeader(42, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000);
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        BlockHeader header = new BlockHeader(42, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -29,5 +34,6 @@ public class BlockHeaderEncoderTest {
         Assert.assertEquals(hash, result.getParentHash());
         Assert.assertEquals(header.getHash(), result.getHash());
         Assert.assertEquals(header.getTransactionsHash(), result.getTransactionsHash());
+        Assert.assertEquals(header.getCoinbase(), result.getCoinbase());
     }
 }

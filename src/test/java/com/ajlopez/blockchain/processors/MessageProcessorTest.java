@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
@@ -23,8 +24,10 @@ public class MessageProcessorTest {
     @Test
     public void processBlockMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, Hash.EMPTY_HASH, System.currentTimeMillis() / 1000);
+        Block block = new Block(0, null, Hash.EMPTY_HASH, System.currentTimeMillis() / 1000, coinbase);
+
         Message message = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor);
@@ -45,8 +48,9 @@ public class MessageProcessorTest {
         SendProcessor outputProcessor = new SendProcessor(sender);
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
         Message message = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
@@ -71,8 +75,10 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(sender, channel);
 
-        Block block1 = new Block(1, blockChain.getBestBlock().getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
-        Block block2 = new Block(2, block1.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block1 = new Block(1, blockChain.getBestBlock().getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block2 = new Block(2, block1.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
         Message message = new BlockMessage(block2);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
@@ -102,7 +108,9 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel2 = new SimpleMessageChannel();
         sendProcessor.connectToPeer(peer2, channel2);
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
         Message message = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, sendProcessor);
@@ -129,7 +137,9 @@ public class MessageProcessorTest {
         Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor sendProcessor = new SendProcessor(sender);
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
         Message blockMessage = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, sendProcessor);
@@ -150,8 +160,9 @@ public class MessageProcessorTest {
     public void processGetUnknownBlockByHashMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
 
@@ -173,8 +184,9 @@ public class MessageProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(sender);
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
         Message blockMessage = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
@@ -195,8 +207,9 @@ public class MessageProcessorTest {
     public void processGetUnknownBlockByNumberMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
 

@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.net.peers.TcpPeerServer;
@@ -22,12 +23,12 @@ public class NodeRunner {
     private NodeProcessor nodeProcessor;
     private TcpPeerServer tcpPeerServer;
 
-    public NodeRunner(BlockChain blockChain, boolean miner, int port, List<String> peers) {
+    public NodeRunner(BlockChain blockChain, boolean miner, int port, List<String> peers, Address coinbase) {
         this.miner = miner;
         this.port = port;
         this.peers = peers;
 
-        this.nodeProcessor = new NodeProcessor(Peer.createRandomPeer(), blockChain, new TrieStore(new HashMapStore()));
+        this.nodeProcessor = new NodeProcessor(Peer.createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), coinbase);
 
         if (this.port > 0)
             this.tcpPeerServer = new TcpPeerServer(this.port, this.nodeProcessor);

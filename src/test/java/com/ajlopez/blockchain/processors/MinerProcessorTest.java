@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.state.Trie;
@@ -26,10 +27,12 @@ public class MinerProcessorTest {
     @Test
     public void mineBlockWithNoTransactions() {
         TransactionPool transactionPool = new TransactionPool();
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, new TrieStore(new HashMapStore()));
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, new TrieStore(new HashMapStore()), coinbase);
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000);
+        Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
 
         Block block = processor.mineBlock(parent, transactionPool);
 
@@ -58,15 +61,18 @@ public class MinerProcessorTest {
         accountStore.save();
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000);
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, trieStore);
+        Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase);
+
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, trieStore, coinbase);
 
         Block block = processor.mineBlock(parent, transactionPool);
 
         Assert.assertNotNull(block);
         Assert.assertEquals(2, block.getNumber());
         Assert.assertEquals(parent.getHash(), block.getParentHash());
+        Assert.assertEquals(coinbase, block.getCoinbase());
 
         List<Transaction> txs = block.getTransactions();
 
@@ -93,8 +99,9 @@ public class MinerProcessorTest {
         accountStore.save();
 
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, trieStore);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, trieStore, coinbase);
 
         Block block = processor.process();
 
@@ -127,8 +134,9 @@ public class MinerProcessorTest {
         accountStore.save();
 
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, trieStore);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, trieStore, coinbase);
 
         Semaphore sem = new Semaphore(0, true);
 
@@ -169,8 +177,9 @@ public class MinerProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         TransactionPool transactionPool = new TransactionPool();
+        Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new TrieStore(new HashMapStore()));
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new TrieStore(new HashMapStore()), coinbase);
 
         Semaphore sem = new Semaphore(0, true);
 

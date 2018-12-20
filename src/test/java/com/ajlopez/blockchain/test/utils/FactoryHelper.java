@@ -58,9 +58,10 @@ public class FactoryHelper {
 
     public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks) {
         Block block = blockChain.getBestBlock();
+        Address coinbase = FactoryHelper.createRandomAddress();
 
         for (int k = 0; k < nblocks; k++) {
-            Block newBlock = new Block(block.getNumber() + 1, block.getHash(), block.getStateRootHash(), System.currentTimeMillis() / 1000);
+            Block newBlock = new Block(block.getNumber() + 1, block.getHash(), block.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase);
             blockChain.connectBlock(newBlock);
             block = newBlock;
         }
@@ -118,18 +119,19 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
-        return new NodeProcessor(createRandomPeer(), blockChain, new TrieStore(new HashMapStore()));
+        return new NodeProcessor(createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), createRandomAddress());
     }
 
     public static List<Block> createBlocks(int nblocks) {
+        Address coinbase = createRandomAddress();
         List<Block> blocks = new ArrayList<>();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         blocks.add(block);
 
         for (int k = 0; k < nblocks; k++) {
-            block = new Block(block.getNumber() + 1, block.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000);
+            block = new Block(block.getNumber() + 1, block.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
             blocks.add(block);
         }
 

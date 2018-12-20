@@ -2,6 +2,7 @@ package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
@@ -29,7 +30,9 @@ public class NodeRunnerTest {
             semaphore.release();
         });
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList());
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList(), coinbase);
 
         runner.start();
 
@@ -53,11 +56,14 @@ public class NodeRunnerTest {
             semaphore.release();
         });
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList());
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList(), coinbase);
 
         runner.start();
 
-        Block block = new Block(1, blockChain.getBestBlock().getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000);
+        Block block = new Block(1, blockChain.getBestBlock().getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+
         Message message = new BlockMessage(block);
 
         TcpPeerClient tcpPeerClient = new TcpPeerClient("127.0.0.1", 3000, null);
@@ -88,8 +94,10 @@ public class NodeRunnerTest {
             semaphore.release();
         });
 
-        NodeRunner runner1 = new NodeRunner(blockChain1, true, 3001, null);
-        NodeRunner runner2 = new NodeRunner(blockChain2, false, 0, Collections.singletonList("localhost:3001"));
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        NodeRunner runner1 = new NodeRunner(blockChain1, true, 3001, null, coinbase );
+        NodeRunner runner2 = new NodeRunner(blockChain2, false, 0, Collections.singletonList("localhost:3001"), coinbase);
 
         runner1.start();
         runner2.start();

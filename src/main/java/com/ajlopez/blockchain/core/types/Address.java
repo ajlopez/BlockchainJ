@@ -8,6 +8,8 @@ import java.util.Random;
 public class Address extends AbstractBytesValue {
     public static final int ADDRESS_BYTES = 20;
 
+    public static final Address ZERO = new Address(new byte[0]);
+
     public Address(byte[] bytes) {
         super(bytes, ADDRESS_BYTES);
     }

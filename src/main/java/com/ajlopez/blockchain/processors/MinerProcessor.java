@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.state.Trie;
@@ -21,13 +22,15 @@ public class MinerProcessor {
     private final TransactionPool transactionPool;
     private final List<Consumer<Block>> minedBlockConsumers = new ArrayList<>();
     private final TrieStore trieStore;
+    private final Address coinbase;
 
     private boolean stopped = false;
 
-    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, TrieStore trieStore) {
+    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, TrieStore trieStore, Address coinbase) {
         this.blockChain = blockChain;
         this.transactionPool = transactionPool;
         this.trieStore = trieStore;
+        this.coinbase = coinbase;
     }
 
     public Block process() {
@@ -52,7 +55,7 @@ public class MinerProcessor {
 
         List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions());
 
-        return new Block(parent, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000);
+        return new Block(parent, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase);
     }
 
     public void start() {
