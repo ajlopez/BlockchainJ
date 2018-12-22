@@ -16,11 +16,20 @@ public class ProgramEnvironmentTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        ProgramEnvironment environment = new ProgramEnvironment(address, origin, caller, DataWord.ONE);
+        long number = 1;
+        long timestamp = 2;
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        BlockData blockData = new BlockData(number, timestamp, coinbase);
+
+        ProgramEnvironment environment = new ProgramEnvironment(address, origin, caller, DataWord.ONE, blockData);
 
         Assert.assertEquals(address, environment.getAddress());
         Assert.assertEquals(origin, environment.getOrigin());
         Assert.assertEquals(caller, environment.getCaller());
         Assert.assertEquals(DataWord.ONE, environment.getValue());
+        Assert.assertEquals(coinbase, environment.getCoinbase());
+        Assert.assertEquals(number, environment.getNumber());
+        Assert.assertEquals(timestamp, environment.getTimestamp());
     }
 }

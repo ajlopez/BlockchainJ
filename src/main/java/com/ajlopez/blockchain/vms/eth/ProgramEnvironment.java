@@ -11,12 +11,14 @@ public class ProgramEnvironment {
     private final Address origin;
     private final Address caller;
     private final DataWord value;
+    private final BlockData blockData;
 
-    public ProgramEnvironment(Address address, Address origin, Address caller, DataWord value) {
+    public ProgramEnvironment(Address address, Address origin, Address caller, DataWord value, BlockData blockData) {
         this.address = address;
         this.origin = origin;
         this.caller = caller;
         this.value = value;
+        this.blockData = blockData;
     }
 
     public Address getAddress() { return this.address; }
@@ -26,4 +28,11 @@ public class ProgramEnvironment {
     public Address getCaller() { return this.caller; }
 
     public DataWord getValue() { return this.value; }
+
+    public long getNumber() { return this.blockData.getNumber(); }
+
+    public long getTimestamp() { return this.blockData.getTimestamp(); }
+
+    public Address getCoinbase() { return this.blockData.getCoinbase(); }
+
 }

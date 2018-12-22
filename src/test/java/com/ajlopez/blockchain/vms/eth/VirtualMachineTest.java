@@ -505,7 +505,7 @@ public class VirtualMachineTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(address, origin, caller, DataWord.ONE);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(address, origin, caller, DataWord.ONE, null);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
