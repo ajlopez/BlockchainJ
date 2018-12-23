@@ -146,6 +146,10 @@ public class VirtualMachine {
                     this.stack.push(DataWord.fromUnsignedInteger(bytecodes.length));
                     break;
 
+                case OpCodes.COINBASE:
+                    this.stack.push(DataWord.fromAddress(this.programEnvironment.getCoinbase()));
+                    break;
+
                 case OpCodes.POP:
                     this.stack.pop();
                     break;

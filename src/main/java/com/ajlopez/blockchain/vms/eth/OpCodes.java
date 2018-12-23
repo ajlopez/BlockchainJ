@@ -41,6 +41,8 @@ public class OpCodes {
 
     public static final byte CODESIZE = 0x38;
 
+    public static final byte COINBASE = 0x41;
+
     public static final byte POP = 0x50;
     public static final byte MLOAD = 0x51;
     public static final byte MSTORE = 0x52;

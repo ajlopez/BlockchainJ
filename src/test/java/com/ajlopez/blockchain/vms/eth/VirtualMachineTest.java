@@ -521,6 +521,28 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromAddress(address), stack.pop());
     }
 
+
+    @Test
+    public void executeCoinbaseOperation() throws VirtualMachineException {
+        long number = 1;
+        long timestamp = 2;
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        BlockData blockData = new BlockData(number, timestamp, coinbase);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(null, null, null, DataWord.ONE, blockData);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.COINBASE });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromAddress(coinbase), stack.pop());
+    }
+
     @Test
     public void executeCodeSizeOperation() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
