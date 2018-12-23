@@ -523,7 +523,7 @@ public class VirtualMachineTest {
 
 
     @Test
-    public void executeCoinbaseOperation() throws VirtualMachineException {
+    public void executeCoinbaseTimestampNumberOperations() throws VirtualMachineException {
         long number = 1;
         long timestamp = 2;
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -534,12 +534,14 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.COINBASE });
+        virtualMachine.execute(new byte[] { OpCodes.COINBASE, OpCodes.TIMESTAMP, OpCodes.NUMBER });
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
         Assert.assertNotNull(stack);
-        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(3, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedLong(number), stack.pop());
+        Assert.assertEquals(DataWord.fromUnsignedLong(timestamp), stack.pop());
         Assert.assertEquals(DataWord.fromAddress(coinbase), stack.pop());
     }
 

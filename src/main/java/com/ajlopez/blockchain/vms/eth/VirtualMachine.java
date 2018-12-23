@@ -150,6 +150,14 @@ public class VirtualMachine {
                     this.stack.push(DataWord.fromAddress(this.programEnvironment.getCoinbase()));
                     break;
 
+                case OpCodes.TIMESTAMP:
+                    this.stack.push(DataWord.fromUnsignedLong(this.programEnvironment.getTimestamp()));
+                    break;
+
+                case OpCodes.NUMBER:
+                    this.stack.push(DataWord.fromUnsignedLong(this.programEnvironment.getNumber()));
+                    break;
+
                 case OpCodes.POP:
                     this.stack.pop();
                     break;
