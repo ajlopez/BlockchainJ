@@ -158,6 +158,10 @@ public class VirtualMachine {
                     this.stack.push(DataWord.fromUnsignedLong(this.programEnvironment.getNumber()));
                     break;
 
+                case OpCodes.DIFFICULTY:
+                    this.stack.push(this.programEnvironment.getDifficulty());
+                    break;
+
                 case OpCodes.POP:
                     this.stack.pop();
                     break;

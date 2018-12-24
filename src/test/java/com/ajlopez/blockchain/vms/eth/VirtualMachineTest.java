@@ -521,25 +521,26 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromAddress(address), stack.pop());
     }
 
-
     @Test
-    public void executeCoinbaseTimestampNumberOperations() throws VirtualMachineException {
+    public void executeCoinbaseTimestampNumberDifficultyOperations() throws VirtualMachineException {
         long number = 1;
         long timestamp = 2;
         Address coinbase = FactoryHelper.createRandomAddress();
+        DataWord difficulty = DataWord.ONE;
 
-        BlockData blockData = new BlockData(number, timestamp, coinbase, null);
+        BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(null, null, null, DataWord.ONE, blockData);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.COINBASE, OpCodes.TIMESTAMP, OpCodes.NUMBER });
+        virtualMachine.execute(new byte[] { OpCodes.COINBASE, OpCodes.TIMESTAMP, OpCodes.NUMBER, OpCodes.DIFFICULTY });
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
         Assert.assertNotNull(stack);
-        Assert.assertEquals(3, stack.size());
+        Assert.assertEquals(4, stack.size());
+        Assert.assertEquals(difficulty, stack.pop());
         Assert.assertEquals(DataWord.fromUnsignedLong(number), stack.pop());
         Assert.assertEquals(DataWord.fromUnsignedLong(timestamp), stack.pop());
         Assert.assertEquals(DataWord.fromAddress(coinbase), stack.pop());

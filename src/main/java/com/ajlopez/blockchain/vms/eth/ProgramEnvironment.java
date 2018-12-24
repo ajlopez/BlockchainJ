@@ -31,6 +31,8 @@ public class ProgramEnvironment {
 
     public long getNumber() { return this.blockData.getNumber(); }
 
+    public DataWord getDifficulty() { return this.blockData.getDifficulty(); }
+
     public long getTimestamp() { return this.blockData.getTimestamp(); }
 
     public Address getCoinbase() { return this.blockData.getCoinbase(); }
