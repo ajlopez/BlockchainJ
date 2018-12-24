@@ -20,7 +20,7 @@ public class ProgramEnvironmentTest {
         long timestamp = 2;
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockData blockData = new BlockData(number, timestamp, coinbase);
+        BlockData blockData = new BlockData(number, timestamp, coinbase, null);
 
         ProgramEnvironment environment = new ProgramEnvironment(address, origin, caller, DataWord.ONE, blockData);
 

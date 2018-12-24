@@ -528,7 +528,7 @@ public class VirtualMachineTest {
         long timestamp = 2;
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockData blockData = new BlockData(number, timestamp, coinbase);
+        BlockData blockData = new BlockData(number, timestamp, coinbase, null);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(null, null, null, DataWord.ONE, blockData);
 
