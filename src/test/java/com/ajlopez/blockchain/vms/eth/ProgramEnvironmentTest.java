@@ -11,7 +11,7 @@ import org.junit.Test;
  */
 public class ProgramEnvironmentTest {
     @Test
-    public void createEnvironmentWithAddresses() {
+    public void createEnvironment() {
         Address address = FactoryHelper.createRandomAddress();
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
