@@ -505,7 +505,9 @@ public class VirtualMachineTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(address, origin, caller, DataWord.ONE, null);
+        MessageData messageData = new MessageData(address, origin, caller, DataWord.ONE);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -530,7 +532,7 @@ public class VirtualMachineTest {
 
         BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(null, null, null, DataWord.ONE, blockData);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(null, blockData);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 

@@ -16,13 +16,15 @@ public class ProgramEnvironmentTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
+        MessageData messageData = new MessageData(address, origin, caller, DataWord.ONE);
+
         long number = 1;
         long timestamp = 2;
         Address coinbase = FactoryHelper.createRandomAddress();
 
         BlockData blockData = new BlockData(number, timestamp, coinbase, null);
 
-        ProgramEnvironment environment = new ProgramEnvironment(address, origin, caller, DataWord.ONE, blockData);
+        ProgramEnvironment environment = new ProgramEnvironment(messageData, blockData);
 
         Assert.assertEquals(address, environment.getAddress());
         Assert.assertEquals(origin, environment.getOrigin());

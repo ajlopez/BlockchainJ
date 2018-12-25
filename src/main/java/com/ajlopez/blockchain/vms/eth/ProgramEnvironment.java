@@ -7,27 +7,21 @@ import com.ajlopez.blockchain.core.types.DataWord;
  * Created by ajlopez on 14/12/2018.
  */
 public class ProgramEnvironment {
-    private final Address address;
-    private final Address origin;
-    private final Address caller;
-    private final DataWord value;
+    private final MessageData messageData;
     private final BlockData blockData;
 
-    public ProgramEnvironment(Address address, Address origin, Address caller, DataWord value, BlockData blockData) {
-        this.address = address;
-        this.origin = origin;
-        this.caller = caller;
-        this.value = value;
+    public ProgramEnvironment(MessageData messageData, BlockData blockData) {
+        this.messageData = messageData;
         this.blockData = blockData;
     }
 
-    public Address getAddress() { return this.address; }
+    public Address getAddress() { return this.messageData.getAddress(); }
 
-    public Address getOrigin() { return this.origin; }
+    public Address getOrigin() { return this.messageData.getOrigin(); }
 
-    public Address getCaller() { return this.caller; }
+    public Address getCaller() { return this.messageData.getCaller(); }
 
-    public DataWord getValue() { return this.value; }
+    public DataWord getValue() { return this.messageData.getValue(); }
 
     public long getNumber() { return this.blockData.getNumber(); }
 
