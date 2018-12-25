@@ -259,6 +259,18 @@ public class DataWordTest {
     }
 
     @Test
+    public void isNegative() {
+        Assert.assertTrue(DataWord.fromSignedLong(-1).isNegative());
+        Assert.assertTrue(DataWord.fromSignedLong(-42).isNegative());
+        Assert.assertTrue(DataWord.fromSignedLong(-1024).isNegative());
+
+        Assert.assertFalse(DataWord.ZERO.isNegative());
+        Assert.assertFalse(DataWord.fromSignedLong(1).isNegative());
+        Assert.assertFalse(DataWord.fromSignedLong(42).isNegative());
+        Assert.assertFalse(DataWord.fromSignedLong(1024).isNegative());
+    }
+
+    @Test
     public void fromAddress() {
         Address address = FactoryHelper.createRandomAddress();
 
