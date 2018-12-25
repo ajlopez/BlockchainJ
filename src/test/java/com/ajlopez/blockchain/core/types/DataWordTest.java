@@ -232,6 +232,13 @@ public class DataWordTest {
     }
 
     @Test
+    public void executeNegateOperations() {
+        executeNegate("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        executeNegate("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "01");
+        executeNegate("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe", "02");
+    }
+
+    @Test
     public void isUnsignedInteger() {
         Assert.assertTrue(DataWord.fromHexadecimalString("00").isUnsignedInteger());
         Assert.assertTrue(DataWord.fromHexadecimalString("0100").isUnsignedInteger());
@@ -275,6 +282,14 @@ public class DataWordTest {
 
         for (int k = 0; k < Address.ADDRESS_BYTES; k++)
             Assert.assertEquals(wordbytes[k + DataWord.DATAWORD_BYTES - Address.ADDRESS_BYTES], addrbytes[k]);
+    }
+
+    private static void executeNegate(String operand, String expected) {
+        DataWord word = DataWord.fromHexadecimalString(operand);
+
+        DataWord result = word.negate();
+
+        Assert.assertEquals(DataWord.fromHexadecimalString(expected), result);
     }
 
     private static void executeNot(String operand, String expected) {
