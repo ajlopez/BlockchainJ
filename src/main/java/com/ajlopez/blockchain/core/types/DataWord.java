@@ -220,4 +220,18 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
 
         return 0;
     }
+
+    public int compareToSigned(DataWord word) {
+        if (this.isNegative()) {
+            if (!word.isNegative())
+                return -1;
+
+            return -this.negate().compareTo(word.negate());
+        }
+
+        if (word.isNegative())
+            return 1;
+
+        return compareTo(word);
+    }
 }

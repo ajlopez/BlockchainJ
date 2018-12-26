@@ -198,6 +198,34 @@ public class DataWordTest {
     }
 
     @Test
+    public void compareSignedDataWords() {
+        DataWord word1 = DataWord.fromSignedLong(1);
+        DataWord word2 = DataWord.fromSignedLong(-1);
+        DataWord word3 = DataWord.fromSignedLong(42);
+        DataWord word4 = DataWord.fromSignedLong(-42);
+
+        Assert.assertTrue(word1.compareToSigned(word1) == 0);
+        Assert.assertTrue(word2.compareToSigned(word2) == 0);
+        Assert.assertTrue(word3.compareToSigned(word3) == 0);
+        Assert.assertTrue(word4.compareToSigned(word4) == 0);
+
+        Assert.assertTrue(word1.compareToSigned(word4) > 0);
+        Assert.assertTrue(word4.compareToSigned(word1) < 0);
+        Assert.assertTrue(word2.compareToSigned(word4) > 0);
+        Assert.assertTrue(word4.compareToSigned(word2) < 0);
+        Assert.assertTrue(word1.compareToSigned(word2) > 0);
+        Assert.assertTrue(word1.compareToSigned(word3) < 0);
+
+        Assert.assertTrue(word2.compareToSigned(word4) > 0);
+        Assert.assertTrue(word2.compareToSigned(word1) < 0);
+        Assert.assertTrue(word2.compareToSigned(word3) < 0);
+
+        Assert.assertTrue(word3.compareToSigned(word4) > 0);
+        Assert.assertTrue(word3.compareToSigned(word1) > 0);
+        Assert.assertTrue(word3.compareToSigned(word2) > 0);
+    }
+
+    @Test
     public void executeOrOperations() {
         executeOr("01", "01", "01");
         executeOr("02", "04", "06");
