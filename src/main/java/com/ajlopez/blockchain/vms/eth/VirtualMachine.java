@@ -81,6 +81,13 @@ public class VirtualMachine {
                     this.stack.push(word1.compareTo(word2) > 0 ? DataWord.ONE : DataWord.ZERO);
                     break;
 
+                case OpCodes.SLT:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+                    this.stack.push(word1.compareToSigned(word2) < 0 ? DataWord.ONE : DataWord.ZERO);
+
+                    break;
+
                 case OpCodes.EQ:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();

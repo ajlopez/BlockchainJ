@@ -440,6 +440,9 @@ public class VirtualMachineTest {
     public void executeSignedLessThanOperations() throws VirtualMachineException {
         executeBinaryOp(0, 0, OpCodes.SLT, 0);
         executeBinaryOp(1, 2, OpCodes.SLT, 0);
+        executeBinaryOp(-1, 2, OpCodes.SLT, 0);
+        executeBinaryOp(2, -1, OpCodes.SLT, 1);
+        executeBinaryOp(-1, -2, OpCodes.SLT, 1);
         executeBinaryOp(40, 2, OpCodes.SLT, 1);
         executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.SLT, 1);
     }
@@ -704,8 +707,8 @@ public class VirtualMachineTest {
     }
 
     private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected) throws VirtualMachineException {
-        byte[] boperand1 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand1));
-        byte[] boperand2 = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand2));
+        byte[] boperand1 = DataWord.fromSignedLong(operand1).toNormalizedBytes();
+        byte[] boperand2 = DataWord.fromSignedLong(operand2).toNormalizedBytes();
 
         byte[] bytecodes = new byte[3 + boperand1.length + boperand2.length];
 
@@ -723,7 +726,7 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
-        Assert.assertEquals(DataWord.fromUnsignedInteger(expected), stack.pop());
+        Assert.assertEquals(DataWord.fromSignedLong(expected), stack.pop());
     }
 
     private static void executeBinaryOp(String operand1, String operand2, byte opcode, String expected) throws VirtualMachineException {
