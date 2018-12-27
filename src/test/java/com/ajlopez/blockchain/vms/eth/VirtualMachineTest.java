@@ -437,6 +437,14 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeSignedLessThanOperations() throws VirtualMachineException {
+        executeBinaryOp(0, 0, OpCodes.SLT, 0);
+        executeBinaryOp(1, 2, OpCodes.SLT, 0);
+        executeBinaryOp(40, 2, OpCodes.SLT, 1);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.SLT, 1);
+    }
+
+    @Test
     public void executeEqualsOperations() throws VirtualMachineException {
         executeBinaryOp(0, 0, OpCodes.EQ, 1);
         executeBinaryOp(1, 2, OpCodes.EQ, 0);
