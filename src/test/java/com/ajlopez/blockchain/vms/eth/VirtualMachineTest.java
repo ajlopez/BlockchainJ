@@ -448,6 +448,18 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeSignedGreaterThanOperations() throws VirtualMachineException {
+        executeBinaryOp(0, 0, OpCodes.SGT, 0);
+        executeBinaryOp(1, 2, OpCodes.SGT, 1);
+        executeBinaryOp(-1, 2, OpCodes.SGT, 1);
+        executeBinaryOp(2, -1, OpCodes.SGT, 0);
+        executeBinaryOp(-1, -2, OpCodes.SGT, 0);
+        executeBinaryOp(40, 2, OpCodes.SGT, 0);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.SGT, 0);
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SGT, 1);
+    }
+
+    @Test
     public void executeEqualsOperations() throws VirtualMachineException {
         executeBinaryOp(0, 0, OpCodes.EQ, 1);
         executeBinaryOp(1, 2, OpCodes.EQ, 0);
