@@ -134,7 +134,7 @@ public class ByteUtilsTest {
         byte[] bytes = new byte[] { 0x01, 0x02, 0x03, 0x05 };
         byte[] expected = new byte[] { 0x01, 0x02, 0x03, 0x05, 0x00, 0x00 };
 
-        byte[] result = ByteUtils.copyBytes(bytes, expected.length, true);
+        byte[] result = ByteUtils.copyBytes(bytes, expected.length, true, false);
 
         Assert.assertNotNull(result);
         Assert.assertNotSame(bytes, result);

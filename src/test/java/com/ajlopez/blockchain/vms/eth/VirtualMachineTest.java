@@ -160,6 +160,24 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeSignedDivOperations() throws VirtualMachineException {
+        executeBinaryOp(0, 0, OpCodes.SDIV, 0);
+        executeBinaryOp(1, 2, OpCodes.SDIV, 2);
+        executeBinaryOp(2, 84, OpCodes.SDIV, 42);
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SDIV, 1024 * 1024 * 1024);
+
+        executeBinaryOp(1, -2, OpCodes.SDIV, -2);
+        executeBinaryOp(-1, -2, OpCodes.SDIV, 2);
+        executeBinaryOp(-2, -4, OpCodes.SDIV, 2);
+        executeBinaryOp(-2, 4, OpCodes.SDIV, -2);
+
+        executeBinaryOp("0100000000", "010000000000000000", OpCodes.SDIV, "0100000000");
+        executeBinaryOp(1, -1, OpCodes.SDIV, -1);
+
+        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "8000000000000000000000000000000000000000000000000000000000000000", OpCodes.SDIV, "8000000000000000000000000000000000000000000000000000000000000000");
+    }
+
+    @Test
     public void executeModOperations() throws VirtualMachineException {
         executeBinaryOp(0, 0, OpCodes.MOD, 0);
         executeBinaryOp(1, 2, OpCodes.MOD, 0);

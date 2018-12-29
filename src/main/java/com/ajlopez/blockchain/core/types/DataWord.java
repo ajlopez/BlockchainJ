@@ -52,6 +52,10 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         super(value, DATAWORD_BYTES);
     }
 
+    public DataWord(byte[] value, boolean signed) {
+        super(value, DATAWORD_BYTES, signed);
+    }
+
     public byte[] toNormalizedBytes() {
         return ByteUtils.normalizedBytes(this.bytes);
     }
@@ -119,6 +123,18 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
             return DataWord.fromBytes(newbytes, newbytes.length - DATAWORD_BYTES, DATAWORD_BYTES);
 
         return new DataWord(newbytes);
+    }
+
+    public DataWord sdiv(DataWord word) {
+        BigInteger value1 = new BigInteger(this.bytes);
+        BigInteger value2 = new BigInteger(word.bytes);
+
+        byte[] newbytes = value1.divide(value2).toByteArray();
+
+        if (newbytes.length > DATAWORD_BYTES)
+            return DataWord.fromBytes(newbytes, newbytes.length - DATAWORD_BYTES, DATAWORD_BYTES);
+
+        return new DataWord(newbytes, true);
     }
 
     public DataWord mod(DataWord word) {

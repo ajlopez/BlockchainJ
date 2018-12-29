@@ -112,17 +112,21 @@ public class ByteUtils {
     }
 
     public static byte[] copyBytes(byte[] bytes) {
-        return copyBytes(bytes, bytes.length, false);
+        return copyBytes(bytes, bytes.length, false, false);
     }
 
     public static byte[] copyBytes(byte[] bytes, int length) {
-        return copyBytes(bytes, length, false);
+        return copyBytes(bytes, length, false, false);
     }
 
-    public static byte[] copyBytes(byte[] bytes, int length, boolean rightPadding) {
+    public static byte[] copyBytes(byte[] bytes, int length, boolean rightPadding, boolean signed) {
         byte[] newbytes = new byte[length];
 
         System.arraycopy(bytes, 0, newbytes, rightPadding ? 0 : length - bytes.length, bytes.length);
+
+        if (signed && bytes[0] < 0)
+            for (int k = 0; k < length - bytes.length; k++)
+                newbytes[k] = (byte)0xff;
 
         return newbytes;
     }

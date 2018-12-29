@@ -12,6 +12,10 @@ public abstract class AbstractBytesValue {
     protected byte[] bytes;
 
     public AbstractBytesValue(byte[] bytes, int length) {
+        this(bytes, length, false);
+    }
+
+    public AbstractBytesValue(byte[] bytes, int length, boolean signed) {
         if (bytes == null)
             throw new IllegalArgumentException("Null byte array");
 
@@ -21,7 +25,7 @@ public abstract class AbstractBytesValue {
         if (bytes.length == length)
             this.bytes = bytes;
         else
-            this.bytes = ByteUtils.copyBytes(bytes, length, false);
+            this.bytes = ByteUtils.copyBytes(bytes, length, false, signed);
     }
 
     public byte[] getBytes() {
