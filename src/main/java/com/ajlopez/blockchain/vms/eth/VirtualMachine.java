@@ -79,6 +79,17 @@ public class VirtualMachine {
 
                     break;
 
+                case OpCodes.SMOD:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+
+                    if (word2.isZero())
+                        this.stack.push(DataWord.ZERO);
+                    else
+                        this.stack.push(word1.smod(word2));
+
+                    break;
+
                 case OpCodes.LT:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
