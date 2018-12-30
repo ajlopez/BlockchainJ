@@ -10,7 +10,7 @@ public class NetworkConfigurationTest {
     @Test
     public void simpleCreationTest() {
         NetworkConfiguration networkConfiguration = new NetworkConfiguration(42);
-        
+
         Assert.assertEquals(42, networkConfiguration.getNetworkNumber());
     }
 }

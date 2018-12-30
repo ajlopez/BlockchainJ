@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
@@ -28,25 +29,26 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(peer, blockChain, null, coinbase);
+        NodeProcessor nodeProcessor = new NodeProcessor(null, peer, blockChain, null, coinbase);
 
         Assert.assertSame(peer, nodeProcessor.getPeer());
     }
 
     @Test
     public void getStatus() {
+        NetworkConfiguration networkConfiguration = new NetworkConfiguration(42);
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(peer, blockChain, null, coinbase);
+        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, blockChain, null, coinbase);
 
         Status result = nodeProcessor.getStatus();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(blockChain.getBestBlockNumber(), result.getBestBlockNumber());
         Assert.assertEquals(blockChain.getBestBlock().getHash(), result.getBestBlockHash());
-        Assert.assertEquals(0, result.getNetworkNumber());
+        Assert.assertEquals(networkConfiguration.getNetworkNumber(), result.getNetworkNumber());
         Assert.assertEquals(peer.getId(), result.getPeerId());
     }
 

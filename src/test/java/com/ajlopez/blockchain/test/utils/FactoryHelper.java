@@ -119,7 +119,7 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
-        return new NodeProcessor(createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), createRandomAddress());
+        return new NodeProcessor(null, createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), createRandomAddress());
     }
 
     public static List<Block> createBlocks(int nblocks) {

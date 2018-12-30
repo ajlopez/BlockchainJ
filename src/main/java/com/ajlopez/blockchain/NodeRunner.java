@@ -28,7 +28,7 @@ public class NodeRunner {
         this.port = port;
         this.peers = peers;
 
-        this.nodeProcessor = new NodeProcessor(Peer.createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), coinbase);
+        this.nodeProcessor = new NodeProcessor(null, Peer.createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), coinbase);
 
         if (this.port > 0)
             this.tcpPeerServer = new TcpPeerServer(this.port, this.nodeProcessor);

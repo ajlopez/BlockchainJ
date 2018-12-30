@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
@@ -17,6 +18,7 @@ import java.util.List;
  * Created by ajlopez on 14/10/2018.
  */
 public class NodeProcessor implements PeerNode {
+    private final NetworkConfiguration networkConfiguration;
     private final Peer peer;
     private final ReceiveProcessor receiveProcessor;
     private final SendProcessor sendProcessor;
@@ -24,7 +26,8 @@ public class NodeProcessor implements PeerNode {
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(Peer peer, BlockChain blockChain, TrieStore accountTrieStore, Address coinbase) {
+    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, BlockChain blockChain, TrieStore accountTrieStore, Address coinbase) {
+        this.networkConfiguration = networkConfiguration;
         this.peer = peer;
         OrphanBlocks orphanBlocks = new OrphanBlocks();
         this.blockProcessor = new BlockProcessor(blockChain, orphanBlocks);
@@ -79,7 +82,6 @@ public class NodeProcessor implements PeerNode {
     public Status getStatus() {
         Block bestBlock = this.blockProcessor.getBestBlock();
 
-        // TODO determine network number
-        return new Status(this.peer.getId(), 0, bestBlock.getNumber(), bestBlock.getHash());
+        return new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash());
     }
 }
