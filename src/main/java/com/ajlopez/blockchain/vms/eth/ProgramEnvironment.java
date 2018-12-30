@@ -30,5 +30,4 @@ public class ProgramEnvironment {
     public long getTimestamp() { return this.blockData.getTimestamp(); }
 
     public Address getCoinbase() { return this.blockData.getCoinbase(); }
-
 }

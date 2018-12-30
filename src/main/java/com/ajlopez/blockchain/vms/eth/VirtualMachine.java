@@ -31,19 +31,25 @@ public class VirtualMachine {
                 case OpCodes.ADD:
                     DataWord word1 = this.stack.pop();
                     DataWord word2 = this.stack.pop();
+
                     this.stack.push(word1.add(word2));
+
                     break;
 
                 case OpCodes.MUL:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.mul(word2));
+
                     break;
 
                 case OpCodes.SUB:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.sub(word2));
+
                     break;
 
                 case OpCodes.DIV:
@@ -93,6 +99,7 @@ public class VirtualMachine {
                 case OpCodes.LT:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.compareTo(word2) < 0 ? DataWord.ONE : DataWord.ZERO);
 
                     break;
@@ -100,12 +107,15 @@ public class VirtualMachine {
                 case OpCodes.GT:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.compareTo(word2) > 0 ? DataWord.ONE : DataWord.ZERO);
+
                     break;
 
                 case OpCodes.SLT:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.compareToSigned(word2) < 0 ? DataWord.ONE : DataWord.ZERO);
 
                     break;
@@ -113,40 +123,53 @@ public class VirtualMachine {
                 case OpCodes.SGT:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.compareToSigned(word2) > 0 ? DataWord.ONE : DataWord.ZERO);
+
                     break;
 
                 case OpCodes.EQ:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.compareTo(word2) == 0 ? DataWord.ONE : DataWord.ZERO);
+
                     break;
 
                 case OpCodes.ISZERO:
                     DataWord word = this.stack.pop();
+
                     this.stack.push(word.isZero() ? DataWord.ONE : DataWord.ZERO);
+
                     break;
 
                 case OpCodes.AND:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.and(word2));
+
                     break;
 
                 case OpCodes.OR:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.or(word2));
+
                     break;
 
                 case OpCodes.XOR:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.stack.push(word1.xor(word2));
+
                     break;
 
                 case OpCodes.NOT:
                     this.stack.push(this.stack.pop().not());
+
                     break;
 
                 case OpCodes.BYTE:
@@ -159,74 +182,95 @@ public class VirtualMachine {
                         this.stack.push(DataWord.fromUnsignedInteger(word2.getBytes()[nbyte] & 0xff));
                     else
                         this.stack.push(DataWord.ZERO);
+
                     break;
 
                 case OpCodes.ADDRESS:
                     this.stack.push(DataWord.fromAddress(this.programEnvironment.getAddress()));
+
                     break;
 
                 case OpCodes.ORIGIN:
                     this.stack.push(DataWord.fromAddress(this.programEnvironment.getOrigin()));
+
                     break;
 
                 case OpCodes.CALLER:
                     this.stack.push(DataWord.fromAddress(this.programEnvironment.getCaller()));
+
                     break;
 
                 case OpCodes.CALLVALUE:
                     this.stack.push(this.programEnvironment.getValue());
+
                     break;
 
                 case OpCodes.CODESIZE:
                     this.stack.push(DataWord.fromUnsignedInteger(bytecodes.length));
+
                     break;
 
                 case OpCodes.COINBASE:
                     this.stack.push(DataWord.fromAddress(this.programEnvironment.getCoinbase()));
+
                     break;
 
                 case OpCodes.TIMESTAMP:
                     this.stack.push(DataWord.fromUnsignedLong(this.programEnvironment.getTimestamp()));
+
                     break;
 
                 case OpCodes.NUMBER:
                     this.stack.push(DataWord.fromUnsignedLong(this.programEnvironment.getNumber()));
+
                     break;
 
                 case OpCodes.DIFFICULTY:
                     this.stack.push(this.programEnvironment.getDifficulty());
+
                     break;
 
                 case OpCodes.POP:
                     this.stack.pop();
+
                     break;
 
                 case OpCodes.MLOAD:
                     word1 = this.stack.pop();
+
                     this.stack.push(this.memory.getValue(word1.asUnsignedInteger()));
+
                     break;
 
                 case OpCodes.MSTORE:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.memory.setValue(word1.asUnsignedInteger(), word2);
+
                     break;
 
                 case OpCodes.MSTORE8:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.memory.setByte(word1.asUnsignedInteger(), word2.getBytes()[DataWord.DATAWORD_BYTES - 1]);
+
                     break;
 
                 case OpCodes.SLOAD:
                     word1 = this.stack.pop();
+
                     this.stack.push(this.storage.getValue(word1));
+
                     break;
 
                 case OpCodes.SSTORE:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
                     this.storage.setValue(word1, word2);
+
                     break;
 
                 case OpCodes.JUMP:
@@ -249,10 +293,12 @@ public class VirtualMachine {
 
                 case OpCodes.PC:
                     this.stack.push(DataWord.fromUnsignedInteger(pc));
+
                     break;
 
                 case OpCodes.MSIZE:
                     this.stack.push(DataWord.fromUnsignedInteger(this.memory.size()));
+
                     break;
 
                 case OpCodes.PUSH1:
@@ -288,8 +334,11 @@ public class VirtualMachine {
                 case OpCodes.PUSH31:
                 case OpCodes.PUSH32:
                     int lb = bytecode - OpCodes.PUSH1 + 1;
+
                     this.stack.push(DataWord.fromBytes(bytecodes, pc + 1, lb));
+
                     pc += lb;
+
                     break;
 
                 case OpCodes.DUP1:
@@ -309,6 +358,7 @@ public class VirtualMachine {
                 case OpCodes.DUP15:
                 case OpCodes.DUP16:
                     this.stack.push(this.stack.get(this.stack.size() - 1 - (bytecode - OpCodes.DUP1)));
+
                     break;
 
                 case OpCodes.SWAP1:
