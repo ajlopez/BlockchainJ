@@ -207,6 +207,19 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeAddModOperations() throws VirtualMachineException {
+        executeTernaryOp(0, 0, 0, OpCodes.ADDMOD, 0);
+        executeTernaryOp(1, 1, 1, OpCodes.ADDMOD, 0);
+        executeTernaryOp(2, 1, 2, OpCodes.ADDMOD, 1);
+        executeTernaryOp(2, 80, 4, OpCodes.ADDMOD, 0);
+        executeTernaryOp(5, 80, 4, OpCodes.ADDMOD, 4);
+        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.ADDMOD, 0);
+
+        executeTernaryOp("0100000000", "00", "010000000000000000", OpCodes.ADDMOD, "00");
+        executeTernaryOp("01", "00", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.ADDMOD, "00");
+    }
+
+    @Test
     public void executeSub() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
@@ -785,6 +798,58 @@ public class VirtualMachineTest {
         System.arraycopy(boperand1, 0, bytecodes, 1, boperand1.length);
         bytecodes[boperand1.length + 1] = (byte)(OpCodes.PUSH1 + boperand2.length - 1);
         System.arraycopy(boperand2, 0, bytecodes, 2 + boperand1.length, boperand2.length);
+        bytecodes[bytecodes.length - 1] = opcode;
+
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        virtualMachine.execute(bytecodes);
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
+    }
+
+    private static void executeTernaryOp(int operand1, int operand2, int operand3, byte opcode, int expected) throws VirtualMachineException {
+        byte[] boperand1 = DataWord.fromSignedLong(operand1).toNormalizedBytes();
+        byte[] boperand2 = DataWord.fromSignedLong(operand2).toNormalizedBytes();
+        byte[] boperand3 = DataWord.fromSignedLong(operand3).toNormalizedBytes();
+
+        byte[] bytecodes = new byte[4 + boperand1.length + boperand2.length + boperand3.length];
+
+        bytecodes[0] = (byte)(OpCodes.PUSH1 + boperand1.length - 1);
+        System.arraycopy(boperand1, 0, bytecodes, 1, boperand1.length);
+        bytecodes[boperand1.length + 1] = (byte)(OpCodes.PUSH1 + boperand2.length - 1);
+        System.arraycopy(boperand2, 0, bytecodes, 2 + boperand1.length, boperand2.length);
+        bytecodes[boperand1.length + 1 + boperand2.length + 1] = (byte)(OpCodes.PUSH1 + boperand3.length - 1);
+        System.arraycopy(boperand3, 0, bytecodes, 3 + boperand1.length + boperand2.length, boperand3.length);
+        bytecodes[bytecodes.length - 1] = opcode;
+
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        virtualMachine.execute(bytecodes);
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromSignedLong(expected), stack.pop());
+    }
+
+    private static void executeTernaryOp(String operand1, String operand2, String operand3, byte opcode, String expected) throws VirtualMachineException {
+        byte[] boperand1 = DataWord.fromHexadecimalString(operand1).toNormalizedBytes();
+        byte[] boperand2 = DataWord.fromHexadecimalString(operand2).toNormalizedBytes();
+        byte[] boperand3 = DataWord.fromHexadecimalString(operand3).toNormalizedBytes();
+
+        byte[] bytecodes = new byte[4 + boperand1.length + boperand2.length + boperand3.length];
+
+        bytecodes[0] = (byte)(OpCodes.PUSH1 + boperand1.length - 1);
+        System.arraycopy(boperand1, 0, bytecodes, 1, boperand1.length);
+        bytecodes[boperand1.length + 1] = (byte)(OpCodes.PUSH1 + boperand2.length - 1);
+        System.arraycopy(boperand2, 0, bytecodes, 2 + boperand1.length, boperand2.length);
+        bytecodes[boperand1.length + 1 + boperand2.length + 1] = (byte)(OpCodes.PUSH1 + boperand3.length - 1);
+        System.arraycopy(boperand3, 0, bytecodes, 3 + boperand1.length + boperand2.length, boperand3.length);
         bytecodes[bytecodes.length - 1] = opcode;
 
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
