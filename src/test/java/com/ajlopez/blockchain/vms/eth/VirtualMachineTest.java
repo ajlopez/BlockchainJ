@@ -149,6 +149,20 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeMulModOperations() throws VirtualMachineException {
+        // TODO test add without 2^256 modulus
+        executeTernaryOp(0, 0, 0, OpCodes.MULMOD, 0);
+        executeTernaryOp(1, 1, 1, OpCodes.MULMOD, 0);
+        executeTernaryOp(2, 1, 3, OpCodes.MULMOD, 1);
+        executeTernaryOp(2, 21, 2, OpCodes.MULMOD, 0);
+        executeTernaryOp(5, 42, 2, OpCodes.MULMOD, 4);
+        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.MULMOD, 0);
+
+        executeTernaryOp("0100000000", "00", "010000000000000000", OpCodes.MULMOD, "00");
+        executeTernaryOp("01", "00", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MULMOD, "00");
+    }
+
+    @Test
     public void executeDivOperations() throws VirtualMachineException {
         executeBinaryOp(0, 0, OpCodes.DIV, 0);
         executeBinaryOp(1, 2, OpCodes.DIV, 2);
@@ -208,6 +222,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAddModOperations() throws VirtualMachineException {
+        // TODO test mul without 2^256 modulus
         executeTernaryOp(0, 0, 0, OpCodes.ADDMOD, 0);
         executeTernaryOp(1, 1, 1, OpCodes.ADDMOD, 0);
         executeTernaryOp(2, 1, 2, OpCodes.ADDMOD, 1);
