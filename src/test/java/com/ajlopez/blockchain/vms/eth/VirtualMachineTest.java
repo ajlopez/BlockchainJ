@@ -106,7 +106,6 @@ public class VirtualMachineTest {
         Assert.assertEquals(1, stack.size());
 
         DataWord result = stack.pop();
-
         Assert.assertNotNull(result);
         Assert.assertEquals("0x03", result.toNormalizedString());
     }
@@ -738,6 +737,14 @@ public class VirtualMachineTest {
         exception.expect(VirtualMachineException.class);
         exception.expectMessage("Invalid jump");
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 1, OpCodes.PUSH1, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+    }
+    @Test
+    public void executeInvalidOpCodeRaiseException() throws VirtualMachineException {
+        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+
+        exception.expect(VirtualMachineException.class);
+        exception.expectMessage("Invalid opcode");
+        virtualMachine.execute(new byte[] { (byte)0xfe });
     }
 
     private static void executeUnaryOp(int operand, byte opcode, int expected) throws VirtualMachineException {

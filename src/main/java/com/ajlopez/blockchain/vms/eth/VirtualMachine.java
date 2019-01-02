@@ -315,6 +315,10 @@ public class VirtualMachine {
 
                     break;
 
+                case OpCodes.JUMPDEST:
+                    
+                    break;
+
                 case OpCodes.PC:
                     this.stack.push(DataWord.fromUnsignedInteger(pc));
 
@@ -411,6 +415,9 @@ public class VirtualMachine {
                     this.stack.set(size - 1 - offset, word1);
 
                     break;
+
+                default:
+                    throw new VirtualMachineException("Invalid opcode");
             }
         }
     }
