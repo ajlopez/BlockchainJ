@@ -589,7 +589,7 @@ public class VirtualMachineTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(address, origin, caller, DataWord.ONE);
+        MessageData messageData = new MessageData(address, origin, caller, DataWord.ONE, 0);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 

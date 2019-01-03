@@ -316,7 +316,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.JUMPDEST:
-                    
+
                     break;
 
                 case OpCodes.PC:
