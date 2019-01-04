@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.test.utils;
 
 import com.ajlopez.blockchain.bc.GenesisGenerator;
+import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
@@ -119,7 +120,7 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
-        return new NodeProcessor(null, createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), createRandomAddress());
+        return new NodeProcessor(new NetworkConfiguration(42), createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), createRandomAddress());
     }
 
     public static List<Block> createBlocks(int nblocks) {
