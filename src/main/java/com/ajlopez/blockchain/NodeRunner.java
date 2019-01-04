@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
@@ -16,22 +17,21 @@ import java.util.List;
  * Created by ajlopez on 25/11/2018.
  */
 public class NodeRunner {
-    private boolean miner;
-    private int port;
-    private List<String> peers;
+    private final boolean miner;
+    private final int port;
+    private final List<String> peers;
 
-    private NodeProcessor nodeProcessor;
-    private TcpPeerServer tcpPeerServer;
+    private final NodeProcessor nodeProcessor;
+    private final TcpPeerServer tcpPeerServer;
 
-    public NodeRunner(BlockChain blockChain, boolean miner, int port, List<String> peers, Address coinbase) {
+    public NodeRunner(BlockChain blockChain, boolean miner, int port, List<String> peers, Address coinbase, NetworkConfiguration networkConfiguration) {
         this.miner = miner;
         this.port = port;
         this.peers = peers;
 
-        this.nodeProcessor = new NodeProcessor(null, Peer.createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), coinbase);
+        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), coinbase);
 
-        if (this.port > 0)
-            this.tcpPeerServer = new TcpPeerServer(this.port, this.nodeProcessor);
+        this.tcpPeerServer = port > 0 ? new TcpPeerServer(this.port, this.nodeProcessor) : null;
     }
 
     public void start() throws IOException {
