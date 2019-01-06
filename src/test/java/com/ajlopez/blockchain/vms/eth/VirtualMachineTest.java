@@ -120,10 +120,10 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAddOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.ADD, 0);
-        executeBinaryOp(1, 2, OpCodes.ADD, 3);
-        executeBinaryOp(40, 2, OpCodes.ADD, 42);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.ADD, 1024 * 1024 * 1024 + 1);
+        executeBinaryOp(0, 0, OpCodes.ADD, 0, FeeSchedule.VERYLOW.getValue() * 3);
+        executeBinaryOp(1, 2, OpCodes.ADD, 3, FeeSchedule.VERYLOW.getValue() * 3);
+        executeBinaryOp(40, 2, OpCodes.ADD, 42, FeeSchedule.VERYLOW.getValue() * 3);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.ADD, 1024 * 1024 * 1024 + 1, FeeSchedule.VERYLOW.getValue() * 3);
     }
 
     @Test
@@ -146,10 +146,10 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMulOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.MUL, 0);
-        executeBinaryOp(1, 2, OpCodes.MUL, 2);
-        executeBinaryOp(21, 2, OpCodes.MUL, 42);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.MUL, 1024 * 1024 * 1024);
+        executeBinaryOp(0, 0, OpCodes.MUL, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.MUL, 2, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(21, 2, OpCodes.MUL, 42, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.MUL, 1024 * 1024 * 1024, FeeSchedule.VERYLOW.getValue() * 2);
 
         executeBinaryOp("0100000000", "0100000000", OpCodes.MUL, "010000000000000000");
         executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MUL, "01");
@@ -171,10 +171,10 @@ public class VirtualMachineTest {
 
     @Test
     public void executeDivOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.DIV, 0);
-        executeBinaryOp(1, 2, OpCodes.DIV, 2);
-        executeBinaryOp(2, 84, OpCodes.DIV, 42);
-        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.DIV, 1024 * 1024 * 1024);
+        executeBinaryOp(0, 0, OpCodes.DIV, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.DIV, 2, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(2, 84, OpCodes.DIV, 42, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.DIV, 1024 * 1024 * 1024, FeeSchedule.VERYLOW.getValue() * 2);
 
         executeBinaryOp("0100000000", "010000000000000000", OpCodes.DIV, "0100000000");
         executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.DIV, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
@@ -182,30 +182,30 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSignedDivOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.SDIV, 0);
-        executeBinaryOp(1, 2, OpCodes.SDIV, 2);
-        executeBinaryOp(2, 84, OpCodes.SDIV, 42);
-        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SDIV, 1024 * 1024 * 1024);
+        executeBinaryOp(0, 0, OpCodes.SDIV, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.SDIV, 2, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(2, 84, OpCodes.SDIV, 42, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SDIV, 1024 * 1024 * 1024, FeeSchedule.VERYLOW.getValue() * 2);
 
-        executeBinaryOp(1, -2, OpCodes.SDIV, -2);
-        executeBinaryOp(-1, -2, OpCodes.SDIV, 2);
-        executeBinaryOp(-2, -4, OpCodes.SDIV, 2);
-        executeBinaryOp(-2, 4, OpCodes.SDIV, -2);
+        executeBinaryOp(1, -2, OpCodes.SDIV, -2, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(-1, -2, OpCodes.SDIV, 2, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(-2, -4, OpCodes.SDIV, 2, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(-2, 4, OpCodes.SDIV, -2, FeeSchedule.VERYLOW.getValue() * 2);
 
         executeBinaryOp("0100000000", "010000000000000000", OpCodes.SDIV, "0100000000");
-        executeBinaryOp(1, -1, OpCodes.SDIV, -1);
+        executeBinaryOp(1, -1, OpCodes.SDIV, -1, FeeSchedule.VERYLOW.getValue() * 2);
 
         executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "8000000000000000000000000000000000000000000000000000000000000000", OpCodes.SDIV, "8000000000000000000000000000000000000000000000000000000000000000");
     }
 
     @Test
     public void executeModOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.MOD, 0);
-        executeBinaryOp(1, 2, OpCodes.MOD, 0);
-        executeBinaryOp(2, 3, OpCodes.MOD, 1);
-        executeBinaryOp(2, 84, OpCodes.MOD, 0);
-        executeBinaryOp(5, 84, OpCodes.MOD, 4);
-        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.MOD, 0);
+        executeBinaryOp(0, 0, OpCodes.MOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.MOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(2, 3, OpCodes.MOD, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(2, 84, OpCodes.MOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(5, 84, OpCodes.MOD, 4, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.MOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
 
         executeBinaryOp("0100000000", "010000000000000000", OpCodes.MOD, "00");
         executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MOD, "00");
@@ -213,15 +213,15 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSignedModOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.SMOD, 0);
-        executeBinaryOp(1, 2, OpCodes.SMOD, 0);
-        executeBinaryOp(1, -2, OpCodes.SMOD, 0);
-        executeBinaryOp(2, 3, OpCodes.SMOD, 1);
-        executeBinaryOp(2, 84, OpCodes.SMOD, 0);
-        executeBinaryOp(5, 84, OpCodes.SMOD, 4);
-        executeBinaryOp(5, -84, OpCodes.SMOD, -4);
-        executeBinaryOp(-5, 84, OpCodes.SMOD, 4);
-        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SMOD, 0);
+        executeBinaryOp(0, 0, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, -2, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(2, 3, OpCodes.SMOD, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(2, 84, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(5, 84, OpCodes.SMOD, 4, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(5, -84, OpCodes.SMOD, -4, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(-5, 84, OpCodes.SMOD, 4, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
 
         executeBinaryOp("0100000000", "010000000000000000", OpCodes.SMOD, "00");
         executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.SMOD, "00");
@@ -261,10 +261,10 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSubOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.SUB, 0);
-        executeBinaryOp(1, 3, OpCodes.SUB, 2);
-        executeBinaryOp(2, 44, OpCodes.SUB, 42);
-        executeBinaryOp(1, 1024 * 1024 * 1024 + 1, OpCodes.SUB, 1024 * 1024 * 1024);
+        executeBinaryOp(0, 0, OpCodes.SUB, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 3, OpCodes.SUB, 2, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(2, 44, OpCodes.SUB, 42, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 1024 * 1024 * 1024 + 1, OpCodes.SUB, 1024 * 1024 * 1024, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
@@ -491,80 +491,80 @@ public class VirtualMachineTest {
 
     @Test
     public void executeLessThanOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.LT, 0);
-        executeBinaryOp(1, 2, OpCodes.LT, 0);
-        executeBinaryOp(40, 2, OpCodes.LT, 1);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.LT, 1);
+        executeBinaryOp(0, 0, OpCodes.LT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.LT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(40, 2, OpCodes.LT, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.LT, 1, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
     public void executeGreaterThanOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.GT, 0);
-        executeBinaryOp(1, 2, OpCodes.GT, 1);
-        executeBinaryOp(40, 2, OpCodes.GT, 0);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.GT, 0);
+        executeBinaryOp(0, 0, OpCodes.GT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.GT, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(40, 2, OpCodes.GT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.GT, 0, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
     public void executeSignedLessThanOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.SLT, 0);
-        executeBinaryOp(1, 2, OpCodes.SLT, 0);
-        executeBinaryOp(-1, 2, OpCodes.SLT, 0);
-        executeBinaryOp(2, -1, OpCodes.SLT, 1);
-        executeBinaryOp(-1, -2, OpCodes.SLT, 1);
-        executeBinaryOp(40, 2, OpCodes.SLT, 1);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.SLT, 1);
+        executeBinaryOp(0, 0, OpCodes.SLT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.SLT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(-1, 2, OpCodes.SLT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(2, -1, OpCodes.SLT, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(-1, -2, OpCodes.SLT, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(40, 2, OpCodes.SLT, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.SLT, 1, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
     public void executeSignedGreaterThanOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.SGT, 0);
-        executeBinaryOp(1, 2, OpCodes.SGT, 1);
-        executeBinaryOp(-1, 2, OpCodes.SGT, 1);
-        executeBinaryOp(2, -1, OpCodes.SGT, 0);
-        executeBinaryOp(-1, -2, OpCodes.SGT, 0);
-        executeBinaryOp(40, 2, OpCodes.SGT, 0);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.SGT, 0);
-        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SGT, 1);
+        executeBinaryOp(0, 0, OpCodes.SGT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.SGT, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(-1, 2, OpCodes.SGT, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(2, -1, OpCodes.SGT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(-1, -2, OpCodes.SGT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(40, 2, OpCodes.SGT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.SGT, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SGT, 1, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
     public void executeEqualsOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.EQ, 1);
-        executeBinaryOp(1, 2, OpCodes.EQ, 0);
-        executeBinaryOp(42, 42, OpCodes.EQ, 1);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.EQ, 0);
-        executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.EQ, 1);
+        executeBinaryOp(0, 0, OpCodes.EQ, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.EQ, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(42, 42, OpCodes.EQ, 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.EQ, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.EQ, 1, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
     public void executeAndOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.AND, 0);
-        executeBinaryOp(1, 2, OpCodes.AND, 0);
-        executeBinaryOp(3, 3, OpCodes.AND, 3);
-        executeBinaryOp(255, 42, OpCodes.AND, 42);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.AND, 0);
-        executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.AND, 1024 * 1024 * 1024);
+        executeBinaryOp(0, 0, OpCodes.AND, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.AND, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(3, 3, OpCodes.AND, 3, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(255, 42, OpCodes.AND, 42, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.AND, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.AND, 1024 * 1024 * 1024, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
     public void executeOrOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.OR, 0);
-        executeBinaryOp(1, 2, OpCodes.OR, 3);
-        executeBinaryOp(3, 3, OpCodes.OR, 3);
-        executeBinaryOp(255, 42, OpCodes.OR, 255);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.OR, 1024 * 1024 * 1024 + 1);
-        executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.OR, 1024 * 1024 * 1024);
+        executeBinaryOp(0, 0, OpCodes.OR, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.OR, 3, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(3, 3, OpCodes.OR, 3, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(255, 42, OpCodes.OR, 255, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.OR, 1024 * 1024 * 1024 + 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.OR, 1024 * 1024 * 1024, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
     public void executeXorOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.XOR, 0);
-        executeBinaryOp(1, 2, OpCodes.XOR, 3);
-        executeBinaryOp(3, 3, OpCodes.XOR, 0);
-        executeBinaryOp(255, 42, OpCodes.XOR, 255 ^ 42);
-        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.XOR, 1024 * 1024 * 1024 + 1);
-        executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.XOR, 0);
+        executeBinaryOp(0, 0, OpCodes.XOR, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1, 2, OpCodes.XOR, 3, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(3, 3, OpCodes.XOR, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(255, 42, OpCodes.XOR, 255 ^ 42, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.XOR, 1024 * 1024 * 1024 + 1, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(1024 * 1024 * 1024, 1024 * 1024 * 1024, OpCodes.XOR, 0, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
@@ -798,7 +798,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
     }
 
-    private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected) throws VirtualMachineException {
+    private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected, int expectedGasUsed) throws VirtualMachineException {
         byte[] boperand1 = DataWord.fromSignedLong(operand1).toNormalizedBytes();
         byte[] boperand2 = DataWord.fromSignedLong(operand2).toNormalizedBytes();
 
@@ -813,6 +813,8 @@ public class VirtualMachineTest {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(bytecodes);
+
+        Assert.assertEquals(expectedGasUsed, virtualMachine.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
