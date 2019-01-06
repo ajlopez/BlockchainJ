@@ -8,14 +8,31 @@ import java.util.Stack;
  * Created by ajlopez on 10/12/2018.
  */
 public class VirtualMachine {
+    private final static FeeSchedule[] opCodeFees = new FeeSchedule[256];
+
     private final ProgramEnvironment programEnvironment;
     private final Storage storage;
     private final Memory memory = new Memory();
     private final Stack<DataWord> stack = new Stack<>();
 
+    private int gasUsed;
+
+    static {
+        opCodeFees[OpCodes.ADDRESS] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.ORIGIN] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.CALLER] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.CALLVALUE] = FeeSchedule.BASE;
+
+        opCodeFees[OpCodes.PUSH1] = FeeSchedule.VERYLOW;
+    }
+
     public VirtualMachine(ProgramEnvironment programEnvironment, Storage storage) {
         this.programEnvironment = programEnvironment;
         this.storage = storage;
+    }
+
+    public int getGasUsed() {
+        return this.gasUsed;
     }
 
     public void execute(byte[] bytecodes) throws VirtualMachineException {
@@ -23,6 +40,11 @@ public class VirtualMachine {
 
         for (int pc = 0; pc < l; pc++) {
             byte bytecode = bytecodes[pc];
+
+            FeeSchedule fee = opCodeFees[bytecode & 0xff];
+
+            if (fee != null)
+                this.gasUsed += fee.getValue();
 
             switch (bytecode) {
                 case OpCodes.STOP:

@@ -48,6 +48,8 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(DataWord.ONE, result);
+
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
     }
 
     @Test
@@ -605,6 +607,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromAddress(caller), stack.pop());
         Assert.assertEquals(DataWord.fromAddress(origin), stack.pop());
         Assert.assertEquals(DataWord.fromAddress(address), stack.pop());
+        Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, virtualMachine.getGasUsed());
     }
 
     @Test
@@ -655,6 +658,7 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
+        Assert.assertEquals(0, virtualMachine.getGasUsed());
     }
 
     @Test
@@ -738,6 +742,7 @@ public class VirtualMachineTest {
         exception.expectMessage("Invalid jump");
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 1, OpCodes.PUSH1, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
     }
+
     @Test
     public void executeInvalidOpCodeRaiseException() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
