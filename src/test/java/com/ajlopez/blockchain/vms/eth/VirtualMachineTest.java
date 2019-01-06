@@ -579,9 +579,9 @@ public class VirtualMachineTest {
 
     @Test
     public void executeIsZeroOperations() throws VirtualMachineException {
-        executeUnaryOp(0, OpCodes.ISZERO, 1);
-        executeUnaryOp(42, OpCodes.ISZERO, 0);
-        executeUnaryOp(1024 * 1024 * 1024, OpCodes.ISZERO, 0);
+        executeUnaryOp(OpCodes.ISZERO, 1, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeUnaryOp(OpCodes.ISZERO, 0, 42, FeeSchedule.VERYLOW.getValue() * 2);
+        executeUnaryOp(OpCodes.ISZERO, 0, 1024 * 1024 * 1024, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
@@ -758,7 +758,7 @@ public class VirtualMachineTest {
         virtualMachine.execute(new byte[] { (byte)0xfe });
     }
 
-    private static void executeUnaryOp(int operand, byte opcode, int expected) throws VirtualMachineException {
+    private static void executeUnaryOp(byte opcode, int expected, int operand, int expectedGasUsed) throws VirtualMachineException {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
         byte[] bytecodes = new byte[2 + boperand.length];
@@ -770,6 +770,8 @@ public class VirtualMachineTest {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(bytecodes);
+
+        Assert.assertEquals(expectedGasUsed, virtualMachine.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
