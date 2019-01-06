@@ -24,6 +24,8 @@ public class VirtualMachine {
         opCodeFees[OpCodes.CALLVALUE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.PC] = FeeSchedule.BASE;
 
+        opCodeFees[OpCodes.ADD] = FeeSchedule.VERYLOW;
+
         for (int k = 0; k < 32; k++)
             opCodeFees[OpCodes.PUSH1 + k] = FeeSchedule.VERYLOW;
     }
