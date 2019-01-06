@@ -22,8 +22,10 @@ public class VirtualMachine {
         opCodeFees[OpCodes.ORIGIN] = FeeSchedule.BASE;
         opCodeFees[OpCodes.CALLER] = FeeSchedule.BASE;
         opCodeFees[OpCodes.CALLVALUE] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.PC] = FeeSchedule.BASE;
 
-        opCodeFees[OpCodes.PUSH1] = FeeSchedule.VERYLOW;
+        for (int k = 0; k < 32; k++)
+            opCodeFees[OpCodes.PUSH1 + k] = FeeSchedule.VERYLOW;
     }
 
     public VirtualMachine(ProgramEnvironment programEnvironment, Storage storage) {
