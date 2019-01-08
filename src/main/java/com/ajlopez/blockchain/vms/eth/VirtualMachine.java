@@ -39,6 +39,9 @@ public class VirtualMachine {
 
         for (int k = 0; k < 16; k++)
             opCodeFees[(OpCodes.DUP1 & 0xff) + k] = FeeSchedule.VERYLOW;
+
+        for (int k = 0; k < 16; k++)
+            opCodeFees[(OpCodes.SWAP1 & 0xff) + k] = FeeSchedule.VERYLOW;
     }
 
     public VirtualMachine(ProgramEnvironment programEnvironment, Storage storage) {

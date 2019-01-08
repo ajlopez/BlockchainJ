@@ -361,6 +361,8 @@ public class VirtualMachineTest {
 
             virtualMachine.execute(bytecodes);
 
+            Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * (values.length + 1), virtualMachine.getGasUsed());
+
             Stack<DataWord> stack = virtualMachine.getStack();
 
             Assert.assertNotNull(stack);
