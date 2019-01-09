@@ -603,7 +603,7 @@ public class VirtualMachineTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(address, origin, caller, DataWord.ONE, 0);
+        MessageData messageData = new MessageData(address, origin, caller, DataWord.ONE, 0, null);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 

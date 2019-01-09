@@ -17,13 +17,15 @@ public class MessageDataTest {
         Address caller = FactoryHelper.createRandomAddress();
         DataWord value = DataWord.ONE;
         long gas = 42;
+        byte[] data = FactoryHelper.createRandomBytes(10);
 
-        MessageData messageData = new MessageData(address, origin, caller, value, gas);
+        MessageData messageData = new MessageData(address, origin, caller, value, gas, data);
 
         Assert.assertEquals(address, messageData.getAddress());
         Assert.assertEquals(origin, messageData.getOrigin());
         Assert.assertEquals(caller, messageData.getCaller());
         Assert.assertEquals(value, messageData.getValue());
         Assert.assertEquals(gas, messageData.getGas());
+        Assert.assertArrayEquals(data, messageData.getData());
     }
 }
