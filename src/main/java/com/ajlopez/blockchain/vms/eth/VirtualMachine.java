@@ -269,6 +269,11 @@ public class VirtualMachine {
 
                     break;
 
+                case OpCodes.CALLDATASIZE:
+                    this.stack.push(DataWord.fromUnsignedInteger(this.programEnvironment.getData().length));
+
+                    break;
+
                 case OpCodes.CODESIZE:
                     this.stack.push(DataWord.fromUnsignedInteger(bytecodes.length));
 

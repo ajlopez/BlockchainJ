@@ -623,6 +623,24 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeCallDataSize() throws VirtualMachineException {
+        byte[] data = FactoryHelper.createRandomBytes(42);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 0, data);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.CALLDATASIZE });
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), stack.pop());
+    }
+
+    @Test
     public void executeCoinbaseTimestampNumberDifficultyOperations() throws VirtualMachineException {
         long number = 1;
         long timestamp = 2;
