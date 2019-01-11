@@ -158,12 +158,12 @@ public class VirtualMachineTest {
     @Test
     public void executeMulModOperations() throws VirtualMachineException {
         // TODO test add without 2^256 modulus
-        executeTernaryOp(0, 0, 0, OpCodes.MULMOD, 0);
-        executeTernaryOp(1, 1, 1, OpCodes.MULMOD, 0);
-        executeTernaryOp(2, 1, 3, OpCodes.MULMOD, 1);
-        executeTernaryOp(2, 21, 2, OpCodes.MULMOD, 0);
-        executeTernaryOp(5, 42, 2, OpCodes.MULMOD, 4);
-        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.MULMOD, 0);
+        executeTernaryOp(0, 0, 0, OpCodes.MULMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(1, 1, 1, OpCodes.MULMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(2, 1, 3, OpCodes.MULMOD, 1, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(2, 21, 2, OpCodes.MULMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(5, 42, 2, OpCodes.MULMOD, 4, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.MULMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
 
         executeTernaryOp("0100000000", "00", "010000000000000000", OpCodes.MULMOD, "00");
         executeTernaryOp("01", "00", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MULMOD, "00");
@@ -230,12 +230,12 @@ public class VirtualMachineTest {
     @Test
     public void executeAddModOperations() throws VirtualMachineException {
         // TODO test mul without 2^256 modulus
-        executeTernaryOp(0, 0, 0, OpCodes.ADDMOD, 0);
-        executeTernaryOp(1, 1, 1, OpCodes.ADDMOD, 0);
-        executeTernaryOp(2, 1, 2, OpCodes.ADDMOD, 1);
-        executeTernaryOp(2, 80, 4, OpCodes.ADDMOD, 0);
-        executeTernaryOp(5, 80, 4, OpCodes.ADDMOD, 4);
-        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.ADDMOD, 0);
+        executeTernaryOp(0, 0, 0, OpCodes.ADDMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(1, 1, 1, OpCodes.ADDMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(2, 1, 2, OpCodes.ADDMOD, 1, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(2, 80, 4, OpCodes.ADDMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(5, 80, 4, OpCodes.ADDMOD, 4, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.ADDMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
 
         executeTernaryOp("0100000000", "00", "010000000000000000", OpCodes.ADDMOD, "00");
         executeTernaryOp("01", "00", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.ADDMOD, "00");
@@ -611,6 +611,8 @@ public class VirtualMachineTest {
 
         virtualMachine.execute(new byte[] { OpCodes.ADDRESS, OpCodes.ORIGIN, OpCodes.CALLER, OpCodes.CALLVALUE });
 
+        Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, virtualMachine.getGasUsed());
+
         Stack<DataWord> stack = virtualMachine.getStack();
 
         Assert.assertNotNull(stack);
@@ -619,7 +621,6 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromAddress(caller), stack.pop());
         Assert.assertEquals(DataWord.fromAddress(origin), stack.pop());
         Assert.assertEquals(DataWord.fromAddress(address), stack.pop());
-        Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, virtualMachine.getGasUsed());
     }
 
     @Test
@@ -876,7 +877,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
     }
 
-    private static void executeTernaryOp(int operand1, int operand2, int operand3, byte opcode, int expected) throws VirtualMachineException {
+    private static void executeTernaryOp(int operand1, int operand2, int operand3, byte opcode, int expected, int expectedGasUsed) throws VirtualMachineException {
         byte[] boperand1 = DataWord.fromSignedLong(operand1).toNormalizedBytes();
         byte[] boperand2 = DataWord.fromSignedLong(operand2).toNormalizedBytes();
         byte[] boperand3 = DataWord.fromSignedLong(operand3).toNormalizedBytes();
@@ -894,6 +895,8 @@ public class VirtualMachineTest {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         virtualMachine.execute(bytecodes);
+
+        Assert.assertEquals(expectedGasUsed, virtualMachine.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 

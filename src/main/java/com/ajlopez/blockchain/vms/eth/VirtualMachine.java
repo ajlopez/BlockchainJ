@@ -34,6 +34,8 @@ public class VirtualMachine {
         opCodeFees[OpCodes.SGT] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.EQ] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.ISZERO] = FeeSchedule.VERYLOW;
+        opCodeFees[OpCodes.ADDMOD] = FeeSchedule.MID;
+        opCodeFees[OpCodes.MULMOD] = FeeSchedule.MID;
 
         for (int k = 0; k < 32; k++)
             opCodeFees[OpCodes.PUSH1 + k] = FeeSchedule.VERYLOW;
