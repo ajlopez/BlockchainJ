@@ -633,6 +633,8 @@ public class VirtualMachineTest {
 
         virtualMachine.execute(new byte[] { OpCodes.CALLDATASIZE });
 
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+
         Stack<DataWord> stack = virtualMachine.getStack();
 
         Assert.assertNotNull(stack);
