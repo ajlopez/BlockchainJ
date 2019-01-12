@@ -22,6 +22,7 @@ public class VirtualMachine {
         opCodeFees[OpCodes.ORIGIN] = FeeSchedule.BASE;
         opCodeFees[OpCodes.CALLER] = FeeSchedule.BASE;
         opCodeFees[OpCodes.CALLVALUE] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.CALLDATALOAD] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.CALLDATASIZE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.PC] = FeeSchedule.BASE;
 
@@ -269,6 +270,11 @@ public class VirtualMachine {
 
                 case OpCodes.CALLVALUE:
                     this.stack.push(this.programEnvironment.getValue());
+
+                    break;
+
+                case OpCodes.CALLDATALOAD:
+                    this.stack.push(DataWord.fromBytes(this.programEnvironment.getData(), this.stack.pop().asUnsignedInteger(), DataWord.DATAWORD_BYTES));
 
                     break;
 

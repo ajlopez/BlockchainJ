@@ -39,7 +39,7 @@ public class OpCodes {
     public static final byte ORIGIN = 0x32;
     public static final byte CALLER = 0x33;
     public static final byte CALLVALUE = 0x34;
-
+    public static final byte CALLDATALOAD = 0x35;
     public static final byte CALLDATASIZE = 0x36;
 
     public static final byte CODESIZE = 0x38;
