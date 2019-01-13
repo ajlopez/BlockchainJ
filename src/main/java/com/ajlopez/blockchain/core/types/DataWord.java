@@ -42,6 +42,14 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return new DataWord(newbytes);
     }
 
+    public static DataWord fromBytesToLeft(byte[] bytes, int offset, int length) {
+        byte[] newbytes = new byte[DATAWORD_BYTES];
+
+        System.arraycopy(bytes, offset, newbytes, 0, length);
+
+        return new DataWord(newbytes);
+    }
+
     public static DataWord fromAddress(Address address) {
         byte[] bytes = address.getBytes();
 

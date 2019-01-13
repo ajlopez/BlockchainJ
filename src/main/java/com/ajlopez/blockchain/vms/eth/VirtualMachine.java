@@ -274,7 +274,10 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.CALLDATALOAD:
-                    this.stack.push(DataWord.fromBytes(this.programEnvironment.getData(), this.stack.pop().asUnsignedInteger(), DataWord.DATAWORD_BYTES));
+                    byte[] data = this.programEnvironment.getData();
+                    int offset = this.stack.pop().asUnsignedInteger();
+
+                    this.stack.push(DataWord.fromBytesToLeft(data, offset, Math.min(DataWord.DATAWORD_BYTES, data.length - offset)));
 
                     break;
 
@@ -460,7 +463,7 @@ public class VirtualMachine {
                 case OpCodes.SWAP15:
                 case OpCodes.SWAP16:
                     int size = this.stack.size();
-                    int offset = bytecode - OpCodes.SWAP1 + 1;
+                    offset = bytecode - OpCodes.SWAP1 + 1;
 
                     word1 = this.stack.get(size - 1);
                     word2 = this.stack.get(size - 1 - offset);
