@@ -687,6 +687,26 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeCallDataLoadBeyondData() throws VirtualMachineException {
+        byte[] data = FactoryHelper.createRandomBytes(42);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 0, data);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x70, OpCodes.CALLDATALOAD });
+
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, virtualMachine.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.ZERO, stack.pop());
+    }
+
+    @Test
     public void executeCoinbaseTimestampNumberDifficultyOperations() throws VirtualMachineException {
         long number = 1;
         long timestamp = 2;

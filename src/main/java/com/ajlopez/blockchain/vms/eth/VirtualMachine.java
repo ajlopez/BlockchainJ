@@ -277,7 +277,10 @@ public class VirtualMachine {
                     byte[] data = this.programEnvironment.getData();
                     int offset = this.stack.pop().asUnsignedInteger();
 
-                    this.stack.push(DataWord.fromBytesToLeft(data, offset, Math.min(DataWord.DATAWORD_BYTES, data.length - offset)));
+                    if (offset >= data.length)
+                        this.stack.push(DataWord.ZERO);
+                    else
+                        this.stack.push(DataWord.fromBytesToLeft(data, offset, Math.min(DataWord.DATAWORD_BYTES, data.length - offset)));
 
                     break;
 
