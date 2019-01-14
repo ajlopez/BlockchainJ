@@ -36,6 +36,12 @@ public class Memory {
         this.bytes[address] = value;
     }
 
+    public void setBytes(int address, byte[] bytes, int offset, int length) {
+        ensureSize(address + length);
+
+        System.arraycopy(bytes, offset, this.bytes, address, length);
+    }
+
     public int size() {
         if (this.bytes == null)
             return 0;

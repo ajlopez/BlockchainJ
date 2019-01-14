@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -56,5 +57,19 @@ public class MemoryTest {
         Assert.assertEquals(2, memory.size());
 
         Assert.assertEquals("0x0102000000000000000000000000000000000000000000000000000000000000", memory.getValue(0).toNormalizedString());
+    }
+
+    @Test
+    public void setBytes() {
+        Memory memory = new Memory();
+        byte[] bytes = FactoryHelper.createRandomBytes(42);
+
+        memory.setBytes(10, bytes, 2, 4);
+
+        Assert.assertEquals(14, memory.size());
+
+        byte[] expected = new byte[DataWord.DATAWORD_BYTES];
+        System.arraycopy(bytes, 2, expected, 10, 4);
+        Assert.assertArrayEquals(expected, memory.getValue(0).getBytes());
     }
 }
