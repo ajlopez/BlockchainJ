@@ -41,7 +41,7 @@ public class OpCodes {
     public static final byte CALLVALUE = 0x34;
     public static final byte CALLDATALOAD = 0x35;
     public static final byte CALLDATASIZE = 0x36;
-
+    public static final byte CALLDATACOPY = 0x37;
     public static final byte CODESIZE = 0x38;
 
     public static final byte COINBASE = 0x41;

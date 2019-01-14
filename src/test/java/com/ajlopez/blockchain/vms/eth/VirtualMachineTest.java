@@ -707,6 +707,32 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeCallDataCopy() throws VirtualMachineException {
+        byte[] data = FactoryHelper.createRandomBytes(42);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 0, data);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x10, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x04, OpCodes.CALLDATACOPY });
+
+        // TODO check gas uses
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertNotNull(memory);
+        Assert.assertEquals(20, memory.size());
+
+        // TODO check memory content
+    }
+
+    @Test
     public void executeCoinbaseTimestampNumberDifficultyOperations() throws VirtualMachineException {
         long number = 1;
         long timestamp = 2;
