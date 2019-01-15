@@ -39,6 +39,9 @@ public class Memory {
     public void setBytes(int address, byte[] bytes, int offset, int length) {
         ensureSize(address + length);
 
+        if (bytes.length <= offset)
+            return;
+
         System.arraycopy(bytes, offset, this.bytes, address, Math.min(bytes.length - offset, length));
     }
 
