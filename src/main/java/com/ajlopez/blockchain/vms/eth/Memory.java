@@ -39,13 +39,13 @@ public class Memory {
     public void setBytes(int address, byte[] bytes, int offset, int length) {
         ensureSize(address + length);
 
-        System.arraycopy(bytes, offset, this.bytes, address, length);
+        System.arraycopy(bytes, offset, this.bytes, address, Math.min(bytes.length - offset, length));
     }
 
     public byte[] getBytes(int address, int length) {
         byte[] bytes = new byte[length];
 
-        System.arraycopy(this.bytes, address, bytes, 0, length);
+        System.arraycopy(this.bytes, address, bytes, 0, Math.min(this.bytes.length - address, length));
 
         return bytes;
     }

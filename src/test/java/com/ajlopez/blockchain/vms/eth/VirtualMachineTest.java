@@ -733,9 +733,41 @@ public class VirtualMachineTest {
         Assert.assertNotNull(memory);
         Assert.assertEquals(20, memory.size());
 
-        // TODO check memory content
         byte[] expected = new byte[16];
         System.arraycopy(data, 2, expected, 0, 16);
+
+        Assert.assertArrayEquals(expected, memory.getBytes(4, 16));
+    }
+
+    @Test
+    public void executeCallDataCopyWithPartialData() throws VirtualMachineException {
+        byte[] data = FactoryHelper.createRandomBytes(42);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 0, data);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(new byte[] {
+                OpCodes.PUSH1, 0x10,
+                OpCodes.PUSH1, 0x20,
+                OpCodes.PUSH1, 0x04,
+                OpCodes.CALLDATACOPY });
+
+        // TODO check gas uses
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertNotNull(memory);
+        Assert.assertEquals(20, memory.size());
+
+        byte[] expected = new byte[16];
+        System.arraycopy(data, 32, expected, 0, 10);
 
         Assert.assertArrayEquals(expected, memory.getBytes(4, 16));
     }
