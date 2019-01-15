@@ -42,6 +42,14 @@ public class Memory {
         System.arraycopy(bytes, offset, this.bytes, address, length);
     }
 
+    public byte[] getBytes(int address, int length) {
+        byte[] bytes = new byte[length];
+
+        System.arraycopy(this.bytes, address, bytes, 0, length);
+
+        return bytes;
+    }
+
     public int size() {
         if (this.bytes == null)
             return 0;

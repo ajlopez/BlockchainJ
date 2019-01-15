@@ -715,7 +715,11 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x10, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x04, OpCodes.CALLDATACOPY });
+        virtualMachine.execute(new byte[] {
+                OpCodes.PUSH1, 0x10,
+                OpCodes.PUSH1, 0x02,
+                OpCodes.PUSH1, 0x04,
+                OpCodes.CALLDATACOPY });
 
         // TODO check gas uses
 
@@ -730,6 +734,10 @@ public class VirtualMachineTest {
         Assert.assertEquals(20, memory.size());
 
         // TODO check memory content
+        byte[] expected = new byte[16];
+        System.arraycopy(data, 2, expected, 0, 16);
+
+        Assert.assertArrayEquals(expected, memory.getBytes(4, 16));
     }
 
     @Test
