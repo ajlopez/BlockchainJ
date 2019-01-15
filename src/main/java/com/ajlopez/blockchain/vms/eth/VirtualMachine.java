@@ -289,6 +289,16 @@ public class VirtualMachine {
 
                     break;
 
+                case OpCodes.CALLDATACOPY:
+                    data = this.programEnvironment.getData();
+                    int targetOffset = this.stack.pop().asUnsignedInteger();
+                    int sourceOffset = this.stack.pop().asUnsignedInteger();
+                    int length = this.stack.pop().asUnsignedInteger();
+
+                    this.memory.setBytes(targetOffset, data, sourceOffset, length);
+
+                    break;
+
                 case OpCodes.CODESIZE:
                     this.stack.push(DataWord.fromUnsignedInteger(bytecodes.length));
 
