@@ -804,6 +804,120 @@ public class VirtualMachineTest {
         Assert.assertArrayEquals(expected, memory.getBytes(4, 16));
     }
 
+
+    @Test
+    public void executeCodeCopy() throws VirtualMachineException {
+        byte[] code = FactoryHelper.createRandomBytes(42);
+        code[0] = OpCodes.PUSH1;
+        code[1] = 0x10;
+        code[2] = OpCodes.PUSH1;
+        code[3] = 0x08;
+        code[4] = OpCodes.PUSH1;
+        code[5] = 0x04;
+        code[6] = OpCodes.CODECOPY;
+        code[7] = OpCodes.STOP;
+
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 0, null);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(code);
+
+        // TODO check gas uses
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertNotNull(memory);
+        Assert.assertEquals(20, memory.size());
+
+        byte[] expected = new byte[16];
+        System.arraycopy(code, 8, expected, 0, 16);
+
+        Assert.assertArrayEquals(expected, memory.getBytes(4, 16));
+    }
+
+    @Test
+    public void executeCodeCopyWithPartialCode() throws VirtualMachineException {
+        byte[] code = FactoryHelper.createRandomBytes(42);
+        code[0] = OpCodes.PUSH1;
+        code[1] = 0x10;
+        code[2] = OpCodes.PUSH1;
+        code[3] = 0x20;
+        code[4] = OpCodes.PUSH1;
+        code[5] = 0x04;
+        code[6] = OpCodes.CODECOPY;
+        code[7] = OpCodes.STOP;
+
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 0, null);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(code);
+
+        // TODO check gas uses
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertNotNull(memory);
+        Assert.assertEquals(20, memory.size());
+
+        byte[] expected = new byte[16];
+        System.arraycopy(code, 32, expected, 0, 10);
+
+        Assert.assertArrayEquals(expected, memory.getBytes(4, 16));
+    }
+
+    @Test
+    public void executeCodeCopyBeyondCode() throws VirtualMachineException {
+        byte[] code = FactoryHelper.createRandomBytes(42);
+        code[0] = OpCodes.PUSH1;
+        code[1] = 0x10;
+        code[2] = OpCodes.PUSH1;
+        code[3] = 0x70;
+        code[4] = OpCodes.PUSH1;
+        code[5] = 0x04;
+        code[6] = OpCodes.CODECOPY;
+        code[7] = OpCodes.STOP;
+
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 0, null);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(code);
+
+        // TODO check gas uses
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertNotNull(memory);
+        Assert.assertEquals(20, memory.size());
+
+        byte[] expected = new byte[16];
+
+        Assert.assertArrayEquals(expected, memory.getBytes(4, 16));
+    }
+
     @Test
     public void executeCoinbaseTimestampNumberDifficultyOperations() throws VirtualMachineException {
         long number = 1;

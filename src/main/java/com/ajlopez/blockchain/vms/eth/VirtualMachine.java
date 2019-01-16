@@ -304,6 +304,15 @@ public class VirtualMachine {
 
                     break;
 
+                case OpCodes.CODECOPY:
+                    targetOffset = this.stack.pop().asUnsignedInteger();
+                    sourceOffset = this.stack.pop().asUnsignedInteger();
+                    length = this.stack.pop().asUnsignedInteger();
+
+                    this.memory.setBytes(targetOffset, bytecodes, sourceOffset, length);
+
+                    break;
+
                 case OpCodes.COINBASE:
                     this.stack.push(DataWord.fromAddress(this.programEnvironment.getCoinbase()));
 
