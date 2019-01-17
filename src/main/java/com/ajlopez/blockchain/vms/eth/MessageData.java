@@ -12,14 +12,16 @@ public class MessageData {
     private final Address caller;
     private final DataWord value;
     private final long gas;
+    private final DataWord gasPrice;
     private final byte[] data;
 
-    public MessageData(Address address, Address origin, Address caller, DataWord value, long gas, byte[] data) {
+    public MessageData(Address address, Address origin, Address caller, DataWord value, long gas, DataWord gasPrice, byte[] data) {
         this.address = address;
         this.origin = origin;
         this.caller = caller;
         this.value = value;
         this.gas = gas;
+        this.gasPrice = gasPrice;
         this.data = data;
     }
 
@@ -32,6 +34,8 @@ public class MessageData {
     public DataWord getValue() { return this.value; }
 
     public long getGas() { return this.gas; }
+
+    public DataWord getGasPrice() { return this.gasPrice; }
 
     public byte[] getData() { return this.data; }
 }
