@@ -598,6 +598,26 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeGasPriceOperations() throws VirtualMachineException {
+        DataWord gasPrice = DataWord.fromUnsignedInteger(42);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 0, gasPrice, null);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        virtualMachine.execute(new byte[] { OpCodes.GASPRICE });
+
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(gasPrice, stack.pop());
+    }
+
+    @Test
     public void executeAddressOriginCallerCallValueOperations() throws VirtualMachineException {
         Address address = FactoryHelper.createRandomAddress();
         Address origin = FactoryHelper.createRandomAddress();

@@ -32,4 +32,6 @@ public class ProgramEnvironment {
     public Address getCoinbase() { return this.blockData.getCoinbase(); }
 
     public byte[] getData() { return this.messageData.getData(); }
+
+    public DataWord getGasPrice() { return this.messageData.getGasPrice(); }
 }

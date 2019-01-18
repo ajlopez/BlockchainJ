@@ -38,6 +38,8 @@ public class VirtualMachine {
         opCodeFees[OpCodes.ADDMOD] = FeeSchedule.MID;
         opCodeFees[OpCodes.MULMOD] = FeeSchedule.MID;
 
+        opCodeFees[OpCodes.GASPRICE] = FeeSchedule.BASE;
+
         for (int k = 0; k < 32; k++)
             opCodeFees[OpCodes.PUSH1 + k] = FeeSchedule.VERYLOW;
 
@@ -310,6 +312,11 @@ public class VirtualMachine {
                     length = this.stack.pop().asUnsignedInteger();
 
                     this.memory.setBytes(targetOffset, bytecodes, sourceOffset, length);
+
+                    break;
+
+                case OpCodes.GASPRICE:
+                    this.stack.push(this.programEnvironment.getGasPrice());
 
                     break;
 
