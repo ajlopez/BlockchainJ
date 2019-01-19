@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.types.Hash;
 
 import java.math.BigInteger;
 
@@ -10,18 +11,19 @@ import java.math.BigInteger;
 public class AccountState {
     private BigInteger balance;
     private long nonce;
+    private Hash codeHash;
 
     private boolean changed;
 
     public static AccountState fromAccount(Account account) {
-        return new AccountState(account.getBalance(), account.getNonce());
+        return new AccountState(account.getBalance(), account.getNonce(), null);
     }
 
     public AccountState() {
-        this(BigInteger.ZERO, 0);
+        this(BigInteger.ZERO, 0, null);
     }
 
-    public AccountState(BigInteger balance, long nonce) {
+    public AccountState(BigInteger balance, long nonce, Hash codeHash) {
         if (balance == null)
             balance = BigInteger.ZERO;
 
@@ -33,6 +35,7 @@ public class AccountState {
 
         this.balance = balance;
         this.nonce = nonce;
+        this.codeHash = codeHash;
     }
 
     public BigInteger getBalance() {
@@ -40,6 +43,10 @@ public class AccountState {
     }
 
     public long getNonce() { return this.nonce; }
+
+    public Hash getCodeHash() {
+        return this.codeHash;
+    }
 
     public void incrementNonce() {
         this.nonce++;
@@ -81,7 +88,7 @@ public class AccountState {
     }
 
     public AccountState cloneState() {
-        AccountState clonedState = new AccountState(this.balance, this.nonce);
+        AccountState clonedState = new AccountState(this.balance, this.nonce, this.codeHash);
 
         clonedState.changed = this.changed;
 

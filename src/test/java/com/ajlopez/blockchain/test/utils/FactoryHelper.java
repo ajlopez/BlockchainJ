@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -30,6 +31,10 @@ public class FactoryHelper {
         random.nextBytes(bytes);
 
         return bytes;
+    }
+
+    public static Hash createRandomHash() {
+        return new Hash(createRandomBytes(BlockHash.HASH_BYTES));
     }
 
     public static BlockHash createRandomBlockHash() {

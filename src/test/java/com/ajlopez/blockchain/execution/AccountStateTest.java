@@ -1,11 +1,12 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
-import java.util.BitSet;
 
 /**
  * Created by ajlopez on 26/11/2018.
@@ -18,15 +19,27 @@ public class AccountStateTest {
         Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
         Assert.assertEquals(0, accountState.getNonce());
         Assert.assertFalse(accountState.wasChanged());
+        Assert.assertNull(accountState.getCodeHash());
     }
 
     @Test
     public void createWithNullBalanceAndNonZeroNonce() {
-        AccountState accountState = new AccountState(null, 42);
+        AccountState accountState = new AccountState(null, 42, null);
 
         Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
         Assert.assertEquals(42, accountState.getNonce());
         Assert.assertFalse(accountState.wasChanged());
+    }
+
+    @Test
+    public void createWithCodeHash() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+        AccountState accountState = new AccountState(null, 42, codeHash);
+
+        Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
+        Assert.assertEquals(42, accountState.getNonce());
+        Assert.assertFalse(accountState.wasChanged());
+        Assert.assertEquals(codeHash, accountState.getCodeHash());
     }
 
     @Test
@@ -40,7 +53,7 @@ public class AccountStateTest {
 
     @Test
     public void cloneWithInitialBalanceAndNonce() {
-        AccountState accountState = new AccountState(BigInteger.TEN, 42);
+        AccountState accountState = new AccountState(BigInteger.TEN, 42, null);
 
         AccountState result = accountState.cloneState();
 
@@ -52,7 +65,7 @@ public class AccountStateTest {
 
     @Test
     public void cloneWithInitialBalanceAndNonceAfterIncrementNonce() {
-        AccountState accountState = new AccountState(BigInteger.TEN, 41);
+        AccountState accountState = new AccountState(BigInteger.TEN, 41, null);
 
         accountState.incrementNonce();
 
@@ -62,6 +75,23 @@ public class AccountStateTest {
         Assert.assertEquals(BigInteger.TEN, result.getBalance());
         Assert.assertEquals(42, result.getNonce());
         Assert.assertTrue(result.wasChanged());
+        Assert.assertEquals(null, result.getCodeHash());
+    }
+
+    @Test
+    public void cloneWithInitialBalanceAndNonceAfterIncrementNonceAndCodeHash() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+        AccountState accountState = new AccountState(BigInteger.TEN, 41, codeHash);
+
+        accountState.incrementNonce();
+
+        AccountState result = accountState.cloneState();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.TEN, result.getBalance());
+        Assert.assertEquals(42, result.getNonce());
+        Assert.assertTrue(result.wasChanged());
+        Assert.assertEquals(codeHash, result.getCodeHash());
     }
 
     @Test
@@ -105,7 +135,7 @@ public class AccountStateTest {
 
     @Test
     public void subtractFromBalance() {
-        AccountState accountState = new AccountState(BigInteger.TEN, 42);
+        AccountState accountState = new AccountState(BigInteger.TEN, 42, null);
 
         accountState.subtractFromBalance(BigInteger.ONE);
         Assert.assertEquals(BigInteger.valueOf(9), accountState.getBalance());
@@ -114,7 +144,7 @@ public class AccountStateTest {
 
     @Test
     public void subtractZeroFromBalance() {
-        AccountState accountState = new AccountState(BigInteger.TEN, 42);
+        AccountState accountState = new AccountState(BigInteger.TEN, 42, null);
 
         accountState.subtractFromBalance(BigInteger.ZERO);
         Assert.assertEquals(BigInteger.TEN, accountState.getBalance());
@@ -123,12 +153,12 @@ public class AccountStateTest {
 
     @Test(expected = IllegalStateException.class)
     public void negativeBalance() {
-        new AccountState(BigInteger.TEN.negate(), 0);
+        new AccountState(BigInteger.TEN.negate(), 0, null);
     }
 
     @Test(expected = IllegalStateException.class)
     public void negativeNonce() {
-        new AccountState(BigInteger.TEN, -1);
+        new AccountState(BigInteger.TEN, -1, null);
     }
 
     @Test(expected = IllegalStateException.class)
