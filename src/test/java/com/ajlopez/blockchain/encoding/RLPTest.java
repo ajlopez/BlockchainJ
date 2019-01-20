@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain.encoding;
 
-import com.ajlopez.blockchain.encoding.RLP;
 import org.junit.Assert;
 import org.junit.Test;
 

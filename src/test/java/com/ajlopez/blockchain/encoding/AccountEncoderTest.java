@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,10 +13,10 @@ import java.math.BigInteger;
  */
 public class AccountEncoderTest {
     @Test
-    public void encodeDecodeAccountStateWithZeroBalanceAndZeroNonce() {
-        Account state = new Account();
+    public void encodeDecodeAccountWithZeroBalanceAndZeroNonce() {
+        Account account = new Account();
 
-        byte[] encoded = AccountEncoder.encode(state);
+        byte[] encoded = AccountEncoder.encode(account);
 
         Assert.assertNotNull(encoded);
 
@@ -23,10 +25,28 @@ public class AccountEncoderTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.ZERO, result.getBalance());
         Assert.assertEquals(0, result.getNonce());
+        Assert.assertNull(result.getCodeHash());
     }
 
     @Test
-    public void encodeDecodeAccountStateWithNonZeroBalance() {
+    public void encodeDecodeAccountWithCodeHash() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+        Account account = new Account(null, 0, codeHash);
+
+        byte[] encoded = AccountEncoder.encode(account);
+
+        Assert.assertNotNull(encoded);
+
+        Account result = AccountEncoder.decode(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(0, result.getNonce());
+        Assert.assertEquals(codeHash, result.getCodeHash());
+    }
+
+    @Test
+    public void encodeDecodeAccountWithNonZeroBalance() {
         Account account = new Account(BigInteger.TEN, 0, null);
 
         byte[] encoded = AccountEncoder.encode(account);
@@ -41,7 +61,7 @@ public class AccountEncoderTest {
     }
 
     @Test
-    public void encodeDecodeAccountStateWithNonZeroNonce() {
+    public void encodeDecodeAccountWithNonZeroNonce() {
         Account account = new Account(BigInteger.ZERO, 42, null);
 
         byte[] encoded = AccountEncoder.encode(account);
