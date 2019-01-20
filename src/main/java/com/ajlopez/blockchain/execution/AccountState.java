@@ -11,19 +11,18 @@ import java.math.BigInteger;
 public class AccountState {
     private BigInteger balance;
     private long nonce;
-    private Hash codeHash;
 
     private boolean changed;
 
     public static AccountState fromAccount(Account account) {
-        return new AccountState(account.getBalance(), account.getNonce(), null);
+        return new AccountState(account.getBalance(), account.getNonce());
     }
 
     public AccountState() {
-        this(BigInteger.ZERO, 0, null);
+        this(BigInteger.ZERO, 0);
     }
 
-    public AccountState(BigInteger balance, long nonce, Hash codeHash) {
+    public AccountState(BigInteger balance, long nonce) {
         if (balance == null)
             balance = BigInteger.ZERO;
 
@@ -35,7 +34,6 @@ public class AccountState {
 
         this.balance = balance;
         this.nonce = nonce;
-        this.codeHash = codeHash;
     }
 
     public BigInteger getBalance() {
@@ -43,10 +41,6 @@ public class AccountState {
     }
 
     public long getNonce() { return this.nonce; }
-
-    public Hash getCodeHash() {
-        return this.codeHash;
-    }
 
     public void incrementNonce() {
         this.nonce++;
@@ -88,7 +82,7 @@ public class AccountState {
     }
 
     public AccountState cloneState() {
-        AccountState clonedState = new AccountState(this.balance, this.nonce, this.codeHash);
+        AccountState clonedState = new AccountState(this.balance, this.nonce);
 
         clonedState.changed = this.changed;
 
