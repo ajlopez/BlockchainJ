@@ -177,7 +177,7 @@ public class AccountStateTest {
 
     @Test
     public void createFromAccount() {
-        Account account = new Account(BigInteger.TEN, 42);
+        Account account = new Account(BigInteger.TEN, 42, null);
 
         AccountState result = AccountState.fromAccount(account);
 

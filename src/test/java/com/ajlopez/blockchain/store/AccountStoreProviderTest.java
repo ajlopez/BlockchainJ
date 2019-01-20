@@ -3,14 +3,12 @@ package com.ajlopez.blockchain.store;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 /**
  * Created by ajlopez on 01/12/2018.
@@ -43,12 +41,12 @@ public class AccountStoreProviderTest {
         Hash hash0 = accountStore.getRootHash();
         accountStore.save();
 
-        Account account1 = new Account(BigInteger.ONE, 3);
+        Account account1 = new Account(BigInteger.ONE, 3, null);
         accountStore.putAccount(address, account1);
         Hash hash1 = accountStore.getRootHash();
         accountStore.save();
 
-        Account account2 = new Account(BigInteger.TEN, 42);
+        Account account2 = new Account(BigInteger.TEN, 42, null);
 
         accountStore.putAccount(address, account2);
         Hash hash2 = accountStore.getRootHash();

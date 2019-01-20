@@ -80,7 +80,7 @@ public class AccountState {
     }
 
     public Account toAccount() {
-        return new Account(this.balance, this.nonce);
+        return new Account(this.balance, this.nonce, null);
     }
 
     public boolean wasChanged() {

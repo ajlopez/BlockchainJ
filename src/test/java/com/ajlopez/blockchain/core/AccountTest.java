@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.core;
 
+import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,27 +13,39 @@ import java.math.BigInteger;
 public class AccountTest {
     @Test
     public void createWithZeroBalanceAndZeroNonce() {
-        Account accstate = new Account();
+        Account account = new Account();
 
-        Assert.assertEquals(BigInteger.ZERO, accstate.getBalance());
-        Assert.assertEquals(0, accstate.getNonce());
+        Assert.assertEquals(BigInteger.ZERO, account.getBalance());
+        Assert.assertEquals(0, account.getNonce());
+        Assert.assertNull(account.getCodeHash());
     }
 
     @Test
     public void createWithNullBalanceAndNonZeroNonce() {
-        Account accstate = new Account(null, 42);
+        Account account = new Account(null, 42, null);
 
-        Assert.assertEquals(BigInteger.ZERO, accstate.getBalance());
-        Assert.assertEquals(42, accstate.getNonce());
+        Assert.assertEquals(BigInteger.ZERO, account.getBalance());
+        Assert.assertEquals(42, account.getNonce());
+        Assert.assertNull(account.getCodeHash());
+    }
+
+    @Test
+    public void createWithCodeHash() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+        Account account = new Account(null, 42, codeHash);
+
+        Assert.assertEquals(BigInteger.ZERO, account.getBalance());
+        Assert.assertEquals(42, account.getNonce());
+        Assert.assertEquals(codeHash, account.getCodeHash());
     }
 
     @Test(expected = IllegalStateException.class)
     public void negativeBalance() {
-        new Account(BigInteger.TEN.negate(), 0);
+        new Account(BigInteger.TEN.negate(), 0, null);
     }
 
     @Test(expected = IllegalStateException.class)
     public void negativeNonce() {
-        new Account(BigInteger.TEN, -1);
+        new Account(BigInteger.TEN, -1, null);
     }
 }

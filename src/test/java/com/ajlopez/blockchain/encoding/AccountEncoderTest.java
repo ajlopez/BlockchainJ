@@ -27,7 +27,7 @@ public class AccountEncoderTest {
 
     @Test
     public void encodeDecodeAccountStateWithNonZeroBalance() {
-        Account account = new Account(BigInteger.TEN, 0);
+        Account account = new Account(BigInteger.TEN, 0, null);
 
         byte[] encoded = AccountEncoder.encode(account);
 
@@ -42,7 +42,7 @@ public class AccountEncoderTest {
 
     @Test
     public void encodeDecodeAccountStateWithNonZeroNonce() {
-        Account account = new Account(BigInteger.ZERO, 42);
+        Account account = new Account(BigInteger.ZERO, 42, null);
 
         byte[] encoded = AccountEncoder.encode(account);
 

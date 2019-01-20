@@ -28,7 +28,7 @@ public class AccountStoreTest {
     @Test
     public void putAndGetAccount() {
         AccountStore store = new AccountStore(new Trie());
-        Account account = new Account(BigInteger.TEN, 42);
+        Account account = new Account(BigInteger.TEN, 42, null);
         Address address = new Address(new byte[] { 0x01, 0x02 });
 
         store.putAccount(address, account);

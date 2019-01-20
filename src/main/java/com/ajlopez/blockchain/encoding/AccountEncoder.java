@@ -23,6 +23,6 @@ public class AccountEncoder {
         BigInteger balance = new BigInteger(1, RLP.decode(bytes[0]));
         byte[] nonce = RLP.decode(bytes[1]);
 
-        return new Account(balance, ByteUtils.bytesToUnsignedLong(nonce));
+        return new Account(balance, ByteUtils.bytesToUnsignedLong(nonce), null);
     }
 }

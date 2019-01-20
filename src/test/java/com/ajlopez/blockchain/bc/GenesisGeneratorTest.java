@@ -33,7 +33,7 @@ public class GenesisGeneratorTest {
     public void generateGenesisWithInitialAccounts() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        accountStore.putAccount(FactoryHelper.createRandomAddress(), new Account(BigInteger.TEN, 42));
+        accountStore.putAccount(FactoryHelper.createRandomAddress(), new Account(BigInteger.TEN, 42, null));
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 

@@ -252,7 +252,7 @@ public class AccountsProcessorTest {
         TrieStore accountTrieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(accountTrieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account senderAccount = new Account(BigInteger.valueOf(initialBalance), 0);
+        Account senderAccount = new Account(BigInteger.valueOf(initialBalance), 0, null);
 
         accountStore.putAccount(sender, senderAccount);
         accountStore.save();

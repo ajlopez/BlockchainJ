@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.core;
 
+import com.ajlopez.blockchain.core.types.Hash;
+
 import java.math.BigInteger;
 
 /**
@@ -8,12 +10,13 @@ import java.math.BigInteger;
 public class Account {
     private final BigInteger balance;
     private final long nonce;
+    private final Hash codeHash;
 
     public Account() {
-        this(BigInteger.ZERO, 0);
+        this(BigInteger.ZERO, 0, null);
     }
 
-    public Account(BigInteger balance, long nonce) {
+    public Account(BigInteger balance, long nonce, Hash codeHash) {
         if (balance == null)
             balance = BigInteger.ZERO;
 
@@ -25,6 +28,7 @@ public class Account {
 
         this.balance = balance;
         this.nonce = nonce;
+        this.codeHash = codeHash;
     }
 
     public BigInteger getBalance() {
@@ -32,4 +36,6 @@ public class Account {
     }
 
     public long getNonce() { return this.nonce; }
+
+    public Hash getCodeHash() { return this.codeHash; }
 }

@@ -31,7 +31,7 @@ public class ChildExecutionContextTest {
     @Test
     public void getBalanceFromAccountAndCommitDoesNotChangeStore() {
         AccountStore accountStore = new AccountStore(new Trie());
-        Account account = new Account(BigInteger.TEN, 42);
+        Account account = new Account(BigInteger.TEN, 42, null);
         Address address = FactoryHelper.createRandomAddress();
 
         accountStore.putAccount(address, account);
@@ -87,7 +87,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null);
         accountStore.putAccount(address, account);
 
 
@@ -108,7 +108,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -132,7 +132,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -154,7 +154,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -200,7 +200,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -231,7 +231,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -271,7 +271,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -304,7 +304,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
