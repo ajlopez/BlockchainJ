@@ -33,5 +33,7 @@ public class ProgramEnvironment {
 
     public byte[] getData() { return this.messageData.getData(); }
 
+    public long getGas() { return this.messageData.getGas(); }
+
     public DataWord getGasPrice() { return this.messageData.getGasPrice(); }
 }

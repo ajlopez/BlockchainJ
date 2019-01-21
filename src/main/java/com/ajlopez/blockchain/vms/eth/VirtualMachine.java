@@ -67,8 +67,14 @@ public class VirtualMachine {
 
             FeeSchedule fee = opCodeFees[bytecode & 0xff];
 
-            if (fee != null)
-                this.gasUsed += fee.getValue();
+            if (fee != null) {
+                long gasCost = fee.getValue();
+
+                if (this.gasUsed + gasCost > this.programEnvironment.getGas())
+                    throw new VirtualMachineException("Insufficient gas");
+
+                this.gasUsed += gasCost;
+            }
 
             switch (bytecode) {
                 case OpCodes.STOP:
