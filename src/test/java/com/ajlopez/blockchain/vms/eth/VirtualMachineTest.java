@@ -990,6 +990,21 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeGasOperation() throws VirtualMachineException {
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+
+        virtualMachine.execute(new byte[] { OpCodes.GAS });
+
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(100000 - FeeSchedule.BASE.getValue(), stack.pop().asUnsignedInteger());
+    }
+
+    @Test
     public void executeJumpOperation() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 

@@ -40,6 +40,8 @@ public class VirtualMachine {
 
         opCodeFees[OpCodes.GASPRICE] = FeeSchedule.BASE;
 
+        opCodeFees[OpCodes.GAS] = FeeSchedule.BASE;
+
         for (int k = 0; k < 32; k++)
             opCodeFees[OpCodes.PUSH1 + k] = FeeSchedule.VERYLOW;
 
@@ -418,6 +420,11 @@ public class VirtualMachine {
 
                 case OpCodes.MSIZE:
                     this.stack.push(DataWord.fromUnsignedInteger(this.memory.size()));
+
+                    break;
+
+                case OpCodes.GAS:
+                    this.stack.push(DataWord.fromUnsignedLong(this.programEnvironment.getGas() - this.gasUsed));
 
                     break;
 

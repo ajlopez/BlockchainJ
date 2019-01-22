@@ -61,7 +61,7 @@ public class OpCodes {
     public static final byte JUMPI = 0x57;
     public static final byte PC = 0x58;
     public static final byte MSIZE = 0x59;
-
+    public static final byte GAS = 0x5a;
     public static final byte JUMPDEST = 0x5b;
 
     public static final byte PUSH1 = 0x60;
