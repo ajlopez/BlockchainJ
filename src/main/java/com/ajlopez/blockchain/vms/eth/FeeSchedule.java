@@ -8,7 +8,8 @@ public enum FeeSchedule {
     BASE(2),
     VERYLOW(3),
     LOW(5),
-    MID(8);
+    MID(8),
+    HIGH(10);
 
     private int value;
 

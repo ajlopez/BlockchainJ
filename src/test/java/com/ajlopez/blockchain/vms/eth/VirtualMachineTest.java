@@ -1053,6 +1053,8 @@ public class VirtualMachineTest {
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
 
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.HIGH.getValue(), virtualMachine.getGasUsed());
+
         Stack<DataWord> stack = virtualMachine.getStack();
 
         Assert.assertNotNull(stack);
