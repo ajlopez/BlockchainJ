@@ -131,4 +131,10 @@ public class OpCodes {
     public static final byte SWAP14 = (byte)0x9d;
     public static final byte SWAP15 = (byte)0x9e;
     public static final byte SWAP16 = (byte)0x9f;
+
+    public static final byte LOG0 = (byte)0xa0;
+    public static final byte LOG1 = (byte)0xa1;
+    public static final byte LOG2 = (byte)0xa2;
+    public static final byte LOG3 = (byte)0xa3;
+    public static final byte LOG4 = (byte)0xa4;
 }
