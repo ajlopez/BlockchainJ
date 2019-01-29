@@ -26,7 +26,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [BlockBench: A Framework for Analyzing Private Blockchains](https://github.com/ooibc88/blockbench)
 - [Pantheon: An enterprise-grade Java-based, Apache 2.0 licensed Ethereum client](https://github.com/PegaSysEng/pantheon)
 - [Add timer metrics for EVM operations #551](https://github.com/PegaSysEng/pantheon/pull/551)
-
+- [Do a Simple HTTP Request in Java](https://www.baeldung.com/java-http-request)
 
 ## License
 

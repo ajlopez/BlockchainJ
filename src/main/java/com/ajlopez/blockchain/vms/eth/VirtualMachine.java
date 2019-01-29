@@ -42,8 +42,9 @@ public class VirtualMachine {
 
         opCodeFees[OpCodes.JUMPI] = FeeSchedule.HIGH;
 
-        opCodeFees[OpCodes.MSTORE] = FeeSchedule.VERYLOW;
+        opCodeFees[OpCodes.POP] = FeeSchedule.BASE;
         opCodeFees[OpCodes.MLOAD] = FeeSchedule.VERYLOW;
+        opCodeFees[OpCodes.MSTORE] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.MSTORE8] = FeeSchedule.VERYLOW;
 
         opCodeFees[OpCodes.GASPRICE] = FeeSchedule.BASE;
