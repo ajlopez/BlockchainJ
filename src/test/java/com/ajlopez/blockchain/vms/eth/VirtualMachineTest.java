@@ -412,6 +412,8 @@ public class VirtualMachineTest {
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.SLOAD });
 
+        Assert.assertEquals(FeeSchedule.SLOAD.getValue() + FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
+
         Stack<DataWord> stack = virtualMachine.getStack();
 
         Assert.assertNotNull(stack);

@@ -9,7 +9,9 @@ public enum FeeSchedule {
     VERYLOW(3),
     LOW(5),
     MID(8),
-    HIGH(10);
+    HIGH(10),
+    EXT(20),
+    SLOAD(50);
 
     private int value;
 
