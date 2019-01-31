@@ -11,7 +11,10 @@ public enum FeeSchedule {
     MID(8),
     HIGH(10),
     EXT(20),
-    SLOAD(50);
+    SLOAD(50),
+    SSET(20000),
+    SRESET(5000),
+    SCLEAR(15000);
 
     private int value;
 

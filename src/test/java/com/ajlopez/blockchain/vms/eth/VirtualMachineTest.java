@@ -423,12 +423,15 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeStorageStorage() throws VirtualMachineException {
+    public void executeStorageStore() throws VirtualMachineException {
         Storage storage = new MapStorage();
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), storage);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
+
+        // TODO other SSTORE cases for gas cost
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue(), virtualMachine.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
