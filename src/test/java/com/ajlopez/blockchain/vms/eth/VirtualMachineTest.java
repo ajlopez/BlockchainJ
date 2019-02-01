@@ -619,7 +619,7 @@ public class VirtualMachineTest {
     @Test
     public void executeGasPriceOperations() throws VirtualMachineException {
         DataWord gasPrice = DataWord.fromUnsignedInteger(42);
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, gasPrice, null);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, gasPrice, null, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -642,7 +642,7 @@ public class VirtualMachineTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(address, origin, caller, DataWord.ONE, 100000, null, null);
+        MessageData messageData = new MessageData(address, origin, caller, DataWord.ONE, 100000, null, null, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -665,7 +665,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataSize() throws VirtualMachineException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -685,7 +685,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataLoad() throws VirtualMachineException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -705,7 +705,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataLoadWithAdditionalBytes() throws VirtualMachineException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -728,7 +728,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataLoadBeyondData() throws VirtualMachineException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -748,7 +748,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataCopy() throws VirtualMachineException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -781,7 +781,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataCopyWithPartialData() throws VirtualMachineException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -814,7 +814,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataCopyBeyondData() throws VirtualMachineException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, data, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -856,7 +856,7 @@ public class VirtualMachineTest {
         code[6] = OpCodes.CODECOPY;
         code[7] = OpCodes.STOP;
 
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, null);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, null, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -894,7 +894,7 @@ public class VirtualMachineTest {
         code[6] = OpCodes.CODECOPY;
         code[7] = OpCodes.STOP;
 
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, null);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, null, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -932,7 +932,7 @@ public class VirtualMachineTest {
         code[6] = OpCodes.CODECOPY;
         code[7] = OpCodes.STOP;
 
-        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, null);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ONE, 100000, null, null, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null);
 
@@ -1120,7 +1120,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeWithInsufficientGasRaiseException() throws VirtualMachineException {
-        MessageData messageData = new MessageData(null, null, null, DataWord.ZERO, 0, DataWord.ZERO, null);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ZERO, 0, DataWord.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null), null);
 
         exception.expect(VirtualMachineException.class);
@@ -1275,7 +1275,7 @@ public class VirtualMachineTest {
     }
 
     private static ProgramEnvironment createProgramEnvironment() {
-        MessageData messageData = new MessageData(null, null, null, DataWord.ZERO, 100000, DataWord.ZERO, null);
+        MessageData messageData = new MessageData(null, null, null, DataWord.ZERO, 100000, DataWord.ZERO, null, false);
 
         return new ProgramEnvironment(messageData, null);
     }

@@ -14,8 +14,9 @@ public class MessageData {
     private final long gas;
     private final DataWord gasPrice;
     private final byte[] data;
+    private final boolean readOnly;
 
-    public MessageData(Address address, Address origin, Address caller, DataWord value, long gas, DataWord gasPrice, byte[] data) {
+    public MessageData(Address address, Address origin, Address caller, DataWord value, long gas, DataWord gasPrice, byte[] data, boolean readOnly) {
         this.address = address;
         this.origin = origin;
         this.caller = caller;
@@ -23,6 +24,7 @@ public class MessageData {
         this.gas = gas;
         this.gasPrice = gasPrice;
         this.data = data;
+        this.readOnly = readOnly;
     }
 
     public Address getAddress() { return this.address; }
@@ -38,4 +40,6 @@ public class MessageData {
     public DataWord getGasPrice() { return this.gasPrice; }
 
     public byte[] getData() { return this.data; }
+
+    public boolean isReadOnly() { return this.readOnly; }
 }
