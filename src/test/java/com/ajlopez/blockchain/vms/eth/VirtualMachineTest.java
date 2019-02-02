@@ -442,6 +442,17 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void cannotExecuteStorageStoreIfMessageIsReadOnly() throws VirtualMachineException {
+        Storage storage = new MapStorage();
+
+        VirtualMachine virtualMachine = new VirtualMachine(createReadOnlyProgramEnvironment(), storage);
+
+        exception.expect(VirtualMachineException.class);
+        exception.expectMessage("Read-only message");
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
+    }
+
+    @Test
     public void executeMemoryStore() throws VirtualMachineException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
@@ -1276,6 +1287,12 @@ public class VirtualMachineTest {
 
     private static ProgramEnvironment createProgramEnvironment() {
         MessageData messageData = new MessageData(null, null, null, DataWord.ZERO, 100000, DataWord.ZERO, null, false);
+
+        return new ProgramEnvironment(messageData, null);
+    }
+
+    private static ProgramEnvironment createReadOnlyProgramEnvironment() {
+        MessageData messageData = new MessageData(null, null, null, DataWord.ZERO, 100000, DataWord.ZERO, null, true);
 
         return new ProgramEnvironment(messageData, null);
     }

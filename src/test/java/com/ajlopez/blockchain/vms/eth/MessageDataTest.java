@@ -32,7 +32,7 @@ public class MessageDataTest {
         Assert.assertArrayEquals(data, messageData.getData());
         Assert.assertFalse(messageData.isReadOnly());
     }
-    
+
     @Test
     public void createMessageDataIsReadOnly() {
         Address address = FactoryHelper.createRandomAddress();

@@ -395,6 +395,9 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.SSTORE:
+                    if (this.programEnvironment.isReadOnly())
+                        throw new VirtualMachineException("Read-only message");
+
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
 

@@ -36,4 +36,6 @@ public class ProgramEnvironment {
     public long getGas() { return this.messageData.getGas(); }
 
     public DataWord getGasPrice() { return this.messageData.getGasPrice(); }
+
+    public boolean isReadOnly() { return this.messageData.isReadOnly(); }
 }
