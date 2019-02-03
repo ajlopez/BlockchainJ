@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
+import jdk.internal.org.objectweb.asm.Opcodes;
 
 import java.util.Stack;
 
@@ -46,6 +47,7 @@ public class VirtualMachine {
         opCodeFees[OpCodes.MLOAD] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.MSTORE] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.MSTORE8] = FeeSchedule.VERYLOW;
+        opCodeFees[OpCodes.MSIZE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.SLOAD] = FeeSchedule.SLOAD;
         opCodeFees[OpCodes.SSTORE] = FeeSchedule.SSET;
 
