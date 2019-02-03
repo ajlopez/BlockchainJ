@@ -1,8 +1,9 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
-import jdk.internal.org.objectweb.asm.Opcodes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -15,6 +16,7 @@ public class VirtualMachine {
     private final Storage storage;
     private final Memory memory = new Memory();
     private final Stack<DataWord> stack = new Stack<>();
+    private final List<Log> logs = new ArrayList<>();
 
     private int gasUsed;
 
@@ -69,6 +71,8 @@ public class VirtualMachine {
         this.programEnvironment = programEnvironment;
         this.storage = storage;
     }
+
+    public List<Log> getLogs() { return this.logs; }
 
     public int getGasUsed() {
         return this.gasUsed;

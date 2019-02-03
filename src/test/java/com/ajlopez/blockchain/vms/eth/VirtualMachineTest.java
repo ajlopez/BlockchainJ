@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -32,6 +33,11 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
+
+        List<Log> logs = virtualMachine.getLogs();
+
+        Assert.assertNotNull(logs);
+        Assert.assertTrue(logs.isEmpty());
     }
 
     @Test
