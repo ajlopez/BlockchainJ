@@ -223,15 +223,15 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSignedModOperations() throws VirtualMachineException {
-        executeBinaryOp(0, 0, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
-        executeBinaryOp(1, 2, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
-        executeBinaryOp(1, -2, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
-        executeBinaryOp(2, 3, OpCodes.SMOD, 1, FeeSchedule.VERYLOW.getValue() * 2);
-        executeBinaryOp(2, 84, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
-        executeBinaryOp(5, 84, OpCodes.SMOD, 4, FeeSchedule.VERYLOW.getValue() * 2);
-        executeBinaryOp(5, -84, OpCodes.SMOD, -4, FeeSchedule.VERYLOW.getValue() * 2);
-        executeBinaryOp(-5, 84, OpCodes.SMOD, 4, FeeSchedule.VERYLOW.getValue() * 2);
-        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2);
+        executeBinaryOp(0, 0, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.LOW.getValue());
+        executeBinaryOp(1, 2, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.LOW.getValue());
+        executeBinaryOp(1, -2, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.LOW.getValue());
+        executeBinaryOp(2, 3, OpCodes.SMOD, 1, FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.LOW.getValue());
+        executeBinaryOp(2, 84, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.LOW.getValue());
+        executeBinaryOp(5, 84, OpCodes.SMOD, 4, FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.LOW.getValue());
+        executeBinaryOp(5, -84, OpCodes.SMOD, -4, FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.LOW.getValue());
+        executeBinaryOp(-5, 84, OpCodes.SMOD, 4, FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.LOW.getValue());
+        executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SMOD, 0, FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.LOW.getValue());
 
         executeBinaryOp("0100000000", "010000000000000000", OpCodes.SMOD, "00");
         executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.SMOD, "00");
