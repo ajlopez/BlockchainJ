@@ -31,6 +31,10 @@ public class VirtualMachine {
 
         opCodeFees[OpCodes.ADD] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.SUB] = FeeSchedule.VERYLOW;
+        opCodeFees[OpCodes.MUL] = FeeSchedule.LOW;
+        opCodeFees[OpCodes.DIV] = FeeSchedule.LOW;
+        opCodeFees[OpCodes.SDIV] = FeeSchedule.LOW;
+
         opCodeFees[OpCodes.NOT] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.LT] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.GT] = FeeSchedule.VERYLOW;
@@ -39,9 +43,13 @@ public class VirtualMachine {
         opCodeFees[OpCodes.EQ] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.ISZERO] = FeeSchedule.VERYLOW;
 
+        opCodeFees[OpCodes.XOR] = FeeSchedule.VERYLOW;
+        opCodeFees[OpCodes.AND] = FeeSchedule.VERYLOW;
+        opCodeFees[OpCodes.OR] = FeeSchedule.VERYLOW;
+
         opCodeFees[OpCodes.MOD] = FeeSchedule.LOW;
         opCodeFees[OpCodes.SMOD] = FeeSchedule.LOW;
-        
+
         opCodeFees[OpCodes.ADDMOD] = FeeSchedule.MID;
         opCodeFees[OpCodes.MULMOD] = FeeSchedule.MID;
         opCodeFees[OpCodes.JUMP] = FeeSchedule.MID;
