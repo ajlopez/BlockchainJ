@@ -168,12 +168,12 @@ public class VirtualMachineTest {
     @Test
     public void executeMulModOperations() throws VirtualMachineException {
         // TODO test add without 2^256 modulus
-        executeTernaryOp(0, 0, 0, OpCodes.MULMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(1, 1, 1, OpCodes.MULMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(2, 1, 3, OpCodes.MULMOD, 1, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(2, 21, 2, OpCodes.MULMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(5, 42, 2, OpCodes.MULMOD, 4, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.MULMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(0, 0, 0, OpCodes.MULMOD, 0, FeeSchedule.MID.getValue());
+        executeTernaryOp(1, 1, 1, OpCodes.MULMOD, 0, FeeSchedule.MID.getValue());
+        executeTernaryOp(2, 1, 3, OpCodes.MULMOD, 1, FeeSchedule.MID.getValue());
+        executeTernaryOp(2, 21, 2, OpCodes.MULMOD, 0, FeeSchedule.MID.getValue());
+        executeTernaryOp(5, 42, 2, OpCodes.MULMOD, 4, FeeSchedule.MID.getValue());
+        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.MULMOD, 0, FeeSchedule.MID.getValue());
 
         executeTernaryOp("0100000000", "00", "010000000000000000", OpCodes.MULMOD, "00");
         executeTernaryOp("01", "00", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MULMOD, "00");
@@ -240,12 +240,12 @@ public class VirtualMachineTest {
     @Test
     public void executeAddModOperations() throws VirtualMachineException {
         // TODO test mul without 2^256 modulus
-        executeTernaryOp(0, 0, 0, OpCodes.ADDMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(1, 1, 1, OpCodes.ADDMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(2, 1, 2, OpCodes.ADDMOD, 1, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(2, 80, 4, OpCodes.ADDMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(5, 80, 4, OpCodes.ADDMOD, 4, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
-        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.ADDMOD, 0, FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.MID.getValue());
+        executeTernaryOp(0, 0, 0, OpCodes.ADDMOD, 0, FeeSchedule.MID.getValue());
+        executeTernaryOp(1, 1, 1, OpCodes.ADDMOD, 0, FeeSchedule.MID.getValue());
+        executeTernaryOp(2, 1, 2, OpCodes.ADDMOD, 1, FeeSchedule.MID.getValue());
+        executeTernaryOp(2, 80, 4, OpCodes.ADDMOD, 0, FeeSchedule.MID.getValue());
+        executeTernaryOp(5, 80, 4, OpCodes.ADDMOD, 4, FeeSchedule.MID.getValue());
+        executeTernaryOp(1, 1, 1024 * 1024 * 1024, OpCodes.ADDMOD, 0, FeeSchedule.MID.getValue());
 
         executeTernaryOp("0100000000", "00", "010000000000000000", OpCodes.ADDMOD, "00");
         executeTernaryOp("01", "00", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.ADDMOD, "00");
@@ -1260,7 +1260,7 @@ public class VirtualMachineTest {
 
         virtualMachine.execute(bytecodes);
 
-        Assert.assertEquals(expectedGasUsed, virtualMachine.getGasUsed());
+        Assert.assertEquals(expectedGasUsed + FeeSchedule.VERYLOW.getValue() * 3, virtualMachine.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
