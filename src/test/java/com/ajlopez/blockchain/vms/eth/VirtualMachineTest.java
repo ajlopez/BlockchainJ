@@ -615,6 +615,8 @@ public class VirtualMachineTest {
 
     @Test
     public void executeByteOperations() throws VirtualMachineException {
+        executeBinaryOp(0x20, 0x1f, OpCodes.BYTE, 0x20, FeeSchedule.VERYLOW.getValue());
+
         executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "00", OpCodes.BYTE, "01");
         executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "01", OpCodes.BYTE, "02");
         executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "02", OpCodes.BYTE, "03");
