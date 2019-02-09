@@ -1007,9 +1007,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeCodeSizeOperation() throws VirtualMachineException {
-        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         virtualMachine.execute(new byte[] { OpCodes.CODESIZE, OpCodes.STOP });
+
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 

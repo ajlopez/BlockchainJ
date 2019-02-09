@@ -27,6 +27,7 @@ public class VirtualMachine {
         opCodeFees[OpCodes.CALLVALUE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.CALLDATALOAD] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.CALLDATASIZE] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.CODESIZE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.PC] = FeeSchedule.BASE;
 
         opCodeFees[OpCodes.ADD] = FeeSchedule.VERYLOW;
