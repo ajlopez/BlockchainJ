@@ -989,11 +989,13 @@ public class VirtualMachineTest {
 
         BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(null, blockData);
+        ProgramEnvironment programEnvironment = createProgramEnvironment(blockData);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
         virtualMachine.execute(new byte[] { OpCodes.COINBASE, OpCodes.TIMESTAMP, OpCodes.NUMBER, OpCodes.DIFFICULTY });
+
+        Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, virtualMachine.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1303,6 +1305,12 @@ public class VirtualMachineTest {
         MessageData messageData = new MessageData(null, null, null, DataWord.ZERO, 100000, DataWord.ZERO, null, false);
 
         return new ProgramEnvironment(messageData, null);
+    }
+
+    private static ProgramEnvironment createProgramEnvironment(BlockData blockData) {
+        MessageData messageData = new MessageData(null, null, null, DataWord.ZERO, 100000, DataWord.ZERO, null, false);
+
+        return new ProgramEnvironment(messageData, blockData);
     }
 
     private static ProgramEnvironment createReadOnlyProgramEnvironment() {

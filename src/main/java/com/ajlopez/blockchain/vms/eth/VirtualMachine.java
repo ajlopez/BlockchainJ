@@ -49,6 +49,11 @@ public class VirtualMachine {
         opCodeFees[OpCodes.OR] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.BYTE] = FeeSchedule.VERYLOW;
 
+        opCodeFees[OpCodes.COINBASE] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.DIFFICULTY] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.TIMESTAMP] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.NUMBER] = FeeSchedule.BASE;
+
         opCodeFees[OpCodes.MOD] = FeeSchedule.LOW;
         opCodeFees[OpCodes.SMOD] = FeeSchedule.LOW;
 
