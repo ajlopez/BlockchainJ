@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.vms.eth;
 import com.ajlopez.blockchain.core.types.DataWord;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -550,6 +551,18 @@ public class VirtualMachine {
 
                     this.stack.set(size - 1, word2);
                     this.stack.set(size - 1 - offset, word1);
+
+                    break;
+
+                case OpCodes.LOG0:
+                    offset = this.stack.pop().asUnsignedInteger();
+                    length = this.stack.pop().asUnsignedInteger();
+
+                    byte[] bytes = this.memory.getBytes(offset, length);
+
+                    Log log = new Log(this.programEnvironment.getAddress(), bytes, Collections.EMPTY_LIST);
+
+                    this.logs.add(log);
 
                     break;
 
