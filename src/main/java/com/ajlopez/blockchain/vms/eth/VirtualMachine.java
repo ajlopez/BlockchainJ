@@ -556,13 +556,14 @@ public class VirtualMachine {
 
                 case OpCodes.LOG0:
                 case OpCodes.LOG1:
+                case OpCodes.LOG2:
                     offset = this.stack.pop().asUnsignedInteger();
                     length = this.stack.pop().asUnsignedInteger();
 
                     byte[] bytes = this.memory.getBytes(offset, length);
                     List<DataWord> topics = new ArrayList<>();
 
-                    if (bytecode == OpCodes.LOG1)
+                    for (int k = 0; k < bytecode - OpCodes.LOG0; k++)
                         topics.add(this.stack.pop());
 
                     Log log = new Log(this.programEnvironment.getAddress(), bytes, topics);

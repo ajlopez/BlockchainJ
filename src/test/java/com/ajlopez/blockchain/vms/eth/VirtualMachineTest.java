@@ -568,7 +568,7 @@ public class VirtualMachineTest {
         virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG1 });
 
         // TODO check gas used
-        
+
         Stack<DataWord> stack = virtualMachine.getStack();
 
         Assert.assertNotNull(stack);
@@ -587,6 +587,35 @@ public class VirtualMachineTest {
         Assert.assertFalse(logs.get(0).getTopics().isEmpty());
         Assert.assertEquals(1, logs.get(0).getTopics().size());
         Assert.assertEquals(DataWord.fromSignedLong(42), logs.get(0).getTopics().get(0));
+    }
+
+    @Test
+    public void executeLog2() throws VirtualMachineException {
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG2 });
+
+        // TODO check gas used
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertEquals(32, memory.size());
+
+        List<Log> logs = virtualMachine.getLogs();
+
+        Assert.assertNotNull(logs);
+        Assert.assertFalse(logs.isEmpty());
+        Assert.assertEquals(1, logs.size());
+        Assert.assertArrayEquals(memory.getBytes(28, 2), logs.get(0).getData());
+        Assert.assertFalse(logs.get(0).getTopics().isEmpty());
+        Assert.assertEquals(2, logs.get(0).getTopics().size());
+        Assert.assertEquals(DataWord.fromSignedLong(42), logs.get(0).getTopics().get(0));
+        Assert.assertEquals(DataWord.fromSignedLong(3), logs.get(0).getTopics().get(1));
     }
 
     @Test
