@@ -557,6 +557,8 @@ public class VirtualMachine {
                 case OpCodes.LOG0:
                 case OpCodes.LOG1:
                 case OpCodes.LOG2:
+                case OpCodes.LOG3:
+                case OpCodes.LOG4:
                     offset = this.stack.pop().asUnsignedInteger();
                     length = this.stack.pop().asUnsignedInteger();
 
