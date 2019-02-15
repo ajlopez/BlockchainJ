@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by ajlopez on 27/10/2018.
  */
 public class JsonParser {
-    private JsonLexer lexer;
+    private final JsonLexer lexer;
 
     public JsonParser(Reader reader) {
         this.lexer = new JsonLexer(reader);

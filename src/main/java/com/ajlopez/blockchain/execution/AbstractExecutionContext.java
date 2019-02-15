@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by ajlopez on 27/11/2018.
  */
 public abstract class AbstractExecutionContext {
-    private Map<Address, AccountState> accountStates = new HashMap<>();
+    private final Map<Address, AccountState> accountStates = new HashMap<>();
 
     public void transfer(Address senderAddress, Address receiverAddress, BigInteger amount) {
         AccountState sender = this.getAccountState(senderAddress);

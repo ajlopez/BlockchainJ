@@ -7,8 +7,8 @@ import java.util.List;
  * Created by ajlopez on 03/11/2018.
  */
 public class JsonArrayBuilder extends JsonBuilder {
-    private JsonBuilder parent;
-    private List<JsonValue> elements = new ArrayList<>();
+    private final JsonBuilder parent;
+    private final List<JsonValue> elements = new ArrayList<>();
 
     public JsonArrayBuilder(JsonBuilder parent) {
         this.parent = parent;
