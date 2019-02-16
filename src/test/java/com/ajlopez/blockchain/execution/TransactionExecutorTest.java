@@ -31,7 +31,7 @@ public class TransactionExecutorTest {
 
         Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0 );
 
-        TransactionExecutor executor = new TransactionExecutor(accountStore);
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore));
 
         List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction));
 
@@ -72,7 +72,7 @@ public class TransactionExecutorTest {
         transactions.add(transaction1);
         transactions.add(transaction2);
 
-        TransactionExecutor executor = new TransactionExecutor(accountStore);
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore));
 
         List<Transaction> result = executor.executeTransactions(transactions);
 
@@ -114,7 +114,7 @@ public class TransactionExecutorTest {
         transactions.add(transaction1);
         transactions.add(transaction2);
 
-        TransactionExecutor executor = new TransactionExecutor(accountStore);
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore));
 
         List<Transaction> result = executor.executeTransactions(transactions);
 
@@ -154,7 +154,7 @@ public class TransactionExecutorTest {
         transactions.add(transaction1);
         transactions.add(transaction2);
 
-        TransactionExecutor executor = new TransactionExecutor(accountStore);
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore));
 
         List<Transaction> result = executor.executeTransactions(transactions);
 
@@ -197,7 +197,7 @@ public class TransactionExecutorTest {
             transactions.add(transaction);
         }
 
-        TransactionExecutor transactionExecutor = new TransactionExecutor(accountStore);
+        TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore));
 
         long millis = System.currentTimeMillis();
         List<Transaction> executed = transactionExecutor.executeTransactions(transactions);

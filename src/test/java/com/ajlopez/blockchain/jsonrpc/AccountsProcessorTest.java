@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.json.JsonStringValue;
 import com.ajlopez.blockchain.json.JsonValue;
@@ -261,7 +262,7 @@ public class AccountsProcessorTest {
 
         for (int k = 0; k < nblocks; k++) {
             Transaction transaction = new Transaction(sender, receiver, BigInteger.valueOf(transferAmount), k);
-            TransactionExecutor transactionExecutor = new TransactionExecutor(accountStore);
+            TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore));
             List<Transaction> transactions = Collections.singletonList(transaction);
 
             transactions = transactionExecutor.executeTransactions(transactions);
@@ -269,9 +270,9 @@ public class AccountsProcessorTest {
             Block parent = blockChain.getBestBlock();
             Address coinbase = FactoryHelper.createRandomAddress();
 
-            Block block = new Block(parent.getNumber() + 1, parent.getHash(), transactions, transactionExecutor.getHashRoot(), System.currentTimeMillis() / 1000, coinbase);
-
             accountStore.save();
+
+            Block block = new Block(parent.getNumber() + 1, parent.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase);
 
             blockChain.connectBlock(block);
         }

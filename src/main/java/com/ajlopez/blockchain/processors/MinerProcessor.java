@@ -5,6 +5,8 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.ExecutionContext;
+import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -51,7 +53,8 @@ public class MinerProcessor {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
         Trie trie = this.trieStore.retrieve(parentStateRootHash);
         AccountStore accountStore = new AccountStore(trie);
-        TransactionExecutor transactionExecutor = new TransactionExecutor(accountStore);
+        ExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
         List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions());
 

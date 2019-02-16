@@ -13,16 +13,10 @@ import java.util.List;
  * Created by ajlopez on 27/11/2018.
  */
 public class TransactionExecutor {
-    private final AccountStore accountStore;
     private final ExecutionContext executionContext;
 
-    public TransactionExecutor(AccountStore accountStore) {
-        this.accountStore = accountStore;
-        this.executionContext = new TopExecutionContext(this.accountStore);
-    }
-
-    public Hash getHashRoot() {
-        return this.accountStore.getRootHash();
+    public TransactionExecutor(ExecutionContext executionContext) {
+        this.executionContext = executionContext;
     }
 
     public List<Transaction> executeTransactions(List<Transaction> transactions) {
