@@ -14,11 +14,11 @@ import java.util.List;
  */
 public class TransactionExecutor {
     private final AccountStore accountStore;
-    private final TopExecutionContext topExecutionContext;
+    private final ExecutionContext executionContext;
 
     public TransactionExecutor(AccountStore accountStore) {
         this.accountStore = accountStore;
-        this.topExecutionContext = new TopExecutionContext(this.accountStore);
+        this.executionContext = new TopExecutionContext(this.accountStore);
     }
 
     public Hash getHashRoot() {
@@ -31,15 +31,15 @@ public class TransactionExecutor {
         for (Transaction transaction : transactions) {
             Address sender = transaction.getSender();
 
-            if (transaction.getNonce() != this.topExecutionContext.getNonce(sender))
+            if (transaction.getNonce() != this.executionContext.getNonce(sender))
                 continue;
 
-            BigInteger senderBalance = this.topExecutionContext.getBalance(sender);
+            BigInteger senderBalance = this.executionContext.getBalance(sender);
 
             if (senderBalance.compareTo(transaction.getValue()) < 0)
                 continue;
 
-            AbstractExecutionContext context = new ChildExecutionContext(this.topExecutionContext);
+            ExecutionContext context = new ChildExecutionContext(this.executionContext);
 
             context.transfer(transaction.getSender(), transaction.getReceiver(), transaction.getValue());
             context.incrementNonce(transaction.getSender());
@@ -48,7 +48,7 @@ public class TransactionExecutor {
             executed.add(transaction);
         }
 
-        this.topExecutionContext.commit();
+        this.executionContext.commit();
 
         return executed;
     }

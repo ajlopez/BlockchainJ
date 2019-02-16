@@ -9,9 +9,10 @@ import java.util.Map;
 /**
  * Created by ajlopez on 27/11/2018.
  */
-public abstract class AbstractExecutionContext {
+public abstract class AbstractExecutionContext implements ExecutionContext {
     private final Map<Address, AccountState> accountStates = new HashMap<>();
 
+    @Override
     public void transfer(Address senderAddress, Address receiverAddress, BigInteger amount) {
         AccountState sender = this.getAccountState(senderAddress);
         AccountState receiver = this.getAccountState(receiverAddress);
@@ -20,20 +21,24 @@ public abstract class AbstractExecutionContext {
         receiver.addToBalance(amount);
     }
 
+    @Override
     public void incrementNonce(Address address) {
         AccountState accountState = this.getAccountState(address);
 
         accountState.incrementNonce();
     }
 
+    @Override
     public BigInteger getBalance(Address address) {
         return this.getAccountState(address).getBalance();
     }
 
+    @Override
     public long getNonce(Address address) {
         return this.getAccountState(address).getNonce();
     }
 
+    @Override
     public void commit() {
         for (Map.Entry<Address, AccountState> entry : this.accountStates.entrySet()) {
             Address address = entry.getKey();
@@ -48,11 +53,13 @@ public abstract class AbstractExecutionContext {
         this.accountStates.clear();
     }
 
+    @Override
     public void rollback() {
         this.accountStates.clear();
     }
 
-    AccountState getAccountState(Address address) {
+    @Override
+    public AccountState getAccountState(Address address) {
         if (this.accountStates.containsKey(address))
             return this.accountStates.get(address);
 
@@ -63,7 +70,8 @@ public abstract class AbstractExecutionContext {
         return accountState;
     }
 
-    void putAccountState(Address address, AccountState accountState) {
+    @Override
+    public void putAccountState(Address address, AccountState accountState) {
         this.accountStates.put(address, accountState);
     }
 

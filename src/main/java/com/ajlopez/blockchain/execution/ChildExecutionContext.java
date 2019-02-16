@@ -7,9 +7,9 @@ import com.ajlopez.blockchain.store.AccountStore;
  * Created by ajlopez on 27/11/2018.
  */
 public class ChildExecutionContext extends AbstractExecutionContext {
-    private final AbstractExecutionContext parentContext;
+    private final ExecutionContext parentContext;
 
-    public ChildExecutionContext(AbstractExecutionContext parentContext) {
+    public ChildExecutionContext(ExecutionContext parentContext) {
         this.parentContext = parentContext;
     }
 
