@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.TrieStore;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -67,5 +68,35 @@ public class TrieStorageTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(DataWord.ZERO, result);
         Assert.assertEquals(initialHash, storage.getRootHash());
+    }
+
+
+    @Test
+    public void setAndGetValueAndCommit() {
+        TrieStore store = new TrieStore(new HashMapStore());
+        TrieStorage storage = new TrieStorage(new Trie(store));
+
+        DataWord address = DataWord.fromHexadecimalString("0x010203");
+        DataWord value = DataWord.fromHexadecimalString("2a");
+
+        storage.setValue(address, value);
+
+        DataWord result = storage.getValue(address);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(value, result);
+
+        storage.commit();
+
+        Trie trie2 = store.retrieve(storage.getRootHash());
+
+        Assert.assertNotNull(trie2);
+
+        TrieStorage storage2 = new TrieStorage(trie2);
+
+        DataWord result2 = storage2.getValue(address);
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(value, result2);
     }
 }

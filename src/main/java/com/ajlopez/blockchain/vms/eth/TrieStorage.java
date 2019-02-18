@@ -39,4 +39,8 @@ public class TrieStorage implements Storage {
     public Hash getRootHash() {
         return this.trie.getHash();
     }
+
+    public void commit() {
+        this.trie.save();
+    }
 }
