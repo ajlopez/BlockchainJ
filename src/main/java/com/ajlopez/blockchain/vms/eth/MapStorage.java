@@ -12,17 +12,20 @@ import java.util.Map;
 public class MapStorage implements Storage {
     private Map<DataWord, DataWord> values = new HashMap<>();
 
+    public boolean hasValue(DataWord address) {
+        return this.values.containsKey(address);
+    }
     public DataWord getValue(DataWord address) {
-        if (values.containsKey(address))
-            return values.get(address);
+        if (this.hasValue(address))
+            return this.values.get(address);
 
         return DataWord.ZERO;
     }
 
     public void setValue(DataWord address, DataWord value) {
         if (value.equals(DataWord.ZERO))
-            values.remove(address);
+            this.values.remove(address);
         else
-            values.put(address, value);
+            this.values.put(address, value);
     }
 }
