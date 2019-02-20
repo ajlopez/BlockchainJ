@@ -12,9 +12,12 @@ import java.util.Map;
 public class MapStorage implements Storage {
     private Map<DataWord, DataWord> values = new HashMap<>();
 
+    @Override
     public boolean hasValue(DataWord address) {
         return this.values.containsKey(address);
     }
+
+    @Override
     public DataWord getValue(DataWord address) {
         if (this.hasValue(address))
             return this.values.get(address);
@@ -22,6 +25,7 @@ public class MapStorage implements Storage {
         return DataWord.ZERO;
     }
 
+    @Override
     public void setValue(DataWord address, DataWord value) {
         if (value.equals(DataWord.ZERO))
             this.values.remove(address);

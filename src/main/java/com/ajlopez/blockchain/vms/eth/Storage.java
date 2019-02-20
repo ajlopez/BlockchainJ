@@ -7,6 +7,8 @@ import com.ajlopez.blockchain.core.types.DataWord;
  */
 
 public interface Storage {
+    boolean hasValue(DataWord address);
+
     void setValue(DataWord address, DataWord value);
 
     DataWord getValue(DataWord address);

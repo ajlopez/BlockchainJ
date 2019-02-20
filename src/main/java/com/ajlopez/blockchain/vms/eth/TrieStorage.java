@@ -15,6 +15,13 @@ public class TrieStorage implements Storage {
     }
 
     @Override
+    public boolean hasValue(DataWord address) {
+        byte[] data = this.trie.get(address.getBytes());
+
+        return data == null;
+    }
+
+    @Override
     public void setValue(DataWord address, DataWord value) {
         byte[] bkey = address.getBytes();
 
