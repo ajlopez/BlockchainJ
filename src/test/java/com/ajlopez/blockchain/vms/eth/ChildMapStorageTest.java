@@ -43,5 +43,23 @@ public class ChildMapStorageTest {
         Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.ONE));
 
         Assert.assertFalse(parentStorage.hasValue(DataWord.ONE));
-        Assert.assertEquals(DataWord.ZERO, parentStorage.getValue(DataWord.ONE));    }
+        Assert.assertEquals(DataWord.ZERO, parentStorage.getValue(DataWord.ONE));
+    }
+
+    @Test
+    public void setCommitAndGetValue() {
+        Storage parentStorage = new MapStorage();
+
+        ChildMapStorage storage = new ChildMapStorage(parentStorage);
+
+        storage.setValue(DataWord.ONE, DataWord.ONE);
+
+        storage.commit();
+
+        Assert.assertTrue(storage.hasValue(DataWord.ONE));
+        Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.ONE));
+
+        Assert.assertTrue(parentStorage.hasValue(DataWord.ONE));
+        Assert.assertEquals(DataWord.ONE, parentStorage.getValue(DataWord.ONE));
+    }
 }
