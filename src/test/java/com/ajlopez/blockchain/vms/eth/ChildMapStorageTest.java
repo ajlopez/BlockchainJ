@@ -15,8 +15,9 @@ public class ChildMapStorageTest {
         Storage parentStorage = new MapStorage();
         Storage storage = new ChildMapStorage(parentStorage);
 
-        Assert.assertFalse(((ChildMapStorage) storage).hasValue(DataWord.ZERO));
+        Assert.assertFalse(storage.hasValue(DataWord.ZERO));
         Assert.assertEquals(DataWord.ZERO, storage.getValue(DataWord.ONE));
+        Assert.assertFalse(((ChildMapStorage) storage).hasChanges());
     }
 
     @Test
@@ -25,17 +26,18 @@ public class ChildMapStorageTest {
 
         parentStorage.setValue(DataWord.ONE, DataWord.ONE);
 
-        Storage storage = new ChildMapStorage(parentStorage);
+        ChildMapStorage storage = new ChildMapStorage(parentStorage);
 
         Assert.assertTrue(storage.hasValue(DataWord.ONE));
         Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.ONE));
+        Assert.assertFalse(storage.hasChanges());
     }
 
     @Test
     public void setAndGetValue() {
         Storage parentStorage = new MapStorage();
 
-        Storage storage = new ChildMapStorage(parentStorage);
+        ChildMapStorage storage = new ChildMapStorage(parentStorage);
 
         storage.setValue(DataWord.ONE, DataWord.ONE);
 
@@ -44,6 +46,7 @@ public class ChildMapStorageTest {
 
         Assert.assertFalse(parentStorage.hasValue(DataWord.ONE));
         Assert.assertEquals(DataWord.ZERO, parentStorage.getValue(DataWord.ONE));
+        Assert.assertTrue(storage.hasChanges());
     }
 
     @Test
@@ -54,7 +57,11 @@ public class ChildMapStorageTest {
 
         storage.setValue(DataWord.ONE, DataWord.ONE);
 
+        Assert.assertTrue(storage.hasChanges());
+
         storage.commit();
+
+        Assert.assertFalse(storage.hasChanges());
 
         Assert.assertTrue(storage.hasValue(DataWord.ONE));
         Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.ONE));

@@ -45,6 +45,12 @@ public class ChildMapStorage extends MapStorage {
 
     public void commit() {
         for (DataWord address : changed)
-            parentStorage.setValue(address, super.getValue(address));
+            this.parentStorage.setValue(address, super.getValue(address));
+
+        changed.clear();
+    }
+
+    public boolean hasChanges() {
+        return !this.changed.isEmpty();
     }
 }
