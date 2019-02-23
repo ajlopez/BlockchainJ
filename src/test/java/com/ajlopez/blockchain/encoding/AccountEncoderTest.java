@@ -47,7 +47,7 @@ public class AccountEncoderTest {
 
     @Test
     public void encodeDecodeAccountWithNonZeroBalance() {
-        Account account = new Account(BigInteger.TEN, 0, null);
+        Account account = new Account(BigInteger.valueOf(255), 0, null);
 
         byte[] encoded = AccountEncoder.encode(account);
 
@@ -56,7 +56,7 @@ public class AccountEncoderTest {
         Account result = AccountEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(BigInteger.TEN, result.getBalance());
+        Assert.assertEquals(BigInteger.valueOf(255), result.getBalance());
         Assert.assertEquals(0, result.getNonce());
     }
 
