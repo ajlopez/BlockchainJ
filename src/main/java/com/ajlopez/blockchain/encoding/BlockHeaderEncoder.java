@@ -13,25 +13,25 @@ public class BlockHeaderEncoder {
     private BlockHeaderEncoder() {}
 
     public static byte[] encode(BlockHeader header) {
-        byte[] rlpNumber = RLP.encode(ByteUtils.unsignedLongToNormalizedBytes(header.getNumber()));
+        byte[] rlpNumber = RLPEncoder.encodeUnsignedLong(header.getNumber());
         byte[] rlpParentHash = RLP.encode(header.getParentHash().getBytes());
         byte[] rlpTransactionsHash = RLP.encode(header.getTransactionsHash().getBytes());
         byte[] rlpStateRootHash = RLP.encode(header.getStateRootHash().getBytes());
-        byte[] rlpTimestamp = RLP.encode(ByteUtils.unsignedLongToNormalizedBytes(header.getTimestamp()));
-        byte[] rlpCoinbase = RLP.encode(header.getCoinbase().getBytes());
+        byte[] rlpTimestamp = RLPEncoder.encodeUnsignedLong(header.getTimestamp());
+        byte[] rlpCoinbase = RLPEncoder.encodeAddress(header.getCoinbase());
 
         return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase);
     }
 
     public static BlockHeader decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
-        byte[] number = RLP.decode(bytes[0]);
+        long number = RLPEncoder.decodeUnsignedLong(bytes[0]);
         byte[] parentHash = RLP.decode(bytes[1]);
         byte[] transactionsHash = RLP.decode(bytes[2]);
         byte[] stateRootHash = RLP.decode(bytes[3]);
-        byte[] timestamp = RLP.decode(bytes[4]);
-        byte[] coinbase = RLP.decode(bytes[5]);
+        long timestamp = RLPEncoder.decodeUnsignedLong(bytes[4]);
+        Address coinbase = RLPEncoder.decodeAddress(bytes[5]);
 
-        return new BlockHeader(ByteUtils.bytesToUnsignedLong(number), new BlockHash(parentHash), new Hash(transactionsHash), new Hash(stateRootHash), ByteUtils.bytesToUnsignedLong(timestamp), new Address(coinbase));
+        return new BlockHeader(number, new BlockHash(parentHash), new Hash(transactionsHash), new Hash(stateRootHash), timestamp, coinbase);
     }
 }

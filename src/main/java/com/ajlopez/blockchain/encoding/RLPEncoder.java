@@ -26,4 +26,12 @@ public class RLPEncoder {
     public static BigInteger decodeCoin(byte[] data) {
         return new BigInteger(1, RLP.decode(data));
     }
+
+    public static byte[] encodeUnsignedLong(long value) {
+        return RLP.encode(ByteUtils.unsignedLongToNormalizedBytes(value));
+    }
+
+    public static long decodeUnsignedLong(byte[] data) {
+        return ByteUtils.bytesToUnsignedLong(RLP.decode(data));
+    }
 }
