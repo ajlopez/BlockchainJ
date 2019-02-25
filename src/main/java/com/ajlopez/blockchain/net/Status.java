@@ -28,5 +28,5 @@ public class Status {
         return this.bestBlockNumber;
     }
 
-    public Hash getBestBlockHash() { return this.bestBlockHash; }
+    public BlockHash getBestBlockHash() { return this.bestBlockHash; }
 }

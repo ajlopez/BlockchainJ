@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.encoding;
 
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -11,7 +12,8 @@ public class StatusEncoderTest {
     @Test
     public void encodeDecodeStatus() {
         PeerId nodeid = HashUtilsTest.generateRandomPeerId();
-        Status status = new Status(nodeid, 2, 3, FactoryHelper.createRandomBlockHash());
+        BlockHash blockHash = FactoryHelper.createRandomBlockHash();
+        Status status = new Status(nodeid, 2, 3, blockHash);
 
         byte[] bytes = StatusEncoder.encode(status);
 
@@ -24,5 +26,6 @@ public class StatusEncoderTest {
         Assert.assertEquals(nodeid, result.getPeerId());
         Assert.assertEquals(2, result.getNetworkNumber());
         Assert.assertEquals(3, result.getBestBlockNumber());
+        Assert.assertEquals(blockHash, result.getBestBlockHash());
     }
 }

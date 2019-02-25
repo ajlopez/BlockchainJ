@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.math.BigInteger;
@@ -33,5 +34,13 @@ public class RLPEncoder {
 
     public static long decodeUnsignedLong(byte[] data) {
         return ByteUtils.bytesToUnsignedLong(RLP.decode(data));
+    }
+
+    public static byte[] encodeBlockHash(BlockHash blockHash) {
+        return RLP.encode(blockHash.getBytes());
+    }
+
+    public static BlockHash decodeBlockHash(byte[] data) {
+        return new BlockHash(RLP.decode(data));
     }
 }
