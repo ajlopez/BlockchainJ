@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.encoding;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.math.BigInteger;
@@ -59,5 +60,13 @@ public class RLPEncoder {
             return null;
 
         return new Hash(bytes);
+    }
+
+    public static byte[] encodePeerId(PeerId peerId) {
+        return RLP.encode(peerId.getBytes());
+    }
+
+    public static PeerId decodePeerId(byte[] data) {
+        return new PeerId(RLP.decode(data));
     }
 }
