@@ -187,4 +187,16 @@ public class AccountStateTest {
         Assert.assertEquals(42, result.getNonce());
         Assert.assertFalse(result.wasChanged());
     }
+
+    @Test
+    public void toAccount() {
+        Account account = new Account(BigInteger.TEN, 42, FactoryHelper.createRandomHash());
+
+        Account result = AccountState.fromAccount(account).toAccount();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(account.getBalance(), result.getBalance());
+        Assert.assertEquals(account.getNonce(), result.getNonce());
+        Assert.assertEquals(account.getCodeHash(), result.getCodeHash());
+    }
 }
