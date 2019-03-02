@@ -3,8 +3,11 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.vms.eth.VirtualMachineException;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigInteger;
 
@@ -12,6 +15,10 @@ import java.math.BigInteger;
  * Created by ajlopez on 26/11/2018.
  */
 public class AccountStateTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void createWithZeroBalanceAndZeroNonceAndNullCodeHash() {
         AccountState accountState = new AccountState();
@@ -20,6 +27,44 @@ public class AccountStateTest {
         Assert.assertEquals(0, accountState.getNonce());
         Assert.assertNull(accountState.getCodeHash());
         Assert.assertFalse(accountState.wasChanged());
+    }
+
+    @Test
+    public void setCodeHash() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+
+        AccountState accountState = new AccountState();
+
+        accountState.setCodeHash(codeHash);
+
+        Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
+        Assert.assertEquals(0, accountState.getNonce());
+        Assert.assertEquals(codeHash, accountState.getCodeHash());
+        Assert.assertTrue(accountState.wasChanged());
+    }
+
+    @Test
+    public void cannotSetCodeHashTwice() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+
+        AccountState accountState = new AccountState();
+
+        accountState.setCodeHash(codeHash);
+
+        exception.expect(UnsupportedOperationException.class);
+        exception.expectMessage("Cannot change code hash");
+        accountState.setCodeHash(FactoryHelper.createRandomHash());
+    }
+
+    @Test
+    public void cannotChangeCodeHash() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+
+        AccountState accountState = new AccountState(BigInteger.ZERO, 0, codeHash);
+
+        exception.expect(UnsupportedOperationException.class);
+        exception.expectMessage("Cannot change code hash");
+        accountState.setCodeHash(FactoryHelper.createRandomHash());
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Hash;
 
+import javax.naming.OperationNotSupportedException;
 import java.math.BigInteger;
 
 /**
@@ -80,6 +81,9 @@ public class AccountState {
     }
 
     public void setCodeHash(Hash codeHash) {
+        if (this.codeHash != null)
+            throw new UnsupportedOperationException("Cannot change code hash");
+
         this.codeHash = codeHash;
         this.changed = true;
     }
