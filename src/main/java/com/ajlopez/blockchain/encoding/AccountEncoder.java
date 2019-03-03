@@ -15,8 +15,9 @@ public class AccountEncoder {
         byte[] rlpBalance = RLPEncoder.encodeCoin(account.getBalance());
         byte[] rlpNonce = RLPEncoder.encodeUnsignedLong(account.getNonce());
         byte[] rlpCodeHash = RLPEncoder.encodeHash(account.getCodeHash());
+        byte[] rlpStorageHash = RLPEncoder.encodeHash(account.getStorageHash());
 
-        return RLP.encodeList(rlpBalance, rlpNonce, rlpCodeHash);
+        return RLP.encodeList(rlpBalance, rlpNonce, rlpCodeHash, rlpStorageHash);
     }
 
     public static Account decode(byte[] encoded) {
@@ -24,7 +25,8 @@ public class AccountEncoder {
         BigInteger balance = RLPEncoder.decodeCoin(bytes[0]);
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[1]);
         Hash codeHash = RLPEncoder.decodeHash(bytes[2]);
+        Hash storageHash = RLPEncoder.decodeHash(bytes[3]);
 
-        return new Account(balance, nonce, codeHash, null);
+        return new Account(balance, nonce, codeHash, storageHash);
     }
 }

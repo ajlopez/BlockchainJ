@@ -26,6 +26,7 @@ public class AccountEncoderTest {
         Assert.assertEquals(BigInteger.ZERO, result.getBalance());
         Assert.assertEquals(0, result.getNonce());
         Assert.assertNull(result.getCodeHash());
+        Assert.assertNull(result.getStorageHash());
     }
 
     @Test
@@ -43,6 +44,26 @@ public class AccountEncoderTest {
         Assert.assertEquals(BigInteger.ZERO, result.getBalance());
         Assert.assertEquals(0, result.getNonce());
         Assert.assertEquals(codeHash, result.getCodeHash());
+        Assert.assertNull(result.getStorageHash());
+    }
+
+
+    @Test
+    public void encodeDecodeAccountWithStorageHash() {
+        Hash storageHash = FactoryHelper.createRandomHash();
+        Account account = new Account(null, 0, null, storageHash);
+
+        byte[] encoded = AccountEncoder.encode(account);
+
+        Assert.assertNotNull(encoded);
+
+        Account result = AccountEncoder.decode(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(0, result.getNonce());
+        Assert.assertNull(result.getCodeHash());
+        Assert.assertEquals(storageHash, result.getStorageHash());
     }
 
     @Test
