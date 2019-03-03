@@ -31,7 +31,7 @@ public class ChildExecutionContextTest {
     @Test
     public void getBalanceFromAccountAndCommitDoesNotChangeStore() {
         AccountStore accountStore = new AccountStore(new Trie());
-        Account account = new Account(BigInteger.TEN, 42, null);
+        Account account = new Account(BigInteger.TEN, 42, null, null);
         Address address = FactoryHelper.createRandomAddress();
 
         accountStore.putAccount(address, account);
@@ -87,7 +87,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41, null);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
 
@@ -108,7 +108,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41, null);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -132,7 +132,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41, null);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -154,7 +154,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41, null);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -200,7 +200,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -231,7 +231,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -271,7 +271,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -304,7 +304,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
@@ -328,5 +328,39 @@ public class ChildExecutionContextTest {
         Account receiver2 = accountStore.getAccount(receiverAddress);
         Assert.assertNotNull(receiver2);
         Assert.assertEquals(BigInteger.ZERO, receiver2.getBalance());
+    }
+    @Test
+    public void getNullCodeHashFromNewAccount() {
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
+
+        Hash result = executionContext.getCodeHash(new Address(new byte[] { 0x01, 0x02 }));
+
+        Assert.assertNull(result);
+    }
+
+    @Test
+    public void setAndGetCodeHashFromNewAccount() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+        Address address = FactoryHelper.createRandomAddress();
+
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
+
+        executionContext.setCodeHash(address, codeHash);
+
+        Hash result = executionContext.getCodeHash(address);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(codeHash, result);
+        Assert.assertNull(parentExecutionContext.getCodeHash(address));
+
+        executionContext.commit();
+
+        Assert.assertEquals(codeHash, parentExecutionContext.getCodeHash(address));
     }
 }

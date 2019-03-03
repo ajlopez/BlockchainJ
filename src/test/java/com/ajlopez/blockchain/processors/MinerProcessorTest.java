@@ -56,7 +56,7 @@ public class MinerProcessorTest {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account account = new Account(BigInteger.valueOf(1000), 0, null);
+        Account account = new Account(BigInteger.valueOf(1000), 0, null, null);
         accountStore.putAccount(tx.getSender(), account);
         accountStore.save();
 
@@ -94,7 +94,7 @@ public class MinerProcessorTest {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account account = new Account(BigInteger.valueOf(1000), 0, null);
+        Account account = new Account(BigInteger.valueOf(1000), 0, null, null);
         accountStore.putAccount(tx.getSender(), account);
         accountStore.save();
 
@@ -129,7 +129,7 @@ public class MinerProcessorTest {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account account = new Account(BigInteger.valueOf(1000), 0, null);
+        Account account = new Account(BigInteger.valueOf(1000), 0, null, null);
         accountStore.putAccount(tx.getSender(), account);
         accountStore.save();
 

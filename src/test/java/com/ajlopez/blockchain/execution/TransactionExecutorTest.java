@@ -25,7 +25,7 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 0, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
 
         accountStore.putAccount(senderAddress, sender);
 
@@ -62,7 +62,7 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 0, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
 
         accountStore.putAccount(senderAddress, sender);
 
@@ -104,7 +104,7 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 0, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
 
         accountStore.putAccount(senderAddress, sender);
 
@@ -144,7 +144,7 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 0, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
 
         accountStore.putAccount(senderAddress, sender);
 
@@ -186,7 +186,7 @@ public class TransactionExecutorTest {
         for (int k = 0; k < 1000; k++)
             addresses.add(FactoryHelper.createRandomAddress());
 
-        Account account = new Account(BigInteger.valueOf(1001), 0, null);
+        Account account = new Account(BigInteger.valueOf(1001), 0, null, null);
 
         accountStore.putAccount(addresses.get(0), account);
 

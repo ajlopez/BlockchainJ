@@ -31,7 +31,7 @@ public class AccountEncoderTest {
     @Test
     public void encodeDecodeAccountWithCodeHash() {
         Hash codeHash = FactoryHelper.createRandomHash();
-        Account account = new Account(null, 0, codeHash);
+        Account account = new Account(null, 0, codeHash, null);
 
         byte[] encoded = AccountEncoder.encode(account);
 
@@ -47,7 +47,7 @@ public class AccountEncoderTest {
 
     @Test
     public void encodeDecodeAccountWithNonZeroBalance() {
-        Account account = new Account(BigInteger.valueOf(255), 0, null);
+        Account account = new Account(BigInteger.valueOf(255), 0, null, null);
 
         byte[] encoded = AccountEncoder.encode(account);
 
@@ -62,7 +62,7 @@ public class AccountEncoderTest {
 
     @Test
     public void encodeDecodeAccountWithNonZeroNonce() {
-        Account account = new Account(BigInteger.ZERO, 42, null);
+        Account account = new Account(BigInteger.ZERO, 42, null, null);
 
         byte[] encoded = AccountEncoder.encode(account);
 

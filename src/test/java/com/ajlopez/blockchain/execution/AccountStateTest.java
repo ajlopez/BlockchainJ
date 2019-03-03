@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.vms.eth.VirtualMachineException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -223,7 +222,7 @@ public class AccountStateTest {
 
     @Test
     public void createFromAccount() {
-        Account account = new Account(BigInteger.TEN, 42, null);
+        Account account = new Account(BigInteger.TEN, 42, null, null);
 
         AccountState result = AccountState.fromAccount(account);
 
@@ -235,7 +234,7 @@ public class AccountStateTest {
 
     @Test
     public void toAccount() {
-        Account account = new Account(BigInteger.TEN, 42, FactoryHelper.createRandomHash());
+        Account account = new Account(BigInteger.TEN, 42, FactoryHelper.createRandomHash(), null);
 
         Account result = AccountState.fromAccount(account).toAccount();
 

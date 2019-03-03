@@ -58,7 +58,7 @@ public class TopExecutionContextTest {
     @Test
     public void getBalanceFromAccountAndCommitDoesNotChangeStore() {
         AccountStore accountStore = new AccountStore(new Trie());
-        Account account = new Account(BigInteger.TEN, 42, null);
+        Account account = new Account(BigInteger.TEN, 42, null, null);
         Address address = FactoryHelper.createRandomAddress();
 
         accountStore.putAccount(address, account);
@@ -111,7 +111,7 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41, null);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore);
@@ -130,7 +130,7 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41, null);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore);
@@ -150,7 +150,7 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(BigInteger.valueOf(1000), 41, null);
+        Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore);
@@ -191,7 +191,7 @@ public class TopExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore);
@@ -221,7 +221,7 @@ public class TopExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore);
@@ -252,7 +252,7 @@ public class TopExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(BigInteger.valueOf(1000), 42, null);
+        Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore);

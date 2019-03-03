@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Hash;
 
-import javax.naming.OperationNotSupportedException;
 import java.math.BigInteger;
 
 /**
@@ -89,7 +88,7 @@ public class AccountState {
     }
 
     public Account toAccount() {
-        return new Account(this.balance, this.nonce, this.codeHash);
+        return new Account(this.balance, this.nonce, this.codeHash, null);
     }
 
     public boolean wasChanged() {

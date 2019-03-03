@@ -41,12 +41,12 @@ public class AccountStoreProviderTest {
         Hash hash0 = accountStore.getRootHash();
         accountStore.save();
 
-        Account account1 = new Account(BigInteger.ONE, 3, null);
+        Account account1 = new Account(BigInteger.ONE, 3, null, null);
         accountStore.putAccount(address, account1);
         Hash hash1 = accountStore.getRootHash();
         accountStore.save();
 
-        Account account2 = new Account(BigInteger.TEN, 42, null);
+        Account account2 = new Account(BigInteger.TEN, 42, null, null);
 
         accountStore.putAccount(address, account2);
         Hash hash2 = accountStore.getRootHash();

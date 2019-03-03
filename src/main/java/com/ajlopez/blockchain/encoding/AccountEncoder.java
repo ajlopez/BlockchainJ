@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.math.BigInteger;
 
@@ -26,6 +25,6 @@ public class AccountEncoder {
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[1]);
         Hash codeHash = RLPEncoder.decodeHash(bytes[2]);
 
-        return new Account(balance, nonce, codeHash);
+        return new Account(balance, nonce, codeHash, null);
     }
 }

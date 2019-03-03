@@ -11,12 +11,13 @@ public class Account {
     private final BigInteger balance;
     private final long nonce;
     private final Hash codeHash;
+    private final Hash storageHash;
 
     public Account() {
-        this(BigInteger.ZERO, 0, null);
+        this(BigInteger.ZERO, 0, null, null);
     }
 
-    public Account(BigInteger balance, long nonce, Hash codeHash) {
+    public Account(BigInteger balance, long nonce, Hash codeHash, Hash storageHash) {
         if (balance == null)
             balance = BigInteger.ZERO;
 
@@ -29,6 +30,7 @@ public class Account {
         this.balance = balance;
         this.nonce = nonce;
         this.codeHash = codeHash;
+        this.storageHash = storageHash;
     }
 
     public BigInteger getBalance() {
@@ -38,4 +40,6 @@ public class Account {
     public long getNonce() { return this.nonce; }
 
     public Hash getCodeHash() { return this.codeHash; }
+
+    public Hash getStorageHash() { return this.storageHash; }
 }
