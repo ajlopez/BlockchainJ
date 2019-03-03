@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -37,6 +38,12 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
     public long getNonce(Address address) {
         return this.getAccountState(address).getNonce();
     }
+
+    @Override
+    public Hash getCodeHash(Address address) { return this.getAccountState(address).getCodeHash(); }
+
+    @Override
+    public void setCodeHash(Address address, Hash codeHash) { this.getAccountState(address).setCodeHash(codeHash); }
 
     @Override
     public void commit() {

@@ -28,6 +28,34 @@ public class TopExecutionContextTest {
     }
 
     @Test
+    public void getNullCodeHashFromNewAccount() {
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+
+        Hash result = executionContext.getCodeHash(new Address(new byte[] { 0x01, 0x02 }));
+
+        Assert.assertNull(result);
+    }
+
+    @Test
+    public void setAndGetCodeHashFromNewAccount() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+        Address address = FactoryHelper.createRandomAddress();
+
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+
+        executionContext.setCodeHash(address, codeHash);
+
+        Hash result = executionContext.getCodeHash(address);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(codeHash, result);
+    }
+
+    @Test
     public void getBalanceFromAccountAndCommitDoesNotChangeStore() {
         AccountStore accountStore = new AccountStore(new Trie());
         Account account = new Account(BigInteger.TEN, 42, null);

@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 
 import java.math.BigInteger;
 
@@ -15,6 +16,10 @@ public interface ExecutionContext {
     BigInteger getBalance(Address address);
 
     long getNonce(Address address);
+
+    Hash getCodeHash(Address address);
+
+    void setCodeHash(Address address, Hash codeHash);
 
     void commit();
 
