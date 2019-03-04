@@ -12,18 +12,19 @@ public class AccountState {
     private BigInteger balance;
     private long nonce;
     private Hash codeHash;
+    private Hash storageHash;
 
     private boolean changed;
 
     public static AccountState fromAccount(Account account) {
-        return new AccountState(account.getBalance(), account.getNonce(), account.getCodeHash());
+        return new AccountState(account.getBalance(), account.getNonce(), account.getCodeHash(), null);
     }
 
     public AccountState() {
-        this(BigInteger.ZERO, 0, null);
+        this(BigInteger.ZERO, 0, null, null);
     }
 
-    public AccountState(BigInteger balance, long nonce, Hash codeHash) {
+    public AccountState(BigInteger balance, long nonce, Hash codeHash, Hash storageHash) {
         if (balance == null)
             balance = BigInteger.ZERO;
 
@@ -36,6 +37,7 @@ public class AccountState {
         this.balance = balance;
         this.nonce = nonce;
         this.codeHash = codeHash;
+        this.storageHash = storageHash;
     }
 
     public BigInteger getBalance() {
@@ -80,6 +82,12 @@ public class AccountState {
     }
 
     public void setCodeHash(Hash codeHash) {
+        if (this.codeHash == null && codeHash == null)
+            return;
+
+        if (this.codeHash != null && this.codeHash.equals(codeHash))
+            return;
+
         if (this.codeHash != null)
             throw new UnsupportedOperationException("Cannot change code hash");
 
@@ -96,7 +104,7 @@ public class AccountState {
     }
 
     public AccountState cloneState() {
-        AccountState clonedState = new AccountState(this.balance, this.nonce, this.codeHash);
+        AccountState clonedState = new AccountState(this.balance, this.nonce, this.codeHash, null);
 
         clonedState.changed = this.changed;
 
