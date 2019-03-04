@@ -95,6 +95,19 @@ public class AccountState {
         this.changed = true;
     }
 
+    public Hash getStorageHash() { return this.storageHash; }
+
+    public void setStorageHash(Hash storageHash) {
+        if (storageHash == null && this.storageHash == null)
+            return;
+
+        if (storageHash != null && storageHash.equals(this.storageHash))
+            return;
+
+        this.storageHash = storageHash;
+        this.changed = true;
+    }
+
     public Account toAccount() {
         return new Account(this.balance, this.nonce, this.codeHash, null);
     }

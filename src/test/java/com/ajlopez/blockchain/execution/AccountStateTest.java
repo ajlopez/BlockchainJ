@@ -25,6 +25,7 @@ public class AccountStateTest {
         Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
         Assert.assertEquals(0, accountState.getNonce());
         Assert.assertNull(accountState.getCodeHash());
+        Assert.assertNull(accountState.getStorageHash());
         Assert.assertFalse(accountState.wasChanged());
     }
 
@@ -39,6 +40,74 @@ public class AccountStateTest {
         Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
         Assert.assertEquals(0, accountState.getNonce());
         Assert.assertEquals(codeHash, accountState.getCodeHash());
+        Assert.assertTrue(accountState.wasChanged());
+    }
+
+
+    @Test
+    public void setStorageHash() {
+        Hash storageHash = FactoryHelper.createRandomHash();
+
+        AccountState accountState = new AccountState();
+
+        accountState.setStorageHash(storageHash);
+
+        Assert.assertEquals(BigInteger.ZERO, accountState.getBalance());
+        Assert.assertEquals(0, accountState.getNonce());
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertEquals(storageHash, accountState.getStorageHash());
+        Assert.assertTrue(accountState.wasChanged());
+    }
+
+    @Test
+    public void createWithStorageHash() {
+        Hash storageHash = FactoryHelper.createRandomHash();
+
+        AccountState accountState = new AccountState(BigInteger.ZERO, 0, null, storageHash);
+
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertEquals(storageHash, accountState.getStorageHash());
+        Assert.assertFalse(accountState.wasChanged());
+
+        accountState.setStorageHash(storageHash);
+
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertEquals(storageHash, accountState.getStorageHash());
+        Assert.assertFalse(accountState.wasChanged());
+    }
+
+    @Test
+    public void createWithoutStorageHashAndChangeToNull() {
+        AccountState accountState = new AccountState();
+
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertNull(accountState.getStorageHash());
+        Assert.assertFalse(accountState.wasChanged());
+
+        accountState.setStorageHash(null);
+
+
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertNull(accountState.getStorageHash());
+        Assert.assertFalse(accountState.wasChanged());
+    }
+
+    @Test
+    public void createWithStorageHashAndChangeIt() {
+        Hash storageHash = FactoryHelper.createRandomHash();
+
+        AccountState accountState = new AccountState(BigInteger.ZERO, 0, null, storageHash);
+
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertEquals(storageHash, accountState.getStorageHash());
+        Assert.assertFalse(accountState.wasChanged());
+
+        Hash storageHash2 = FactoryHelper.createRandomHash();
+
+        accountState.setStorageHash(storageHash2);
+
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertEquals(storageHash2, accountState.getStorageHash());
         Assert.assertTrue(accountState.wasChanged());
     }
 
