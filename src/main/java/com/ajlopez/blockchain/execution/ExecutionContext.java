@@ -21,6 +21,10 @@ public interface ExecutionContext {
 
     void setCodeHash(Address address, Hash codeHash);
 
+    Hash getStorageHash(Address address);
+
+    void setStorageHash(Address address, Hash storageHash);
+
     void commit();
 
     void rollback();

@@ -39,6 +39,17 @@ public class TopExecutionContextTest {
     }
 
     @Test
+    public void getNullStorageHashFromNewAccount() {
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+
+        Hash result = executionContext.getStorageHash(new Address(new byte[] { 0x01, 0x02 }));
+
+        Assert.assertNull(result);
+    }
+
+    @Test
     public void setAndGetCodeHashFromNewAccount() {
         Hash codeHash = FactoryHelper.createRandomHash();
         Address address = FactoryHelper.createRandomAddress();
@@ -53,6 +64,23 @@ public class TopExecutionContextTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(codeHash, result);
+    }
+
+    @Test
+    public void setAndGetStorageHashFromNewAccount() {
+        Hash storageHash = FactoryHelper.createRandomHash();
+        Address address = FactoryHelper.createRandomAddress();
+
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+
+        executionContext.setStorageHash(address, storageHash);
+
+        Hash result = executionContext.getStorageHash(address);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(storageHash, result);
     }
 
     @Test
