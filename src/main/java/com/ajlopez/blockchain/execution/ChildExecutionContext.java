@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.store.AccountStore;
 
 /**
  * Created by ajlopez on 27/11/2018.

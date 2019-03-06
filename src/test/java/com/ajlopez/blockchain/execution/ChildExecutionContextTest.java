@@ -329,6 +329,7 @@ public class ChildExecutionContextTest {
         Assert.assertNotNull(receiver2);
         Assert.assertEquals(BigInteger.ZERO, receiver2.getBalance());
     }
+
     @Test
     public void getNullCodeHashFromNewAccount() {
         AccountStore accountStore = new AccountStore(new Trie());
@@ -337,6 +338,18 @@ public class ChildExecutionContextTest {
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         Hash result = executionContext.getCodeHash(new Address(new byte[] { 0x01, 0x02 }));
+
+        Assert.assertNull(result);
+    }
+
+    @Test
+    public void getNullStorageHashFromNewAccount() {
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
+
+        Hash result = executionContext.getStorageHash(new Address(new byte[] { 0x01, 0x02 }));
 
         Assert.assertNull(result);
     }
@@ -362,5 +375,28 @@ public class ChildExecutionContextTest {
         executionContext.commit();
 
         Assert.assertEquals(codeHash, parentExecutionContext.getCodeHash(address));
+    }
+
+    @Test
+    public void setAndGetStorageHashFromNewAccount() {
+        Hash storageHash = FactoryHelper.createRandomHash();
+        Address address = FactoryHelper.createRandomAddress();
+
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
+
+        executionContext.setStorageHash(address, storageHash);
+
+        Hash result = executionContext.getStorageHash(address);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(storageHash, result);
+        Assert.assertNull(parentExecutionContext.getCodeHash(address));
+
+        executionContext.commit();
+
+        Assert.assertEquals(storageHash, parentExecutionContext.getStorageHash(address));
     }
 }
