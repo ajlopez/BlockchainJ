@@ -35,6 +35,15 @@ public class TrieStoreTest {
     }
 
     @Test
+    public void retrieveEmptyTrieIfHashIsNull() {
+        TrieStore store = new TrieStore(new HashMapStore());
+        Trie trie = store.retrieve(null);
+
+        Assert.assertNotNull(trie);
+        Assert.assertEquals(Trie.EMPTY_TRIE_HASH, trie.getHash());
+    }
+
+    @Test
     public void saveAndRetrieveTrieWithKeyValue() {
         byte[] value = new byte[32];
         random.nextBytes(value);

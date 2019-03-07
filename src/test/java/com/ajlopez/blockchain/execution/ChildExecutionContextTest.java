@@ -19,7 +19,7 @@ public class ChildExecutionContextTest {
     public void getZeroBalanceFromNewAccount() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         BigInteger result = executionContext.getBalance(new Address(new byte[] { 0x01, 0x02 }));
@@ -38,7 +38,7 @@ public class ChildExecutionContextTest {
 
         Hash originalHash = accountStore.getRootHash();
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         BigInteger result = executionContext.getBalance(address);
@@ -64,7 +64,7 @@ public class ChildExecutionContextTest {
         Hash originalHash = accountStore.getRootHash();
 
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         BigInteger result = executionContext.getBalance(address);
@@ -91,7 +91,7 @@ public class ChildExecutionContextTest {
         accountStore.putAccount(address, account);
 
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.incrementNonce(address);
@@ -111,7 +111,7 @@ public class ChildExecutionContextTest {
         Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.incrementNonce(address);
@@ -135,7 +135,7 @@ public class ChildExecutionContextTest {
         Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.incrementNonce(address);
@@ -157,7 +157,7 @@ public class ChildExecutionContextTest {
         Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.incrementNonce(address);
@@ -180,7 +180,7 @@ public class ChildExecutionContextTest {
 
         Hash originalHash = accountStore.getRootHash();
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         long nonce = executionContext.getNonce(address);
@@ -203,7 +203,7 @@ public class ChildExecutionContextTest {
         Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.transfer(senderAddress, receiverAddress, BigInteger.valueOf(100));
@@ -234,7 +234,7 @@ public class ChildExecutionContextTest {
         Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.transfer(senderAddress, receiverAddress, BigInteger.valueOf(100));
@@ -274,7 +274,7 @@ public class ChildExecutionContextTest {
         Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.transfer(senderAddress, receiverAddress, BigInteger.valueOf(100));
@@ -307,7 +307,7 @@ public class ChildExecutionContextTest {
         Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.transfer(senderAddress, receiverAddress, BigInteger.valueOf(100));
@@ -334,7 +334,7 @@ public class ChildExecutionContextTest {
     public void getNullCodeHashFromNewAccount() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         Hash result = executionContext.getCodeHash(new Address(new byte[] { 0x01, 0x02 }));
@@ -346,7 +346,7 @@ public class ChildExecutionContextTest {
     public void getNullStorageHashFromNewAccount() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         Hash result = executionContext.getStorageHash(new Address(new byte[] { 0x01, 0x02 }));
@@ -361,7 +361,7 @@ public class ChildExecutionContextTest {
 
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.setCodeHash(address, codeHash);
@@ -384,7 +384,7 @@ public class ChildExecutionContextTest {
 
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
         executionContext.setStorageHash(address, storageHash);

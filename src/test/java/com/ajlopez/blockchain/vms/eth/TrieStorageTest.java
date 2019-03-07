@@ -70,7 +70,6 @@ public class TrieStorageTest {
         Assert.assertEquals(initialHash, storage.getRootHash());
     }
 
-
     @Test
     public void setAndGetValueAndCommit() {
         TrieStore store = new TrieStore(new HashMapStore());

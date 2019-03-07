@@ -53,7 +53,7 @@ public class MinerProcessor {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
         Trie trie = this.trieStore.retrieve(parentStateRootHash);
         AccountStore accountStore = new AccountStore(trie);
-        ExecutionContext executionContext = new TopExecutionContext(accountStore);
+        ExecutionContext executionContext = new TopExecutionContext(accountStore, null);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
         List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions());

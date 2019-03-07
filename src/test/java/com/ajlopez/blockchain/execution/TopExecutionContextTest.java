@@ -19,7 +19,7 @@ public class TopExecutionContextTest {
     public void getZeroBalanceFromNewAccount() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         BigInteger result = executionContext.getBalance(new Address(new byte[] { 0x01, 0x02 }));
         
@@ -31,7 +31,7 @@ public class TopExecutionContextTest {
     public void getNullCodeHashFromNewAccount() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         Hash result = executionContext.getCodeHash(new Address(new byte[] { 0x01, 0x02 }));
 
@@ -42,7 +42,7 @@ public class TopExecutionContextTest {
     public void getNullStorageHashFromNewAccount() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         Hash result = executionContext.getStorageHash(new Address(new byte[] { 0x01, 0x02 }));
 
@@ -56,7 +56,7 @@ public class TopExecutionContextTest {
 
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         executionContext.setCodeHash(address, codeHash);
 
@@ -73,7 +73,7 @@ public class TopExecutionContextTest {
 
         AccountStore accountStore = new AccountStore(new Trie());
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         executionContext.setStorageHash(address, storageHash);
 
@@ -93,7 +93,7 @@ public class TopExecutionContextTest {
 
         Hash originalHash = accountStore.getRootHash();
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         BigInteger result = executionContext.getBalance(address);
 
@@ -117,7 +117,7 @@ public class TopExecutionContextTest {
 
         Hash originalHash = accountStore.getRootHash();
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         BigInteger result = executionContext.getBalance(address);
 
@@ -142,7 +142,7 @@ public class TopExecutionContextTest {
         Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         executionContext.incrementNonce(address);
 
@@ -161,7 +161,7 @@ public class TopExecutionContextTest {
         Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         executionContext.incrementNonce(address);
         executionContext.commit();
@@ -181,7 +181,7 @@ public class TopExecutionContextTest {
         Account account = new Account(BigInteger.valueOf(1000), 41, null, null);
         accountStore.putAccount(address, account);
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         executionContext.incrementNonce(address);
         executionContext.rollback();
@@ -200,7 +200,7 @@ public class TopExecutionContextTest {
 
         Hash originalHash = accountStore.getRootHash();
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         long nonce = executionContext.getNonce(address);
         Assert.assertEquals(0, nonce);
@@ -222,7 +222,7 @@ public class TopExecutionContextTest {
         Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         executionContext.transfer(senderAddress, receiverAddress, BigInteger.valueOf(100));
 
@@ -252,7 +252,7 @@ public class TopExecutionContextTest {
         Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         executionContext.transfer(senderAddress, receiverAddress, BigInteger.valueOf(100));
         executionContext.commit();
@@ -283,7 +283,7 @@ public class TopExecutionContextTest {
         Account sender = new Account(BigInteger.valueOf(1000), 42, null, null);
         accountStore.putAccount(senderAddress, sender);
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
         executionContext.transfer(senderAddress, receiverAddress, BigInteger.valueOf(100));
         executionContext.rollback();
