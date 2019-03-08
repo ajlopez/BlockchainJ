@@ -78,13 +78,13 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
 
         AccountState accountState = this.retrieveAccountState(address);
 
-        this.putAccountState(address, accountState);
+        this.setAccountState(address, accountState);
 
         return accountState;
     }
 
     @Override
-    public void putAccountState(Address address, AccountState accountState) {
+    public void setAccountState(Address address, AccountState accountState) {
         this.accountStates.put(address, accountState);
     }
 

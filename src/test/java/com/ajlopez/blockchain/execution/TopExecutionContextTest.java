@@ -5,7 +5,10 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
+import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.vms.eth.Storage;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -81,6 +84,18 @@ public class TopExecutionContextTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(storageHash, result);
+    }
+
+    @Test
+    public void getEmptyStorageFromNewAccount() {
+        AccountStore accountStore = new AccountStore(new Trie());
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, trieStore);
+
+        Storage result = executionContext.getAccountStorage(new Address(new byte[] { 0x01, 0x02 }));
+
+        Assert.assertNotNull(result);
     }
 
     @Test

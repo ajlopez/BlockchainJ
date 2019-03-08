@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.vms.eth.Storage;
 
 import java.math.BigInteger;
 
@@ -31,5 +32,9 @@ public interface ExecutionContext {
 
     AccountState getAccountState(Address address);
 
-    void putAccountState(Address address, AccountState accountState);
+    void setAccountState(Address address, AccountState accountState);
+
+    Storage getAccountStorage(Address address);
+
+    void setAccountStorage(Address address, Storage storage);
 }
