@@ -2,13 +2,16 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.KeyValueStore;
 import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.vms.eth.Storage;
+import com.ajlopez.blockchain.vms.eth.TrieStorage;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -96,6 +99,43 @@ public class TopExecutionContextTest {
         Storage result = executionContext.getAccountStorage(new Address(new byte[] { 0x01, 0x02 }));
 
         Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof TrieStorage);
+
+        TrieStorage tresult = (TrieStorage)result;
+
+        Assert.assertEquals(Trie.EMPTY_TRIE_HASH, tresult.getRootHash());
+    }
+
+    @Test
+    public void getStorageFromNewAccountAndSetKeyValue() {
+        Address address = FactoryHelper.createRandomAddress();
+        AccountStore accountStore = new AccountStore(new Trie());
+        KeyValueStore keyValueStore = new HashMapStore();
+        TrieStore trieStore = new TrieStore(keyValueStore);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, trieStore);
+
+        Storage result = executionContext.getAccountStorage(address);
+
+        DataWord key = FactoryHelper.createRandomDataWord();
+        DataWord value = FactoryHelper.createRandomDataWord();
+
+        result.setValue(key, value);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof TrieStorage);
+
+        TrieStorage tresult = (TrieStorage)result;
+
+        Assert.assertNotEquals(Trie.EMPTY_TRIE_HASH, tresult.getRootHash());
+
+        Assert.assertNull(keyValueStore.getValue(tresult.getRootHash().getBytes()));
+
+        Storage result2 = executionContext.getAccountStorage(address);
+
+        Assert.assertNotNull(result2);
+        Assert.assertTrue(result2 instanceof TrieStorage);
+        Assert.assertEquals(tresult.getRootHash(), ((TrieStorage)result2).getRootHash());
     }
 
     @Test
