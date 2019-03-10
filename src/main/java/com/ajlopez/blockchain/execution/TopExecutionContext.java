@@ -50,4 +50,15 @@ public class TopExecutionContext extends AbstractExecutionContext {
     public void setAccountStorage(Address address, Storage storage) {
 
     }
+
+    @Override
+    public void commit() {
+        for (Map.Entry<Address, Storage> entry : this.accountStorages.entrySet()) {
+            TrieStorage storage = (TrieStorage)entry.getValue();
+            storage.commit();
+            this.getAccountState(entry.getKey()).setStorageHash(storage.getRootHash());
+        }
+
+        super.commit();
+    }
 }

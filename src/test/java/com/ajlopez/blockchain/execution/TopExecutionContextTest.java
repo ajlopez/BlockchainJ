@@ -136,6 +136,17 @@ public class TopExecutionContextTest {
         Assert.assertNotNull(result2);
         Assert.assertTrue(result2 instanceof TrieStorage);
         Assert.assertEquals(tresult.getRootHash(), ((TrieStorage)result2).getRootHash());
+
+        Assert.assertNull(executionContext.getStorageHash(address));
+
+        executionContext.commit();
+
+        Assert.assertEquals(tresult.getRootHash(), executionContext.getStorageHash(address));
+
+        Account account = accountStore.getAccount(address);
+
+        Assert.assertNotNull(account);
+        Assert.assertEquals(tresult.getRootHash(), account.getStorageHash());
     }
 
     @Test

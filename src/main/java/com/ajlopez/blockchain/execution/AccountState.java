@@ -17,7 +17,7 @@ public class AccountState {
     private boolean changed;
 
     public static AccountState fromAccount(Account account) {
-        return new AccountState(account.getBalance(), account.getNonce(), account.getCodeHash(), null);
+        return new AccountState(account.getBalance(), account.getNonce(), account.getCodeHash(), account.getStorageHash());
     }
 
     public AccountState() {
@@ -109,7 +109,7 @@ public class AccountState {
     }
 
     public Account toAccount() {
-        return new Account(this.balance, this.nonce, this.codeHash, null);
+        return new Account(this.balance, this.nonce, this.codeHash, this.storageHash);
     }
 
     public boolean wasChanged() {
