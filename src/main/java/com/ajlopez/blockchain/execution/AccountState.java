@@ -38,7 +38,7 @@ public class AccountState {
         this.balance = balance;
         this.nonce = nonce;
         this.codeHash = codeHash;
-        this.storageHash = storageHash;
+        this.storageHash = normalizeStorageHash(storageHash);
     }
 
     public BigInteger getBalance() {
@@ -99,7 +99,7 @@ public class AccountState {
     public Hash getStorageHash() { return this.storageHash; }
 
     public void setStorageHash(Hash storageHash) {
-        Hash normalizedHash = Trie.EMPTY_TRIE_HASH.equals(storageHash) ? null : storageHash;
+        Hash normalizedHash = normalizeStorageHash(storageHash);
 
         if (normalizedHash == null && this.storageHash == null)
             return;
@@ -109,6 +109,10 @@ public class AccountState {
 
         this.storageHash = normalizedHash;
         this.changed = true;
+    }
+
+    private static Hash normalizeStorageHash(Hash hash) {
+        return Trie.EMPTY_TRIE_HASH.equals(hash) ? null : hash;
     }
 
     public Account toAccount() {

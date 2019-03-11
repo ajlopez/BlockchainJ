@@ -78,6 +78,17 @@ public class AccountStateTest {
     }
 
     @Test
+    public void createWithEmptyStorageHash() {
+        Hash storageHash = Trie.EMPTY_TRIE_HASH;
+
+        AccountState accountState = new AccountState(BigInteger.ZERO, 0, null, storageHash);
+
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertNull(accountState.getStorageHash());
+        Assert.assertFalse(accountState.wasChanged());
+    }
+
+    @Test
     public void createWithoutStorageHashAndChangeToNull() {
         AccountState accountState = new AccountState();
 
