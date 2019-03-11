@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -86,6 +87,20 @@ public class AccountStateTest {
 
         accountState.setStorageHash(null);
 
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertNull(accountState.getStorageHash());
+        Assert.assertFalse(accountState.wasChanged());
+    }
+
+    @Test
+    public void createWithoutStorageHashAndChangeToEmptyTrieHash() {
+        AccountState accountState = new AccountState();
+
+        Assert.assertNull(accountState.getCodeHash());
+        Assert.assertNull(accountState.getStorageHash());
+        Assert.assertFalse(accountState.wasChanged());
+
+        accountState.setStorageHash(Trie.EMPTY_TRIE_HASH);
 
         Assert.assertNull(accountState.getCodeHash());
         Assert.assertNull(accountState.getStorageHash());

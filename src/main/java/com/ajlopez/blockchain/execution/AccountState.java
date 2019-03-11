@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.state.Trie;
 
 import java.math.BigInteger;
 
@@ -98,13 +99,15 @@ public class AccountState {
     public Hash getStorageHash() { return this.storageHash; }
 
     public void setStorageHash(Hash storageHash) {
-        if (storageHash == null && this.storageHash == null)
+        Hash normalizedHash = Trie.EMPTY_TRIE_HASH.equals(storageHash) ? null : storageHash;
+
+        if (normalizedHash == null && this.storageHash == null)
             return;
 
-        if (storageHash != null && storageHash.equals(this.storageHash))
+        if (normalizedHash != null && normalizedHash.equals(this.storageHash))
             return;
 
-        this.storageHash = storageHash;
+        this.storageHash = normalizedHash;
         this.changed = true;
     }
 
