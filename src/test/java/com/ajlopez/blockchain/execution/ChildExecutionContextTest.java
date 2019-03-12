@@ -2,10 +2,17 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
+import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.KeyValueStore;
+import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.vms.eth.ChildMapStorage;
+import com.ajlopez.blockchain.vms.eth.Storage;
+import com.ajlopez.blockchain.vms.eth.TrieStorage;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -398,5 +405,44 @@ public class ChildExecutionContextTest {
         executionContext.commit();
 
         Assert.assertEquals(storageHash, parentExecutionContext.getStorageHash(address));
+    }
+
+    @Test
+    public void getStorageFromNewAccountAndSetKeyValue() {
+        Address address = FactoryHelper.createRandomAddress();
+        AccountStore accountStore = new AccountStore(new Trie());
+        KeyValueStore keyValueStore = new HashMapStore();
+        TrieStore trieStore = new TrieStore(keyValueStore);
+
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, trieStore);
+        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
+
+        Storage result = executionContext.getAccountStorage(address);
+
+        DataWord key = FactoryHelper.createRandomDataWord();
+        DataWord value = FactoryHelper.createRandomDataWord();
+
+        result.setValue(key, value);
+
+        Assert.assertEquals(value, result.getValue(key));
+        Assert.assertEquals(DataWord.ZERO, parentExecutionContext.getAccountStorage(address).getValue(key));
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof ChildMapStorage);
+
+        Assert.assertNull(executionContext.getStorageHash(address));
+
+        executionContext.commit();
+
+        Storage result2 = parentExecutionContext.getAccountStorage(address);
+
+        Assert.assertNotNull(result2);
+        Assert.assertTrue(result2 instanceof TrieStorage);
+
+        TrieStorage tresult2 = (TrieStorage)result2;
+
+        Assert.assertNotEquals(Trie.EMPTY_TRIE_HASH, tresult2.getRootHash());
+
+        Assert.assertEquals(value, tresult2.getValue(key));
     }
 }
