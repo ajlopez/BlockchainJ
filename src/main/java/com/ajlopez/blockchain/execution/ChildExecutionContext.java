@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.vms.eth.ChildMapStorage;
 import com.ajlopez.blockchain.vms.eth.Storage;
-import com.ajlopez.blockchain.vms.eth.TrieStorage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +49,7 @@ public class ChildExecutionContext extends AbstractExecutionContext {
     @Override
     public void commit() {
         for (Map.Entry<Address, Storage> entry : this.accountStorages.entrySet()) {
-            ChildMapStorage storage = (ChildMapStorage)entry.getValue();
+            Storage storage = entry.getValue();
             storage.commit();
         }
 

@@ -47,6 +47,7 @@ public class TrieStorage implements Storage {
         return this.trie.getHash();
     }
 
+    @Override
     public void commit() {
         this.trie.save();
     }

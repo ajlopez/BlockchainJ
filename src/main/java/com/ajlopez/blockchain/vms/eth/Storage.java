@@ -12,4 +12,6 @@ public interface Storage {
     void setValue(DataWord address, DataWord value);
 
     DataWord getValue(DataWord address);
+
+    void commit();
 }

@@ -43,6 +43,7 @@ public class ChildMapStorage extends MapStorage {
         return value;
     }
 
+    @Override
     public void commit() {
         for (DataWord address : changed)
             this.parentStorage.setValue(address, super.getValue(address));

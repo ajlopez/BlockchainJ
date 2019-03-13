@@ -32,4 +32,7 @@ public class MapStorage implements Storage {
         else
             this.values.put(address, value);
     }
+
+    @Override
+    public void commit() { }
 }

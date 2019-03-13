@@ -444,5 +444,14 @@ public class ChildExecutionContextTest {
         Assert.assertNotEquals(Trie.EMPTY_TRIE_HASH, tresult2.getRootHash());
 
         Assert.assertEquals(value, tresult2.getValue(key));
+
+        Assert.assertNull(parentExecutionContext.getAccountState(address).getStorageHash());
+        Assert.assertNull(keyValueStore.getValue(tresult2.getRootHash().getBytes()));
+
+        parentExecutionContext.commit();
+
+        Assert.assertNotNull(parentExecutionContext.getAccountState(address).getStorageHash());
+        Assert.assertEquals(tresult2.getRootHash(), parentExecutionContext.getAccountState(address).getStorageHash());
+        Assert.assertNotNull(keyValueStore.getValue(tresult2.getRootHash().getBytes()));
     }
 }
