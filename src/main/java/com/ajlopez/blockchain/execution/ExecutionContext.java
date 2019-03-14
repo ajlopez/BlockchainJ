@@ -35,6 +35,4 @@ public interface ExecutionContext {
     void setAccountState(Address address, AccountState accountState);
 
     Storage getAccountStorage(Address address);
-
-    void setAccountStorage(Address address, Storage storage);
 }

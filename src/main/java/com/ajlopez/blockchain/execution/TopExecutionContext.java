@@ -48,11 +48,6 @@ public class TopExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    public void setAccountStorage(Address address, Storage storage) {
-
-    }
-
-    @Override
     public void commit() {
         for (Map.Entry<Address, Storage> entry : this.accountStorages.entrySet()) {
             TrieStorage storage = (TrieStorage)entry.getValue();

@@ -42,11 +42,6 @@ public class ChildExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    public void setAccountStorage(Address address, Storage storage) {
-
-    }
-
-    @Override
     public void commit() {
         for (Map.Entry<Address, Storage> entry : this.accountStorages.entrySet()) {
             Storage storage = entry.getValue();
