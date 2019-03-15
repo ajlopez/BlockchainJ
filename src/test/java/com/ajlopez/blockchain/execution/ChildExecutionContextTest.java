@@ -356,7 +356,7 @@ public class ChildExecutionContextTest {
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
         ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
 
-        Hash result = executionContext.getStorageHash(new Address(new byte[] { 0x01, 0x02 }));
+        Hash result = executionContext.getAccountState(new Address(new byte[] { 0x01, 0x02 })).getStorageHash();
 
         Assert.assertNull(result);
     }
@@ -385,29 +385,6 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void setAndGetStorageHashFromNewAccount() {
-        Hash storageHash = FactoryHelper.createRandomHash();
-        Address address = FactoryHelper.createRandomAddress();
-
-        AccountStore accountStore = new AccountStore(new Trie());
-
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null);
-        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
-
-        executionContext.setStorageHash(address, storageHash);
-
-        Hash result = executionContext.getStorageHash(address);
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(storageHash, result);
-        Assert.assertNull(parentExecutionContext.getCodeHash(address));
-
-        executionContext.commit();
-
-        Assert.assertEquals(storageHash, parentExecutionContext.getStorageHash(address));
-    }
-
-    @Test
     public void getStorageFromNewAccountAndSetKeyValue() {
         Address address = FactoryHelper.createRandomAddress();
         AccountStore accountStore = new AccountStore(new Trie());
@@ -430,7 +407,7 @@ public class ChildExecutionContextTest {
         Assert.assertNotNull(result);
         Assert.assertTrue(result instanceof ChildMapStorage);
 
-        Assert.assertNull(executionContext.getStorageHash(address));
+        Assert.assertNull(executionContext.getAccountState(address).getStorageHash());
 
         executionContext.commit();
 

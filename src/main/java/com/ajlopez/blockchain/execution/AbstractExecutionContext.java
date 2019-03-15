@@ -46,12 +46,6 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
     public void setCodeHash(Address address, Hash codeHash) { this.getAccountState(address).setCodeHash(codeHash); }
 
     @Override
-    public Hash getStorageHash(Address address) { return this.getAccountState(address).getStorageHash(); }
-
-    @Override
-    public void setStorageHash(Address address, Hash hash) { this.getAccountState(address).setStorageHash(hash); }
-
-    @Override
     public void commit() {
         for (Map.Entry<Address, AccountState> entry : this.accountStates.entrySet()) {
             Address address = entry.getKey();

@@ -50,7 +50,7 @@ public class TopExecutionContextTest {
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
 
-        Hash result = executionContext.getStorageHash(new Address(new byte[] { 0x01, 0x02 }));
+        Hash result = executionContext.getAccountState(new Address(new byte[] { 0x01, 0x02 })).getStorageHash();
 
         Assert.assertNull(result);
     }
@@ -70,23 +70,6 @@ public class TopExecutionContextTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(codeHash, result);
-    }
-
-    @Test
-    public void setAndGetStorageHashFromNewAccount() {
-        Hash storageHash = FactoryHelper.createRandomHash();
-        Address address = FactoryHelper.createRandomAddress();
-
-        AccountStore accountStore = new AccountStore(new Trie());
-
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null);
-
-        executionContext.setStorageHash(address, storageHash);
-
-        Hash result = executionContext.getStorageHash(address);
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(storageHash, result);
     }
 
     @Test
@@ -137,11 +120,11 @@ public class TopExecutionContextTest {
         Assert.assertTrue(result2 instanceof TrieStorage);
         Assert.assertEquals(tresult.getRootHash(), ((TrieStorage)result2).getRootHash());
 
-        Assert.assertNull(executionContext.getStorageHash(address));
+        Assert.assertNull(executionContext.getAccountState(address).getStorageHash());
 
         executionContext.commit();
 
-        Assert.assertEquals(tresult.getRootHash(), executionContext.getStorageHash(address));
+        Assert.assertEquals(tresult.getRootHash(), executionContext.getAccountState(address).getStorageHash());
 
         Account account = accountStore.getAccount(address);
 

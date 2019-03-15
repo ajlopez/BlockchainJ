@@ -40,7 +40,7 @@ public class TopExecutionContext extends AbstractExecutionContext {
         if (this.accountStorages.containsKey(address))
             return this.accountStorages.get(address);
 
-        Storage storage = new TrieStorage(this.storageStore.retrieve(this.getStorageHash(address)));
+        Storage storage = new TrieStorage(this.storageStore.retrieve(this.getAccountState(address).getStorageHash()));
 
         this.accountStorages.put(address, storage);
 
