@@ -50,4 +50,10 @@ public class ChildExecutionContext extends AbstractExecutionContext {
 
         super.commit();
     }
+
+    @Override
+    public void rollback() {
+        this.accountStorages.clear();
+        super.rollback();
+    }
 }

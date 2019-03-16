@@ -431,4 +431,46 @@ public class ChildExecutionContextTest {
         Assert.assertEquals(tresult2.getRootHash(), parentExecutionContext.getAccountState(address).getStorageHash());
         Assert.assertNotNull(keyValueStore.getValue(tresult2.getRootHash().getBytes()));
     }
+
+    @Test
+    public void getStorageFromNewAccountAndSetKeyValueAndRollback() {
+        Address address = FactoryHelper.createRandomAddress();
+        AccountStore accountStore = new AccountStore(new Trie());
+        KeyValueStore keyValueStore = new HashMapStore();
+        TrieStore trieStore = new TrieStore(keyValueStore);
+
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, trieStore);
+        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
+
+        Storage result = executionContext.getAccountStorage(address);
+
+        DataWord key = FactoryHelper.createRandomDataWord();
+        DataWord value = FactoryHelper.createRandomDataWord();
+
+        result.setValue(key, value);
+
+        Assert.assertEquals(value, result.getValue(key));
+        Assert.assertEquals(DataWord.ZERO, parentExecutionContext.getAccountStorage(address).getValue(key));
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof ChildMapStorage);
+
+        Assert.assertNull(executionContext.getAccountState(address).getStorageHash());
+
+        executionContext.rollback();
+
+        Assert.assertNull(executionContext.getAccountState(address).getStorageHash());
+
+        Storage result2 = parentExecutionContext.getAccountStorage(address);
+
+        Assert.assertNotNull(result2);
+        Assert.assertTrue(result2 instanceof TrieStorage);
+
+        TrieStorage tresult2 = (TrieStorage)result2;
+
+        Assert.assertEquals(Trie.EMPTY_TRIE_HASH, tresult2.getRootHash());
+
+        Assert.assertNull(parentExecutionContext.getAccountState(address).getStorageHash());
+        Assert.assertNull(keyValueStore.getValue(tresult2.getRootHash().getBytes()));
+    }
 }
