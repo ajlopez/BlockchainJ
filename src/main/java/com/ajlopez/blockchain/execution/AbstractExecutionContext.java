@@ -2,6 +2,8 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.vms.eth.Storage;
+import com.ajlopez.blockchain.vms.eth.TrieStorage;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.Map;
  */
 public abstract class AbstractExecutionContext implements ExecutionContext {
     private final Map<Address, AccountState> accountStates = new HashMap<>();
+    private final Map<Address, Storage> accountStorages = new HashMap<>();
 
     @Override
     public void transfer(Address senderAddress, Address receiverAddress, BigInteger amount) {
@@ -47,6 +50,15 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
 
     @Override
     public void commit() {
+        for (Map.Entry<Address, Storage> entry : this.accountStorages.entrySet()) {
+            Storage storage = entry.getValue();
+            storage.commit();
+
+            // TODO review implementation, possibly move to storage.commit()
+            if (storage instanceof TrieStorage)
+                this.accountStates.get(entry.getKey()).setStorageHash(((TrieStorage)storage).getRootHash());
+        }
+
         for (Map.Entry<Address, AccountState> entry : this.accountStates.entrySet()) {
             Address address = entry.getKey();
             AccountState accountState = entry.getValue();
@@ -57,11 +69,13 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
             this.updateAccountState(address, accountState);
         }
 
+        this.accountStorages.clear();
         this.accountStates.clear();
     }
 
     @Override
     public void rollback() {
+        this.accountStorages.clear();
         this.accountStates.clear();
     }
 
@@ -82,7 +96,21 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
         this.accountStates.put(address, accountState);
     }
 
+    @Override
+    public Storage getAccountStorage(Address address) {
+        if (this.accountStorages.containsKey(address))
+            return this.accountStorages.get(address);
+
+        Storage storage = this.retrieveAccountStorage(address);
+
+        this.accountStorages.put(address, storage);
+
+        return storage;
+    }
+
     abstract AccountState retrieveAccountState(Address address);
 
     abstract void updateAccountState(Address address, AccountState accountState);
+
+    abstract public Storage retrieveAccountStorage(Address address);
 }

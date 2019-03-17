@@ -13,8 +13,6 @@ import java.util.Map;
 public class ChildExecutionContext extends AbstractExecutionContext {
     private final ExecutionContext parentContext;
 
-    private final Map<Address, Storage> accountStorages = new HashMap<>();
-
     public ChildExecutionContext(ExecutionContext parentContext) {
         this.parentContext = parentContext;
     }
@@ -30,30 +28,7 @@ public class ChildExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    public Storage getAccountStorage(Address address) {
-        if (this.accountStorages.containsKey(address))
-            return this.accountStorages.get(address);
-
-        Storage storage = new ChildMapStorage(this.parentContext.getAccountStorage(address));
-
-        this.accountStorages.put(address, storage);
-
-        return storage;
-    }
-
-    @Override
-    public void commit() {
-        for (Map.Entry<Address, Storage> entry : this.accountStorages.entrySet()) {
-            Storage storage = entry.getValue();
-            storage.commit();
-        }
-
-        super.commit();
-    }
-
-    @Override
-    public void rollback() {
-        this.accountStorages.clear();
-        super.rollback();
+    public Storage retrieveAccountStorage(Address address) {
+        return new ChildMapStorage(this.parentContext.getAccountStorage(address));
     }
 }
