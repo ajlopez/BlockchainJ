@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.AccountState;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
@@ -14,7 +15,7 @@ import org.junit.Test;
 public class TrieStorageTest {
     @Test
     public void getZeroIfUndefinedValue() {
-        Storage storage = new TrieStorage(new Trie());
+        Storage storage = new TrieStorage(new Trie(), null);
 
         DataWord result = storage.getValue(DataWord.fromHexadecimalString("0102"));
 
@@ -24,7 +25,7 @@ public class TrieStorageTest {
 
     @Test
     public void setAndGetValue() {
-        Storage storage = new TrieStorage(new Trie());
+        Storage storage = new TrieStorage(new Trie(), null);
         DataWord address = DataWord.fromHexadecimalString("0x010203");
         DataWord value = DataWord.fromHexadecimalString("2a");
 
@@ -38,7 +39,7 @@ public class TrieStorageTest {
 
     @Test
     public void setResetAndGetValue() {
-        Storage storage = new TrieStorage(new Trie());
+        Storage storage = new TrieStorage(new Trie(), null);
         DataWord address = DataWord.fromHexadecimalString("0x010203");
         DataWord value = DataWord.fromHexadecimalString("2a");
 
@@ -53,7 +54,7 @@ public class TrieStorageTest {
 
     @Test
     public void setResetToZeroAndGetValue() {
-        TrieStorage storage = new TrieStorage(new Trie());
+        TrieStorage storage = new TrieStorage(new Trie(), null);
 
         Hash initialHash = storage.getRootHash();
 
@@ -72,8 +73,9 @@ public class TrieStorageTest {
 
     @Test
     public void setAndGetValueAndCommit() {
+        AccountState accountState = new AccountState();
         TrieStore store = new TrieStore(new HashMapStore());
-        TrieStorage storage = new TrieStorage(new Trie(store));
+        TrieStorage storage = new TrieStorage(new Trie(store), accountState);
 
         DataWord address = DataWord.fromHexadecimalString("0x010203");
         DataWord value = DataWord.fromHexadecimalString("2a");
@@ -87,11 +89,12 @@ public class TrieStorageTest {
 
         storage.commit();
 
+        Assert.assertEquals(storage.getRootHash(), accountState.getStorageHash());
         Trie trie2 = store.retrieve(storage.getRootHash());
 
         Assert.assertNotNull(trie2);
 
-        TrieStorage storage2 = new TrieStorage(trie2);
+        TrieStorage storage2 = new TrieStorage(trie2, null);
 
         DataWord result2 = storage2.getValue(address);
 

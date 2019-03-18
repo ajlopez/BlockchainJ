@@ -6,9 +6,6 @@ import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.vms.eth.Storage;
 import com.ajlopez.blockchain.vms.eth.TrieStorage;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by ajlopez on 26/11/2018.
  */
@@ -34,7 +31,8 @@ public class TopExecutionContext extends AbstractExecutionContext {
 
     @Override
     public Storage retrieveAccountStorage(Address address) {
-        Storage storage = new TrieStorage(this.storageStore.retrieve(this.getAccountState(address).getStorageHash()));
+        AccountState accountState = this.getAccountState(address);
+        Storage storage = new TrieStorage(this.storageStore.retrieve(accountState.getStorageHash()), accountState);
 
         return storage;
     }

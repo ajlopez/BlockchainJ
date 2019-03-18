@@ -53,10 +53,6 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
         for (Map.Entry<Address, Storage> entry : this.accountStorages.entrySet()) {
             Storage storage = entry.getValue();
             storage.commit();
-
-            // TODO review implementation, possibly move to storage.commit()
-            if (storage instanceof TrieStorage)
-                this.accountStates.get(entry.getKey()).setStorageHash(((TrieStorage)storage).getRootHash());
         }
 
         for (Map.Entry<Address, AccountState> entry : this.accountStates.entrySet()) {
