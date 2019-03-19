@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Hash;
 
 /**
  * Created by ajlopez on 29/01/2018.

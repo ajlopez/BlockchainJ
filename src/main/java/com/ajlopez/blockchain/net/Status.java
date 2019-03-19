@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.net;
 
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Hash;
 
 public class Status {
     private PeerId peerId;

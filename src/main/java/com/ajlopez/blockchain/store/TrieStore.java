@@ -23,7 +23,6 @@ public class TrieStore {
 
         byte[] encoded = this.store.getValue(hash.getBytes());
 
-        // TODO add hash
         if (encoded == null)
             throw new RuntimeException("Unknown trie");
 
