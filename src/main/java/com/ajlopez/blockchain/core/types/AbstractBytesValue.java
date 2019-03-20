@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Created by ajlopez on 27/11/2018.
  */
 public abstract class AbstractBytesValue {
-    protected byte[] bytes;
+    protected final byte[] bytes;
 
     public AbstractBytesValue(byte[] bytes, int length) {
         this(bytes, length, false);

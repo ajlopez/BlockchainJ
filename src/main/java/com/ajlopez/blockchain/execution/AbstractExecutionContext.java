@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.vms.eth.Storage;
-import com.ajlopez.blockchain.vms.eth.TrieStorage;
 
 import java.math.BigInteger;
 import java.util.HashMap;

@@ -2,8 +2,6 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.store.AccountStore;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

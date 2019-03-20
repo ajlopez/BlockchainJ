@@ -4,7 +4,6 @@ import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.utils.ByteUtils;
 
 /**
  * Created by ajlopez on 23/09/2017.

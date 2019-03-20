@@ -2,10 +2,6 @@ package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
-import com.ajlopez.blockchain.core.Transaction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ajlopez on 10/10/2017.

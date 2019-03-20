@@ -1,7 +1,5 @@
 package com.ajlopez.blockchain.core.types;
 
-import java.util.Random;
-
 /**
  * Created by ajlopez on 31/08/2017.
  */

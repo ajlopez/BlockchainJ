@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.encoding;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
-import com.ajlopez.blockchain.utils.ByteUtils;
 
 public class StatusEncoder {
     private StatusEncoder() {

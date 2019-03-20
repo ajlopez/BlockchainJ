@@ -4,9 +4,6 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.vms.eth.ChildMapStorage;
 import com.ajlopez.blockchain.vms.eth.Storage;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by ajlopez on 27/11/2018.
  */

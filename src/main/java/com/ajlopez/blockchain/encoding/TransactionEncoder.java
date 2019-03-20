@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
