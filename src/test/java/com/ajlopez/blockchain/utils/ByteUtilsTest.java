@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.utils;
 
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -187,5 +188,30 @@ public class ByteUtilsTest {
         Assert.assertArrayEquals(new byte[] { 0x02 }, ByteUtils.unsignedLongToNormalizedBytes(2));
         Assert.assertArrayEquals(new byte[] { (byte)0xff }, ByteUtils.unsignedLongToNormalizedBytes(255));
         Assert.assertArrayEquals(new byte[] { 0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }, ByteUtils.unsignedLongToNormalizedBytes(Long.MAX_VALUE));
+    }
+
+    @Test
+    public void shiftBytesByZero() {
+        byte[] bytes = FactoryHelper.createRandomBytes(32);
+
+        byte[] result = ByteUtils.shiftLeft(bytes, 0);
+
+        Assert.assertArrayEquals(bytes, result);
+    }
+
+    @Test
+    public void shiftBytesBy8Multiple() {
+        byte[] bytes = FactoryHelper.createRandomBytes(32);
+
+        byte[] result = ByteUtils.shiftLeft(bytes, 16);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        for (int k = 0; k < bytes.length - 2; k++)
+            Assert.assertEquals(bytes[k + 2], result[k]);
+
+        Assert.assertEquals(0, result[bytes.length - 2]);
+        Assert.assertEquals(0, result[bytes.length - 1]);
     }
 }

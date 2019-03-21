@@ -165,4 +165,12 @@ public class ByteUtils {
 
         return newbytes;
     }
+
+    public static byte[] shiftLeft(byte[] bytes, int shift) {
+        byte[] newbytes = new byte[bytes.length];
+        int nbytes = shift / 8;
+        System.arraycopy(bytes, nbytes, newbytes, 0, bytes.length - nbytes);
+
+        return newbytes;
+    }
 }
