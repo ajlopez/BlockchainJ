@@ -214,4 +214,30 @@ public class ByteUtilsTest {
         Assert.assertEquals(0, result[bytes.length - 2]);
         Assert.assertEquals(0, result[bytes.length - 1]);
     }
+
+    @Test
+    public void shiftBytesByLowNon8Multiple() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x08, 0x17, (byte)0xf8 };
+
+        byte[] result = ByteUtils.shiftLeft(bytes, 3);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftBytesByNon8Multiple() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x17, (byte)0xf8, 0x00 };
+
+        byte[] result = ByteUtils.shiftLeft(bytes, 3 + 8);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
 }

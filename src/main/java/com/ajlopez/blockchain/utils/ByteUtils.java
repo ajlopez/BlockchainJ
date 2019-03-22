@@ -169,7 +169,19 @@ public class ByteUtils {
     public static byte[] shiftLeft(byte[] bytes, int shift) {
         byte[] newbytes = new byte[bytes.length];
         int nbytes = shift / 8;
+        int nbits = shift % 8;
         System.arraycopy(bytes, nbytes, newbytes, 0, bytes.length - nbytes);
+
+        if (nbits > 0)
+            for (int k = 0; k < newbytes.length; k++) {
+                byte b = newbytes[k];
+                newbytes[k] <<= nbits;
+
+                if (k == 0)
+                    continue;
+
+                newbytes[k - 1] |= (b & 0xff) >> (8 - nbits);
+            }
 
         return newbytes;
     }
