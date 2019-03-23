@@ -200,7 +200,7 @@ public class ByteUtilsTest {
     }
 
     @Test
-    public void shiftBytesBy8Multiple() {
+    public void shiftLeftBytesBy8Multiple() {
         byte[] bytes = FactoryHelper.createRandomBytes(32);
 
         byte[] result = ByteUtils.shiftLeft(bytes, 16);
@@ -216,7 +216,7 @@ public class ByteUtilsTest {
     }
 
     @Test
-    public void shiftBytesByLowNon8Multiple() {
+    public void shiftLeftBytesByLowNon8Multiple() {
         byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
         byte[] expected = new byte[] { 0x08, 0x17, (byte)0xf8 };
 
@@ -229,7 +229,7 @@ public class ByteUtilsTest {
     }
 
     @Test
-    public void shiftBytesByNon8Multiple() {
+    public void shiftLeftBytesByNon8Multiple() {
         byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
         byte[] expected = new byte[] { 0x17, (byte)0xf8, 0x00 };
 
@@ -239,5 +239,21 @@ public class ByteUtilsTest {
         Assert.assertEquals(bytes.length, result.length);
 
         Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftRightBytesBy8Multiple() {
+        byte[] bytes = FactoryHelper.createRandomBytes(32);
+
+        byte[] result = ByteUtils.shiftRight(bytes, 16);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        for (int k = 2; k < bytes.length - 2; k++)
+            Assert.assertEquals(bytes[k - 2], result[k]);
+
+        Assert.assertEquals(0, result[0]);
+        Assert.assertEquals(0, result[1]);
     }
 }

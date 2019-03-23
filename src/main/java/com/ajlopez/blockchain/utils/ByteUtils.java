@@ -166,6 +166,16 @@ public class ByteUtils {
         return newbytes;
     }
 
+    public static byte[] shiftRight(byte[] bytes, int shift) {
+        byte[] newbytes = new byte[bytes.length];
+
+        int nbytes = shift / 8;
+
+        System.arraycopy(bytes, 0, newbytes, nbytes, bytes.length - nbytes);
+
+        return newbytes;
+    }
+
     public static byte[] shiftLeft(byte[] bytes, int shift) {
         byte[] newbytes = new byte[bytes.length];
         int nbytes = shift / 8;
