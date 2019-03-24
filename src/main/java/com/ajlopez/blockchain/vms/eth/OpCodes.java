@@ -33,6 +33,7 @@ public class OpCodes {
     public static final byte XOR = 0x18;
     public static final byte NOT = 0x19;
     public static final byte BYTE = 0x1a;
+    public static final byte SHL = 0x1b;
 
     public static final byte ADDRESS = 0x30;
 

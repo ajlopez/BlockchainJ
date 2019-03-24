@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +50,7 @@ public class VirtualMachine {
         opCodeFees[OpCodes.AND] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.OR] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.BYTE] = FeeSchedule.VERYLOW;
+        opCodeFees[OpCodes.SHL] = FeeSchedule.VERYLOW;
 
         opCodeFees[OpCodes.COINBASE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.DIFFICULTY] = FeeSchedule.BASE;
@@ -296,6 +298,16 @@ public class VirtualMachine {
                         this.stack.push(DataWord.fromUnsignedInteger(word2.getBytes()[nbyte] & 0xff));
                     else
                         this.stack.push(DataWord.ZERO);
+
+                    break;
+
+                case OpCodes.SHL:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+
+                    // TODO check integer high values
+                    byte[] bytes = ByteUtils.shiftLeft(word2.getBytes(), word1.asUnsignedInteger());
+                    this.stack.push(new DataWord(bytes));
 
                     break;
 
@@ -562,7 +574,7 @@ public class VirtualMachine {
                     offset = this.stack.pop().asUnsignedInteger();
                     length = this.stack.pop().asUnsignedInteger();
 
-                    byte[] bytes = this.memory.getBytes(offset, length);
+                    bytes = this.memory.getBytes(offset, length);
                     List<DataWord> topics = new ArrayList<>();
 
                     for (int k = 0; k < bytecode - OpCodes.LOG0; k++)
