@@ -305,9 +305,7 @@ public class VirtualMachine {
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
 
-                    // TODO check integer high values
-                    byte[] bytes = ByteUtils.shiftLeft(word2.getBytes(), word1.asUnsignedInteger());
-                    this.stack.push(new DataWord(bytes));
+                    this.stack.push(word2.shiftLeft(word1));
 
                     break;
 
@@ -574,7 +572,7 @@ public class VirtualMachine {
                     offset = this.stack.pop().asUnsignedInteger();
                     length = this.stack.pop().asUnsignedInteger();
 
-                    bytes = this.memory.getBytes(offset, length);
+                    byte[] bytes = this.memory.getBytes(offset, length);
                     List<DataWord> topics = new ArrayList<>();
 
                     for (int k = 0; k < bytecode - OpCodes.LOG0; k++)

@@ -10,6 +10,7 @@ import java.math.BigInteger;
  */
 public class DataWord extends AbstractBytesValue implements Comparable<DataWord> {
     public static final int DATAWORD_BYTES = 32;
+    private static final int MAX_POW = 256;
 
     public static final DataWord ZERO = new DataWord(new byte[0]);
     public static final DataWord ONE = new DataWord(new byte[] { 0x01 });
@@ -274,5 +275,19 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
             return 1;
 
         return compareTo(word);
+    }
+
+    public DataWord shiftLeft(DataWord word) {
+        if (!word.isUnsignedInteger())
+            return DataWord.ZERO;
+
+        int nbits = word.asUnsignedInteger();
+
+        if (nbits >= MAX_POW)
+            return DataWord.ZERO;
+
+        byte[] bytes = ByteUtils.shiftLeft(this.getBytes(), nbits);
+
+        return new DataWord(bytes);
     }
 }

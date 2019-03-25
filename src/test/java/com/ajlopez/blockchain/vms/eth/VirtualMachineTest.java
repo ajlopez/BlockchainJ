@@ -774,6 +774,8 @@ public class VirtualMachineTest {
         executeBinaryOp(0x20, 0x01, OpCodes.SHL, 0x40, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x2020, 0x01, OpCodes.SHL, 0x4040, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x2020, 0x08, OpCodes.SHL, 0x202000, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp(0x20, 0x0100, OpCodes.SHL, 0x00, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp(0x20, 0xffffffff, OpCodes.SHL, 0x00, FeeSchedule.VERYLOW.getValue());
     }
 
     @Test
