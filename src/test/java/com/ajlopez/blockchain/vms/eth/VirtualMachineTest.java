@@ -161,8 +161,8 @@ public class VirtualMachineTest {
         executeBinaryOp(21, 2, OpCodes.MUL, 42, FeeSchedule.LOW.getValue());
         executeBinaryOp(1024 * 1024 * 1024, 1, OpCodes.MUL, 1024 * 1024 * 1024, FeeSchedule.LOW.getValue());
 
-        executeBinaryOp("0100000000", "0100000000", OpCodes.MUL, "010000000000000000");
-        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MUL, "01");
+        executeBinaryOp("0100000000", "0100000000", OpCodes.MUL, "010000000000000000", FeeSchedule.LOW.getValue());
+        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MUL, "01", FeeSchedule.LOW.getValue());
     }
 
     @Test
@@ -186,8 +186,8 @@ public class VirtualMachineTest {
         executeBinaryOp(2, 84, OpCodes.DIV, 42, FeeSchedule.LOW.getValue());
         executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.DIV, 1024 * 1024 * 1024, FeeSchedule.LOW.getValue());
 
-        executeBinaryOp("0100000000", "010000000000000000", OpCodes.DIV, "0100000000");
-        executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.DIV, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        executeBinaryOp("0100000000", "010000000000000000", OpCodes.DIV, "0100000000", FeeSchedule.LOW.getValue());
+        executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.DIV, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", FeeSchedule.LOW.getValue());
     }
 
     @Test
@@ -202,10 +202,10 @@ public class VirtualMachineTest {
         executeBinaryOp(-2, -4, OpCodes.SDIV, 2, FeeSchedule.LOW.getValue());
         executeBinaryOp(-2, 4, OpCodes.SDIV, -2, FeeSchedule.LOW.getValue());
 
-        executeBinaryOp("0100000000", "010000000000000000", OpCodes.SDIV, "0100000000");
+        executeBinaryOp("0100000000", "010000000000000000", OpCodes.SDIV, "0100000000", FeeSchedule.LOW.getValue());
         executeBinaryOp(1, -1, OpCodes.SDIV, -1, FeeSchedule.LOW.getValue());
 
-        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "8000000000000000000000000000000000000000000000000000000000000000", OpCodes.SDIV, "8000000000000000000000000000000000000000000000000000000000000000");
+        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "8000000000000000000000000000000000000000000000000000000000000000", OpCodes.SDIV, "8000000000000000000000000000000000000000000000000000000000000000", FeeSchedule.LOW.getValue());
     }
 
     @Test
@@ -217,8 +217,8 @@ public class VirtualMachineTest {
         executeBinaryOp(5, 84, OpCodes.MOD, 4, FeeSchedule.LOW.getValue());
         executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.MOD, 0, FeeSchedule.LOW.getValue());
 
-        executeBinaryOp("0100000000", "010000000000000000", OpCodes.MOD, "00");
-        executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MOD, "00");
+        executeBinaryOp("0100000000", "010000000000000000", OpCodes.MOD, "00", FeeSchedule.LOW.getValue());
+        executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.MOD, "00", FeeSchedule.LOW.getValue());
     }
 
     @Test
@@ -233,8 +233,8 @@ public class VirtualMachineTest {
         executeBinaryOp(-5, 84, OpCodes.SMOD, 4, FeeSchedule.LOW.getValue());
         executeBinaryOp(1, 1024 * 1024 * 1024, OpCodes.SMOD, 0, FeeSchedule.LOW.getValue());
 
-        executeBinaryOp("0100000000", "010000000000000000", OpCodes.SMOD, "00");
-        executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.SMOD, "00");
+        executeBinaryOp("0100000000", "010000000000000000", OpCodes.SMOD, "00", FeeSchedule.LOW.getValue());
+        executeBinaryOp("01", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.SMOD, "00", FeeSchedule.LOW.getValue());
     }
 
     @Test
@@ -761,12 +761,12 @@ public class VirtualMachineTest {
     public void executeByteOperations() throws VirtualMachineException {
         executeBinaryOp(0x20, 0x1f, OpCodes.BYTE, 0x20, FeeSchedule.VERYLOW.getValue());
 
-        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "00", OpCodes.BYTE, "01");
-        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "01", OpCodes.BYTE, "02");
-        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "02", OpCodes.BYTE, "03");
-        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "1f", OpCodes.BYTE, "20");
-        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "2a", OpCodes.BYTE, "00");
-        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1fff", "1f", OpCodes.BYTE, "ff");
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "00", OpCodes.BYTE, "01", FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "01", OpCodes.BYTE, "02", FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "02", OpCodes.BYTE, "03", FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "1f", OpCodes.BYTE, "20", FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "2a", OpCodes.BYTE, "00", FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1fff", "1f", OpCodes.BYTE, "ff", FeeSchedule.VERYLOW.getValue());
     }
 
     @Test
@@ -776,6 +776,7 @@ public class VirtualMachineTest {
         executeBinaryOp(0x2020, 0x08, OpCodes.SHL, 0x202000, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x20, 0x0100, OpCodes.SHL, 0x00, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x20, 0xffffffff, OpCodes.SHL, 0x00, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp("20", "ffffffffffffffffffffffffffffffff", OpCodes.SHL, "00", FeeSchedule.VERYLOW.getValue());
     }
 
     @Test
@@ -1377,7 +1378,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromSignedLong(expected), stack.pop());
     }
 
-    private static void executeBinaryOp(String operand1, String operand2, byte opcode, String expected) throws VirtualMachineException {
+    private static void executeBinaryOp(String operand1, String operand2, byte opcode, String expected, int expectedGasUsed) throws VirtualMachineException {
         byte[] boperand1 = DataWord.fromHexadecimalString(operand1).toNormalizedBytes();
         byte[] boperand2 = DataWord.fromHexadecimalString(operand2).toNormalizedBytes();
 
@@ -1392,6 +1393,8 @@ public class VirtualMachineTest {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         virtualMachine.execute(bytecodes);
+
+        Assert.assertEquals(expectedGasUsed + 2 * FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
