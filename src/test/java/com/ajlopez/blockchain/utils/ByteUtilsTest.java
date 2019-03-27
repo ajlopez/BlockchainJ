@@ -256,4 +256,82 @@ public class ByteUtilsTest {
         Assert.assertEquals(0, result[0]);
         Assert.assertEquals(0, result[1]);
     }
+
+    @Test
+    public void shiftLeftBytesByHighPower() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, 0x00, 0x00 };
+
+        byte[] result = ByteUtils.shiftLeft(bytes, 24);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftLeftBytesByTooHighPower() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, 0x00, 0x00 };
+
+        byte[] result = ByteUtils.shiftLeft(bytes, 100);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftRightBytesByLowNon8Multiple() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, (byte)0x81, 0x7f };
+
+        byte[] result = ByteUtils.shiftRight(bytes, 1);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftRightBytesByNon8Multiple() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, 0x00, (byte)0x81 };
+
+        byte[] result = ByteUtils.shiftRight(bytes, 9);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftRightBytesByHighPower() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, 0x00, 0x00 };
+
+        byte[] result = ByteUtils.shiftRight(bytes, 24);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftRightBytesByTooHighPower() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, 0x00, 0x00 };
+
+        byte[] result = ByteUtils.shiftRight(bytes, 100);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
 }
