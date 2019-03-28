@@ -51,6 +51,7 @@ public class VirtualMachine {
         opCodeFees[OpCodes.OR] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.BYTE] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.SHL] = FeeSchedule.VERYLOW;
+        opCodeFees[OpCodes.SHR] = FeeSchedule.VERYLOW;
 
         opCodeFees[OpCodes.COINBASE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.DIFFICULTY] = FeeSchedule.BASE;
@@ -306,6 +307,14 @@ public class VirtualMachine {
                     word2 = this.stack.pop();
 
                     this.stack.push(word2.shiftLeft(word1));
+
+                    break;
+
+                case OpCodes.SHR:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+
+                    this.stack.push(word2.shiftRight(word1));
 
                     break;
 

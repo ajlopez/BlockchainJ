@@ -775,8 +775,20 @@ public class VirtualMachineTest {
         executeBinaryOp(0x2020, 0x01, OpCodes.SHL, 0x4040, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x2020, 0x08, OpCodes.SHL, 0x202000, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x20, 0x0100, OpCodes.SHL, 0x00, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp(0x20, 0x00, OpCodes.SHL, 0x20, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x20, 0xffffffff, OpCodes.SHL, 0x00, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp("20", "ffffffffffffffffffffffffffffffff", OpCodes.SHL, "00", FeeSchedule.VERYLOW.getValue());
+    }
+
+    @Test
+    public void executeShiftRightOperations() throws VirtualMachineException {
+        executeBinaryOp(0x20, 0x05, OpCodes.SHR, 0x01, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp(0x2020, 0x01, OpCodes.SHR, 0x1010, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp(0x20200000, 0x08, OpCodes.SHR, 0x202000, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp(0x20, 0x0100, OpCodes.SHR, 0x00, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp(0x20, 0x00, OpCodes.SHR, 0x20, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp(0x20, 0xffffffff, OpCodes.SHR, 0x00, FeeSchedule.VERYLOW.getValue());
+        executeBinaryOp("20", "ffffffffffffffffffffffffffffffff", OpCodes.SHR, "00", FeeSchedule.VERYLOW.getValue());
     }
 
     @Test

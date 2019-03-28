@@ -199,7 +199,7 @@ public class ByteUtils {
 
         if (nbytes >= bytes.length)
             return newbytes;
-        
+
         int nbits = shift % 8;
 
         System.arraycopy(bytes, nbytes, newbytes, 0, bytes.length - nbytes);
