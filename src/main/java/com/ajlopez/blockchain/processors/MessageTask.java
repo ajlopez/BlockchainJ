@@ -7,8 +7,8 @@ import com.ajlopez.blockchain.net.messages.Message;
  * Created by ajlopez on 06/02/2018.
  */
 public class MessageTask {
-    private Message message;
-    private Peer sender;
+    private final Message message;
+    private final Peer sender;
 
     public MessageTask(Message message, Peer sender) {
         this.message = message;

@@ -16,9 +16,9 @@ import java.util.function.Consumer;
 public class BlockProcessor {
     private static List<Block> emptyList = Collections.unmodifiableList(Arrays.asList());
 
-    private OrphanBlocks orphanBlocks;
-    private BlockChain blockChain;
-    private List<Consumer<Block>> newBestBlockConsumers = new ArrayList<>();
+    private final OrphanBlocks orphanBlocks;
+    private final BlockChain blockChain;
+    private final List<Consumer<Block>> newBestBlockConsumers = new ArrayList<>();
 
     public BlockProcessor(BlockChain blockChain, OrphanBlocks orphanBlocks) {
         this.blockChain = blockChain;

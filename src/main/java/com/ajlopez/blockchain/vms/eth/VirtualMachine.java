@@ -1,10 +1,8 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
-import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 

@@ -14,10 +14,10 @@ import java.util.List;
  * Created by ajlopez on 27/01/2018.
  */
 public class MessageProcessor {
-    BlockProcessor blockProcessor;
-    TransactionProcessor transactionProcessor;
-    PeerProcessor peerProcessor;
-    SendProcessor outputProcessor;
+    private final BlockProcessor blockProcessor;
+    private final TransactionProcessor transactionProcessor;
+    private final PeerProcessor peerProcessor;
+    private final SendProcessor outputProcessor;
 
     public MessageProcessor(BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor) {
         this.blockProcessor = blockProcessor;
