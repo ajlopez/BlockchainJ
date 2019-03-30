@@ -166,6 +166,32 @@ public class ByteUtils {
         return newbytes;
     }
 
+    public static byte[] shiftLeft(byte[] bytes, int shift) {
+        byte[] newbytes = new byte[bytes.length];
+
+        int nbytes = shift / 8;
+
+        if (nbytes >= bytes.length)
+            return newbytes;
+
+        int nbits = shift % 8;
+
+        System.arraycopy(bytes, nbytes, newbytes, 0, bytes.length - nbytes);
+
+        if (nbits > 0)
+            for (int k = 0; k < newbytes.length; k++) {
+                byte b = newbytes[k];
+                newbytes[k] <<= nbits;
+
+                if (k == 0)
+                    continue;
+
+                newbytes[k - 1] |= (b & 0xff) >>> (8 - nbits);
+            }
+
+        return newbytes;
+    }
+
     public static byte[] shiftRight(byte[] bytes, int shift) {
         byte[] newbytes = new byte[bytes.length];
 
@@ -192,7 +218,7 @@ public class ByteUtils {
         return newbytes;
     }
 
-    public static byte[] shiftLeft(byte[] bytes, int shift) {
+    public static byte[] shiftArithmeticRight(byte[] bytes, int shift) {
         byte[] newbytes = new byte[bytes.length];
 
         int nbytes = shift / 8;
@@ -202,17 +228,17 @@ public class ByteUtils {
 
         int nbits = shift % 8;
 
-        System.arraycopy(bytes, nbytes, newbytes, 0, bytes.length - nbytes);
+        System.arraycopy(bytes, 0, newbytes, nbytes, bytes.length - nbytes);
 
         if (nbits > 0)
-            for (int k = 0; k < newbytes.length; k++) {
+            for (int k = newbytes.length - 1; k >= 0; k--) {
                 byte b = newbytes[k];
-                newbytes[k] <<= nbits;
+                newbytes[k] = (byte)((newbytes[k] & 0xff) >> nbits);
 
-                if (k == 0)
+                if (k == newbytes.length - 1)
                     continue;
 
-                newbytes[k - 1] |= (b & 0xff) >>> (8 - nbits);
+                newbytes[k + 1] |= (b & 0xff) << (8 - nbits);
             }
 
         return newbytes;

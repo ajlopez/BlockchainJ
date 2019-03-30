@@ -334,4 +334,69 @@ public class ByteUtilsTest {
 
         Assert.assertArrayEquals(expected, result);
     }
+
+    @Test
+    public void shiftArithmeticRightBytesByLowNon8Multiple() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, (byte)0x81, 0x7f };
+
+        byte[] result = ByteUtils.shiftArithmeticRight(bytes, 1);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftArithmeticRightBytesByNon8Multiple() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, 0x00, (byte)0x81 };
+
+        byte[] result = ByteUtils.shiftArithmeticRight(bytes, 9);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftArithmeticRightBytesByNon8MultipleExpandingSign() {
+        byte[] bytes = new byte[] { (byte)0xf0, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { (byte)0xff, (byte)0xf8, (byte)0x01 };
+
+        byte[] result = ByteUtils.shiftArithmeticRight(bytes, 9);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftArithmeticRightBytesByHighPower() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, 0x00, 0x00 };
+
+        byte[] result = ByteUtils.shiftArithmeticRight(bytes, 24);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void shiftArithmeticRightBytesByTooHighPower() {
+        byte[] bytes = new byte[] { 0x01, 0x02, (byte)0xff };
+        byte[] expected = new byte[] { 0x00, 0x00, 0x00 };
+
+        byte[] result = ByteUtils.shiftArithmeticRight(bytes, 100);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(bytes.length, result.length);
+
+        Assert.assertArrayEquals(expected, result);
+    }
 }
