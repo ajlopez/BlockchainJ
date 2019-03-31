@@ -241,6 +241,14 @@ public class ByteUtils {
                 newbytes[k + 1] |= (b & 0xff) << (8 - nbits);
             }
 
+        if ((bytes[0] & 0x80) != 0) {
+            for (int k = 0; k < nbytes; k++)
+                newbytes[k] = (byte)0xff;
+
+            if (nbits > 0)
+                newbytes[nbytes] |= (byte)(0xff << (8 - nbits));
+        }
+
         return newbytes;
     }
 }
