@@ -35,6 +35,7 @@ public class OpCodes {
     public static final byte BYTE = 0x1a;
     public static final byte SHL = 0x1b;
     public static final byte SHR = 0x1c;
+    public static final byte SAR = 0x1d;
 
     public static final byte ADDRESS = 0x30;
 

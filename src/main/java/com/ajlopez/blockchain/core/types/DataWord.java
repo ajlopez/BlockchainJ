@@ -304,4 +304,21 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
 
         return new DataWord(bytes);
     }
+
+    public DataWord shiftArithmeticRight(DataWord word) {
+        if (!word.isUnsignedInteger())
+            return DataWord.ZERO;
+
+        int nbits = word.asUnsignedInteger();
+
+        if (nbits >= MAX_POW)
+            if ((this.getBytes()[0] & 0x80) != 0)
+                return DataWord.ZERO.sub(DataWord.ONE);
+            else
+                return DataWord.ZERO;
+
+        byte[] bytes = ByteUtils.shiftArithmeticRight(this.getBytes(), nbits);
+
+        return new DataWord(bytes);
+    }
 }
