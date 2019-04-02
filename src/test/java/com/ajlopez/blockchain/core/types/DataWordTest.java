@@ -174,6 +174,17 @@ public class DataWordTest {
     }
 
     @Test
+    public void subtractTwoFromZero() {
+        DataWord word1 = DataWord.fromHexadecimalString("00");
+        DataWord word2 = DataWord.fromHexadecimalString("02");
+
+        DataWord result = word1.sub(word2);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe", result.toNormalizedString());
+    }
+
+    @Test
     public void compareDataWords() {
         DataWord word1 = DataWord.fromUnsignedInteger(1);
         DataWord word2 = DataWord.fromUnsignedInteger(42);
