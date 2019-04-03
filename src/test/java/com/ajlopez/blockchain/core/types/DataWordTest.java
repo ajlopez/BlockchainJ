@@ -185,6 +185,19 @@ public class DataWordTest {
     }
 
     @Test
+    public void executeExpOperations() {
+        executeExp("01", "02", "01");
+        executeExp("02", "02", "04");
+        executeExp("0100", "04", "0100000000");
+        executeExp("02", "10", "010000");
+        executeExp("02", "0100", "00");
+        executeExp("03", "02", "09");
+        executeExp("03", "00", "01");
+        executeExp("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "02", "01");
+        executeExp("0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe", "02", "04");
+    }
+
+    @Test
     public void compareDataWords() {
         DataWord word1 = DataWord.fromUnsignedInteger(1);
         DataWord word2 = DataWord.fromUnsignedInteger(42);
@@ -374,6 +387,15 @@ public class DataWordTest {
         DataWord word2 = DataWord.fromHexadecimalString(operand2);
 
         DataWord result = word1.xor(word2);
+
+        Assert.assertEquals(DataWord.fromHexadecimalString(expected), result);
+    }
+
+    private static void executeExp(String operand1, String operand2, String expected) {
+        DataWord word1 = DataWord.fromHexadecimalString(operand1);
+        DataWord word2 = DataWord.fromHexadecimalString(operand2);
+
+        DataWord result = word1.exp(word2);
 
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), result);
     }

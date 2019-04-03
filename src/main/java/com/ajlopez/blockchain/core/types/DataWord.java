@@ -11,6 +11,7 @@ import java.math.BigInteger;
 public class DataWord extends AbstractBytesValue implements Comparable<DataWord> {
     public static final int DATAWORD_BYTES = 32;
     private static final int MAX_POW = 256;
+    public static final BigInteger _2_256 = BigInteger.valueOf(2).pow(MAX_POW);
 
     public static final DataWord ZERO = new DataWord(new byte[0]);
     public static final DataWord ONE = new DataWord(new byte[] { 0x01 });
@@ -173,6 +174,18 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
             return DataWord.fromBytes(newbytes, newbytes.length - DATAWORD_BYTES, DATAWORD_BYTES);
 
         return new DataWord(newbytes, true);
+    }
+
+    public DataWord exp(DataWord word) {
+        BigInteger value1 = new BigInteger(1, this.bytes);
+        BigInteger value2 = new BigInteger(1, word.bytes);
+
+        byte[] newbytes = value1.modPow(value2, _2_256).toByteArray();
+
+        if (newbytes.length > DATAWORD_BYTES)
+            return DataWord.fromBytes(newbytes, newbytes.length - DATAWORD_BYTES, DATAWORD_BYTES);
+
+        return new DataWord(newbytes);
     }
 
     public DataWord or(DataWord word) {
