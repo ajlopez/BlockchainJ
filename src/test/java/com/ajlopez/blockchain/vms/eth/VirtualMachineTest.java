@@ -805,6 +805,20 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeExpOperations() throws VirtualMachineException {
+        // TODO calculate and check gas
+        executeBinaryOp(0x10, 0x05, OpCodes.EXP, 0x100000, -1);
+        executeBinaryOp(0x2020, 0x01, OpCodes.EXP, 0x2020, -1);
+        executeBinaryOp(0x20200000, 0x08, OpCodes.EXP, 0x202000, -1);
+        executeBinaryOp(0x20, 0x0100, OpCodes.EXP, 0x00, -1);
+        executeBinaryOp(0x20, 0x00, OpCodes.EXP, 0x20, -1);
+        executeBinaryOp(0x20, 0xffffffff, OpCodes.EXP, 0x00, -1);
+        executeBinaryOp("20", "ffffffffffffffffffffffffffffffff", OpCodes.EXP, "00", -1);
+        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "09", OpCodes.EXP, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", -1);
+        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "1000", OpCodes.EXP, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", -1);
+    }
+
+    @Test
     public void executeIsZeroOperations() throws VirtualMachineException {
         executeUnaryOp(OpCodes.ISZERO, 1, 0, FeeSchedule.VERYLOW.getValue() * 2);
         executeUnaryOp(OpCodes.ISZERO, 0, 42, FeeSchedule.VERYLOW.getValue() * 2);
