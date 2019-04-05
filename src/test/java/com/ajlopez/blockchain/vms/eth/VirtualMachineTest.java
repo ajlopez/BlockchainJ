@@ -807,15 +807,14 @@ public class VirtualMachineTest {
     @Test
     public void executeExpOperations() throws VirtualMachineException {
         // TODO calculate and check gas
-        executeBinaryOp(0x10, 0x05, OpCodes.EXP, 0x100000, -1);
-        executeBinaryOp(0x2020, 0x01, OpCodes.EXP, 0x2020, -1);
-        executeBinaryOp(0x20200000, 0x08, OpCodes.EXP, 0x202000, -1);
-        executeBinaryOp(0x20, 0x0100, OpCodes.EXP, 0x00, -1);
-        executeBinaryOp(0x20, 0x00, OpCodes.EXP, 0x20, -1);
-        executeBinaryOp(0x20, 0xffffffff, OpCodes.EXP, 0x00, -1);
-        executeBinaryOp("20", "ffffffffffffffffffffffffffffffff", OpCodes.EXP, "00", -1);
-        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "09", OpCodes.EXP, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", -1);
-        executeBinaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "1000", OpCodes.EXP, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", -1);
+        executeBinaryOp(0x05, 0x10, OpCodes.EXP, 0x100000, 0);
+        executeBinaryOp(0x01, 0x2020, OpCodes.EXP, 0x2020, 0);
+        executeBinaryOp(0x02, 0x1000, OpCodes.EXP, 0x1000000, 0);
+        executeBinaryOp(0x20, 0x0100, OpCodes.EXP, 0x00, 0);
+        executeBinaryOp(0x00, 0x20, OpCodes.EXP, 0x01, 0);
+        executeBinaryOp(0xffffffff, 0x20, OpCodes.EXP, 0x00, 0);
+        executeBinaryOp("09", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.EXP, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 0);
+        executeBinaryOp("1001", "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.EXP, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 0);
     }
 
     @Test

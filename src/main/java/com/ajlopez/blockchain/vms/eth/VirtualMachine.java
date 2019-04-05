@@ -155,6 +155,14 @@ public class VirtualMachine {
 
                     break;
 
+                case OpCodes.EXP:
+                    word1 = this.stack.pop();
+                    word2 = this.stack.pop();
+
+                    this.stack.push(word1.exp(word2));
+
+                    break;
+
                 case OpCodes.SDIV:
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
