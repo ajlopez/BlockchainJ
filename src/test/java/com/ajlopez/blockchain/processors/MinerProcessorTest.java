@@ -34,7 +34,7 @@ public class MinerProcessorTest {
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
 
-        Block block = processor.mineBlock(parent, transactionPool);
+        Block block = processor.mineBlock(parent);
 
         Assert.assertNotNull(block);
         Assert.assertEquals(2, block.getNumber());
@@ -67,7 +67,7 @@ public class MinerProcessorTest {
 
         MinerProcessor processor = new MinerProcessor(null, transactionPool, trieStore, coinbase);
 
-        Block block = processor.mineBlock(parent, transactionPool);
+        Block block = processor.mineBlock(parent);
 
         Assert.assertNotNull(block);
         Assert.assertEquals(2, block.getNumber());

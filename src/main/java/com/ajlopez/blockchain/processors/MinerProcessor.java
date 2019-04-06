@@ -38,7 +38,7 @@ public class MinerProcessor {
     public Block process() {
         Block bestBlock = this.blockChain.getBestBlock();
 
-        Block newBlock = this.mineBlock(bestBlock, this.transactionPool);
+        Block newBlock = this.mineBlock(bestBlock);
 
         emitMinedBlock(newBlock);
 
@@ -49,7 +49,7 @@ public class MinerProcessor {
         this.minedBlockConsumers.add(consumer);
     }
 
-    public Block mineBlock(Block parent, TransactionPool txpool) {
+    public Block mineBlock(Block parent) {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
         Trie trie = this.trieStore.retrieve(parentStateRootHash);
         AccountStore accountStore = new AccountStore(trie);
