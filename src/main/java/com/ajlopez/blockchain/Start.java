@@ -3,6 +3,7 @@ package com.ajlopez.blockchain;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
+import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.utils.HexUtils;
@@ -26,7 +27,7 @@ public class Start {
 
         Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
 
-        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"), coinbase, null);
+        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"), coinbase, new NetworkConfiguration(1));
 
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
