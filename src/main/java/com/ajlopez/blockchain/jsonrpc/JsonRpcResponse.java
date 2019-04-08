@@ -13,6 +13,12 @@ public class JsonRpcResponse {
     private final String version;
     private final JsonValue result;
 
+    public static JsonRpcResponse createResponse(JsonRpcRequest request, int result) {
+        JsonValue value = JsonConverter.convert(HexUtils.bytesToHexString(ByteUtils.unsignedIntegerToNormalizedBytes(result), true));
+
+        return createResponse(request, value);
+    }
+
     public static JsonRpcResponse createResponse(JsonRpcRequest request, long result) {
         JsonValue value = JsonConverter.convert(HexUtils.bytesToHexString(ByteUtils.unsignedLongToNormalizedBytes(result), true));
 

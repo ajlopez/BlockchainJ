@@ -51,6 +51,10 @@ public class ByteUtils {
         return result;
     }
 
+    public static byte[] unsignedIntegerToNormalizedBytes(int value) {
+        return normalizedBytes(unsignedIntegerToBytes(value));
+    }
+
     public static void unsignedIntegerToBytes(int value, byte[] bytes, int offset) {
         for (int k = Integer.BYTES; value != 0 && k-- > 0;) {
             bytes[k + offset] = (byte)(value & 0xff);
