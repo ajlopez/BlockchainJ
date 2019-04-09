@@ -36,4 +36,24 @@ public class HttpProcessorTest {
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals("200 OK\r\n\r\n{ \"id\": \"1\", \"version\": \"2.0\", \"result\": \"0x0a\" }", result);
     }
+
+    @Test
+    public void rejectGetRequest() throws JsonLexerException, IOException, JsonRpcException, JsonParserException {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
+        BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
+
+        String input = "GET /\r\n\r\n";
+        StringWriter writer = new StringWriter();
+
+        HttpProcessor processor = new HttpProcessor(blocksProcessor,  new StringReader(input), writer);
+
+        processor.process();
+
+        String result = writer.toString();
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals("404 ERROR\r\n\r\n", result);
+    }
 }

@@ -30,39 +30,43 @@ public class HttpProcessor {
 
         HttpRequest request = parser.parse(this.reader);
 
-        if (request.getMethod().equals("POST")) {
-            JsonParser jparser = new JsonParser(request.getReader());
-            JsonValue jvalue = jparser.parseValue();
+        if (!"POST".equals(request.getMethod())) {
+            this.writer.write("404 ERROR\r\n\r\n");
+            this.writer.flush();
+            return;
+        }
 
-            if (jvalue.getType() == JsonValueType.OBJECT) {
-                JsonObjectValue jovalue = (JsonObjectValue) jvalue;
+        JsonParser jparser = new JsonParser(request.getReader());
+        JsonValue jvalue = jparser.parseValue();
 
-                if (jovalue.hasProperty("method") && jovalue.hasProperty("id") && jovalue.hasProperty("version") && jovalue.hasProperty("params") && jovalue.getProperty("params").getType() == JsonValueType.ARRAY) {
-                    String id = jovalue.getProperty("id").getValue().toString();
-                    String version = jovalue.getProperty("version").getValue().toString();
-                    String method = jovalue.getProperty("method").getValue().toString();
+        if (jvalue.getType() == JsonValueType.OBJECT) {
+            JsonObjectValue jovalue = (JsonObjectValue) jvalue;
 
-                    JsonArrayValue avalue = (JsonArrayValue)jovalue.getProperty("params");
-                    List<JsonValue> params = avalue.getValues();
+            if (jovalue.hasProperty("method") && jovalue.hasProperty("id") && jovalue.hasProperty("version") && jovalue.hasProperty("params") && jovalue.getProperty("params").getType() == JsonValueType.ARRAY) {
+                String id = jovalue.getProperty("id").getValue().toString();
+                String version = jovalue.getProperty("version").getValue().toString();
+                String method = jovalue.getProperty("method").getValue().toString();
 
-                    JsonRpcRequest jsonrequest = new JsonRpcRequest(id, version, method, params);
+                JsonArrayValue avalue = (JsonArrayValue)jovalue.getProperty("params");
+                List<JsonValue> params = avalue.getValues();
 
-                    JsonRpcResponse jsonresponse = this.jsonRpcProcessor.processRequest(jsonrequest);
+                JsonRpcRequest jsonrequest = new JsonRpcRequest(id, version, method, params);
 
-                    JsonBuilder builder = new JsonBuilder();
-                    JsonValue response = builder.object()
-                            .name("id")
-                            .value(jsonresponse.getId())
-                            .name("version")
-                            .value(jsonresponse.getVersion())
-                            .name("result")
-                            .value(jsonresponse.getResult())
-                            .build();
+                JsonRpcResponse jsonresponse = this.jsonRpcProcessor.processRequest(jsonrequest);
 
-                    this.writer.write("200 OK\r\n\r\n");
-                    this.writer.write(response.toString());
-                    this.writer.flush();
-                }
+                JsonBuilder builder = new JsonBuilder();
+                JsonValue response = builder.object()
+                        .name("id")
+                        .value(jsonresponse.getId())
+                        .name("version")
+                        .value(jsonresponse.getVersion())
+                        .name("result")
+                        .value(jsonresponse.getResult())
+                        .build();
+
+                this.writer.write("200 OK\r\n\r\n");
+                this.writer.write(response.toString());
+                this.writer.flush();
             }
         }
     }
