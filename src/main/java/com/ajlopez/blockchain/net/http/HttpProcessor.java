@@ -31,44 +31,51 @@ public class HttpProcessor {
         HttpRequest request = parser.parse(this.reader);
 
         if (!"POST".equals(request.getMethod())) {
-            this.writer.write("404 ERROR\r\n\r\n");
-            this.writer.flush();
+            this.reject();
             return;
         }
 
         JsonParser jparser = new JsonParser(request.getReader());
         JsonValue jvalue = jparser.parseValue();
 
-        if (jvalue.getType() == JsonValueType.OBJECT) {
-            JsonObjectValue jovalue = (JsonObjectValue) jvalue;
-
-            if (jovalue.hasProperty("method") && jovalue.hasProperty("id") && jovalue.hasProperty("version") && jovalue.hasProperty("params") && jovalue.getProperty("params").getType() == JsonValueType.ARRAY) {
-                String id = jovalue.getProperty("id").getValue().toString();
-                String version = jovalue.getProperty("version").getValue().toString();
-                String method = jovalue.getProperty("method").getValue().toString();
-
-                JsonArrayValue avalue = (JsonArrayValue)jovalue.getProperty("params");
-                List<JsonValue> params = avalue.getValues();
-
-                JsonRpcRequest jsonrequest = new JsonRpcRequest(id, version, method, params);
-
-                JsonRpcResponse jsonresponse = this.jsonRpcProcessor.processRequest(jsonrequest);
-
-                JsonBuilder builder = new JsonBuilder();
-                JsonValue response = builder.object()
-                        .name("id")
-                        .value(jsonresponse.getId())
-                        .name("version")
-                        .value(jsonresponse.getVersion())
-                        .name("result")
-                        .value(jsonresponse.getResult())
-                        .build();
-
-                this.writer.write("200 OK\r\n\r\n");
-                this.writer.write(response.toString());
-                this.writer.flush();
-            }
+        if (jvalue.getType() != JsonValueType.OBJECT) {
+            this.reject();
+            return;
         }
+
+        JsonObjectValue jovalue = (JsonObjectValue) jvalue;
+
+        if (jovalue.hasProperty("method") && jovalue.hasProperty("id") && jovalue.hasProperty("version") && jovalue.hasProperty("params") && jovalue.getProperty("params").getType() == JsonValueType.ARRAY) {
+            String id = jovalue.getProperty("id").getValue().toString();
+            String version = jovalue.getProperty("version").getValue().toString();
+            String method = jovalue.getProperty("method").getValue().toString();
+
+            JsonArrayValue avalue = (JsonArrayValue)jovalue.getProperty("params");
+            List<JsonValue> params = avalue.getValues();
+
+            JsonRpcRequest jsonrequest = new JsonRpcRequest(id, version, method, params);
+
+            JsonRpcResponse jsonresponse = this.jsonRpcProcessor.processRequest(jsonrequest);
+
+            JsonBuilder builder = new JsonBuilder();
+            JsonValue response = builder.object()
+                    .name("id")
+                    .value(jsonresponse.getId())
+                    .name("version")
+                    .value(jsonresponse.getVersion())
+                    .name("result")
+                    .value(jsonresponse.getResult())
+                    .build();
+
+            this.writer.write("200 OK\r\n\r\n");
+            this.writer.write(response.toString());
+            this.writer.flush();
+        }
+    }
+
+    private void reject() throws IOException {
+        this.writer.write("404 ERROR\r\n\r\n");
+        this.writer.flush();
     }
 }
 
