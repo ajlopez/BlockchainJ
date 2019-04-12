@@ -76,4 +76,24 @@ public class HttpProcessorTest {
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals("404 ERROR\r\n\r\n", result);
     }
+
+    @Test
+    public void rejectPostRequestWithoutIdProperty() throws JsonLexerException, IOException, JsonRpcException, JsonParserException {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
+        BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
+
+        String input = "POST /\r\n\r\n{ \"version\": \"2.0\", \"method\": \"eth_blockNumber\", \"params\": [] }";
+        StringWriter writer = new StringWriter();
+
+        HttpProcessor processor = new HttpProcessor(blocksProcessor,  new StringReader(input), writer);
+
+        processor.process();
+
+        String result = writer.toString();
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals("404 ERROR\r\n\r\n", result);
+    }
 }
