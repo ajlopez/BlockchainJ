@@ -1,0 +1,59 @@
+package com.ajlopez.blockchain.net.http;
+
+import com.ajlopez.blockchain.json.JsonLexerException;
+import com.ajlopez.blockchain.json.JsonParserException;
+import com.ajlopez.blockchain.jsonrpc.JsonRpcException;
+import com.ajlopez.blockchain.jsonrpc.JsonRpcProcessor;
+import com.ajlopez.blockchain.net.messages.StatusMessage;
+import com.ajlopez.blockchain.net.peers.Peer;
+import com.ajlopez.blockchain.net.peers.PeerConnection;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * Created by ajlopez on 14/04/2019.
+ */
+public class HttpServer {
+    private final int port;
+    private final JsonRpcProcessor jsonRpcProcessor;
+
+    private boolean started;
+    private boolean stopped;
+
+    public HttpServer(int port, JsonRpcProcessor jsonRpcProcessor) {
+        this.port = port;
+        this.jsonRpcProcessor = jsonRpcProcessor;
+    }
+
+    public synchronized void start() {
+        if (started)
+            return;
+
+        new Thread(this::process).start();
+
+        this.started = true;
+    }
+
+    public void stop() {
+        this.stopped = true;
+    }
+
+    private void process() {
+        try {
+            ServerSocket serverSocket = new ServerSocket(this.port);
+
+            while (!this.stopped) {
+                Socket clientSocket = serverSocket.accept();
+                Reader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                Writer writer = new PrintWriter(clientSocket.getOutputStream());
+                HttpProcessor processor = new HttpProcessor(this.jsonRpcProcessor, reader, writer);
+
+                processor.process();
+            }
+        }
+        catch (IOException | JsonLexerException | JsonParserException | JsonRpcException ex) {
+        }
+    }
+}
