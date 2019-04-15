@@ -38,7 +38,7 @@ public class HttpProcessor {
         JsonParser jparser = new JsonParser(request.getReader());
         JsonValue jvalue = jparser.parseValue();
 
-        if (jvalue.getType() != JsonValueType.OBJECT) {
+        if (jvalue == null || jvalue.getType() != JsonValueType.OBJECT) {
             this.reject();
             return;
         }

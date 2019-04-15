@@ -46,7 +46,13 @@ public class HttpServer {
 
             while (!this.stopped) {
                 Socket clientSocket = serverSocket.accept();
-                Reader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+                // TODO review implementation
+                byte[] data = new byte[1024 * 10];
+                int ndata = clientSocket.getInputStream().read(data);
+                InputStream inputStream = new ByteArrayInputStream(data, 0, ndata);
+                Reader reader = new BufferedReader(new InputStreamReader(inputStream));
+
                 Writer writer = new PrintWriter(clientSocket.getOutputStream());
                 HttpProcessor processor = new HttpProcessor(this.jsonRpcProcessor, reader, writer);
 

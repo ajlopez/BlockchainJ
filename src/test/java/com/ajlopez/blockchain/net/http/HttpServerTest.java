@@ -34,4 +34,50 @@ public class HttpServerTest {
 
         httpServer.stop();
     }
+
+    @Test
+    public void processPostWithInvalidPayload() throws IOException {
+        TopProcessor topProcessor = new TopProcessor();
+        HttpServer httpServer = new HttpServer(5001, topProcessor);
+
+        httpServer.start();
+
+        Socket socket = new Socket("127.0.0.1", 5001);
+        PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
+        writer.println("POST /\r\n\r\n42");
+        writer.flush();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        String result = reader.readLine();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("404 ERROR", result);
+
+        httpServer.stop();
+    }
+
+    @Test
+    public void processPostWithoutPayload() throws IOException {
+        TopProcessor topProcessor = new TopProcessor();
+        HttpServer httpServer = new HttpServer(5000, topProcessor);
+
+        httpServer.start();
+
+        Socket socket = new Socket("127.0.0.1", 5000);
+        PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
+        writer.println("POST /\r\n");
+        writer.flush();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        String result = reader.readLine();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("404 ERROR", result);
+
+        httpServer.stop();
+    }
 }

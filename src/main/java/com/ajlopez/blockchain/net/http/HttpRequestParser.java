@@ -23,9 +23,6 @@ public class HttpRequestParser {
 
         Map<String, String> headers = new HashMap<>();
 
-        if ("GET".equals(method))
-            return new HttpRequest(method, resource, headers, breader);
-
         while ((line = breader.readLine()) != null)
             if (line.trim().isEmpty())
                 break;
