@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class JsonRpcRequest {
     private final String id;
-    private final String version;
+    private final String jsonrpc;
     private final String method;
     private final List<JsonValue> params;
 
@@ -26,9 +26,9 @@ public class JsonRpcRequest {
         );
     }
 
-    public JsonRpcRequest(String id, String version, String method, List<JsonValue> params) {
+    public JsonRpcRequest(String id, String jsonrpc, String method, List<JsonValue> params) {
         this.id = id;
-        this.version = version;
+        this.jsonrpc = jsonrpc;
         this.method = method;
         this.params = params;
     }
@@ -37,8 +37,8 @@ public class JsonRpcRequest {
         return this.id;
     }
 
-    public String getVersion() {
-        return this.version;
+    public String getJsonRpc() {
+        return this.jsonrpc;
     }
 
     public String getMethod() {

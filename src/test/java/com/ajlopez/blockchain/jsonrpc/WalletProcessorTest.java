@@ -34,7 +34,7 @@ public class WalletProcessorTest {
 
         Assert.assertNotNull(response);
         Assert.assertEquals(request.getId(), response.getId());
-        Assert.assertEquals(request.getVersion(), response.getVersion());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
 
         JsonValue result = response.getResult();
 
@@ -56,7 +56,7 @@ public class WalletProcessorTest {
 
         Assert.assertNotNull(response);
         Assert.assertEquals(request.getId(), response.getId());
-        Assert.assertEquals(request.getVersion(), response.getVersion());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
 
         JsonValue result = response.getResult();
 

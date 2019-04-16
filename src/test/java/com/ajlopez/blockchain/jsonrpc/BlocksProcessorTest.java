@@ -34,7 +34,7 @@ public class BlocksProcessorTest {
 
         Assert.assertNotNull(response);
         Assert.assertEquals(request.getId(), response.getId());
-        Assert.assertEquals(request.getVersion(), response.getVersion());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
         Assert.assertEquals("\"0x00\"", response.getResult().toString());
     }
 
@@ -52,7 +52,7 @@ public class BlocksProcessorTest {
 
         Assert.assertNotNull(response);
         Assert.assertEquals(request.getId(), response.getId());
-        Assert.assertEquals(request.getVersion(), response.getVersion());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
         Assert.assertEquals("\"0x0a\"", response.getResult().toString());
     }
 

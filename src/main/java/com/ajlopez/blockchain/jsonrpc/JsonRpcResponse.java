@@ -10,7 +10,7 @@ import com.ajlopez.blockchain.utils.HexUtils;
  */
 public class JsonRpcResponse {
     private final String id;
-    private final String version;
+    private final String jsonrpc;
     private final JsonValue result;
 
     public static JsonRpcResponse createResponse(JsonRpcRequest request, int result) {
@@ -32,18 +32,18 @@ public class JsonRpcResponse {
     }
 
     public static JsonRpcResponse createResponse(JsonRpcRequest request, JsonValue result) {
-        return new JsonRpcResponse(request.getId(), request.getVersion(), result);
+        return new JsonRpcResponse(request.getId(), request.getJsonRpc(), result);
     }
 
-    public JsonRpcResponse(String id, String version, JsonValue result) {
+    public JsonRpcResponse(String id, String jsonrpc, JsonValue result) {
         this.id = id;
-        this.version = version;
+        this.jsonrpc = jsonrpc;
         this.result = result;
     }
 
     public String getId() { return this.id; }
 
-    public String getVersion() { return this.version; }
+    public String getJsonRpc() { return this.jsonrpc; }
 
     public JsonValue getResult() { return this.result; }
 }

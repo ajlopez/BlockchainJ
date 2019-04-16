@@ -22,7 +22,7 @@ public class JsonRpcRequestTest {
 
         Assert.assertNotNull(request);
         Assert.assertEquals("1", request.getId());
-        Assert.assertEquals("2.0", request.getVersion());
+        Assert.assertEquals("2.0", request.getJsonRpc());
         Assert.assertEquals("eth_blockNumber", request.getMethod());
         Assert.assertNotNull(request.getParams());
         Assert.assertTrue(request.getParams().isEmpty());

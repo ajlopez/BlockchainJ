@@ -1,9 +1,7 @@
 package com.ajlopez.blockchain.jsonrpc;
 
-import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.json.JsonValue;
-import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,7 +41,7 @@ public class NetworkProcessorTest {
 
         Assert.assertNotNull(response);
         Assert.assertEquals(request.getId(), response.getId());
-        Assert.assertEquals(request.getVersion(), response.getVersion());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
         Assert.assertEquals("\"0x2a\"", response.getResult().toString());
     }
 }

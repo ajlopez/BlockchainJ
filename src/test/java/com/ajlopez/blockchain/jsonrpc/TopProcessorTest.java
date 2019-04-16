@@ -46,7 +46,7 @@ public class TopProcessorTest {
 
         Assert.assertNotNull(response);
         Assert.assertEquals(request.getId(), response.getId());
-        Assert.assertEquals(request.getVersion(), response.getVersion());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
         Assert.assertEquals("\"0x00\"", response.getResult().toString());
     }
 }

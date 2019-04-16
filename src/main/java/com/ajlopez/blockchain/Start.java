@@ -6,6 +6,8 @@ import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.jsonrpc.BlocksProcessor;
+import com.ajlopez.blockchain.net.http.HttpServer;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.io.IOException;
@@ -31,6 +33,11 @@ public class Start {
 
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
+
+        HttpServer server = new HttpServer(4445, new BlocksProcessor(blockChain));
+
+        server.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
     }
 
     public static ArgumentsProcessor processArguments(String[] args) {

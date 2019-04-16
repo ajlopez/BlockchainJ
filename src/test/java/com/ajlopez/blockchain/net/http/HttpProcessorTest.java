@@ -23,7 +23,7 @@ public class HttpProcessorTest {
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
         BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
 
-        String input = "POST /\r\n\r\n{ \"id\": 1, \"version\": \"2.0\", \"method\": \"eth_blockNumber\", \"params\": [] }";
+        String input = "POST /\r\n\r\n{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_blockNumber\", \"params\": [] }";
         StringWriter writer = new StringWriter();
 
         HttpProcessor processor = new HttpProcessor(blocksProcessor,  new StringReader(input), writer);
@@ -34,7 +34,7 @@ public class HttpProcessorTest {
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
-        Assert.assertEquals("200 OK\r\n\r\n{ \"id\": \"1\", \"version\": \"2.0\", \"result\": \"0x0a\" }", result);
+        Assert.assertEquals("200 OK\r\n\r\n{ \"id\": \"1\", \"jsonrpc\": \"2.0\", \"result\": \"0x0a\" }", result);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class HttpProcessorTest {
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
         BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
 
-        String input = "POST /\r\n\r\n{ \"version\": \"2.0\", \"method\": \"eth_blockNumber\", \"params\": [] }";
+        String input = "POST /\r\n\r\n{ \"jsonrpc\": \"2.0\", \"method\": \"eth_blockNumber\", \"params\": [] }";
         StringWriter writer = new StringWriter();
 
         HttpProcessor processor = new HttpProcessor(blocksProcessor,  new StringReader(input), writer);
@@ -98,7 +98,7 @@ public class HttpProcessorTest {
     }
 
     @Test
-    public void rejectPostRequestWithoutVersionProperty() throws JsonLexerException, IOException, JsonRpcException, JsonParserException {
+    public void rejectPostRequestWithoutJsonRpcProperty() throws JsonLexerException, IOException, JsonRpcException, JsonParserException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
         BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
@@ -123,7 +123,7 @@ public class HttpProcessorTest {
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
         BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
 
-        String input = "POST /\r\n\r\n{ \"id\": 1, \"version\": \"2.0\", \"params\": [] }";
+        String input = "POST /\r\n\r\n{ \"id\": 1, \"jsonrpc\": \"2.0\", \"params\": [] }";
         StringWriter writer = new StringWriter();
 
         HttpProcessor processor = new HttpProcessor(blocksProcessor,  new StringReader(input), writer);
@@ -143,7 +143,7 @@ public class HttpProcessorTest {
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
         BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
 
-        String input = "POST /\r\n\r\n{ \"id\": 1, \"version\": \"2.0\", \"method\": \"eth_blockNumber\" }";
+        String input = "POST /\r\n\r\n{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_blockNumber\" }";
         StringWriter writer = new StringWriter();
 
         HttpProcessor processor = new HttpProcessor(blocksProcessor,  new StringReader(input), writer);
