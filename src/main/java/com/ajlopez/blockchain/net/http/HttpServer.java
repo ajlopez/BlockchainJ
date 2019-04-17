@@ -57,6 +57,7 @@ public class HttpServer {
                 HttpProcessor processor = new HttpProcessor(this.jsonRpcProcessor, reader, writer);
 
                 processor.process();
+                clientSocket.close();
             }
         }
         catch (IOException | JsonLexerException | JsonParserException | JsonRpcException ex) {

@@ -61,11 +61,11 @@ public class HttpServerTest {
     @Test
     public void processPostWithoutPayload() throws IOException {
         TopProcessor topProcessor = new TopProcessor();
-        HttpServer httpServer = new HttpServer(5000, topProcessor);
+        HttpServer httpServer = new HttpServer(5002, topProcessor);
 
         httpServer.start();
 
-        Socket socket = new Socket("127.0.0.1", 5000);
+        Socket socket = new Socket("127.0.0.1", 5002);
         PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
         writer.println("POST /\r\n");
