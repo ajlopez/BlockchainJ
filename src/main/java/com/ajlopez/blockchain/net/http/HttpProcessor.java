@@ -71,13 +71,13 @@ public class HttpProcessor {
                 .value(jsonresponse.getResult())
                 .build();
 
-        this.writer.write("200 OK\r\n\r\n");
+        this.writer.write("HTTP/1.1 200 OK\r\n\r\n");
         this.writer.write(response.toString());
         this.writer.flush();
     }
 
     private void reject() throws IOException {
-        this.writer.write("404 ERROR\r\n\r\n");
+        this.writer.write("HTTP/1.1 404 ERROR\r\n\r\n");
         this.writer.flush();
     }
 }

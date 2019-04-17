@@ -30,7 +30,7 @@ public class HttpServerTest {
         String result = reader.readLine();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals("404 ERROR", result);
+        Assert.assertEquals("HTTP/1.1 404 ERROR", result);
 
         httpServer.stop();
     }
@@ -53,7 +53,7 @@ public class HttpServerTest {
         String result = reader.readLine();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals("404 ERROR", result);
+        Assert.assertEquals("HTTP/1.1 404 ERROR", result);
 
         httpServer.stop();
     }
@@ -76,7 +76,7 @@ public class HttpServerTest {
         String result = reader.readLine();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals("404 ERROR", result);
+        Assert.assertEquals("HTTP/1.1 404 ERROR", result);
 
         httpServer.stop();
     }
