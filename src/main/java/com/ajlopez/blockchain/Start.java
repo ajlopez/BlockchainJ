@@ -7,6 +7,8 @@ import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.jsonrpc.BlocksProcessor;
+import com.ajlopez.blockchain.jsonrpc.NetworkProcessor;
+import com.ajlopez.blockchain.jsonrpc.TopProcessor;
 import com.ajlopez.blockchain.net.http.HttpServer;
 import com.ajlopez.blockchain.utils.HexUtils;
 
@@ -29,12 +31,20 @@ public class Start {
 
         Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
 
-        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"), coinbase, new NetworkConfiguration(1));
+        NetworkConfiguration networkConfiguration = new NetworkConfiguration(1);
+        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"), coinbase, networkConfiguration);
 
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
 
-        HttpServer server = new HttpServer(4445, new BlocksProcessor(blockChain));
+        TopProcessor topProcessor = new TopProcessor();
+        BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
+        NetworkProcessor networkProcessor = new NetworkProcessor(networkConfiguration);
+
+        topProcessor.registerProcess("eth_blockNumber", blocksProcessor);
+        topProcessor.registerProcess("net_version", networkProcessor);
+
+        HttpServer server = new HttpServer(argsproc.getInteger("rpcport"), topProcessor);
 
         server.start();
         Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
@@ -44,6 +54,7 @@ public class Start {
         ArgumentsProcessor processor = new ArgumentsProcessor();
 
         processor.defineInteger("p", "port", 0);
+        processor.defineInteger("rp", "rpcport", 4445);
         processor.defineStringList("ps", "peers", "");
         processor.defineBoolean("m", "miner", false);
         processor.defineString("k", "coinbase", "");
