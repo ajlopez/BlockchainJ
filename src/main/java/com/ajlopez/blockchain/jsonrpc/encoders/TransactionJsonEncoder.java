@@ -19,6 +19,8 @@ public class TransactionJsonEncoder {
                 .value(transaction.getSender())
                 .name("to")
                 .value(transaction.getReceiver())
+                .name("nonce")
+                .value(transaction.getNonce())
                 .name("value")
                 .value(transaction.getValue())
                 .build();
