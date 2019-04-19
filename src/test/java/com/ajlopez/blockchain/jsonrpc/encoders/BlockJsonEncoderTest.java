@@ -44,7 +44,7 @@ public class BlockJsonEncoderTest {
         Assert.assertEquals(block.getParentHash().toString(), oresult.getProperty("parentHash").getValue());
         Assert.assertEquals("0", oresult.getProperty("nonce").getValue());
         Assert.assertEquals(block.getStateRootHash().toString(), oresult.getProperty("stateRoot").getValue());
-        Assert.assertEquals(block.getHeader().getTransactionsHash().toString(), oresult.getProperty("transactionRoot").getValue());
+        Assert.assertEquals(block.getTransactionRootHash().toString(), oresult.getProperty("transactionRoot").getValue());
         Assert.assertEquals(block.getHeader().getTimestamp() + "", oresult.getProperty("timestamp").getValue());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("uncles").getType());
         Assert.assertEquals(0, ((JsonArrayValue)oresult.getProperty("uncles")).size());

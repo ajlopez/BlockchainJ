@@ -60,6 +60,10 @@ public class Block {
         return this.header.getStateRootHash();
     }
 
+    public Hash getTransactionRootHash() {
+        return this.header.getTransactionsHash();
+    }
+
     public List<Transaction> getTransactions() {
         return this.transactions;
     }
