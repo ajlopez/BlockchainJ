@@ -6,6 +6,10 @@ package com.ajlopez.blockchain.json;
 public class JsonBuilder {
     private JsonValue value;
 
+    public JsonBuilder value(Object obj) {
+        return this.value(obj.toString());
+    }
+
     public JsonBuilder value(String value) {
         this.value = new JsonStringValue(value);
 
