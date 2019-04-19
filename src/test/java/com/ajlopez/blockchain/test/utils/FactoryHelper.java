@@ -78,6 +78,13 @@ public class FactoryHelper {
         }
     }
 
+    public static BlockChain createBlockChain(int size) {
+        BlockChain blockChain = createBlockChainWithGenesis();
+        extendBlockChainWithBlocks(blockChain, size);
+
+        return blockChain;
+    }
+
     public static BlockChain createBlockChainWithGenesis() {
         return createBlockChainWithGenesis(GenesisGenerator.generateGenesis());
     }

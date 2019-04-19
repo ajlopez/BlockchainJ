@@ -29,6 +29,22 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Do a Simple HTTP Request in Java](https://www.baeldung.com/java-http-request)
 - [Model 0: low-level defence measures for Sybil attacks in P2P networks](https://blog.golemproject.net/model-0-low-level-defence-measures-for-sybil-attacks-in-p2p-networks/)
 
+## To Do
+
+- Coin type
+- Signed transactions
+- DataWord or Coin in Transaction value, instead of BigInteger
+- DataWord or Coin in Account balance, instead of BigInteger
+- Block JSON serialization
+- Block transaction hash should be the hash of a trie
+- Difficulty in block
+- Total difficulty in block JSON serialization
+- Numeric values in hexadecimal in JSON serialization
+- Transaction receipts
+- Log emit
+- Create contracts
+- Call contracts in Virtual Machine
+
 ## License
 
 MIT
