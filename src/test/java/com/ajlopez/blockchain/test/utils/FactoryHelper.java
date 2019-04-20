@@ -67,20 +67,38 @@ public class FactoryHelper {
         return new Transaction(sender, receiver, bivalue, 0);
     }
 
+    public static List<Transaction> createTransactions(int ntransactions) {
+        List<Transaction> transactions = new ArrayList<>();
+
+        for (int k = 0; k < ntransactions; k++)
+            transactions.add(createTransaction(random.nextInt(10000)));
+
+        return transactions;
+    }
+
     public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks) {
+        extendBlockChainWithBlocks(blockChain, nblocks, 0);
+    }
+
+    public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks, int ntransactions) {
         Block block = blockChain.getBestBlock();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         for (int k = 0; k < nblocks; k++) {
-            Block newBlock = new Block(block.getNumber() + 1, block.getHash(), block.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase);
+            List<Transaction> transactions = createTransactions(ntransactions);
+            Block newBlock = new Block(block.getNumber() + 1, block.getHash(), transactions, block.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase);
             blockChain.connectBlock(newBlock);
             block = newBlock;
         }
     }
 
     public static BlockChain createBlockChain(int size) {
+        return createBlockChain(size, 0);
+    }
+
+    public static BlockChain createBlockChain(int size, int ntransactions) {
         BlockChain blockChain = createBlockChainWithGenesis();
-        extendBlockChainWithBlocks(blockChain, size);
+        extendBlockChainWithBlocks(blockChain, size, ntransactions);
 
         return blockChain;
     }
