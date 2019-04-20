@@ -64,6 +64,8 @@ public class Block {
         return this.header.getTransactionsHash();
     }
 
+    public long getTimestamp() { return this.header.getTimestamp(); }
+
     public List<Transaction> getTransactions() {
         return this.transactions;
     }
