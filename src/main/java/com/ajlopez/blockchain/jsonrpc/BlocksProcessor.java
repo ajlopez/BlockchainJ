@@ -20,7 +20,7 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         if (request.check("eth_blockNumber", 0))
             return this.getBestBlockNumber(request);
 
-        if (request.check("eth_getBlockByNumber", 1))
+        if (request.check("eth_getBlockByNumber", 1, 2))
             return this.getBlockByNumber(request);
 
         return super.processRequest(request);
@@ -38,6 +38,8 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
             block = this.blockChain.getBlockByNumber(0);
         else if ("latest".equals(blockId))
             block = this.blockChain.getBestBlock();
+        else if (blockId.startsWith("0x"))
+            block = this.blockChain.getBlockByNumber(Long.parseLong(blockId.substring(2), 16));
         else
             block = this.blockChain.getBlockByNumber(Long.parseLong(blockId));
 
