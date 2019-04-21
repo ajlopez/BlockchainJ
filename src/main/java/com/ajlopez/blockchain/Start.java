@@ -42,6 +42,7 @@ public class Start {
         NetworkProcessor networkProcessor = new NetworkProcessor(networkConfiguration);
 
         topProcessor.registerProcess("eth_blockNumber", blocksProcessor);
+        topProcessor.registerProcess("eth_getBlockByNumber", blocksProcessor);
         topProcessor.registerProcess("net_version", networkProcessor);
 
         HttpServer server = new HttpServer(argsproc.getInteger("rpcport"), topProcessor);
