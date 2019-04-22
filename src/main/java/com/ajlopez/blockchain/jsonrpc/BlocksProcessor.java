@@ -2,8 +2,10 @@ package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.jsonrpc.encoders.BlockJsonEncoder;
+import com.ajlopez.blockchain.utils.HexUtils;
 
 /**
  * Created by ajlopez on 30/11/2018.
@@ -20,8 +22,12 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         if (request.check("eth_blockNumber", 0))
             return this.getBestBlockNumber(request);
 
+        // TODO use the second argument
         if (request.check("eth_getBlockByNumber", 1, 2))
             return this.getBlockByNumber(request);
+
+        if (request.check("eth_getBlockByHash", 1))
+            return this.getBlockByHash(request);
 
         return super.processRequest(request);
     }
@@ -42,6 +48,15 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
             block = this.blockChain.getBlockByNumber(Long.parseLong(blockId.substring(2), 16));
         else
             block = this.blockChain.getBlockByNumber(Long.parseLong(blockId));
+
+        JsonValue json = BlockJsonEncoder.encode(block);
+
+        return JsonRpcResponse.createResponse(request, json);
+    }
+
+    private JsonRpcResponse getBlockByHash(JsonRpcRequest request) {
+        BlockHash hash = new BlockHash(HexUtils.hexStringToBytes(request.getParams().get(0).getValue().toString()));
+        Block block = this.blockChain.getBlockByHash(hash);
 
         JsonValue json = BlockJsonEncoder.encode(block);
 

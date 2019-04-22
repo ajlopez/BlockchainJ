@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.json.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -101,6 +102,32 @@ public class BlocksProcessorTest {
 
         Assert.assertTrue(jovalue.hasProperty("number"));
         Assert.assertEquals("10", jovalue.getProperty("number").getValue());
+    }
+
+    @Test
+    public void getBlockByHashUsingBlockchainWithTenBlocks() throws JsonRpcException {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
+        Block block = blockChain.getBlockByNumber(3);
+
+        List<JsonValue> params = new ArrayList<>();
+        params.add(new JsonStringValue(block.getHash().toString()));
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getBlockByHash", params);
+
+        BlocksProcessor processor = new BlocksProcessor(blockChain);
+
+        JsonRpcResponse response = processor.processRequest(request);
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals(request.getId(), response.getId());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
+        Assert.assertEquals(JsonValueType.OBJECT, response.getResult().getType());
+
+        JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
+
+        Assert.assertTrue(jovalue.hasProperty("number"));
+        Assert.assertEquals("3", jovalue.getProperty("number").getValue());
+        Assert.assertEquals(block.getHash().toString(), jovalue.getProperty("hash").getValue());
     }
 
     @Test
