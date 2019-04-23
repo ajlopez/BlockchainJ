@@ -8,5 +8,6 @@ public enum JsonValueType {
     NUMBER,
     BOOLEAN,
     ARRAY,
-    OBJECT
+    OBJECT,
+    NULL
 }
