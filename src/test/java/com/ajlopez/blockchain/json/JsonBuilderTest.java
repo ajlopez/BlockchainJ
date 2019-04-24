@@ -19,6 +19,28 @@ public class JsonBuilderTest {
     }
 
     @Test
+    public void buildNullValueFromObject() {
+        JsonBuilder builder = new JsonBuilder();
+
+        JsonValue result = builder.value((Object)null).build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(JsonValueType.NULL, result.getType());
+        Assert.assertEquals(null, result.getValue());
+    }
+
+    @Test
+    public void buildNullValueFromString() {
+        JsonBuilder builder = new JsonBuilder();
+
+        JsonValue result = builder.value((String)null).build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(JsonValueType.NULL, result.getType());
+        Assert.assertEquals(null, result.getValue());
+    }
+
+    @Test
     public void buildNumericValueFromInteger() {
         JsonBuilder builder = new JsonBuilder();
 

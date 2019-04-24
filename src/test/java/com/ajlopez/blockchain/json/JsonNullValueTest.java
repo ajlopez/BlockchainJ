@@ -10,7 +10,7 @@ public class JsonNullValueTest {
     @Test
     public void createJsonNullValue() {
         JsonValue jsonValue = new JsonNullValue();
-        
+
         Assert.assertEquals(JsonValueType.NULL, jsonValue.getType());
         Assert.assertNull(jsonValue.getValue());
         Assert.assertEquals("null", jsonValue.toString());
