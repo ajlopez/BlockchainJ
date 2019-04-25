@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.jsonrpc.encoders;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.json.JsonBuilder;
+import com.ajlopez.blockchain.json.JsonNullValue;
 import com.ajlopez.blockchain.json.JsonObjectBuilder;
 import com.ajlopez.blockchain.json.JsonValue;
 
@@ -15,6 +16,9 @@ public class BlockJsonEncoder {
     private BlockJsonEncoder() {}
 
     public static JsonValue encode(Block block) {
+        if (block == null)
+            return new JsonNullValue();
+
         JsonBuilder builder = (new JsonObjectBuilder(new JsonBuilder()))
                 .name("hash")
                 .value(block.getHash())

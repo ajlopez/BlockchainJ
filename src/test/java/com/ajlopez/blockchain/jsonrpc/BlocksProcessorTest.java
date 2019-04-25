@@ -105,6 +105,24 @@ public class BlocksProcessorTest {
     }
 
     @Test
+    public void getUnknownBlockByHexadecimalNumber() throws JsonRpcException {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+
+        List<JsonValue> params = new ArrayList<>();
+        params.add(new JsonStringValue("0x20"));
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getBlockByNumber", params);
+
+        BlocksProcessor processor = new BlocksProcessor(blockChain);
+
+        JsonRpcResponse response = processor.processRequest(request);
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals(request.getId(), response.getId());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
+        Assert.assertEquals(JsonValueType.NULL, response.getResult().getType());
+    }
+
+    @Test
     public void getBlockByHashUsingBlockchainWithTenBlocks() throws JsonRpcException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
@@ -128,6 +146,25 @@ public class BlocksProcessorTest {
         Assert.assertTrue(jovalue.hasProperty("number"));
         Assert.assertEquals("3", jovalue.getProperty("number").getValue());
         Assert.assertEquals(block.getHash().toString(), jovalue.getProperty("hash").getValue());
+    }
+
+    @Test
+    public void getUnknownBlockByHash() throws JsonRpcException {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
+
+        List<JsonValue> params = new ArrayList<>();
+        params.add(new JsonStringValue(FactoryHelper.createRandomBlockHash().toString()));
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getBlockByHash", params);
+
+        BlocksProcessor processor = new BlocksProcessor(blockChain);
+
+        JsonRpcResponse response = processor.processRequest(request);
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals(request.getId(), response.getId());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
+        Assert.assertEquals(JsonValueType.NULL, response.getResult().getType());
     }
 
     @Test
