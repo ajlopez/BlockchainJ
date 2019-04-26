@@ -17,7 +17,7 @@ public class BlockJsonEncoder {
 
     public static JsonValue encode(Block block) {
         if (block == null)
-            return new JsonNullValue();
+            return JsonNullValue.getInstance();
 
         JsonBuilder builder = (new JsonObjectBuilder(new JsonBuilder()))
                 .name("hash")

@@ -1,11 +1,17 @@
 package com.ajlopez.blockchain.json;
 
 /**
- * Created by Angel on 23/04/2019.
+ * Created by ajlopez on 23/04/2019.
  */
 public class JsonNullValue extends JsonValue {
-    public JsonNullValue() {
+    private static final JsonNullValue instance = new JsonNullValue();
+
+    private JsonNullValue() {
         super(JsonValueType.NULL, null);
+    }
+
+    public static JsonNullValue getInstance() {
+        return instance;
     }
 
     @Override

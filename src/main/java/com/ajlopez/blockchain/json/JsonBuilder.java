@@ -8,7 +8,7 @@ public class JsonBuilder {
 
     public JsonBuilder value(Object obj) {
         if (obj == null) {
-            this.value = new JsonNullValue();
+            this.value = JsonNullValue.getInstance();
             return this;
         }
         else
@@ -17,7 +17,7 @@ public class JsonBuilder {
 
     public JsonBuilder value(String value) {
         if (value == null)
-            this.value = new JsonNullValue();
+            this.value = JsonNullValue.getInstance();
         else
             this.value = new JsonStringValue(value);
 

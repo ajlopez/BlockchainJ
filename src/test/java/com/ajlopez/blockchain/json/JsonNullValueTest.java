@@ -9,7 +9,7 @@ import org.junit.Test;
 public class JsonNullValueTest {
     @Test
     public void createJsonNullValue() {
-        JsonValue jsonValue = new JsonNullValue();
+        JsonValue jsonValue = JsonNullValue.getInstance();
 
         Assert.assertEquals(JsonValueType.NULL, jsonValue.getType());
         Assert.assertNull(jsonValue.getValue());
