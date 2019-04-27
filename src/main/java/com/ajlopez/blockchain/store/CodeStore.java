@@ -7,18 +7,17 @@ import com.ajlopez.blockchain.state.Trie;
  * Created by ajlopez on 21/01/2019.
  */
 public class CodeStore {
-    private Trie trie;
+    private final KeyValueStore store;
 
-    public CodeStore(Trie trie) {
-        this.trie = trie;
+    public CodeStore(KeyValueStore store) {
+        this.store = store;
     }
 
     public byte[] getCode(Hash codeHash) {
-        return this.trie.get(codeHash.getBytes());
-
+        return this.store.getValue(codeHash.getBytes());
     }
 
     public void putCode(Hash codeHash, byte[] code) {
-        this.trie = this.trie.put(codeHash.getBytes(), code);
+        this.store.setValue(codeHash.getBytes(), code);
     }
 }

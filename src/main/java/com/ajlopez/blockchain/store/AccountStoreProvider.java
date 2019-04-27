@@ -6,7 +6,7 @@ import com.ajlopez.blockchain.core.types.Hash;
  * Created by ajlopez on 01/12/2018.
  */
 public class AccountStoreProvider {
-    private TrieStore accountTrieStore;
+    private final TrieStore accountTrieStore;
 
     public AccountStoreProvider(TrieStore accountTrieStore) {
         this.accountTrieStore = accountTrieStore;

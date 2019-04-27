@@ -12,7 +12,7 @@ import org.junit.Test;
 public class CodeStoreTest {
     @Test
     public void getUnknownCode() {
-        CodeStore codeStore = new CodeStore(new Trie());
+        CodeStore codeStore = new CodeStore(new HashMapStore());
 
         Assert.assertNull(codeStore.getCode(FactoryHelper.createRandomHash()));
     }
@@ -22,7 +22,7 @@ public class CodeStoreTest {
         Hash codeHash = FactoryHelper.createRandomHash();
         byte[] code = FactoryHelper.createRandomBytes(42);
 
-        CodeStore codeStore = new CodeStore(new Trie());
+        CodeStore codeStore = new CodeStore(new HashMapStore());
 
         codeStore.putCode(codeHash, code);
         Assert.assertArrayEquals(code, codeStore.getCode(codeHash));
