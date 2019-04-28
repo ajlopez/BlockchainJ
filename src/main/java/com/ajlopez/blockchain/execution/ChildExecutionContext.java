@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.vms.eth.ChildMapStorage;
 import com.ajlopez.blockchain.vms.eth.Storage;
 
@@ -27,5 +28,11 @@ public class ChildExecutionContext extends AbstractExecutionContext {
     @Override
     public Storage retrieveAccountStorage(Address address) {
         return new ChildMapStorage(this.parentContext.getAccountStorage(address));
+    }
+
+    @Override
+    public byte[] getCode(Address address) {
+        // TODO implement in child context
+        return parentContext.getCode(address);
     }
 }

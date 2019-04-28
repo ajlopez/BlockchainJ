@@ -22,6 +22,8 @@ public interface ExecutionContext {
 
     void setCodeHash(Address address, Hash codeHash);
 
+    byte[] getCode(Address address);
+
     void commit();
 
     void rollback();

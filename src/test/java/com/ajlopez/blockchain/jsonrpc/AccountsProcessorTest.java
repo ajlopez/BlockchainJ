@@ -262,7 +262,7 @@ public class AccountsProcessorTest {
 
         for (int k = 0; k < nblocks; k++) {
             Transaction transaction = new Transaction(sender, receiver, BigInteger.valueOf(transferAmount), k);
-            TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore, null));
+            TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
             List<Transaction> transactions = Collections.singletonList(transaction);
 
             transactions = transactionExecutor.executeTransactions(transactions);
