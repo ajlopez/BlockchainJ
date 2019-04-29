@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
+import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -29,7 +30,7 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, new TrieStore(new HashMapStore()), coinbase);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, new AccountStoreProvider(new TrieStore(new HashMapStore())), coinbase);
 
         BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
         Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
@@ -65,7 +66,7 @@ public class MinerProcessorTest {
 
         Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase);
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, trieStore, coinbase);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, new AccountStoreProvider(trieStore), coinbase);
 
         Block block = processor.mineBlock(parent);
 
@@ -101,7 +102,7 @@ public class MinerProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, trieStore, coinbase);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new AccountStoreProvider(trieStore), coinbase);
 
         Block block = processor.process();
 
@@ -136,7 +137,7 @@ public class MinerProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, trieStore, coinbase);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new AccountStoreProvider(trieStore), coinbase);
 
         Semaphore sem = new Semaphore(0, true);
 
@@ -179,7 +180,7 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new TrieStore(new HashMapStore()), coinbase);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new AccountStoreProvider(new TrieStore(new HashMapStore())), coinbase);
 
         Semaphore sem = new Semaphore(0, true);
 

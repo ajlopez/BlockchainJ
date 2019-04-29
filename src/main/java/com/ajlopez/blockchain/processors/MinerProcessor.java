@@ -8,9 +8,8 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
-import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.AccountStoreProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +22,15 @@ public class MinerProcessor {
     private final BlockChain blockChain;
     private final TransactionPool transactionPool;
     private final List<Consumer<Block>> minedBlockConsumers = new ArrayList<>();
-    private final TrieStore trieStore;
+    private final AccountStoreProvider accountStoreProvider;
     private final Address coinbase;
 
     private boolean stopped = false;
 
-    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, TrieStore trieStore, Address coinbase) {
+    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, AccountStoreProvider accountStoreProvider, Address coinbase) {
         this.blockChain = blockChain;
         this.transactionPool = transactionPool;
-        this.trieStore = trieStore;
+        this.accountStoreProvider = accountStoreProvider;
         this.coinbase = coinbase;
     }
 
@@ -51,8 +50,7 @@ public class MinerProcessor {
 
     public Block mineBlock(Block parent) {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
-        Trie trie = this.trieStore.retrieve(parentStateRootHash);
-        AccountStore accountStore = new AccountStore(trie);
+        AccountStore accountStore = this.accountStoreProvider.retrieve(parentStateRootHash);
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
