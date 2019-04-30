@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.execution.CodeProvider;
 
 /**
  * Created by ajlopez on 14/12/2018.
@@ -9,13 +10,17 @@ import com.ajlopez.blockchain.core.types.DataWord;
 public class ProgramEnvironment {
     private final MessageData messageData;
     private final BlockData blockData;
+    private final CodeProvider codeProvider;
 
-    public ProgramEnvironment(MessageData messageData, BlockData blockData) {
+    public ProgramEnvironment(MessageData messageData, BlockData blockData, CodeProvider codeProvider) {
         this.messageData = messageData;
         this.blockData = blockData;
+        this.codeProvider = codeProvider;
     }
 
     public Address getAddress() { return this.messageData.getAddress(); }
+
+    public byte[] getCode(Address address) { return this.codeProvider.getCode(address); }
 
     public Address getOrigin() { return this.messageData.getOrigin(); }
 

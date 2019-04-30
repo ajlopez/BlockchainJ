@@ -24,7 +24,7 @@ public class ProgramEnvironmentTest {
 
         BlockData blockData = new BlockData(number, timestamp, coinbase, null);
 
-        ProgramEnvironment environment = new ProgramEnvironment(messageData, blockData);
+        ProgramEnvironment environment = new ProgramEnvironment(messageData, blockData, null);
 
         Assert.assertEquals(address, environment.getAddress());
         Assert.assertEquals(origin, environment.getOrigin());

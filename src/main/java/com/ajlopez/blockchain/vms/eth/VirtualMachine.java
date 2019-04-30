@@ -398,6 +398,12 @@ public class VirtualMachine {
 
                     break;
 
+                case OpCodes.EXTCODESIZE:
+                    this.stack.pop();
+                    this.stack.push(DataWord.ZERO);
+
+                    break;
+
                 case OpCodes.COINBASE:
                     this.stack.push(DataWord.fromAddress(this.programEnvironment.getCoinbase()));
 
