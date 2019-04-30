@@ -28,6 +28,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Add timer metrics for EVM operations #551](https://github.com/PegaSysEng/pantheon/pull/551)
 - [Do a Simple HTTP Request in Java](https://www.baeldung.com/java-http-request)
 - [Model 0: low-level defence measures for Sybil attacks in P2P networks](https://blog.golemproject.net/model-0-low-level-defence-measures-for-sybil-attacks-in-p2p-networks/)
+- [Introducing Hobbits: A lightweight wire protocol for ETH 2.0](https://medium.com/whiteblock/introducing-hobbits-a-lightweight-wire-protocol-for-eth-2-0-b1bfae5e4843)
 
 ## To Do
 
