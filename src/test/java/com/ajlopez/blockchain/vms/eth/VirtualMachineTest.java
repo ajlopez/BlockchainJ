@@ -1,15 +1,25 @@
 package com.ajlopez.blockchain.vms.eth;
 
+import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.CodeProvider;
+import com.ajlopez.blockchain.execution.TopExecutionContext;
+import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.AccountStore;
+import com.ajlopez.blockchain.store.CodeStore;
+import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
+import jdk.internal.org.objectweb.asm.Opcodes;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Stack;
 
@@ -1216,7 +1226,11 @@ public class VirtualMachineTest {
 
     @Test
     public void executeExtCodeSizeOperationForUnknownAccount() throws VirtualMachineException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        AccountStore accountStore = new AccountStore(new Trie());
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x28, OpCodes.EXTCODESIZE, OpCodes.STOP });
 
@@ -1227,6 +1241,39 @@ public class VirtualMachineTest {
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
         Assert.assertEquals(DataWord.ZERO, stack.pop());
+    }
+
+
+    @Test
+    public void executeExtCodeSizeOperationForAccountWithCode() throws VirtualMachineException {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        Hash codeHash = FactoryHelper.createRandomHash();
+        byte[] code = FactoryHelper.createRandomBytes(100);
+        codeStore.putCode(codeHash, code);
+        Account account = new Account(BigInteger.ZERO, 0, codeHash, null);
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+        accountStore.putAccount(address, account);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+
+        byte bytecode[] = new byte[1 + 20 + 2];
+        bytecode[0] = OpCodes.PUSH20;
+        System.arraycopy(address.getBytes(), 0, bytecode, 1, Address.ADDRESS_BYTES);
+        bytecode[21] = OpCodes.EXTCODESIZE;
+        bytecode[22] = OpCodes.STOP;
+
+        virtualMachine.execute(bytecode);
+
+        // TODO Check gas cost
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(100), stack.pop());
     }
 
     @Test
@@ -1511,9 +1558,13 @@ public class VirtualMachineTest {
     }
 
     private static ProgramEnvironment createProgramEnvironment() {
+        return createProgramEnvironment((CodeProvider)null);
+    }
+
+    private static ProgramEnvironment createProgramEnvironment(CodeProvider codeProvider) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, DataWord.ZERO, 100000, DataWord.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, null, null);
+        return new ProgramEnvironment(messageData, null, codeProvider);
     }
 
     private static ProgramEnvironment createProgramEnvironment(BlockData blockData) {

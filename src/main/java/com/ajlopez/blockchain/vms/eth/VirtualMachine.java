@@ -399,8 +399,8 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.EXTCODESIZE:
-                    this.stack.pop();
-                    this.stack.push(DataWord.ZERO);
+                    byte[] code = this.programEnvironment.getCode(stack.pop().toAddress());
+                    this.stack.push(code == null ? DataWord.ZERO : DataWord.fromUnsignedLong(code.length));
 
                     break;
 
