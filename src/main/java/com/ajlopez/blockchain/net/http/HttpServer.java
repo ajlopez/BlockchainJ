@@ -4,9 +4,6 @@ import com.ajlopez.blockchain.json.JsonLexerException;
 import com.ajlopez.blockchain.json.JsonParserException;
 import com.ajlopez.blockchain.jsonrpc.JsonRpcException;
 import com.ajlopez.blockchain.jsonrpc.JsonRpcProcessor;
-import com.ajlopez.blockchain.net.messages.StatusMessage;
-import com.ajlopez.blockchain.net.peers.Peer;
-import com.ajlopez.blockchain.net.peers.PeerConnection;
 
 import java.io.*;
 import java.net.ServerSocket;

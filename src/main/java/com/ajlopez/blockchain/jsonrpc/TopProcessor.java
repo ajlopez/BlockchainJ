@@ -1,7 +1,5 @@
 package com.ajlopez.blockchain.jsonrpc;
 
-import com.ajlopez.blockchain.store.HashMapStore;
-
 import java.util.HashMap;
 import java.util.Map;
 

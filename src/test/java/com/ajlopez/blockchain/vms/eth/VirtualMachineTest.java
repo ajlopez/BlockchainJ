@@ -13,7 +13,6 @@ import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
-import jdk.internal.org.objectweb.asm.Opcodes;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -1067,7 +1066,6 @@ public class VirtualMachineTest {
 
         Assert.assertArrayEquals(expected, memory.getBytes(4, 16));
     }
-
 
     @Test
     public void executeCodeCopy() throws VirtualMachineException {

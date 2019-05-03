@@ -5,7 +5,6 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;

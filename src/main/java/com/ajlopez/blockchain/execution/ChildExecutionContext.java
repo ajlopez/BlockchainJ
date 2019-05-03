@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.vms.eth.ChildMapStorage;
 import com.ajlopez.blockchain.vms.eth.Storage;
 
