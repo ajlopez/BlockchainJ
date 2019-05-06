@@ -1241,7 +1241,6 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.ZERO, stack.pop());
     }
 
-
     @Test
     public void executeExtCodeSizeOperationForAccountWithCode() throws VirtualMachineException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
@@ -1272,6 +1271,78 @@ public class VirtualMachineTest {
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
         Assert.assertEquals(DataWord.fromUnsignedInteger(100), stack.pop());
+    }
+
+    @Test
+    public void executeExtCodeCopyOperationForUnknownAccount() throws VirtualMachineException {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        AccountStore accountStore = new AccountStore(new Trie());
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+
+        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x20, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x10, OpCodes.PUSH1, 0x28, OpCodes.EXTCODECOPY, OpCodes.STOP });
+
+        // TODO Check gas cost
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.empty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertNotNull(memory);
+        Assert.assertEquals(34, memory.size());
+
+        byte[] expected = new byte[34];
+        Assert.assertArrayEquals(expected, memory.getBytes(0, 34));
+    }
+
+
+    @Test
+    public void executeExtCodeCopyOperationForAccountWithCode() throws VirtualMachineException {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        Hash codeHash = FactoryHelper.createRandomHash();
+        byte[] code = FactoryHelper.createRandomBytes(100);
+        codeStore.putCode(codeHash, code);
+        Account account = new Account(BigInteger.ZERO, 0, codeHash, null);
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+        accountStore.putAccount(address, account);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+
+        byte bytecode[] = new byte[6 + 1 + 20 + 2];
+        bytecode[0] = OpCodes.PUSH1;
+        bytecode[1] = 0x20;
+        bytecode[2] = OpCodes.PUSH1;
+        bytecode[3] = 0x02;
+        bytecode[4] = OpCodes.PUSH1;
+        bytecode[5] = 0x10;
+        bytecode[6] = OpCodes.PUSH20;
+        System.arraycopy(address.getBytes(), 0, bytecode, 7, Address.ADDRESS_BYTES);
+        bytecode[27] = OpCodes.EXTCODESIZE;
+        bytecode[28] = OpCodes.STOP;
+
+        virtualMachine.execute(bytecode);
+
+        // TODO Check gas cost
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.empty());
+
+        Memory memory = virtualMachine.getMemory();
+
+        Assert.assertNotNull(memory);
+        Assert.assertEquals(34, memory.size());
+
+        byte[] expected = new byte[34];
+        Assert.assertArrayEquals(expected, memory.getBytes(0, 34));
     }
 
     @Test
