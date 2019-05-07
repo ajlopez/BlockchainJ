@@ -29,6 +29,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Do a Simple HTTP Request in Java](https://www.baeldung.com/java-http-request)
 - [Model 0: low-level defence measures for Sybil attacks in P2P networks](https://blog.golemproject.net/model-0-low-level-defence-measures-for-sybil-attacks-in-p2p-networks/)
 - [Introducing Hobbits: A lightweight wire protocol for ETH 2.0](https://medium.com/whiteblock/introducing-hobbits-a-lightweight-wire-protocol-for-eth-2-0-b1bfae5e4843)
+- [Ethereum 2.0’s Nodes Need to Talk – A Solution Is ‘Hobbits’](https://www.coindesk.com/testing-ethereum-2-0-requires-basic-signaling-a-solution-is-hobbits)
+- [Wisps: The Magical World of Create2](https://blog.ricmoo.com/wisps-the-magical-world-of-create2-5c2177027604)
 
 ## To Do
 
