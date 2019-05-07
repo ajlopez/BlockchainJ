@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.vms.eth;
 
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
 
 import java.util.ArrayList;
@@ -399,8 +400,21 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.EXTCODESIZE:
-                    byte[] code = this.programEnvironment.getCode(stack.pop().toAddress());
-                    this.stack.push(code == null ? DataWord.ZERO : DataWord.fromUnsignedLong(code.length));
+                    byte[] contractCode = this.programEnvironment.getCode(stack.pop().toAddress());
+                    this.stack.push(contractCode == null ? DataWord.ZERO : DataWord.fromUnsignedLong(contractCode.length));
+
+                    break;
+
+                case OpCodes.EXTCODECOPY:
+                    Address address = this.stack.pop().toAddress();
+                    contractCode = this.programEnvironment.getCode(address);
+
+                    // TODO check integer ranges
+                    int to = this.stack.pop().asUnsignedInteger();
+                    int from = this.stack.pop().asUnsignedInteger();
+                    length = this.stack.pop().asUnsignedInteger();
+
+                    this.memory.setBytes(to, contractCode, from, length);
 
                     break;
 

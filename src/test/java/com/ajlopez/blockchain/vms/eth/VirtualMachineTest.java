@@ -1342,6 +1342,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(34, memory.size());
 
         byte[] expected = new byte[34];
+        System.arraycopy(code, 2, expected, 16, 32);
         Assert.assertArrayEquals(expected, memory.getBytes(0, 34));
     }
 
