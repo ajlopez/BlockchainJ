@@ -1324,7 +1324,7 @@ public class VirtualMachineTest {
         bytecode[5] = 0x10;
         bytecode[6] = OpCodes.PUSH20;
         System.arraycopy(address.getBytes(), 0, bytecode, 7, Address.ADDRESS_BYTES);
-        bytecode[27] = OpCodes.EXTCODESIZE;
+        bytecode[27] = OpCodes.EXTCODECOPY;
         bytecode[28] = OpCodes.STOP;
 
         virtualMachine.execute(bytecode);

@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -413,6 +414,9 @@ public class VirtualMachine {
                     int to = this.stack.pop().asUnsignedInteger();
                     int from = this.stack.pop().asUnsignedInteger();
                     length = this.stack.pop().asUnsignedInteger();
+
+                    if (contractCode == null)
+                        contractCode = ByteUtils.EMPTY_BYTE_ARRAY;
 
                     this.memory.setBytes(to, contractCode, from, length);
 
