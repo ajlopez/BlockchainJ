@@ -1293,10 +1293,10 @@ public class VirtualMachineTest {
         Memory memory = virtualMachine.getMemory();
 
         Assert.assertNotNull(memory);
-        Assert.assertEquals(34, memory.size());
+        Assert.assertEquals(48, memory.size());
 
-        byte[] expected = new byte[34];
-        Assert.assertArrayEquals(expected, memory.getBytes(0, 34));
+        byte[] expected = new byte[48];
+        Assert.assertArrayEquals(expected, memory.getBytes(0, 48));
     }
 
 
@@ -1339,11 +1339,11 @@ public class VirtualMachineTest {
         Memory memory = virtualMachine.getMemory();
 
         Assert.assertNotNull(memory);
-        Assert.assertEquals(34, memory.size());
+        Assert.assertEquals(48, memory.size());
 
-        byte[] expected = new byte[34];
+        byte[] expected = new byte[48];
         System.arraycopy(code, 2, expected, 16, 32);
-        Assert.assertArrayEquals(expected, memory.getBytes(0, 34));
+        Assert.assertArrayEquals(expected, memory.getBytes(0, 48));
     }
 
     @Test
