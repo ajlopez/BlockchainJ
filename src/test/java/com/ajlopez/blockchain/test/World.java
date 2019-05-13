@@ -28,6 +28,10 @@ public class World {
         return this.accountStore.getAccount(this.accounts.get(name));
     }
 
+    public Address getAccountAddress(String name) {
+        return this.accounts.get(name);
+    }
+
     public void setAccount(String name, Account account) {
         Address address = FactoryHelper.createRandomAddress();
         this.accounts.put(name, address);

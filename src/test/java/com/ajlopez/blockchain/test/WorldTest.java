@@ -1,7 +1,9 @@
 package com.ajlopez.blockchain.test;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,5 +29,27 @@ public class WorldTest {
 
         Assert.assertNotNull(result);
         Assert.assertArrayEquals(AccountEncoder.encode(account), AccountEncoder.encode(result));
+    }
+
+    @Test
+    public void getAccountAddress() {
+        World world = new World();
+        Account account = new Account();
+
+        world.setAccount("acc1", account);
+
+        Address result = world.getAccountAddress("acc1");
+
+        Assert.assertNotNull(result);
+    }
+
+    @Test
+    public void getUnknownAccountAddress() {
+        World world = new World();
+        Account account = new Account();
+
+        Address result = world.getAccountAddress("acc1");
+
+        Assert.assertNull(result);
     }
 }
