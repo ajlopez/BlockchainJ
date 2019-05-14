@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.test;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -15,10 +16,20 @@ import java.util.Map;
 public class World {
     private final AccountStore accountStore;
     private final Map<String, Address> accounts;
+    private final Map<String, Block> blocks;
 
     public World() {
         this.accountStore = new AccountStore(new Trie());
         this.accounts = new HashMap<>();
+        this.blocks = new HashMap<>();
+    }
+
+    public Block getBlock(String name) {
+        return this.blocks.get(name);
+    }
+
+    public void setBlock(String name, Block block) {
+        this.blocks.put(name, block);
     }
 
     public Account getAccount(String name) {

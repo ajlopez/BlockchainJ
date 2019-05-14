@@ -1,8 +1,10 @@
 package com.ajlopez.blockchain.test;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
+import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -51,5 +53,25 @@ public class WorldTest {
         Address result = world.getAccountAddress("acc1");
 
         Assert.assertNull(result);
+    }
+
+    @Test
+    public void getUnknownBlock() {
+        World world = new World();
+
+        Assert.assertNull(world.getBlock("blk1"));
+    }
+
+    @Test
+    public void setAndGetBlock() {
+        World world = new World();
+        Block block = FactoryHelper.createBlocks(1).get(0);
+
+        world.setBlock("blk1", block);
+
+        Block result = world.getBlock("blk1");
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(BlockEncoder.encode(block), BlockEncoder.encode(result));
     }
 }
