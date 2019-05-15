@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test;
 
+import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
@@ -17,6 +18,7 @@ public class World {
     private final AccountStore accountStore;
     private final Map<String, Address> accounts;
     private final Map<String, Block> blocks;
+    private final BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
     public World() {
         this.accountStore = new AccountStore(new Trie());
@@ -48,4 +50,9 @@ public class World {
         this.accounts.put(name, address);
         this.accountStore.putAccount(address, account);
     }
+
+    public BlockChain getBlockChain() {
+        return this.blockChain;
+    }
 }
+

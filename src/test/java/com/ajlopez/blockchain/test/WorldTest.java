@@ -1,10 +1,12 @@
 package com.ajlopez.blockchain.test;
 
+import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
+import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -73,5 +75,20 @@ public class WorldTest {
 
         Assert.assertNotNull(result);
         Assert.assertArrayEquals(BlockEncoder.encode(block), BlockEncoder.encode(result));
+    }
+
+    @Test
+    public void getBlockChain() {
+        World world = new World();
+        BlockChain blockChain = world.getBlockChain();
+
+        Assert.assertNotNull(blockChain);
+        Assert.assertEquals(0, blockChain.getBestBlockNumber());
+
+        Block block = blockChain.getBestBlock();
+
+        Assert.assertNotNull(block);
+        Assert.assertEquals(0, block.getNumber());
+        Assert.assertEquals(Trie.EMPTY_TRIE_HASH, block.getStateRootHash());
     }
 }
