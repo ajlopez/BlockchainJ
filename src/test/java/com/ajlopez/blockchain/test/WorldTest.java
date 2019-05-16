@@ -7,9 +7,12 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.math.BigInteger;
 
 /**
  * Created by ajlopez on 12/05/2019.
@@ -90,5 +93,32 @@ public class WorldTest {
         Assert.assertNotNull(block);
         Assert.assertEquals(0, block.getNumber());
         Assert.assertEquals(Trie.EMPTY_TRIE_HASH, block.getStateRootHash());
+    }
+
+    @Test
+    public void getBlockChainWithInitialAccounts() {
+        World world = new World();
+        Account account1 = new Account(BigInteger.TEN, 10, null, null);
+        Account account2 = new Account(BigInteger.ONE, 20, null, null);
+
+        world.setAccount("acc1", account1);
+        world.setAccount("acc2", account2);
+
+        BlockChain blockChain = world.getBlockChain();
+
+        Assert.assertNotNull(blockChain);
+        Assert.assertEquals(0, blockChain.getBestBlockNumber());
+
+        Block block = blockChain.getBestBlock();
+
+        Assert.assertNotNull(block);
+        Assert.assertEquals(0, block.getNumber());
+        Assert.assertNotEquals(Trie.EMPTY_TRIE_HASH, block.getStateRootHash());
+
+        AccountStore accountStore = new AccountStore(new Trie());
+        accountStore.putAccount(world.getAccountAddress("acc1"), account1);
+        accountStore.putAccount(world.getAccountAddress("acc2"), account2);
+
+        Assert.assertEquals(accountStore.getRootHash(), block.getStateRootHash());
     }
 }

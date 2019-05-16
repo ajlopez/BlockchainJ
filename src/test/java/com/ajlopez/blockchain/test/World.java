@@ -18,7 +18,8 @@ public class World {
     private final AccountStore accountStore;
     private final Map<String, Address> accounts;
     private final Map<String, Block> blocks;
-    private final BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+
+    private BlockChain blockChain;
 
     public World() {
         this.accountStore = new AccountStore(new Trie());
@@ -52,6 +53,9 @@ public class World {
     }
 
     public BlockChain getBlockChain() {
+        if (this.blockChain == null)
+            this.blockChain = FactoryHelper.createBlockChainWithGenesis(this.accountStore);
+
         return this.blockChain;
     }
 }
