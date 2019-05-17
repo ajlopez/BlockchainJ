@@ -1,5 +1,9 @@
 package com.ajlopez.blockchain.test.dsl;
 
+import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.test.World;
+
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -20,6 +24,18 @@ public class DslCommand {
 
     public List<String> getArguments() {
         return this.arguments;
+    }
+
+    public void execute(World world) {
+        if ("account".equals(this.verb)) {
+            String name = this.arguments.get(0);
+            BigInteger balance = new BigInteger(this.arguments.get(1));
+            long nonce = Long.parseLong(this.arguments.get(2));
+
+            Account account = new Account(balance, nonce, null, null);
+
+            world.setAccount(name, account);
+        }
     }
 }
 
