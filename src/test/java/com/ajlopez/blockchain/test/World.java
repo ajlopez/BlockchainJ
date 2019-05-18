@@ -28,7 +28,17 @@ public class World {
     }
 
     public Block getBlock(String name) {
-        return this.blocks.get(name);
+        Block block = this.blocks.get(name);
+
+        if (block != null)
+            return block;
+
+        if ("genesis".equals(name)) {
+            block = this.getBlockChain().getBlockByNumber(0);
+            this.blocks.put("genesis", block);
+        }
+
+        return block;
     }
 
     public void setBlock(String name, Block block) {

@@ -81,6 +81,21 @@ public class WorldTest {
     }
 
     @Test
+    public void getGenesisBlock() {
+        World world = new World();
+
+        Block result = world.getBlock("genesis");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(0, result.getNumber());
+
+        BlockChain blockChain = world.getBlockChain();
+
+        Assert.assertNotNull(blockChain);
+        Assert.assertArrayEquals(BlockEncoder.encode(blockChain.getBestBlock()), BlockEncoder.encode(result));
+    }
+
+    @Test
     public void getBlockChain() {
         World world = new World();
         BlockChain blockChain = world.getBlockChain();
@@ -120,5 +135,7 @@ public class WorldTest {
         accountStore.putAccount(world.getAccountAddress("acc2"), account2);
 
         Assert.assertEquals(accountStore.getRootHash(), block.getStateRootHash());
+
+        Assert.assertEquals(accountStore.getRootHash(), world.getBlock("genesis").getStateRootHash());
     }
 }
