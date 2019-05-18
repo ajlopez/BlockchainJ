@@ -85,11 +85,16 @@ public class FactoryHelper {
         Address coinbase = FactoryHelper.createRandomAddress();
 
         for (int k = 0; k < nblocks; k++) {
-            List<Transaction> transactions = createTransactions(ntransactions);
-            Block newBlock = new Block(block.getNumber() + 1, block.getHash(), transactions, block.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase);
+            Block newBlock = createBlock(block, coinbase, ntransactions);
             blockChain.connectBlock(newBlock);
             block = newBlock;
         }
+    }
+
+    public static Block createBlock(Block parent, Address coinbase, int ntransactions) {
+        List<Transaction> transactions = createTransactions(ntransactions);
+
+        return new Block(parent.getNumber() + 1, parent.getHash(), transactions, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase);
     }
 
     public static BlockChain createBlockChain(int size) {
