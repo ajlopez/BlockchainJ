@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ajlopez on 10/05/2019.
@@ -26,6 +27,29 @@ public class DslCommandTest {
         Assert.assertEquals(2, command.getArguments().size());
         Assert.assertEquals("acc1", command.getArguments().get(0));
         Assert.assertEquals("1000000", command.getArguments().get(1));
+
+        Assert.assertNotNull(command.getNamedArgumens());
+        Assert.assertTrue(command.getNamedArgumens().isEmpty());
+    }
+
+    @Test
+    public void createCommandWithVerbAndArgumentsAndNamedArguments() {
+        String verb = "account";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("acc1");
+        arguments.add("balance=1000000");
+
+        DslCommand command = new DslCommand("account", arguments);
+
+        Assert.assertEquals(verb, command.getVerb());
+        Assert.assertEquals(1, command.getArguments().size());
+        Assert.assertEquals("acc1", command.getArguments().get(0));
+
+        Map<String, String> namedArguments = command.getNamedArgumens();
+
+        Assert.assertNotNull(namedArguments);
+        Assert.assertFalse(namedArguments.isEmpty());
+        Assert.assertEquals("1000000", namedArguments.get("balance"));
     }
 
     @Test
