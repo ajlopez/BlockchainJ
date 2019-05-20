@@ -71,4 +71,24 @@ public class DslCommandTest {
         Assert.assertEquals(new BigInteger("1000000"), result.getBalance());
         Assert.assertEquals(42, result.getNonce());
     }
+
+    @Test
+    public void executeAccountCommandUsingNamedArguments() {
+        String verb = "account";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("name=acc1");
+        arguments.add("balance=1000000");
+        arguments.add("nonce=42");
+
+        DslCommand command = new DslCommand("account", arguments);
+        World world = new World();
+
+        command.execute(world);
+
+        Account result = world.getAccount("acc1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(new BigInteger("1000000"), result.getBalance());
+        Assert.assertEquals(42, result.getNonce());
+    }
 }

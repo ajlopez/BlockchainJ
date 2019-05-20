@@ -46,14 +46,35 @@ public class DslCommand {
 
     public void execute(World world) {
         if ("account".equals(this.verb)) {
-            String name = this.arguments.get(0);
-            BigInteger balance = new BigInteger(this.arguments.get(1));
-            long nonce = Long.parseLong(this.arguments.get(2));
+            String name = this.getName(0, "name");
+            BigInteger balance = this.getBigInteger(1, "balance");
+            long nonce = this.getLongInteger(2, "nonce");
 
             Account account = new Account(balance, nonce, null, null);
 
             world.setAccount(name, account);
         }
+    }
+
+    private String getName(int position, String name) {
+        if (position >= 0 && this.arguments.size() > position)
+            return this.arguments.get(position);
+
+        return this.namedArgumens.get(name);
+    }
+
+    private BigInteger getBigInteger(int position, String name) {
+        if (position >= 0 && this.arguments.size() > position)
+            return new BigInteger(this.arguments.get(position));
+
+        return new BigInteger(this.namedArgumens.get(name));
+    }
+
+    private long getLongInteger(int position, String name) {
+        if (position >= 0 && this.arguments.size() > position)
+            return Long.parseLong(this.arguments.get(position));
+
+        return Long.parseLong(this.namedArgumens.get(name));
     }
 }
 
