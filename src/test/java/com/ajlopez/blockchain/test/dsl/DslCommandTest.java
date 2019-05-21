@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.test.dsl;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.test.World;
 import org.junit.Assert;
 import org.junit.Test;
@@ -60,7 +61,7 @@ public class DslCommandTest {
         arguments.add("1000000");
         arguments.add("42");
 
-        DslCommand command = new DslCommand("account", arguments);
+        DslCommand command = new DslCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -80,7 +81,7 @@ public class DslCommandTest {
         arguments.add("balance=1000000");
         arguments.add("nonce=42");
 
-        DslCommand command = new DslCommand("account", arguments);
+        DslCommand command = new DslCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -90,5 +91,43 @@ public class DslCommandTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(new BigInteger("1000000"), result.getBalance());
         Assert.assertEquals(42, result.getNonce());
+    }
+
+    @Test
+    public void executeBlockCommand() {
+        String verb = "block";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("blk1");
+        arguments.add("genesis");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        command.execute(world);
+
+        Block result = world.getBlock("blk1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
+        Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
+    }
+
+    @Test
+    public void executeBlockCommandUsingNamedArguments() {
+        String verb = "block";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("name=blk1");
+        arguments.add("parent=genesis");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        command.execute(world);
+
+        Block result = world.getBlock("blk1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
+        Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
     }
 }

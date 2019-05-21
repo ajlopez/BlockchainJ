@@ -1,7 +1,9 @@
 package com.ajlopez.blockchain.test.dsl;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.test.World;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -53,6 +55,19 @@ public class DslCommand {
             Account account = new Account(balance, nonce, null, null);
 
             world.setAccount(name, account);
+
+            return;
+        }
+
+        if ("block".equals(this.verb)) {
+            String name = this.getName(0, "name");
+            String parentName = this.getName(1, "parent");
+            Block parent = world.getBlock(parentName);
+            Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), 0);
+
+            world.setBlock(name, block);
+
+            return;
         }
     }
 
