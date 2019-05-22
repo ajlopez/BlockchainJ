@@ -17,7 +17,7 @@ import java.util.Map;
 public class DslCommand {
     private final String verb;
     private final List<String> arguments = new ArrayList<>();
-    private final Map<String, String> namedArgumens = new HashMap<>();
+    private final Map<String, String> namedArguments = new HashMap<>();
 
     public DslCommand(String verb, List<String> arguments) {
         this.verb = verb;
@@ -29,7 +29,7 @@ public class DslCommand {
                 String key = argument.substring(0, p);
                 String value = argument.substring(p + 1);
 
-                this.namedArgumens.put(key, value);
+                this.namedArguments.put(key, value);
             }
             else
                 this.arguments.add(argument);
@@ -44,7 +44,7 @@ public class DslCommand {
         return this.arguments;
     }
 
-    public Map<String, String> getNamedArgumens() { return this.namedArgumens; }
+    public Map<String, String> getNamedArguments() { return this.namedArguments; }
 
     public void execute(World world) {
         if ("account".equals(this.verb)) {
@@ -75,21 +75,31 @@ public class DslCommand {
         if (position >= 0 && this.arguments.size() > position)
             return this.arguments.get(position);
 
-        return this.namedArgumens.get(name);
+        return this.namedArguments.get(name);
     }
 
     private BigInteger getBigInteger(int position, String name) {
         if (position >= 0 && this.arguments.size() > position)
             return new BigInteger(this.arguments.get(position));
 
-        return new BigInteger(this.namedArgumens.get(name));
+        String value = this.namedArguments.get(name);
+
+        if (value == null)
+            return BigInteger.ZERO;
+
+        return new BigInteger(value);
     }
 
     private long getLongInteger(int position, String name) {
         if (position >= 0 && this.arguments.size() > position)
             return Long.parseLong(this.arguments.get(position));
 
-        return Long.parseLong(this.namedArgumens.get(name));
+        String value = this.namedArguments.get(name);
+
+        if (value == null)
+            return 0L;
+
+        return Long.parseLong(value);
     }
 }
 

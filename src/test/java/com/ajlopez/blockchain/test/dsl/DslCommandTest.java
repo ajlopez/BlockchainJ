@@ -29,8 +29,8 @@ public class DslCommandTest {
         Assert.assertEquals("acc1", command.getArguments().get(0));
         Assert.assertEquals("1000000", command.getArguments().get(1));
 
-        Assert.assertNotNull(command.getNamedArgumens());
-        Assert.assertTrue(command.getNamedArgumens().isEmpty());
+        Assert.assertNotNull(command.getNamedArguments());
+        Assert.assertTrue(command.getNamedArguments().isEmpty());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class DslCommandTest {
         Assert.assertEquals(1, command.getArguments().size());
         Assert.assertEquals("acc1", command.getArguments().get(0));
 
-        Map<String, String> namedArguments = command.getNamedArgumens();
+        Map<String, String> namedArguments = command.getNamedArguments();
 
         Assert.assertNotNull(namedArguments);
         Assert.assertFalse(namedArguments.isEmpty());
@@ -91,6 +91,25 @@ public class DslCommandTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(new BigInteger("1000000"), result.getBalance());
         Assert.assertEquals(42, result.getNonce());
+    }
+
+
+    @Test
+    public void executeAccountCommandUsingNamedArgumentsAndDefaultArguments() {
+        String verb = "account";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("name=acc1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        command.execute(world);
+
+        Account result = world.getAccount("acc1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(0, result.getNonce());
     }
 
     @Test
