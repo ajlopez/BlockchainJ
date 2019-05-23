@@ -132,6 +132,24 @@ public class DslCommandTest {
     }
 
     @Test
+    public void executeBlockCommandUsingDefaultParent() {
+        String verb = "block";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("blk1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        command.execute(world);
+
+        Block result = world.getBlock("blk1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
+        Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
+    }
+
+    @Test
     public void executeBlockCommandUsingNamedArguments() {
         String verb = "block";
         List<String> arguments = new ArrayList<>();

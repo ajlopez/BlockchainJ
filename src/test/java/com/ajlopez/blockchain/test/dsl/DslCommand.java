@@ -62,6 +62,10 @@ public class DslCommand {
         if ("block".equals(this.verb)) {
             String name = this.getName(0, "name");
             String parentName = this.getName(1, "parent");
+
+            if (parentName == null)
+                parentName = "genesis";
+
             Block parent = world.getBlock(parentName);
             Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), 0);
 
