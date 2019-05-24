@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.test.dsl;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.test.World;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -166,5 +167,51 @@ public class DslCommandTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(1, result.getNumber());
         Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
+    }
+
+    @Test
+    public void executeConnectBlock() {
+        World world = new World();
+        Block genesis = world.getBlock("genesis");
+        Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+
+        world.setBlock("blk1", block);
+
+        String verb = "connect";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("blk1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+
+        command.execute(world);
+
+        Block result = world.getBlockChain().getBestBlock();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
+        Assert.assertEquals(block.getHash(), result.getHash());
+    }
+
+    @Test
+    public void executeConnectBlockUsingNamedArgument() {
+        World world = new World();
+        Block genesis = world.getBlock("genesis");
+        Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+
+        world.setBlock("blk1", block);
+
+        String verb = "connect";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("name=blk1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+
+        command.execute(world);
+
+        Block result = world.getBlockChain().getBestBlock();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
+        Assert.assertEquals(block.getHash(), result.getHash());
     }
 }

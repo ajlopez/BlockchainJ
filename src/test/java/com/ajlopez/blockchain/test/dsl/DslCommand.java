@@ -73,6 +73,12 @@ public class DslCommand {
 
             return;
         }
+
+        if ("connect".equals(this.verb)) {
+            String name = this.getName(0, "name");
+            Block block = world.getBlock(name);
+            world.getBlockChain().connectBlock(block);
+        }
     }
 
     private String getName(int position, String name) {
