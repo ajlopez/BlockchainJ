@@ -3,9 +3,11 @@ package com.ajlopez.blockchain.test;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
+import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -58,6 +60,27 @@ public class WorldTest {
         Address result = world.getAccountAddress("acc1");
 
         Assert.assertNull(result);
+    }
+
+    @Test
+    public void getUnknownTransaction() {
+        World world = new World();
+
+        Assert.assertNull(world.getTransaction("foo"));
+    }
+
+    @Test
+    public void setAndGetTransaction() {
+        Transaction transaction = FactoryHelper.createTransaction(1000);
+
+        World world = new World();
+
+        world.setTransaction("tx1", transaction);
+
+        Transaction result = world.getTransaction("tx1");
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(TransactionEncoder.encode(transaction), TransactionEncoder.encode(result));
     }
 
     @Test

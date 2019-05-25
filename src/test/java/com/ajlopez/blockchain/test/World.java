@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.test;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -18,6 +19,7 @@ public class World {
     private final AccountStore accountStore;
     private final Map<String, Address> accounts;
     private final Map<String, Block> blocks;
+    private final Map<String, Transaction> transactions;
 
     private BlockChain blockChain;
 
@@ -25,6 +27,15 @@ public class World {
         this.accountStore = new AccountStore(new Trie());
         this.accounts = new HashMap<>();
         this.blocks = new HashMap<>();
+        this.transactions = new HashMap<>();
+    }
+
+    public Transaction getTransaction(String name) {
+        return this.transactions.get(name);
+    }
+
+    public void setTransaction(String name, Transaction transaction) {
+        this.transactions.put(name, transaction);
     }
 
     public Block getBlock(String name) {
