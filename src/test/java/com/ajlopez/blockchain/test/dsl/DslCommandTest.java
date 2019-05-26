@@ -2,10 +2,13 @@ package com.ajlopez.blockchain.test.dsl;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
+import sun.security.smartcardio.SunPCSC;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -94,7 +97,6 @@ public class DslCommandTest {
         Assert.assertEquals(42, result.getNonce());
     }
 
-
     @Test
     public void executeAccountCommandUsingNamedArgumentsAndDefaultArguments() {
         String verb = "account";
@@ -111,6 +113,60 @@ public class DslCommandTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.ZERO, result.getBalance());
         Assert.assertEquals(0, result.getNonce());
+    }
+
+    @Test
+    public void executeTransactionCommand() {
+        String verb = "transaction";
+        Address from = FactoryHelper.createRandomAddress();
+        Address to = FactoryHelper.createRandomAddress();
+
+        List<String> arguments = new ArrayList<>();
+        arguments.add("tx1");
+        arguments.add(from.toString());
+        arguments.add(to.toString());
+        arguments.add("10000");
+        arguments.add("1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        command.execute(world);
+
+        Transaction result = world.getTransaction("tx1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(new BigInteger("10000"), result.getValue());
+        Assert.assertEquals(from, result.getSender());
+        Assert.assertEquals(to, result.getReceiver());
+        Assert.assertEquals(1, result.getNonce());
+    }
+
+    @Test
+    public void executeTransactionCommandUsingNamedArguments() {
+        String verb = "transaction";
+        Address from = FactoryHelper.createRandomAddress();
+        Address to = FactoryHelper.createRandomAddress();
+
+        List<String> arguments = new ArrayList<>();
+        arguments.add("name=tx1");
+        arguments.add("from=" + from.toString());
+        arguments.add("to=" + to.toString());
+        arguments.add("value=10000");
+        arguments.add("nonce=1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        command.execute(world);
+
+        Transaction result = world.getTransaction("tx1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(new BigInteger("10000"), result.getValue());
+        Assert.assertEquals(from, result.getSender());
+        Assert.assertEquals(to, result.getReceiver());
+        Assert.assertEquals(1, result.getNonce());
     }
 
     @Test

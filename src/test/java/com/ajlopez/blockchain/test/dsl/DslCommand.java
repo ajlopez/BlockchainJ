@@ -2,8 +2,12 @@ package com.ajlopez.blockchain.test.dsl;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HexUtils;
+import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -70,6 +74,20 @@ public class DslCommand {
             Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), 0);
 
             world.setBlock(name, block);
+
+            return;
+        }
+
+        if ("transaction".equals(this.verb)) {
+            String name = this.getName(0, "name");
+            Address from = new Address(HexUtils.hexStringToBytes(this.getName(1, "from")));
+            Address to = new Address(HexUtils.hexStringToBytes(this.getName(2, "to")));
+            BigInteger value = this.getBigInteger(3, "value");
+            long nonce = this.getLongInteger(4, "nonce");
+
+            Transaction transaction = new Transaction(from, to, value, nonce);
+
+            world.setTransaction(name, transaction);
 
             return;
         }
