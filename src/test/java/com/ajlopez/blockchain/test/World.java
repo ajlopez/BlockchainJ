@@ -9,7 +9,9 @@ import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +34,19 @@ public class World {
 
     public Transaction getTransaction(String name) {
         return this.transactions.get(name);
+    }
+
+    public List<Transaction> getTransactions(List<String> names) {
+        List<Transaction> result = new ArrayList<>();
+
+        for (String name : names) {
+            Transaction transaction = this.getTransaction(name);
+
+            if (transaction != null)
+                result.add(transaction);
+        }
+
+        return result;
     }
 
     public void setTransaction(String name, Transaction transaction) {

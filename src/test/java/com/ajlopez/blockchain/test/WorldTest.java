@@ -15,6 +15,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ajlopez on 12/05/2019.
@@ -70,6 +72,19 @@ public class WorldTest {
     }
 
     @Test
+    public void getUnknownTransactions() {
+        World world = new World();
+        List<String> names = new ArrayList<>();
+        names.add("tx1");
+        names.add("tx2");
+
+        List<Transaction> result = world.getTransactions(names);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+    }
+
+    @Test
     public void setAndGetTransaction() {
         Transaction transaction = FactoryHelper.createTransaction(1000);
 
@@ -81,6 +96,26 @@ public class WorldTest {
 
         Assert.assertNotNull(result);
         Assert.assertArrayEquals(TransactionEncoder.encode(transaction), TransactionEncoder.encode(result));
+    }
+
+    @Test
+    public void setAndGetTransactions() {
+        Transaction transaction1 = FactoryHelper.createTransaction(1000);
+        Transaction transaction2 = FactoryHelper.createTransaction(2000);
+
+        World world = new World();
+        List<String> names = new ArrayList<>();
+        names.add("tx1");
+        names.add("tx2");
+
+        world.setTransaction("tx1", transaction1);
+        world.setTransaction("tx2", transaction2);
+
+        List<Transaction> result = world.getTransactions(names);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(transaction1, result.get(0));
+        Assert.assertEquals(transaction2, result.get(1));
     }
 
     @Test
