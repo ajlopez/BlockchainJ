@@ -125,6 +125,20 @@ public class WorldTest {
         Assert.assertNull(world.getBlock("blk1"));
     }
 
+
+    @Test
+    public void getUnknownBlocks() {
+        World world = new World();
+        List<String> names = new ArrayList<>();
+        names.add("blk1");
+        names.add("blk2");
+
+        List<Block> result = world.getBlocks(names);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+    }
+
     @Test
     public void setAndGetBlock() {
         World world = new World();
@@ -136,6 +150,28 @@ public class WorldTest {
 
         Assert.assertNotNull(result);
         Assert.assertArrayEquals(BlockEncoder.encode(block), BlockEncoder.encode(result));
+    }
+
+    @Test
+    public void setAndGetBlocks() {
+        World world = new World();
+        Block genesis = world.getBlock("genesis");
+
+        Block block1 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block block2 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+
+        List<String> names = new ArrayList<>();
+        names.add("blk1");
+        names.add("blk2");
+
+        world.setBlock("blk1", block1);
+        world.setBlock("blk2", block2);
+
+        List<Block> result = world.getBlocks(names);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(block1, result.get(0));
+        Assert.assertEquals(block2, result.get(1));
     }
 
     @Test

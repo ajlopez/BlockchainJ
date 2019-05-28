@@ -67,6 +67,19 @@ public class World {
         return block;
     }
 
+    public List<Block> getBlocks(List<String> names) {
+        List<Block> result = new ArrayList<>();
+
+        for (String name : names) {
+            Block block = this.getBlock(name);
+
+            if (block != null)
+                result.add(block);
+        }
+
+        return result;
+    }
+
     public void setBlock(String name, Block block) {
         this.blocks.put(name, block);
     }
