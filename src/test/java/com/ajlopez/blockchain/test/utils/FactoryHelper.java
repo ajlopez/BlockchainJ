@@ -94,6 +94,10 @@ public class FactoryHelper {
     public static Block createBlock(Block parent, Address coinbase, int ntransactions) {
         List<Transaction> transactions = createTransactions(ntransactions);
 
+        return createBlock(parent, coinbase, transactions);
+    }
+
+    public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions) {
         return new Block(parent.getNumber() + 1, parent.getHash(), transactions, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase);
     }
 

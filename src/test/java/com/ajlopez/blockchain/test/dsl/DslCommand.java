@@ -10,10 +10,7 @@ import com.ajlopez.blockchain.utils.HexUtils;
 import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ajlopez on 10/05/2019.
@@ -70,8 +67,11 @@ public class DslCommand {
             if (parentName == null)
                 parentName = "genesis";
 
+            List<String> transactionNames = this.getNames(2, "transactions");
+
             Block parent = world.getBlock(parentName);
-            Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), 0);
+            List<Transaction> transactions = world.getTransactions(transactionNames);
+            Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), transactions);
 
             world.setBlock(name, block);
 
@@ -104,6 +104,22 @@ public class DslCommand {
             return this.arguments.get(position);
 
         return this.namedArguments.get(name);
+    }
+
+    private List<String> getNames(int position, String name) {
+        String text = this.getName(position, name);
+
+        if (text == null)
+            return Collections.emptyList();
+
+        String[] names = text.split(",");
+
+        List<String> result = new ArrayList<>();
+
+        for (int k = 0; k < names.length; k++)
+            result.add(names[k]);
+
+        return result;
     }
 
     private BigInteger getBigInteger(int position, String name) {

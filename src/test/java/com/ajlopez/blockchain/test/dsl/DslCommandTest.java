@@ -186,6 +186,38 @@ public class DslCommandTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(1, result.getNumber());
         Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
+        Assert.assertNotNull(result.getTransactions());
+        Assert.assertTrue(result.getTransactions().isEmpty());
+    }
+
+    @Test
+    public void executeBlockCommandWithTransactions() {
+        String verb = "block";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("blk1");
+        arguments.add("genesis");
+        arguments.add("tx1,tx2");
+
+        Transaction transaction1 = FactoryHelper.createTransaction(1000);
+        Transaction transaction2 = FactoryHelper.createTransaction(2000);
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        world.setTransaction("tx1", transaction1);
+        world.setTransaction("tx2", transaction2);
+
+        command.execute(world);
+
+        Block result = world.getBlock("blk1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
+        Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
+        Assert.assertNotNull(result.getTransactions());
+        Assert.assertEquals(2, result.getTransactions().size());
+        Assert.assertEquals(transaction1.getHash(), result.getTransactions().get(0).getHash());
+        Assert.assertEquals(transaction2.getHash(), result.getTransactions().get(1).getHash());
     }
 
     @Test
@@ -223,6 +255,36 @@ public class DslCommandTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(1, result.getNumber());
         Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
+    }
+
+    @Test
+    public void executeBlockCommandUsingNamedArgumentsWithTransactions() {
+        String verb = "block";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("name=blk1");
+        arguments.add("parent=genesis");
+        arguments.add("transactions=tx1,tx2");
+
+        Transaction transaction1 = FactoryHelper.createTransaction(1000);
+        Transaction transaction2 = FactoryHelper.createTransaction(2000);
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        world.setTransaction("tx1", transaction1);
+        world.setTransaction("tx2", transaction2);
+
+        command.execute(world);
+
+        Block result = world.getBlock("blk1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
+        Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
+        Assert.assertNotNull(result.getTransactions());
+        Assert.assertEquals(2, result.getTransactions().size());
+        Assert.assertEquals(transaction1.getHash(), result.getTransactions().get(0).getHash());
+        Assert.assertEquals(transaction2.getHash(), result.getTransactions().get(1).getHash());
     }
 
     @Test
