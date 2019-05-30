@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.execution.AccountState;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
@@ -66,7 +67,8 @@ public class MinerProcessorTest {
 
         Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase);
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, new AccountStoreProvider(trieStore), coinbase);
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, accountStoreProvider, coinbase);
 
         Block block = processor.mineBlock(parent);
 
@@ -83,6 +85,18 @@ public class MinerProcessorTest {
         Assert.assertSame(tx, txs.get(0));
 
         Assert.assertFalse(transactionPool.getTransactions().isEmpty());
+
+        AccountStore newAccountStore = accountStoreProvider.retrieve(block.getStateRootHash());
+        Account updatedSenderAccount = newAccountStore.getAccount(tx.getSender());
+        Account updatedReceiverAccount = newAccountStore.getAccount(tx.getReceiver());
+
+        Assert.assertNotNull(updatedSenderAccount);
+        Assert.assertEquals(1, updatedSenderAccount.getNonce());
+        Assert.assertEquals(BigInteger.valueOf(900), updatedSenderAccount.getBalance());
+
+        Assert.assertNotNull(updatedReceiverAccount);
+        Assert.assertEquals(0, updatedReceiverAccount.getNonce());
+        Assert.assertEquals(BigInteger.valueOf(100), updatedReceiverAccount.getBalance());
     }
 
     @Test
