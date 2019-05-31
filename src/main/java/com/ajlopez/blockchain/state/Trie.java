@@ -132,7 +132,10 @@ public class Trie {
         if (this.saved)
             return;
 
-        this.store.save(this);
+        // TODO review
+        if (this.store != null)
+            this.store.save(this);
+
         this.saved = true;
 
         if (this.nodes == null)

@@ -55,4 +55,11 @@ public class TopExecutionContext extends AbstractExecutionContext {
 
         return this.codeStore.getCode(codeHash);
     }
+
+    @Override
+    public void commit() {
+        super.commit();
+        // TODO save other stores??
+        this.accountStore.save();
+    }
 }

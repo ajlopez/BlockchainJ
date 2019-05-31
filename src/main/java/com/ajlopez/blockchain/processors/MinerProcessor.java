@@ -56,9 +56,6 @@ public class MinerProcessor {
 
         List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions());
 
-        // TODO Review the save
-        accountStore.save();
-
         return new Block(parent, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase);
     }
 
