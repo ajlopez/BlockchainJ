@@ -14,8 +14,8 @@ public class BlockChain {
     public static final long NO_BEST_BLOCK_NUMBER = -1;
 
     private Block best;
-    private BlockHashStore blocksByHash = new BlockHashStore();
-    private BlockNumberStore blocksByNumber = new BlockNumberStore();
+    private final BlockHashStore blocksByHash = new BlockHashStore();
+    private final BlockNumberStore blocksByNumber = new BlockNumberStore();
 
     private List<Consumer<Block>> blockConsumers = new ArrayList<>();
 
