@@ -40,7 +40,7 @@ public class BlockExecutorTest {
     }
 
     @Test
-    public void executeBlockWithOneTransactions() {
+    public void executeBlockWithOneTransaction() {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
@@ -55,7 +55,7 @@ public class BlockExecutorTest {
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
         Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0);
-        List<Transaction> transactions = new ArrayList<Transaction>();
+        List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -70,5 +70,71 @@ public class BlockExecutorTest {
         Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
         Assert.assertEquals(accountStore.getRootHash(), result);
+    }
+
+    @Test
+    public void executeBlockWithOneTransactionWithInvalidNonce() {
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+
+        Account sender = new Account(BigInteger.valueOf(10000), 0, null, null);
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        accountStore.putAccount(senderAddress, sender);
+        accountStore.save();
+
+        Block genesis = GenesisGenerator.generateGenesis(accountStore);
+
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 1);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+
+        ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
+        TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
+
+        transactionExecutor.executeTransactions(transactions);
+
+        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider);
+
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress());
+
+        Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
+
+        Assert.assertEquals(genesis.getStateRootHash(), result);
+    }
+
+    @Test
+    public void executeBlockWithOneTransactionWithSenderWithoutEnoughBalance() {
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+
+        Account sender = new Account(BigInteger.valueOf(10000), 0, null, null);
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        accountStore.putAccount(senderAddress, sender);
+        accountStore.save();
+
+        Block genesis = GenesisGenerator.generateGenesis(accountStore);
+
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(10000000), 0);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+
+        ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
+        TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
+
+        transactionExecutor.executeTransactions(transactions);
+
+        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider);
+
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress());
+
+        Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
+
+        Assert.assertEquals(genesis.getStateRootHash(), result);
     }
 }
