@@ -9,6 +9,8 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 /**
  * Created by ajlopez on 03/06/2019.
  */
@@ -26,5 +28,20 @@ public class BlockValidatorTest {
         BlockValidator blockValidator = new BlockValidator(blockExecutor);
 
         Assert.assertTrue(blockValidator.isValid(block, genesis.getStateRootHash()));
+    }
+    
+    @Test
+    public void invalidEmptyBlock() {
+        Block genesis = GenesisGenerator.generateGenesis();
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), new ArrayList<>(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress());
+
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+
+        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider);
+
+        BlockValidator blockValidator = new BlockValidator(blockExecutor);
+
+        Assert.assertFalse(blockValidator.isValid(block, genesis.getStateRootHash()));
     }
 }
