@@ -75,6 +75,31 @@ public class BlockValidatorTest {
     }
 
     @Test
+    public void validBlockWithInvaidTransaction() {
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+
+        Account sender = new Account(BigInteger.valueOf(10000), 0, null, null);
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+
+        Block genesis = GenesisGenerator.generateGenesis(accountStore);
+
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), transactions, genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress());
+
+        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider);
+
+        BlockValidator blockValidator = new BlockValidator(blockExecutor);
+
+        Assert.assertTrue(blockValidator.isValid(block, genesis.getStateRootHash()));
+    }
+
+    @Test
     public void invalidEmptyBlock() {
         Block genesis = GenesisGenerator.generateGenesis();
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), new ArrayList<>(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress());
