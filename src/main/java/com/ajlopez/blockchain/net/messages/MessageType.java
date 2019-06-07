@@ -8,5 +8,6 @@ public enum MessageType {
     TRANSACTION,
     BLOCK,
     GET_BLOCK_BY_HASH,
-    GET_BLOCK_BY_NUMBER
+    GET_BLOCK_BY_NUMBER,
+    TRIE_NODE
 }
