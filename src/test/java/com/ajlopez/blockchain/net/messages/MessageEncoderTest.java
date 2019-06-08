@@ -154,4 +154,25 @@ public class MessageEncoderTest {
         Assert.assertEquals(2, sresult.getStatus().getNetworkNumber());
         Assert.assertEquals(3, sresult.getStatus().getBestBlockNumber());
     }
+
+    @Test
+    public void encodeAndDecodeTrieNodeMessage() {
+        byte[] nodeData = FactoryHelper.createRandomBytes(42);
+
+        Message message = new TrieNodeMessage(TrieType.ACCOUNT, nodeData);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.TRIE_NODE, result.getMessageType());
+
+        TrieNodeMessage tnresult = (TrieNodeMessage)result;
+
+        Assert.assertEquals(TrieType.ACCOUNT, tnresult.getTrieType());
+        Assert.assertArrayEquals(nodeData, tnresult.getTrieNode());
+    }
 }
