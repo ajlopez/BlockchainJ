@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.net.messages;
 
+import com.ajlopez.blockchain.encoding.RLP;
+
 /**
  * Created by ajlopez on 07/06/2019.
  */
@@ -23,7 +25,8 @@ public class TrieNodeMessage extends Message {
 
     @Override
     public byte[] getPayload() {
-        return null;
+        byte[] type = new byte[] { (byte)this.trieType.ordinal() };
+        return RLP.encodeList(RLP.encode(type), RLP.encode(this.trieNode));
     }
 }
 

@@ -4,10 +4,12 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
+import com.ajlopez.blockchain.encoding.RLP;
 import com.ajlopez.blockchain.encoding.StatusEncoder;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.utils.ByteUtils;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.NodeType;
 
 public class MessageEncoder {
     private MessageEncoder() {
@@ -66,6 +68,15 @@ public class MessageEncoder {
             Status status = StatusEncoder.decode(bstatus);
 
             return new StatusMessage(status);
+        }
+
+        if (bytes[0] == MessageType.TRIE_NODE.ordinal()) {
+            byte[][] lbytes = RLP.decodeList(bbytes);
+            byte[] btype = RLP.decode(lbytes[0]);
+            byte[] data = RLP.decode(lbytes[1]);
+            TrieType trieType = TrieType.values()[btype[0]];
+
+            return new TrieNodeMessage(trieType, data);
         }
 
         throw new UnsupportedOperationException();
