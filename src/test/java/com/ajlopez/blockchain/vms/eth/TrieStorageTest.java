@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.execution.AccountState;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -69,6 +70,21 @@ public class TrieStorageTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(DataWord.ZERO, result);
         Assert.assertEquals(initialHash, storage.getRootHash());
+    }
+
+    @Test
+    public void unknownHashDoesNotExists() {
+        TrieStore store = new TrieStore(new HashMapStore());
+
+        Assert.assertFalse(store.exists(FactoryHelper.createRandomHash()));
+    }
+
+    @Test
+    public void emptyTryExists() {
+        TrieStore store = new TrieStore(new HashMapStore());
+
+        Assert.assertTrue(store.exists(null));
+        Assert.assertTrue(store.exists(Trie.EMPTY_TRIE_HASH));
     }
 
     @Test

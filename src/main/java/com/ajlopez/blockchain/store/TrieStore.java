@@ -17,6 +17,13 @@ public class TrieStore {
         this.store.setValue(trie.getHash().getBytes(), trie.getEncoded());
     }
 
+    public boolean exists(Hash hash) {
+        if (hash == null || hash.equals(Trie.EMPTY_TRIE_HASH))
+            return true;
+
+        return this.store.getValue(hash.getBytes()) != null;
+    }
+
     public Trie retrieve(Hash hash) {
         if (hash == null || hash.equals(Trie.EMPTY_TRIE_HASH))
             return new Trie(this);
