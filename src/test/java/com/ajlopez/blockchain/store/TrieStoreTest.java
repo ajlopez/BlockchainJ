@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.store;
 
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -95,5 +96,35 @@ public class TrieStoreTest {
 
         for (int k = 0; k < 100; k++)
             Assert.assertArrayEquals(values[k], result.get(keys[k]));
+    }
+
+    @Test
+    public void unknownHashDoesNotExists() {
+        TrieStore store = new TrieStore(new HashMapStore());
+
+        Assert.assertFalse(store.exists(FactoryHelper.createRandomHash()));
+    }
+
+    @Test
+    public void knownHashExists() {
+        TrieStore store = new TrieStore(new HashMapStore());
+
+        byte[] value = new byte[32];
+        random.nextBytes(value);
+        byte[] key = new byte[2];
+
+        Trie trie = new Trie(store).put(key, value);
+
+        trie.save();
+
+        Assert.assertTrue(store.exists(trie.getHash()));
+    }
+
+    @Test
+    public void emptyTryExists() {
+        TrieStore store = new TrieStore(new HashMapStore());
+
+        Assert.assertTrue(store.exists(null));
+        Assert.assertTrue(store.exists(Trie.EMPTY_TRIE_HASH));
     }
 }
