@@ -41,6 +41,19 @@ public class TrieTest {
     }
 
     @Test
+    public void getSubhashesFromEmptyTrie() {
+        Trie trie = new Trie();
+
+        Hash[] hashes = trie.getSubHashes();
+
+        Assert.assertNotNull(hashes);
+        Assert.assertEquals(Trie.ARITY, hashes.length);
+
+        for (int k = 0; k < Trie.ARITY; k++)
+            Assert.assertNull(hashes[k]);
+    }
+
+    @Test
     public void getEncodedTrieWithValueAndNoSubNodes() {
         byte[] value = new byte[32];
         random.nextBytes(value);

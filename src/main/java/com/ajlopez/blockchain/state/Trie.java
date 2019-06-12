@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public class Trie {
     public static final Hash EMPTY_TRIE_HASH = new Trie().getHash();
-    private static final int ARITY = 16;
+    public static final int ARITY = 16;
 
     private byte[] value;
     private Trie[] nodes;
@@ -47,6 +47,13 @@ public class Trie {
         return count;
     }
 
+    public Hash[] getSubHashes() {
+        if (this.hashes == null)
+            this.hashes = new Hash[Trie.ARITY];
+
+        return this.hashes;
+    }
+
     public byte[] get(byte[] key) {
         return this.get(key, 0);
     }
@@ -57,7 +64,7 @@ public class Trie {
 
         int nibble = getOffset(key, position);
 
-        Trie trie = this.getSubnode(nibble);
+        Trie trie = this.getSubNode(nibble);
 
         if (trie == null)
             return null;
@@ -99,11 +106,11 @@ public class Trie {
             valbytes = this.value.length;
         }
 
-        int nsubnodes = this.getSubnodesCount();
+        int nsubnodes = this.getSubNodesCount();
 
         byte[] bytes = new byte[1 + 1 + 1 + Short.BYTES + HashUtils.HASH_BYTES * nsubnodes + valsizebytes + valbytes];
 
-        getSubnodes(bytes, 1 + 1 + 1);
+        getSubNodes(bytes, 1 + 1 + 1);
 
         // byte[0] version == 0
 
@@ -181,13 +188,13 @@ public class Trie {
         return new Trie(null, hashes, value, store);
     }
 
-    private void getSubnodes(byte[] bytes, int offset) {
+    private void getSubNodes(byte[] bytes, int offset) {
         short subnodes = 0;
         int nsubnode = 0;
 
         if (this.nodes != null || this.hashes != null)
             for (int k = 0; k < ARITY; k++) {
-                Hash subhash = this.getSubhash(k);
+                Hash subhash = this.getSubHash(k);
 
                 if (subhash == null)
                     continue;
@@ -202,37 +209,37 @@ public class Trie {
         System.arraycopy(subnodesbits, 0, bytes, offset, subnodesbits.length);
     }
 
-    private Hash getSubhash(int k) {
-        Hash hash = this.getSubhashFromHashes(k);
+    private Hash getSubHash(int k) {
+        Hash hash = this.getSubHashFromHashes(k);
 
         if (hash != null)
             return hash;
 
-        hash = this.getSubhashFromNodes(k);
+        hash = this.getSubHashFromNodes(k);
 
         if (hash == null)
             return null;
 
-        this.setSubhash(k, hash);
+        this.setSubHash(k, hash);
 
         return hash;
     }
 
-    private Hash getSubhashFromHashes(int k) {
+    private Hash getSubHashFromHashes(int k) {
         if (this.hashes == null)
             return null;
 
         return this.hashes[k];
     }
 
-    private void setSubhash(int k, Hash hash) {
+    private void setSubHash(int k, Hash hash) {
         if (this.hashes == null)
             this.hashes = new Hash[ARITY];
 
         this.hashes[k] = hash;
     }
 
-    private Hash getSubhashFromNodes(int k) {
+    private Hash getSubHashFromNodes(int k) {
         if (this.nodes == null)
             return null;
 
@@ -244,7 +251,7 @@ public class Trie {
         return node.getHash();
     }
 
-    private Trie getSubnode(int k) {
+    private Trie getSubNode(int k) {
         if (this.nodes != null && this.nodes[k] != null)
             return this.nodes[k];
 
@@ -264,7 +271,7 @@ public class Trie {
         return trie;
     }
 
-    private int getSubnodesCount() {
+    private int getSubNodesCount() {
         boolean hasnodes = this.nodes != null;
         boolean hashashes = this.hashes != null;
 
