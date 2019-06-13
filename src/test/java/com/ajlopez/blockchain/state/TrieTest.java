@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -51,6 +52,48 @@ public class TrieTest {
 
         for (int k = 0; k < Trie.ARITY; k++)
             Assert.assertNull(hashes[k]);
+    }
+
+    @Test
+    public void getSubhashesFromTrieWithOneKeyValue() {
+        Trie trie = new Trie().put(FactoryHelper.createRandomBytes(32), FactoryHelper.createRandomBytes(42));
+
+        Hash[] hashes = trie.getSubHashes();
+
+        Assert.assertNotNull(hashes);
+        Assert.assertEquals(Trie.ARITY, hashes.length);
+
+        int nhashes = 0;
+
+        for (int k = 0; k < Trie.ARITY; k++)
+            if (hashes[k] != null)
+                nhashes++;
+
+        Assert.assertEquals(1, nhashes);
+    }
+
+    @Test
+    public void getSubhashesFromTrieIsACopy() {
+        Trie trie = new Trie().put(FactoryHelper.createRandomBytes(32), FactoryHelper.createRandomBytes(42));
+
+        Hash[] hashes = trie.getSubHashes();
+
+        Assert.assertNotNull(hashes);
+        Assert.assertEquals(Trie.ARITY, hashes.length);
+
+        Hash[] copy = new Hash[Trie.ARITY];
+
+        System.arraycopy(hashes, 0, copy, 0, Trie.ARITY);
+
+        for (int k = 0; k < Trie.ARITY; k++)
+            if (hashes[k] != null)
+                hashes[k] = FactoryHelper.createRandomHash();
+
+        Hash[] newhashes = trie.getSubHashes();
+
+        Assert.assertNotNull(newhashes);
+        Assert.assertEquals(Trie.ARITY, newhashes.length);
+        Assert.assertArrayEquals(copy, newhashes);
     }
 
     @Test

@@ -51,7 +51,16 @@ public class Trie {
         if (this.hashes == null)
             this.hashes = new Hash[Trie.ARITY];
 
-        return this.hashes;
+        if (this.nodes != null)
+            for (int k = 0; k < Trie.ARITY; k++)
+                if (this.hashes[k] == null && this.nodes[k] != null)
+                    this.hashes[k] = this.getSubHash(k);
+
+        Hash[] result = new Hash[Trie.ARITY];
+
+        System.arraycopy(this.hashes, 0, result, 0, Trie.ARITY);
+
+        return result;
     }
 
     public byte[] get(byte[] key) {
