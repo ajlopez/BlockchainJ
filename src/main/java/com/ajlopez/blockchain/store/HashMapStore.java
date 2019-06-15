@@ -18,5 +18,7 @@ public class HashMapStore implements KeyValueStore {
     public void setValue(byte[] key, byte[] value) {
         this.values.put(new ByteArrayWrapper(key), value);
     }
+
+    public boolean isEmpty() { return this.values.isEmpty(); }
 }
 
