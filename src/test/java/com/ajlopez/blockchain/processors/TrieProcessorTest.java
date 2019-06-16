@@ -57,4 +57,28 @@ public class TrieProcessorTest {
         Assert.assertFalse(trieProcessor.getPendingHashes().isEmpty());
         Assert.assertEquals(1, trieProcessor.getPendingHashes().size());
     }
+
+    @Test
+    public void processUnexpectedTrie() {
+        byte[] key = FactoryHelper.createRandomBytes(32);
+        byte[] value = FactoryHelper.createRandomBytes(42);
+        byte[] key2 = FactoryHelper.createRandomBytes(32);
+        byte[] value2 = FactoryHelper.createRandomBytes(42);
+
+        KeyValueStore keyValueStore = new HashMapStore();
+        TrieStore trieStore = new TrieStore(keyValueStore);
+
+        Trie trie = new Trie().put(key, value);
+        Trie trie2 = new Trie().put(key2, value2);
+
+        TrieProcessor trieProcessor = new TrieProcessor(trieStore);
+
+        trieProcessor.saveNode(trie.getEncoded());
+        trieProcessor.saveNode(trie2.getEncoded());
+
+        Assert.assertTrue(trieStore.exists(trie.getHash()));
+        Assert.assertFalse(trieStore.exists(trie2.getHash()));
+        Assert.assertArrayEquals(trie.getEncoded(), keyValueStore.getValue(trie.getHash().getBytes()));
+        Assert.assertNull(keyValueStore.getValue(trie2.getHash().getBytes()));
+    }
 }
