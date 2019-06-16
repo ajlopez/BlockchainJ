@@ -22,6 +22,9 @@ public class TrieProcessor {
         Trie trie = Trie.fromEncoded(nodeData, this.trieStore);
         Hash trieHash = trie.getHash();
 
+        if (!this.pendingHashes.isEmpty() && this.pendingHashes.contains(trieHash))
+            return;
+
         if (this.trieStore.exists(trieHash))
             return;
 
