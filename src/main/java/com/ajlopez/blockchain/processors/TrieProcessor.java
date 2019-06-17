@@ -14,16 +14,19 @@ public class TrieProcessor {
     private final TrieStore trieStore;
     private final Set<Hash> pendingHashes = new HashSet<>();
 
-    public TrieProcessor(TrieStore trieStore) {
+    public TrieProcessor(TrieStore trieStore, Hash expectedHash) {
         this.trieStore = trieStore;
+        this.pendingHashes.add(expectedHash);
     }
 
     public void saveNode(byte[] nodeData) {
         Trie trie = Trie.fromEncoded(nodeData, this.trieStore);
         Hash trieHash = trie.getHash();
 
-        if (!this.pendingHashes.isEmpty() && !this.pendingHashes.contains(trieHash))
+        if (!this.pendingHashes.contains(trieHash))
             return;
+
+        this.pendingHashes.remove(trieHash);
 
         if (this.trieStore.exists(trieHash))
             return;

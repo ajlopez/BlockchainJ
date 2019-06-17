@@ -20,7 +20,7 @@ public class TrieProcessorTest {
 
         Trie trie = new Trie();
 
-        TrieProcessor trieProcessor = new TrieProcessor(trieStore);
+        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
 
         trieProcessor.saveNode(trie.getEncoded());
 
@@ -35,12 +35,12 @@ public class TrieProcessorTest {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 
+        Trie trie = new Trie().put(key, value);
+
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
 
-        Trie trie = new Trie().put(key, value);
-
-        TrieProcessor trieProcessor = new TrieProcessor(trieStore);
+        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
 
         trieProcessor.saveNode(trie.getEncoded());
 
@@ -56,6 +56,7 @@ public class TrieProcessorTest {
 
         Assert.assertFalse(trieProcessor.getPendingHashes().isEmpty());
         Assert.assertEquals(1, trieProcessor.getPendingHashes().size());
+        Assert.assertFalse(trieProcessor.getPendingHashes().contains(trie.getHash()));
     }
 
     @Test
@@ -71,7 +72,7 @@ public class TrieProcessorTest {
         Trie trie = new Trie().put(key, value);
         Trie trie2 = new Trie().put(key2, value2);
 
-        TrieProcessor trieProcessor = new TrieProcessor(trieStore);
+        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
 
         trieProcessor.saveNode(trie.getEncoded());
         trieProcessor.saveNode(trie2.getEncoded());
