@@ -60,6 +60,24 @@ public class TrieProcessorTest {
     }
 
     @Test
+    public void processTrieThatIsAlreadyInStore() {
+        KeyValueStore keyValueStore = new HashMapStore();
+        TrieStore trieStore = new TrieStore(keyValueStore);
+
+        byte[] key = FactoryHelper.createRandomBytes(32);
+        byte[] value = FactoryHelper.createRandomBytes(42);
+
+        Trie trie = new Trie(trieStore).put(key, value);
+        trie.save();
+
+        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
+
+        Assert.assertTrue(trieStore.exists(trie.getHash()));
+
+        Assert.assertTrue(trieProcessor.getPendingHashes().isEmpty());
+    }
+
+    @Test
     public void processUnexpectedTrie() {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);

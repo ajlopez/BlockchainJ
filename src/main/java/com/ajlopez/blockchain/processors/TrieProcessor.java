@@ -20,6 +20,9 @@ public class TrieProcessor {
     }
 
     public void expectHash(Hash expectedHash) {
+        if (this.trieStore.exists(expectedHash))
+            return;
+
         this.pendingHashes.add(expectedHash);
     }
 
