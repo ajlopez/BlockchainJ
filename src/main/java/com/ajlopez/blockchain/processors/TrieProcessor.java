@@ -16,6 +16,10 @@ public class TrieProcessor {
 
     public TrieProcessor(TrieStore trieStore, Hash expectedHash) {
         this.trieStore = trieStore;
+        this.expectHash(expectedHash);
+    }
+
+    public void expectHash(Hash expectedHash) {
         this.pendingHashes.add(expectedHash);
     }
 
