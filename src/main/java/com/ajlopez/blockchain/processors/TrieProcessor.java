@@ -43,8 +43,7 @@ public class TrieProcessor {
         Hash[] subHashes = trie.getSubHashes();
 
         for (int k = 0; k < subHashes.length; k++)
-            if (!this.trieStore.exists(subHashes[k]))
-                this.pendingHashes.add(subHashes[k]);
+            this.expectHash(subHashes[k]);
     }
 
     public Set<Hash> getPendingHashes() {

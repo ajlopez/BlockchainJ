@@ -60,6 +60,36 @@ public class TrieProcessorTest {
     }
 
     @Test
+    public void processTrieWithOneKeyValueTwice() {
+        byte[] key = FactoryHelper.createRandomBytes(32);
+        byte[] value = FactoryHelper.createRandomBytes(42);
+
+        Trie trie = new Trie().put(key, value);
+
+        KeyValueStore keyValueStore = new HashMapStore();
+        TrieStore trieStore = new TrieStore(keyValueStore);
+
+        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
+
+        trieProcessor.saveNode(trie.getEncoded());
+        trieProcessor.saveNode(trie.getEncoded());
+
+        Assert.assertTrue(trieStore.exists(trie.getHash()));
+        Assert.assertArrayEquals(trie.getEncoded(), keyValueStore.getValue(trie.getHash().getBytes()));
+        Assert.assertFalse(((HashMapStore) keyValueStore).isEmpty());
+
+        Hash[] subHashes = trie.getSubHashes();
+
+        for (int k = 0; k < subHashes.length; k++)
+            if (subHashes[k] != null)
+                Assert.assertFalse(trieStore.exists(subHashes[k]));
+
+        Assert.assertFalse(trieProcessor.getPendingHashes().isEmpty());
+        Assert.assertEquals(1, trieProcessor.getPendingHashes().size());
+        Assert.assertFalse(trieProcessor.getPendingHashes().contains(trie.getHash()));
+    }
+
+    @Test
     public void processTrieThatIsAlreadyInStore() {
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
