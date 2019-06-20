@@ -12,7 +12,7 @@ import org.junit.Test;
 /**
  * Created by ajlopez on 14/06/2019.
  */
-public class TrieProcessorTest {
+public class TrieCollectorTest {
     @Test
     public void processEmptyTrie() {
         KeyValueStore keyValueStore = new HashMapStore();
@@ -20,14 +20,14 @@ public class TrieProcessorTest {
 
         Trie trie = new Trie();
 
-        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
+        TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
-        trieProcessor.saveNode(trie.getEncoded());
+        trieCollector.saveNode(trie.getEncoded());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
         Assert.assertNull(keyValueStore.getValue(trie.getHash().getBytes()));
         Assert.assertTrue(((HashMapStore) keyValueStore).isEmpty());
-        Assert.assertTrue(trieProcessor.getPendingHashes().isEmpty());
+        Assert.assertTrue(trieCollector.getPendingHashes().isEmpty());
     }
 
     @Test
@@ -40,9 +40,9 @@ public class TrieProcessorTest {
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
 
-        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
+        TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
-        trieProcessor.saveNode(trie.getEncoded());
+        trieCollector.saveNode(trie.getEncoded());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
         Assert.assertArrayEquals(trie.getEncoded(), keyValueStore.getValue(trie.getHash().getBytes()));
@@ -54,9 +54,9 @@ public class TrieProcessorTest {
             if (subHashes[k] != null)
                 Assert.assertFalse(trieStore.exists(subHashes[k]));
 
-        Assert.assertFalse(trieProcessor.getPendingHashes().isEmpty());
-        Assert.assertEquals(1, trieProcessor.getPendingHashes().size());
-        Assert.assertFalse(trieProcessor.getPendingHashes().contains(trie.getHash()));
+        Assert.assertFalse(trieCollector.getPendingHashes().isEmpty());
+        Assert.assertEquals(1, trieCollector.getPendingHashes().size());
+        Assert.assertFalse(trieCollector.getPendingHashes().contains(trie.getHash()));
     }
 
     @Test
@@ -69,10 +69,10 @@ public class TrieProcessorTest {
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
 
-        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
+        TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
-        trieProcessor.saveNode(trie.getEncoded());
-        trieProcessor.saveNode(trie.getEncoded());
+        trieCollector.saveNode(trie.getEncoded());
+        trieCollector.saveNode(trie.getEncoded());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
         Assert.assertArrayEquals(trie.getEncoded(), keyValueStore.getValue(trie.getHash().getBytes()));
@@ -84,9 +84,9 @@ public class TrieProcessorTest {
             if (subHashes[k] != null)
                 Assert.assertFalse(trieStore.exists(subHashes[k]));
 
-        Assert.assertFalse(trieProcessor.getPendingHashes().isEmpty());
-        Assert.assertEquals(1, trieProcessor.getPendingHashes().size());
-        Assert.assertFalse(trieProcessor.getPendingHashes().contains(trie.getHash()));
+        Assert.assertFalse(trieCollector.getPendingHashes().isEmpty());
+        Assert.assertEquals(1, trieCollector.getPendingHashes().size());
+        Assert.assertFalse(trieCollector.getPendingHashes().contains(trie.getHash()));
     }
 
     @Test
@@ -100,11 +100,11 @@ public class TrieProcessorTest {
         Trie trie = new Trie(trieStore).put(key, value);
         trie.save();
 
-        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
+        TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
 
-        Assert.assertTrue(trieProcessor.getPendingHashes().isEmpty());
+        Assert.assertTrue(trieCollector.getPendingHashes().isEmpty());
     }
 
     @Test
@@ -120,10 +120,10 @@ public class TrieProcessorTest {
         Trie trie = new Trie().put(key, value);
         Trie trie2 = new Trie().put(key2, value2);
 
-        TrieProcessor trieProcessor = new TrieProcessor(trieStore, trie.getHash());
+        TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
-        trieProcessor.saveNode(trie.getEncoded());
-        trieProcessor.saveNode(trie2.getEncoded());
+        trieCollector.saveNode(trie.getEncoded());
+        trieCollector.saveNode(trie2.getEncoded());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
         Assert.assertFalse(trieStore.exists(trie2.getHash()));

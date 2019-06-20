@@ -10,11 +10,11 @@ import java.util.Set;
 /**
  * Created by ajlopez on 14/06/2019.
  */
-public class TrieProcessor {
+public class TrieCollector {
     private final TrieStore trieStore;
     private final Set<Hash> pendingHashes = new HashSet<>();
 
-    public TrieProcessor(TrieStore trieStore, Hash expectedHash) {
+    public TrieCollector(TrieStore trieStore, Hash expectedHash) {
         this.trieStore = trieStore;
         this.expectHash(expectedHash);
     }
