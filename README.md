@@ -34,6 +34,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Quantifying Immutability](https://medium.com/ethereum-classic/quantifying-immutability-e8f2b1bb9301)
 - [Empirically Analyzing Ethereum’s Gas Mechanism](https://arxiv.org/pdf/1905.00553.pdf)
 - [Blockchain Scalability: Do Layer I Solutions Hold the Key?](https://hackernoon.com/blockchain-scalability-do-layer-i-solutions-hold-the-key-f3d9388c60f3)
+- [Overview of Layer 2 approaches: Plasma, State Channels, Side Chains, Roll Ups](https://nearprotocol.com/blog/layer-2/)
 
 ## To Do
 
