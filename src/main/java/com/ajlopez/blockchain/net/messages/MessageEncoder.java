@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.net.messages;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.encoding.RLP;
 import com.ajlopez.blockchain.encoding.StatusEncoder;
@@ -77,6 +78,15 @@ public class MessageEncoder {
             TrieType trieType = TrieType.values()[btype[0]];
 
             return new TrieNodeMessage(trieType, data);
+        }
+
+        if (bytes[0] == MessageType.GET_TRIE_NODE.ordinal()) {
+            byte[][] lbytes = RLP.decodeList(bbytes);
+            byte[] btype = RLP.decode(lbytes[0]);
+            byte[] bhash = RLP.decode(lbytes[1]);
+            TrieType trieType = TrieType.values()[btype[0]];
+
+            return new GetTrieNodeMessage(trieType, new Hash(bhash));
         }
 
         throw new UnsupportedOperationException();

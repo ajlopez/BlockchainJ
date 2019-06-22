@@ -175,4 +175,25 @@ public class MessageEncoderTest {
         Assert.assertEquals(TrieType.ACCOUNT, tnresult.getTrieType());
         Assert.assertArrayEquals(nodeData, tnresult.getTrieNode());
     }
+
+    @Test
+    public void encodeAndDecodeGetTrieNodeMessage() {
+        Hash trieHash = FactoryHelper.createRandomHash();
+
+        Message message = new GetTrieNodeMessage(TrieType.ACCOUNT, trieHash);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.GET_TRIE_NODE, result.getMessageType());
+
+        GetTrieNodeMessage gtnresult = (GetTrieNodeMessage)result;
+
+        Assert.assertEquals(TrieType.ACCOUNT, gtnresult.getTrieType());
+        Assert.assertEquals(trieHash, gtnresult.getTrieHash());
+    }
 }
