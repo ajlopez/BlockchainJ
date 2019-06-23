@@ -9,6 +9,8 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * Created by ajlopez on 14/06/2019.
  */
@@ -22,7 +24,10 @@ public class TrieCollectorTest {
 
         TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
-        trieCollector.saveNode(trie.getEncoded());
+        List<Hash> hashes = trieCollector.saveNode(trie.getEncoded());
+
+        Assert.assertNotNull(hashes);
+        Assert.assertTrue(hashes.isEmpty());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
         Assert.assertNull(keyValueStore.getValue(trie.getHash().getBytes()));
@@ -42,7 +47,7 @@ public class TrieCollectorTest {
 
         TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
-        trieCollector.saveNode(trie.getEncoded());
+        List<Hash> hashes = trieCollector.saveNode(trie.getEncoded());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
         Assert.assertArrayEquals(trie.getEncoded(), keyValueStore.getValue(trie.getHash().getBytes()));
@@ -51,8 +56,10 @@ public class TrieCollectorTest {
         Hash[] subHashes = trie.getSubHashes();
 
         for (int k = 0; k < subHashes.length; k++)
-            if (subHashes[k] != null)
+            if (subHashes[k] != null) {
                 Assert.assertFalse(trieStore.exists(subHashes[k]));
+                Assert.assertTrue(hashes.contains(subHashes[k]));
+            }
 
         Assert.assertFalse(trieCollector.getPendingHashes().isEmpty());
         Assert.assertEquals(1, trieCollector.getPendingHashes().size());
@@ -72,7 +79,10 @@ public class TrieCollectorTest {
         TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
         trieCollector.saveNode(trie.getEncoded());
-        trieCollector.saveNode(trie.getEncoded());
+        List<Hash> hashes = trieCollector.saveNode(trie.getEncoded());
+
+        Assert.assertNotNull(hashes);
+        Assert.assertTrue(hashes.isEmpty());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
         Assert.assertArrayEquals(trie.getEncoded(), keyValueStore.getValue(trie.getHash().getBytes()));
@@ -123,7 +133,10 @@ public class TrieCollectorTest {
         TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
         trieCollector.saveNode(trie.getEncoded());
-        trieCollector.saveNode(trie2.getEncoded());
+        List<Hash> hashes = trieCollector.saveNode(trie2.getEncoded());
+
+        Assert.assertNotNull(hashes);
+        Assert.assertTrue(hashes.isEmpty());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
         Assert.assertFalse(trieStore.exists(trie2.getHash()));

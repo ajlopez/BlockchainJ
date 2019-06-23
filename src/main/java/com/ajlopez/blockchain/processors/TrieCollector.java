@@ -4,13 +4,13 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.TrieStore;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by ajlopez on 14/06/2019.
  */
 public class TrieCollector {
+    private static final List<Hash> noHashes = Collections.EMPTY_LIST;
     private final TrieStore trieStore;
     private final Set<Hash> pendingHashes = new HashSet<>();
 
@@ -19,31 +19,40 @@ public class TrieCollector {
         this.expectHash(expectedHash);
     }
 
-    public void expectHash(Hash expectedHash) {
+    public boolean expectHash(Hash expectedHash) {
         if (this.trieStore.exists(expectedHash))
-            return;
+            return false;
+
+        if (this.pendingHashes.contains(expectedHash))
+            return false;
 
         this.pendingHashes.add(expectedHash);
+
+        return true;
     }
 
-    public void saveNode(byte[] nodeData) {
+    public List<Hash> saveNode(byte[] nodeData) {
         Trie trie = Trie.fromEncoded(nodeData, this.trieStore);
         Hash trieHash = trie.getHash();
 
         if (!this.pendingHashes.contains(trieHash))
-            return;
+            return noHashes;
 
         this.pendingHashes.remove(trieHash);
 
         if (this.trieStore.exists(trieHash))
-            return;
+            return noHashes;
 
         this.trieStore.save(trie);
 
         Hash[] subHashes = trie.getSubHashes();
+        List<Hash> newHashes = new ArrayList<>();
 
         for (int k = 0; k < subHashes.length; k++)
-            this.expectHash(subHashes[k]);
+            if (this.expectHash(subHashes[k]))
+                newHashes.add(subHashes[k]);
+
+        return newHashes;
     }
 
     public Set<Hash> getPendingHashes() {
