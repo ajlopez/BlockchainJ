@@ -27,4 +27,17 @@ public class WarpProcessorTest {
         Assert.assertNotNull(hashes);
         Assert.assertTrue(hashes.isEmpty());
     }
+
+    @Test
+    public void processBlockWithTransactions() {
+        Block block = FactoryHelper.createBlockChain(1, 10).getBlockByNumber(1);
+        TrieStore accountStore = new TrieStore(new HashMapStore());
+
+        WarpProcessor processor = new WarpProcessor(accountStore);
+
+        List<Hash> hashes = processor.processBlock(block);
+
+        Assert.assertNotNull(hashes);
+        Assert.assertFalse(hashes.isEmpty());
+    }
 }

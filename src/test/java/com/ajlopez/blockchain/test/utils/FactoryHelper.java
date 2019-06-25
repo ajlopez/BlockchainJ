@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.test.utils;
 
 import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
+import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.bc.BlockChain;
@@ -11,6 +12,7 @@ import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
+import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
@@ -61,6 +63,11 @@ public class FactoryHelper {
 
     public static Transaction createTransaction(int value) {
         Address sender = createRandomAddress();
+
+        return createTransaction(value, sender);
+    }
+
+    public static Transaction createTransaction(int value, Address sender) {
         Address receiver = createRandomAddress();
         BigInteger bivalue = BigInteger.valueOf(value);
 
@@ -72,6 +79,15 @@ public class FactoryHelper {
 
         for (int k = 0; k < ntransactions; k++)
             transactions.add(createTransaction(random.nextInt(10000)));
+
+        return transactions;
+    }
+
+    public static List<Transaction> createTransactions(int ntransactions, Address sender) {
+        List<Transaction> transactions = new ArrayList<>();
+
+        for (int k = 0; k < ntransactions; k++)
+            transactions.add(createTransaction(random.nextInt(10000), sender));
 
         return transactions;
     }
@@ -91,8 +107,25 @@ public class FactoryHelper {
         }
     }
 
+    public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks, int ntransactions, Address sender) {
+        Block block = blockChain.getBestBlock();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        for (int k = 0; k < nblocks; k++) {
+            Block newBlock = createBlock(block, coinbase, ntransactions, sender);
+            blockChain.connectBlock(newBlock);
+            block = newBlock;
+        }
+    }
+
     public static Block createBlock(Block parent, Address coinbase, int ntransactions) {
         List<Transaction> transactions = createTransactions(ntransactions);
+
+        return createBlock(parent, coinbase, transactions);
+    }
+
+    public static Block createBlock(Block parent, Address coinbase, int ntransactions, Address sender) {
+        List<Transaction> transactions = createTransactions(ntransactions, sender);
 
         return createBlock(parent, coinbase, transactions);
     }
@@ -106,8 +139,17 @@ public class FactoryHelper {
     }
 
     public static BlockChain createBlockChain(int size, int ntransactions) {
-        BlockChain blockChain = createBlockChainWithGenesis();
-        extendBlockChainWithBlocks(blockChain, size, ntransactions);
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+
+        Account sender = new Account(BigInteger.valueOf(1000000), 0, null, null);
+        Address senderAddress = FactoryHelper.createRandomAddress();
+
+        accountStore.putAccount(senderAddress, sender);
+        accountStore.save();
+
+        BlockChain blockChain = createBlockChainWithGenesis(accountStore);
+        extendBlockChainWithBlocks(blockChain, size, ntransactions, senderAddress);
 
         return blockChain;
     }

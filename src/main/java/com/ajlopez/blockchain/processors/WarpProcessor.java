@@ -28,7 +28,7 @@ public class WarpProcessor {
 
         if (this.accountStore.exists(hash))
             return Collections.emptyList();
-        
+
         accountCollectors.put(hash, new TrieCollector(this.accountStore, hash));
 
         return Collections.singletonList(hash);
