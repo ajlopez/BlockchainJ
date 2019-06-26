@@ -140,6 +140,11 @@ public class FactoryHelper {
 
     public static BlockChain createBlockChain(int size, int ntransactions) {
         TrieStore trieStore = new TrieStore(new HashMapStore());
+
+        return createBlockChain(trieStore, size, ntransactions);
+    }
+
+    public static BlockChain createBlockChain(TrieStore trieStore, int size, int ntransactions) {
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
         Account sender = new Account(BigInteger.valueOf(1000000), 0, null, null);
