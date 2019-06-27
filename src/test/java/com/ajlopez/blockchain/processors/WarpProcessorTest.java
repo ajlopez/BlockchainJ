@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ajlopez on 24/06/2019.
@@ -30,6 +31,18 @@ public class WarpProcessorTest {
     }
 
     @Test
+    public void noPendingHashesForRandomTopHash() {
+        TrieStore accountStore = new TrieStore(new HashMapStore());
+
+        WarpProcessor processor = new WarpProcessor(accountStore);
+
+        Set<Hash> hashes = processor.getPendingAccountHashes(FactoryHelper.createRandomHash());
+
+        Assert.assertNotNull(hashes);
+        Assert.assertTrue(hashes.isEmpty());
+    }
+
+    @Test
     public void processBlockWithTransactions() {
         Block block = FactoryHelper.createBlockChain(1, 10).getBlockByNumber(1);
         TrieStore accountStore = new TrieStore(new HashMapStore());
@@ -42,6 +55,13 @@ public class WarpProcessorTest {
         Assert.assertFalse(hashes.isEmpty());
         Assert.assertTrue(hashes.contains(block.getStateRootHash()));
         Assert.assertEquals(1, hashes.size());
+
+        Set<Hash> pendingHashes = processor.getPendingAccountHashes(block.getStateRootHash());
+
+        Assert.assertNotNull(pendingHashes);
+        Assert.assertFalse(pendingHashes.isEmpty());
+        Assert.assertTrue(pendingHashes.contains(block.getStateRootHash()));
+        Assert.assertEquals(1, pendingHashes.size());
     }
 
     @Test

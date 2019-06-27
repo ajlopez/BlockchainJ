@@ -4,10 +4,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.TrieStore;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ajlopez on 24/06/2019.
@@ -36,5 +33,12 @@ public class WarpProcessor {
 
     public List<Hash> processAccountNode(Hash topHash, byte[] nodeData) {
         return this.accountCollectors.get(topHash).saveNode(nodeData);
+    }
+
+    public Set<Hash> getPendingAccountHashes(Hash topHash) {
+        if (!this.accountCollectors.containsKey(topHash))
+            return Collections.EMPTY_SET;
+
+        return this.accountCollectors.get(topHash).getPendingHashes();
     }
 }
