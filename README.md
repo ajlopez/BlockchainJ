@@ -37,6 +37,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Overview of Layer 2 approaches: Plasma, State Channels, Side Chains, Roll Ups](https://nearprotocol.com/blog/layer-2/)
 - [Blockchain Consensus: The Past, Present, and Future](https://hackernoon.com/blockchain-consensus-the-past-present-and-future-112cd1a4189a)
 - [Warp Sync](https://wiki.parity.io/Warp-Sync)
+- [What is a light client and why you should care?](https://www.parity.io/what-is-a-light-client/)
 
 ## To Do
 
