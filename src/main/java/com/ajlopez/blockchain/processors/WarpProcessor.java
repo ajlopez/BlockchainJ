@@ -39,6 +39,6 @@ public class WarpProcessor {
         if (!this.accountCollectors.containsKey(topHash))
             return Collections.EMPTY_SET;
 
-        return this.accountCollectors.get(topHash).getPendingHashes();
+        return new HashSet<>(this.accountCollectors.get(topHash).getPendingHashes());
     }
 }

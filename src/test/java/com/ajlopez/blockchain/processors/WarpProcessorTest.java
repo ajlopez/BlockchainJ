@@ -117,7 +117,7 @@ public class WarpProcessorTest {
                 processor.processAccountNode(topHash, trieStore0.retrieve(pendingHash).getEncoded());
 
         AccountStore accounts = new AccountStore(accountStore.retrieve(topHash));
-        
+
         for (Transaction transaction : block.getTransactions()) {
             Account account = accounts.getAccount(transaction.getReceiver());
             Assert.assertEquals(transaction.getValue(), account.getBalance());

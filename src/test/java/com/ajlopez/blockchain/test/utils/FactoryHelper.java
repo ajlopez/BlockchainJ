@@ -10,10 +10,14 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.ExecutionContext;
+import com.ajlopez.blockchain.execution.TopExecutionContext;
+import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
+import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -107,12 +111,12 @@ public class FactoryHelper {
         }
     }
 
-    public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks, int ntransactions, Address sender) {
+    public static void extendBlockChainWithBlocks(AccountStoreProvider accountStoreProvider, BlockChain blockChain, int nblocks, int ntransactions, Address sender) {
         Block block = blockChain.getBestBlock();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         for (int k = 0; k < nblocks; k++) {
-            Block newBlock = createBlock(block, coinbase, ntransactions, sender);
+            Block newBlock = createBlock(accountStoreProvider, block, coinbase, ntransactions, sender);
             blockChain.connectBlock(newBlock);
             block = newBlock;
         }
@@ -124,10 +128,21 @@ public class FactoryHelper {
         return createBlock(parent, coinbase, transactions);
     }
 
-    public static Block createBlock(Block parent, Address coinbase, int ntransactions, Address sender) {
+    public static Block createBlock(AccountStoreProvider accountStoreProvider, Block parent, Address coinbase, int ntransactions, Address sender) {
         List<Transaction> transactions = createTransactions(ntransactions, sender);
 
-        return createBlock(parent, coinbase, transactions);
+        return createBlock(accountStoreProvider, parent, coinbase, transactions);
+    }
+
+    public static Block createBlock(AccountStoreProvider accountStoreProvider, Block parent, Address coinbase, List<Transaction> transactions) {
+        AccountStore accountStore = accountStoreProvider.retrieve(parent.getStateRootHash());
+
+        ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
+        TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
+
+        transactionExecutor.executeTransactions(transactions);
+
+        return new Block(parent.getNumber() + 1, parent.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase);
     }
 
     public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions) {
@@ -145,7 +160,8 @@ public class FactoryHelper {
     }
 
     public static BlockChain createBlockChain(TrieStore trieStore, int size, int ntransactions) {
-        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        AccountStore accountStore = accountStoreProvider.retrieve(Trie.EMPTY_TRIE_HASH);
 
         Account sender = new Account(BigInteger.valueOf(1000000), 0, null, null);
         Address senderAddress = FactoryHelper.createRandomAddress();
@@ -154,7 +170,7 @@ public class FactoryHelper {
         accountStore.save();
 
         BlockChain blockChain = createBlockChainWithGenesis(accountStore);
-        extendBlockChainWithBlocks(blockChain, size, ntransactions, senderAddress);
+        extendBlockChainWithBlocks(accountStoreProvider, blockChain, size, ntransactions, senderAddress);
 
         return blockChain;
     }
