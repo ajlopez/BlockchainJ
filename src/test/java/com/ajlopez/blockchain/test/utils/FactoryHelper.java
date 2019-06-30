@@ -68,14 +68,14 @@ public class FactoryHelper {
     public static Transaction createTransaction(int value) {
         Address sender = createRandomAddress();
 
-        return createTransaction(value, sender);
+        return createTransaction(value, sender, 0);
     }
 
-    public static Transaction createTransaction(int value, Address sender) {
+    public static Transaction createTransaction(int value, Address sender, long nonce) {
         Address receiver = createRandomAddress();
         BigInteger bivalue = BigInteger.valueOf(value);
 
-        return new Transaction(sender, receiver, bivalue, 0);
+        return new Transaction(sender, receiver, bivalue, nonce);
     }
 
     public static List<Transaction> createTransactions(int ntransactions) {
@@ -87,11 +87,11 @@ public class FactoryHelper {
         return transactions;
     }
 
-    public static List<Transaction> createTransactions(int ntransactions, Address sender) {
+    public static List<Transaction> createTransactions(int ntransactions, Address sender, long nonce) {
         List<Transaction> transactions = new ArrayList<>();
 
         for (int k = 0; k < ntransactions; k++)
-            transactions.add(createTransaction(random.nextInt(10000), sender));
+            transactions.add(createTransaction(random.nextInt(10000), sender, nonce++));
 
         return transactions;
     }
@@ -111,14 +111,15 @@ public class FactoryHelper {
         }
     }
 
-    public static void extendBlockChainWithBlocks(AccountStoreProvider accountStoreProvider, BlockChain blockChain, int nblocks, int ntransactions, Address sender) {
+    public static void extendBlockChainWithBlocks(AccountStoreProvider accountStoreProvider, BlockChain blockChain, int nblocks, int ntransactions, Address sender, long nonce) {
         Block block = blockChain.getBestBlock();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         for (int k = 0; k < nblocks; k++) {
-            Block newBlock = createBlock(accountStoreProvider, block, coinbase, ntransactions, sender);
+            Block newBlock = createBlock(accountStoreProvider, block, coinbase, ntransactions, sender, nonce);
             blockChain.connectBlock(newBlock);
             block = newBlock;
+            nonce += ntransactions;
         }
     }
 
@@ -128,8 +129,8 @@ public class FactoryHelper {
         return createBlock(parent, coinbase, transactions);
     }
 
-    public static Block createBlock(AccountStoreProvider accountStoreProvider, Block parent, Address coinbase, int ntransactions, Address sender) {
-        List<Transaction> transactions = createTransactions(ntransactions, sender);
+    public static Block createBlock(AccountStoreProvider accountStoreProvider, Block parent, Address coinbase, int ntransactions, Address sender, long nonce) {
+        List<Transaction> transactions = createTransactions(ntransactions, sender, nonce);
 
         return createBlock(accountStoreProvider, parent, coinbase, transactions);
     }
@@ -170,7 +171,7 @@ public class FactoryHelper {
         accountStore.save();
 
         BlockChain blockChain = createBlockChainWithGenesis(accountStore);
-        extendBlockChainWithBlocks(accountStoreProvider, blockChain, size, ntransactions, senderAddress);
+        extendBlockChainWithBlocks(accountStoreProvider, blockChain, size, ntransactions, senderAddress, 0);
 
         return blockChain;
     }

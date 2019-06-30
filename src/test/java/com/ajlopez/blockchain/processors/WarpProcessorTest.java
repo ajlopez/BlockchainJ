@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
@@ -100,13 +101,26 @@ public class WarpProcessorTest {
         KeyValueStore keyValueStore0 = new HashMapStore();
         TrieStore trieStore0 = new TrieStore(keyValueStore0);
 
-        Block block = FactoryHelper.createBlockChain(trieStore0, 1, 10).getBlockByNumber(1);
+        BlockChain blockChain = FactoryHelper.createBlockChain(trieStore0, 1, 10);
+        Block genesis = blockChain.getBlockByNumber(0);
+        Block block = blockChain.getBlockByNumber(1);
+
+        Assert.assertNotEquals(genesis.getStateRootHash(), block.getStateRootHash());
+        Assert.assertFalse(block.getTransactions().isEmpty());
+        Assert.assertEquals(10, block.getTransactions().size());
 
         Assert.assertTrue(trieStore0.exists(block.getStateRootHash()));
 
-        TrieStore accountStore = new TrieStore(new HashMapStore());
+        TrieStore accountTrieStore = new TrieStore(new HashMapStore());
+        AccountStore accountStore0 = new AccountStore(trieStore0.retrieve(block.getStateRootHash()));
 
-        WarpProcessor processor = new WarpProcessor(accountStore);
+        for (Transaction transaction : block.getTransactions()) {
+            Account account0 = accountStore0.getAccount(transaction.getReceiver());
+            Assert.assertEquals(transaction.getValue(), account0.getBalance());
+            Assert.assertEquals(0, account0.getNonce());
+        }
+
+        WarpProcessor processor = new WarpProcessor(accountTrieStore);
 
         processor.processBlock(block);
 
@@ -116,10 +130,12 @@ public class WarpProcessorTest {
             for (Hash pendingHash : pendingHashes)
                 processor.processAccountNode(topHash, trieStore0.retrieve(pendingHash).getEncoded());
 
-        AccountStore accounts = new AccountStore(accountStore.retrieve(topHash));
+        Assert.assertTrue(accountTrieStore.exists(block.getStateRootHash()));
+
+        AccountStore accountStore = new AccountStore(accountTrieStore.retrieve(topHash));
 
         for (Transaction transaction : block.getTransactions()) {
-            Account account = accounts.getAccount(transaction.getReceiver());
+            Account account = accountStore.getAccount(transaction.getReceiver());
             Assert.assertEquals(transaction.getValue(), account.getBalance());
             Assert.assertEquals(0, account.getNonce());
         }
