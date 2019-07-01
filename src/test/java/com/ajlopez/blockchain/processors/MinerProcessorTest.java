@@ -101,7 +101,8 @@ public class MinerProcessorTest {
 
     @Test
     public void processBlockWithOneTransaction() {
-        Transaction tx = FactoryHelper.createTransaction(100);
+        Address sender = FactoryHelper.createRandomAddress();
+        Transaction tx = FactoryHelper.createTransaction(100, sender, 0);
 
         TransactionPool transactionPool = new TransactionPool();
         transactionPool.addTransaction(tx);
@@ -110,7 +111,7 @@ public class MinerProcessorTest {
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
         Account account = new Account(BigInteger.valueOf(1000), 0, null, null);
-        accountStore.putAccount(tx.getSender(), account);
+        accountStore.putAccount(sender, account);
         accountStore.save();
 
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
