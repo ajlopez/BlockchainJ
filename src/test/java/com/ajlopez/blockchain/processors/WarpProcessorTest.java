@@ -6,7 +6,6 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.execution.AccountState;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.KeyValueStore;
@@ -89,7 +88,7 @@ public class WarpProcessorTest {
         Assert.assertTrue(hashes.contains(block.getStateRootHash()));
         Assert.assertEquals(1, hashes.size());
 
-        List<Hash> result = processor.processAccountNode(block.getStateRootHash(), trieStore0.retrieve(block.getStateRootHash()).getEncoded());
+        Set<Hash> result = processor.processAccountNode(block.getStateRootHash(), trieStore0.retrieve(block.getStateRootHash()).getEncoded());
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());

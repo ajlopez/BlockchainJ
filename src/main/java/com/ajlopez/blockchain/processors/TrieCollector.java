@@ -10,7 +10,7 @@ import java.util.*;
  * Created by ajlopez on 14/06/2019.
  */
 public class TrieCollector {
-    private static final List<Hash> noHashes = Collections.EMPTY_LIST;
+    private static final Set<Hash> noHashes = Collections.EMPTY_SET;
     private final TrieStore trieStore;
     private final Set<Hash> pendingHashes = new HashSet<>();
 
@@ -31,7 +31,7 @@ public class TrieCollector {
         return true;
     }
 
-    public List<Hash> saveNode(byte[] nodeData) {
+    public Set<Hash> saveNode(byte[] nodeData) {
         Trie trie = Trie.fromEncoded(nodeData, this.trieStore);
         Hash trieHash = trie.getHash();
 
@@ -46,7 +46,7 @@ public class TrieCollector {
         this.trieStore.save(trie);
 
         Hash[] subHashes = trie.getSubHashes();
-        List<Hash> newHashes = new ArrayList<>();
+        Set<Hash> newHashes = new HashSet<>();
 
         for (int k = 0; k < subHashes.length; k++)
             if (this.expectHash(subHashes[k]))

@@ -9,7 +9,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ajlopez on 14/06/2019.
@@ -24,7 +24,7 @@ public class TrieCollectorTest {
 
         TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
-        List<Hash> hashes = trieCollector.saveNode(trie.getEncoded());
+        Set<Hash> hashes = trieCollector.saveNode(trie.getEncoded());
 
         Assert.assertNotNull(hashes);
         Assert.assertTrue(hashes.isEmpty());
@@ -47,7 +47,7 @@ public class TrieCollectorTest {
 
         TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
-        List<Hash> hashes = trieCollector.saveNode(trie.getEncoded());
+        Set<Hash> hashes = trieCollector.saveNode(trie.getEncoded());
 
         Assert.assertTrue(trieStore.exists(trie.getHash()));
         Assert.assertArrayEquals(trie.getEncoded(), keyValueStore.getValue(trie.getHash().getBytes()));
@@ -79,7 +79,7 @@ public class TrieCollectorTest {
         TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
         trieCollector.saveNode(trie.getEncoded());
-        List<Hash> hashes = trieCollector.saveNode(trie.getEncoded());
+        Set<Hash> hashes = trieCollector.saveNode(trie.getEncoded());
 
         Assert.assertNotNull(hashes);
         Assert.assertTrue(hashes.isEmpty());
@@ -133,7 +133,7 @@ public class TrieCollectorTest {
         TrieCollector trieCollector = new TrieCollector(trieStore, trie.getHash());
 
         trieCollector.saveNode(trie.getEncoded());
-        List<Hash> hashes = trieCollector.saveNode(trie2.getEncoded());
+        Set<Hash> hashes = trieCollector.saveNode(trie2.getEncoded());
 
         Assert.assertNotNull(hashes);
         Assert.assertTrue(hashes.isEmpty());

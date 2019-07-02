@@ -31,7 +31,7 @@ public class WarpProcessor {
         return Collections.singletonList(hash);
     }
 
-    public List<Hash> processAccountNode(Hash topHash, byte[] nodeData) {
+    public Set<Hash> processAccountNode(Hash topHash, byte[] nodeData) {
         return this.accountCollectors.get(topHash).saveNode(nodeData);
     }
 
