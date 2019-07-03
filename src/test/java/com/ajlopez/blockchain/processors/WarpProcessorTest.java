@@ -14,7 +14,6 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,7 +27,7 @@ public class WarpProcessorTest {
 
         WarpProcessor processor = new WarpProcessor(accountStore);
 
-        List<Hash> hashes = processor.processBlock(block);
+        Set<Hash> hashes = processor.processBlock(block);
 
         Assert.assertNotNull(hashes);
         Assert.assertTrue(hashes.isEmpty());
@@ -53,7 +52,7 @@ public class WarpProcessorTest {
 
         WarpProcessor processor = new WarpProcessor(accountStore);
 
-        List<Hash> hashes = processor.processBlock(block);
+        Set<Hash> hashes = processor.processBlock(block);
 
         Assert.assertNotNull(hashes);
         Assert.assertFalse(hashes.isEmpty());
@@ -81,7 +80,7 @@ public class WarpProcessorTest {
 
         WarpProcessor processor = new WarpProcessor(accountStore);
 
-        List<Hash> hashes = processor.processBlock(block);
+        Set<Hash> hashes = processor.processBlock(block);
 
         Assert.assertNotNull(hashes);
         Assert.assertFalse(hashes.isEmpty());

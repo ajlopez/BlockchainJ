@@ -17,18 +17,18 @@ public class WarpProcessor {
         this.accountStore = accountStore;
     }
 
-    public List<Hash> processBlock(Block block) {
+    public Set<Hash> processBlock(Block block) {
         Hash hash = block.getStateRootHash();
 
         if (accountCollectors.containsKey(hash))
-            return Collections.emptyList();
+            return Collections.emptySet();
 
         if (this.accountStore.exists(hash))
-            return Collections.emptyList();
+            return Collections.emptySet();
 
         accountCollectors.put(hash, new TrieCollector(this.accountStore, hash));
 
-        return Collections.singletonList(hash);
+        return Collections.singleton(hash);
     }
 
     public Set<Hash> processAccountNode(Hash topHash, byte[] nodeData) {
