@@ -21,7 +21,7 @@ public class WarpProcessor {
         Hash hash = block.getStateRootHash();
 
         if (accountCollectors.containsKey(hash))
-            return Collections.emptySet();
+            return accountCollectors.get(hash).getPendingHashes();
 
         if (this.accountStore.exists(hash))
             return Collections.emptySet();

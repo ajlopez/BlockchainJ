@@ -68,6 +68,29 @@ public class WarpProcessorTest {
     }
 
     @Test
+    public void processBlockWithTransactionsTwice() {
+        Block block = FactoryHelper.createBlockChain(1, 10).getBlockByNumber(1);
+        TrieStore accountStore = new TrieStore(new HashMapStore());
+
+        WarpProcessor processor = new WarpProcessor(accountStore);
+
+        processor.processBlock(block);
+        Set<Hash> hashes = processor.processBlock(block);
+
+        Assert.assertNotNull(hashes);
+        Assert.assertFalse(hashes.isEmpty());
+        Assert.assertTrue(hashes.contains(block.getStateRootHash()));
+        Assert.assertEquals(1, hashes.size());
+
+        Set<Hash> pendingHashes = processor.getPendingAccountHashes(block.getStateRootHash());
+
+        Assert.assertNotNull(pendingHashes);
+        Assert.assertFalse(pendingHashes.isEmpty());
+        Assert.assertTrue(pendingHashes.contains(block.getStateRootHash()));
+        Assert.assertEquals(1, pendingHashes.size());
+    }
+
+    @Test
     public void processBlockWithTransactionsAndTopNode() {
         KeyValueStore keyValueStore0 = new HashMapStore();
         TrieStore trieStore0 = new TrieStore(keyValueStore0);
