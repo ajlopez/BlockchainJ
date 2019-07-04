@@ -117,6 +117,19 @@ public class WarpProcessorTest {
         Assert.assertTrue(accountStore.exists(block.getStateRootHash()));
     }
 
+
+    @Test
+    public void processAccountNodeWithRandomTopHash() {
+        TrieStore accountStore = new TrieStore(new HashMapStore());
+
+        WarpProcessor processor = new WarpProcessor(accountStore);
+
+        Set<Hash> result = processor.processAccountNode(FactoryHelper.createRandomHash(), FactoryHelper.createRandomBytes(42));
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+    }
+
     @Test
     public void copyCompleteStateOfBlockWithTransactions() {
         KeyValueStore keyValueStore0 = new HashMapStore();

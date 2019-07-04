@@ -32,6 +32,9 @@ public class WarpProcessor {
     }
 
     public Set<Hash> processAccountNode(Hash topHash, byte[] nodeData) {
+        if (!this.accountCollectors.containsKey(topHash))
+            return Collections.emptySet();
+        
         return this.accountCollectors.get(topHash).saveNode(nodeData);
     }
 
