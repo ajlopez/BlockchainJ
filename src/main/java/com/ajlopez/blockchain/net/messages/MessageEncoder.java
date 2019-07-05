@@ -73,11 +73,12 @@ public class MessageEncoder {
 
         if (bytes[0] == MessageType.TRIE_NODE.ordinal()) {
             byte[][] lbytes = RLP.decodeList(bbytes);
-            byte[] btype = RLP.decode(lbytes[0]);
-            byte[] data = RLP.decode(lbytes[1]);
+            byte[] bhash = RLP.decode(lbytes[0]);
+            byte[] btype = RLP.decode(lbytes[1]);
+            byte[] data = RLP.decode(lbytes[2]);
             TrieType trieType = TrieType.values()[btype[0]];
 
-            return new TrieNodeMessage(trieType, data);
+            return new TrieNodeMessage(new Hash(bhash), trieType, data);
         }
 
         if (bytes[0] == MessageType.GET_TRIE_NODE.ordinal()) {
