@@ -83,11 +83,12 @@ public class MessageEncoder {
 
         if (bytes[0] == MessageType.GET_TRIE_NODE.ordinal()) {
             byte[][] lbytes = RLP.decodeList(bbytes);
-            byte[] btype = RLP.decode(lbytes[0]);
-            byte[] bhash = RLP.decode(lbytes[1]);
+            byte[] btophash = RLP.decode(lbytes[0]);
+            byte[] btype = RLP.decode(lbytes[1]);
+            byte[] bhash = RLP.decode(lbytes[2]);
             TrieType trieType = TrieType.values()[btype[0]];
 
-            return new GetTrieNodeMessage(trieType, new Hash(bhash));
+            return new GetTrieNodeMessage(new Hash(btophash), trieType, new Hash(bhash));
         }
 
         throw new UnsupportedOperationException();

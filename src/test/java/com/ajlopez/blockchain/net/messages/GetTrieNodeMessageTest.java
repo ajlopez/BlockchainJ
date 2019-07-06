@@ -11,11 +11,13 @@ import org.junit.Test;
 public class GetTrieNodeMessageTest {
     @Test
     public void createMessage() {
+        Hash topHash = FactoryHelper.createRandomHash();
         TrieType trieType = TrieType.ACCOUNT;
         Hash trieHash = FactoryHelper.createRandomHash();
 
-        GetTrieNodeMessage message = new GetTrieNodeMessage(trieType, trieHash);
+        GetTrieNodeMessage message = new GetTrieNodeMessage(topHash, trieType, trieHash);
 
+        Assert.assertEquals(topHash, message.getTopHash());
         Assert.assertEquals(trieType, message.getTrieType());
         Assert.assertEquals(trieHash, message.getTrieHash());
     }

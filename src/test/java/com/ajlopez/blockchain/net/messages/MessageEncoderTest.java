@@ -180,9 +180,10 @@ public class MessageEncoderTest {
 
     @Test
     public void encodeAndDecodeGetTrieNodeMessage() {
+        Hash topHash = FactoryHelper.createRandomHash();
         Hash trieHash = FactoryHelper.createRandomHash();
 
-        Message message = new GetTrieNodeMessage(TrieType.ACCOUNT, trieHash);
+        Message message = new GetTrieNodeMessage(topHash, TrieType.ACCOUNT, trieHash);
 
         byte[] bytes = MessageEncoder.encode(message);
 
@@ -195,6 +196,7 @@ public class MessageEncoderTest {
 
         GetTrieNodeMessage gtnresult = (GetTrieNodeMessage)result;
 
+        Assert.assertEquals(topHash, gtnresult.getTopHash());
         Assert.assertEquals(TrieType.ACCOUNT, gtnresult.getTrieType());
         Assert.assertEquals(trieHash, gtnresult.getTrieHash());
     }
