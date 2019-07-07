@@ -36,7 +36,7 @@ public class NodeProcessor implements PeerNode {
         TransactionProcessor transactionProcessor = new TransactionProcessor(this.transactionPool);
         PeerProcessor peerProcessor = new PeerProcessor();
         this.sendProcessor = new SendProcessor(this.peer);
-        MessageProcessor messageProcessor = new MessageProcessor(this.blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor);
+        MessageProcessor messageProcessor = new MessageProcessor(this.blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor, null);
         this.receiveProcessor = new ReceiveProcessor(messageProcessor);
         this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, new AccountStoreProvider(accountTrieStore), coinbase);
         this.minerProcessor.onMinedBlock(blk -> {

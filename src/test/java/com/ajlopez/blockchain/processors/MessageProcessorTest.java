@@ -8,6 +8,9 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
+import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.KeyValueStore;
+import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.simples.SimpleMessageChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -16,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ajlopez on 27/01/2018.
@@ -380,6 +384,30 @@ public class MessageProcessorTest {
 
             Assert.assertEquals(k, gmsg.getNumber());
         }
+    }
+
+    @Test
+    public void processNodeTrieMessage() {
+        KeyValueStore keyValueStore0 = new HashMapStore();
+        TrieStore trieStore0 = new TrieStore(keyValueStore0);
+
+        Block block = FactoryHelper.createBlockChain(trieStore0, 1, 10).getBlockByNumber(1);
+        TrieStore accountStore = new TrieStore(new HashMapStore());
+
+        WarpProcessor warpProcessor = new WarpProcessor(accountStore);
+        warpProcessor.processBlock(block);
+
+        MessageProcessor processor = new MessageProcessor(null, null, null, null, warpProcessor);
+
+        TrieNodeMessage message = new TrieNodeMessage(block.getStateRootHash(), TrieType.ACCOUNT, trieStore0.retrieve(block.getStateRootHash()).getEncoded());
+
+        processor.processMessage(message, null);
+
+        Set<Hash> result = warpProcessor.getPendingAccountHashes(block.getStateRootHash());
+        
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertTrue(accountStore.exists(block.getStateRootHash()));
     }
 
     public static void expectedMessage(SimpleMessageChannel channel, Peer expectedSender, Message expectedMessage) {

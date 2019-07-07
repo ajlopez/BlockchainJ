@@ -18,12 +18,14 @@ public class MessageProcessor {
     private final TransactionProcessor transactionProcessor;
     private final PeerProcessor peerProcessor;
     private final SendProcessor outputProcessor;
+    private final WarpProcessor warpProcessor;
 
-    public MessageProcessor(BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor) {
+    public MessageProcessor(BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor, WarpProcessor warpProcessor) {
         this.blockProcessor = blockProcessor;
         this.transactionProcessor = transactionProcessor;
         this.peerProcessor = peerProcessor;
         this.outputProcessor = outputProcessor;
+        this.warpProcessor = warpProcessor;
     }
 
     public void processMessage(Message message, Peer sender) {
@@ -39,6 +41,8 @@ public class MessageProcessor {
             this.processTransactionMessage((TransactionMessage)message, sender);
         else if (msgtype == MessageType.STATUS)
             this.processStatusMessage((StatusMessage)message, sender);
+        else if (msgtype == MessageType.TRIE_NODE)
+            this.processTrieNodeMessage((TrieNodeMessage)message);
     }
 
     private void processBlockMessage(BlockMessage message, Peer sender) {
@@ -120,5 +124,9 @@ public class MessageProcessor {
 
         if (block != null)
             outputProcessor.postMessage(sender, new BlockMessage(block));
+    }
+
+    private void processTrieNodeMessage(TrieNodeMessage message) {
+        this.warpProcessor.processAccountNode(message.getTopHash(), message.getTrieNode());
     }
 }
