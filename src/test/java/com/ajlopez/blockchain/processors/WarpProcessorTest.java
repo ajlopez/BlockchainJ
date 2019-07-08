@@ -174,4 +174,35 @@ public class WarpProcessorTest {
             Assert.assertEquals(0, account.getNonce());
         }
     }
+
+    @Test
+    public void expectedBlocks() {
+        TrieStore accountStore = new TrieStore(new HashMapStore());
+
+        WarpProcessor processor = new WarpProcessor(accountStore);
+
+        Set<Long> result1 = processor.getExpectedBlocks();
+
+        Assert.assertNotNull(result1);
+        Assert.assertTrue(result1.isEmpty());
+
+        processor.expectBlock(42);
+
+        Set<Long> result2 = processor.getExpectedBlocks();
+
+        Assert.assertNotNull(result2);
+        Assert.assertFalse(result2.isEmpty());
+        Assert.assertTrue(result2.contains(Long.valueOf(42)));
+        Assert.assertEquals(1, result2.size());
+
+        processor.expectBlock(3);
+
+        Set<Long> result3 = processor.getExpectedBlocks();
+
+        Assert.assertNotNull(result3);
+        Assert.assertFalse(result3.isEmpty());
+        Assert.assertTrue(result3.contains(Long.valueOf(42)));
+        Assert.assertTrue(result3.contains(Long.valueOf(3)));
+        Assert.assertEquals(2, result3.size());
+    }
 }

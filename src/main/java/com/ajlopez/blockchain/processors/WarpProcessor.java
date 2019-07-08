@@ -12,10 +12,17 @@ import java.util.*;
 public class WarpProcessor {
     private final TrieStore accountStore;
     private final Map<Hash, TrieCollector> accountCollectors = new HashMap<>();
+    private final Set<Long> expectedBlocks = new HashSet<>();
 
     public WarpProcessor(TrieStore accountStore) {
         this.accountStore = accountStore;
     }
+
+    public void expectBlock(long height) {
+        this.expectedBlocks.add(height);
+    }
+
+    public Set<Long> getExpectedBlocks() { return this.expectedBlocks; }
 
     public Set<Hash> processBlock(Block block) {
         Hash hash = block.getStateRootHash();

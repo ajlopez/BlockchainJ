@@ -404,7 +404,7 @@ public class MessageProcessorTest {
         processor.processMessage(message, null);
 
         Set<Hash> result = warpProcessor.getPendingAccountHashes(block.getStateRootHash());
-        
+
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertTrue(accountStore.exists(block.getStateRootHash()));
