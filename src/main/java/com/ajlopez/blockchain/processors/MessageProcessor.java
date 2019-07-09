@@ -99,7 +99,7 @@ public class MessageProcessor {
 
         long peerNumber = this.peerProcessor.getPeerBestBlockNumber(senderId);
 
-        this.peerProcessor.registerBestBlockNumber(senderId, message.getStatus().getBestBlockNumber());
+        this.peerProcessor.registerBestBlockNumber(senderId, message.getStatus().getNetworkNumber(), message.getStatus().getBestBlockNumber());
 
         long fromNumber = this.blockProcessor.getBestBlockNumber();
 

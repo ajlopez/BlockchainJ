@@ -283,7 +283,7 @@ public class MessageProcessorTest {
     @Test
     public void processStatusMessageAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        PeerProcessor peerProcessor = new PeerProcessor();
+        PeerProcessor peerProcessor = new PeerProcessor(1);
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, peerProcessor, outputProcessor);
@@ -316,7 +316,7 @@ public class MessageProcessorTest {
     @Test
     public void processStatusMessageTwiceWithSameHeightAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        PeerProcessor peerProcessor = new PeerProcessor();
+        PeerProcessor peerProcessor = new PeerProcessor(1);
         Peer firstPeer = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(firstPeer);
 
@@ -352,7 +352,7 @@ public class MessageProcessorTest {
     @Test
     public void processStatusMessageTwiceWithDifferentHeightsAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
-        PeerProcessor peerProcessor = new PeerProcessor();
+        PeerProcessor peerProcessor = new PeerProcessor(1);
         Peer firstPeer = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(firstPeer);
 
