@@ -95,6 +95,9 @@ public class MessageProcessor {
     }
 
     private void processStatusMessage(StatusMessage message, Peer sender) {
+        if (message.getStatus().getNetworkNumber() != this.peerProcessor.getNetworkNumber())
+            return;
+
         Hash senderId = sender.getId();
 
         long peerNumber = this.peerProcessor.getPeerBestBlockNumber(senderId);

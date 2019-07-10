@@ -18,6 +18,8 @@ public class PeerProcessor {
         this.networkNumber = networkNumber;
     }
 
+    public long getNetworkNumber() { return this.networkNumber; }
+
     public long getBestBlockNumber() {
         return this.bestBlockNumber;
     }
