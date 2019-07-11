@@ -33,7 +33,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList(), coinbase, null);
+        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration(42));
 
         runner.start();
 
@@ -59,7 +59,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList(), coinbase, null);
+        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration(42));
 
         runner.start();
 
