@@ -10,5 +10,6 @@ public enum MessageType {
     GET_BLOCK_BY_HASH,
     GET_BLOCK_BY_NUMBER,
     TRIE_NODE,
-    GET_TRIE_NODE
+    GET_TRIE_NODE,
+    GET_BLOCK_HASHES
 }
