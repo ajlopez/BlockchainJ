@@ -91,6 +91,15 @@ public class MessageEncoder {
             return new GetTrieNodeMessage(new Hash(btophash), trieType, new Hash(bhash));
         }
 
+        if (bytes[0] == MessageType.GET_BLOCK_HASHES.ordinal()) {
+            byte[][] lbytes = RLP.decodeList(bbytes);
+            byte[] bheight = RLP.decode(lbytes[0]);
+            byte[] bno = RLP.decode(lbytes[1]);
+            byte[] bgap = RLP.decode(lbytes[2]);
+
+            return new GetBlockHashesMessage(ByteUtils.bytesToUnsignedLong(bheight), ByteUtils.bytesToUnsignedInteger(bno), ByteUtils.bytesToUnsignedInteger(bgap));
+        }
+
         throw new UnsupportedOperationException();
     }
 }

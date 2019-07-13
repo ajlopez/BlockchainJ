@@ -200,4 +200,24 @@ public class MessageEncoderTest {
         Assert.assertEquals(TrieType.ACCOUNT, gtnresult.getTrieType());
         Assert.assertEquals(trieHash, gtnresult.getTrieHash());
     }
+
+    @Test
+    public void encodeAndDecodeGetBlockHashesMessage() {
+        Message message = new GetBlockHashesMessage(42, 10, 2);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.GET_BLOCK_HASHES, result.getMessageType());
+
+        GetBlockHashesMessage gbhresult = (GetBlockHashesMessage)result;
+
+        Assert.assertEquals(42, gbhresult.getBlockHeight());
+        Assert.assertEquals(10, gbhresult.getNoBlocks());
+        Assert.assertEquals(2, gbhresult.getBlockGap());
+    }
 }

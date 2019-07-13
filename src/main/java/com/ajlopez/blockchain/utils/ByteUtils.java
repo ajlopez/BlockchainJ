@@ -85,6 +85,10 @@ public class ByteUtils {
         return result;
     }
 
+    public static int bytesToUnsignedInteger(byte[] bytes) {
+        return bytesToUnsignedInteger(bytes, 0);
+    }
+
     public static int bytesToUnsignedInteger(byte[] bytes, int offset) {
         int result = 0;
 

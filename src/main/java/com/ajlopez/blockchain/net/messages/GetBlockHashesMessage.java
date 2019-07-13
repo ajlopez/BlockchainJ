@@ -1,5 +1,8 @@
 package com.ajlopez.blockchain.net.messages;
 
+import com.ajlopez.blockchain.encoding.RLP;
+import com.ajlopez.blockchain.utils.ByteUtils;
+
 /**
  * Created by ajlopez on 12/07/2019.
  */
@@ -29,7 +32,11 @@ public class GetBlockHashesMessage extends Message {
 
     @Override
     public byte[] getPayload() {
-        return null;
+        byte[] bheight = ByteUtils.unsignedLongToNormalizedBytes(this.blockHeight);
+        byte[] bno = ByteUtils.unsignedIntegerToNormalizedBytes(this.noBlocks);
+        byte[] bgap = ByteUtils.unsignedIntegerToNormalizedBytes(this.blockGap);
+
+        return RLP.encodeList(RLP.encode(bheight), RLP.encode(bno), RLP.encode(bgap));
     }
 }
 
