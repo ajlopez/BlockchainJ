@@ -35,7 +35,7 @@ public class NetworkProcessorTest {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "net_version", params);
 
-        NetworkProcessor processor = new NetworkProcessor(new NetworkConfiguration(42));
+        NetworkProcessor processor = new NetworkProcessor(new NetworkConfiguration((short)42));
 
         JsonRpcResponse response = processor.processRequest(request);
 

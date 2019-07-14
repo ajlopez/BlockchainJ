@@ -62,8 +62,8 @@ public class NodesHelper {
         PipedInputStream inputStream2 = new PipedInputStream();
         inputStream2.connect(outputStream2);
 
-        PeerConnection connection1 = new PeerConnection(node1.getPeer(), inputStream1, outputStream2, node2);
-        PeerConnection connection2 = new PeerConnection(node2.getPeer(), inputStream2, outputStream1, node1);
+        PeerConnection connection1 = new PeerConnection((short)1, node1.getPeer(), inputStream1, outputStream2, node2);
+        PeerConnection connection2 = new PeerConnection((short)1, node2.getPeer(), inputStream2, outputStream1, node1);
 
         List<PeerConnection> connections = new ArrayList<>();
         connections.add(connection1);

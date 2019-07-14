@@ -33,8 +33,8 @@ public class PeerConnectionTest {
 
         SimpleMessageChannel inputChannel = new SimpleMessageChannel();
 
-        PeerConnection peerConnection1 = new PeerConnection(peer2, inputStream1, outputStream2, null);
-        PeerConnection peerConnection2 = new PeerConnection(peer1, inputStream2, outputStream1, inputChannel);
+        PeerConnection peerConnection1 = new PeerConnection((short)1, peer2, inputStream1, outputStream2, null);
+        PeerConnection peerConnection2 = new PeerConnection((short)1, peer1, inputStream2, outputStream1, inputChannel);
 
         Message message = new GetBlockByHashMessage(HashUtilsTest.generateRandomBlockHash());
 

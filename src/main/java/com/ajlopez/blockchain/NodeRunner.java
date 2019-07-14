@@ -19,6 +19,7 @@ import java.util.List;
 public class NodeRunner {
     private final boolean miner;
     private final int port;
+    private final short network;
     private final List<String> peers;
 
     private final NodeProcessor nodeProcessor;
@@ -28,10 +29,11 @@ public class NodeRunner {
         this.miner = miner;
         this.port = port;
         this.peers = peers;
+        this.network = networkConfiguration.getNetworkNumber();
 
         this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), blockChain, new TrieStore(new HashMapStore()), coinbase);
 
-        this.tcpPeerServer = port > 0 ? new TcpPeerServer(this.port, this.nodeProcessor) : null;
+        this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
     }
 
     public void start() throws IOException {
@@ -48,7 +50,7 @@ public class NodeRunner {
                 String host = parts[0];
                 int port = Integer.parseInt(parts[1]);
 
-                TcpPeerClient client = new TcpPeerClient(host, port, this.nodeProcessor);
+                TcpPeerClient client = new TcpPeerClient(host, port, this.network, this.nodeProcessor);
                 client.connect();
             }
 

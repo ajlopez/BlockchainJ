@@ -23,10 +23,10 @@ public class PeerConnection implements PeerNode {
     private boolean started;
     private boolean stopped;
 
-    public PeerConnection(Peer peer, InputStream inputStream, OutputStream outputStream, MessageChannel inputChannel) {
+    public PeerConnection(short network, Peer peer, InputStream inputStream, OutputStream outputStream, MessageChannel inputChannel) {
         this.peer = peer;
         this.messageInputStream = new MessageInputStream(new PacketInputStream(inputStream));
-        this.messageOutputStream = new MessageOutputStream(new PacketOutputStream(outputStream));
+        this.messageOutputStream = new MessageOutputStream(network, new PacketOutputStream(outputStream));
         this.inputChannel = inputChannel;
     }
 

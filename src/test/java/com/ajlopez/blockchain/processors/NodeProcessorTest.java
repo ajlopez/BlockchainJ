@@ -29,14 +29,14 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration(42), peer, blockChain, null, coinbase);
+        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, blockChain, null, coinbase);
 
         Assert.assertSame(peer, nodeProcessor.getPeer());
     }
 
     @Test
     public void getStatus() {
-        NetworkConfiguration networkConfiguration = new NetworkConfiguration(42);
+        NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)42);
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();

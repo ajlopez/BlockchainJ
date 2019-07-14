@@ -15,11 +15,17 @@ public class PacketOutputStream {
         this.dataOutputStream = new DataOutputStream(outputStream);
     }
 
-    public boolean writePacket(byte[] bytes) {
+    public boolean writePacket(Packet packet) {
         try {
             this.dataOutputStream.writeInt(0x01020304);
+
+            this.dataOutputStream.writeShort(packet.getProtocol());
+            this.dataOutputStream.writeShort(packet.getNetwork());
+
+            byte[] bytes = packet.getBytes();
             this.dataOutputStream.writeInt(bytes.length);
             this.dataOutputStream.write(bytes);
+
             this.dataOutputStream.flush();
         }
         catch (EOFException ex) {

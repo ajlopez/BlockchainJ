@@ -15,12 +15,15 @@ public class PacketInputStream {
         this.dataInputStream = new DataInputStream(inputStream);
     }
 
-    public byte[] readPacket() {
+    public Packet readPacket() {
         try {
             int signature = this.dataInputStream.readInt();
 
             if (signature != 0x01020304)
                 return null;
+
+            short protocol = this.dataInputStream.readShort();
+            short network = this.dataInputStream.readShort();
 
             int length = this.dataInputStream.readInt();
 
@@ -36,7 +39,7 @@ public class PacketInputStream {
                 btotalread += bread;
             }
 
-            return bytes;
+            return new Packet(protocol, network, bytes);
         }
         catch (EOFException ex) {
             return null;

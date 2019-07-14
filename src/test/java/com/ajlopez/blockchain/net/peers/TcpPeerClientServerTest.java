@@ -32,10 +32,10 @@ public class TcpPeerClientServerTest {
             semaphore.release();
         });
 
-        TcpPeerServer server = new TcpPeerServer(4000, nodeProcessor2);
+        TcpPeerServer server = new TcpPeerServer((short) 1, 4000, nodeProcessor2);
         server.start();
 
-        TcpPeerClient client = new TcpPeerClient("localhost", 4000, nodeProcessor1);
+        TcpPeerClient client = new TcpPeerClient("localhost", 4000, (short)1, nodeProcessor1);
         client.connect();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -83,10 +83,10 @@ public class TcpPeerClientServerTest {
                 semaphore.release();
         });
 
-        TcpPeerServer server = new TcpPeerServer(4001, nodeProcessor2);
+        TcpPeerServer server = new TcpPeerServer((short)1, 4001, nodeProcessor2);
         server.start();
 
-        TcpPeerClient client = new TcpPeerClient("localhost", 4001, nodeProcessor1);
+        TcpPeerClient client = new TcpPeerClient("localhost", 4001, (short)1, nodeProcessor1);
         client.connect();
 
         NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
@@ -130,10 +130,10 @@ public class TcpPeerClientServerTest {
                 semaphore.release();
         });
 
-        TcpPeerServer server = new TcpPeerServer(4002, nodeProcessor2);
+        TcpPeerServer server = new TcpPeerServer((short)1, 4002, nodeProcessor2);
         server.start();
 
-        TcpPeerClient client = new TcpPeerClient("localhost", 4002, nodeProcessor1);
+        TcpPeerClient client = new TcpPeerClient("localhost", 4002, (short)1, nodeProcessor1);
         client.connect();
 
         NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);

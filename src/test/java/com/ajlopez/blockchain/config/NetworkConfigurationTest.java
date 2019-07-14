@@ -9,7 +9,7 @@ import org.junit.Test;
 public class NetworkConfigurationTest {
     @Test
     public void simpleCreationTest() {
-        NetworkConfiguration networkConfiguration = new NetworkConfiguration(42);
+        NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)42);
 
         Assert.assertEquals(42, networkConfiguration.getNetworkNumber());
     }

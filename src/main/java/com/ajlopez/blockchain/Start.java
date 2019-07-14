@@ -31,7 +31,7 @@ public class Start {
 
         Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
 
-        NetworkConfiguration networkConfiguration = new NetworkConfiguration(1);
+        NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
         NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"), coinbase, networkConfiguration);
 
         runner.start();

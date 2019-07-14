@@ -9,9 +9,11 @@ import java.io.IOException;
  * Created by ajlopez on 18/11/2018.
  */
 public class MessageOutputStream {
-    private PacketOutputStream packetOutputStream;
+    private final short network;
+    private final PacketOutputStream packetOutputStream;
 
-    public MessageOutputStream(PacketOutputStream packetOutputStream) {
+    public MessageOutputStream(short network, PacketOutputStream packetOutputStream) {
+        this.network = network;
         this.packetOutputStream = packetOutputStream;
     }
 
@@ -20,7 +22,7 @@ public class MessageOutputStream {
 
         // TODO sign packet using sender keys
 
-        this.packetOutputStream.writePacket(bytes);
+        this.packetOutputStream.writePacket(new Packet(Protocols.BLOCKCHAIN, network, bytes));
     }
 
     public void close() throws IOException {

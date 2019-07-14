@@ -21,6 +21,8 @@ public class MessageInputStreamTest {
         DataOutputStream dataOutputStream = new DataOutputStream(bytesOutputStream);
 
         dataOutputStream.writeInt(0x01020304);
+        dataOutputStream.writeShort(Protocols.BLOCKCHAIN);
+        dataOutputStream.writeShort(1);
         dataOutputStream.writeInt(bytes.length);
         dataOutputStream.write(bytes);
 

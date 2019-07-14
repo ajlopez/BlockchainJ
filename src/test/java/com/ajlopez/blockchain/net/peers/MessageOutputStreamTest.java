@@ -24,7 +24,7 @@ public class MessageOutputStreamTest {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PacketOutputStream packetOutputStream = new PacketOutputStream(outputStream);
-        MessageOutputStream messageOutputStream = new MessageOutputStream(packetOutputStream);
+        MessageOutputStream messageOutputStream = new MessageOutputStream((short)1, packetOutputStream);
 
         messageOutputStream.writeMessage(null, message);
 
@@ -33,11 +33,13 @@ public class MessageOutputStreamTest {
         byte[] result = outputStream.toByteArray();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(Integer.BYTES + Integer.BYTES + bytes.length, result.length);
+        Assert.assertEquals(Integer.BYTES + Integer.BYTES + 2 * Short.BYTES + bytes.length, result.length);
 
         DataInputStream dataInputStream = new DataInputStream(new ByteArrayInputStream(result));
 
         Assert.assertEquals(0x01020304, dataInputStream.readInt());
+        Assert.assertEquals(Protocols.BLOCKCHAIN, dataInputStream.readShort());
+        Assert.assertEquals(1, dataInputStream.readShort());
         Assert.assertEquals(bytes.length, dataInputStream.readInt());
 
         byte[] bresult = new byte[bytes.length];

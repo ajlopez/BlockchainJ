@@ -14,7 +14,8 @@ public class MessageInputStream {
     }
 
     public Message readMessage() {
-        byte[] bytes = this.packetInputStream.readPacket();
+        // TODO process network, protocol
+        byte[] bytes = this.packetInputStream.readPacket().getBytes();
 
         return MessageEncoder.decode(bytes);
     }

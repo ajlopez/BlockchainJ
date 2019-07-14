@@ -4,13 +4,13 @@ package com.ajlopez.blockchain.config;
  * Created by ajlopez on 30/12/2018.
  */
 public class NetworkConfiguration {
-    private final int networkNumber;
+    private final short networkNumber;
 
-    public NetworkConfiguration(int networkNumber) {
+    public NetworkConfiguration(short networkNumber) {
         this.networkNumber = networkNumber;
     }
 
-    public int getNetworkNumber() {
+    public short getNetworkNumber() {
         return this.networkNumber;
     }
 }

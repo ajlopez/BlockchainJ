@@ -14,6 +14,8 @@ public class PacketInputStreamTest {
         DataOutputStream dataOutputStream = new DataOutputStream(bytesOutputStream);
 
         dataOutputStream.writeInt(0x01020304);
+        dataOutputStream.writeShort(1);
+        dataOutputStream.writeShort(42);
         dataOutputStream.writeInt(bytes.length);
         dataOutputStream.write(bytes);
 
@@ -24,7 +26,13 @@ public class PacketInputStreamTest {
         InputStream inputStream = new ByteArrayInputStream(message);
         PacketInputStream messageInputStream = new PacketInputStream(inputStream);
 
-        byte[] result = messageInputStream.readPacket();
+        Packet packet = messageInputStream.readPacket();
+
+        Assert.assertNotNull(packet);
+        Assert.assertEquals(Protocols.BLOCKCHAIN, packet.getProtocol());
+        Assert.assertEquals(42, packet.getNetwork());
+
+        byte[] result = packet.getBytes();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(bytes.length, result.length);
@@ -48,7 +56,7 @@ public class PacketInputStreamTest {
         InputStream inputStream = new ByteArrayInputStream(message);
         PacketInputStream messageInputStream = new PacketInputStream(inputStream);
 
-        byte[] result = messageInputStream.readPacket();
+        Packet result = messageInputStream.readPacket();
 
         Assert.assertNull(result);
     }
@@ -60,6 +68,8 @@ public class PacketInputStreamTest {
         DataOutputStream dataOutputStream = new DataOutputStream(bytesOutputStream);
 
         dataOutputStream.writeInt(0x01020304);
+        dataOutputStream.writeShort(Protocols.BLOCKCHAIN);
+        dataOutputStream.writeShort(42);
         dataOutputStream.writeInt(bytes.length + 10);
         dataOutputStream.write(bytes);
 
@@ -70,7 +80,7 @@ public class PacketInputStreamTest {
         InputStream inputStream = new ByteArrayInputStream(message);
         PacketInputStream messageInputStream = new PacketInputStream(inputStream);
 
-        byte[] result = messageInputStream.readPacket();
+        Packet result = messageInputStream.readPacket();
 
         Assert.assertNull(result);
     }
