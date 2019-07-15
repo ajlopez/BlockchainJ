@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.execution.BlockExecutor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.function.Consumer;
  * Created by ajlopez on 17/12/2017.
  */
 public class BlockProcessor {
-    private static List<Block> emptyList = Collections.unmodifiableList(Arrays.asList());
+    private static final List<Block> emptyList = Collections.unmodifiableList(Arrays.asList());
 
     private final OrphanBlocks orphanBlocks;
     private final BlockChain blockChain;
@@ -34,6 +35,14 @@ public class BlockProcessor {
         if (this.blockChain.isChainedBlock(hash))
             return emptyList;
 
+        // TODO validate block in a block validator
+        Block parent = this.blockChain.getBlockByHash(block.getParentHash());
+
+        if (parent == null && this.blockChain.getBestBlock() != null) {
+            orphanBlocks.addToOrphans(block);
+            return emptyList;
+        }
+
         Block initialBestBlock = this.getBestBlock();
 
         if (blockChain.connectBlock(block)) {
@@ -48,10 +57,10 @@ public class BlockProcessor {
 
             return connectedBlocks;
         }
-        else {
-            orphanBlocks.addToOrphans(block);
-            return emptyList;
-        }
+
+        orphanBlocks.addToOrphans(block);
+
+        return emptyList;
     }
 
     public Block getBestBlock() {
