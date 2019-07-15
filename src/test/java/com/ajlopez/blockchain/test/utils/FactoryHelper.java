@@ -10,6 +10,7 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
@@ -192,11 +193,11 @@ public class FactoryHelper {
     }
 
     public static BlockProcessor createBlockProcessor() {
-        return new BlockProcessor(new BlockChain(), new OrphanBlocks());
+        return createBlockProcessor(new BlockChain());
     }
 
     public static BlockProcessor createBlockProcessor(BlockChain blockChain) {
-        return new BlockProcessor(blockChain, new OrphanBlocks());
+        return new BlockProcessor(blockChain, new OrphanBlocks(), new BlockExecutor(new AccountStoreProvider(new TrieStore(new HashMapStore()))));
     }
 
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor) {
@@ -235,12 +236,12 @@ public class FactoryHelper {
         Address coinbase = createRandomAddress();
         List<Block> blocks = new ArrayList<>();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
 
         blocks.add(block);
 
         for (int k = 0; k < nblocks; k++) {
-            block = new Block(block.getNumber() + 1, block.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+            block = new Block(block.getNumber() + 1, block.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
             blocks.add(block);
         }
 

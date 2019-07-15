@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.BlockConsumer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
@@ -185,10 +186,10 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block2 = new Block(2, block1.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block3 = new Block(3, block2.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO);
+        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block block2 = new Block(2, block1.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block block3 = new Block(3, block2.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
 
         processor.processBlock(genesis);
         processor.processBlock(block1);
@@ -219,10 +220,10 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block2 = new Block(2, block1.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block3 = new Block(3, block2.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO);
+        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block block2 = new Block(2, block1.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block block3 = new Block(3, block2.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
 
         processor.processBlock(genesis);
         processor.processBlock(block1);

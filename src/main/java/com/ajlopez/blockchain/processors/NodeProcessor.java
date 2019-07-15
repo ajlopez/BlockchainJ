@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.peers.Peer;
@@ -31,7 +32,7 @@ public class NodeProcessor implements PeerNode {
         this.networkConfiguration = networkConfiguration;
         this.peer = peer;
         OrphanBlocks orphanBlocks = new OrphanBlocks();
-        this.blockProcessor = new BlockProcessor(blockChain, orphanBlocks);
+        this.blockProcessor = new BlockProcessor(blockChain, orphanBlocks, new BlockExecutor(new AccountStoreProvider(accountTrieStore)));
         this.transactionPool = new TransactionPool();
         TransactionProcessor transactionProcessor = new TransactionProcessor(this.transactionPool);
         PeerProcessor peerProcessor = new PeerProcessor(this.networkConfiguration.getNetworkNumber());
