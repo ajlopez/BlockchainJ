@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * Created by ajlopez on 15/08/2017.
  */
-public class BlockChain {
+public class BlockChain implements BlockProvider {
     public static final long NO_BEST_BLOCK_NUMBER = -1;
 
     private Block best;
@@ -56,6 +56,7 @@ public class BlockChain {
         this.blockConsumers.add(consumer);
     }
 
+    @Override
     public Block getBlockByHash(Hash hash) {
         return this.blocksByHash.getBlock(hash);
     }
@@ -64,6 +65,7 @@ public class BlockChain {
         return this.blocksByHash.containsBlock(hash);
     }
 
+    @Override
     public Block getBlockByNumber(long number) {
         return this.blocksByNumber.getBlock(number);
     }
