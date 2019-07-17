@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test.utils;
 
+import com.ajlopez.blockchain.bc.BlockValidator;
 import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Account;
@@ -197,7 +198,7 @@ public class FactoryHelper {
     }
 
     public static BlockProcessor createBlockProcessor(BlockChain blockChain) {
-        return new BlockProcessor(blockChain, new OrphanBlocks(), new BlockExecutor(new AccountStoreProvider(new TrieStore(new HashMapStore()))));
+        return new BlockProcessor(blockChain, new OrphanBlocks(), new BlockValidator(new BlockExecutor(new AccountStoreProvider(new TrieStore(new HashMapStore())))));
     }
 
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor) {

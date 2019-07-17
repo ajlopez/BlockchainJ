@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.bc.BlockValidator;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.BlockHash;
@@ -18,15 +19,15 @@ import java.util.function.Consumer;
 public class BlockProcessor {
     private static final List<Block> emptyList = Collections.unmodifiableList(Arrays.asList());
 
-    private final BlockExecutor blockExecutor;
+    private final BlockValidator blockValidator;
     private final OrphanBlocks orphanBlocks;
     private final BlockChain blockChain;
     private final List<Consumer<Block>> newBestBlockConsumers = new ArrayList<>();
 
-    public BlockProcessor(BlockChain blockChain, OrphanBlocks orphanBlocks, BlockExecutor blockExecutor) {
+    public BlockProcessor(BlockChain blockChain, OrphanBlocks orphanBlocks, BlockValidator blockValidator) {
         this.blockChain = blockChain;
         this.orphanBlocks = orphanBlocks;
-        this.blockExecutor = blockExecutor;
+        this.blockValidator = blockValidator;
     }
 
     public List<Block> processBlock(Block block) {
@@ -41,11 +42,9 @@ public class BlockProcessor {
         // TODO validate block in a block validator
         Block parent = this.blockChain.getBlockByHash(block.getParentHash());
 
-        if (parent != null) {
-            Hash bhash = this.blockExecutor.executeBlock(block, parent.getStateRootHash());
-            if (!bhash.equals(block.getStateRootHash()))
+        if (parent != null)
+            if (!this.blockValidator.isValid(block, parent.getStateRootHash()))
                 return emptyList;
-        }
 
         Block initialBestBlock = this.getBestBlock();
 
