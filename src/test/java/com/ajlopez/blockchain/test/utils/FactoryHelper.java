@@ -22,7 +22,6 @@ import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -198,7 +197,11 @@ public class FactoryHelper {
     }
 
     public static BlockProcessor createBlockProcessor(BlockChain blockChain) {
-        return new BlockProcessor(blockChain, new OrphanBlocks(), new BlockValidator(new BlockExecutor(new AccountStoreProvider(new TrieStore(new HashMapStore())))));
+        return new BlockProcessor(blockChain, new OrphanBlocks(), createBlockValidator(new AccountStoreProvider(new TrieStore(new HashMapStore()))));
+    }
+
+    public static BlockValidator createBlockValidator(AccountStoreProvider accountStoreProvider) {
+        return new BlockValidator(new BlockExecutor(accountStoreProvider));
     }
 
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor) {

@@ -4,8 +4,6 @@ import com.ajlopez.blockchain.bc.BlockValidator;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.execution.BlockExecutor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
