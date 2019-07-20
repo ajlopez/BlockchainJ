@@ -25,7 +25,7 @@ public class PeerConnection implements PeerNode {
 
     public PeerConnection(short network, Peer peer, InputStream inputStream, OutputStream outputStream, MessageChannel inputChannel) {
         this.peer = peer;
-        this.messageInputStream = new MessageInputStream(new PacketInputStream(inputStream));
+        this.messageInputStream = new MessageInputStream(network, new PacketInputStream(inputStream));
         this.messageOutputStream = new MessageOutputStream(network, new PacketOutputStream(outputStream));
         this.inputChannel = inputChannel;
     }

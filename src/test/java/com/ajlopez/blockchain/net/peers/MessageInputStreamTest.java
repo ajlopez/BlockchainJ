@@ -32,7 +32,7 @@ public class MessageInputStreamTest {
 
         InputStream inputStream = new ByteArrayInputStream(packet);
         PacketInputStream packetInputStream = new PacketInputStream(inputStream);
-        MessageInputStream messageInputStream = new MessageInputStream(packetInputStream);
+        MessageInputStream messageInputStream = new MessageInputStream((short)1, packetInputStream);
 
         Message result = messageInputStream.readMessage();
 

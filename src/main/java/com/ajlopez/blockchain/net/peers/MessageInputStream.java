@@ -7,16 +7,21 @@ import com.ajlopez.blockchain.net.messages.MessageEncoder;
  * Created by ajlopez on 19/11/2018.
  */
 public class MessageInputStream {
-    private PacketInputStream packetInputStream;
+    private final short network;
+    private final PacketInputStream packetInputStream;
 
-    public MessageInputStream(PacketInputStream packetInputStream) {
+    public MessageInputStream(short network, PacketInputStream packetInputStream) {
+        this.network = network;
         this.packetInputStream = packetInputStream;
     }
 
     public Message readMessage() {
-        // TODO process network, protocol
-        byte[] bytes = this.packetInputStream.readPacket().getBytes();
+        // TODO process protocol
+        while (true) {
+            Packet packet = this.packetInputStream.readPacket();
 
-        return MessageEncoder.decode(bytes);
+            if (packet.getNetwork() == this.network)
+                return MessageEncoder.decode(packet.getBytes());
+        }
     }
 }
