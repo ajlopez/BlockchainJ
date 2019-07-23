@@ -4,22 +4,21 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.CodeStore;
-import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.vms.eth.Storage;
-import com.ajlopez.blockchain.vms.eth.TrieStorage;
+import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
 /**
  * Created by ajlopez on 26/11/2018.
  */
 public class TopExecutionContext extends AbstractExecutionContext {
     private final AccountStore accountStore;
-    private final TrieStore storageStore;
+    private final TrieStorageProvider trieStorageProvider;
     private final CodeStore codeStore;
 
-    public TopExecutionContext(AccountStore accountStore, TrieStore storageStore, CodeStore codeStore)
+    public TopExecutionContext(AccountStore accountStore, TrieStorageProvider trieStorageProvider, CodeStore codeStore)
     {
         this.accountStore = accountStore;
-        this.storageStore = storageStore;
+        this.trieStorageProvider = trieStorageProvider;
         this.codeStore = codeStore;
     }
 
@@ -36,7 +35,7 @@ public class TopExecutionContext extends AbstractExecutionContext {
     @Override
     public Storage retrieveAccountStorage(Address address) {
         AccountState accountState = this.getAccountState(address);
-        Storage storage = new TrieStorage(this.storageStore.retrieve(accountState.getStorageHash()), accountState);
+        Storage storage = this.trieStorageProvider.retrieve(accountState);
 
         return storage;
     }

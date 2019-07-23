@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.vms.eth.Storage;
 import com.ajlopez.blockchain.vms.eth.TrieStorage;
+import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -114,8 +115,9 @@ public class TopExecutionContextTest {
     public void getEmptyStorageFromNewAccount() {
         AccountStore accountStore = new AccountStore(new Trie());
         TrieStore trieStore = new TrieStore(new HashMapStore());
+        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(trieStore);
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, trieStore, null);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, trieStorageProvider, null);
 
         Storage result = executionContext.getAccountStorage(new Address(new byte[] { 0x01, 0x02 }));
 
@@ -133,8 +135,9 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
+        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(trieStore);
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, trieStore, null);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, trieStorageProvider, null);
 
         Storage result = executionContext.getAccountStorage(address);
 
@@ -176,8 +179,9 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
+        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(trieStore);
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, trieStore, null);
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, trieStorageProvider, null);
 
         Storage result = executionContext.getAccountStorage(address);
 
