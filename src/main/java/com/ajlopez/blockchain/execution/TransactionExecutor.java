@@ -20,28 +20,32 @@ public class TransactionExecutor {
     public List<Transaction> executeTransactions(List<Transaction> transactions) {
         List<Transaction> executed = new ArrayList<>();
 
-        for (Transaction transaction : transactions) {
-            Address sender = transaction.getSender();
-
-            if (transaction.getNonce() != this.executionContext.getNonce(sender))
-                continue;
-
-            BigInteger senderBalance = this.executionContext.getBalance(sender);
-
-            if (senderBalance.compareTo(transaction.getValue()) < 0)
-                continue;
-
-            ExecutionContext context = new ChildExecutionContext(this.executionContext);
-
-            context.transfer(transaction.getSender(), transaction.getReceiver(), transaction.getValue());
-            context.incrementNonce(transaction.getSender());
-            context.commit();
-
-            executed.add(transaction);
-        }
+        for (Transaction transaction : transactions)
+            if (this.executeTransaction(transaction))
+                executed.add(transaction);
 
         this.executionContext.commit();
 
         return executed;
+    }
+
+    private boolean executeTransaction(Transaction transaction) {
+        Address sender = transaction.getSender();
+
+        if (transaction.getNonce() != this.executionContext.getNonce(sender))
+            return false;
+
+        BigInteger senderBalance = this.executionContext.getBalance(sender);
+
+        if (senderBalance.compareTo(transaction.getValue()) < 0)
+            return false;
+
+        ExecutionContext context = new ChildExecutionContext(this.executionContext);
+
+        context.transfer(transaction.getSender(), transaction.getReceiver(), transaction.getValue());
+        context.incrementNonce(transaction.getSender());
+        context.commit();
+
+        return true;
     }
 }
