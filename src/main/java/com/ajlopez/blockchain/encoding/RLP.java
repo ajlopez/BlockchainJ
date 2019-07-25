@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
+import com.ajlopez.blockchain.utils.ByteUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +13,6 @@ public class RLP {
     private static final int EMPTY_MARK = 128;
     private static final int TINY_SIZE = 55;
 
-    private static byte[] empty = new byte[0];
     private static byte[] emptyEncoding = new byte[] { (byte)0x80 };
 
     private RLP() {
@@ -46,7 +47,7 @@ public class RLP {
 
         if (bytes.length == 1)
             if (b0 == EMPTY_MARK)
-                return empty;
+                return ByteUtils.EMPTY_BYTE_ARRAY;
             else
                 return bytes;
 
