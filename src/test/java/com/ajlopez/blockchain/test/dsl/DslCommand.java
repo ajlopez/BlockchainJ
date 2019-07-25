@@ -7,7 +7,6 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HexUtils;
-import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -85,7 +84,7 @@ public class DslCommand {
             BigInteger value = this.getBigInteger(3, "value");
             long nonce = this.getLongInteger(4, "nonce");
 
-            Transaction transaction = new Transaction(from, to, value, nonce);
+            Transaction transaction = new Transaction(from, to, value, nonce, null);
 
             world.setTransaction(name, transaction);
 

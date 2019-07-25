@@ -29,7 +29,7 @@ public class TransactionExecutorTest {
 
         accountStore.putAccount(senderAddress, sender);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0 );
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
@@ -66,8 +66,8 @@ public class TransactionExecutorTest {
 
         accountStore.putAccount(senderAddress, sender);
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0 );
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 1 );
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 1, null);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -108,8 +108,8 @@ public class TransactionExecutorTest {
 
         accountStore.putAccount(senderAddress, sender);
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0 );
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 0 );
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 0, null);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -148,8 +148,8 @@ public class TransactionExecutorTest {
 
         accountStore.putAccount(senderAddress, sender);
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0 );
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(5000), 1 );
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(5000), 1, null);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -193,7 +193,7 @@ public class TransactionExecutorTest {
         List<Transaction> transactions = new ArrayList<>();
 
         for (int k = 0; k < 1000 - 1; k++) {
-            Transaction transaction = new Transaction(addresses.get(k), addresses.get(k + 1), BigInteger.valueOf(1000 - k), 0);
+            Transaction transaction = new Transaction(addresses.get(k), addresses.get(k + 1), BigInteger.valueOf(1000 - k), 0, null);
             transactions.add(transaction);
         }
 

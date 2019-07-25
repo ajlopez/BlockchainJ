@@ -54,7 +54,7 @@ public class BlockExecutorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0, null);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
@@ -87,7 +87,7 @@ public class BlockExecutorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 1);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 1, null);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
@@ -120,7 +120,7 @@ public class BlockExecutorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(10000000), 0);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(10000000), 0, null);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 

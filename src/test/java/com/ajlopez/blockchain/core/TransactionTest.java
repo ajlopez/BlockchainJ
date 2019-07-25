@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.core;
 
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,7 +17,7 @@ public class TransactionTest {
         Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
-        Transaction tx = new Transaction(sender, receiver, value, 42);
+        Transaction tx = new Transaction(sender, receiver, value, 42, null);
 
         Assert.assertEquals(sender, tx.getSender());
         Assert.assertEquals(receiver, tx.getReceiver());
@@ -26,6 +25,9 @@ public class TransactionTest {
         Assert.assertEquals(42, tx.getNonce());
 
         Assert.assertNotNull(tx.getHash());
+
+        Assert.assertNotNull(tx.getData());
+        Assert.assertEquals(0, tx.getData().length);
     }
 
     @Test
@@ -33,7 +35,7 @@ public class TransactionTest {
         Address sender = FactoryHelper.createRandomAddress();
         Address receiver = FactoryHelper.createRandomAddress();
 
-        Transaction tx = new Transaction(sender, receiver, null, 42);
+        Transaction tx = new Transaction(sender, receiver, null, 42, null);
 
         Assert.assertEquals(sender, tx.getSender());
         Assert.assertEquals(receiver, tx.getReceiver());
@@ -49,7 +51,7 @@ public class TransactionTest {
         Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
-        new Transaction(sender, receiver, value, -1);
+        new Transaction(sender, receiver, value, -1, null);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -57,7 +59,7 @@ public class TransactionTest {
         Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
-        new Transaction(null, receiver, value, 42);
+        new Transaction(null, receiver, value, 42, null);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -65,7 +67,7 @@ public class TransactionTest {
         Address sender = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
-        new Transaction(sender, null, value, 42);
+        new Transaction(sender, null, value, 42, null);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -74,6 +76,6 @@ public class TransactionTest {
         Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE.negate();
 
-        new Transaction(sender, receiver, value, 42);
+        new Transaction(sender, receiver, value, 42, null);
     }
 }

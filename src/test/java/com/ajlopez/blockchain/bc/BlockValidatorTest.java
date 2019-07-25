@@ -53,7 +53,7 @@ public class BlockValidatorTest {
         accountStore.putAccount(senderAddress, sender);
         accountStore.save();
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0, null);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
@@ -82,7 +82,7 @@ public class BlockValidatorTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0, null);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 

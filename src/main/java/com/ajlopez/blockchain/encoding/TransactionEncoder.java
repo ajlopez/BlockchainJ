@@ -38,7 +38,7 @@ public class TransactionEncoder {
         BigInteger value = RLPEncoder.decodeCoin(bytes[2]);
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[3]);
 
-        return new Transaction(sender, receiver, value, nonce);
+        return new Transaction(sender, receiver, value, nonce, null);
     }
 
     public static List<Transaction> decodeList(byte[] encoded) {

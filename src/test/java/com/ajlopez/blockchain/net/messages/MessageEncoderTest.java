@@ -116,7 +116,7 @@ public class MessageEncoderTest {
         Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
-        Transaction tx = new Transaction(sender, receiver, value, 42);
+        Transaction tx = new Transaction(sender, receiver, value, 42, null);
 
         Message message = new TransactionMessage(tx);
 
