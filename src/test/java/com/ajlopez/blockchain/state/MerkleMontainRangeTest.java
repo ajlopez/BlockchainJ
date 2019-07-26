@@ -34,4 +34,41 @@ public class MerkleMontainRangeTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes())), result);
     }
+
+    @Test
+    public void addThreeHashes() {
+        MerkleMontainRange mmr = new MerkleMontainRange();
+        Hash hash1 = FactoryHelper.createRandomHash();
+        Hash hash2 = FactoryHelper.createRandomHash();
+        Hash hash3 = FactoryHelper.createRandomHash();
+
+        mmr.addHash(hash1);
+        mmr.addHash(hash2);
+        Hash result = mmr.addHash(hash3);
+
+        Assert.assertNotNull(result);
+        Hash root12 = HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes()));
+        Hash root123 = HashUtils.calculateHash(ByteUtils.concatenate(root12.getBytes(), hash3.getBytes()));
+        Assert.assertEquals(root123, result);
+    }
+
+    @Test
+    public void addFourHashes() {
+        MerkleMontainRange mmr = new MerkleMontainRange();
+        Hash hash1 = FactoryHelper.createRandomHash();
+        Hash hash2 = FactoryHelper.createRandomHash();
+        Hash hash3 = FactoryHelper.createRandomHash();
+        Hash hash4 = FactoryHelper.createRandomHash();
+
+        mmr.addHash(hash1);
+        mmr.addHash(hash2);
+        mmr.addHash(hash3);
+        Hash result = mmr.addHash(hash4);
+
+        Assert.assertNotNull(result);
+        Hash root12 = HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes()));
+        Hash root34 = HashUtils.calculateHash(ByteUtils.concatenate(hash3.getBytes(), hash4.getBytes()));
+        Hash root1234 = HashUtils.calculateHash(ByteUtils.concatenate(root12.getBytes(), root34.getBytes()));
+        Assert.assertEquals(root1234, result);
+    }
 }

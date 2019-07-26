@@ -20,13 +20,13 @@ public class MerkleMontainRange {
                 break;
             }
             else {
-                result = calculate(result, treeHashes[k]);
+                result = calculate(treeHashes[k], result);
                 treeHashes[k] = null;
             }
 
         for (k++; k < treeHashes.length; k++)
             if (treeHashes[k] != null)
-                result = calculate(result, treeHashes[k]);
+                result = calculate(treeHashes[k], result);
 
         return result;
     }
