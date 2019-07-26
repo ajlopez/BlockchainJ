@@ -10,13 +10,25 @@ import org.spongycastle.pqc.math.linearalgebra.ByteUtils;
 /**
  * Created by ajlopez on 12/08/2017.
  */
-public class MerkleMontainRangeTest {
+public class MerkleMountainRangeTest {
+    @Test
+    public void createEmpty() {
+        MerkleMountainRange mmr = new MerkleMountainRange();
+
+        Assert.assertEquals(0, mmr.getCount());
+        Assert.assertNull(mmr.getRootHash());
+    }
+
     @Test
     public void addFirstHash() {
-        MerkleMontainRange mmr = new MerkleMontainRange();
+        MerkleMountainRange mmr = new MerkleMountainRange();
         Hash hash = FactoryHelper.createRandomHash();
 
-        Hash result = mmr.addHash(hash);
+        mmr = mmr.addHash(hash);
+
+        Assert.assertEquals(1, mmr.getCount());
+
+        Hash result = mmr.getRootHash();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(hash, result);
@@ -24,12 +36,11 @@ public class MerkleMontainRangeTest {
 
     @Test
     public void addTwoHashes() {
-        MerkleMontainRange mmr = new MerkleMontainRange();
+        MerkleMountainRange mmr = new MerkleMountainRange();
         Hash hash1 = FactoryHelper.createRandomHash();
         Hash hash2 = FactoryHelper.createRandomHash();
 
-        mmr.addHash(hash1);
-        Hash result = mmr.addHash(hash2);
+        Hash result = mmr.addHash(hash1).addHash(hash2).getRootHash();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes())), result);
@@ -37,14 +48,12 @@ public class MerkleMontainRangeTest {
 
     @Test
     public void addThreeHashes() {
-        MerkleMontainRange mmr = new MerkleMontainRange();
+        MerkleMountainRange mmr = new MerkleMountainRange();
         Hash hash1 = FactoryHelper.createRandomHash();
         Hash hash2 = FactoryHelper.createRandomHash();
         Hash hash3 = FactoryHelper.createRandomHash();
 
-        mmr.addHash(hash1);
-        mmr.addHash(hash2);
-        Hash result = mmr.addHash(hash3);
+        Hash result = mmr.addHash(hash1).addHash(hash2).addHash(hash3).getRootHash();
 
         Assert.assertNotNull(result);
         Hash root12 = HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes()));
@@ -54,16 +63,13 @@ public class MerkleMontainRangeTest {
 
     @Test
     public void addFourHashes() {
-        MerkleMontainRange mmr = new MerkleMontainRange();
+        MerkleMountainRange mmr = new MerkleMountainRange();
         Hash hash1 = FactoryHelper.createRandomHash();
         Hash hash2 = FactoryHelper.createRandomHash();
         Hash hash3 = FactoryHelper.createRandomHash();
         Hash hash4 = FactoryHelper.createRandomHash();
 
-        mmr.addHash(hash1);
-        mmr.addHash(hash2);
-        mmr.addHash(hash3);
-        Hash result = mmr.addHash(hash4);
+        Hash result = mmr.addHash(hash1).addHash(hash2).addHash(hash3).addHash(hash4).getRootHash();
 
         Assert.assertNotNull(result);
         Hash root12 = HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes()));
