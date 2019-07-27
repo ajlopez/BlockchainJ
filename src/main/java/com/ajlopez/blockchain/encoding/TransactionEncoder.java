@@ -18,8 +18,9 @@ public class TransactionEncoder {
         byte[] rlpReceiver = RLPEncoder.encodeAddress(transaction.getReceiver());
         byte[] rlpValue = RLPEncoder.encodeCoin(transaction.getValue());
         byte[] rlpNonce = RLPEncoder.encodeUnsignedLong(transaction.getNonce());
+        byte[] rlpData = RLP.encode(transaction.getData());
 
-        return RLP.encodeList(rlpSender, rlpReceiver, rlpValue, rlpNonce);
+        return RLP.encodeList(rlpSender, rlpReceiver, rlpValue, rlpNonce, rlpData);
     }
 
     public static byte[] encode(List<Transaction> transactions) {
@@ -37,8 +38,12 @@ public class TransactionEncoder {
         Address receiver = RLPEncoder.decodeAddress(bytes[1]);
         BigInteger value = RLPEncoder.decodeCoin(bytes[2]);
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[3]);
+        byte[] data = RLP.decode(bytes[4]);
 
-        return new Transaction(sender, receiver, value, nonce, null);
+        if (data != null && data.length == 0)
+            data = null;
+
+        return new Transaction(sender, receiver, value, nonce, data);
     }
 
     public static List<Transaction> decodeList(byte[] encoded) {

@@ -40,7 +40,7 @@ public class Transaction {
         this.receiver = receiver;
         this.value = value;
         this.nonce = nonce;
-        this.data = data == null ? ByteUtils.EMPTY_BYTE_ARRAY : data;
+        this.data = data != null && data.length == 0 ? null : data;
     }
 
     public Address getSender() { return this.sender; }

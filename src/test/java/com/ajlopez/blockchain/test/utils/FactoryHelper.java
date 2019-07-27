@@ -72,6 +72,14 @@ public class FactoryHelper {
         return createTransaction(value, sender, 0);
     }
 
+    public static Transaction createTransaction(int value, long nonce, byte[] data) {
+        Address sender = createRandomAddress();
+        Address receiver = createRandomAddress();
+        BigInteger bivalue = BigInteger.valueOf(value);
+
+        return new Transaction(sender, receiver, bivalue, nonce, data);
+    }
+
     public static Transaction createTransaction(int value, Address sender, long nonce) {
         Address receiver = createRandomAddress();
         BigInteger bivalue = BigInteger.valueOf(value);

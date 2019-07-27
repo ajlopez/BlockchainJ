@@ -26,8 +26,7 @@ public class TransactionTest {
 
         Assert.assertNotNull(tx.getHash());
 
-        Assert.assertNotNull(tx.getData());
-        Assert.assertEquals(0, tx.getData().length);
+        Assert.assertNull(tx.getData());
     }
 
     @Test
