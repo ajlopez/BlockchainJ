@@ -418,6 +418,7 @@ public class VirtualMachine {
                     if (contractCode == null)
                         contractCode = ByteUtils.EMPTY_BYTE_ARRAY;
 
+                    // TODO case code length < length
                     this.memory.setBytes(to, contractCode, from, length);
 
                     break;

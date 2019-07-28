@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.core.types.DataWord;
  * Created by ajlopez on 11/12/2018.
  */
 public class Memory {
+    // TODO implement array of memory chunks
     private byte[] bytes;
 
     public void setValue(int address, DataWord value) {

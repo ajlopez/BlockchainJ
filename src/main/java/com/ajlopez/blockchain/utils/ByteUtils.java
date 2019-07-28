@@ -17,6 +17,13 @@ public class ByteUtils {
         return true;
     }
 
+    public static byte[] normalizeBytesToNull(byte[] bytes) {
+        if (bytes != null && bytes.length == 0)
+            return null;
+
+        return bytes;
+    }
+
     public static byte[] unsignedLongToBytes(long value) {
         byte[] result = new byte[Long.BYTES];
 

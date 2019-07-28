@@ -399,4 +399,13 @@ public class ByteUtilsTest {
 
         Assert.assertArrayEquals(expected, result);
     }
+
+    @Test
+    public void normalizeBytesToNull() {
+        byte[] bytes = FactoryHelper.createRandomBytes(42);
+
+        Assert.assertArrayEquals(bytes, ByteUtils.normalizeBytesToNull(bytes));
+        Assert.assertNull(ByteUtils.normalizeBytesToNull(ByteUtils.EMPTY_BYTE_ARRAY));
+        Assert.assertNull(ByteUtils.normalizeBytesToNull(null));
+    }
 }
