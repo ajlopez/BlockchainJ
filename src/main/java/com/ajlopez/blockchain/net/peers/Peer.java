@@ -13,6 +13,7 @@ public class Peer {
 
     private final PeerId id;
 
+    // TODO remove usage
     public static Peer createRandomPeer() {
         byte[] hashBytes = new byte[Hash.HASH_BYTES];
         random.nextBytes(hashBytes);

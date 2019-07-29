@@ -15,6 +15,7 @@ import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
+import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
 import com.ajlopez.blockchain.state.Trie;
@@ -233,7 +234,11 @@ public class FactoryHelper {
     }
 
     public static Peer createRandomPeer() {
-        return Peer.createRandomPeer();
+        return new Peer(createRandomPeerId());
+    }
+
+    public static PeerId createRandomPeerId() {
+        return new PeerId(createRandomBytes(Hash.HASH_BYTES));
     }
 
     public static NodeProcessor createNodeProcessor() {
