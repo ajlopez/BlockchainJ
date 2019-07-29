@@ -4,14 +4,13 @@ import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class StatusEncoderTest {
     @Test
     public void encodeDecodeStatus() {
-        PeerId nodeid = HashUtilsTest.generateRandomPeerId();
+        PeerId nodeid = FactoryHelper.createRandomPeerId();
         BlockHash blockHash = FactoryHelper.createRandomBlockHash();
         Status status = new Status(nodeid, 2, 3, blockHash);
 

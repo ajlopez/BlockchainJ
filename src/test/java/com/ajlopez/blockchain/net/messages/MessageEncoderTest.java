@@ -10,7 +10,6 @@ import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -136,7 +135,7 @@ public class MessageEncoderTest {
 
     @Test
     public void encodeAndDecodeStatusMessage() {
-        PeerId nodeId = HashUtilsTest.generateRandomPeerId();
+        PeerId nodeId = FactoryHelper.createRandomPeerId();
         Message message = new StatusMessage(new Status(nodeId, 2, 3, FactoryHelper.createRandomBlockHash()));
 
         byte[] bytes = MessageEncoder.encode(message);

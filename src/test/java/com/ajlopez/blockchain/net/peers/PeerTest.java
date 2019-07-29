@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.net.peers;
 
 import com.ajlopez.blockchain.net.PeerId;
-import com.ajlopez.blockchain.net.peers.Peer;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.junit.Test;
 public class PeerTest {
     @Test
     public void createWithPeerId() {
-        PeerId peerId = HashUtilsTest.generateRandomPeerId();
+        PeerId peerId = FactoryHelper.createRandomPeerId();
 
         Peer peer = new Peer(peerId);
 
@@ -21,11 +21,11 @@ public class PeerTest {
 
     @Test
     public void peerEquals() {
-        PeerId peerId = HashUtilsTest.generateRandomPeerId();
+        PeerId peerId = FactoryHelper.createRandomPeerId();
 
         Peer peer1 = new Peer(peerId);
         Peer peer2 = new Peer(peerId);
-        Peer peer3 = new Peer(HashUtilsTest.generateRandomPeerId());
+        Peer peer3 = new Peer(FactoryHelper.createRandomPeerId());
 
         Assert.assertEquals(peer1, peer1);
         Assert.assertEquals(peer1, peer2);

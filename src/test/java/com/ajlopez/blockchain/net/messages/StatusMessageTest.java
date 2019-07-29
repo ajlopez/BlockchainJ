@@ -4,7 +4,6 @@ import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +13,7 @@ import org.junit.Test;
 public class StatusMessageTest {
     @Test
     public void createWithData() {
-        PeerId nodeid = HashUtilsTest.generateRandomPeerId();
+        PeerId nodeid = FactoryHelper.createRandomPeerId();
         BlockHash blockHash = FactoryHelper.createRandomBlockHash();
 
         StatusMessage message = new StatusMessage(new Status(nodeid, 2, 3, blockHash));
