@@ -22,13 +22,6 @@ public class HashUtilsTest {
         Assert.assertNotNull(hash);
     }
 
-    public static Hash generateRandomHash() {
-        byte[] bytes = new byte[32];
-        Random random = new Random();
-        random.nextBytes(bytes);
-        return new Hash(bytes);
-    }
-
     public static PeerId generateRandomPeerId() {
         byte[] bytes = new byte[32];
         Random random = new Random();

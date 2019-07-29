@@ -7,7 +7,6 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.BlockConsumer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -114,7 +113,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         List<Block> connectedBlocks = processor.processBlock(block);
 
@@ -129,7 +128,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         List<Block> connectedBlocks = processor.processBlock(block);
 
@@ -149,7 +148,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         BlockHash hash = processor.getUnknownAncestorHash(block.getHash());
 
@@ -172,7 +171,7 @@ public class BlockProcessorTest {
         BlockConsumer consumer = new BlockConsumer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         processor.onNewBestBlock(consumer);
         processor.processBlock(block);

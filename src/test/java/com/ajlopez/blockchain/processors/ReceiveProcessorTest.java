@@ -8,7 +8,6 @@ import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.TransactionMessage;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,7 +23,7 @@ public class ReceiveProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
         Message message = new BlockMessage(block);
 
         MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(blockProcessor);
@@ -127,7 +126,7 @@ public class ReceiveProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         Message message = new BlockMessage(block);
 

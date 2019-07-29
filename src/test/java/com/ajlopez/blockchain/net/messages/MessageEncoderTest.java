@@ -19,10 +19,10 @@ import java.math.BigInteger;
 public class MessageEncoderTest {
     @Test
     public void encodeBlockMessage() {
-        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
+        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         BlockMessage message = new BlockMessage(block);
 
@@ -41,10 +41,10 @@ public class MessageEncoderTest {
 
     @Test
     public void encodeAndDecodeBlockMessage() {
-        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
+        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         BlockMessage message = new BlockMessage(block);
 

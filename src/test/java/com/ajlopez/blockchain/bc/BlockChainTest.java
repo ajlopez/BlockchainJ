@@ -4,7 +4,6 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,7 +23,7 @@ public class BlockChainTest {
     public void noBlockByHash() {
         BlockChain blockChain = new BlockChain();
 
-        Assert.assertNull(blockChain.getBlockByHash(HashUtilsTest.generateRandomHash()));
+        Assert.assertNull(blockChain.getBlockByHash(FactoryHelper.createRandomHash()));
     }
 
     @Test
@@ -41,7 +40,7 @@ public class BlockChainTest {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         Assert.assertTrue(blockChain.connectBlock(block));
 
@@ -59,8 +58,8 @@ public class BlockChainTest {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
+        Block block = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
@@ -79,8 +78,8 @@ public class BlockChainTest {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
@@ -95,8 +94,8 @@ public class BlockChainTest {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
+        Block block = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
@@ -111,8 +110,8 @@ public class BlockChainTest {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block = new Block(1, new BlockHash(HashUtilsTest.generateRandomHash()), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
+        Block block = new Block(1, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertFalse(blockChain.connectBlock(block));
@@ -127,10 +126,10 @@ public class BlockChainTest {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block1 = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block1b = new Block(1, genesis.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block2b = new Block(2, block1b.getHash(), HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO);
+        Block block1 = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block1b = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block2b = new Block(2, block1b.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block1));

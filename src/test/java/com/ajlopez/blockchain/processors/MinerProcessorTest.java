@@ -6,14 +6,12 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.execution.AccountState;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,7 +31,7 @@ public class MinerProcessorTest {
 
         MinerProcessor processor = new MinerProcessor(null, transactionPool, new AccountStoreProvider(new TrieStore(new HashMapStore())), coinbase);
 
-        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
+        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
         Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
 
         Block block = processor.mineBlock(parent);
@@ -62,7 +60,7 @@ public class MinerProcessorTest {
         accountStore.putAccount(tx.getSender(), account);
         accountStore.save();
 
-        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
+        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase);

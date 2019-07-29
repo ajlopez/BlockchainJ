@@ -5,7 +5,6 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,9 +14,9 @@ import org.junit.Test;
 public class BlockHeaderEncoderTest {
     @Test
     public void encodeDecodeBlockHeader() {
-        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
-        Hash transactionsHash = HashUtilsTest.generateRandomHash();
-        Hash stateRootHash = HashUtilsTest.generateRandomHash();
+        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
+        Hash transactionsHash = FactoryHelper.createRandomHash();
+        Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         BlockHeader header = new BlockHeader(42, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase);

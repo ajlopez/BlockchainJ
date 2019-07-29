@@ -2,10 +2,8 @@ package com.ajlopez.blockchain.store;
 
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.util.Random;
 
@@ -19,7 +17,7 @@ public class TrieStoreTest {
     public void retrieveUnknownTrie() {
         TrieStore store = new TrieStore(new HashMapStore());
 
-        store.retrieve(HashUtilsTest.generateRandomHash());
+        store.retrieve(FactoryHelper.createRandomHash());
     }
 
     @Test
