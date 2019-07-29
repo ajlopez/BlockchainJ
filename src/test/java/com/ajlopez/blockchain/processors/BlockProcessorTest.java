@@ -28,7 +28,7 @@ public class BlockProcessorTest {
     public void noBlockByHash() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Assert.assertNull(processor.getBlockByHash(HashUtilsTest.generateRandomBlockHash()));
+        Assert.assertNull(processor.getBlockByHash(FactoryHelper.createRandomBlockHash()));
     }
 
     @Test
@@ -42,21 +42,21 @@ public class BlockProcessorTest {
     public void notChainedBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Assert.assertFalse(processor.isChainedBlock(HashUtilsTest.generateRandomBlockHash()));
+        Assert.assertFalse(processor.isChainedBlock(FactoryHelper.createRandomBlockHash()));
     }
 
     @Test
     public void notOrphanBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Assert.assertFalse(processor.isOrphanBlock(HashUtilsTest.generateRandomBlockHash()));
+        Assert.assertFalse(processor.isOrphanBlock(FactoryHelper.createRandomBlockHash()));
     }
 
     @Test
     public void unknownBlock() {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Assert.assertFalse(processor.isKnownBlock(HashUtilsTest.generateRandomBlockHash()));
+        Assert.assertFalse(processor.isKnownBlock(FactoryHelper.createRandomBlockHash()));
     }
 
     @Test

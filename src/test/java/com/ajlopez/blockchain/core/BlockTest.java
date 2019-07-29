@@ -16,7 +16,7 @@ import java.util.List;
 public class BlockTest {
     @Test
     public void createWithNumberAndParentHash() {
-        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
@@ -28,7 +28,7 @@ public class BlockTest {
 
     @Test
     public void noTransactions() {
-        BlockHash hash = new BlockHash(HashUtilsTest.generateRandomHash());
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(1L, hash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);
@@ -51,7 +51,7 @@ public class BlockTest {
 
     @Test
     public void blockWithDifferentNumbersHaveDifferentHashes() {
-        BlockHash parentHash = new BlockHash(HashUtilsTest.generateRandomHash());
+        BlockHash parentHash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block1 = new Block(1L, parentHash, HashUtilsTest.generateRandomHash(), System.currentTimeMillis() / 1000, coinbase);

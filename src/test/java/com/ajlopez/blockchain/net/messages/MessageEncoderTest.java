@@ -92,7 +92,7 @@ public class MessageEncoderTest {
 
     @Test
     public void encodeAndDecodeGetBlockByHashMessage() {
-        BlockHash hash = HashUtilsTest.generateRandomBlockHash();
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
         Message message = new GetBlockByHashMessage(hash);
 
         byte[] bytes = MessageEncoder.encode(message);

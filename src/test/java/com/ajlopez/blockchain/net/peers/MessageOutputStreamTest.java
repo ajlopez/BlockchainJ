@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.messages.GetBlockByHashMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.MessageEncoder;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class MessageOutputStreamTest {
     @Test
     public void writeSimpleMessage() throws IOException {
-        Message message = new GetBlockByHashMessage(HashUtilsTest.generateRandomBlockHash());
+        Message message = new GetBlockByHashMessage(FactoryHelper.createRandomBlockHash());
         byte[] bytes = MessageEncoder.encode(message);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

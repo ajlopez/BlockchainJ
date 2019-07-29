@@ -36,7 +36,7 @@ public class PeerConnectionTest {
         PeerConnection peerConnection1 = new PeerConnection((short)1, peer2, inputStream1, outputStream2, null);
         PeerConnection peerConnection2 = new PeerConnection((short)1, peer1, inputStream2, outputStream1, inputChannel);
 
-        Message message = new GetBlockByHashMessage(HashUtilsTest.generateRandomBlockHash());
+        Message message = new GetBlockByHashMessage(FactoryHelper.createRandomBlockHash());
 
         Semaphore semaphore = new Semaphore(0, true);
 

@@ -15,9 +15,10 @@ import java.util.Random;
  */
 public class HashUtilsTest {
     @Test
-    public void getSha3Hash() throws NoSuchProviderException, NoSuchAlgorithmException {
+    public void getKeccak256Hash() throws NoSuchProviderException, NoSuchAlgorithmException {
         byte[] hash = HashUtils.keccak256(new byte[] { 0x01, 0x02, 0x03 });
 
+        // TODO better check
         Assert.assertNotNull(hash);
     }
 
@@ -26,13 +27,6 @@ public class HashUtilsTest {
         Random random = new Random();
         random.nextBytes(bytes);
         return new Hash(bytes);
-    }
-
-    public static BlockHash generateRandomBlockHash() {
-        byte[] bytes = new byte[32];
-        Random random = new Random();
-        random.nextBytes(bytes);
-        return new BlockHash(bytes);
     }
 
     public static PeerId generateRandomPeerId() {

@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.net.peers;
 import com.ajlopez.blockchain.net.messages.GetBlockByHashMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.MessageEncoder;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +16,7 @@ import java.io.*;
 public class MessageInputStreamTest {
     @Test
     public void readMessage() throws IOException {
-        Message message = new GetBlockByHashMessage(HashUtilsTest.generateRandomBlockHash());
+        Message message = new GetBlockByHashMessage(FactoryHelper.createRandomBlockHash());
         byte[] bytes = MessageEncoder.encode(message);
         ByteArrayOutputStream bytesOutputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(bytesOutputStream);
