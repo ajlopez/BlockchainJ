@@ -21,7 +21,7 @@ public class HashUtils {
 
     private HashUtils() { }
 
-    public static byte[] sha3(byte[] input) throws NoSuchProviderException, NoSuchAlgorithmException {
+    public static byte[] keccak256(byte[] input) throws NoSuchProviderException, NoSuchAlgorithmException {
         MessageDigest digest;
         digest = MessageDigest.getInstance("KECCAK-256", BouncyCastleProvider.PROVIDER_NAME);
         digest.update(input);
@@ -30,7 +30,7 @@ public class HashUtils {
 
     public static Hash calculateHash(byte[] data) {
         try {
-            return new Hash(sha3(data));
+            return new Hash(keccak256(data));
         } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
