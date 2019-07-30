@@ -179,21 +179,22 @@ public class TransactionExecutorTest {
 
     @Test
     public void execute999Transactions() {
+        int ntxs = 1000;
         AccountStore accountStore = new AccountStore(new Trie());
 
         List<Address> addresses = new ArrayList<>();
 
-        for (int k = 0; k < 1000; k++)
+        for (int k = 0; k < ntxs; k++)
             addresses.add(FactoryHelper.createRandomAddress());
 
-        Account account = new Account(BigInteger.valueOf(1001), 0, null, null);
+        Account account = new Account(BigInteger.valueOf(ntxs + 1), 0, null, null);
 
         accountStore.putAccount(addresses.get(0), account);
 
         List<Transaction> transactions = new ArrayList<>();
 
-        for (int k = 0; k < 1000 - 1; k++) {
-            Transaction transaction = new Transaction(addresses.get(k), addresses.get(k + 1), BigInteger.valueOf(1000 - k), 0, null);
+        for (int k = 0; k < ntxs - 1; k++) {
+            Transaction transaction = new Transaction(addresses.get(k), addresses.get(k + 1), BigInteger.valueOf(ntxs - k), 0, null);
             transactions.add(transaction);
         }
 
