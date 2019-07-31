@@ -43,7 +43,15 @@ public class TransactionExecutor {
         ExecutionContext context = new ChildExecutionContext(this.executionContext);
 
         context.transfer(transaction.getSender(), transaction.getReceiver(), transaction.getValue());
+
+        byte[] code = context.getCode(transaction.getReceiver());
+
         context.incrementNonce(transaction.getSender());
+
+        // TODO apply gas limit gas price
+        // TODO apply data cost
+        // TODO apply contract creation cost
+
         context.commit();
 
         return true;

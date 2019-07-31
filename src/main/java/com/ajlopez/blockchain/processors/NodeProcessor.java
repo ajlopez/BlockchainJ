@@ -13,6 +13,7 @@ import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
+import com.ajlopez.blockchain.store.CodeStore;
 
 import java.util.List;
 
@@ -28,13 +29,13 @@ public class NodeProcessor implements PeerNode {
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, BlockChain blockChain, AccountStoreProvider accountStoreProvider, Address coinbase) {
+    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, BlockChain blockChain, AccountStoreProvider accountStoreProvider, CodeStore codeStore, Address coinbase) {
         this.networkConfiguration = networkConfiguration;
         this.peer = peer;
 
         OrphanBlocks orphanBlocks = new OrphanBlocks();
 
-        this.blockProcessor = new BlockProcessor(blockChain, orphanBlocks, new BlockValidator(new BlockExecutor(accountStoreProvider)));
+        this.blockProcessor = new BlockProcessor(blockChain, orphanBlocks, new BlockValidator(new BlockExecutor(accountStoreProvider, codeStore)));
         this.transactionPool = new TransactionPool();
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(this.transactionPool);

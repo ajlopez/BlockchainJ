@@ -19,13 +19,11 @@ import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -210,7 +208,7 @@ public class FactoryHelper {
     }
 
     public static BlockValidator createBlockValidator(AccountStoreProvider accountStoreProvider) {
-        return new BlockValidator(new BlockExecutor(accountStoreProvider));
+        return new BlockValidator(new BlockExecutor(accountStoreProvider, null));
     }
 
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor) {
@@ -246,7 +244,7 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
-        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), blockChain, new AccountStoreProvider(new TrieStore(new HashMapStore())), createRandomAddress());
+        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), blockChain, new AccountStoreProvider(new TrieStore(new HashMapStore())), new CodeStore(new HashMapStore()), createRandomAddress());
     }
 
     public static List<Block> createBlocks(int nblocks) {
