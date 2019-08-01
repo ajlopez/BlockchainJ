@@ -3,9 +3,14 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
+import com.ajlopez.blockchain.store.CodeStore;
+import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtils;
+import com.ajlopez.blockchain.vms.eth.OpCodes;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,6 +37,50 @@ public class TransactionExecutorTest {
         Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
+
+        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction));
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(1, result.size());
+
+        Transaction tresult = result.get(0);
+
+        Assert.assertEquals(transaction, tresult);
+
+        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Assert.assertNotNull(senderBalance);
+        Assert.assertEquals(BigInteger.valueOf(1000 - 100), senderBalance);
+
+        BigInteger receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
+        Assert.assertNotNull(receiverAddress);
+        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
+
+        Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
+        Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
+    }
+
+    @Test
+    public void executeTransactionInvokingContractCode() {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
+        accountStore.putAccount(senderAddress, sender);
+
+        byte[] code = new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x00, OpCodes.SSTORE };
+        Hash codeHash = HashUtils.calculateHash(code);
+        codeStore.putCode(codeHash, code);
+        Account receiver = new Account(BigInteger.ZERO, 0, codeHash, null);
+        accountStore.putAccount(receiverAddress, receiver);
+
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
+
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, codeStore));
 
         List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction));
 
