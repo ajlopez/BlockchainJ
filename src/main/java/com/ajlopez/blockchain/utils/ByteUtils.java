@@ -18,10 +18,14 @@ public class ByteUtils {
     }
 
     public static byte[] normalizeBytesToNull(byte[] bytes) {
-        if (bytes != null && bytes.length == 0)
+        if (isNullOrEmpty(bytes))
             return null;
 
         return bytes;
+    }
+
+    public static boolean isNullOrEmpty(byte[] bytes) {
+        return bytes == null || bytes.length == 0;
     }
 
     public static byte[] unsignedLongToBytes(long value) {

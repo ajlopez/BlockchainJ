@@ -8,9 +8,11 @@ import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.OpCodes;
+import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -63,7 +65,7 @@ public class TransactionExecutorTest {
     @Test
     public void executeTransactionInvokingContractCode() {
         CodeStore codeStore = new CodeStore(new HashMapStore());
-
+        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
         AccountStore accountStore = new AccountStore(new Trie());
 
         Address senderAddress = FactoryHelper.createRandomAddress();
@@ -80,9 +82,14 @@ public class TransactionExecutorTest {
 
         Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
 
-        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, codeStore));
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
         List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction));
+
+        Account receiver2 = accountStore.getAccount(receiverAddress);
+
+        Assert.assertNotNull(receiver2);
+        Assert.assertNotNull(receiver2.getStorageHash());
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());

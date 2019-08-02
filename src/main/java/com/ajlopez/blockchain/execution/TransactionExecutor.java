@@ -2,6 +2,8 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.vms.eth.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -44,7 +46,23 @@ public class TransactionExecutor {
 
         context.transfer(transaction.getSender(), transaction.getReceiver(), transaction.getValue());
 
-        byte[] code = context.getCode(transaction.getReceiver());
+        Address receiver = transaction.getReceiver();
+        byte[] code = context.getCode(receiver);
+
+        if (!ByteUtils.isNullOrEmpty(code)) {
+            Storage storage = context.getAccountStorage(receiver);
+            ProgramEnvironment programEnvironment = new ProgramEnvironment(new MessageData(null, null, null, null, 6000000, null, null, false), null, null);
+            VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
+
+            try {
+                vm.execute(code);
+                storage.commit();
+            }
+            catch (VirtualMachineException ex) {
+                // TODO revert all
+                return false;
+            }
+        }
 
         context.incrementNonce(transaction.getSender());
 
