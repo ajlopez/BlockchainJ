@@ -39,6 +39,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Warp Sync](https://wiki.parity.io/Warp-Sync)
 - [What is a light client and why you should care?](https://www.parity.io/what-is-a-light-client/)
 - [Transactions Per Second in Permissioned Blockchains — Does It Even Matter?](https://hackernoon.com/transactions-per-second-in-private-blockchains-does-it-even-matter-bf67dec56b76)
+- [Vac modular peer-to-peer messaging stack](https://vac.dev/vac-overview)
 
 ## To Do
 
