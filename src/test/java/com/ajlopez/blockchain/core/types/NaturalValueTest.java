@@ -1,7 +1,5 @@
 package com.ajlopez.blockchain.core.types;
 
-import com.ajlopez.blockchain.vms.eth.VirtualMachineException;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,5 +50,17 @@ public class NaturalValueTest {
         Assert.assertEquals(new NaturalValue(BigInteger.TEN).hashCode(), BigInteger.TEN.hashCode());
 
         Assert.assertNotEquals(new NaturalValue(BigInteger.TEN).hashCode(), new NaturalValue(BigInteger.ONE));
+    }
+
+    @Test
+    public void toBytes() {
+        Assert.assertArrayEquals(new byte[] { 0x01 }, new NaturalValue(new BigInteger(1, new byte[] { 0x01 })).toBytes());
+
+        byte[] bytes = new byte[NaturalValue.NATURAL_VALUE_BYTES];
+
+        for (int k = 0; k < bytes.length; k++)
+            bytes[k] = (byte)0xff;
+
+        Assert.assertArrayEquals(bytes, new NaturalValue(new BigInteger(1, bytes)).toBytes());
     }
 }
