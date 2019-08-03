@@ -205,7 +205,6 @@ public class TransactionExecutorTest {
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
     }
 
-
     @Test
     public void secondTransactionRejectedByInsufficientBalanceToCoverGasLimit() {
         AccountStore accountStore = new AccountStore(new Trie());
@@ -350,7 +349,8 @@ public class TransactionExecutorTest {
 
         BigInteger coinbaseBalance = accountStore.getAccount(coinbase).getBalance();
         Assert.assertNotNull(coinbaseBalance);
-        
+        Assert.assertNotEquals(BigInteger.ZERO, coinbaseBalance);
+
         BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
         Assert.assertEquals(BigInteger.valueOf(1000000 - 100).subtract(coinbaseBalance), senderBalance);
