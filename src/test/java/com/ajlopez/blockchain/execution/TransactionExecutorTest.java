@@ -29,12 +29,8 @@ public class TransactionExecutorTest {
     public void executeTransaction() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
-
-        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
-
-        accountStore.putAccount(senderAddress, sender);
 
         Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
 
@@ -68,17 +64,9 @@ public class TransactionExecutorTest {
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
         AccountStore accountStore = new AccountStore(new Trie());
 
-        Address senderAddress = FactoryHelper.createRandomAddress();
-        Address receiverAddress = FactoryHelper.createRandomAddress();
-
-        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
-        accountStore.putAccount(senderAddress, sender);
-
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         byte[] code = new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x00, OpCodes.SSTORE };
-        Hash codeHash = HashUtils.calculateHash(code);
-        codeStore.putCode(codeHash, code);
-        Account receiver = new Account(BigInteger.ZERO, 0, codeHash, null);
-        accountStore.putAccount(receiverAddress, receiver);
+        Address receiverAddress = FactoryHelper.createAccountWithCode(accountStore, codeStore, code);
 
         Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
 
@@ -86,10 +74,10 @@ public class TransactionExecutorTest {
 
         List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction));
 
-        Account receiver2 = accountStore.getAccount(receiverAddress);
+        Account receiver = accountStore.getAccount(receiverAddress);
 
-        Assert.assertNotNull(receiver2);
-        Assert.assertNotNull(receiver2.getStorageHash());
+        Assert.assertNotNull(receiver);
+        Assert.assertNotNull(receiver.getStorageHash());
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
@@ -115,12 +103,8 @@ public class TransactionExecutorTest {
     public void executeTwoTransactions() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
-
-        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
-
-        accountStore.putAccount(senderAddress, sender);
 
         Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
         Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 1, null);
@@ -157,12 +141,8 @@ public class TransactionExecutorTest {
     public void secondTransactionRejectedByNonce() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
-
-        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
-
-        accountStore.putAccount(senderAddress, sender);
 
         Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
         Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 0, null);
@@ -197,12 +177,8 @@ public class TransactionExecutorTest {
     public void secondTransactionRejectedByInsufficientBalance() {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
-
-        Account sender = new Account(BigInteger.valueOf(1000), 0, null, null);
-
-        accountStore.putAccount(senderAddress, sender);
 
         Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
         Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(5000), 1, null);

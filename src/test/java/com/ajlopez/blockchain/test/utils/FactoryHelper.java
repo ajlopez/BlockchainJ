@@ -20,6 +20,7 @@ import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
+import com.ajlopez.blockchain.utils.HashUtils;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -54,6 +55,26 @@ public class FactoryHelper {
 
     public static Address createRandomAddress() {
         return new Address(createRandomBytes(Address.ADDRESS_BYTES));
+    }
+
+    public static Address createAccountWithBalance(AccountStore accountStore, long balance) {
+        Address address = createRandomAddress();
+        Account account = new Account(BigInteger.valueOf(balance), 0, null, null);
+
+        accountStore.putAccount(address, account);
+
+        return address;
+    }
+
+    public static Address createAccountWithCode(AccountStore accountStore, CodeStore codeStore, byte[] code) {
+        Hash codeHash = HashUtils.calculateHash(code);
+        codeStore.putCode(codeHash, code);
+        Address address = createRandomAddress();
+        Account account = new Account(BigInteger.ZERO, 0, codeHash, null);
+
+        accountStore.putAccount(address, account);
+
+        return address;
     }
 
     public static List<Address> createRandomAddresses(int n) {
