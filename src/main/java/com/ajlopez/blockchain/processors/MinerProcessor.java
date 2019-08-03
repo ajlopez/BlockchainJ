@@ -54,7 +54,7 @@ public class MinerProcessor {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions());
+        List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions(), null);
 
         return new Block(parent, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase);
     }

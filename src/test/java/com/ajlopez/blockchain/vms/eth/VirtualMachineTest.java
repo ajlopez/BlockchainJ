@@ -1479,7 +1479,7 @@ public class VirtualMachineTest {
         virtualMachine.execute(new byte[] { OpCodes.ADDRESS });
     }
 
-    private static void executeUnaryOp(byte opcode, int expected, int operand, int expectedGasUsed) throws VirtualMachineException {
+    private static void executeUnaryOp(byte opcode, int expected, int operand, long expectedGasUsed) throws VirtualMachineException {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
         byte[] bytecodes = new byte[2 + boperand.length];
@@ -1501,7 +1501,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromUnsignedInteger(expected), stack.pop());
     }
 
-    private static void executeUnaryOp(String operand, byte opcode, String expected, int expectedGasUsed) throws VirtualMachineException {
+    private static void executeUnaryOp(String operand, byte opcode, String expected, long expectedGasUsed) throws VirtualMachineException {
         byte[] boperand = DataWord.fromHexadecimalString(operand).toNormalizedBytes();
 
         byte[] bytecodes = new byte[2 + boperand.length];
@@ -1523,7 +1523,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
     }
 
-    private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected, int expectedGasUsed) throws VirtualMachineException {
+    private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected, long expectedGasUsed) throws VirtualMachineException {
         byte[] boperand1 = DataWord.fromSignedLong(operand1).toNormalizedBytes();
         byte[] boperand2 = DataWord.fromSignedLong(operand2).toNormalizedBytes();
 
@@ -1548,7 +1548,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromSignedLong(expected), stack.pop());
     }
 
-    private static void executeBinaryOp(String operand1, String operand2, byte opcode, String expected, int expectedGasUsed) throws VirtualMachineException {
+    private static void executeBinaryOp(String operand1, String operand2, byte opcode, String expected, long expectedGasUsed) throws VirtualMachineException {
         byte[] boperand1 = DataWord.fromHexadecimalString(operand1).toNormalizedBytes();
         byte[] boperand2 = DataWord.fromHexadecimalString(operand2).toNormalizedBytes();
 
@@ -1573,7 +1573,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
     }
 
-    private static void executeTernaryOp(int operand1, int operand2, int operand3, byte opcode, int expected, int expectedGasUsed) throws VirtualMachineException {
+    private static void executeTernaryOp(int operand1, int operand2, int operand3, byte opcode, int expected, long expectedGasUsed) throws VirtualMachineException {
         byte[] boperand1 = DataWord.fromSignedLong(operand1).toNormalizedBytes();
         byte[] boperand2 = DataWord.fromSignedLong(operand2).toNormalizedBytes();
         byte[] boperand3 = DataWord.fromSignedLong(operand3).toNormalizedBytes();

@@ -179,7 +179,7 @@ public class FactoryHelper {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        transactionExecutor.executeTransactions(transactions);
+        transactionExecutor.executeTransactions(transactions, null);
 
         return new Block(parent.getNumber() + 1, parent.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase);
     }

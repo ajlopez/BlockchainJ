@@ -14,15 +14,16 @@ public enum FeeSchedule {
     SLOAD(50),
     SSET(20000),
     SRESET(5000),
-    SCLEAR(15000);
+    SCLEAR(15000),
+    TRANSFER(21000);
 
-    private int value;
+    private long value;
 
-    private FeeSchedule(int value) {
+    private FeeSchedule(long value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public long getValue() {
         return this.value;
     }
 }

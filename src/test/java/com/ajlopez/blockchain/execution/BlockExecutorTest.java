@@ -60,7 +60,7 @@ public class BlockExecutorTest {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        transactionExecutor.executeTransactions(transactions);
+        transactionExecutor.executeTransactions(transactions, null);
 
         BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, codeStore);
 
@@ -94,7 +94,7 @@ public class BlockExecutorTest {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        transactionExecutor.executeTransactions(transactions);
+        transactionExecutor.executeTransactions(transactions, null);
 
         BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, codeStore);
 
@@ -128,7 +128,7 @@ public class BlockExecutorTest {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        transactionExecutor.executeTransactions(transactions);
+        transactionExecutor.executeTransactions(transactions, null);
 
         BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, codeStore);
 

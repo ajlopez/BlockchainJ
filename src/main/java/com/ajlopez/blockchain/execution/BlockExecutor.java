@@ -24,7 +24,7 @@ public class BlockExecutor {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, this.codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        transactionExecutor.executeTransactions(block.getTransactions());
+        transactionExecutor.executeTransactions(block.getTransactions(), null);
 
         return accountStore.getRootHash();
     }

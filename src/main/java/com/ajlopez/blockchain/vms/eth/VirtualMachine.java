@@ -20,7 +20,7 @@ public class VirtualMachine {
     private final Stack<DataWord> stack = new Stack<>();
     private final List<Log> logs = new ArrayList<>();
 
-    private int gasUsed;
+    private long gasUsed;
 
     static {
         opCodeFees[OpCodes.ADDRESS] = FeeSchedule.BASE;
@@ -97,7 +97,7 @@ public class VirtualMachine {
 
     public List<Log> getLogs() { return this.logs; }
 
-    public int getGasUsed() {
+    public long getGasUsed() {
         return this.gasUsed;
     }
 

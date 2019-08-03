@@ -20,11 +20,11 @@ public class TransactionExecutor {
         this.executionContext = executionContext;
     }
 
-    public List<Transaction> executeTransactions(List<Transaction> transactions) {
+    public List<Transaction> executeTransactions(List<Transaction> transactions, BlockData blockData) {
         List<Transaction> executed = new ArrayList<>();
 
         for (Transaction transaction : transactions)
-            if (this.executeTransaction(transaction))
+            if (this.executeTransaction(transaction, blockData))
                 executed.add(transaction);
 
         this.executionContext.commit();
@@ -32,15 +32,17 @@ public class TransactionExecutor {
         return executed;
     }
 
-    private boolean executeTransaction(Transaction transaction) {
+    private boolean executeTransaction(Transaction transaction, BlockData blockData) {
         Address sender = transaction.getSender();
 
         if (transaction.getNonce() != this.executionContext.getNonce(sender))
             return false;
 
         BigInteger senderBalance = this.executionContext.getBalance(sender);
+        BigInteger gasPrice = transaction.getGasPrice();
+        BigInteger gasLimitToPay = gasPrice.multiply(BigInteger.valueOf(transaction.getGas()));
 
-        if (senderBalance.compareTo(transaction.getValue()) < 0)
+        if (senderBalance.compareTo(transaction.getValue().add(gasLimitToPay)) < 0)
             return false;
 
         ExecutionContext context = new ChildExecutionContext(this.executionContext);
@@ -50,6 +52,8 @@ public class TransactionExecutor {
         Address receiver = transaction.getReceiver();
         byte[] code = context.getCode(receiver);
 
+        long gasUsed = FeeSchedule.TRANSFER.getValue();
+
         if (!ByteUtils.isNullOrEmpty(code)) {
             Storage storage = context.getAccountStorage(receiver);
             MessageData messageData = new MessageData(receiver, sender, sender, DataWord.fromBigInteger(transaction.getValue()), 6000000, DataWord.ZERO, null, false);
@@ -58,11 +62,17 @@ public class TransactionExecutor {
 
             try {
                 vm.execute(code);
+                gasUsed += vm.getGasUsed();
             }
             catch (VirtualMachineException ex) {
                 // TODO revert all
                 return false;
             }
+        }
+
+        if (gasPrice.signum() > 0) {
+            BigInteger gasPayment = gasPrice.multiply(BigInteger.valueOf(gasUsed));
+            context.transfer(sender, blockData.getCoinbase(), gasPayment);
         }
 
         context.incrementNonce(transaction.getSender());

@@ -59,7 +59,7 @@ public class BlockValidatorTest {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        transactionExecutor.executeTransactions(transactions);
+        transactionExecutor.executeTransactions(transactions, null);
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 

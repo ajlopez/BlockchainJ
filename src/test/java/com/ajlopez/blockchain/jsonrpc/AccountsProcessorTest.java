@@ -265,7 +265,7 @@ public class AccountsProcessorTest {
             TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
             List<Transaction> transactions = Collections.singletonList(transaction);
 
-            transactions = transactionExecutor.executeTransactions(transactions);
+            transactions = transactionExecutor.executeTransactions(transactions, null);
 
             Block parent = blockChain.getBestBlock();
             Address coinbase = FactoryHelper.createRandomAddress();
