@@ -6,11 +6,25 @@ import java.math.BigInteger;
  * Created by ajlopez on 03/08/2019.
  */
 public class NaturalValue {
+    public static final int NATURAL_VALUE_BYTES = 32;
+
     private final BigInteger value;
 
     public NaturalValue(BigInteger value) {
         if (value.signum() < 0)
             throw new ArithmeticException("Natural value cannot be negative");
+
+        byte[] binat = value.toByteArray();
+        int nzeros = 0;
+
+        for (int k = 0; k < binat.length; k++)
+            if (binat[k] == 0)
+                nzeros++;
+            else
+                break;
+
+        if (value.toByteArray().length - nzeros > NATURAL_VALUE_BYTES)
+            throw new ArithmeticException("Natural value is too big");
 
         this.value = value;
     }
