@@ -56,7 +56,6 @@ public class TransactionExecutor {
 
             try {
                 vm.execute(code);
-                storage.commit();
             }
             catch (VirtualMachineException ex) {
                 // TODO revert all

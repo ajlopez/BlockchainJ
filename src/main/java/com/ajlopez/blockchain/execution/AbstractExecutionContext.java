@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.vms.eth.Storage;
+import com.ajlopez.blockchain.vms.eth.TrieStorage;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -52,6 +53,12 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
         for (Map.Entry<Address, Storage> entry : this.accountStorages.entrySet()) {
             Storage storage = entry.getValue();
             storage.commit();
+
+            // TODO Improve
+            if (storage instanceof TrieStorage) {
+                Address address = entry.getKey();
+                this.getAccountState(address).setStorageHash(((TrieStorage)storage).getRootHash());
+            }
         }
 
         for (Map.Entry<Address, AccountState> entry : this.accountStates.entrySet()) {
