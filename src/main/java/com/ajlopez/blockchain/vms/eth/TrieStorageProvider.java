@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.vms.eth;
 
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.AccountState;
 import com.ajlopez.blockchain.store.TrieStore;
 
@@ -14,6 +15,10 @@ public class TrieStorageProvider {
     }
 
     public TrieStorage retrieve(AccountState accountState) {
-        return new TrieStorage(this.storageTrieStore.retrieve(accountState.getStorageHash()));
+        return this.retrieve(accountState.getStorageHash());
+    }
+
+    public TrieStorage retrieve(Hash hash) {
+        return new TrieStorage(this.storageTrieStore.retrieve(hash));
     }
 }
