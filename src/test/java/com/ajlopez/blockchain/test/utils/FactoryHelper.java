@@ -59,22 +59,24 @@ public class FactoryHelper {
 
     public static Address createAccountWithBalance(AccountStore accountStore, long balance) {
         Address address = createRandomAddress();
-        Account account = new Account(BigInteger.valueOf(balance), 0, null, null);
 
-        accountStore.putAccount(address, account);
-
+        createAccountWithBalance(accountStore, address, balance);
+        
         return address;
     }
 
-    public static Address createAccountWithCode(AccountStore accountStore, CodeStore codeStore, byte[] code) {
+    public static void createAccountWithBalance(AccountStore accountStore, Address address, long balance) {
+        Account account = new Account(BigInteger.valueOf(balance), 0, null, null);
+
+        accountStore.putAccount(address, account);
+    }
+
+    public static void createAccountWithCode(AccountStore accountStore, CodeStore codeStore, Address address, byte[] code) {
         Hash codeHash = HashUtils.calculateHash(code);
         codeStore.putCode(codeHash, code);
-        Address address = createRandomAddress();
         Account account = new Account(BigInteger.ZERO, 0, codeHash, null);
 
         accountStore.putAccount(address, account);
-
-        return address;
     }
 
     public static List<Address> createRandomAddresses(int n) {

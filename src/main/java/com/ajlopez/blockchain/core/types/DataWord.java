@@ -36,6 +36,11 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return new DataWord(HexUtils.hexStringToBytes(value));
     }
 
+    public static DataWord fromBigInteger(BigInteger value) {
+        byte[] bytes = value.toByteArray();
+        return fromBytes(bytes, 0, bytes.length);
+    }
+
     public static DataWord fromBytes(byte[] bytes, int offset, int length) {
         byte[] newbytes = new byte[DATAWORD_BYTES];
 

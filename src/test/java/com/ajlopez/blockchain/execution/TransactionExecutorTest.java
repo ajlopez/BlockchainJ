@@ -10,7 +10,7 @@ import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtils;
+import com.ajlopez.blockchain.vms.eth.FeeSchedule;
 import com.ajlopez.blockchain.vms.eth.OpCodes;
 import com.ajlopez.blockchain.vms.eth.Storage;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
@@ -57,52 +57,6 @@ public class TransactionExecutorTest {
 
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
-    }
-
-    @Test
-    public void executeTransactionInvokingContractCode() {
-        CodeStore codeStore = new CodeStore(new HashMapStore());
-        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
-        AccountStore accountStore = new AccountStore(new Trie());
-
-        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
-        byte[] code = new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x00, OpCodes.SSTORE };
-        Address receiverAddress = FactoryHelper.createAccountWithCode(accountStore, codeStore, code);
-
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
-
-        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
-
-        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction));
-
-        Account receiver = accountStore.getAccount(receiverAddress);
-
-        Assert.assertNotNull(receiver);
-        Assert.assertNotNull(receiver.getStorageHash());
-
-        Assert.assertNotNull(result);
-        Assert.assertFalse(result.isEmpty());
-        Assert.assertEquals(1, result.size());
-
-        Transaction tresult = result.get(0);
-
-        Assert.assertEquals(transaction, tresult);
-
-        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
-        Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(BigInteger.valueOf(1000 - 100), senderBalance);
-
-        Assert.assertNotNull(receiverAddress);
-
-        BigInteger receiverBalance = receiver.getBalance();
-        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
-
-        Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
-        Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
-
-        Storage storage = trieStorageProvider.retrieve(receiver.getStorageHash());
-
-        Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.ZERO));
     }
 
     @Test
@@ -250,5 +204,86 @@ public class TransactionExecutorTest {
 
         Assert.assertNotNull(executed);
         Assert.assertEquals(transactions.size(), executed.size());
+    }
+
+    private static Storage executeTransactionInvokingCode(byte[] code) {
+        return executeTransactionInvokingCode(code, FactoryHelper.createRandomAddress(), FactoryHelper.createRandomAddress());
+    }
+
+    @Test
+    public void executeTransactionInvokingContractCode() {
+        byte[] code = new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x00, OpCodes.SSTORE };
+
+        Storage storage = executeTransactionInvokingCode(code);
+
+        Assert.assertNotNull(storage);
+        Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.ZERO));
+    }
+
+    @Test
+    public void executeTransactionInvokingContractCodeGettingMessageData() {
+        byte[] code = new byte[] {
+                OpCodes.ORIGIN, OpCodes.PUSH1, 0x00, OpCodes.SSTORE,
+                OpCodes.CALLER, OpCodes.PUSH1, 0x01, OpCodes.SSTORE,
+                OpCodes.ADDRESS, OpCodes.PUSH1, 0x02, OpCodes.SSTORE,
+                OpCodes.CALLVALUE, OpCodes.PUSH1, 0x03, OpCodes.SSTORE,
+                OpCodes.GAS, OpCodes.PUSH1, 0x04, OpCodes.SSTORE,
+                OpCodes.GASPRICE, OpCodes.PUSH1, 0x05, OpCodes.SSTORE
+        };
+
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        Storage storage = executeTransactionInvokingCode(code, senderAddress, receiverAddress);
+
+        Assert.assertNotNull(storage);
+        Assert.assertEquals(DataWord.fromAddress(senderAddress), storage.getValue(DataWord.ZERO));
+        Assert.assertEquals(DataWord.fromAddress(senderAddress), storage.getValue(DataWord.ONE));
+        Assert.assertEquals(DataWord.fromAddress(receiverAddress), storage.getValue(DataWord.TWO));
+        Assert.assertEquals(DataWord.fromUnsignedInteger(100), storage.getValue(DataWord.fromUnsignedInteger(3)));
+        Assert.assertEquals(DataWord.fromUnsignedInteger(6000000 - FeeSchedule.BASE.getValue() - 4 * (FeeSchedule.BASE.getValue() + FeeSchedule.VERYLOW.getValue() + FeeSchedule.SSET.getValue())), storage.getValue(DataWord.fromUnsignedInteger(4)));
+        Assert.assertEquals(DataWord.ZERO, storage.getValue(DataWord.fromUnsignedInteger(5)));
+    }
+
+    private static Storage executeTransactionInvokingCode(byte[] code, Address senderAddress, Address receiverAddress) {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000);
+        FactoryHelper.createAccountWithCode(accountStore, codeStore, receiverAddress, code);
+
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
+
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
+
+        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction));
+
+        Account receiver = accountStore.getAccount(receiverAddress);
+
+        Assert.assertNotNull(receiver);
+        Assert.assertNotNull(receiver.getStorageHash());
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(1, result.size());
+
+        Transaction tresult = result.get(0);
+
+        Assert.assertEquals(transaction, tresult);
+
+        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Assert.assertNotNull(senderBalance);
+        Assert.assertEquals(BigInteger.valueOf(1000 - 100), senderBalance);
+
+        Assert.assertNotNull(receiverAddress);
+
+        BigInteger receiverBalance = receiver.getBalance();
+        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
+
+        Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
+        Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
+
+        return trieStorageProvider.retrieve(receiver.getStorageHash());
     }
 }

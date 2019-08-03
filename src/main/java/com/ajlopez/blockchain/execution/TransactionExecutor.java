@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.vms.eth.*;
 
@@ -51,7 +52,8 @@ public class TransactionExecutor {
 
         if (!ByteUtils.isNullOrEmpty(code)) {
             Storage storage = context.getAccountStorage(receiver);
-            ProgramEnvironment programEnvironment = new ProgramEnvironment(new MessageData(null, null, null, null, 6000000, null, null, false), null, null);
+            MessageData messageData = new MessageData(receiver, sender, sender, DataWord.fromBigInteger(transaction.getValue()), 6000000, DataWord.ZERO, null, false);
+            ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
             VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
             try {

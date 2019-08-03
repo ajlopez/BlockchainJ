@@ -33,6 +33,19 @@ public class MapStorageTest {
     }
 
     @Test
+    public void setZeroAndGetValue() {
+        Storage storage = new MapStorage();
+        DataWord address = DataWord.fromHexadecimalString("0x010203");
+
+        storage.setValue(address, DataWord.ZERO);
+
+        DataWord result = storage.getValue(address);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(DataWord.ZERO, result);
+    }
+
+    @Test
     public void setResetAndGetValue() {
         Storage storage = new MapStorage();
         DataWord address = DataWord.fromHexadecimalString("0x010203");

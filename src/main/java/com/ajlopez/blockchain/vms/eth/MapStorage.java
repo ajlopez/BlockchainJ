@@ -27,10 +27,7 @@ public class MapStorage implements Storage {
 
     @Override
     public void setValue(DataWord address, DataWord value) {
-        if (value.equals(DataWord.ZERO))
-            this.values.remove(address);
-        else
-            this.values.put(address, value);
+        this.values.put(address, value);
     }
 
     @Override
