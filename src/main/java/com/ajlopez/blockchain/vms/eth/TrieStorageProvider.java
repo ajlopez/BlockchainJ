@@ -14,6 +14,6 @@ public class TrieStorageProvider {
     }
 
     public TrieStorage retrieve(AccountState accountState) {
-        return new TrieStorage(this.storageTrieStore.retrieve(accountState.getStorageHash()), accountState);
+        return new TrieStorage(this.storageTrieStore.retrieve(accountState.getStorageHash()));
     }
 }

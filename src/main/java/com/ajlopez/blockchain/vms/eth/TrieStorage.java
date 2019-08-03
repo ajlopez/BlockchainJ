@@ -10,11 +10,9 @@ import com.ajlopez.blockchain.state.Trie;
  */
 public class TrieStorage implements Storage {
     private Trie trie;
-    private final AccountState accountState;
 
-    public TrieStorage(Trie trie, AccountState accountState) {
+    public TrieStorage(Trie trie) {
         this.trie = trie;
-        this.accountState = accountState;
     }
 
     @Override
@@ -53,6 +51,5 @@ public class TrieStorage implements Storage {
     @Override
     public void commit() {
         this.trie.save();
-        this.accountState.setStorageHash(this.getRootHash());
     }
 }
