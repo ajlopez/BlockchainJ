@@ -44,6 +44,14 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
     public static DataWord fromBytes(byte[] bytes, int offset, int length) {
         byte[] newbytes = new byte[DATAWORD_BYTES];
 
+        while (length > 0 && bytes[offset] == 0) {
+            offset++;
+            length--;
+        }
+
+        if (length > DATAWORD_BYTES)
+            throw new IllegalArgumentException("Too large byte array");
+
         System.arraycopy(bytes, offset, newbytes, DATAWORD_BYTES - length, length);
 
         return new DataWord(newbytes);

@@ -4,8 +4,11 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -13,6 +16,10 @@ import java.util.Random;
  * Created by ajlopez on 27/11/2018.
  */
 public class DataWordTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void createDataWord() {
         Random random = new Random();
@@ -41,14 +48,11 @@ public class DataWordTest {
         Random random = new Random();
         byte[] bytes = new byte[DataWord.DATAWORD_BYTES + 1];
         random.nextBytes(bytes);
+        bytes[0] = 1;
 
-        try {
-            new DataWord(bytes);
-            Assert.fail();
-        }
-        catch (IllegalArgumentException ex) {
-            Assert.assertEquals("Too large byte array", ex.getMessage());
-        }
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Too large byte array");
+        new DataWord(bytes);
     }
 
     @Test
@@ -329,6 +333,58 @@ public class DataWordTest {
         DataWord word = DataWord.fromAddress(address);
 
         Assert.assertArrayEquals(ByteUtils.normalizedBytes(address.getBytes()), word.toNormalizedBytes());
+    }
+
+    @Test
+    public void fromEmptyBytes() {
+        DataWord word = DataWord.fromBytes(new byte[0], 0, 0);
+
+        Assert.assertEquals(DataWord.ZERO, word);
+    }
+
+    @Test
+    public void fromOneByte() {
+        DataWord word = DataWord.fromBytes(new byte[] { (byte)0xff }, 0, 1);
+
+        Assert.assertEquals(DataWord.fromUnsignedInteger(255), word);
+    }
+
+    @Test
+    public void maximumValueFromBytes() {
+        byte[] bytes = new byte[DataWord.DATAWORD_BYTES];
+
+        for (int k = 0; k < bytes.length; k++)
+            bytes[k] = (byte)0xff;
+
+        DataWord word = DataWord.fromBytes(bytes, 0, bytes.length);
+
+        Assert.assertEquals(DataWord.fromBigInteger(new BigInteger(1, bytes)), word);
+    }
+
+    @Test
+    public void cannotCreateFromTooManyBytes() {
+        byte[] bytes = new byte[DataWord.DATAWORD_BYTES + 1];
+
+        bytes[0] = 1;
+
+        for (int k = 1; k < bytes.length; k++)
+            bytes[k] = (byte)0xff;
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Too large byte array");
+        DataWord.fromBytes(bytes, 0, bytes.length);
+    }
+
+    @Test
+    public void maximumValueFromTooManyBytes() {
+        byte[] bytes = new byte[DataWord.DATAWORD_BYTES + 1];
+
+        for (int k = 1; k < bytes.length; k++)
+            bytes[k] = (byte)0xff;
+
+        DataWord word = DataWord.fromBytes(bytes, 0, bytes.length);
+
+        Assert.assertEquals(DataWord.fromBigInteger(new BigInteger(1, bytes)), word);
     }
 
     @Test
