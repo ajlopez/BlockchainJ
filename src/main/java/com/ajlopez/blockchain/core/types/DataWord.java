@@ -41,6 +41,11 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return fromBytes(bytes, 0, bytes.length);
     }
 
+    public static DataWord fromCoin(Coin coin) {
+        byte[] bytes = coin.toBytes();
+        return fromBytes(bytes, 0, bytes.length);
+    }
+
     public static DataWord fromBytes(byte[] bytes, int offset, int length) {
         byte[] newbytes = new byte[DATAWORD_BYTES];
 

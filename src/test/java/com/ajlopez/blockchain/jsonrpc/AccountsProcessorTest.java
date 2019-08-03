@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.json.JsonStringValue;
@@ -253,7 +254,7 @@ public class AccountsProcessorTest {
         TrieStore accountTrieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(accountTrieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account senderAccount = new Account(BigInteger.valueOf(initialBalance), 0, null, null);
+        Account senderAccount = new Account(Coin.fromUnsignedLong(initialBalance), 0, null, null);
 
         accountStore.putAccount(sender, senderAccount);
         accountStore.save();
@@ -261,7 +262,7 @@ public class AccountsProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
 
         for (int k = 0; k < nblocks; k++) {
-            Transaction transaction = new Transaction(sender, receiver, BigInteger.valueOf(transferAmount), k, null, 6000000, BigInteger.ZERO);
+            Transaction transaction = new Transaction(sender, receiver, Coin.fromUnsignedLong(transferAmount), k, null, 6000000, Coin.ZERO);
             TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
             List<Transaction> transactions = Collections.singletonList(transaction);
 

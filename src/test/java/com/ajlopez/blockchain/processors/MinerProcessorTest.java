@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
@@ -15,7 +16,6 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -56,7 +56,7 @@ public class MinerProcessorTest {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account account = new Account(BigInteger.valueOf(1000), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 0, null, null);
         accountStore.putAccount(tx.getSender(), account);
         accountStore.save();
 
@@ -90,11 +90,11 @@ public class MinerProcessorTest {
 
         Assert.assertNotNull(updatedSenderAccount);
         Assert.assertEquals(1, updatedSenderAccount.getNonce());
-        Assert.assertEquals(BigInteger.valueOf(900), updatedSenderAccount.getBalance());
+        Assert.assertEquals(Coin.fromUnsignedLong(900), updatedSenderAccount.getBalance());
 
         Assert.assertNotNull(updatedReceiverAccount);
         Assert.assertEquals(0, updatedReceiverAccount.getNonce());
-        Assert.assertEquals(BigInteger.valueOf(100), updatedReceiverAccount.getBalance());
+        Assert.assertEquals(Coin.fromUnsignedLong(100), updatedReceiverAccount.getBalance());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class MinerProcessorTest {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account account = new Account(BigInteger.valueOf(1000), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 0, null, null);
         accountStore.putAccount(sender, account);
         accountStore.save();
 
@@ -143,7 +143,7 @@ public class MinerProcessorTest {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account account = new Account(BigInteger.valueOf(1000), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 0, null, null);
         accountStore.putAccount(tx.getSender(), account);
         accountStore.save();
 

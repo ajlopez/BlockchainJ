@@ -1,16 +1,15 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
-
-import java.math.BigInteger;
 
 /**
  * Created by ajlopez on 26/11/2018.
  */
 public class AccountState {
-    private BigInteger balance;
+    private Coin balance;
     private long nonce;
     private Hash codeHash;
     private Hash storageHash;
@@ -22,15 +21,12 @@ public class AccountState {
     }
 
     public AccountState() {
-        this(BigInteger.ZERO, 0, null, null);
+        this(Coin.ZERO, 0, null, null);
     }
 
-    public AccountState(BigInteger balance, long nonce, Hash codeHash, Hash storageHash) {
+    public AccountState(Coin balance, long nonce, Hash codeHash, Hash storageHash) {
         if (balance == null)
-            balance = BigInteger.ZERO;
-
-        if (BigInteger.ZERO.compareTo(balance) > 0)
-            throw new IllegalStateException("Negative balance in account state");
+            balance = Coin.ZERO;
 
         if (nonce < 0)
             throw new IllegalStateException("Negative nonce in account state");
@@ -41,7 +37,7 @@ public class AccountState {
         this.storageHash = normalizeStorageHash(storageHash);
     }
 
-    public BigInteger getBalance() {
+    public Coin getBalance() {
         return this.balance;
     }
 
@@ -52,27 +48,21 @@ public class AccountState {
         this.changed = true;
     }
 
-    public void addToBalance(BigInteger amount) {
-        if (amount.equals(BigInteger.ZERO))
+    public void addToBalance(Coin amount) {
+        if (amount.equals(Coin.ZERO))
             return;
 
-        BigInteger newbalance = this.balance.add(amount);
-
-        if (newbalance.compareTo(BigInteger.ZERO) < 0)
-            throw new IllegalStateException("Invalid balance");
+        Coin newbalance = new Coin(this.balance.asBigInteger().add(amount.asBigInteger()));
 
         this.balance = newbalance;
         this.changed = true;
     }
 
-    public void subtractFromBalance(BigInteger amount) {
-        if (amount.equals(BigInteger.ZERO))
+    public void subtractFromBalance(Coin amount) {
+        if (amount.equals(Coin.ZERO))
             return;
 
-        BigInteger newbalance = this.balance.subtract(amount);
-
-        if (newbalance.compareTo(BigInteger.ZERO) < 0)
-            throw new IllegalStateException("Invalid balance");
+        Coin newbalance = new Coin(this.balance.asBigInteger().subtract(amount.asBigInteger()));
 
         this.balance = newbalance;
         this.changed = true;

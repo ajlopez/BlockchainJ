@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HexUtils;
@@ -49,7 +50,7 @@ public class DslCommand {
     public void execute(World world) {
         if ("account".equals(this.verb)) {
             String name = this.getName(0, "name");
-            BigInteger balance = this.getBigInteger(1, "balance");
+            Coin balance = this.getCoin(1, "balance");
             long nonce = this.getLongInteger(2, "nonce");
 
             Account account = new Account(balance, nonce, null, null);
@@ -81,10 +82,10 @@ public class DslCommand {
             String name = this.getName(0, "name");
             Address from = new Address(HexUtils.hexStringToBytes(this.getName(1, "from")));
             Address to = new Address(HexUtils.hexStringToBytes(this.getName(2, "to")));
-            BigInteger value = this.getBigInteger(3, "value");
+            Coin value = this.getCoin(3, "value");
             long nonce = this.getLongInteger(4, "nonce");
 
-            Transaction transaction = new Transaction(from, to, value, nonce, null, 6000000, BigInteger.ZERO);
+            Transaction transaction = new Transaction(from, to, value, nonce, null, 6000000, Coin.ZERO);
 
             world.setTransaction(name, transaction);
 
@@ -121,16 +122,16 @@ public class DslCommand {
         return result;
     }
 
-    private BigInteger getBigInteger(int position, String name) {
+    private Coin getCoin(int position, String name) {
         if (position >= 0 && this.arguments.size() > position)
-            return new BigInteger(this.arguments.get(position));
+            return new Coin(new BigInteger(this.arguments.get(position)));
 
         String value = this.namedArguments.get(name);
 
         if (value == null)
-            return BigInteger.ZERO;
+            return Coin.ZERO;
 
-        return new BigInteger(value);
+        return new Coin(new BigInteger(value));
     }
 
     private long getLongInteger(int position, String name) {

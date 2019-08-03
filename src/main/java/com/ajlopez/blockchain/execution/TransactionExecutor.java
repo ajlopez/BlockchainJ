@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.vms.eth.*;
@@ -38,11 +39,11 @@ public class TransactionExecutor {
         if (transaction.getNonce() != this.executionContext.getNonce(sender))
             return false;
 
-        BigInteger senderBalance = this.executionContext.getBalance(sender);
-        BigInteger gasPrice = transaction.getGasPrice();
-        BigInteger gasLimitToPay = gasPrice.multiply(BigInteger.valueOf(transaction.getGas()));
+        Coin senderBalance = this.executionContext.getBalance(sender);
+        Coin gasPrice = transaction.getGasPrice();
+        Coin gasLimitToPay = new Coin(gasPrice.asBigInteger().multiply(BigInteger.valueOf(transaction.getGas())));
 
-        if (senderBalance.compareTo(transaction.getValue().add(gasLimitToPay)) < 0)
+        if (senderBalance.asBigInteger().compareTo(transaction.getValue().asBigInteger().add(gasLimitToPay.asBigInteger())) < 0)
             return false;
 
         ExecutionContext context = new ChildExecutionContext(this.executionContext);
@@ -56,7 +57,7 @@ public class TransactionExecutor {
 
         if (!ByteUtils.isNullOrEmpty(code)) {
             Storage storage = context.getAccountStorage(receiver);
-            MessageData messageData = new MessageData(receiver, sender, sender, DataWord.fromBigInteger(transaction.getValue()), 6000000, DataWord.ZERO, null, false);
+            MessageData messageData = new MessageData(receiver, sender, sender, DataWord.fromCoin(transaction.getValue()), 6000000, DataWord.ZERO, null, false);
             ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
             VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
@@ -70,8 +71,8 @@ public class TransactionExecutor {
             }
         }
 
-        if (gasPrice.signum() > 0) {
-            BigInteger gasPayment = gasPrice.multiply(BigInteger.valueOf(gasUsed));
+        if (gasPrice.asBigInteger().signum() > 0) {
+            Coin gasPayment = new Coin(gasPrice.asBigInteger().multiply(BigInteger.valueOf(gasUsed)));
             context.transfer(sender, blockData.getCoinbase(), gasPayment);
         }
 

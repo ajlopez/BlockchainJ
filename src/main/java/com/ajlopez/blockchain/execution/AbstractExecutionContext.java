@@ -1,11 +1,11 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.vms.eth.Storage;
 import com.ajlopez.blockchain.vms.eth.TrieStorage;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
     private final Map<Address, Storage> accountStorages = new HashMap<>();
 
     @Override
-    public void transfer(Address senderAddress, Address receiverAddress, BigInteger amount) {
+    public void transfer(Address senderAddress, Address receiverAddress, Coin amount) {
         AccountState sender = this.getAccountState(senderAddress);
         AccountState receiver = this.getAccountState(receiverAddress);
 
@@ -33,7 +33,7 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
     }
 
     @Override
-    public BigInteger getBalance(Address address) {
+    public Coin getBalance(Address address) {
         return this.getAccountState(address).getBalance();
     }
 

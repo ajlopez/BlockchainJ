@@ -2,9 +2,9 @@ package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,11 +39,11 @@ public class TransactionEncoder {
         byte[][] bytes = RLP.decodeList(encoded);
         Address sender = RLPEncoder.decodeAddress(bytes[0]);
         Address receiver = RLPEncoder.decodeAddress(bytes[1]);
-        BigInteger value = RLPEncoder.decodeCoin(bytes[2]);
+        Coin value = RLPEncoder.decodeCoin(bytes[2]);
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[3]);
         byte[] data = ByteUtils.normalizeBytesToNull(RLP.decode(bytes[4]));
         long gas = RLPEncoder.decodeUnsignedLong(bytes[5]);
-        BigInteger gasPrice = RLPEncoder.decodeCoin(bytes[6]);
+        Coin gasPrice = RLPEncoder.decodeCoin(bytes[6]);
 
         if (data != null && data.length == 0)
             data = null;

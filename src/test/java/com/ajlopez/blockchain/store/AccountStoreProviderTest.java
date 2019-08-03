@@ -2,13 +2,12 @@ package com.ajlopez.blockchain.store;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.math.BigInteger;
 
 /**
  * Created by ajlopez on 01/12/2018.
@@ -25,7 +24,7 @@ public class AccountStoreProviderTest {
         Account account = result.getAccount(FactoryHelper.createRandomAddress());
 
         Assert.assertNotNull(account);
-        Assert.assertEquals(BigInteger.ZERO, account.getBalance());
+        Assert.assertEquals(Coin.ZERO, account.getBalance());
         Assert.assertEquals(0, account.getNonce());
     }
 
@@ -41,12 +40,12 @@ public class AccountStoreProviderTest {
         Hash hash0 = accountStore.getRootHash();
         accountStore.save();
 
-        Account account1 = new Account(BigInteger.ONE, 3, null, null);
+        Account account1 = new Account(Coin.ONE, 3, null, null);
         accountStore.putAccount(address, account1);
         Hash hash1 = accountStore.getRootHash();
         accountStore.save();
 
-        Account account2 = new Account(BigInteger.TEN, 42, null, null);
+        Account account2 = new Account(Coin.TEN, 42, null, null);
 
         accountStore.putAccount(address, account2);
         Hash hash2 = accountStore.getRootHash();
@@ -63,7 +62,7 @@ public class AccountStoreProviderTest {
         Account account0 = result0.getAccount(address);
 
         Assert.assertNotNull(account0);
-        Assert.assertEquals(BigInteger.ZERO, account0.getBalance());
+        Assert.assertEquals(Coin.ZERO, account0.getBalance());
         Assert.assertEquals(0, account0.getNonce());
 
         AccountStore result1 = provider.retrieve(hash1);
@@ -73,7 +72,7 @@ public class AccountStoreProviderTest {
         Account account1b = result1.getAccount(address);
 
         Assert.assertNotNull(account1b);
-        Assert.assertEquals(BigInteger.ONE, account1b.getBalance());
+        Assert.assertEquals(Coin.ONE, account1b.getBalance());
         Assert.assertEquals(3, account1b.getNonce());
 
         AccountStore result2 = provider.retrieve(hash2);
@@ -83,7 +82,7 @@ public class AccountStoreProviderTest {
         Account account2b = result2.getAccount(address);
 
         Assert.assertNotNull(account2b);
-        Assert.assertEquals(BigInteger.TEN, account2b.getBalance());
+        Assert.assertEquals(Coin.TEN, account2b.getBalance());
         Assert.assertEquals(42, account2b.getNonce());
     }
 }

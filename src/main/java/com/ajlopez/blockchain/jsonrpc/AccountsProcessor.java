@@ -3,13 +3,13 @@ package com.ajlopez.blockchain.jsonrpc;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.utils.HexUtils;
 
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -38,8 +38,8 @@ public class AccountsProcessor extends AbstractJsonRpcProcessor {
     private JsonRpcResponse getBalance(JsonRpcRequest request) throws JsonRpcException {
         Account account = getAccount(request);
 
-        BigInteger balance = account.getBalance();
-        String result = HexUtils.bytesToHexString(balance.toByteArray(), true);
+        Coin balance = account.getBalance();
+        String result = HexUtils.bytesToHexString(balance.toBytes(), true);
 
         return JsonRpcResponse.createResponse(request, result);
     }

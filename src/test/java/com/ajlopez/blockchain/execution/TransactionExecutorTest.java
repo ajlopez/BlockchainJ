@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -14,7 +15,6 @@ import com.ajlopez.blockchain.vms.eth.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +30,7 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 6000000, Coin.ZERO);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
@@ -44,13 +44,13 @@ public class TransactionExecutorTest {
 
         Assert.assertEquals(transaction, tresult);
 
-        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(BigInteger.valueOf(1000 - 100), senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(1000 - 100), senderBalance);
 
-        BigInteger receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
+        Coin receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
         Assert.assertNotNull(receiverAddress);
-        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(100), receiverBalance);
 
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
@@ -63,7 +63,7 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 100000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 60000, BigInteger.ONE);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 60000, Coin.ONE);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
@@ -79,17 +79,17 @@ public class TransactionExecutorTest {
 
         Assert.assertEquals(transaction, tresult);
 
-        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(BigInteger.valueOf(100000 - FeeSchedule.TRANSFER.getValue() - 100), senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(100000 - FeeSchedule.TRANSFER.getValue() - 100), senderBalance);
 
-        BigInteger receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
+        Coin receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
         Assert.assertNotNull(receiverAddress);
-        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(100), receiverBalance);
 
-        BigInteger coinbaseBalance = accountStore.getAccount(coinbase).getBalance();
+        Coin coinbaseBalance = accountStore.getAccount(coinbase).getBalance();
         Assert.assertNotNull(coinbase);
-        Assert.assertEquals(BigInteger.valueOf(FeeSchedule.TRANSFER.getValue()), coinbaseBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(FeeSchedule.TRANSFER.getValue()), coinbaseBalance);
 
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
@@ -102,8 +102,8 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 1, null, 6000000, BigInteger.ZERO);
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 6000000, Coin.ZERO);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(50), 1, null, 6000000, Coin.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -121,13 +121,13 @@ public class TransactionExecutorTest {
         Transaction tresult2 = result.get(1);
         Assert.assertEquals(transaction2, tresult2);
 
-        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(BigInteger.valueOf(1000 - 150), senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(1000 - 150), senderBalance);
 
-        BigInteger receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
+        Coin receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
         Assert.assertNotNull(receiverAddress);
-        Assert.assertEquals(BigInteger.valueOf(150), receiverBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(150), receiverBalance);
 
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(2, accountStore.getAccount(senderAddress).getNonce());
@@ -140,9 +140,10 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 0, null, 6000000, BigInteger.ZERO);
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 6000000, Coin.ZERO);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(50), 0, null, 6000000, Coin.ZERO);
         List<Transaction> transactions = new ArrayList<>();
+
         transactions.add(transaction1);
         transactions.add(transaction2);
 
@@ -157,13 +158,13 @@ public class TransactionExecutorTest {
         Transaction tresult1 = result.get(0);
         Assert.assertEquals(transaction1, tresult1);
 
-        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(BigInteger.valueOf(1000 - 100), senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(1000 - 100), senderBalance);
 
-        BigInteger receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
+        Coin receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
         Assert.assertNotNull(receiverAddress);
-        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(100), receiverBalance);
 
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
@@ -176,8 +177,8 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(5000), 1, null, 6000000, BigInteger.ZERO);
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 6000000, Coin.ZERO);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(5000), 1, null, 6000000, Coin.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -193,13 +194,13 @@ public class TransactionExecutorTest {
         Transaction tresult1 = result.get(0);
         Assert.assertEquals(transaction1, tresult1);
 
-        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(BigInteger.valueOf(1000 - 100), senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(1000 - 100), senderBalance);
 
-        BigInteger receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
+        Coin receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
         Assert.assertNotNull(receiverAddress);
-        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(100), receiverBalance);
 
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
@@ -212,8 +213,8 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 1, null, 6000000, BigInteger.ONE);
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 6000000, Coin.ZERO);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 1, null, 6000000, Coin.ONE);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -229,13 +230,13 @@ public class TransactionExecutorTest {
         Transaction tresult1 = result.get(0);
         Assert.assertEquals(transaction1, tresult1);
 
-        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(BigInteger.valueOf(1000 - 100), senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(1000 - 100), senderBalance);
 
-        BigInteger receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
+        Coin receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
         Assert.assertNotNull(receiverAddress);
-        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(100), receiverBalance);
 
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
@@ -251,14 +252,14 @@ public class TransactionExecutorTest {
         for (int k = 0; k < ntxs; k++)
             addresses.add(FactoryHelper.createRandomAddress());
 
-        Account account = new Account(BigInteger.valueOf(ntxs + 1), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(ntxs + 1), 0, null, null);
 
         accountStore.putAccount(addresses.get(0), account);
 
         List<Transaction> transactions = new ArrayList<>();
 
         for (int k = 0; k < ntxs - 1; k++) {
-            Transaction transaction = new Transaction(addresses.get(k), addresses.get(k + 1), BigInteger.valueOf(ntxs - k), 0, null, 6000000, BigInteger.ZERO);
+            Transaction transaction = new Transaction(addresses.get(k), addresses.get(k + 1), Coin.fromUnsignedLong(ntxs - k), 0, null, 6000000, Coin.ZERO);
             transactions.add(transaction);
         }
 
@@ -325,7 +326,7 @@ public class TransactionExecutorTest {
         FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
         FactoryHelper.createAccountWithCode(accountStore, codeStore, receiverAddress, code);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 50000, BigInteger.ONE);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 50000, Coin.ONE);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
@@ -347,18 +348,18 @@ public class TransactionExecutorTest {
 
         Assert.assertEquals(transaction, tresult);
 
-        BigInteger coinbaseBalance = accountStore.getAccount(coinbase).getBalance();
+        Coin coinbaseBalance = accountStore.getAccount(coinbase).getBalance();
         Assert.assertNotNull(coinbaseBalance);
-        Assert.assertNotEquals(BigInteger.ZERO, coinbaseBalance);
+        Assert.assertNotEquals(Coin.ZERO, coinbaseBalance);
 
-        BigInteger senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(BigInteger.valueOf(1000000 - 100).subtract(coinbaseBalance), senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(1000000 - 100).asBigInteger().subtract(coinbaseBalance.asBigInteger()), senderBalance.asBigInteger());
 
         Assert.assertNotNull(receiverAddress);
 
-        BigInteger receiverBalance = receiver.getBalance();
-        Assert.assertEquals(BigInteger.valueOf(100), receiverBalance);
+        Coin receiverBalance = receiver.getBalance();
+        Assert.assertEquals(Coin.fromUnsignedLong(100), receiverBalance);
 
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());

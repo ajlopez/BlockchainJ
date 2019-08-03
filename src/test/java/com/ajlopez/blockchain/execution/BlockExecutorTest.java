@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
@@ -12,7 +13,6 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class BlockExecutorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account sender = new Account(BigInteger.valueOf(10000), 0, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(10000), 0, null, null);
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
@@ -53,7 +53,7 @@ public class BlockExecutorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0, null, 6000000, BigInteger.ZERO);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(1000), 0, null, 6000000, Coin.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
@@ -78,7 +78,7 @@ public class BlockExecutorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account sender = new Account(BigInteger.valueOf(10000), 0, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(10000), 0, null, null);
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
@@ -87,7 +87,7 @@ public class BlockExecutorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 1, null, 6000000, BigInteger.ZERO);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(1000), 1, null, 6000000, Coin.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
@@ -112,7 +112,7 @@ public class BlockExecutorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account sender = new Account(BigInteger.valueOf(10000), 0, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(10000), 0, null, null);
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
@@ -121,7 +121,7 @@ public class BlockExecutorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(10000000), 0, null, 6000000, BigInteger.ZERO);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(10000000), 0, null, 6000000, Coin.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 

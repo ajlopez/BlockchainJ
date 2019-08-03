@@ -1,20 +1,19 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.vms.eth.Storage;
-
-import java.math.BigInteger;
 
 /**
  * Created by ajlopez on 16/02/2018.
  */
 public interface ExecutionContext extends CodeProvider {
-    void transfer(Address senderAddress, Address receiverAddress, BigInteger amount);
+    void transfer(Address senderAddress, Address receiverAddress, Coin amount);
 
     void incrementNonce(Address address);
 
-    BigInteger getBalance(Address address);
+    Coin getBalance(Address address);
 
     long getNonce(Address address);
 

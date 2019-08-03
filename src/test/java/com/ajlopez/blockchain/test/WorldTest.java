@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
@@ -14,7 +15,6 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -207,8 +207,8 @@ public class WorldTest {
     @Test
     public void getBlockChainWithInitialAccounts() {
         World world = new World();
-        Account account1 = new Account(BigInteger.TEN, 10, null, null);
-        Account account2 = new Account(BigInteger.ONE, 20, null, null);
+        Account account1 = new Account(Coin.TEN, 10, null, null);
+        Account account2 = new Account(Coin.ONE, 20, null, null);
 
         world.setAccount("acc1", account1);
         world.setAccount("acc2", account2);

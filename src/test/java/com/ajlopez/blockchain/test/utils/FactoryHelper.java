@@ -5,12 +5,9 @@ import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.DataWord;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
@@ -22,7 +19,6 @@ import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.utils.HashUtils;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -65,7 +61,7 @@ public class FactoryHelper {
     }
 
     public static void createAccountWithBalance(AccountStore accountStore, Address address, long balance) {
-        Account account = new Account(BigInteger.valueOf(balance), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
 
         accountStore.putAccount(address, account);
     }
@@ -73,7 +69,7 @@ public class FactoryHelper {
     public static void createAccountWithCode(AccountStore accountStore, CodeStore codeStore, Address address, byte[] code) {
         Hash codeHash = HashUtils.calculateHash(code);
         codeStore.putCode(codeHash, code);
-        Account account = new Account(BigInteger.ZERO, 0, codeHash, null);
+        Account account = new Account(Coin.ZERO, 0, codeHash, null);
 
         accountStore.putAccount(address, account);
     }
@@ -96,24 +92,24 @@ public class FactoryHelper {
     public static Transaction createTransaction(int value, long nonce, byte[] data) {
         Address sender = createRandomAddress();
         Address receiver = createRandomAddress();
-        BigInteger bivalue = BigInteger.valueOf(value);
+        Coin cvalue = Coin.fromUnsignedLong(value);
 
-        return new Transaction(sender, receiver, bivalue, nonce, data, 6000000, BigInteger.ZERO);
+        return new Transaction(sender, receiver, cvalue, nonce, data, 6000000, Coin.ZERO);
     }
 
     public static Transaction createTransaction(int value, long nonce, byte[] data, long gas, long gasPrice) {
         Address sender = createRandomAddress();
         Address receiver = createRandomAddress();
-        BigInteger bivalue = BigInteger.valueOf(value);
+        Coin cvalue = Coin.fromUnsignedLong(value);
 
-        return new Transaction(sender, receiver, bivalue, nonce, data, gas, BigInteger.valueOf(gasPrice));
+        return new Transaction(sender, receiver, cvalue, nonce, data, gas, Coin.fromUnsignedLong(gasPrice));
     }
 
     public static Transaction createTransaction(int value, Address sender, long nonce) {
         Address receiver = createRandomAddress();
-        BigInteger bivalue = BigInteger.valueOf(value);
+        Coin cvalue = Coin.fromUnsignedLong(value);
 
-        return new Transaction(sender, receiver, bivalue, nonce, null, 6000000, BigInteger.ZERO);
+        return new Transaction(sender, receiver, cvalue, nonce, null, 6000000, Coin.ZERO);
     }
 
     public static List<Transaction> createTransactions(int ntransactions) {
@@ -202,7 +198,7 @@ public class FactoryHelper {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = accountStoreProvider.retrieve(Trie.EMPTY_TRIE_HASH);
 
-        Account sender = new Account(BigInteger.valueOf(1000000), 0, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(1000000), 0, null, null);
         Address senderAddress = FactoryHelper.createRandomAddress();
 
         accountStore.putAccount(senderAddress, sender);

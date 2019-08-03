@@ -1,12 +1,11 @@
 package com.ajlopez.blockchain.core;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
-
-import java.math.BigInteger;
 
 /**
  * Created by ajlopez on 12/08/2017.
@@ -14,15 +13,15 @@ import java.math.BigInteger;
 public class Transaction {
     private final Address sender;
     private final Address receiver;
-    private final BigInteger value;
+    private final Coin value;
     private final long nonce;
     private final byte[] data;
     private final long gas;
-    private final BigInteger gasPrice;
+    private final Coin gasPrice;
 
     private Hash hash;
 
-    public Transaction(Address sender, Address receiver, BigInteger value, long nonce, byte[] data, long gas, BigInteger gasPrice) {
+    public Transaction(Address sender, Address receiver, Coin value, long nonce, byte[] data, long gas, Coin gasPrice) {
         if (sender == null)
             throw new IllegalStateException("No sender in transaction");
 
@@ -30,13 +29,10 @@ public class Transaction {
             throw new IllegalStateException("No receiver in transaction");
 
         if (value == null)
-            value = BigInteger.ZERO;
+            value = Coin.ZERO;
 
         if (gasPrice == null)
-            gasPrice = BigInteger.ZERO;
-
-        if (BigInteger.ZERO.compareTo(value) > 0)
-            throw new IllegalStateException("Negative value in transaction");
+            gasPrice = Coin.ZERO;
 
         if (nonce < 0)
             throw new IllegalStateException("Negative nonce in transaction");
@@ -54,7 +50,7 @@ public class Transaction {
 
     public Address getReceiver() { return this.receiver; }
 
-    public BigInteger getValue() { return this.value; }
+    public Coin getValue() { return this.value; }
 
     public long getNonce() { return this.nonce; }
 
@@ -62,7 +58,7 @@ public class Transaction {
 
     public long getGas() { return this.gas; }
 
-    public BigInteger getGasPrice() { return this.gasPrice; }
+    public Coin getGasPrice() { return this.gasPrice; }
 
     public Hash getHash() {
         if (this.hash == null)

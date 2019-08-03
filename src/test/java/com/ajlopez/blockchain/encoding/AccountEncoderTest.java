@@ -1,12 +1,11 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.Account;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.math.BigInteger;
 
 /**
  * Created by ajlopez on 19/11/2017.
@@ -23,7 +22,7 @@ public class AccountEncoderTest {
         Account result = AccountEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(Coin.ZERO, result.getBalance());
         Assert.assertEquals(0, result.getNonce());
         Assert.assertNull(result.getCodeHash());
         Assert.assertNull(result.getStorageHash());
@@ -41,7 +40,7 @@ public class AccountEncoderTest {
         Account result = AccountEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(Coin.ZERO, result.getBalance());
         Assert.assertEquals(0, result.getNonce());
         Assert.assertEquals(codeHash, result.getCodeHash());
         Assert.assertNull(result.getStorageHash());
@@ -60,7 +59,7 @@ public class AccountEncoderTest {
         Account result = AccountEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(Coin.ZERO, result.getBalance());
         Assert.assertEquals(0, result.getNonce());
         Assert.assertNull(result.getCodeHash());
         Assert.assertEquals(storageHash, result.getStorageHash());
@@ -68,7 +67,7 @@ public class AccountEncoderTest {
 
     @Test
     public void encodeDecodeAccountWithNonZeroBalance() {
-        Account account = new Account(BigInteger.valueOf(255), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(255), 0, null, null);
 
         byte[] encoded = AccountEncoder.encode(account);
 
@@ -77,13 +76,13 @@ public class AccountEncoderTest {
         Account result = AccountEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(BigInteger.valueOf(255), result.getBalance());
+        Assert.assertEquals(Coin.fromUnsignedLong(255), result.getBalance());
         Assert.assertEquals(0, result.getNonce());
     }
 
     @Test
     public void encodeDecodeAccountWithNonZeroNonce() {
-        Account account = new Account(BigInteger.ZERO, 42, null, null);
+        Account account = new Account(Coin.ZERO, 42, null, null);
 
         byte[] encoded = AccountEncoder.encode(account);
 
@@ -92,7 +91,7 @@ public class AccountEncoderTest {
         Account result = AccountEncoder.decode(encoded);
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(Coin.ZERO, result.getBalance());
         Assert.assertEquals(42, result.getNonce());
     }
 }

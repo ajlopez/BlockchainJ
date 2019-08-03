@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.net.PeerId;
@@ -12,8 +13,6 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.math.BigInteger;
 
 public class MessageEncoderTest {
     @Test
@@ -113,9 +112,9 @@ public class MessageEncoderTest {
     public void encodeAndDecodeTransactionMessage() {
         Address sender = FactoryHelper.createRandomAddress();
         Address receiver = FactoryHelper.createRandomAddress();
-        BigInteger value = BigInteger.ONE;
+        Coin value = Coin.ONE;
 
-        Transaction tx = new Transaction(sender, receiver, value, 42, null, 6000000, BigInteger.ZERO);
+        Transaction tx = new Transaction(sender, receiver, value, 42, null, 6000000, Coin.ZERO);
 
         Message message = new TransactionMessage(tx);
 

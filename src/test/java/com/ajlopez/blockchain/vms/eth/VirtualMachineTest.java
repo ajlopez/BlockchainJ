@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.CodeProvider;
@@ -18,7 +19,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Stack;
 
@@ -1247,7 +1247,7 @@ public class VirtualMachineTest {
         Hash codeHash = FactoryHelper.createRandomHash();
         byte[] code = FactoryHelper.createRandomBytes(100);
         codeStore.putCode(codeHash, code);
-        Account account = new Account(BigInteger.ZERO, 0, codeHash, null);
+        Account account = new Account(Coin.ZERO, 0, codeHash, null);
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
         accountStore.putAccount(address, account);
@@ -1306,7 +1306,7 @@ public class VirtualMachineTest {
         Hash codeHash = FactoryHelper.createRandomHash();
         byte[] code = FactoryHelper.createRandomBytes(100);
         codeStore.putCode(codeHash, code);
-        Account account = new Account(BigInteger.ZERO, 0, codeHash, null);
+        Account account = new Account(Coin.ZERO, 0, codeHash, null);
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
         accountStore.putAccount(address, account);
