@@ -17,7 +17,7 @@ public class TransactionTest {
         Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
-        Transaction tx = new Transaction(sender, receiver, value, 42, null);
+        Transaction tx = new Transaction(sender, receiver, value, 42, null, 6000000, BigInteger.ZERO);
 
         Assert.assertEquals(sender, tx.getSender());
         Assert.assertEquals(receiver, tx.getReceiver());
@@ -27,6 +27,9 @@ public class TransactionTest {
         Assert.assertNotNull(tx.getHash());
 
         Assert.assertNull(tx.getData());
+
+        Assert.assertEquals(6000000, tx.getGas());
+        Assert.assertEquals(BigInteger.ZERO, tx.getGasPrice());
     }
 
     @Test
@@ -34,7 +37,7 @@ public class TransactionTest {
         Address sender = FactoryHelper.createRandomAddress();
         Address receiver = FactoryHelper.createRandomAddress();
 
-        Transaction tx = new Transaction(sender, receiver, null, 42, null);
+        Transaction tx = new Transaction(sender, receiver, null, 42, null, 6000000, BigInteger.ZERO);
 
         Assert.assertEquals(sender, tx.getSender());
         Assert.assertEquals(receiver, tx.getReceiver());
@@ -42,6 +45,31 @@ public class TransactionTest {
         Assert.assertEquals(42, tx.getNonce());
 
         Assert.assertNotNull(tx.getHash());
+
+        Assert.assertNull(tx.getData());
+
+        Assert.assertEquals(6000000, tx.getGas());
+        Assert.assertEquals(BigInteger.ZERO, tx.getGasPrice());
+    }
+
+    @Test
+    public void createTransactionWithNullGasPrice() {
+        Address sender = FactoryHelper.createRandomAddress();
+        Address receiver = FactoryHelper.createRandomAddress();
+
+        Transaction tx = new Transaction(sender, receiver, null, 42, null, 6000000, null);
+
+        Assert.assertEquals(sender, tx.getSender());
+        Assert.assertEquals(receiver, tx.getReceiver());
+        Assert.assertEquals(BigInteger.ZERO, tx.getValue());
+        Assert.assertEquals(42, tx.getNonce());
+
+        Assert.assertNotNull(tx.getHash());
+
+        Assert.assertNull(tx.getData());
+
+        Assert.assertEquals(6000000, tx.getGas());
+        Assert.assertEquals(BigInteger.ZERO, tx.getGasPrice());
     }
 
     @Test(expected = IllegalStateException.class)
@@ -50,7 +78,7 @@ public class TransactionTest {
         Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
-        new Transaction(sender, receiver, value, -1, null);
+        new Transaction(sender, receiver, value, -1, null, 6000000, BigInteger.ZERO);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -58,7 +86,7 @@ public class TransactionTest {
         Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
-        new Transaction(null, receiver, value, 42, null);
+        new Transaction(null, receiver, value, 42, null, 6000000, BigInteger.ZERO);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -66,7 +94,7 @@ public class TransactionTest {
         Address sender = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE;
 
-        new Transaction(sender, null, value, 42, null);
+        new Transaction(sender, null, value, 42, null, 6000000, BigInteger.ZERO);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -75,6 +103,6 @@ public class TransactionTest {
         Address receiver = FactoryHelper.createRandomAddress();
         BigInteger value = BigInteger.ONE.negate();
 
-        new Transaction(sender, receiver, value, 42, null);
+        new Transaction(sender, receiver, value, 42, null, 6000000, BigInteger.ZERO);
     }
 }

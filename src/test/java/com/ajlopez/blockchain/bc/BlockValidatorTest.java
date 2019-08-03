@@ -4,7 +4,6 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
@@ -53,7 +52,7 @@ public class BlockValidatorTest {
         accountStore.putAccount(senderAddress, sender);
         accountStore.save();
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0, null);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0, null, 6000000, BigInteger.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
@@ -83,7 +82,7 @@ public class BlockValidatorTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0, null);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(1000), 0, null, 6000000, BigInteger.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 

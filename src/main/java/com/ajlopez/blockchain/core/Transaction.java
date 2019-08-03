@@ -17,10 +17,12 @@ public class Transaction {
     private final BigInteger value;
     private final long nonce;
     private final byte[] data;
+    private final long gas;
+    private final BigInteger gasPrice;
 
     private Hash hash;
 
-    public Transaction(Address sender, Address receiver, BigInteger value, long nonce, byte[] data) {
+    public Transaction(Address sender, Address receiver, BigInteger value, long nonce, byte[] data, long gas, BigInteger gasPrice) {
         if (sender == null)
             throw new IllegalStateException("No sender in transaction");
 
@@ -29,6 +31,9 @@ public class Transaction {
 
         if (value == null)
             value = BigInteger.ZERO;
+
+        if (gasPrice == null)
+            gasPrice = BigInteger.ZERO;
 
         if (BigInteger.ZERO.compareTo(value) > 0)
             throw new IllegalStateException("Negative value in transaction");
@@ -41,6 +46,8 @@ public class Transaction {
         this.value = value;
         this.nonce = nonce;
         this.data = ByteUtils.normalizeBytesToNull(data);
+        this.gas = gas;
+        this.gasPrice = gasPrice;
     }
 
     public Address getSender() { return this.sender; }
@@ -52,6 +59,10 @@ public class Transaction {
     public long getNonce() { return this.nonce; }
 
     public byte[] getData() { return this.data; }
+
+    public long getGas() { return this.gas; }
+
+    public BigInteger getGasPrice() { return this.gasPrice; }
 
     public Hash getHash() {
         if (this.hash == null)

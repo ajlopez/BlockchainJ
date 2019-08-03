@@ -20,8 +20,10 @@ public class TransactionEncoder {
         byte[] rlpValue = RLPEncoder.encodeCoin(transaction.getValue());
         byte[] rlpNonce = RLPEncoder.encodeUnsignedLong(transaction.getNonce());
         byte[] rlpData = RLP.encode(transaction.getData());
+        byte[] rlpGas = RLPEncoder.encodeUnsignedLong(transaction.getGas());
+        byte[] rlpGasPrice = RLPEncoder.encodeCoin(transaction.getGasPrice());
 
-        return RLP.encodeList(rlpSender, rlpReceiver, rlpValue, rlpNonce, rlpData);
+        return RLP.encodeList(rlpSender, rlpReceiver, rlpValue, rlpNonce, rlpData, rlpGas, rlpGasPrice);
     }
 
     public static byte[] encode(List<Transaction> transactions) {
@@ -40,11 +42,13 @@ public class TransactionEncoder {
         BigInteger value = RLPEncoder.decodeCoin(bytes[2]);
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[3]);
         byte[] data = ByteUtils.normalizeBytesToNull(RLP.decode(bytes[4]));
+        long gas = RLPEncoder.decodeUnsignedLong(bytes[5]);
+        BigInteger gasPrice = RLPEncoder.decodeCoin(bytes[6]);
 
         if (data != null && data.length == 0)
             data = null;
 
-        return new Transaction(sender, receiver, value, nonce, data);
+        return new Transaction(sender, receiver, value, nonce, data, gas, gasPrice);
     }
 
     public static List<Transaction> decodeList(byte[] encoded) {

@@ -24,7 +24,6 @@ import com.ajlopez.blockchain.utils.HashUtils;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -61,7 +60,7 @@ public class FactoryHelper {
         Address address = createRandomAddress();
 
         createAccountWithBalance(accountStore, address, balance);
-        
+
         return address;
     }
 
@@ -99,14 +98,22 @@ public class FactoryHelper {
         Address receiver = createRandomAddress();
         BigInteger bivalue = BigInteger.valueOf(value);
 
-        return new Transaction(sender, receiver, bivalue, nonce, data);
+        return new Transaction(sender, receiver, bivalue, nonce, data, 6000000, BigInteger.ZERO);
+    }
+
+    public static Transaction createTransaction(int value, long nonce, byte[] data, long gas, long gasPrice) {
+        Address sender = createRandomAddress();
+        Address receiver = createRandomAddress();
+        BigInteger bivalue = BigInteger.valueOf(value);
+
+        return new Transaction(sender, receiver, bivalue, nonce, data, gas, BigInteger.valueOf(gasPrice));
     }
 
     public static Transaction createTransaction(int value, Address sender, long nonce) {
         Address receiver = createRandomAddress();
         BigInteger bivalue = BigInteger.valueOf(value);
 
-        return new Transaction(sender, receiver, bivalue, nonce, null);
+        return new Transaction(sender, receiver, bivalue, nonce, null, 6000000, BigInteger.ZERO);
     }
 
     public static List<Transaction> createTransactions(int ntransactions) {

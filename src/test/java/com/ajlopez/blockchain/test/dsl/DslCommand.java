@@ -84,7 +84,7 @@ public class DslCommand {
             BigInteger value = this.getBigInteger(3, "value");
             long nonce = this.getLongInteger(4, "nonce");
 
-            Transaction transaction = new Transaction(from, to, value, nonce, null);
+            Transaction transaction = new Transaction(from, to, value, nonce, null, 6000000, BigInteger.ZERO);
 
             world.setTransaction(name, transaction);
 

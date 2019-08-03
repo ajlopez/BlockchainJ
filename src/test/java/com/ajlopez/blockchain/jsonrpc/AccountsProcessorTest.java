@@ -261,7 +261,7 @@ public class AccountsProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
 
         for (int k = 0; k < nblocks; k++) {
-            Transaction transaction = new Transaction(sender, receiver, BigInteger.valueOf(transferAmount), k, null);
+            Transaction transaction = new Transaction(sender, receiver, BigInteger.valueOf(transferAmount), k, null, 6000000, BigInteger.ZERO);
             TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
             List<Transaction> transactions = Collections.singletonList(transaction);
 

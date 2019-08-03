@@ -33,7 +33,7 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
@@ -66,8 +66,8 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 1, null);
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 1, null, 6000000, BigInteger.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -104,8 +104,8 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 0, null);
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(50), 0, null, 6000000, BigInteger.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -140,8 +140,8 @@ public class TransactionExecutorTest {
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
-        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(5000), 1, null);
+        Transaction transaction1 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
+        Transaction transaction2 = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(5000), 1, null, 6000000, BigInteger.ZERO);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -186,7 +186,7 @@ public class TransactionExecutorTest {
         List<Transaction> transactions = new ArrayList<>();
 
         for (int k = 0; k < ntxs - 1; k++) {
-            Transaction transaction = new Transaction(addresses.get(k), addresses.get(k + 1), BigInteger.valueOf(ntxs - k), 0, null);
+            Transaction transaction = new Transaction(addresses.get(k), addresses.get(k + 1), BigInteger.valueOf(ntxs - k), 0, null, 6000000, BigInteger.ZERO);
             transactions.add(transaction);
         }
 
@@ -253,7 +253,7 @@ public class TransactionExecutorTest {
         FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000);
         FactoryHelper.createAccountWithCode(accountStore, codeStore, receiverAddress, code);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, BigInteger.valueOf(100), 0, null, 6000000, BigInteger.ZERO);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
