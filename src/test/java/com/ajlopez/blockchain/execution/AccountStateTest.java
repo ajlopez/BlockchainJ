@@ -332,7 +332,7 @@ public class AccountStateTest {
         new AccountState(Coin.TEN, -1, null, null);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = ArithmeticException.class)
     public void subtractAmountFromZeroBalance() {
         AccountState accstate = new AccountState();
 

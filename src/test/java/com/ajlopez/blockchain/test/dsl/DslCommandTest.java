@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -73,7 +74,7 @@ public class DslCommandTest {
         Account result = world.getAccount("acc1");
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(new BigInteger("1000000"), result.getBalance());
+        Assert.assertEquals(new Coin(new BigInteger("1000000")), result.getBalance());
         Assert.assertEquals(42, result.getNonce());
     }
 
@@ -93,7 +94,7 @@ public class DslCommandTest {
         Account result = world.getAccount("acc1");
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(new BigInteger("1000000"), result.getBalance());
+        Assert.assertEquals(new Coin(new BigInteger("1000000")), result.getBalance());
         Assert.assertEquals(42, result.getNonce());
     }
 
@@ -111,7 +112,7 @@ public class DslCommandTest {
         Account result = world.getAccount("acc1");
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(BigInteger.ZERO, result.getBalance());
+        Assert.assertEquals(Coin.ZERO, result.getBalance());
         Assert.assertEquals(0, result.getNonce());
     }
 
@@ -136,7 +137,7 @@ public class DslCommandTest {
         Transaction result = world.getTransaction("tx1");
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(new BigInteger("10000"), result.getValue());
+        Assert.assertEquals(new Coin(new BigInteger("10000")), result.getValue());
         Assert.assertEquals(from, result.getSender());
         Assert.assertEquals(to, result.getReceiver());
         Assert.assertEquals(1, result.getNonce());
@@ -163,7 +164,7 @@ public class DslCommandTest {
         Transaction result = world.getTransaction("tx1");
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(new BigInteger("10000"), result.getValue());
+        Assert.assertEquals(new Coin(new BigInteger("10000")), result.getValue());
         Assert.assertEquals(from, result.getSender());
         Assert.assertEquals(to, result.getReceiver());
         Assert.assertEquals(1, result.getNonce());
