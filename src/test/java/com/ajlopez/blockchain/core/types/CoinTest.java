@@ -111,4 +111,53 @@ public class CoinTest {
 
         Assert.assertNotEquals(new Coin(BigInteger.TEN).hashCode(), new Coin(BigInteger.ONE));
     }
+
+    @Test
+    public void addCoin() {
+        Assert.assertEquals(Coin.TWO, Coin.ONE.add(Coin.ONE));
+        Assert.assertEquals(Coin.ZERO, Coin.ZERO.add(Coin.ZERO));
+        Assert.assertEquals(Coin.fromUnsignedLong(42), Coin.fromUnsignedLong(2).add(Coin.fromUnsignedLong(40)));
+    }
+
+    @Test
+    public void subtractCoin() {
+        Assert.assertEquals(Coin.ONE, Coin.TWO.subtract(Coin.ONE));
+        Assert.assertEquals(Coin.ZERO, Coin.ZERO.subtract(Coin.ZERO));
+        Assert.assertEquals(Coin.fromUnsignedLong(42), Coin.fromUnsignedLong(44).subtract(Coin.fromUnsignedLong(2)));
+    }
+
+    @Test
+    public void multiplyCoinByNonNegativeLongValue() {
+        Assert.assertEquals(Coin.TWO, Coin.ONE.multiply(2));
+        Assert.assertEquals(Coin.ZERO, Coin.ZERO.multiply(10));
+        Assert.assertEquals(Coin.fromUnsignedLong(42), Coin.TWO.multiply(21));
+    }
+
+    @Test
+    public void cannotSubtractToGiveNegativeValue() {
+        exception.expect(ArithmeticException.class);
+        exception.expectMessage("Natural value cannot be negative");
+        Coin.ONE.subtract(Coin.TWO);
+    }
+
+    @Test
+    public void cannotMultiplyByNegativeLongValue() {
+        exception.expect(ArithmeticException.class);
+        exception.expectMessage("Natural value cannot be negative");
+        Coin.ONE.multiply(-2);
+    }
+
+    @Test
+    public void compareTo() {
+        Assert.assertEquals(0, Coin.ONE.compareTo(Coin.ONE));
+        Assert.assertEquals(-1, Coin.ONE.compareTo(Coin.TWO));
+        Assert.assertEquals(1, Coin.TWO.compareTo(Coin.ONE));
+    }
+    
+    @Test
+    public void isZero() {
+        Assert.assertTrue(Coin.ZERO.isZero());
+        Assert.assertFalse(Coin.ONE.isZero());
+        Assert.assertFalse(Coin.fromUnsignedLong(42).isZero());
+    }
 }

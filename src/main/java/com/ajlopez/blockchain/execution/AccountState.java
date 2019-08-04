@@ -52,7 +52,7 @@ public class AccountState {
         if (amount.equals(Coin.ZERO))
             return;
 
-        Coin newbalance = new Coin(this.balance.asBigInteger().add(amount.asBigInteger()));
+        Coin newbalance = this.balance.add(amount);
 
         this.balance = newbalance;
         this.changed = true;
@@ -62,7 +62,7 @@ public class AccountState {
         if (amount.equals(Coin.ZERO))
             return;
 
-        Coin newbalance = new Coin(this.balance.asBigInteger().subtract(amount.asBigInteger()));
+        Coin newbalance = this.balance.subtract(amount);
 
         this.balance = newbalance;
         this.changed = true;

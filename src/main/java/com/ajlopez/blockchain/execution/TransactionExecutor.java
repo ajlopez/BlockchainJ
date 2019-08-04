@@ -41,9 +41,9 @@ public class TransactionExecutor {
 
         Coin senderBalance = this.executionContext.getBalance(sender);
         Coin gasPrice = transaction.getGasPrice();
-        Coin gasLimitToPay = new Coin(gasPrice.asBigInteger().multiply(BigInteger.valueOf(transaction.getGas())));
+        Coin gasLimitToPay = gasPrice.multiply(transaction.getGas());
 
-        if (senderBalance.asBigInteger().compareTo(transaction.getValue().asBigInteger().add(gasLimitToPay.asBigInteger())) < 0)
+        if (senderBalance.compareTo(transaction.getValue().add(gasLimitToPay)) < 0)
             return false;
 
         ExecutionContext context = new ChildExecutionContext(this.executionContext);
@@ -71,8 +71,8 @@ public class TransactionExecutor {
             }
         }
 
-        if (gasPrice.asBigInteger().signum() > 0) {
-            Coin gasPayment = new Coin(gasPrice.asBigInteger().multiply(BigInteger.valueOf(gasUsed)));
+        if (!gasPrice.isZero()) {
+            Coin gasPayment = gasPrice.multiply(gasUsed);
             context.transfer(sender, blockData.getCoinbase(), gasPayment);
         }
 

@@ -354,7 +354,7 @@ public class TransactionExecutorTest {
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(Coin.fromUnsignedLong(1000000 - 100).asBigInteger().subtract(coinbaseBalance.asBigInteger()), senderBalance.asBigInteger());
+        Assert.assertEquals(Coin.fromUnsignedLong(1000000 - 100).subtract(coinbaseBalance), senderBalance);
 
         Assert.assertNotNull(receiverAddress);
 
