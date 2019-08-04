@@ -10,8 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.math.BigInteger;
-
 /**
  * Created by ajlopez on 26/11/2018.
  */
@@ -304,7 +302,7 @@ public class AccountStateTest {
         Assert.assertTrue(accountState.wasChanged());
 
         accountState.subtractFromBalance(Coin.ONE);
-        Assert.assertEquals(9, accountState.getBalance().asBigInteger().intValue());
+        Assert.assertEquals(Coin.fromUnsignedLong(9), accountState.getBalance());
         Assert.assertTrue(accountState.wasChanged());
     }
 
@@ -313,7 +311,7 @@ public class AccountStateTest {
         AccountState accountState = new AccountState(Coin.TEN, 42, null, null);
 
         accountState.subtractFromBalance(Coin.ONE);
-        Assert.assertEquals(BigInteger.valueOf(9), accountState.getBalance().asBigInteger());
+        Assert.assertEquals(Coin.fromUnsignedLong(9), accountState.getBalance());
         Assert.assertTrue(accountState.wasChanged());
     }
 
