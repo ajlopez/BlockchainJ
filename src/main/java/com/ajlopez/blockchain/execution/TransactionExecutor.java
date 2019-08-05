@@ -7,7 +7,6 @@ import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.vms.eth.*;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 

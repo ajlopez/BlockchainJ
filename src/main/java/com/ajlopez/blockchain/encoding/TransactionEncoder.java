@@ -45,9 +45,6 @@ public class TransactionEncoder {
         long gas = RLPEncoder.decodeUnsignedLong(bytes[5]);
         Coin gasPrice = RLPEncoder.decodeCoin(bytes[6]);
 
-        if (data != null && data.length == 0)
-            data = null;
-
         return new Transaction(sender, receiver, value, nonce, data, gas, gasPrice);
     }
 
