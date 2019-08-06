@@ -318,7 +318,36 @@ public class TransactionExecutorTest {
         Assert.assertEquals(DataWord.ZERO, storage.getValue(DataWord.fromUnsignedInteger(5)));
     }
 
-    private static Storage executeTransactionInvokingCode(byte[] code, Address senderAddress, Address receiverAddress) {
+    @Test
+    public void executeTransactionInvokingContractCodeGettingBlockData() {
+        byte[] code = new byte[] {
+                OpCodes.NUMBER, OpCodes.PUSH1, 0x00, OpCodes.SSTORE,
+                OpCodes.TIMESTAMP, OpCodes.PUSH1, 0x01, OpCodes.SSTORE,
+                OpCodes.COINBASE, OpCodes.PUSH1, 0x02, OpCodes.SSTORE,
+                OpCodes.DIFFICULTY, OpCodes.PUSH1, 0x03, OpCodes.SSTORE
+        };
+
+        Address coinbase = FactoryHelper.createRandomAddress();
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        Storage storage = executeTransactionInvokingCode(code, coinbase, senderAddress, receiverAddress);
+
+        Assert.assertNotNull(storage);
+        Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.ZERO));
+        Assert.assertEquals(DataWord.TWO, storage.getValue(DataWord.ONE));
+        Assert.assertEquals(DataWord.fromAddress(coinbase), storage.getValue(DataWord.TWO));
+        Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.fromUnsignedInteger(3)));
+    }
+
+    private static Storage executeTransactionInvokingCode(byte[] code, Address senderAddress, Address receiverAddress)
+    {
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        return executeTransactionInvokingCode(code, coinbase, senderAddress, receiverAddress);
+    }
+
+    private static Storage executeTransactionInvokingCode(byte[] code, Address coinbase, Address senderAddress, Address receiverAddress) {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
         AccountStore accountStore = new AccountStore(new Trie());
@@ -330,8 +359,7 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
-        Address coinbase = FactoryHelper.createRandomAddress();
-        BlockData blockData = new BlockData(1,2,coinbase, DataWord.ONE);
+        BlockData blockData = new BlockData(1,2, coinbase, DataWord.ONE);
 
         List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 

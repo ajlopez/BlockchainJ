@@ -57,7 +57,7 @@ public class TransactionExecutor {
         if (!ByteUtils.isNullOrEmpty(code)) {
             Storage storage = context.getAccountStorage(receiver);
             MessageData messageData = new MessageData(receiver, sender, sender, DataWord.fromCoin(transaction.getValue()), 6000000, DataWord.ZERO, null, false);
-            ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+            ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, blockData, null);
             VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
             try {
