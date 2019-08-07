@@ -64,6 +64,7 @@ public class FactoryHelper {
         Account account = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
 
         accountStore.putAccount(address, account);
+        accountStore.save();
     }
 
     public static void createAccountWithCode(AccountStore accountStore, CodeStore codeStore, Address address, byte[] code) {

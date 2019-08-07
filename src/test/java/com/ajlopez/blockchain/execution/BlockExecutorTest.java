@@ -44,12 +44,8 @@ public class BlockExecutorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account sender = new Account(Coin.fromUnsignedLong(10000), 0, null, null);
-        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 10000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
-
-        accountStore.putAccount(senderAddress, sender);
-        accountStore.save();
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
@@ -78,12 +74,8 @@ public class BlockExecutorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account sender = new Account(Coin.fromUnsignedLong(10000), 0, null, null);
-        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore,10000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
-
-        accountStore.putAccount(senderAddress, sender);
-        accountStore.save();
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
@@ -112,12 +104,8 @@ public class BlockExecutorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account sender = new Account(Coin.fromUnsignedLong(10000), 0, null, null);
-        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 10000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
-
-        accountStore.putAccount(senderAddress, sender);
-        accountStore.save();
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
