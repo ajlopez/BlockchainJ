@@ -3,7 +3,6 @@ package com.ajlopez.blockchain;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.net.peers.TcpPeerServer;
@@ -38,7 +37,7 @@ public class NodeRunner {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(new TrieStore(new HashMapStore()));
         CodeStore codeStore = new CodeStore(new HashMapStore());
 
-        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), blockChain, accountStoreProvider, codeStore, coinbase);
+        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), blockChain, accountStoreProvider, null, codeStore, coinbase);
         this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
     }
 

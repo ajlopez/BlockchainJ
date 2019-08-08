@@ -73,6 +73,7 @@ public class FactoryHelper {
         Account account = new Account(Coin.ZERO, 0, codeHash, null);
 
         accountStore.putAccount(address, account);
+        accountStore.save();
     }
 
     public static List<Address> createRandomAddresses(int n) {
@@ -235,7 +236,7 @@ public class FactoryHelper {
     }
 
     public static BlockValidator createBlockValidator(AccountStoreProvider accountStoreProvider) {
-        return new BlockValidator(new BlockExecutor(accountStoreProvider, null));
+        return new BlockValidator(new BlockExecutor(accountStoreProvider, null, null));
     }
 
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor) {
@@ -271,7 +272,7 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
-        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), blockChain, new AccountStoreProvider(new TrieStore(new HashMapStore())), new CodeStore(new HashMapStore()), createRandomAddress());
+        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), blockChain, new AccountStoreProvider(new TrieStore(new HashMapStore())), null, new CodeStore(new HashMapStore()), createRandomAddress());
     }
 
     public static List<Block> createBlocks(int nblocks) {

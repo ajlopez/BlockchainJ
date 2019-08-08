@@ -31,7 +31,7 @@ public class BlockValidatorTest {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
 
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, codeStore);
+        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
         BlockValidator blockValidator = new BlockValidator(blockExecutor);
 
@@ -65,7 +65,7 @@ public class BlockValidatorTest {
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress());
 
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, codeStore);
+        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
         BlockValidator blockValidator = new BlockValidator(blockExecutor);
 
@@ -90,7 +90,7 @@ public class BlockValidatorTest {
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), transactions, genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress());
 
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, codeStore);
+        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
         BlockValidator blockValidator = new BlockValidator(blockExecutor);
 
@@ -106,7 +106,7 @@ public class BlockValidatorTest {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
 
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, codeStore);
+        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
         BlockValidator blockValidator = new BlockValidator(blockExecutor);
 
