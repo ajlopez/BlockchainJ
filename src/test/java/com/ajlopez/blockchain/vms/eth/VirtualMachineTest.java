@@ -595,7 +595,7 @@ public class VirtualMachineTest {
         Assert.assertArrayEquals(memory.getBytes(28, 2), logs.get(0).getData());
         Assert.assertFalse(logs.get(0).getTopics().isEmpty());
         Assert.assertEquals(1, logs.get(0).getTopics().size());
-        Assert.assertEquals(DataWord.fromSignedLong(42), logs.get(0).getTopics().get(0));
+        Assert.assertEquals(DataWord.fromUnsignedLong(42), logs.get(0).getTopics().get(0));
     }
 
     @Test
@@ -623,8 +623,8 @@ public class VirtualMachineTest {
         Assert.assertArrayEquals(memory.getBytes(28, 2), logs.get(0).getData());
         Assert.assertFalse(logs.get(0).getTopics().isEmpty());
         Assert.assertEquals(2, logs.get(0).getTopics().size());
-        Assert.assertEquals(DataWord.fromSignedLong(42), logs.get(0).getTopics().get(0));
-        Assert.assertEquals(DataWord.fromSignedLong(3), logs.get(0).getTopics().get(1));
+        Assert.assertEquals(DataWord.fromUnsignedLong(42), logs.get(0).getTopics().get(0));
+        Assert.assertEquals(DataWord.fromUnsignedLong(3), logs.get(0).getTopics().get(1));
     }
 
     @Test
@@ -652,8 +652,8 @@ public class VirtualMachineTest {
         Assert.assertArrayEquals(memory.getBytes(28, 2), logs.get(0).getData());
         Assert.assertFalse(logs.get(0).getTopics().isEmpty());
         Assert.assertEquals(3, logs.get(0).getTopics().size());
-        Assert.assertEquals(DataWord.fromSignedLong(42), logs.get(0).getTopics().get(0));
-        Assert.assertEquals(DataWord.fromSignedLong(3), logs.get(0).getTopics().get(1));
+        Assert.assertEquals(DataWord.fromUnsignedLong(42), logs.get(0).getTopics().get(0));
+        Assert.assertEquals(DataWord.fromUnsignedLong(3), logs.get(0).getTopics().get(1));
         Assert.assertEquals(DataWord.TWO, logs.get(0).getTopics().get(2));
     }
 
@@ -682,8 +682,8 @@ public class VirtualMachineTest {
         Assert.assertArrayEquals(memory.getBytes(28, 2), logs.get(0).getData());
         Assert.assertFalse(logs.get(0).getTopics().isEmpty());
         Assert.assertEquals(4, logs.get(0).getTopics().size());
-        Assert.assertEquals(DataWord.fromSignedLong(42), logs.get(0).getTopics().get(0));
-        Assert.assertEquals(DataWord.fromSignedLong(3), logs.get(0).getTopics().get(1));
+        Assert.assertEquals(DataWord.fromUnsignedLong(42), logs.get(0).getTopics().get(0));
+        Assert.assertEquals(DataWord.fromUnsignedLong(3), logs.get(0).getTopics().get(1));
         Assert.assertEquals(DataWord.TWO, logs.get(0).getTopics().get(2));
         Assert.assertEquals(DataWord.ONE, logs.get(0).getTopics().get(3));
     }
@@ -1524,8 +1524,8 @@ public class VirtualMachineTest {
     }
 
     private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected, long expectedGasUsed) throws VirtualMachineException {
-        byte[] boperand1 = DataWord.fromSignedLong(operand1).toNormalizedBytes();
-        byte[] boperand2 = DataWord.fromSignedLong(operand2).toNormalizedBytes();
+        byte[] boperand1 = (operand1 < 0 ? DataWord.fromUnsignedLong(-operand1).negate() : DataWord.fromUnsignedLong(operand1)).toNormalizedBytes();
+        byte[] boperand2 = (operand2 < 0 ? DataWord.fromUnsignedLong(-operand2).negate(): DataWord.fromUnsignedLong(operand2)).toNormalizedBytes();
 
         byte[] bytecodes = new byte[3 + boperand1.length + boperand2.length];
 
@@ -1545,7 +1545,8 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
-        Assert.assertEquals(DataWord.fromSignedLong(expected), stack.pop());
+        DataWord dwexpected = expected < 0 ? DataWord.fromUnsignedLong(-expected).negate() : DataWord.fromUnsignedLong(expected);
+        Assert.assertEquals(dwexpected, stack.pop());
     }
 
     private static void executeBinaryOp(String operand1, String operand2, byte opcode, String expected, long expectedGasUsed) throws VirtualMachineException {
@@ -1574,9 +1575,9 @@ public class VirtualMachineTest {
     }
 
     private static void executeTernaryOp(int operand1, int operand2, int operand3, byte opcode, int expected, long expectedGasUsed) throws VirtualMachineException {
-        byte[] boperand1 = DataWord.fromSignedLong(operand1).toNormalizedBytes();
-        byte[] boperand2 = DataWord.fromSignedLong(operand2).toNormalizedBytes();
-        byte[] boperand3 = DataWord.fromSignedLong(operand3).toNormalizedBytes();
+        byte[] boperand1 = (operand1 < 0 ? DataWord.fromUnsignedLong(operand1).negate() : DataWord.fromUnsignedLong(operand1)).toNormalizedBytes();
+        byte[] boperand2 = (operand2 < 0 ? DataWord.fromUnsignedLong(operand2).negate() : DataWord.fromUnsignedLong(operand2)).toNormalizedBytes();
+        byte[] boperand3 = (operand3 < 0 ? DataWord.fromUnsignedLong(operand3).negate() : DataWord.fromUnsignedLong(operand3)).toNormalizedBytes();
 
         byte[] bytecodes = new byte[4 + boperand1.length + boperand2.length + boperand3.length];
 
@@ -1598,7 +1599,8 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
-        Assert.assertEquals(DataWord.fromSignedLong(expected), stack.pop());
+        DataWord dwexpected = expected < 0 ? DataWord.fromUnsignedLong(-expected).negate() : DataWord.fromUnsignedLong(expected);
+        Assert.assertEquals(dwexpected, stack.pop());
     }
 
     private static void executeTernaryOp(String operand1, String operand2, String operand3, byte opcode, String expected) throws VirtualMachineException {

@@ -5,7 +5,7 @@ import java.math.BigInteger;
 /**
  * Created by ajlopez on 03/08/2019.
  */
-public class Coin extends NaturalValue {
+public class Coin extends NaturalValue implements Comparable<Coin> {
     public static final Coin ZERO = new Coin(BigInteger.ZERO);
     public static final Coin ONE = new Coin(BigInteger.ONE);
     public static final Coin TWO = Coin.fromUnsignedLong(2);

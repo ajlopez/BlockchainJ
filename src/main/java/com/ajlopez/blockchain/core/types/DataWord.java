@@ -25,13 +25,6 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return new DataWord(ByteUtils.unsignedLongToBytes(value));
     }
 
-    public static DataWord fromSignedLong(long value) {
-        if (value < 0)
-            return fromUnsignedLong(-value).negate();
-
-        return fromUnsignedLong(value);
-    }
-
     public static DataWord fromHexadecimalString(String value) {
         return new DataWord(HexUtils.hexStringToBytes(value));
     }
