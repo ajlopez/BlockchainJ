@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.utils;
 
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.vms.eth.VirtualMachineException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -435,5 +434,50 @@ public class ByteUtilsTest {
         Assert.assertArrayEquals(bytes, ByteUtils.normalizeBytesToNull(bytes));
         Assert.assertNull(ByteUtils.normalizeBytesToNull(ByteUtils.EMPTY_BYTE_ARRAY));
         Assert.assertNull(ByteUtils.normalizeBytesToNull(null));
+    }
+
+    @Test
+    public void bytesToUnsignedLong() {
+        Assert.assertEquals(0, ByteUtils.bytesToUnsignedLong(new byte[] { }));
+        Assert.assertEquals(1, ByteUtils.bytesToUnsignedLong(new byte[] { 0x01 }));
+        Assert.assertEquals(256, ByteUtils.bytesToUnsignedLong(new byte[] { 0x01, 0x00 }));
+        Assert.assertEquals(Long.MAX_VALUE, ByteUtils.bytesToUnsignedLong(new byte[] { (byte)0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }));
+    }
+
+    @Test
+    public void bytesToUnsignedLongGivenNegative() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid negative value");
+        ByteUtils.bytesToUnsignedLong(new byte[] { (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff });
+    }
+
+    @Test
+    public void bytesToUnsignedInteger() {
+        Assert.assertEquals(0, ByteUtils.bytesToUnsignedInteger(new byte[] { }));
+        Assert.assertEquals(1, ByteUtils.bytesToUnsignedInteger(new byte[] { 0x01 }));
+        Assert.assertEquals(256, ByteUtils.bytesToUnsignedInteger(new byte[] { 0x01, 0x00 }));
+        Assert.assertEquals(Integer.MAX_VALUE, ByteUtils.bytesToUnsignedInteger(new byte[] { (byte)0x7f, (byte)0xff, (byte)0xff, (byte)0xff }));
+    }
+
+    @Test
+    public void bytesToUnsignedIntegerGivenNegative() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid negative value");
+        ByteUtils.bytesToUnsignedInteger(new byte[] { (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff });
+    }
+
+    @Test
+    public void bytesToUnsignedShort() {
+        Assert.assertEquals(0, ByteUtils.bytesToUnsignedShort(new byte[] { }, 0), 0);
+        Assert.assertEquals(1, ByteUtils.bytesToUnsignedShort(new byte[] { 0x01 }, 0));
+        Assert.assertEquals(256, ByteUtils.bytesToUnsignedShort(new byte[] { 0x01, 0x00 }, 0));
+        Assert.assertEquals(Short.MAX_VALUE, ByteUtils.bytesToUnsignedShort(new byte[] { (byte)0x7f, (byte)0xff }, 0));
+    }
+
+    @Test
+    public void bytesToUnsignedShortGivenNegative() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid negative value");
+        ByteUtils.bytesToUnsignedShort(new byte[] { (byte)0xff, (byte)0xff }, 0);
     }
 }
