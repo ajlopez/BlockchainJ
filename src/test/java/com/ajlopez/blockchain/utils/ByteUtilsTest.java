@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.utils;
 
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.vms.eth.VirtualMachineException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,6 +11,10 @@ import org.junit.rules.ExpectedException;
  * Created by ajlopez on 04/01/2018.
  */
 public class ByteUtilsTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void zeroByteToUnsignedInteger() {
         Assert.assertEquals(0, ByteUtils.bytesToUnsignedInteger(new byte[1], 0));
@@ -48,16 +53,6 @@ public class ByteUtilsTest {
         Assert.assertEquals(2, result.length);
         Assert.assertEquals(0, result[0]);
         Assert.assertEquals(1, result[1]);
-    }
-
-    @Test
-    public void unsignedShortMinusOneToBytes() {
-        byte[] result = ByteUtils.unsignedShortToBytes((short)-1);
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(2, result.length);
-        Assert.assertEquals((byte)0xff, result[0]);
-        Assert.assertEquals((byte)0xff, result[1]);
     }
 
     @Test
@@ -191,6 +186,27 @@ public class ByteUtilsTest {
         Assert.assertArrayEquals(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02 }, ByteUtils.unsignedLongToBytes(2));
         Assert.assertArrayEquals(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xff }, ByteUtils.unsignedLongToBytes(255));
         Assert.assertArrayEquals(new byte[] { 0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }, ByteUtils.unsignedLongToBytes(Long.MAX_VALUE));
+    }
+
+    @Test
+    public void unsignedLongToBytesUsingNegativeValue() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid negative value");
+        ByteUtils.unsignedLongToBytes(-1);
+    }
+
+    @Test
+    public void unsignedIntegerToBytesUsingNegativeValue() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid negative value");
+        ByteUtils.unsignedIntegerToBytes(-1);
+    }
+
+    @Test
+    public void unsignedShortToBytesUsingNegativeValue() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid negative value");
+        ByteUtils.unsignedShortToBytes((short)-1);
     }
 
     @Test

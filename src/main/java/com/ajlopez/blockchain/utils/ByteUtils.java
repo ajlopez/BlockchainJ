@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.utils;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 /**
  * Created by ajlopez on 23/09/2017.
  */
@@ -29,6 +31,9 @@ public class ByteUtils {
     }
 
     public static byte[] unsignedLongToBytes(long value) {
+        if (value < 0)
+            throw new IllegalArgumentException("Invalid negative value");
+
         byte[] result = new byte[Long.BYTES];
 
         for (int k = Long.BYTES; value != 0 && k-- > 0;) {
@@ -67,6 +72,9 @@ public class ByteUtils {
     }
 
     public static void unsignedIntegerToBytes(int value, byte[] bytes, int offset) {
+        if (value < 0)
+            throw new IllegalArgumentException("Invalid negative value");
+
         for (int k = Integer.BYTES; value != 0 && k-- > 0;) {
             bytes[k + offset] = (byte)(value & 0xff);
             value >>= 8;
@@ -112,6 +120,9 @@ public class ByteUtils {
     }
 
     public static byte[] unsignedShortToBytes(short value) {
+        if (value < 0)
+            throw new IllegalArgumentException("Invalid negative value");
+
         byte[] result = new byte[Short.BYTES];
 
         for (int k = Short.BYTES; value != 0 && k-- > 0;) {
