@@ -82,13 +82,19 @@ public class ByteUtils {
         }
     }
 
-    public static short bytesToUnsignedShort(byte[] bytes, int offset) {
+    public static short bytesToShort(byte[] bytes, int offset) {
         short result = 0;
 
         for (int k = 0; k < Short.BYTES && k + offset < bytes.length; k++) {
             result <<= 8;
             result |= bytes[k + offset] & 0xff;
         }
+
+        return result;
+    }
+
+    public static short bytesToUnsignedShort(byte[] bytes, int offset) {
+        short result = bytesToShort(bytes, offset);
 
         if (result < 0)
             throw new IllegalArgumentException("Invalid negative value");
@@ -130,6 +136,10 @@ public class ByteUtils {
         if (value < 0)
             throw new IllegalArgumentException("Invalid negative value");
 
+        return shortToBytes(value);
+    }
+
+    public static byte[] shortToBytes(short value) {
         byte[] result = new byte[Short.BYTES];
 
         for (int k = Short.BYTES; value != 0 && k-- > 0;) {

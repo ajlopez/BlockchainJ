@@ -167,7 +167,7 @@ public class Trie {
 
     public static Trie fromEncoded(byte[] bytes, TrieStore store) {
         short valsizebytes = bytes[2];
-        short subnodes = ByteUtils.bytesToUnsignedShort(bytes, 3);
+        short subnodes = ByteUtils.bytesToShort(bytes, 3);
 
         if (subnodes == 0 && valsizebytes == 0)
             return new Trie(store);
@@ -213,7 +213,7 @@ public class Trie {
                 nsubnode++;
             }
 
-        byte[] subnodesbits = ByteUtils.unsignedShortToBytes(subnodes);
+        byte[] subnodesbits = ByteUtils.shortToBytes(subnodes);
 
         System.arraycopy(subnodesbits, 0, bytes, offset, subnodesbits.length);
     }
