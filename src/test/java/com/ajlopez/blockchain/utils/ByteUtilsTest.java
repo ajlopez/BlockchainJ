@@ -2,7 +2,9 @@ package com.ajlopez.blockchain.utils;
 
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Created by ajlopez on 04/01/2018.
@@ -46,6 +48,16 @@ public class ByteUtilsTest {
         Assert.assertEquals(2, result.length);
         Assert.assertEquals(0, result[0]);
         Assert.assertEquals(1, result[1]);
+    }
+
+    @Test
+    public void unsignedShortMinusOneToBytes() {
+        byte[] result = ByteUtils.unsignedShortToBytes((short)-1);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.length);
+        Assert.assertEquals((byte)0xff, result[0]);
+        Assert.assertEquals((byte)0xff, result[1]);
     }
 
     @Test
