@@ -153,7 +153,7 @@ public class ByteUtils {
     public static byte[] copyBytes(byte[] bytes, int length, boolean rightPadding, boolean signed) {
         byte[] newbytes = new byte[length];
 
-        System.arraycopy(bytes, 0, newbytes, rightPadding ? 0 : length - bytes.length, bytes.length);
+        System.arraycopy(bytes, 0, newbytes, length <= bytes.length || rightPadding ? 0 : length - bytes.length, Math.min(length, bytes.length));
 
         if (signed && bytes[0] < 0)
             for (int k = 0; k < length - bytes.length; k++)
