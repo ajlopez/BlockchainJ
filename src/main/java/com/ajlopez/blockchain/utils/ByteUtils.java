@@ -93,15 +93,6 @@ public class ByteUtils {
         return result;
     }
 
-    public static short bytesToUnsignedShort(byte[] bytes, int offset) {
-        short result = bytesToShort(bytes, offset);
-
-        if (result < 0)
-            throw new IllegalArgumentException("Invalid negative value");
-
-        return result;
-    }
-
     public static short bytesWithLengthToUnsignedInteger(byte[] bytes, int offset) {
         short result = 0;
         short l = bytes[offset];
@@ -130,13 +121,6 @@ public class ByteUtils {
             throw new IllegalArgumentException("Invalid negative value");
 
         return result;
-    }
-
-    public static byte[] unsignedShortToBytes(short value) {
-        if (value < 0)
-            throw new IllegalArgumentException("Invalid negative value");
-
-        return shortToBytes(value);
     }
 
     public static byte[] shortToBytes(short value) {

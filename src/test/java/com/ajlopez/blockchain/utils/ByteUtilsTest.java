@@ -45,26 +45,6 @@ public class ByteUtilsTest {
     }
 
     @Test
-    public void unsignedShortOneToBytes() {
-        byte[] result = ByteUtils.unsignedShortToBytes((short)1);
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(2, result.length);
-        Assert.assertEquals(0, result[0]);
-        Assert.assertEquals(1, result[1]);
-    }
-
-    @Test
-    public void unsignedShort256ToBytes() {
-        byte[] result = ByteUtils.unsignedShortToBytes((short)256);
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(2, result.length);
-        Assert.assertEquals(1, result[0]);
-        Assert.assertEquals(0, result[1]);
-    }
-
-    @Test
     public void unsignedIntegerOneToBytes() {
         byte[] result = ByteUtils.unsignedIntegerToBytes(1);
 
@@ -199,13 +179,6 @@ public class ByteUtilsTest {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("Invalid negative value");
         ByteUtils.unsignedIntegerToBytes(-1);
-    }
-
-    @Test
-    public void unsignedShortToBytesUsingNegativeValue() {
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Invalid negative value");
-        ByteUtils.unsignedShortToBytes((short)-1);
     }
 
     @Test
@@ -464,20 +437,5 @@ public class ByteUtilsTest {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("Invalid negative value");
         ByteUtils.bytesToUnsignedInteger(new byte[] { (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff });
-    }
-
-    @Test
-    public void bytesToUnsignedShort() {
-        Assert.assertEquals(0, ByteUtils.bytesToUnsignedShort(new byte[] { }, 0), 0);
-        Assert.assertEquals(1, ByteUtils.bytesToUnsignedShort(new byte[] { 0x01 }, 0));
-        Assert.assertEquals(256, ByteUtils.bytesToUnsignedShort(new byte[] { 0x01, 0x00 }, 0));
-        Assert.assertEquals(Short.MAX_VALUE, ByteUtils.bytesToUnsignedShort(new byte[] { (byte)0x7f, (byte)0xff }, 0));
-    }
-
-    @Test
-    public void bytesToUnsignedShortGivenNegative() {
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Invalid negative value");
-        ByteUtils.bytesToUnsignedShort(new byte[] { (byte)0xff, (byte)0xff }, 0);
     }
 }
