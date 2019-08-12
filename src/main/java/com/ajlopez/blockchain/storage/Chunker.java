@@ -17,17 +17,17 @@ public class Chunker {
         this.inputStream = inputStream;
     }
 
-    public byte[] nextChunk() throws IOException {
-        byte[] chunk = new byte[this.chunkLength];
+    public Chunk nextChunk() throws IOException {
+        byte[] bytes = new byte[this.chunkLength];
 
-        int nbytes = this.inputStream.read(chunk);
+        int nbytes = this.inputStream.read(bytes);
 
         if (nbytes == -1)
             return null;
 
         if (nbytes < this.chunkLength)
-            return ByteUtils.copyBytes(chunk, nbytes);
+            return new Chunk(ByteUtils.copyBytes(bytes, nbytes));
 
-        return chunk;
+        return new Chunk(bytes);
     }
 }

@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.storage;
 
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,11 +28,12 @@ public class ChunkerTest {
 
         Chunker chunker = new Chunker(1024, new ByteInputStream(data, data.length));
 
-        byte[] result = chunker.nextChunk();
+        Chunk result = chunker.nextChunk();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(data.length, result.length);
-        Assert.assertArrayEquals(data, result);
+        Assert.assertEquals(data.length, result.getData().length);
+        Assert.assertArrayEquals(data, result.getData());
+        Assert.assertEquals(HashUtils.calculateHash(data), result.getHash());
 
         Assert.assertNull(chunker.nextChunk());
     }
@@ -42,17 +44,20 @@ public class ChunkerTest {
 
         Chunker chunker = new Chunker(40, new ByteInputStream(data, data.length));
 
-        byte[] result = chunker.nextChunk();
+        Chunk result = chunker.nextChunk();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(40, result.length);
-        Assert.assertArrayEquals(ByteUtils.copyBytes(data, 40), result);
+        Assert.assertNotNull(result.getData());
+        Assert.assertEquals(40, result.getData().length);
+        Assert.assertArrayEquals(ByteUtils.copyBytes(data, 40), result.getData());
+        Assert.assertEquals(HashUtils.calculateHash(ByteUtils.copyBytes(data, 40)), result.getHash());
 
-        byte[] result2 = chunker.nextChunk();
+        Chunk result2 = chunker.nextChunk();
 
         Assert.assertNotNull(result2);
-        Assert.assertEquals(2, result2.length);
-        Assert.assertEquals(data[40], result2[0]);
-        Assert.assertEquals(data[41], result2[1]);
+        Assert.assertNotNull(result2.getData());
+        Assert.assertEquals(2, result2.getData().length);
+        Assert.assertEquals(data[40], result2.getData()[0]);
+        Assert.assertEquals(data[41], result2.getData()[1]);
     }
 }
