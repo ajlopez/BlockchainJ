@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.storage;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.junit.Assert;
@@ -31,5 +32,47 @@ public class StreamProcessorTest {
 
         Assert.assertNotNull(expectedChunk);
         Assert.assertArrayEquals(data, expectedChunk.getData());
+    }
+
+    @Test
+    public void processStreamInTwoChunks() throws IOException {
+        byte[] data = FactoryHelper.createRandomBytes(128);
+        byte[] data1 = new byte[64];
+        byte[] data2 = new byte[64];
+
+        System.arraycopy(data, 0, data1, 0, 64);
+        System.arraycopy(data, 64, data2, 0, 64);
+
+        InputStream stream = new ByteInputStream(data, data.length);
+        ChunkStore chunkStore = new ChunkStore(new HashMapStore());
+
+        StreamProcessor streamProcessor = new StreamProcessor(chunkStore);
+
+        streamProcessor.processStream(stream, 64);
+
+        Hash expectedHash1 = HashUtils.calculateHash(data1);
+
+        Chunk expectedChunk1 = chunkStore.getChunk(expectedHash1);
+
+        Assert.assertNotNull(expectedChunk1);
+        Assert.assertArrayEquals(data1, expectedChunk1.getData());
+
+        Hash expectedHash2 = HashUtils.calculateHash(data2);
+
+        Chunk expectedChunk2 = chunkStore.getChunk(expectedHash2);
+
+        Assert.assertNotNull(expectedChunk2);
+        Assert.assertArrayEquals(data2, expectedChunk2.getData());
+
+        byte[] data3 = new byte[64];
+        System.arraycopy(expectedHash1.getBytes(), 0, data3, 0, 32);
+        System.arraycopy(expectedHash2.getBytes(), 0, data3, 32, 32);
+
+        Hash expectedHash3 = HashUtils.calculateHash(data3);
+
+        Chunk expectedChunk3 = chunkStore.getChunk(expectedHash3);
+
+        Assert.assertNotNull(expectedChunk3);
+        Assert.assertArrayEquals(data3, expectedChunk3.getData());
     }
 }
