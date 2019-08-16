@@ -3,10 +3,10 @@ package com.ajlopez.blockchain.storage;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 /**
@@ -17,7 +17,7 @@ public class ChunkerTest {
     public void noChunkFromEmptyStream() throws IOException {
         byte[] data = new byte[0];
 
-        Chunker chunker = new Chunker(1024, new ByteInputStream(data, data.length));
+        Chunker chunker = new Chunker(1024, new ByteArrayInputStream(data));
 
         Assert.assertNull(chunker.nextChunk());
     }
@@ -26,7 +26,7 @@ public class ChunkerTest {
     public void onlyOneChunk() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
 
-        Chunker chunker = new Chunker(1024, new ByteInputStream(data, data.length));
+        Chunker chunker = new Chunker(1024, new ByteArrayInputStream(data));
 
         Chunk result = chunker.nextChunk();
 
@@ -42,7 +42,7 @@ public class ChunkerTest {
     public void twoChunks() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
 
-        Chunker chunker = new Chunker(40, new ByteInputStream(data, data.length));
+        Chunker chunker = new Chunker(40, new ByteArrayInputStream(data));
 
         Chunk result = chunker.nextChunk();
 

@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.storage;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.junit.Assert;
