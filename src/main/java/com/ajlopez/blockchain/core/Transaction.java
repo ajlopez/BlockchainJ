@@ -70,4 +70,23 @@ public class Transaction {
     private Hash calculateHash() {
         return HashUtils.calculateHash(TransactionEncoder.encode(this));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Transaction))
+            return false;
+
+        return this.getHash().equals(((Transaction)obj).getHash());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getHash().hashCode();
+    }
 }

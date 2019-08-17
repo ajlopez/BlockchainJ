@@ -84,12 +84,32 @@ public class TransactionPoolTest {
     }
 
     @Test
-    public void addTransactionTwice() {
+    public void addSameTransactionTwice() {
         TransactionPool pool = new TransactionPool();
         Transaction transaction = FactoryHelper.createTransaction(100);
 
         pool.addTransaction(transaction);
         List<Transaction> added = pool.addTransaction(transaction);
+
+        Assert.assertNotNull(added);
+        Assert.assertTrue(added.isEmpty());
+
+        List<Transaction> result = pool.getTransactions();
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(transaction, result.get(0));
+    }
+
+    @Test
+    public void addTransactionTwice() {
+        TransactionPool pool = new TransactionPool();
+        Transaction transaction = FactoryHelper.createTransaction(100);
+        Transaction transaction2 = new Transaction(transaction.getSender(), transaction.getReceiver(), transaction.getValue(), transaction.getNonce(), transaction.getData(), transaction.getGas(), transaction.getGasPrice());
+
+        pool.addTransaction(transaction);
+        List<Transaction> added = pool.addTransaction(transaction2);
 
         Assert.assertNotNull(added);
         Assert.assertTrue(added.isEmpty());

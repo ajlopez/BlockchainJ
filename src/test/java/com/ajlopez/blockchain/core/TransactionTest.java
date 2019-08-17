@@ -95,4 +95,29 @@ public class TransactionTest {
 
         new Transaction(sender, null, value, 42, null, 6000000, Coin.ZERO);
     }
+
+    @Test
+    public void equalTransaction() {
+        Address sender = FactoryHelper.createRandomAddress();
+        Address receiver = FactoryHelper.createRandomAddress();
+        Coin value = Coin.ONE;
+
+        byte[] data = FactoryHelper.createRandomBytes(128);
+
+        Transaction tx = new Transaction(sender, receiver, value, 42, data, 6000000, Coin.ZERO);
+        Transaction tx2 = new Transaction(sender, receiver, value, 42, data, 6000000, Coin.ZERO);
+        Transaction tx3 = new Transaction(sender, receiver, value, 42, data, 6000000, Coin.ONE);
+
+        Assert.assertTrue(tx.equals(tx));
+        Assert.assertTrue(tx.equals(tx2));
+        Assert.assertTrue(tx2.equals(tx));
+        Assert.assertEquals(tx.hashCode(), tx2.hashCode());
+
+        Assert.assertFalse(tx.equals(tx3));
+        Assert.assertFalse(tx2.equals(tx3));
+        Assert.assertFalse(tx3.equals(tx));
+        Assert.assertFalse(tx3.equals(tx2));
+        Assert.assertFalse(tx.equals(null));
+        Assert.assertFalse(tx.equals("foo"));
+    }
 }
