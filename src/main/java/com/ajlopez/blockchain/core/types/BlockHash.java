@@ -13,9 +13,4 @@ public class BlockHash extends Hash {
     public BlockHash(Hash hash) {
         this(hash.getBytes());
     }
-
-    @Override
-    public int hashOffset() {
-        return 31;
-    }
 }

@@ -10,9 +10,4 @@ public class Hash extends AbstractBytesValue {
     public Hash(byte[] bytes) {
         super(bytes, HASH_BYTES);
     }
-
-    @Override
-    public int hashOffset() {
-        return 17;
-    }
 }

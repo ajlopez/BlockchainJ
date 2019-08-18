@@ -11,9 +11,4 @@ public class Address extends AbstractBytesValue {
     public Address(byte[] bytes) {
         super(bytes, ADDRESS_BYTES);
     }
-
-    @Override
-    public int hashOffset() {
-        return 23;
-    }
 }

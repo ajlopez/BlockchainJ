@@ -271,11 +271,6 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
     }
 
     @Override
-    public int hashOffset() {
-        return 29;
-    }
-
-    @Override
     public int compareTo(DataWord word) {
         for (int k = 0; k < DATAWORD_BYTES; k++) {
             int r = Integer.compare(this.bytes[k] & 0xff, word.bytes[k] & 0xff);

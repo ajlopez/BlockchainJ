@@ -98,8 +98,11 @@ public class HashTest {
         random.nextBytes(bytes);
 
         Hash hash = new Hash(bytes);
+        DataWord dataWord = new DataWord(bytes);
 
         Assert.assertFalse(hash.equals(null));
+        Assert.assertFalse(hash.equals(dataWord));
+        Assert.assertFalse(dataWord.equals(hash));
         Assert.assertFalse(hash.equals("foo"));
         Assert.assertFalse(hash.equals(new BlockHash(bytes)));
     }

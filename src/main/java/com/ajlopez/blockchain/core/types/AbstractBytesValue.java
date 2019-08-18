@@ -37,26 +37,21 @@ public abstract class AbstractBytesValue {
         if (obj == null)
             return false;
 
-        if (!(obj instanceof AbstractBytesValue))
+        if (this.getClass() != obj.getClass())
             return false;
 
         AbstractBytesValue value = (AbstractBytesValue)obj;
-
-        if (this.hashOffset() != value.hashOffset())
-            return false;
 
         return Arrays.equals(this.bytes, value.bytes);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(this.bytes) + this.hashOffset();
+        return Arrays.hashCode(this.bytes);
     }
 
     @Override
     public String toString() {
         return HexUtils.bytesToHexString(this.bytes, true);
     }
-
-    protected abstract int hashOffset();
 }
