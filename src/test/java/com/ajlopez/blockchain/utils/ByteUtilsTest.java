@@ -428,6 +428,14 @@ public class ByteUtilsTest {
         Assert.assertEquals(256, ByteUtils.bytesToUnsignedLong(new byte[] { 0x01, 0x00 }));
         Assert.assertEquals(Long.MAX_VALUE, ByteUtils.bytesToUnsignedLong(new byte[] { (byte)0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }));
     }
+    @Test
+    public void bytesToLong() {
+        Assert.assertEquals(0, ByteUtils.bytesToLong(new byte[] { }));
+        Assert.assertEquals(1, ByteUtils.bytesToLong(new byte[] { 0x01 }));
+        Assert.assertEquals(256, ByteUtils.bytesToLong(new byte[] { 0x01, 0x00 }));
+        Assert.assertEquals(Long.MAX_VALUE, ByteUtils.bytesToLong(new byte[] { (byte)0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }));
+        Assert.assertEquals(-1, ByteUtils.bytesToLong(new byte[] { (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }));
+    }
 
     @Test
     public void bytesToUnsignedLongGivenNegative() {

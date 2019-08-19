@@ -47,15 +47,21 @@ public class ByteUtils {
     }
 
     public static long bytesToUnsignedLong(byte[] bytes) {
+        long result = bytesToLong(bytes);
+
+        if (result < 0)
+            throw new IllegalArgumentException("Invalid negative value");
+
+        return result;
+    }
+
+    public static long bytesToLong(byte[] bytes) {
         long result = 0;
 
         for (int k = 0; k < bytes.length && k < Long.BYTES; k++) {
             result <<= 8;
             result |= bytes[k] & 0xff;
         }
-
-        if (result < 0)
-            throw new IllegalArgumentException("Invalid negative value");
 
         return result;
     }
