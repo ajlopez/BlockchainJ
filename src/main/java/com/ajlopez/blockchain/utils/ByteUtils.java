@@ -47,7 +47,7 @@ public class ByteUtils {
     }
 
     public static long bytesToUnsignedLong(byte[] bytes) {
-        long result = bytesToLong(bytes);
+        long result = bytesToLong(bytes, 0);
 
         if (result < 0)
             throw new IllegalArgumentException("Invalid negative value");
@@ -56,11 +56,15 @@ public class ByteUtils {
     }
 
     public static long bytesToLong(byte[] bytes) {
+        return bytesToLong(bytes, 0);
+    }
+
+    public static long bytesToLong(byte[] bytes, int offset) {
         long result = 0;
 
-        for (int k = 0; k < bytes.length && k < Long.BYTES; k++) {
+        for (int k = 0; k + offset < bytes.length && k < Long.BYTES; k++) {
             result <<= 8;
-            result |= bytes[k] & 0xff;
+            result |= bytes[k + offset] & 0xff;
         }
 
         return result;
