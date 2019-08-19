@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.core.types;
 
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -105,5 +107,14 @@ public class HashTest {
         Assert.assertFalse(dataWord.equals(hash));
         Assert.assertFalse(hash.equals("foo"));
         Assert.assertFalse(hash.equals(new BlockHash(bytes)));
+    }
+    
+    @Test
+    public void asLong() {
+        byte[] bytes = FactoryHelper.createRandomBytes(Hash.HASH_BYTES);
+
+        Hash hash = new Hash(bytes);
+
+        Assert.assertEquals(ByteUtils.bytesToLong(bytes, Hash.HASH_BYTES - Long.BYTES), hash.asLong());
     }
 }
