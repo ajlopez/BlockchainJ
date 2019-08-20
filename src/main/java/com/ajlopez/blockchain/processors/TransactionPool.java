@@ -34,7 +34,7 @@ public class TransactionPool {
     }
 
     public List<Transaction> getTransactions() {
-        List<Transaction> list = new ArrayList<Transaction>();
+        List<Transaction> list = new ArrayList<>();
 
         synchronized (this.transactions) {
             list.addAll(this.transactions);

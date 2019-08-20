@@ -108,7 +108,7 @@ public class HashTest {
         Assert.assertFalse(hash.equals("foo"));
         Assert.assertFalse(hash.equals(new BlockHash(bytes)));
     }
-    
+
     @Test
     public void asLong() {
         byte[] bytes = FactoryHelper.createRandomBytes(Hash.HASH_BYTES);

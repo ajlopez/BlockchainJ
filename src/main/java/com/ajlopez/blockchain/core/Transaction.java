@@ -60,6 +60,7 @@ public class Transaction {
 
     public Coin getGasPrice() { return this.gasPrice; }
 
+    // TODO to have TransactionHash
     public Hash getHash() {
         if (this.hash == null)
             this.hash = this.calculateHash();
