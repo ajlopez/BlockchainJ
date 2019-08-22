@@ -1,8 +1,6 @@
 package com.ajlopez.blockchain.core;
 
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
@@ -19,7 +17,7 @@ public class Transaction {
     private final long gas;
     private final Coin gasPrice;
 
-    private Hash hash;
+    private TransactionHash hash;
 
     public Transaction(Address sender, Address receiver, Coin value, long nonce, byte[] data, long gas, Coin gasPrice) {
         if (sender == null)
@@ -60,16 +58,15 @@ public class Transaction {
 
     public Coin getGasPrice() { return this.gasPrice; }
 
-    // TODO to have TransactionHash
-    public Hash getHash() {
+    public TransactionHash getHash() {
         if (this.hash == null)
             this.hash = this.calculateHash();
 
         return this.hash;
     }
 
-    private Hash calculateHash() {
-        return HashUtils.calculateHash(TransactionEncoder.encode(this));
+    private TransactionHash calculateHash() {
+        return new TransactionHash(HashUtils.calculateHash(TransactionEncoder.encode(this)));
     }
 
     @Override
