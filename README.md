@@ -40,12 +40,11 @@ The world state keeps the account states. Each account has a balance and smart c
 - [What is a light client and why you should care?](https://www.parity.io/what-is-a-light-client/)
 - [Transactions Per Second in Permissioned Blockchains — Does It Even Matter?](https://hackernoon.com/transactions-per-second-in-private-blockchains-does-it-even-matter-bf67dec56b76)
 - [Vac modular peer-to-peer messaging stack](https://vac.dev/vac-overview)
+- [Pantheon Enterprise Ethereum Client](https://docs.pantheon.pegasys.tech/en/latest/)
 
 ## To Do
 
-- Coin type
 - Signed transactions
-- DataWord or Coin in Transaction value, instead of BigInteger
 - DataWord or Coin in Account balance, instead of BigInteger
 - Block JSON serialization
 - Block transaction hash should be the hash of a trie
@@ -55,7 +54,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - Transaction receipts
 - Log emit
 - Create contracts
-- Call contracts in Virtual Machine
+- Call contracts in Virtual Machine, WIP
 
 ## License
 
