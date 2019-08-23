@@ -29,11 +29,15 @@ public class TransactionJsonEncoderTest {
         Assert.assertTrue(oresult.hasProperty("to"));
         Assert.assertTrue(oresult.hasProperty("value"));
         Assert.assertTrue(oresult.hasProperty("nonce"));
+        Assert.assertTrue(oresult.hasProperty("gas"));
+        Assert.assertTrue(oresult.hasProperty("gasPrice"));
 
         Assert.assertEquals(transaction.getHash().toString(), oresult.getProperty("hash").getValue());
         Assert.assertEquals(transaction.getSender().toString(), oresult.getProperty("from").getValue());
         Assert.assertEquals(transaction.getReceiver().toString(), oresult.getProperty("to").getValue());
-        Assert.assertEquals(Coin.fromUnsignedLong(1000).toString(), oresult.getProperty("value").getValue());
+        Assert.assertEquals(transaction.getValue().toString(), oresult.getProperty("value").getValue());
         Assert.assertEquals(transaction.getNonce() + "", oresult.getProperty("nonce").getValue());
+        Assert.assertEquals(transaction.getGas() + "", oresult.getProperty("gas").getValue());
+        Assert.assertEquals(transaction.getGasPrice().toString(), oresult.getProperty("gasPrice").getValue());
     }
 }

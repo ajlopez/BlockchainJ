@@ -23,6 +23,10 @@ public class TransactionJsonEncoder {
                 .value(transaction.getNonce())
                 .name("value")
                 .value(transaction.getValue())
+                .name("gas")
+                .value(transaction.getGas())
+                .name("gasPrice")
+                .value(transaction.getGasPrice())
                 .build();
     }
 }
