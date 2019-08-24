@@ -41,6 +41,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Transactions Per Second in Permissioned Blockchains — Does It Even Matter?](https://hackernoon.com/transactions-per-second-in-private-blockchains-does-it-even-matter-bf67dec56b76)
 - [Vac modular peer-to-peer messaging stack](https://vac.dev/vac-overview)
 - [Pantheon Enterprise Ethereum Client](https://docs.pantheon.pegasys.tech/en/latest/)
+- [What Comprises an Ethereum Fullnode Implementation?](https://medium.com/blockchannel/what-comprises-an-ethereum-fullnode-implementation-a1e72f213ca6)
 
 ## To Do
 
