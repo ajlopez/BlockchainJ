@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Coin;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
@@ -32,7 +33,7 @@ public class MinerProcessorTest {
         MinerProcessor processor = new MinerProcessor(null, transactionPool, new AccountStoreProvider(new TrieStore(new HashMapStore())), coinbase);
 
         BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
-        Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Block block = processor.mineBlock(parent);
 
@@ -63,7 +64,7 @@ public class MinerProcessorTest {
         BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         MinerProcessor processor = new MinerProcessor(null, transactionPool, accountStoreProvider, coinbase);

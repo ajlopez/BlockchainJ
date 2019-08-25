@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.core;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class BlockTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertEquals(1L, block.getNumber());
         Assert.assertEquals(hash, block.getParentHash());
@@ -30,7 +31,7 @@ public class BlockTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Transaction> transactions = block.getTransactions();
 
@@ -42,8 +43,8 @@ public class BlockTest {
     public void blockWithDifferentParentHashesHaveDifferentHashes() {
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1L, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block2 = new Block(1L, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block1 = new Block(1L, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2 = new Block(1L, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -53,8 +54,8 @@ public class BlockTest {
         BlockHash parentHash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1L, parentHash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block2 = new Block(2L, parentHash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block1 = new Block(1L, parentHash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2 = new Block(2L, parentHash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -74,8 +75,8 @@ public class BlockTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1L, hash, txs1, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
-        Block block2 = new Block(1L, hash, txs2, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block1 = new Block(1L, hash, txs1, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2 = new Block(1L, hash, txs2, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -90,7 +91,7 @@ public class BlockTest {
         BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1L, hash, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Transaction> transactions = block.getTransactions();
 

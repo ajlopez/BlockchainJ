@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.core;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockHeaderEncoder;
 import com.ajlopez.blockchain.utils.HashUtils;
@@ -16,10 +17,11 @@ public class BlockHeader {
     private final Hash stateRootHash;
     private final long timestamp;
     private final Address coinbase;
+    private final Difficulty difficulty;
 
     private BlockHash hash;
 
-    public BlockHeader(long number, BlockHash parentHash, Hash transactionsHash, Hash stateRootHash, long timestamp, Address coinbase) {
+    public BlockHeader(long number, BlockHash parentHash, Hash transactionsHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
@@ -29,6 +31,7 @@ public class BlockHeader {
         this.stateRootHash = stateRootHash;
         this.timestamp = timestamp;
         this.coinbase = coinbase;
+        this.difficulty = difficulty;
     }
 
     public long getNumber() {
@@ -38,6 +41,8 @@ public class BlockHeader {
     public long getTimestamp() { return this.timestamp; }
 
     public Address getCoinbase() { return this.coinbase; }
+
+    public Difficulty getDifficulty() { return this.difficulty; }
 
     public BlockHash getHash() {
         if (this.hash == null)

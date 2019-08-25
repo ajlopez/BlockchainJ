@@ -1,9 +1,6 @@
 package com.ajlopez.blockchain.encoding;
 
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
@@ -29,6 +26,14 @@ public class RLPEncoder {
 
     public static Coin decodeCoin(byte[] data) {
         return Coin.fromBytes(RLP.decode(data));
+    }
+
+    public static byte[] encodeDifficulty(Difficulty value) {
+        return RLP.encode(value.toBytes());
+    }
+
+    public static Difficulty decodeDifficulty(byte[] data) {
+        return Difficulty.fromBytes(RLP.decode(data));
     }
 
     public static byte[] encodeUnsignedLong(long value) {

@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.encoding;
 import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 
 /**
@@ -18,8 +19,9 @@ public class BlockHeaderEncoder {
         byte[] rlpStateRootHash = RLPEncoder.encodeHash(header.getStateRootHash());
         byte[] rlpTimestamp = RLPEncoder.encodeUnsignedLong(header.getTimestamp());
         byte[] rlpCoinbase = RLPEncoder.encodeAddress(header.getCoinbase());
+        byte[] rlpDifficulty = RLPEncoder.encodeDifficulty(header.getDifficulty());
 
-        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase);
+        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty);
     }
 
     public static BlockHeader decode(byte[] encoded) {
@@ -30,7 +32,8 @@ public class BlockHeaderEncoder {
         Hash stateRootHash = RLPEncoder.decodeHash(bytes[3]);
         long timestamp = RLPEncoder.decodeUnsignedLong(bytes[4]);
         Address coinbase = RLPEncoder.decodeAddress(bytes[5]);
+        Difficulty difficulty = RLPEncoder.decodeDifficulty(bytes[6]);
 
-        return new BlockHeader(number, parentHash, transactionsHash, stateRootHash, timestamp, coinbase);
+        return new BlockHeader(number, parentHash, transactionsHash, stateRootHash, timestamp, coinbase, difficulty);
     }
 }

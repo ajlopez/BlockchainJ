@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.net.messages;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -17,7 +18,7 @@ public class BlockMessageTest {
         BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         BlockMessage message = new BlockMessage(block);
 

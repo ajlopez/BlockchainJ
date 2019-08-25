@@ -3,13 +3,13 @@ package com.ajlopez.blockchain.net.peers;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.processors.NodeProcessor;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.test.utils.NodesHelper;
-import com.ajlopez.blockchain.utils.HashUtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class TcpPeerClientServerTest {
         client.connect();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, blockChain1.getBestBlock().getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1, blockChain1.getBestBlock().getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message message = new BlockMessage(block);
 
         nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);

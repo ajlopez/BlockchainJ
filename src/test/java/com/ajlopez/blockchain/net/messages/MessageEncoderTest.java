@@ -2,10 +2,7 @@ package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
@@ -20,7 +17,7 @@ public class MessageEncoderTest {
         BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         BlockMessage message = new BlockMessage(block);
 
@@ -42,7 +39,7 @@ public class MessageEncoderTest {
         BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         BlockMessage message = new BlockMessage(block);
 

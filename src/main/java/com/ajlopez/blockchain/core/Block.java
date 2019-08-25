@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.core;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.utils.HashUtils;
@@ -16,16 +17,16 @@ public class Block {
     private final BlockHeader header;
     private final List<Transaction> transactions;
 
-    public Block(Block parent, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase) {
-        this(parent.getNumber() + 1, parent.getHash(), txs, stateRootHash, timestamp, coinbase);
+    public Block(Block parent, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+        this(parent.getNumber() + 1, parent.getHash(), txs, stateRootHash, timestamp, coinbase, difficulty);
     }
 
-    public Block(long number, BlockHash parentHash, Hash stateRootHash, long timestamp, Address coinbase) {
-        this(number, parentHash, new ArrayList<>(), stateRootHash, timestamp, coinbase);
+    public Block(long number, BlockHash parentHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+        this(number, parentHash, new ArrayList<>(), stateRootHash, timestamp, coinbase, difficulty);
     }
 
-    public Block(long number, BlockHash parentHash, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase) {
-        this(new BlockHeader(number, parentHash, HashUtils.calculateHash(TransactionEncoder.encode(txs)), stateRootHash, timestamp, coinbase), txs);
+    public Block(long number, BlockHash parentHash, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+        this(new BlockHeader(number, parentHash, HashUtils.calculateHash(TransactionEncoder.encode(txs)), stateRootHash, timestamp, coinbase, difficulty), txs);
     }
 
     public Block(BlockHeader header, List<Transaction> transactions)

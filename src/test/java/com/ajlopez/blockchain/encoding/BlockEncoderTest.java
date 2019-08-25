@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.encoding;
 import com.ajlopez.blockchain.core.*;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -22,7 +23,7 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -46,7 +47,7 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -78,7 +79,7 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(42, parentHash, txs, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -111,8 +112,8 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
-        Block block2 = new Block(0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
+        Block block1 = new Block(42, parentHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2 = new Block(0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         byte[] encoded1 = BlockEncoder.encode(block1);
         byte[] encoded2 = BlockEncoder.encode(block2);

@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.encoding;
 import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -19,7 +20,7 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header = new BlockHeader(42, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase);
+        BlockHeader header = new BlockHeader(42, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42));
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -33,5 +34,6 @@ public class BlockHeaderEncoderTest {
         Assert.assertEquals(header.getHash(), result.getHash());
         Assert.assertEquals(header.getTransactionsHash(), result.getTransactionsHash());
         Assert.assertEquals(header.getCoinbase(), result.getCoinbase());
+        Assert.assertEquals(header.getDifficulty(), result.getDifficulty());
     }
 }

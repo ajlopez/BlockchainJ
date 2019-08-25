@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
@@ -58,7 +59,7 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message message = new BlockMessage(block);
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
@@ -102,7 +103,7 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message = new BlockMessage(block);
 
@@ -123,8 +124,8 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -166,8 +167,8 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -193,8 +194,8 @@ public class NodeProcessorTest {
         nodeProcessor1.connectTo(nodeProcessor2);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -225,8 +226,8 @@ public class NodeProcessorTest {
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO);
-        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);

@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.json.JsonStringValue;
@@ -273,7 +274,7 @@ public class AccountsProcessorTest {
 
             accountStore.save();
 
-            Block block = new Block(parent.getNumber() + 1, parent.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase);
+            Block block = new Block(parent.getNumber() + 1, parent.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
             blockChain.connectBlock(block);
         }

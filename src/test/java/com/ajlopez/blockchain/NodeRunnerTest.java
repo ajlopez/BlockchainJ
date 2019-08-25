@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
@@ -63,7 +64,7 @@ public class NodeRunnerTest {
 
         runner.start();
 
-        Block block = new Block(1, blockChain.getBestBlock().getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase);
+        Block block = new Block(1, blockChain.getBestBlock().getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message = new BlockMessage(block);
 

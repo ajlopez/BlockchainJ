@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
@@ -56,7 +57,7 @@ public class MinerProcessor {
 
         List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions(), null);
 
-        return new Block(parent, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase);
+        return new Block(parent, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
     }
 
     public void start() {
