@@ -36,6 +36,8 @@ public class BlockJsonEncoder {
                 .value(block.getStateRootHash())
                 .name("timestamp")
                 .value(block.getTimestamp())
+                .name("difficulty")
+                .value(block.getDifficulty())
                 .name("uncles")
                 .array()
                 .end();

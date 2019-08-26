@@ -46,10 +46,8 @@ The world state keeps the account states. Each account has a balance and smart c
 ## To Do
 
 - Signed transactions
-- DataWord or Coin in Account balance, instead of BigInteger
 - Block JSON serialization
 - Block transaction hash should be the hash of a trie
-- Difficulty in block
 - Total difficulty in block JSON serialization
 - Numeric values in hexadecimal in JSON serialization
 - Transaction receipts

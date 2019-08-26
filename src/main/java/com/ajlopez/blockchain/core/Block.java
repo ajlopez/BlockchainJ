@@ -67,6 +67,8 @@ public class Block {
 
     public long getTimestamp() { return this.header.getTimestamp(); }
 
+    public Difficulty getDifficulty() { return this.header.getDifficulty(); }
+
     public List<Transaction> getTransactions() {
         return this.transactions;
     }
