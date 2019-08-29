@@ -15,7 +15,7 @@ public class TransactionJsonEncoder {
     public static JsonValue encode(Transaction transaction) {
         if (transaction == null)
             return JsonNullValue.getInstance();
-        
+
         return (new JsonObjectBuilder(new JsonBuilder()))
                 .name("hash")
                 .value(transaction.getHash())
