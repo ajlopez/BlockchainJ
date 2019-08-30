@@ -16,8 +16,12 @@ public class TransactionsProcessor extends AbstractJsonRpcProcessor {
 
     @Override
     public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
-        String txid = request.getParams().get(0).getValue().toString();
-        Transaction transaction = this.transactionsProvider.getTransaction(txid);
-        return JsonRpcResponse.createResponse(request, TransactionJsonEncoder.encode(transaction));
+        if (request.check("eth_getTransactionByHash", 1)) {
+            String txid = request.getParams().get(0).getValue().toString();
+            Transaction transaction = this.transactionsProvider.getTransaction(txid);
+            return JsonRpcResponse.createResponse(request, TransactionJsonEncoder.encode(transaction));
+        }
+
+        return super.processRequest(request);
     }
 }

@@ -8,7 +8,9 @@ import com.ajlopez.blockchain.json.JsonValueType;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,10 @@ import java.util.List;
  * Created by ajlopez on 27/08/2019.
  */
 public class TransactionsProcessorTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void getUnknownTransaction() throws JsonRpcException {
         TransactionPool transactionPool = new TransactionPool();
@@ -55,7 +61,7 @@ public class TransactionsProcessorTest {
         Assert.assertEquals(JsonValueType.OBJECT, response.getResult().getType());
 
         JsonObjectValue oresult = (JsonObjectValue)response.getResult();
-        
+
         Assert.assertTrue(oresult.hasProperty("hash"));
         Assert.assertTrue(oresult.hasProperty("from"));
         Assert.assertTrue(oresult.hasProperty("to"));
@@ -71,5 +77,20 @@ public class TransactionsProcessorTest {
         Assert.assertEquals(transaction.getNonce() + "", oresult.getProperty("nonce").getValue());
         Assert.assertEquals(transaction.getGas() + "", oresult.getProperty("gas").getValue());
         Assert.assertEquals(transaction.getGasPrice().toString(), oresult.getProperty("gasPrice").getValue());
+    }
+
+    @Test
+    public void unknownMethod() throws JsonRpcException {
+        TransactionPool transactionPool = new TransactionPool();
+        TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
+
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider);
+
+        List<JsonValue> params = new ArrayList<>();
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);
+
+        exception.expect(JsonRpcException.class);
+        exception.expectMessage("Unknown method 'eth_foo'");
+        transactionsProcessor.processRequest(request);
     }
 }
