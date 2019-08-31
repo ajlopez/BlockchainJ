@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.core.types;
 
 import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.math.BigInteger;
 
@@ -54,5 +55,10 @@ public class NaturalValue {
 
     public byte[] toBytes() {
         return ByteUtils.normalizedBytes(this.value.toByteArray());
+    }
+
+    @Override
+    public String toString() {
+        return HexUtils.bytesToHexString(this.toBytes(), true);
     }
 }

@@ -30,6 +30,12 @@ public class JsonBuilder {
         return this;
     }
 
+    public JsonBuilder value(long value) {
+        this.value = new JsonNumericValue(Long.toString(value));
+
+        return this;
+    }
+
     public JsonBuilder value(boolean value) {
         this.value = new JsonBooleanValue(value);
 

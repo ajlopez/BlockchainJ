@@ -23,6 +23,13 @@ public class JsonObjectBuilder extends JsonBuilder {
         return this;
     }
 
+    public JsonBuilder value(long value) {
+        super.value(value);
+        properties.put(this.name, super.build());
+
+        return this;
+    }
+
     @Override
     public JsonBuilder value(boolean value) {
         super.value(value);
