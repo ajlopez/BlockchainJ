@@ -65,6 +65,10 @@ public class Transaction {
         return this.hash;
     }
 
+    public Transaction withNonce(long newnonce) {
+        return new Transaction(this.sender, this.receiver, this.value, newnonce, this.data, this.gas, this.gasPrice);
+    }
+
     private TransactionHash calculateHash() {
         return new TransactionHash(HashUtils.calculateHash(TransactionEncoder.encode(this)));
     }

@@ -120,4 +120,28 @@ public class TransactionTest {
         Assert.assertFalse(tx.equals(null));
         Assert.assertFalse(tx.equals("foo"));
     }
+    
+    @Test
+    public void withNonce() {
+        Address from = FactoryHelper.createRandomAddress();
+        Address to = FactoryHelper.createRandomAddress();
+        Coin value = Coin.fromUnsignedLong(1000);
+        Coin gasPrice = Coin.fromUnsignedLong(10000);
+        long gas = 100;
+        byte[] data = FactoryHelper.createRandomBytes(42);
+        long nonce = 17;
+
+        Transaction transaction = new Transaction(from, to, value, nonce, data, gas, gasPrice);
+
+        Transaction result = transaction.withNonce(18);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(18, result.getNonce());
+
+        Transaction result2 = result.withNonce(17);
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(17, result2.getNonce());
+        Assert.assertEquals(transaction, result2);
+    }
 }
