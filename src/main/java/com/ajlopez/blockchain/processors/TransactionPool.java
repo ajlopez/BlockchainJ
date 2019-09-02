@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 
 import java.util.*;
 
@@ -42,4 +43,17 @@ public class TransactionPool {
 
         return list;
     }
+
+    public List<Transaction> getTransactionsWithSender(Address sender) {
+        List<Transaction> list = new ArrayList<>();
+
+        synchronized (this.transactions) {
+            for (Transaction transaction : this.transactions)
+                if (transaction.getSender().equals(sender))
+                    list.add(transaction);
+        }
+
+        return list;
+    }
 }
+

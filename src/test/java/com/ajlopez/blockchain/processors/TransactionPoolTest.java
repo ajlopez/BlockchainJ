@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,6 +17,17 @@ public class TransactionPoolTest {
         TransactionPool pool = new TransactionPool();
 
         List<Transaction> result = pool.getTransactions();
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void noTransactionsWithSender() {
+        Address sender = FactoryHelper.createRandomAddress();
+        TransactionPool pool = new TransactionPool();
+
+        List<Transaction> result = pool.getTransactionsWithSender(sender);
 
         Assert.assertNotNull(result);
         Assert.assertTrue(result.isEmpty());
@@ -39,6 +51,43 @@ public class TransactionPoolTest {
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(1, result.size());
         Assert.assertEquals(transaction, result.get(0));
+    }
+
+    @Test
+    public void transactionWithSender() {
+        TransactionPool pool = new TransactionPool();
+        Transaction transaction = FactoryHelper.createTransaction(100);
+        Transaction otherTransaction = FactoryHelper.createTransaction(2000);
+
+        pool.addTransaction(transaction);
+        pool.addTransaction(otherTransaction);
+
+        List<Transaction> result = pool.getTransactionsWithSender(transaction.getSender());
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(transaction, result.get(0));
+    }
+
+    @Test
+    public void transactionsWithSender() {
+        TransactionPool pool = new TransactionPool();
+        Transaction transaction = FactoryHelper.createTransaction(100);
+        Transaction otherTransaction = FactoryHelper.createTransaction(2000);
+        Transaction transaction2 = transaction.withNonce(transaction.getNonce() + 1);
+
+        pool.addTransaction(transaction);
+        pool.addTransaction(otherTransaction);
+        pool.addTransaction(transaction2);
+
+        List<Transaction> result = pool.getTransactionsWithSender(transaction.getSender());
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(2, result.size());
+        Assert.assertTrue(result.contains(transaction));
+        Assert.assertTrue(result.contains(transaction2));
     }
 
     @Test
