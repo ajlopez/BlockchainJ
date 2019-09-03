@@ -91,6 +91,28 @@ public class TransactionPoolTest {
     }
 
     @Test
+    public void transactionsWithSenderFromNonce() {
+        TransactionPool pool = new TransactionPool();
+        Transaction transaction = FactoryHelper.createTransaction(100);
+        Transaction transaction2 = transaction.withNonce(transaction.getNonce() + 1);
+        Transaction transaction3 = transaction.withNonce(transaction.getNonce() + 2);
+        Transaction otherTransaction = FactoryHelper.createTransaction(2000);
+
+        pool.addTransaction(transaction);
+        pool.addTransaction(otherTransaction);
+        pool.addTransaction(transaction3);
+        pool.addTransaction(transaction2);
+
+        List<Transaction> result = pool.getTransactionsWithSenderFromNonce(transaction.getSender(), transaction.getNonce() + 1);
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(2, result.size());
+        Assert.assertTrue(result.contains(transaction2));
+        Assert.assertTrue(result.contains(transaction3));
+    }
+
+    @Test
     public void addAndRemoveTransaction() {
         TransactionPool pool = new TransactionPool();
         Transaction transaction = FactoryHelper.createTransaction(100);

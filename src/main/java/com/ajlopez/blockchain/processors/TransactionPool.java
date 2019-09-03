@@ -55,5 +55,17 @@ public class TransactionPool {
 
         return list;
     }
+
+    public List<Transaction> getTransactionsWithSenderFromNonce(Address sender, long firstNonce) {
+        List<Transaction> list = new ArrayList<>();
+
+        synchronized (this.transactions) {
+            for (Transaction transaction : this.transactions)
+                if (transaction.getSender().equals(sender) && transaction.getNonce() >= firstNonce)
+                    list.add(transaction);
+        }
+
+        return list;
+    }
 }
 
