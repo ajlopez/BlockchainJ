@@ -96,10 +96,12 @@ public class TransactionPoolTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Transaction transaction2 = transaction.withNonce(transaction.getNonce() + 1);
         Transaction transaction3 = transaction.withNonce(transaction.getNonce() + 2);
+        Transaction transaction4 = transaction.withNonce(transaction.getNonce() + 4);
         Transaction otherTransaction = FactoryHelper.createTransaction(2000);
 
         pool.addTransaction(transaction);
         pool.addTransaction(otherTransaction);
+        pool.addTransaction(transaction4);
         pool.addTransaction(transaction3);
         pool.addTransaction(transaction2);
 
@@ -110,6 +112,8 @@ public class TransactionPoolTest {
         Assert.assertEquals(2, result.size());
         Assert.assertTrue(result.contains(transaction2));
         Assert.assertTrue(result.contains(transaction3));
+        Assert.assertEquals(transaction2, result.get(0));
+        Assert.assertEquals(transaction3, result.get(1));
     }
 
     @Test

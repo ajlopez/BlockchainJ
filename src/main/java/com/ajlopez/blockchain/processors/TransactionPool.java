@@ -65,7 +65,27 @@ public class TransactionPool {
                     list.add(transaction);
         }
 
-        return list;
+        Collections.sort(list, new NonceComparator());
+
+        List<Transaction> result = new ArrayList<>();
+        long expectedNonce = firstNonce;
+
+        for (Transaction transaction : list) {
+            if (transaction.getNonce() != expectedNonce)
+                break;
+
+            result.add(transaction);
+
+            expectedNonce++;
+        }
+
+        return result;
+    }
+
+    class NonceComparator implements Comparator<Transaction> {
+        public int compare(Transaction t1, Transaction t2) {
+            return (int)(t1.getNonce() - t2.getNonce());
+        }
     }
 }
 
