@@ -56,6 +56,15 @@ public class TransactionPool {
         return list;
     }
 
+    public long getTransactionNonceBySenderFromNonce(Address sender, long fromNonce) {
+        List<Transaction> list = getTransactionsWithSenderFromNonce(sender, fromNonce);
+
+        if (list.isEmpty())
+            return fromNonce;
+
+        return list.get(list.size() - 1).getNonce() + 1;
+    }
+
     public List<Transaction> getTransactionsWithSenderFromNonce(Address sender, long firstNonce) {
         List<Transaction> list = new ArrayList<>();
 

@@ -226,4 +226,31 @@ public class TransactionPoolTest {
 
         pool.removeTransaction(null);
     }
+
+    @Test
+    public void nonceWhenNoTransaction() {
+        TransactionPool transactionPool = new TransactionPool();
+
+        Assert.assertEquals(42, transactionPool.getTransactionNonceBySenderFromNonce(FactoryHelper.createRandomAddress(), 42));
+    }
+
+    @Test
+    public void nonceWhenTransactions() {
+        TransactionPool transactionPool = new TransactionPool();
+        Transaction transaction = FactoryHelper.createTransaction(100);
+        Transaction transaction2 = transaction.withNonce(transaction.getNonce() + 1);
+        Transaction transaction3 = transaction.withNonce(transaction.getNonce() + 2);
+        Transaction transaction4 = transaction.withNonce(transaction.getNonce() + 4);
+        Transaction otherTransaction = FactoryHelper.createTransaction(2000);
+
+        transactionPool.addTransaction(transaction);
+        transactionPool.addTransaction(otherTransaction);
+        transactionPool.addTransaction(transaction4);
+        transactionPool.addTransaction(transaction3);
+        transactionPool.addTransaction(transaction2);
+
+        Assert.assertEquals(transaction.getNonce() + 3, transactionPool.getTransactionNonceBySenderFromNonce(transaction.getSender(), transaction.getNonce() + 1));
+        Assert.assertEquals(transaction.getNonce() + 5, transactionPool.getTransactionNonceBySenderFromNonce(transaction.getSender(), transaction.getNonce() + 4));
+        Assert.assertEquals(transaction.getNonce() + 42, transactionPool.getTransactionNonceBySenderFromNonce(transaction.getSender(), transaction.getNonce() + 42));
+    }
 }
