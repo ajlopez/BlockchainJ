@@ -72,7 +72,8 @@ public class HttpProcessor {
                 .build();
 
         this.writer.write("HTTP/1.1 200 OK\r\n\r\n");
-        this.writer.write(response.toString());
+        JsonWriter jsonWriter = new JsonWriter(this.writer);
+        jsonWriter.write(response);
         this.writer.flush();
     }
 
