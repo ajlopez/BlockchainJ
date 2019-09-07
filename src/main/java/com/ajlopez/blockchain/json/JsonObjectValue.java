@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.json;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by ajlopez on 27/10/2018.
@@ -32,6 +33,10 @@ public class JsonObjectValue extends JsonValue {
 
     public int noProperties() {
         return this.properties.size();
+    }
+
+    public Set<String> getPropertyNames() {
+        return this.properties.keySet();
     }
 
     @Override

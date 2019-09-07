@@ -15,6 +15,38 @@ public class JsonWriter {
 
     public void write(JsonValue jsonValue) throws IOException {
         // TODO avoid full toString, write each value type
-        this.writer.write(jsonValue.toString());
+        switch(jsonValue.getType()) {
+            case OBJECT:
+                this.writer.write("{");
+
+                JsonObjectValue ojsonValue = (JsonObjectValue)jsonValue;
+
+                int nproperties = 0;
+
+                for (String name : ojsonValue.getPropertyNames()) {
+                    if (nproperties > 0)
+                        this.writer.write(",");
+
+                    this.writer.write(" ");
+
+                    this.writer.write("\"");
+                    this.writer.write(name);
+                    this.writer.write("\": ");
+
+                    this.write(ojsonValue.getProperty(name));
+
+                    nproperties++;
+                }
+
+                if (nproperties > 0)
+                    this.writer.write(" ");
+
+                this.writer.write("}");
+
+                break;
+
+            default:
+                this.writer.write(jsonValue.toString());
+        }
     }
 }
