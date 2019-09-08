@@ -45,6 +45,31 @@ public class JsonWriter {
 
                 break;
 
+            case ARRAY:
+                this.writer.write("[");
+
+                JsonArrayValue ajsonValue = (JsonArrayValue)jsonValue;
+
+                int nelements = 0;
+
+                for (JsonValue element : ajsonValue.getValues()) {
+                    if (nelements > 0)
+                        this.writer.write(",");
+
+                    this.writer.write(" ");
+
+                    this.write(element);
+
+                    nelements++;
+                }
+
+                if (nelements > 0)
+                    this.writer.write(" ");
+
+                this.writer.write("]");
+
+                break;
+
             default:
                 this.writer.write(jsonValue.toString());
         }
