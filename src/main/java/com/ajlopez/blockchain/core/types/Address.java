@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.core.types;
 
+import com.ajlopez.blockchain.utils.ByteUtils;
+
 /**
  * Created by ajlopez on 31/08/2017.
  */
@@ -10,5 +12,9 @@ public class Address extends AbstractBytesValue {
 
     public Address(byte[] bytes) {
         super(bytes, ADDRESS_BYTES);
+    }
+
+    public boolean isZero() {
+        return ByteUtils.areZero(this.getBytes());
     }
 }

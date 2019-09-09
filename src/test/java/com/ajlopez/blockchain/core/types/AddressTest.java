@@ -117,4 +117,15 @@ public class AddressTest {
         Assert.assertFalse(address.equals(null));
         Assert.assertFalse(address.equals("foo"));
     }
+
+    @Test
+    public void isZeroAddress() {
+        Address address = FactoryHelper.createRandomAddress();
+
+        Assert.assertFalse(address.isZero());
+
+        Address zero = new Address(new byte[0]);
+
+        Assert.assertTrue(zero.isZero());
+    }
 }
