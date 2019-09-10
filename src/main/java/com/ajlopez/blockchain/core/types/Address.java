@@ -17,4 +17,11 @@ public class Address extends AbstractBytesValue {
     public boolean isZero() {
         return ByteUtils.areZero(this.getBytes());
     }
+
+    public static Address normalizeToNull(Address address) {
+        if (address != null && address.isZero())
+            return null;
+
+        return address;
+    }
 }

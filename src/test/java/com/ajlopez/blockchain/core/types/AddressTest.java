@@ -128,4 +128,14 @@ public class AddressTest {
 
         Assert.assertTrue(zero.isZero());
     }
+
+    @Test
+    public void normalizeToNull() {
+        Address address = FactoryHelper.createRandomAddress();
+        Address zero = new Address(new byte[0]);
+
+        Assert.assertSame(address, Address.normalizeToNull(address));
+        Assert.assertNull(Address.normalizeToNull(zero));
+        Assert.assertNull(Address.normalizeToNull(null));
+    }
 }
