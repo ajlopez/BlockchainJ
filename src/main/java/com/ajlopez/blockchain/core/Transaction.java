@@ -23,9 +23,6 @@ public class Transaction {
         if (sender == null)
             throw new IllegalStateException("No sender in transaction");
 
-        if (receiver == null)
-            throw new IllegalStateException("No receiver in transaction");
-
         if (value == null)
             value = Coin.ZERO;
 
@@ -36,7 +33,7 @@ public class Transaction {
             throw new IllegalStateException("Negative nonce in transaction");
 
         this.sender = sender;
-        this.receiver = receiver;
+        this.receiver = Address.normalizeToNull(receiver);
         this.value = value;
         this.nonce = nonce;
         this.data = ByteUtils.normalizeBytesToNull(data);

@@ -88,12 +88,24 @@ public class TransactionTest {
         new Transaction(null, receiver, value, 42, null, 6000000, Coin.ZERO);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void createTransactionWithNoReceiver() {
         Address sender = FactoryHelper.createRandomAddress();
         Coin value = Coin.ONE;
 
-        new Transaction(sender, null, value, 42, null, 6000000, Coin.ZERO);
+        Transaction transaction = new Transaction(sender, null, value, 42, null, 6000000, Coin.ZERO);
+
+        Assert.assertNull(transaction.getReceiver());
+    }
+
+    @Test
+    public void createTransactionWithReceiverZero() {
+        Address sender = FactoryHelper.createRandomAddress();
+        Coin value = Coin.ONE;
+
+        Transaction transaction = new Transaction(sender, new Address(new byte[0]), value, 42, null, 6000000, Coin.ZERO);
+
+        Assert.assertNull(transaction.getReceiver());
     }
 
     @Test

@@ -13,6 +13,9 @@ public class RLPEncoder {
     private RLPEncoder() {}
 
     public static byte[] encodeAddress(Address address) {
+        if (address == null)
+            return RLP.encode(ByteUtils.EMPTY_BYTE_ARRAY);
+
         return RLP.encode(address.getBytes());
     }
 
