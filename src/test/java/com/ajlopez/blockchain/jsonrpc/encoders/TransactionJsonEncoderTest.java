@@ -128,4 +128,28 @@ public class TransactionJsonEncoderTest {
         Assert.assertEquals(transaction.getValue(), result.getValue());
         Assert.assertEquals(transaction, result);
     }
+
+    @Test
+    public void encodeDecodeTransactionWithoutReceiver() {
+        Address from = FactoryHelper.createRandomAddress();
+        Coin value = Coin.fromUnsignedLong(1000);
+        Coin gasPrice = Coin.fromUnsignedLong(10000);
+        long gas = 100;
+        byte[] data = FactoryHelper.createRandomBytes(42);
+        long nonce = 17;
+
+        Transaction transaction = new Transaction(from, null, value, nonce, data, gas, gasPrice);
+
+        JsonValue jsonValue = TransactionJsonEncoder.encode(transaction);
+
+        Assert.assertFalse(((JsonObjectValue)jsonValue).hasProperty("to"));
+
+        Transaction result = TransactionJsonEncoder.decode(jsonValue);
+
+        Assert.assertEquals(transaction.getSender(), result.getSender());
+        Assert.assertEquals(transaction.getReceiver(), result.getReceiver());
+        Assert.assertNull(result.getReceiver());
+        Assert.assertEquals(transaction.getValue(), result.getValue());
+        Assert.assertEquals(transaction, result);
+    }
 }

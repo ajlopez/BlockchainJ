@@ -21,10 +21,13 @@ public class TransactionJsonEncoder {
         builder.name("hash")
             .value(transaction.getHash())
             .name("from")
-            .value(transaction.getSender())
-            .name("to")
-            .value(transaction.getReceiver())
-            .name("nonce")
+            .value(transaction.getSender());
+
+        if (transaction.getReceiver() != null)
+            builder.name("to")
+            .value(transaction.getReceiver());
+
+        builder.name("nonce")
             .value(transaction.getNonce())
             .name("value")
             .value(transaction.getValue())
@@ -48,7 +51,7 @@ public class TransactionJsonEncoder {
         JsonObjectValue ovalue = (JsonObjectValue)jsonValue;
 
         Address from = new Address(HexUtils.hexStringToBytes(ovalue.getProperty("from").getValue().toString()));
-        Address to = new Address(HexUtils.hexStringToBytes(ovalue.getProperty("to").getValue().toString()));
+        Address to = ovalue.hasProperty("to") ? new Address(HexUtils.hexStringToBytes(ovalue.getProperty("to").getValue().toString())) : null;
         Coin value = Coin.fromBytes(HexUtils.hexStringToBytes(ovalue.getProperty("value").getValue().toString()));
         long nonce = Long.parseLong(ovalue.getProperty("nonce").getValue().toString());
         long gas = Long.parseLong(ovalue.getProperty("gas").getValue().toString());
