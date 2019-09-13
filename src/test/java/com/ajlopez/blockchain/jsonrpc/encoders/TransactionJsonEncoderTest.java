@@ -12,6 +12,9 @@ import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Created by ajlopez on 19/04/2019.
  */
@@ -130,6 +133,28 @@ public class TransactionJsonEncoderTest {
     }
 
     @Test
+    public void encodeDecodeTransactionWithoutNonce() {
+        Address from = FactoryHelper.createRandomAddress();
+        Address to = FactoryHelper.createRandomAddress();
+        Coin value = Coin.fromUnsignedLong(1000);
+        Coin gasPrice = Coin.fromUnsignedLong(10000);
+        long gas = 100;
+        byte[] data = FactoryHelper.createRandomBytes(42);
+        long nonce = 17;
+
+        Transaction transaction = new Transaction(from, to, value, nonce, data, gas, gasPrice);
+
+        JsonValue jsonValue = removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction), "nonce");
+
+        Transaction result = TransactionJsonEncoder.decode(jsonValue);
+
+        Assert.assertEquals(transaction.getSender(), result.getSender());
+        Assert.assertEquals(transaction.getReceiver(), result.getReceiver());
+        Assert.assertEquals(transaction.getValue(), result.getValue());
+        Assert.assertEquals(0, result.getNonce());
+    }
+
+    @Test
     public void encodeDecodeTransactionWithoutReceiver() {
         Address from = FactoryHelper.createRandomAddress();
         Coin value = Coin.fromUnsignedLong(1000);
@@ -151,5 +176,15 @@ public class TransactionJsonEncoderTest {
         Assert.assertNull(result.getReceiver());
         Assert.assertEquals(transaction.getValue(), result.getValue());
         Assert.assertEquals(transaction, result);
+    }
+
+    private static JsonObjectValue removeProperty(JsonObjectValue jovalue, String toremove) {
+        Map<String, JsonValue> newprops = new LinkedHashMap<>();
+
+        for (String name : jovalue.getPropertyNames())
+            if (!name.equals(toremove))
+                newprops.put(name, jovalue.getProperty(name));
+
+        return new JsonObjectValue(newprops);
     }
 }

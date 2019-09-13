@@ -53,7 +53,7 @@ public class TransactionJsonEncoder {
         Address from = new Address(HexUtils.hexStringToBytes(ovalue.getProperty("from").getValue().toString()));
         Address to = ovalue.hasProperty("to") ? new Address(HexUtils.hexStringToBytes(ovalue.getProperty("to").getValue().toString())) : null;
         Coin value = Coin.fromBytes(HexUtils.hexStringToBytes(ovalue.getProperty("value").getValue().toString()));
-        long nonce = Long.parseLong(ovalue.getProperty("nonce").getValue().toString());
+        long nonce = ovalue.hasProperty("nonce") ? Long.parseLong(ovalue.getProperty("nonce").getValue().toString()) : 0L;
         long gas = Long.parseLong(ovalue.getProperty("gas").getValue().toString());
         Coin gasPrice = Coin.fromBytes(HexUtils.hexStringToBytes(ovalue.getProperty("gasPrice").getValue().toString()));
 
