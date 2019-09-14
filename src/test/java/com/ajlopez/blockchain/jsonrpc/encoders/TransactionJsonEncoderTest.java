@@ -155,6 +155,30 @@ public class TransactionJsonEncoderTest {
     }
 
     @Test
+    public void encodeDecodeTransactionWithoutSomeProperties() {
+        Address from = FactoryHelper.createRandomAddress();
+        Address to = FactoryHelper.createRandomAddress();
+        Coin value = Coin.fromUnsignedLong(1000);
+        Coin gasPrice = Coin.fromUnsignedLong(10000);
+        long gas = 100;
+        byte[] data = FactoryHelper.createRandomBytes(42);
+        long nonce = 17;
+
+        Transaction transaction = new Transaction(from, to, value, nonce, data, gas, gasPrice);
+
+        JsonValue jsonValue = removeProperty(removeProperty(removeProperty(removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction), "nonce"), "gas"), "gasPrice"), "value");
+
+        Transaction result = TransactionJsonEncoder.decode(jsonValue);
+
+        Assert.assertEquals(transaction.getSender(), result.getSender());
+        Assert.assertEquals(transaction.getReceiver(), result.getReceiver());
+        Assert.assertEquals(Coin.ZERO, result.getValue());
+        Assert.assertEquals(0L, result.getNonce());
+        Assert.assertEquals(Coin.ZERO, result.getGasPrice());
+        Assert.assertEquals(0L, result.getGas());
+    }
+
+    @Test
     public void encodeDecodeTransactionWithoutReceiver() {
         Address from = FactoryHelper.createRandomAddress();
         Coin value = Coin.fromUnsignedLong(1000);
