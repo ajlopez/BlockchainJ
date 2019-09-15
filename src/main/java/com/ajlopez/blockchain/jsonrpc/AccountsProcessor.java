@@ -16,12 +16,10 @@ import java.util.List;
  * Created by ajlopez on 02/12/2018.
  */
 public class AccountsProcessor extends AbstractJsonRpcProcessor {
-    private final BlocksProvider blocksProvider;
-    private final AccountStoreProvider accountStoreProvider;
+    private final AccountsProvider accountsProvider;
 
-    public AccountsProcessor(AccountStoreProvider accountStoreProvider, BlocksProvider blocksProvider) {
-        this.accountStoreProvider = accountStoreProvider;
-        this.blocksProvider = blocksProvider;
+    public AccountsProcessor(AccountsProvider accountsProvider) {
+        this.accountsProvider = accountsProvider;
     }
 
     @Override
@@ -56,11 +54,7 @@ public class AccountsProcessor extends AbstractJsonRpcProcessor {
         Address address = new Address(HexUtils.hexStringToBytes(params.get(0).getValue().toString()));
 
         String blockId = params.size() > 1 ? params.get(1).getValue().toString() : "latest";
-        Block block = this.blocksProvider.getBlock(blockId);
-        Hash hash = block.getStateRootHash();
 
-        AccountStore accountStore = this.accountStoreProvider.retrieve(hash);
-
-        return accountStore.getAccount(address);
+        return this.accountsProvider.getAccount(address, blockId);
     }
 }

@@ -42,7 +42,7 @@ public class AccountsProcessorTest {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null, null);
+        AccountsProcessor processor = new AccountsProcessor(null);
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Unknown method 'eth_foo'");
@@ -54,7 +54,7 @@ public class AccountsProcessorTest {
         List<JsonValue> params = Collections.emptyList();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getBalance", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null, null);
+        AccountsProcessor processor = new AccountsProcessor(null);
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 0");
@@ -70,7 +70,7 @@ public class AccountsProcessorTest {
 
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getBalance", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null, null);
+        AccountsProcessor processor = new AccountsProcessor(null);
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 3");
@@ -114,7 +114,7 @@ public class AccountsProcessorTest {
         List<JsonValue> params = Collections.emptyList();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null, null);
+        AccountsProcessor processor = new AccountsProcessor(null);
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 0");
@@ -130,7 +130,7 @@ public class AccountsProcessorTest {
 
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null, null);
+        AccountsProcessor processor = new AccountsProcessor(null);
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 3");
@@ -281,7 +281,8 @@ public class AccountsProcessorTest {
 
         BlocksProvider blocksProvider = new BlocksProvider(blockChain);
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(accountTrieStore);
+        AccountsProvider accountsProvider = new AccountsProvider(blocksProvider, accountStoreProvider);
 
-        return new AccountsProcessor(accountStoreProvider, blocksProvider);
+        return new AccountsProcessor(accountsProvider);
     }
 }
