@@ -28,7 +28,7 @@ public class TransactionsProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 
-        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null);
 
         List<JsonValue> params = new ArrayList<>();
         params.add(new JsonStringValue(FactoryHelper.createRandomHash().toString()));
@@ -48,7 +48,7 @@ public class TransactionsProcessorTest {
         transactionPool.addTransaction(transaction);
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 
-        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null);
 
         List<JsonValue> params = new ArrayList<>();
         params.add(new JsonStringValue(transaction.getHash().toString()));
@@ -84,7 +84,7 @@ public class TransactionsProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 
-        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null);
 
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);

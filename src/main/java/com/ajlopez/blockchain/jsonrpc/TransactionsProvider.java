@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.core.types.TransactionHash;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.utils.HexUtils;
