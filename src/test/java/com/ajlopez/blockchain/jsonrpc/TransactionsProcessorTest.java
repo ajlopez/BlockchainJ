@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.json.JsonObjectValue;
 import com.ajlopez.blockchain.json.JsonStringValue;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.json.JsonValueType;
+import com.ajlopez.blockchain.jsonrpc.encoders.TransactionJsonEncoder;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -77,6 +78,31 @@ public class TransactionsProcessorTest {
         Assert.assertEquals(transaction.getNonce() + "", oresult.getProperty("nonce").getValue());
         Assert.assertEquals(transaction.getGas() + "", oresult.getProperty("gas").getValue());
         Assert.assertEquals(transaction.getGasPrice().toString(), oresult.getProperty("gasPrice").getValue());
+    }
+
+    @Test
+    public void sendTransaction() throws JsonRpcException {
+        TransactionPool transactionPool = new TransactionPool();
+        Transaction transaction = FactoryHelper.createTransaction(1000);
+        TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
+
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null);
+
+        List<JsonValue> params = new ArrayList<>();
+        params.add(TransactionJsonEncoder.encode(transaction));
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_sendTransaction", params);
+
+        JsonRpcResponse response = transactionsProcessor.processRequest(request);
+
+        Assert.assertNotNull(response);
+        Assert.assertNotNull(response.getResult());
+        Assert.assertEquals(JsonValueType.STRING, response.getResult().getType());
+
+        List<Transaction> transactions = transactionPool.getTransactions();
+
+        Assert.assertNotNull(transactions);
+        Assert.assertFalse(transactions.isEmpty());
+        Assert.assertEquals(1, transactions.size());
     }
 
     @Test
