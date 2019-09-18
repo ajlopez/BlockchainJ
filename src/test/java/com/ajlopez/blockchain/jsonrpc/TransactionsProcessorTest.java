@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.json.JsonValueType;
 import com.ajlopez.blockchain.jsonrpc.encoders.TransactionJsonEncoder;
 import com.ajlopez.blockchain.processors.TransactionPool;
+import com.ajlopez.blockchain.processors.TransactionProcessor;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -29,7 +30,7 @@ public class TransactionsProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 
-        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null, null);
 
         List<JsonValue> params = new ArrayList<>();
         params.add(new JsonStringValue(FactoryHelper.createRandomHash().toString()));
@@ -49,7 +50,7 @@ public class TransactionsProcessorTest {
         transactionPool.addTransaction(transaction);
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 
-        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null, null);
 
         List<JsonValue> params = new ArrayList<>();
         params.add(new JsonStringValue(transaction.getHash().toString()));
@@ -83,10 +84,11 @@ public class TransactionsProcessorTest {
     @Test
     public void sendTransaction() throws JsonRpcException {
         TransactionPool transactionPool = new TransactionPool();
+        TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
         Transaction transaction = FactoryHelper.createTransaction(1000);
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 
-        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null, transactionProcessor);
 
         List<JsonValue> params = new ArrayList<>();
         params.add(TransactionJsonEncoder.encode(transaction));
@@ -110,7 +112,7 @@ public class TransactionsProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 
-        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null, null);
 
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);

@@ -15,6 +15,7 @@ public class TransactionProcessor {
     }
 
     public List<Transaction> processTransaction(Transaction transaction) {
+        // TODO add transaction validation
         return this.transactionPool.addTransaction(transaction);
     }
 }
