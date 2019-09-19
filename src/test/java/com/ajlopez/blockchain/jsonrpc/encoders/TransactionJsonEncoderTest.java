@@ -202,7 +202,7 @@ public class TransactionJsonEncoderTest {
         Assert.assertEquals(transaction, result);
     }
 
-    private static JsonObjectValue removeProperty(JsonObjectValue jovalue, String toremove) {
+    public static JsonObjectValue removeProperty(JsonObjectValue jovalue, String toremove) {
         Map<String, JsonValue> newprops = new LinkedHashMap<>();
 
         for (String name : jovalue.getPropertyNames())
