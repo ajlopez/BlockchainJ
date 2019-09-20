@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.jsonrpc;
 
+import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.json.JsonObjectValue;
 import com.ajlopez.blockchain.json.JsonStringValue;
 import com.ajlopez.blockchain.json.JsonValue;
@@ -110,12 +112,18 @@ public class TransactionsProcessorTest {
 
     @Test
     public void sendTransactionWithoutNonce() throws JsonRpcException {
+        BlockChain blockchain = FactoryHelper.createBlockChain(10, 1);
+        Address sender = blockchain.getBlockByNumber(1).getTransactions().get(0).getSender();
+
+        BlocksProvider blocksProvider = new BlocksProvider(blockchain);
+        AccountsProvider accountsProvider = new AccountsProvider(blocksProvider, null);
+
         TransactionPool transactionPool = new TransactionPool();
         TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
-        Transaction transaction = FactoryHelper.createTransaction(1000);
+        Transaction transaction = FactoryHelper.createTransaction(1000, sender, 0);
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 
-        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null, transactionProcessor);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, accountsProvider, transactionProcessor);
 
         JsonObjectValue jovalue = TransactionJsonEncoderTest.removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction), "nonce");
 
@@ -134,6 +142,7 @@ public class TransactionsProcessorTest {
         Assert.assertNotNull(transactions);
         Assert.assertFalse(transactions.isEmpty());
         Assert.assertEquals(1, transactions.size());
+        Assert.assertEquals(10, transactions.get(0).getNonce());
     }
 
     @Test
