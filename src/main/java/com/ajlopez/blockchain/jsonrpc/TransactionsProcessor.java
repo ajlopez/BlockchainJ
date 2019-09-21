@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.jsonrpc;
 
+import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.json.JsonObjectValue;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.jsonrpc.encoders.TransactionJsonEncoder;
 import com.ajlopez.blockchain.processors.TransactionProcessor;
@@ -30,6 +32,12 @@ public class TransactionsProcessor extends AbstractJsonRpcProcessor {
         if (request.check("eth_sendTransaction", 1)) {
             JsonValue jvalue = request.getParams().get(0);
             Transaction transaction = TransactionJsonEncoder.decode(jvalue);
+
+            if (!((JsonObjectValue)jvalue).hasProperty("nonce")) {
+                Account sender = this.accountsProvider.getAccount(transaction.getSender(), "latest");
+                transaction = transaction.withNonce(sender.getNonce());
+            }
+
             // TODO how to relay the transaction, message/receiver processor instead of transaction processor?
             this.transactionProcessor.processTransaction(transaction);
             return JsonRpcResponse.createResponse(request, transaction.getHash().toString());
