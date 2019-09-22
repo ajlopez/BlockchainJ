@@ -117,6 +117,34 @@ public class TransactionPoolTest {
     }
 
     @Test
+    public void transactionsWithSenderFromNonceWhenTransactionsHasRepeatedNonce() {
+        Address sender = FactoryHelper.createRandomAddress();
+        TransactionPool pool = new TransactionPool();
+        Transaction transaction = FactoryHelper.createTransaction(100, sender, 0);
+        Transaction transaction2 = transaction.withNonce(transaction.getNonce() + 1);
+        Transaction transaction2b = FactoryHelper.createTransaction(200, sender, transaction.getNonce() + 1);
+        Transaction transaction3 = transaction.withNonce(transaction.getNonce() + 2);
+        Transaction transaction4 = transaction.withNonce(transaction.getNonce() + 4);
+        Transaction otherTransaction = FactoryHelper.createTransaction(2000);
+
+        pool.addTransaction(transaction);
+        pool.addTransaction(otherTransaction);
+        pool.addTransaction(transaction4);
+        pool.addTransaction(transaction3);
+        pool.addTransaction(transaction2);
+        pool.addTransaction(transaction2b);
+
+        List<Transaction> result = pool.getTransactionsWithSenderFromNonce(transaction.getSender(), transaction.getNonce() + 1);
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(3, result.size());
+        Assert.assertTrue(result.contains(transaction2));
+        Assert.assertTrue(result.contains(transaction2b));
+        Assert.assertTrue(result.contains(transaction3));
+    }
+
+    @Test
     public void addAndRemoveTransaction() {
         TransactionPool pool = new TransactionPool();
         Transaction transaction = FactoryHelper.createTransaction(100);

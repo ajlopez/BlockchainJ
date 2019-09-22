@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.TransactionHash;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.utils.HexUtils;
@@ -28,5 +29,9 @@ public class TransactionsProvider {
                 return transaction;
 
         return null;
+    }
+
+    public long getNextNonce(Address sender, long fromNonce) {
+        return this.transactionPool.getTransactionNonceBySenderFromNonce(sender, fromNonce);
     }
 }

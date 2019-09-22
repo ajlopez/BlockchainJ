@@ -35,7 +35,7 @@ public class TransactionsProcessor extends AbstractJsonRpcProcessor {
 
             if (!((JsonObjectValue)jvalue).hasProperty("nonce")) {
                 Account sender = this.accountsProvider.getAccount(transaction.getSender(), "latest");
-                transaction = transaction.withNonce(sender.getNonce());
+                transaction = transaction.withNonce(this.transactionsProvider.getNextNonce(transaction.getSender(), sender.getNonce()));
             }
 
             // TODO how to relay the transaction, message/receiver processor instead of transaction processor?

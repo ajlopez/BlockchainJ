@@ -80,12 +80,12 @@ public class TransactionPool {
         long expectedNonce = firstNonce;
 
         for (Transaction transaction : list) {
-            if (transaction.getNonce() != expectedNonce)
+            if (transaction.getNonce() > expectedNonce)
                 break;
 
             result.add(transaction);
 
-            expectedNonce++;
+            expectedNonce = transaction.getNonce() + 1;
         }
 
         return result;

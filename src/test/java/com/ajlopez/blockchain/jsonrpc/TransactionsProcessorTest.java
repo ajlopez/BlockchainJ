@@ -151,6 +151,57 @@ public class TransactionsProcessorTest {
     }
 
     @Test
+    public void sendTwoTransactionsWithoutNonce() throws JsonRpcException {
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        BlockChain blockchain = FactoryHelper.createBlockChain(trieStore,10, 1);
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        Address sender = blockchain.getBlockByNumber(1).getTransactions().get(0).getSender();
+
+        BlocksProvider blocksProvider = new BlocksProvider(blockchain);
+        AccountsProvider accountsProvider = new AccountsProvider(blocksProvider, accountStoreProvider);
+
+        TransactionPool transactionPool = new TransactionPool();
+        TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
+        Transaction transaction1 = FactoryHelper.createTransaction(1000, sender, 0);
+        Transaction transaction2 = FactoryHelper.createTransaction(1000, sender, 0);
+        TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
+
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, accountsProvider, transactionProcessor);
+
+        JsonObjectValue jovalue1 = TransactionJsonEncoderTest.removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction1), "nonce");
+
+        List<JsonValue> params1 = new ArrayList<>();
+        params1.add(jovalue1);
+        JsonRpcRequest request1 =  new JsonRpcRequest("1", "2.0", "eth_sendTransaction", params1);
+
+        JsonRpcResponse response1 = transactionsProcessor.processRequest(request1);
+
+        Assert.assertNotNull(response1);
+        Assert.assertNotNull(response1.getResult());
+        Assert.assertEquals(JsonValueType.STRING, response1.getResult().getType());
+
+        JsonObjectValue jovalue2 = TransactionJsonEncoderTest.removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction2), "nonce");
+
+        List<JsonValue> params2 = new ArrayList<>();
+        params2.add(jovalue2);
+        JsonRpcRequest request2 =  new JsonRpcRequest("1", "2.0", "eth_sendTransaction", params2);
+
+        JsonRpcResponse response2 = transactionsProcessor.processRequest(request2);
+
+        Assert.assertNotNull(response2);
+        Assert.assertNotNull(response2.getResult());
+        Assert.assertEquals(JsonValueType.STRING, response2.getResult().getType());
+
+        List<Transaction> transactions = transactionPool.getTransactionsWithSenderFromNonce(sender, 10);
+
+        Assert.assertNotNull(transactions);
+        Assert.assertFalse(transactions.isEmpty());
+        Assert.assertEquals(2, transactions.size());
+        Assert.assertEquals(10, transactions.get(0).getNonce());
+        Assert.assertEquals(11, transactions.get(1).getNonce());
+    }
+
+    @Test
     public void unknownMethod() throws JsonRpcException {
         TransactionPool transactionPool = new TransactionPool();
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
