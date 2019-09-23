@@ -67,7 +67,7 @@ public class Transaction {
     }
 
     private TransactionHash calculateHash() {
-        return new TransactionHash(HashUtils.calculateHash(TransactionEncoder.encode(this)));
+        return new TransactionHash(HashUtils.keccak256(TransactionEncoder.encode(this)));
     }
 
     @Override

@@ -22,33 +22,27 @@ public class HashUtils {
 
     private HashUtils() { }
 
-    public static byte[] keccak256(byte[] input) throws NoSuchProviderException, NoSuchAlgorithmException {
-        MessageDigest digest;
-        digest = MessageDigest.getInstance("KECCAK-256", BouncyCastleProvider.PROVIDER_NAME);
-        digest.update(input);
-        return digest.digest();
+    public static byte[] keccak256(byte[] input) {
+        try {
+            MessageDigest digest;
+            digest = MessageDigest.getInstance("KECCAK-256", BouncyCastleProvider.PROVIDER_NAME);
+            digest.update(input);
+            return digest.digest();
+        } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static Hash calculateHash(byte[] data) {
-        try {
-            return new Hash(keccak256(data));
-        } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return new Hash(keccak256(data));
     }
 
     public static Address calculateAddress(byte[] data) {
-        try {
-            byte[] bytes = keccak256(data);
-            byte[] abytes = new byte[Address.ADDRESS_BYTES];
-            System.arraycopy(bytes, Hash.HASH_BYTES - Address.ADDRESS_BYTES, abytes, 0, Address.ADDRESS_BYTES);
-            return new Address(abytes);
-        } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        byte[] bytes = keccak256(data);
+        byte[] abytes = new byte[Address.ADDRESS_BYTES];
+        System.arraycopy(bytes, Hash.HASH_BYTES - Address.ADDRESS_BYTES, abytes, 0, Address.ADDRESS_BYTES);
+        return new Address(abytes);
     }
 }

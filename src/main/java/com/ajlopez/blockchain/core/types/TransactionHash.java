@@ -7,9 +7,4 @@ public class TransactionHash extends Hash {
     public TransactionHash(byte[] bytes) {
         super(bytes);
     }
-
-    // TODO consider to remove this constructor
-    public TransactionHash(Hash hash) {
-        this(hash.getBytes());
-    }
 }
