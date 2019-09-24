@@ -26,7 +26,7 @@ public class BlockHeader {
             throw new IllegalStateException("Negative number in block header");
 
         this.number = number;
-        this.parentHash = parentHash == null ? new BlockHash(Hash.EMPTY_HASH) : parentHash;
+        this.parentHash = parentHash == null ? BlockHash.EMPTY_BLOCK_HASH : parentHash;
         this.transactionsHash = transactionsHash;
         this.stateRootHash = stateRootHash;
         this.timestamp = timestamp;
@@ -62,6 +62,6 @@ public class BlockHeader {
     }
 
     private BlockHash calculateHash() {
-        return new BlockHash(HashUtils.calculateHash(BlockHeaderEncoder.encode(this)));
+        return new BlockHash(HashUtils.keccak256(BlockHeaderEncoder.encode(this)));
     }
 }
