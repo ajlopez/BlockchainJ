@@ -15,7 +15,7 @@ import org.junit.Test;
 public class BlockMessageTest {
     @Test
     public void createWithBlock() {
-        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);

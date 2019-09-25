@@ -15,7 +15,7 @@ import org.junit.Test;
 public class BlockHeaderEncoderTest {
     @Test
     public void encodeDecodeBlockHeader() {
-        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
         Hash transactionsHash = FactoryHelper.createRandomHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();

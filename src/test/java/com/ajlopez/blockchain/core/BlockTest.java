@@ -43,8 +43,8 @@ public class BlockTest {
     public void blockWithDifferentParentHashesHaveDifferentHashes() {
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1L, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block2 = new Block(1L, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block1 = new Block(1L, FactoryHelper.createRandomBlockHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2 = new Block(1L, FactoryHelper.createRandomBlockHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -71,7 +71,7 @@ public class BlockTest {
         txs1.add(tx1);
         txs2.add(tx2);
 
-        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -88,7 +88,7 @@ public class BlockTest {
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx);
 
-        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(1L, hash, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);

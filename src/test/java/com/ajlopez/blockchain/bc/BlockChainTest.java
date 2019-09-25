@@ -112,7 +112,7 @@ public class BlockChainTest {
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block = new Block(1, new BlockHash(FactoryHelper.createRandomHash()), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertFalse(blockChain.connectBlock(block));

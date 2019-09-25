@@ -32,7 +32,7 @@ public class MinerProcessorTest {
 
         MinerProcessor processor = new MinerProcessor(null, transactionPool, new AccountStoreProvider(new TrieStore(new HashMapStore())), coinbase);
 
-        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
         Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Block block = processor.mineBlock(parent);
@@ -61,7 +61,7 @@ public class MinerProcessorTest {
         accountStore.putAccount(tx.getSender(), account);
         accountStore.save();
 
-        BlockHash hash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);

@@ -9,9 +9,4 @@ public class BlockHash extends Hash {
     public BlockHash(byte[] bytes) {
         super(bytes);
     }
-
-    // TODO consider to remove this constructor
-    public BlockHash(Hash hash) {
-        this(hash.getBytes());
-    }
 }

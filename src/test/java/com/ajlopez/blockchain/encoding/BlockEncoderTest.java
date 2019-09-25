@@ -19,7 +19,7 @@ import java.util.List;
 public class BlockEncoderTest {
     @Test
     public void encodeDecodeBlock() {
-        BlockHash parentHash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash parentHash = FactoryHelper.createRandomBlockHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -43,7 +43,7 @@ public class BlockEncoderTest {
         List<Transaction> txs = new ArrayList<>();
         txs.add(tx);
 
-        BlockHash parentHash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash parentHash = FactoryHelper.createRandomBlockHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -75,7 +75,7 @@ public class BlockEncoderTest {
         txs.add(tx1);
         txs.add(tx2);
 
-        BlockHash parentHash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash parentHash = FactoryHelper.createRandomBlockHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -108,7 +108,7 @@ public class BlockEncoderTest {
 
     @Test
     public void encodeTwoBlocks() {
-        BlockHash parentHash = new BlockHash(FactoryHelper.createRandomHash());
+        BlockHash parentHash = FactoryHelper.createRandomBlockHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
