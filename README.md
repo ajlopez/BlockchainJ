@@ -42,6 +42,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Vac modular peer-to-peer messaging stack](https://vac.dev/vac-overview)
 - [Pantheon Enterprise Ethereum Client](https://docs.pantheon.pegasys.tech/en/latest/)
 - [What Comprises an Ethereum Fullnode Implementation?](https://medium.com/blockchannel/what-comprises-an-ethereum-fullnode-implementation-a1e72f213ca6)
+- [Announcing Hyperledger Besu](https://www.hyperledger.org/blog/2019/08/29/announcing-hyperledger-besu)
 
 ## To Do
 
