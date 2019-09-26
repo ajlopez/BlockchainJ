@@ -1,5 +1,8 @@
 package com.ajlopez.blockchain.json;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 /**
  * Created by ajlopez on 27/10/2018.
  */
@@ -18,5 +21,20 @@ public abstract class JsonValue {
 
     public Object getValue() {
         return this.value;
+    }
+
+    @Override
+    public String toString() {
+        StringWriter writer = new StringWriter();
+        JsonWriter jsonWriter = new JsonWriter(writer);
+
+        try {
+            jsonWriter.write(this);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return writer.toString();
     }
 }

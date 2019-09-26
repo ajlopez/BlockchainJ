@@ -38,33 +38,4 @@ public class JsonObjectValue extends JsonValue {
     public Set<String> getPropertyNames() {
         return this.properties.keySet();
     }
-
-    @Override
-    public String toString() {
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append('{');
-
-        int nproperty = 0;
-
-        for (Map.Entry<String, JsonValue> entry: this.properties.entrySet()) {
-            if (nproperty > 0)
-                buffer.append(',');
-
-            buffer.append(' ');
-
-            buffer.append((new JsonStringValue(entry.getKey())).toString());
-            buffer.append(": ");
-            buffer.append(entry.getValue().toString());
-
-            nproperty++;
-        }
-
-        if (nproperty > 0)
-            buffer.append(' ');
-
-        buffer.append('}');
-
-        return buffer.toString();
-    }
 }
