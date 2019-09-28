@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -71,5 +72,30 @@ public class MemoryTest {
         byte[] expected = new byte[DataWord.DATAWORD_BYTES];
         System.arraycopy(bytes, 2, expected, 10, 4);
         Assert.assertArrayEquals(expected, memory.getValue(0).getBytes());
+    }
+
+    @Test
+    public void getNonExistentBytes() {
+        Memory memory = new Memory();
+
+        byte[] bytes = memory.getBytes(1024, 42);
+
+        Assert.assertNotNull(bytes);
+        Assert.assertEquals(42, bytes.length);
+        Assert.assertTrue(ByteUtils.areZero(bytes));
+    }
+
+    @Test
+    public void getBytesBeyondUsedMemory() {
+        Memory memory = new Memory();
+        byte[] data = FactoryHelper.createRandomBytes(42);
+        memory.setBytes(0, data, 0, data.length);
+
+        byte[] bytes = memory.getBytes(41, 42);
+
+        Assert.assertNotNull(bytes);
+        Assert.assertEquals(42, bytes.length);
+        Assert.assertEquals(data[41], bytes[0]);
+        Assert.assertTrue(ByteUtils.areZero(bytes, 1, bytes.length - 1));
     }
 }

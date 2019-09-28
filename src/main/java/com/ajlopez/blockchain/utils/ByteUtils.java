@@ -145,7 +145,11 @@ public class ByteUtils {
     }
 
     public static boolean areZero(byte[] bytes) {
-        for (int k = 0; k < bytes.length; k++)
+        return areZero(bytes, 0, bytes.length);
+    }
+
+    public static boolean areZero(byte[] bytes, int offset, int length) {
+        for (int k = offset; k < length; k++)
             if (bytes[k] != 0)
                 return false;
 

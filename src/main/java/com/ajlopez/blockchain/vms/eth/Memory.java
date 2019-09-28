@@ -49,6 +49,9 @@ public class Memory {
     public byte[] getBytes(int address, int length) {
         byte[] bytes = new byte[length];
 
+        if (this.bytes == null)
+            return bytes;
+
         System.arraycopy(this.bytes, address, bytes, 0, Math.min(this.bytes.length - address, length));
 
         return bytes;
