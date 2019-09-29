@@ -21,12 +21,8 @@ public class Memory {
         if (address + DataWord.DATAWORD_BYTES <= size)
             return DataWord.fromBytes(this.bytes, address, DataWord.DATAWORD_BYTES);
 
-        if (address < size) {
-            byte[] dbytes = new byte[DataWord.DATAWORD_BYTES];
-            System.arraycopy(this.bytes, address, dbytes, 0, size - address);
-
-            return new DataWord(dbytes);
-        }
+        if (address < size)
+            return DataWord.fromBytesToLeft(this.bytes, address, size - address);
 
         return DataWord.ZERO;
     }
