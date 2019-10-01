@@ -19,8 +19,13 @@ public class Memory {
         int nchunk = address / CHUNK_SIZE;
         int choffset = address % CHUNK_SIZE;
 
-        // TODO Control chunk crossing
-        System.arraycopy(value.getBytes(), 0, this.chunks.get(nchunk), choffset, DataWord.DATAWORD_BYTES);
+        if (choffset + DataWord.DATAWORD_BYTES >= CHUNK_SIZE) {
+            byte[] data = value.getBytes();
+            System.arraycopy(data, 0, this.chunks.get(nchunk), choffset, CHUNK_SIZE - choffset);
+            System.arraycopy(data, CHUNK_SIZE - choffset, this.chunks.get(nchunk + 1), 0, DataWord.DATAWORD_BYTES - (CHUNK_SIZE - choffset));
+        }
+        else
+            System.arraycopy(value.getBytes(), 0, this.chunks.get(nchunk), choffset, DataWord.DATAWORD_BYTES);
     }
 
     public DataWord getValue(int address) {
@@ -30,9 +35,20 @@ public class Memory {
         int nchunk = address / CHUNK_SIZE;
         int choffset = address % CHUNK_SIZE;
 
-        if (address + DataWord.DATAWORD_BYTES <= this.size)
-            return DataWord.fromBytes(this.chunks.get(nchunk), choffset, DataWord.DATAWORD_BYTES);
+        // TODO check chunk crossing
+        if (address + DataWord.DATAWORD_BYTES <= this.size) {
+            if (choffset + DataWord.DATAWORD_BYTES >= CHUNK_SIZE) {
+                byte[] data = new byte[DataWord.DATAWORD_BYTES];
+                System.arraycopy(this.chunks.get(nchunk), choffset, data, 0, CHUNK_SIZE - choffset);
+                System.arraycopy(this.chunks.get(nchunk + 1), 0, data, CHUNK_SIZE - choffset, DataWord.DATAWORD_BYTES - (CHUNK_SIZE - choffset));
 
+                return DataWord.fromBytes(data, 0, data.length);
+            }
+            else
+                return DataWord.fromBytes(this.chunks.get(nchunk), choffset, DataWord.DATAWORD_BYTES);
+        }
+
+        // TODO check chunk crossing
         return DataWord.fromBytesToLeft(this.chunks.get(nchunk), choffset, this.size - address);
     }
 

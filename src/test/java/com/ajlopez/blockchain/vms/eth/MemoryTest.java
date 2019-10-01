@@ -36,6 +36,20 @@ public class MemoryTest {
     }
 
     @Test
+    public void setAndGetValueCrossingChunk() {
+        Memory memory = new Memory();
+        byte[] data = FactoryHelper.createRandomBytes(DataWord.DATAWORD_BYTES);
+        int address = Memory.CHUNK_SIZE - 10;
+        DataWord value = DataWord.fromBytes(data, 0, data.length);
+
+        memory.setValue(address, value);
+
+        Assert.assertEquals(address + DataWord.DATAWORD_BYTES, memory.size());
+
+        Assert.assertEquals(value, memory.getValue(address));
+    }
+
+    @Test
     public void setAndGetTwoValues() {
         Memory memory = new Memory();
 
