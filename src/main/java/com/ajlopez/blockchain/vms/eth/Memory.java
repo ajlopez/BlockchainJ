@@ -19,7 +19,7 @@ public class Memory {
         int nchunk = address / CHUNK_SIZE;
         int choffset = address % CHUNK_SIZE;
 
-        if (choffset + DataWord.DATAWORD_BYTES >= CHUNK_SIZE) {
+        if (choffset + DataWord.DATAWORD_BYTES > CHUNK_SIZE) {
             byte[] data = value.getBytes();
             System.arraycopy(data, 0, this.chunks.get(nchunk), choffset, CHUNK_SIZE - choffset);
             System.arraycopy(data, CHUNK_SIZE - choffset, this.chunks.get(nchunk + 1), 0, DataWord.DATAWORD_BYTES - (CHUNK_SIZE - choffset));
@@ -35,9 +35,8 @@ public class Memory {
         int nchunk = address / CHUNK_SIZE;
         int choffset = address % CHUNK_SIZE;
 
-        // TODO check chunk crossing
         if (address + DataWord.DATAWORD_BYTES <= this.size) {
-            if (choffset + DataWord.DATAWORD_BYTES >= CHUNK_SIZE) {
+            if (choffset + DataWord.DATAWORD_BYTES > CHUNK_SIZE) {
                 byte[] data = new byte[DataWord.DATAWORD_BYTES];
                 System.arraycopy(this.chunks.get(nchunk), choffset, data, 0, CHUNK_SIZE - choffset);
                 System.arraycopy(this.chunks.get(nchunk + 1), 0, data, CHUNK_SIZE - choffset, DataWord.DATAWORD_BYTES - (CHUNK_SIZE - choffset));
@@ -69,9 +68,16 @@ public class Memory {
 
         int nchunk = address / CHUNK_SIZE;
         int choffset = address % CHUNK_SIZE;
+        int tocopy = Math.min(bytes.length - offset, length);
 
-        // TODO Control chunk crossing
-        System.arraycopy(bytes, offset, this.chunks.get(nchunk), choffset, Math.min(bytes.length - offset, length));
+        // TODO fill the right memory with zeroes if tocopy < length
+        // TODO Process MANY chunks
+        if (choffset + tocopy > CHUNK_SIZE) {
+            System.arraycopy(bytes, offset, this.chunks.get(nchunk), choffset, CHUNK_SIZE - choffset);
+            System.arraycopy(bytes, offset + CHUNK_SIZE - choffset, this.chunks.get(nchunk + 1), 0, tocopy - (CHUNK_SIZE - choffset));
+        }
+        else
+            System.arraycopy(bytes, offset, this.chunks.get(nchunk), choffset, Math.min(bytes.length - offset, tocopy));
     }
 
     public byte[] getBytes(int address, int length) {
@@ -82,9 +88,16 @@ public class Memory {
 
         int nchunk = address / CHUNK_SIZE;
         int offset = address % CHUNK_SIZE;
+        int tocopy = Math.min(this.size - address, length);
 
         // TODO Control chunk crossing
-        System.arraycopy(this.chunks.get(nchunk), offset, bytes, 0, Math.min(this.size - address, length));
+        if (offset + tocopy > CHUNK_SIZE) {
+            // TODO Process MANY chunks
+            System.arraycopy(this.chunks.get(nchunk), offset, bytes, 0, CHUNK_SIZE - offset);
+            System.arraycopy(this.chunks.get(nchunk + 1), 0, bytes, CHUNK_SIZE - offset,  tocopy - (CHUNK_SIZE - offset));
+        }
+        else
+            System.arraycopy(this.chunks.get(nchunk), offset, bytes, 0, tocopy);
 
         return bytes;
     }

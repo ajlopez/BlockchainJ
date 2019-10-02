@@ -89,6 +89,19 @@ public class MemoryTest {
     }
 
     @Test
+    public void setBytesCrossingChunk() {
+        Memory memory = new Memory();
+        byte[] bytes = FactoryHelper.createRandomBytes(42);
+        int address = Memory.CHUNK_SIZE - 10;
+
+        memory.setBytes(address, bytes, 0, 42);
+
+        Assert.assertEquals(address + 42, memory.size());
+
+        Assert.assertArrayEquals(bytes, memory.getBytes(address, 42));
+    }
+
+    @Test
     public void getNonExistentBytes() {
         Memory memory = new Memory();
 
