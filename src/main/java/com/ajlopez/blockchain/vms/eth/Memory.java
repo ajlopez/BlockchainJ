@@ -16,39 +16,17 @@ public class Memory {
     public void setValue(int address, DataWord value) {
         ensureSize(address + DataWord.DATAWORD_BYTES);
 
-        int nchunk = address / CHUNK_SIZE;
-        int choffset = address % CHUNK_SIZE;
-
-        if (choffset + DataWord.DATAWORD_BYTES > CHUNK_SIZE) {
-            byte[] data = value.getBytes();
-            System.arraycopy(data, 0, this.chunks.get(nchunk), choffset, CHUNK_SIZE - choffset);
-            System.arraycopy(data, CHUNK_SIZE - choffset, this.chunks.get(nchunk + 1), 0, DataWord.DATAWORD_BYTES - (CHUNK_SIZE - choffset));
-        }
-        else
-            System.arraycopy(value.getBytes(), 0, this.chunks.get(nchunk), choffset, DataWord.DATAWORD_BYTES);
+        this.setBytes(address, value.getBytes(), 0, DataWord.DATAWORD_BYTES);
     }
 
     public DataWord getValue(int address) {
         if (address >= this.size)
             return DataWord.ZERO;
 
-        int nchunk = address / CHUNK_SIZE;
-        int choffset = address % CHUNK_SIZE;
+        byte[] data = this.getBytes(address, DataWord.DATAWORD_BYTES);
 
-        if (address + DataWord.DATAWORD_BYTES <= this.size) {
-            if (choffset + DataWord.DATAWORD_BYTES > CHUNK_SIZE) {
-                byte[] data = new byte[DataWord.DATAWORD_BYTES];
-                System.arraycopy(this.chunks.get(nchunk), choffset, data, 0, CHUNK_SIZE - choffset);
-                System.arraycopy(this.chunks.get(nchunk + 1), 0, data, CHUNK_SIZE - choffset, DataWord.DATAWORD_BYTES - (CHUNK_SIZE - choffset));
-
-                return DataWord.fromBytes(data, 0, data.length);
-            }
-            else
-                return DataWord.fromBytes(this.chunks.get(nchunk), choffset, DataWord.DATAWORD_BYTES);
-        }
-
-        // TODO check chunk crossing
-        return DataWord.fromBytesToLeft(this.chunks.get(nchunk), choffset, this.size - address);
+        // TODO improve copy bytes
+        return DataWord.fromBytes(data, 0, data.length);
     }
 
     public void setByte(int address, byte value) {
