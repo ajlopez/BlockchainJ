@@ -47,15 +47,23 @@ public class Memory {
         int nchunk = address / CHUNK_SIZE;
         int choffset = address % CHUNK_SIZE;
         int tocopy = Math.min(bytes.length - offset, length);
+        int copied = 0;
 
         // TODO fill the right memory with zeroes if tocopy < length
-        // TODO Process MANY chunks
-        if (choffset + tocopy > CHUNK_SIZE) {
-            System.arraycopy(bytes, offset, this.chunks.get(nchunk), choffset, CHUNK_SIZE - choffset);
-            System.arraycopy(bytes, offset + CHUNK_SIZE - choffset, this.chunks.get(nchunk + 1), 0, tocopy - (CHUNK_SIZE - choffset));
+        while (copied < tocopy) {
+            int nbytes;
+
+            if (choffset + (tocopy - copied) > CHUNK_SIZE)
+                nbytes = CHUNK_SIZE - choffset;
+            else
+                nbytes = tocopy - copied;
+
+            System.arraycopy(bytes, offset + copied, this.chunks.get(nchunk), choffset, nbytes);
+
+            copied += nbytes;
+            nchunk++;
+            choffset = 0;
         }
-        else
-            System.arraycopy(bytes, offset, this.chunks.get(nchunk), choffset, Math.min(bytes.length - offset, tocopy));
     }
 
     public byte[] getBytes(int address, int length) {
@@ -67,15 +75,22 @@ public class Memory {
         int nchunk = address / CHUNK_SIZE;
         int offset = address % CHUNK_SIZE;
         int tocopy = Math.min(this.size - address, length);
+        int copied = 0;
 
-        // TODO Control chunk crossing
-        if (offset + tocopy > CHUNK_SIZE) {
-            // TODO Process MANY chunks
-            System.arraycopy(this.chunks.get(nchunk), offset, bytes, 0, CHUNK_SIZE - offset);
-            System.arraycopy(this.chunks.get(nchunk + 1), 0, bytes, CHUNK_SIZE - offset,  tocopy - (CHUNK_SIZE - offset));
+        while (copied < tocopy) {
+            int nbytes;
+
+            if (offset + (tocopy - copied) > CHUNK_SIZE)
+                nbytes = CHUNK_SIZE - offset;
+            else
+                nbytes = tocopy - copied;
+
+            System.arraycopy(this.chunks.get(nchunk), offset, bytes, copied, nbytes);
+
+            copied += nbytes;
+            nchunk++;
+            offset = 0;
         }
-        else
-            System.arraycopy(this.chunks.get(nchunk), offset, bytes, 0, tocopy);
 
         return bytes;
     }
