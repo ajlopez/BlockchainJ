@@ -1,10 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.Account;
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.DataWord;
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.execution.CodeProvider;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.state.Trie;
@@ -1185,7 +1182,7 @@ public class VirtualMachineTest {
         long number = 1;
         long timestamp = 2;
         Address coinbase = FactoryHelper.createRandomAddress();
-        DataWord difficulty = DataWord.ONE;
+        Difficulty difficulty = Difficulty.ONE;
 
         BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty);
 
@@ -1201,7 +1198,7 @@ public class VirtualMachineTest {
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(4, stack.size());
-        Assert.assertEquals(difficulty, stack.pop());
+        Assert.assertEquals(difficulty.toDataWord(), stack.pop());
         Assert.assertEquals(DataWord.fromUnsignedLong(number), stack.pop());
         Assert.assertEquals(DataWord.fromUnsignedLong(timestamp), stack.pop());
         Assert.assertEquals(DataWord.fromAddress(coinbase), stack.pop());

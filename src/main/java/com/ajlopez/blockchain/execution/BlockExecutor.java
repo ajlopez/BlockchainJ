@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
@@ -29,8 +28,7 @@ public class BlockExecutor {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, this.trieStorageProvider, this.codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        // TODO get difficulty from block
-        BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), DataWord.ONE);
+        BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty());
         transactionExecutor.executeTransactions(block.getTransactions(), blockData);
 
         return accountStore.getRootHash();

@@ -439,7 +439,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.DIFFICULTY:
-                    this.stack.push(this.programEnvironment.getDifficulty());
+                    this.stack.push(this.programEnvironment.getDifficulty().toDataWord());
 
                     break;
 

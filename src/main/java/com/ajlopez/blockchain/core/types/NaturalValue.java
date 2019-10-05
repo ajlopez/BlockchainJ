@@ -61,4 +61,10 @@ public class NaturalValue {
     public String toString() {
         return HexUtils.bytesToHexString(this.toBytes(), true);
     }
+
+    public DataWord toDataWord() {
+        byte[] bytes = this.toBytes();
+
+        return DataWord.fromBytes(bytes, 0, bytes.length);
+    }
 }

@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class BlockDataTest {
         long number = 1;
         long timestamp = 2;
         Address coinbase = FactoryHelper.createRandomAddress();
-        DataWord difficulty = DataWord.ONE;
+        Difficulty difficulty = Difficulty.ONE;
 
         BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty);
 

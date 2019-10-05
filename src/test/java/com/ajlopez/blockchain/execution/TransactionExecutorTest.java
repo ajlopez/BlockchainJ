@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.CodeStore;
@@ -68,7 +69,7 @@ public class TransactionExecutorTest {
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
         Address coinbase = FactoryHelper.createRandomAddress();
-        BlockData blockData = new BlockData(1,2,coinbase, DataWord.ONE);
+        BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE);
         List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 
         Assert.assertNotNull(result);
@@ -359,7 +360,7 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
-        BlockData blockData = new BlockData(1,2, coinbase, DataWord.ONE);
+        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE);
 
         List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 

@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.execution.CodeProvider;
 
 /**
@@ -30,7 +31,7 @@ public class ProgramEnvironment {
 
     public long getNumber() { return this.blockData.getNumber(); }
 
-    public DataWord getDifficulty() { return this.blockData.getDifficulty(); }
+    public Difficulty getDifficulty() { return this.blockData.getDifficulty(); }
 
     public long getTimestamp() { return this.blockData.getTimestamp(); }
 

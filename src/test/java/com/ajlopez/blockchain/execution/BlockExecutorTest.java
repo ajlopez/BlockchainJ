@@ -4,10 +4,7 @@ import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.DataWord;
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -109,10 +106,9 @@ public class BlockExecutorTest {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, trieStorageProvider, codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TWO);
 
-        // TODO get difficulty from block
-        BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), DataWord.ONE);
+        BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty());
         transactionExecutor.executeTransactions(transactions, blockData);
 
         BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, trieStorageProvider, codeStore);
@@ -131,7 +127,7 @@ public class BlockExecutorTest {
         Assert.assertEquals(DataWord.fromUnsignedLong(block.getNumber()), storage.getValue(DataWord.ZERO));
         Assert.assertEquals(DataWord.fromUnsignedLong(block.getTimestamp()), storage.getValue(DataWord.ONE));
         Assert.assertEquals(DataWord.fromAddress(block.getCoinbase()), storage.getValue(DataWord.TWO));
-        Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.fromUnsignedInteger(3)));
+        Assert.assertEquals(DataWord.TWO, storage.getValue(DataWord.fromUnsignedInteger(3)));
     }
 
     @Test
@@ -157,7 +153,7 @@ public class BlockExecutorTest {
 
         BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TEN);
 
         Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
