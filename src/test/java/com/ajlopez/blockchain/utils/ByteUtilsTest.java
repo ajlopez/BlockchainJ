@@ -45,6 +45,17 @@ public class ByteUtilsTest {
     }
 
     @Test
+    public void fillWithZeroes() {
+        byte[] bytes = FactoryHelper.createRandomBytes(42);
+
+        Assert.assertFalse(ByteUtils.areZero(bytes));
+
+        ByteUtils.fillWithZeros(bytes, 0, bytes.length);
+
+        Assert.assertTrue(ByteUtils.areZero(bytes));
+    }
+
+    @Test
     public void unsignedIntegerOneToBytes() {
         byte[] result = ByteUtils.unsignedIntegerToBytes(1);
 
