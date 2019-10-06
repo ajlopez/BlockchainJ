@@ -19,7 +19,7 @@ public class ByteUtils {
 
     public static void fillWithZeros(byte[] bytes, int offset, int length) {
         for (int k = 0; k < length; k++)
-            bytes[k] = 0;
+            bytes[k + offset] = 0;
     }
 
     public static byte[] normalizeBytesToNull(byte[] bytes) {

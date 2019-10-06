@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +48,9 @@ public class Memory {
         int nchunk = address / CHUNK_SIZE;
         int choffset = address % CHUNK_SIZE;
         int tocopy = Math.min(bytes.length - offset, length);
+        int tofill = length > bytes.length - offset ? length - (bytes.length - offset) : 0;
         int copied = 0;
 
-        // TODO fill the right memory with zeroes if tocopy < length
         while (copied < tocopy) {
             int nbytes;
 
@@ -61,6 +62,30 @@ public class Memory {
             System.arraycopy(bytes, offset + copied, this.chunks.get(nchunk), choffset, nbytes);
 
             copied += nbytes;
+            nchunk++;
+            choffset = 0;
+        }
+
+        if (tofill == 0)
+            return;
+
+        address += length - tofill;
+
+        nchunk = address / CHUNK_SIZE;
+        choffset = address % CHUNK_SIZE;
+        int filled = 0;
+
+        while (filled < tofill) {
+            int nbytes;
+
+            if (choffset + (tofill - filled) > CHUNK_SIZE)
+                nbytes = CHUNK_SIZE - choffset;
+            else
+                nbytes = tofill - filled;
+
+            ByteUtils.fillWithZeros(this.chunks.get(nchunk), choffset, nbytes);
+
+            filled += nbytes;
             nchunk++;
             choffset = 0;
         }

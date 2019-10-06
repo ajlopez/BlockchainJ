@@ -115,6 +115,23 @@ public class MemoryTest {
     }
 
     @Test
+    public void setBytesFillingWithZeros() {
+        Memory memory = new Memory();
+        byte[] bytes = FactoryHelper.createRandomBytes(Memory.CHUNK_SIZE * 4 + 100);
+        int address = Memory.CHUNK_SIZE - 10;
+
+        memory.setBytes(address, bytes, 0, bytes.length);
+        memory.setBytes(address, new byte[] { 0x01 }, 0, bytes.length);
+
+        byte[] result = memory.getBytes(address, bytes.length);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(0x01, result[0]);
+        Assert.assertEquals(bytes.length, result.length);
+        Assert.assertTrue(ByteUtils.areZero(result, 1, result.length - 1));
+    }
+
+    @Test
     public void getNonExistentBytes() {
         Memory memory = new Memory();
 
