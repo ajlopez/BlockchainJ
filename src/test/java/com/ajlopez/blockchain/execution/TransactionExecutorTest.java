@@ -315,8 +315,8 @@ public class TransactionExecutorTest {
         Assert.assertEquals(DataWord.fromAddress(senderAddress), storage.getValue(DataWord.ONE));
         Assert.assertEquals(DataWord.fromAddress(receiverAddress), storage.getValue(DataWord.TWO));
         Assert.assertEquals(DataWord.fromUnsignedInteger(100), storage.getValue(DataWord.fromUnsignedInteger(3)));
-        Assert.assertEquals(DataWord.fromUnsignedLong(6000000L - FeeSchedule.BASE.getValue() - 4 * (FeeSchedule.BASE.getValue() + FeeSchedule.VERYLOW.getValue() + FeeSchedule.SSET.getValue())), storage.getValue(DataWord.fromUnsignedInteger(4)));
-        Assert.assertEquals(DataWord.ZERO, storage.getValue(DataWord.fromUnsignedInteger(5)));
+        Assert.assertEquals(DataWord.fromUnsignedLong(200000L - FeeSchedule.BASE.getValue() - 4 * (FeeSchedule.BASE.getValue() + FeeSchedule.VERYLOW.getValue() + FeeSchedule.SSET.getValue())), storage.getValue(DataWord.fromUnsignedInteger(4)));
+        Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.fromUnsignedInteger(5)));
     }
 
     @Test
@@ -356,7 +356,7 @@ public class TransactionExecutorTest {
         FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
         FactoryHelper.createAccountWithCode(accountStore, codeStore, receiverAddress, code);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 50000, Coin.ONE);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 200000, Coin.ONE);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
