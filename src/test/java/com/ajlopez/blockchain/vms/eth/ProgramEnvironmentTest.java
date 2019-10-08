@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -16,7 +17,7 @@ public class ProgramEnvironmentTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(address, origin, caller, DataWord.ONE, 0, null, null, false);
+        MessageData messageData = new MessageData(address, origin, caller, Coin.ONE, 0, null, null, false);
 
         long number = 1;
         long timestamp = 2;
@@ -29,7 +30,7 @@ public class ProgramEnvironmentTest {
         Assert.assertEquals(address, environment.getAddress());
         Assert.assertEquals(origin, environment.getOrigin());
         Assert.assertEquals(caller, environment.getCaller());
-        Assert.assertEquals(DataWord.ONE, environment.getValue());
+        Assert.assertEquals(Coin.ONE, environment.getValue());
         Assert.assertEquals(coinbase, environment.getCoinbase());
         Assert.assertEquals(number, environment.getNumber());
         Assert.assertEquals(timestamp, environment.getTimestamp());

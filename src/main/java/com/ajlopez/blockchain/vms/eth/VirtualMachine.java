@@ -351,7 +351,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.CALLVALUE:
-                    this.stack.push(this.programEnvironment.getValue());
+                    this.stack.push(DataWord.fromCoin(this.programEnvironment.getValue()));
 
                     break;
 
@@ -396,7 +396,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.GASPRICE:
-                    this.stack.push(this.programEnvironment.getGasPrice());
+                    this.stack.push(DataWord.fromCoin(this.programEnvironment.getGasPrice()));
 
                     break;
 

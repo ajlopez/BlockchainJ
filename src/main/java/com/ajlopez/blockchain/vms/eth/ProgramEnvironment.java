@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.execution.CodeProvider;
 
@@ -27,7 +27,7 @@ public class ProgramEnvironment {
 
     public Address getCaller() { return this.messageData.getCaller(); }
 
-    public DataWord getValue() { return this.messageData.getValue(); }
+    public Coin getValue() { return this.messageData.getValue(); }
 
     public long getNumber() { return this.blockData.getNumber(); }
 
@@ -41,7 +41,7 @@ public class ProgramEnvironment {
 
     public long getGas() { return this.messageData.getGas(); }
 
-    public DataWord getGasPrice() { return this.messageData.getGasPrice(); }
+    public Coin getGasPrice() { return this.messageData.getGasPrice(); }
 
     public boolean isReadOnly() { return this.messageData.isReadOnly(); }
 }

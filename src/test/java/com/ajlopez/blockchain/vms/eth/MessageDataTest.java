@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -15,9 +16,9 @@ public class MessageDataTest {
         Address address = FactoryHelper.createRandomAddress();
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
-        DataWord value = DataWord.ONE;
+        Coin value = Coin.ONE;
         long gas = 42;
-        DataWord gasPrice = DataWord.fromUnsignedInteger(42);
+        Coin gasPrice = Coin.fromUnsignedLong(42L);
 
         byte[] data = FactoryHelper.createRandomBytes(10);
 
@@ -38,9 +39,9 @@ public class MessageDataTest {
         Address address = FactoryHelper.createRandomAddress();
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
-        DataWord value = DataWord.ONE;
+        Coin value = Coin.ONE;
         long gas = 42;
-        DataWord gasPrice = DataWord.fromUnsignedInteger(42);
+        Coin gasPrice = Coin.fromUnsignedLong(42L);
 
         byte[] data = FactoryHelper.createRandomBytes(10);
 
