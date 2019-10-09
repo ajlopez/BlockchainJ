@@ -295,6 +295,16 @@ public class TransactionExecutorTest {
     }
 
     @Test
+    public void executeTransactionInvokingContractCodeUsingData() {
+        byte[] code = new byte[] { OpCodes.PUSH1, 0x00, OpCodes.CALLDATALOAD, OpCodes.PUSH1, 0x00, OpCodes.SSTORE };
+
+        Storage storage = executeTransactionInvokingCode(code);
+
+        Assert.assertNotNull(storage);
+        Assert.assertEquals(DataWord.fromBytesToLeft(new byte[] { 0x01, 0x02, 0x03, 0x04 }, 0, 4), storage.getValue(DataWord.ZERO));
+    }
+
+    @Test
     public void executeTransactionInvokingContractCodeGettingMessageData() {
         byte[] code = new byte[] {
                 OpCodes.ORIGIN, OpCodes.PUSH1, 0x00, OpCodes.SSTORE,
@@ -356,7 +366,7 @@ public class TransactionExecutorTest {
         FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
         FactoryHelper.createAccountWithCode(accountStore, codeStore, receiverAddress, code);
 
-        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 200000, Coin.ONE);
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, new byte[] { 0x01, 0x02, 0x03, 0x04 }, 200000, Coin.ONE);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
