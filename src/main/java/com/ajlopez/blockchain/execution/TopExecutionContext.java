@@ -7,8 +7,6 @@ import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.vms.eth.Storage;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
-import java.util.Map;
-
 /**
  * Created by ajlopez on 26/11/2018.
  */

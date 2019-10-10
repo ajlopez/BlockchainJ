@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.vms.eth.*;
 

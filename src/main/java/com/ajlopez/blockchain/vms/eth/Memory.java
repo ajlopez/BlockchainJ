@@ -26,8 +26,7 @@ public class Memory {
 
         byte[] data = this.getBytes(address, DataWord.DATAWORD_BYTES);
 
-        // TODO improve copy bytes
-        return DataWord.fromBytes(data, 0, data.length);
+        return new DataWord(data);
     }
 
     public void setByte(int address, byte value) {
