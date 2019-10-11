@@ -10,6 +10,4 @@ public interface PeerNode extends MessageChannel {
     Peer getPeer();
 
     void connectTo(PeerNode node);
-
-    Status getStatus();
 }

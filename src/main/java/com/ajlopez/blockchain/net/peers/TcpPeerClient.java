@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.net.peers;
 
 import com.ajlopez.blockchain.net.messages.StatusMessage;
+import com.ajlopez.blockchain.processors.NodeProcessor;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -10,11 +11,11 @@ import java.net.Socket;
  */
 public class TcpPeerClient {
     private final short network;
-    private final PeerNode peerNode;
+    private final NodeProcessor peerNode;
     private final String host;
     private final int port;
 
-    public TcpPeerClient(String host, int port, short network, PeerNode peerNode) {
+    public TcpPeerClient(String host, int port, short network, NodeProcessor peerNode) {
         this.host = host;
         this.port = port;
         this.network = network;

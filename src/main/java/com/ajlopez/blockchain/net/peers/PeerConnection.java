@@ -38,11 +38,6 @@ public class PeerConnection implements PeerNode {
         // TODO rewiew if this methods is needed
     }
 
-    public Status getStatus() {
-        // TODO rewiew if this methods is needed
-        return null;
-    }
-
     public synchronized void start() {
         if (this.started)
             return;
