@@ -34,10 +34,6 @@ public class PeerConnection implements PeerNode {
         return this.peer;
     }
 
-    public void connectTo(PeerNode node) {
-        // TODO rewiew if this methods is needed
-    }
-
     public synchronized void start() {
         if (this.started)
             return;

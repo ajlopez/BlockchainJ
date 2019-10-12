@@ -8,6 +8,4 @@ import com.ajlopez.blockchain.net.Status;
  */
 public interface PeerNode extends MessageChannel {
     Peer getPeer();
-
-    void connectTo(PeerNode node);
 }
