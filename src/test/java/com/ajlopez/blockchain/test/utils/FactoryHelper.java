@@ -197,11 +197,16 @@ public class FactoryHelper {
     }
 
     public static BlockChain createBlockChain(TrieStore trieStore, int size, int ntransactions) {
+        Address senderAddress = FactoryHelper.createRandomAddress();
+
+        return createBlockChainWithAccount(senderAddress, 1000000, trieStore, size, ntransactions);
+    }
+
+    public static BlockChain createBlockChainWithAccount(Address senderAddress, long balance, TrieStore trieStore, int size, int ntransactions) {
+        Account sender = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
+
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = accountStoreProvider.retrieve(Trie.EMPTY_TRIE_HASH);
-
-        Account sender = new Account(Coin.fromUnsignedLong(1000000), 0, null, null);
-        Address senderAddress = FactoryHelper.createRandomAddress();
 
         accountStore.putAccount(senderAddress, sender);
         accountStore.save();
