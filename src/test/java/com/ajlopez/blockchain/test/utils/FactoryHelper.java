@@ -148,7 +148,11 @@ public class FactoryHelper {
     }
 
     public static void extendBlockChainWithBlocks(AccountStoreProvider accountStoreProvider, BlockChain blockChain, int nblocks, int ntransactions, Address sender, long nonce) {
-        Block block = blockChain.getBestBlock();
+        extendBlockChainWithBlocksFromBlock(accountStoreProvider, blockChain, blockChain.getBestBlock(), nblocks, ntransactions, sender, nonce);
+    }
+
+    public static void extendBlockChainWithBlocksFromBlock(AccountStoreProvider accountStoreProvider, BlockChain blockChain, Block fromBlock, int nblocks, int ntransactions, Address sender, long nonce) {
+        Block block = fromBlock;
         Address coinbase = FactoryHelper.createRandomAddress();
 
         for (int k = 0; k < nblocks; k++) {
