@@ -9,8 +9,6 @@ import java.util.*;
  * Created by ajlopez on 21/01/2018.
  */
 public class TransactionPool {
-    private static List<Transaction> emptyList = Collections.unmodifiableList(Arrays.asList());
-
     private Set<Transaction> transactions = new HashSet<>();
 
     public List<Transaction> addTransaction(Transaction transaction) {
@@ -19,7 +17,7 @@ public class TransactionPool {
 
         synchronized (this.transactions) {
             if (!this.transactions.add(transaction))
-                return emptyList;
+                return Collections.emptyList();
         }
 
         return Collections.singletonList(transaction);
