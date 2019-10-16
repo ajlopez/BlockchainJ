@@ -6,12 +6,14 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -231,5 +233,28 @@ public class WorldTest {
         Assert.assertEquals(accountStore.getRootHash(), block.getStateRootHash());
 
         Assert.assertEquals(accountStore.getRootHash(), world.getBlock("genesis").getStateRootHash());
+    }
+
+    @Test
+    public void getUnknownCode() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+        World world = new World();
+
+        Assert.assertNull(world.getCode(codeHash));
+    }
+
+    @Test
+    public void setAndGetCode() {
+        byte[] code = FactoryHelper.createRandomBytes(42);
+        Hash hash = HashUtils.calculateHash(code);
+
+        World world = new World();
+
+        world.setCode(hash, code);
+
+        byte[] result = world.getCode(hash);
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(code, result);
     }
 }

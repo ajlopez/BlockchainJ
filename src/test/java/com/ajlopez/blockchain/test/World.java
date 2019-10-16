@@ -5,8 +5,11 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
+import com.ajlopez.blockchain.store.CodeStore;
+import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 
 import java.util.ArrayList;
@@ -19,17 +22,17 @@ import java.util.Map;
  */
 public class World {
     private final AccountStore accountStore;
-    private final Map<String, Address> accounts;
-    private final Map<String, Block> blocks;
-    private final Map<String, Transaction> transactions;
+    private final CodeStore codeStore;
+
+    private final Map<String, Address> accounts = new HashMap<>();
+    private final Map<String, Block> blocks = new HashMap<>();
+    private final Map<String, Transaction> transactions = new HashMap<>();
 
     private BlockChain blockChain;
 
     public World() {
         this.accountStore = new AccountStore(new Trie());
-        this.accounts = new HashMap<>();
-        this.blocks = new HashMap<>();
-        this.transactions = new HashMap<>();
+        this.codeStore = new CodeStore(new HashMapStore());
     }
 
     public Transaction getTransaction(String name) {
@@ -99,6 +102,14 @@ public class World {
         Address address = FactoryHelper.createRandomAddress();
         this.accounts.put(name, address);
         this.accountStore.putAccount(address, account);
+    }
+
+    public void setCode(Hash codeHash, byte[] code) {
+        this.codeStore.putCode(codeHash, code);
+    }
+
+    public byte[] getCode(Hash codeHash) {
+        return this.codeStore.getCode(codeHash);
     }
 
     public BlockChain getBlockChain() {

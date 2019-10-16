@@ -52,6 +52,7 @@ public class MinerProcessor {
     public Block mineBlock(Block parent) {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
         AccountStore accountStore = this.accountStoreProvider.retrieve(parentStateRootHash);
+        // TODO set storage provider, code store
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
