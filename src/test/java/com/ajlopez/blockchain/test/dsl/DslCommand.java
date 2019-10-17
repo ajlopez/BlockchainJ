@@ -5,8 +5,10 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.math.BigInteger;
@@ -52,8 +54,16 @@ public class DslCommand {
             String name = this.getName(0, "name");
             Coin balance = this.getCoin(1, "balance");
             long nonce = this.getLongInteger(2, "nonce");
+            String bytecodes = this.getName(3, "code");
+            Hash codeHash = null;
 
-            Account account = new Account(balance, nonce, null, null);
+            if (bytecodes != null) {
+                byte[] code = HexUtils.hexStringToBytes(bytecodes);
+                codeHash = HashUtils.calculateHash(code);
+                world.setCode(codeHash, code);
+            }
+
+            Account account = new Account(balance, nonce, codeHash, null);
 
             world.setAccount(name, account);
 
