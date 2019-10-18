@@ -50,63 +50,67 @@ public class DslCommand {
     public Map<String, String> getNamedArguments() { return this.namedArguments; }
 
     public void execute(World world) {
-        if ("account".equals(this.verb)) {
-            String name = this.getName(0, "name");
-            Coin balance = this.getCoin(1, "balance");
-            long nonce = this.getLongInteger(2, "nonce");
-            String bytecodes = this.getName(3, "code");
-            Hash codeHash = null;
+        if ("account".equals(this.verb))
+            executeAccount(world);
+        else if ("block".equals(this.verb))
+            executeBlock(world);
+        else if ("transaction".equals(this.verb))
+            executeTransaction(world);
+        else if ("connect".equals(this.verb))
+            executeConnect(world);
+        // TODO process unknown command
+    }
 
-            if (bytecodes != null) {
-                byte[] code = HexUtils.hexStringToBytes(bytecodes);
-                codeHash = HashUtils.calculateHash(code);
-                world.setCode(codeHash, code);
-            }
+    private void executeConnect(World world) {
+        String name = this.getName(0, "name");
+        Block block = world.getBlock(name);
+        world.getBlockChain().connectBlock(block);
+    }
 
-            Account account = new Account(balance, nonce, codeHash, null);
+    private void executeTransaction(World world) {
+        String name = this.getName(0, "name");
+        Address from = new Address(HexUtils.hexStringToBytes(this.getName(1, "from")));
+        Address to = new Address(HexUtils.hexStringToBytes(this.getName(2, "to")));
+        Coin value = this.getCoin(3, "value");
+        long nonce = this.getLongInteger(4, "nonce");
 
-            world.setAccount(name, account);
+        Transaction transaction = new Transaction(from, to, value, nonce, null, 6000000, Coin.ZERO);
 
-            return;
+        world.setTransaction(name, transaction);
+    }
+
+    private void executeBlock(World world) {
+        String name = this.getName(0, "name");
+        String parentName = this.getName(1, "parent");
+
+        if (parentName == null)
+            parentName = "genesis";
+
+        List<String> transactionNames = this.getNames(2, "transactions");
+
+        Block parent = world.getBlock(parentName);
+        List<Transaction> transactions = world.getTransactions(transactionNames);
+        Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), transactions);
+
+        world.setBlock(name, block);
+    }
+
+    private void executeAccount(World world) {
+        String name = this.getName(0, "name");
+        Coin balance = this.getCoin(1, "balance");
+        long nonce = this.getLongInteger(2, "nonce");
+        String bytecodes = this.getName(3, "code");
+        Hash codeHash = null;
+
+        if (bytecodes != null) {
+            byte[] code = HexUtils.hexStringToBytes(bytecodes);
+            codeHash = HashUtils.calculateHash(code);
+            world.setCode(codeHash, code);
         }
 
-        if ("block".equals(this.verb)) {
-            String name = this.getName(0, "name");
-            String parentName = this.getName(1, "parent");
+        Account account = new Account(balance, nonce, codeHash, null);
 
-            if (parentName == null)
-                parentName = "genesis";
-
-            List<String> transactionNames = this.getNames(2, "transactions");
-
-            Block parent = world.getBlock(parentName);
-            List<Transaction> transactions = world.getTransactions(transactionNames);
-            Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), transactions);
-
-            world.setBlock(name, block);
-
-            return;
-        }
-
-        if ("transaction".equals(this.verb)) {
-            String name = this.getName(0, "name");
-            Address from = new Address(HexUtils.hexStringToBytes(this.getName(1, "from")));
-            Address to = new Address(HexUtils.hexStringToBytes(this.getName(2, "to")));
-            Coin value = this.getCoin(3, "value");
-            long nonce = this.getLongInteger(4, "nonce");
-
-            Transaction transaction = new Transaction(from, to, value, nonce, null, 6000000, Coin.ZERO);
-
-            world.setTransaction(name, transaction);
-
-            return;
-        }
-
-        if ("connect".equals(this.verb)) {
-            String name = this.getName(0, "name");
-            Block block = world.getBlock(name);
-            world.getBlockChain().connectBlock(block);
-        }
+        world.setAccount(name, account);
     }
 
     private String getName(int position, String name) {
