@@ -45,6 +45,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Announcing Hyperledger Besu](https://www.hyperledger.org/blog/2019/08/29/announcing-hyperledger-besu)
 - [Fast Ethereum Virtual Machine implementation](https://github.com/ethereum/evmone)
 - [Synchrony, Asynchrony and Partial synchrony](https://ittaiab.github.io/2019-06-01-2019-5-31-models/)
+- [How to implement a most-recently-used cache](https://stackoverflow.com/questions/583852/how-to-implement-a-most-recently-used-cache)
 
 ## To Do
 
