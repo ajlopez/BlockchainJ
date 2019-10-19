@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.test.dsl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -8,7 +10,12 @@ import java.util.StringTokenizer;
  * Created by ajlopez on 11/05/2019.
  */
 public class DslParser {
-    public static DslCommand parse(String line) {
+    public DslCommand parse(BufferedReader reader) throws IOException {
+        String line = reader.readLine();
+
+        if (line == null)
+            return null;
+
         int p = line.indexOf('#');
 
         if (p >= 0)

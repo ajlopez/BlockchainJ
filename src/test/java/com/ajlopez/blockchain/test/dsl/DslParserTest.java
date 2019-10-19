@@ -3,13 +3,18 @@ package com.ajlopez.blockchain.test.dsl;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+
 /**
  * Created by ajlopez on 11/05/2019.
  */
 public class DslParserTest {
     @Test
-    public void parseDslCommand() {
-        DslCommand dslCommand = DslParser.parse("account acc1 10000");
+    public void parseDslCommand() throws IOException {
+        DslParser parser = new DslParser();
+        DslCommand dslCommand = parser.parse(new BufferedReader(new StringReader("account acc1 10000")));
 
         Assert.assertNotNull(dslCommand);
         Assert.assertEquals("account", dslCommand.getVerb());
@@ -19,8 +24,9 @@ public class DslParserTest {
     }
 
     @Test
-    public void parseDslCommandSkippingSpacesAndTabs() {
-        DslCommand dslCommand = DslParser.parse("  account  \t acc1   10000   ");
+    public void parseDslCommandSkippingSpacesAndTabs() throws IOException {
+        DslParser parser = new DslParser();
+        DslCommand dslCommand = parser.parse(new BufferedReader(new StringReader("  account  \t acc1   10000   ")));
 
         Assert.assertNotNull(dslCommand);
         Assert.assertEquals("account", dslCommand.getVerb());
@@ -30,8 +36,9 @@ public class DslParserTest {
     }
 
     @Test
-    public void parseDslCommandSkippingComment() {
-        DslCommand dslCommand = DslParser.parse("  account  \t acc1   10000   # a comment");
+    public void parseDslCommandSkippingComment() throws IOException {
+        DslParser parser = new DslParser();
+        DslCommand dslCommand = parser.parse(new BufferedReader(new StringReader("  account  \t acc1   10000   # a comment")));
 
         Assert.assertNotNull(dslCommand);
         Assert.assertEquals("account", dslCommand.getVerb());
