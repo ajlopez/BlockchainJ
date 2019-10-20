@@ -58,6 +58,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - Log emit
 - Create contracts
 - Call contracts in Virtual Machine, WIP
+- Update transaction pool with new block information
+- Persistent key value store
 
 ## License
 
