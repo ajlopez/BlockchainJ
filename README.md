@@ -46,6 +46,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Fast Ethereum Virtual Machine implementation](https://github.com/ethereum/evmone)
 - [Synchrony, Asynchrony and Partial synchrony](https://ittaiab.github.io/2019-06-01-2019-5-31-models/)
 - [How to implement a most-recently-used cache](https://stackoverflow.com/questions/583852/how-to-implement-a-most-recently-used-cache)
+- [EIP 2124, Fork identifier for chain compatibility checks](https://twitter.com/trent_vanepps/status/1184677267995320322)
+- [Special-purpose light clients for old receipts and transactions](https://ethereum-magicians.org/t/special-purpose-light-clients-for-old-receipts-and-transactions/3711)
 
 ## To Do
 
