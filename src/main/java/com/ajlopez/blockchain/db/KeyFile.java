@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.db;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -17,6 +19,9 @@ public class KeyFile {
     }
 
     public void writeKey(byte[] key, long position, int length) throws IOException {
+        if (key == null || key.length != this.keyLength)
+            throw new IllegalArgumentException("invalid key");
+
         this.file.write(key);
         this.file.writeLong(position);
         this.file.writeInt(keyLength);
