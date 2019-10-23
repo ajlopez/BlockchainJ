@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.db;
 
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.vms.eth.VirtualMachineException;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,12 +18,18 @@ public class KeyFileTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void writeKey() throws IOException {
+    public void writeAndReadKey() throws IOException {
         KeyFile keyFile = new KeyFile("kftest1.data", 32);
 
         byte[] key = FactoryHelper.createRandomBytes(32);
 
         keyFile.writeKey(key, 0L, 42);
+
+        ValueInfo result = keyFile.readKey(key);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(0L, result.position);
+        Assert.assertEquals(42, result.length);
     }
 
     @Test

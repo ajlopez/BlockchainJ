@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.db;
 
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.io.FileNotFoundException;
@@ -24,6 +25,26 @@ public class KeyFile {
 
         this.file.write(key);
         this.file.writeLong(position);
-        this.file.writeInt(keyLength);
+        this.file.writeInt(length);
+    }
+
+    public ValueInfo readKey(byte[] key) throws IOException {
+        this.file.seek(0L);
+
+        byte[] buffer = new byte[this.keyLength];
+
+        while (true) {
+            int nbytes = this.file.read(buffer);
+
+            if (nbytes != this.keyLength)
+                return null;
+
+            long position = this.file.readLong();
+            int length = this.file.readInt();
+
+            if (ByteUtils.equals(key, 0, buffer, 0, this.keyLength)) {
+                return new ValueInfo(position, length);
+            }
+        }
     }
 }
