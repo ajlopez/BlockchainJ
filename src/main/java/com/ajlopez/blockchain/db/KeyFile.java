@@ -23,6 +23,9 @@ public class KeyFile {
         if (key == null || key.length != this.keyLength)
             throw new IllegalArgumentException("invalid key");
 
+        int blockSize = this.keyLength + Long.BYTES + Integer.BYTES;
+
+        this.file.seek((this.file.length() / blockSize) * blockSize);
         this.file.write(key);
         this.file.writeLong(position);
         this.file.writeInt(length);

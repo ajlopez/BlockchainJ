@@ -33,6 +33,38 @@ public class KeyFileTest {
     }
 
     @Test
+    public void writeAndReadThreeKeys() throws IOException {
+        KeyFile keyFile = new KeyFile("kftest1.data", 32);
+
+        byte[] key1 = FactoryHelper.createRandomBytes(32);
+        byte[] key2 = FactoryHelper.createRandomBytes(32);
+        byte[] key3 = FactoryHelper.createRandomBytes(32);
+
+        keyFile.writeKey(key1, 0L, 42);
+        keyFile.writeKey(key2, 42L, 42 * 2);
+
+        ValueInfo result1 = keyFile.readKey(key1);
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(0L, result1.position);
+        Assert.assertEquals(42, result1.length);
+
+        keyFile.writeKey(key3, 42L * 2, 42 * 3);
+
+        ValueInfo result2 = keyFile.readKey(key2);
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(42L, result2.position);
+        Assert.assertEquals(42 * 2, result2.length);
+
+        ValueInfo result3 = keyFile.readKey(key3);
+
+        Assert.assertNotNull(result3);
+        Assert.assertEquals(42L * 2, result3.position);
+        Assert.assertEquals(42 * 3, result3.length);
+    }
+
+    @Test
     public void cannotWriteNullKey() throws IOException {
         KeyFile keyFile = new KeyFile("kftest2.data", 32);
 
