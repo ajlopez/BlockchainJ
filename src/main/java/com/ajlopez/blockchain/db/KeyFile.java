@@ -50,4 +50,8 @@ public class KeyFile {
             }
         }
     }
+
+    public void close() throws IOException {
+        this.file.close();
+    }
 }
