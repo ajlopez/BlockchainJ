@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.db;
 
+import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.KeyValueStore;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
@@ -19,13 +21,21 @@ public class KeyFile {
         this.keyLength = keyLength;
     }
 
+    private int getBlockSize() {
+        return this.keyLength + Long.BYTES + Integer.BYTES;
+    }
+
+    private long getNoKeys(int blockSize) throws IOException {
+        return this.file.length() / blockSize;
+    }
+
     public void writeKey(byte[] key, long position, int length) throws IOException {
         if (key == null || key.length != this.keyLength)
             throw new IllegalArgumentException("invalid key");
 
-        int blockSize = this.keyLength + Long.BYTES + Integer.BYTES;
+        int blockSize = this.getBlockSize();
 
-        this.file.seek((this.file.length() / blockSize) * blockSize);
+        this.file.seek(this.getNoKeys(blockSize) * blockSize);
         this.file.write(key);
         this.file.writeLong(position);
         this.file.writeInt(length);
