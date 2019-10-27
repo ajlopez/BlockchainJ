@@ -14,6 +14,10 @@ public class ValueFile {
         this.file = new RandomAccessFile(name, "rw");
     }
 
+    public void close() throws IOException {
+        this.file.close();
+    }
+
     public void writeValue(byte[] value, long position) throws IOException {
         this.file.seek(position);
 

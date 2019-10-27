@@ -27,8 +27,27 @@ public class ValueFileTest {
     }
 
     @Test
-    public void writeAndReadTwoValues() throws IOException {
+    public void writeCloseReopenAndReadValue() throws IOException {
         ValueFile valueFile = new ValueFile("vftest2.data");
+
+        byte[] value = FactoryHelper.createRandomBytes(42);
+
+        valueFile.writeValue(value, 0L);
+        valueFile.close();
+
+        ValueFile valueFile2 = new ValueFile("vftest2.data");
+
+        byte[] result = new byte[value.length];
+
+        int nread = valueFile2.readValue(0, result);
+
+        Assert.assertEquals(value.length, nread);
+        Assert.assertArrayEquals(value, result);
+    }
+
+    @Test
+    public void writeAndReadTwoValues() throws IOException {
+        ValueFile valueFile = new ValueFile("vftest3.data");
 
         byte[] value1 = FactoryHelper.createRandomBytes(42);
         byte[] value2 = FactoryHelper.createRandomBytes(100);
