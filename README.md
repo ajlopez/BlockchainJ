@@ -48,6 +48,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [How to implement a most-recently-used cache](https://stackoverflow.com/questions/583852/how-to-implement-a-most-recently-used-cache)
 - [EIP 2124, Fork identifier for chain compatibility checks](https://twitter.com/trent_vanepps/status/1184677267995320322)
 - [Special-purpose light clients for old receipts and transactions](https://ethereum-magicians.org/t/special-purpose-light-clients-for-old-receipts-and-transactions/3711)
+- [A Primer on Ethereum Blockchain Light Clients](https://medium.com/@rauljordan/a-primer-on-ethereum-blockchain-light-clients-f3cadde49137)
 
 ## To Do
 

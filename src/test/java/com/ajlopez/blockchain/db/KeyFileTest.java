@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.db;
 
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.vms.eth.VirtualMachineException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
