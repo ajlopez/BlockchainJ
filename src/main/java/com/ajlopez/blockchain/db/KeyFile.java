@@ -48,6 +48,11 @@ public class KeyFile {
         if (key == null || key.length != this.keyLength)
             throw new IllegalArgumentException("invalid key");
 
+        ByteArrayWrapper bakey = new ByteArrayWrapper(key);
+
+        if (this.keys.containsKey(bakey))
+            throw new IllegalStateException("key already exists");
+
         int blockSize = this.getBlockSize();
 
         this.file.seek(this.getNoKeys(blockSize) * blockSize);

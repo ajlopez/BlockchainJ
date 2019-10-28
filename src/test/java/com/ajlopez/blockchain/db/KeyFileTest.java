@@ -32,6 +32,18 @@ public class KeyFileTest {
     }
 
     @Test
+    public void cannotWriteSameKeyTwice() throws IOException {
+        KeyFile keyFile = new KeyFile("kftest1.data", 32);
+
+        byte[] key = FactoryHelper.createRandomBytes(32);
+
+        keyFile.writeKey(key, 0L, 42);
+        exception.expect(IllegalStateException.class);
+        exception.expectMessage("key already exists");
+        keyFile.writeKey(key, 0L, 42);
+    }
+
+    @Test
     public void writeAndReadThreeKeys() throws IOException {
         KeyFile keyFile = new KeyFile("kftest2.data", 32);
 
