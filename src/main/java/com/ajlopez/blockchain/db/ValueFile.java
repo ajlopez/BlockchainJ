@@ -18,10 +18,13 @@ public class ValueFile {
         this.file.close();
     }
 
-    public void writeValue(byte[] value, long position) throws IOException {
-        this.file.seek(position);
+    public long writeValue(byte[] value) throws IOException {
+        long length = this.file.length();
 
+        this.file.seek(length);
         this.file.write(value);
+
+        return length;
     }
 
     public int readValue(long position, byte[] buffer) throws IOException {
