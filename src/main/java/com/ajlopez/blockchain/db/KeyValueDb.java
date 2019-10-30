@@ -18,12 +18,18 @@ public class KeyValueDb implements KeyValueStore {
     }
 
     @Override
-    public void setValue(byte[] key, byte[] value) {
-
+    public void setValue(byte[] key, byte[] value) throws IOException {
+        long position = this.valueFile.writeValue(value);
+        this.keyFile.writeKey(key, position, value.length);
     }
 
     @Override
-    public byte[] getValue(byte[] key) {
-        return new byte[0];
+    public byte[] getValue(byte[] key) throws IOException {
+        ValueInfo valueInfo = this.keyFile.readKey(key);
+
+        if (valueInfo == null)
+            return null;
+
+        return this.valueFile.readValue(valueInfo.position, valueInfo.length);
     }
 }
