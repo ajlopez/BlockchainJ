@@ -7,6 +7,8 @@ import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.jsonrpc.encoders.BlockJsonEncoder;
 import com.ajlopez.blockchain.utils.HexUtils;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 30/11/2018.
  */
@@ -18,7 +20,7 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
     }
 
     @Override
-    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
+    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException, IOException {
         if (request.check("eth_blockNumber", 0))
             return this.getBestBlockNumber(request);
 

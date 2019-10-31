@@ -6,6 +6,8 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 15/09/2019.
  */
@@ -18,7 +20,7 @@ public class AccountsProvider {
         this.accountStoreProvider = accountStoreProvider;
     }
 
-    public Account getAccount(Address address, String blockId) throws JsonRpcException {
+    public Account getAccount(Address address, String blockId) throws JsonRpcException, IOException {
         Block block = this.blocksProvider.getBlock(blockId);
         AccountStore accountStore = this.accountStoreProvider.retrieve(block.getStateRootHash());
 

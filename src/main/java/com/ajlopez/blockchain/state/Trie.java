@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -63,11 +64,11 @@ public class Trie {
         return result;
     }
 
-    public byte[] get(byte[] key) {
+    public byte[] get(byte[] key) throws IOException {
         return this.get(key, 0);
     }
 
-    private byte[] get(byte[] key, int position) {
+    private byte[] get(byte[] key, int position) throws IOException {
         if (position == key.length * 2)
             return this.value;
 
@@ -144,7 +145,7 @@ public class Trie {
         return this.encoded;
     }
 
-    public void save() {
+    public void save() throws IOException {
         if (this.saved)
             return;
 
@@ -260,7 +261,7 @@ public class Trie {
         return node.getHash();
     }
 
-    private Trie getSubNode(int k) {
+    private Trie getSubNode(int k) throws IOException {
         if (this.nodes != null && this.nodes[k] != null)
             return this.nodes[k];
 

@@ -6,6 +6,8 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.state.Trie;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 26/11/2018.
  */
@@ -37,7 +39,7 @@ public class AccountStore {
         return this.trie.getHash();
     }
 
-    public void save() {
+    public void save() throws IOException {
         this.trie.save();
     }
 }

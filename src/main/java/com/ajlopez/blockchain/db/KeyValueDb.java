@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.db;
 
 import com.ajlopez.blockchain.store.KeyValueStore;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -30,6 +29,11 @@ public class KeyValueDb implements KeyValueStore {
         if (valueInfo == null)
             return null;
 
-        return this.valueFile.readValue(valueInfo.position, valueInfo.length);
+        byte[] buffer = new byte[valueInfo.length];
+
+        // TODO Check read
+        int read = this.valueFile.readValue(valueInfo.position, buffer);
+
+        return buffer;
     }
 }

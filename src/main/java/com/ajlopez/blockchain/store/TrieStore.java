@@ -3,6 +3,8 @@ package com.ajlopez.blockchain.store;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 04/03/2018.
  */
@@ -13,18 +15,18 @@ public class TrieStore {
         this.store = store;
     }
 
-    public void save(Trie trie) {
+    public void save(Trie trie) throws IOException {
         this.store.setValue(trie.getHash().getBytes(), trie.getEncoded());
     }
 
-    public boolean exists(Hash hash) {
+    public boolean exists(Hash hash) throws IOException {
         if (hash == null || hash.equals(Trie.EMPTY_TRIE_HASH))
             return true;
 
         return this.store.getValue(hash.getBytes()) != null;
     }
 
-    public Trie retrieve(Hash hash) {
+    public Trie retrieve(Hash hash) throws IOException {
         if (hash == null || hash.equals(Trie.EMPTY_TRIE_HASH))
             return new Trie(this);
 
