@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class TopProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void unknownMethod() throws JsonRpcException {
+    public void unknownMethod() throws JsonRpcException, IOException {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);
 
@@ -32,7 +33,7 @@ public class TopProcessorTest {
     }
 
     @Test
-    public void delegateRequestToRegisteredProcessor() throws JsonRpcException {
+    public void delegateRequestToRegisteredProcessor() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         List<JsonValue> params = new ArrayList<>();

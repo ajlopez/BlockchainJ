@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.json.JsonBuilder;
 import com.ajlopez.blockchain.json.JsonValue;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class WalletProcessor extends AbstractJsonRpcProcessor {
     }
 
     @Override
-    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
+    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException, IOException {
         if (request.check("eth_accounts", 0))
             return JsonRpcResponse.createResponse(request, this.addressToJsonArray());
 

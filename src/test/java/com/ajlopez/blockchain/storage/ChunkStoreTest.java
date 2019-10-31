@@ -5,19 +5,21 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 13/08/2019.
  */
 public class ChunkStoreTest {
     @Test
-    public void getUnknownChunk() {
+    public void getUnknownChunk() throws IOException {
         ChunkStore chunkStore = new ChunkStore(new HashMapStore());
 
         Assert.assertNull(chunkStore.getChunk(FactoryHelper.createRandomHash()));
     }
 
     @Test
-    public void setAndGetChunk() {
+    public void setAndGetChunk() throws IOException {
         Chunk chunk = new Chunk(FactoryHelper.createRandomBytes(42));
         ChunkStore chunkStore = new ChunkStore(new HashMapStore());
 

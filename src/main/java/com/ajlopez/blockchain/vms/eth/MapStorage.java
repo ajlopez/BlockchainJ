@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,12 +14,12 @@ public class MapStorage implements Storage {
     private Map<DataWord, DataWord> values = new HashMap<>();
 
     @Override
-    public boolean hasValue(DataWord address) {
+    public boolean hasValue(DataWord address) throws IOException {
         return this.values.containsKey(address);
     }
 
     @Override
-    public DataWord getValue(DataWord address) {
+    public DataWord getValue(DataWord address) throws IOException {
         if (this.hasValue(address))
             return this.values.get(address);
 
@@ -31,5 +32,5 @@ public class MapStorage implements Storage {
     }
 
     @Override
-    public void commit() { }
+    public void commit() throws IOException { }
 }

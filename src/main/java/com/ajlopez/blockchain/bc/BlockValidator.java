@@ -4,6 +4,8 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.BlockExecutor;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 01/06/2019.
  */
@@ -14,7 +16,7 @@ public class BlockValidator {
         this.blockExecutor = blockExecutor;
     }
 
-    public boolean isValid(Block block, Hash initialStateRoot) {
+    public boolean isValid(Block block, Hash initialStateRoot) throws IOException {
         Hash hash = this.blockExecutor.executeBlock(block, initialStateRoot);
 
         return hash.equals(block.getStateRootHash());

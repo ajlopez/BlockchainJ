@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.BlockHash;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class BlockProcessor {
         this.blockValidator = blockValidator;
     }
 
-    public List<Block> processBlock(Block block) {
+    public List<Block> processBlock(Block block) throws IOException {
         BlockHash hash = block.getHash();
 
         if (this.orphanBlocks.isKnownOrphan(hash))
@@ -105,7 +106,11 @@ public class BlockProcessor {
 
         children.forEach(child -> {
             orphanBlocks.removeOrphan(child);
-            connected.addAll(processBlock(child));
+            try {
+                connected.addAll(processBlock(child));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         return connected;

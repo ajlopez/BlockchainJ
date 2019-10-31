@@ -14,12 +14,14 @@ import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 26/11/2018.
  */
 public class TopExecutionContextTest {
     @Test
-    public void getZeroBalanceFromNewAccount() {
+    public void getZeroBalanceFromNewAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -31,7 +33,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getNullCodeFromUnknownAccount() {
+    public void getNullCodeFromUnknownAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -40,7 +42,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getNullCodeFromAccountWithoutCode() {
+    public void getNullCodeFromAccountWithoutCode() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Account account = new Account();
         Address address = FactoryHelper.createRandomAddress();
@@ -52,7 +54,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getCodeFromAccountWithCode() {
+    public void getCodeFromAccountWithCode() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(new Trie());
         byte[] code = FactoryHelper.createRandomBytes(100);
@@ -72,7 +74,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getNullCodeHashFromNewAccount() {
+    public void getNullCodeHashFromNewAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -83,7 +85,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getNullStorageHashFromNewAccount() {
+    public void getNullStorageHashFromNewAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -94,7 +96,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void setAndGetCodeHashFromNewAccount() {
+    public void setAndGetCodeHashFromNewAccount() throws IOException {
         Hash codeHash = FactoryHelper.createRandomHash();
         Address address = FactoryHelper.createRandomAddress();
 
@@ -111,7 +113,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getEmptyStorageFromNewAccount() {
+    public void getEmptyStorageFromNewAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         TrieStore trieStore = new TrieStore(new HashMapStore());
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(trieStore);
@@ -129,7 +131,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getStorageFromNewAccountAndSetKeyValue() {
+    public void getStorageFromNewAccountAndSetKeyValue() throws IOException {
         Address address = FactoryHelper.createRandomAddress();
         AccountStore accountStore = new AccountStore(new Trie());
         KeyValueStore keyValueStore = new HashMapStore();
@@ -173,7 +175,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getStorageFromNewAccountAndSetKeyValueAndRollback() {
+    public void getStorageFromNewAccountAndSetKeyValueAndRollback() throws IOException {
         Address address = FactoryHelper.createRandomAddress();
         AccountStore accountStore = new AccountStore(new Trie());
         KeyValueStore keyValueStore = new HashMapStore();
@@ -217,7 +219,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getBalanceFromAccountAndCommitDoesNotChangeStore() {
+    public void getBalanceFromAccountAndCommitDoesNotChangeStore() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Account account = new Account(Coin.TEN, 42, null, null);
         Address address = FactoryHelper.createRandomAddress();
@@ -244,7 +246,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getZeroBalanceFromAccountAndCommitDoesNotChangeStore() {
+    public void getZeroBalanceFromAccountAndCommitDoesNotChangeStore() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -268,7 +270,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccount() {
+    public void incrementNonceAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -287,7 +289,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccountAndCommit() {
+    public void incrementNonceAccountAndCommit() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -307,7 +309,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccountAndRollback() {
+    public void incrementNonceAccountAndRollback() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -327,7 +329,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void getNonceFromNewAccountAndCommit() {
+    public void getNonceFromNewAccountAndCommit() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -347,7 +349,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void transferToAccount() {
+    public void transferToAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -377,7 +379,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void transferToAccountAndCommit() {
+    public void transferToAccountAndCommit() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -408,7 +410,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void transferToAccountAndRollback() {
+    public void transferToAccountAndRollback() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();

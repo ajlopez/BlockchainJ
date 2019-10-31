@@ -8,6 +8,8 @@ import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.vms.eth.BlockData;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 30/05/2019.
  */
@@ -22,7 +24,7 @@ public class BlockExecutor {
         this.codeStore = codeStore;
     }
 
-    public Hash executeBlock(Block block, Hash initialStateRoot) {
+    public Hash executeBlock(Block block, Hash initialStateRoot) throws IOException {
         AccountStore accountStore = this.accountStoreProvider.retrieve(initialStateRoot);
 
         ExecutionContext executionContext = new TopExecutionContext(accountStore, this.trieStorageProvider, this.codeStore);

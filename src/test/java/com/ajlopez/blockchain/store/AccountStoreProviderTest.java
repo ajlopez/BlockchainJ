@@ -9,12 +9,14 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 01/12/2018.
  */
 public class AccountStoreProviderTest {
     @Test
-    public void retrieveEmptyAccountStore() {
+    public void retrieveEmptyAccountStore() throws IOException {
         AccountStoreProvider provider = new AccountStoreProvider(new TrieStore(new HashMapStore()));
 
         AccountStore result = provider.retrieve(Trie.EMPTY_TRIE_HASH);
@@ -29,7 +31,7 @@ public class AccountStoreProviderTest {
     }
 
     @Test
-    public void retrieveAccountStores() {
+    public void retrieveAccountStores() throws IOException {
         Address address = FactoryHelper.createRandomAddress();
 
         TrieStore accountTrieStore = new TrieStore(new HashMapStore());

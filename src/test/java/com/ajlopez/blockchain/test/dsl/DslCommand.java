@@ -11,6 +11,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -49,7 +50,7 @@ public class DslCommand {
 
     public Map<String, String> getNamedArguments() { return this.namedArguments; }
 
-    public void execute(World world) {
+    public void execute(World world) throws IOException {
         if ("account".equals(this.verb))
             executeAccount(world);
         else if ("block".equals(this.verb))
@@ -95,7 +96,7 @@ public class DslCommand {
         world.setBlock(name, block);
     }
 
-    private void executeAccount(World world) {
+    private void executeAccount(World world) throws IOException {
         String name = this.getName(0, "name");
         Coin balance = this.getCoin(1, "balance");
         long nonce = this.getLongInteger(2, "nonce");

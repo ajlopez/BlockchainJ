@@ -19,6 +19,7 @@ import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.utils.HashUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -52,7 +53,7 @@ public class FactoryHelper {
         return new Address(createRandomBytes(Address.ADDRESS_BYTES));
     }
 
-    public static Address createAccountWithBalance(AccountStore accountStore, long balance) {
+    public static Address createAccountWithBalance(AccountStore accountStore, long balance) throws IOException {
         Address address = createRandomAddress();
 
         createAccountWithBalance(accountStore, address, balance);
@@ -60,14 +61,14 @@ public class FactoryHelper {
         return address;
     }
 
-    public static void createAccountWithBalance(AccountStore accountStore, Address address, long balance) {
+    public static void createAccountWithBalance(AccountStore accountStore, Address address, long balance) throws IOException {
         Account account = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
 
         accountStore.putAccount(address, account);
         accountStore.save();
     }
 
-    public static void createAccountWithCode(AccountStore accountStore, CodeStore codeStore, Address address, byte[] code) {
+    public static void createAccountWithCode(AccountStore accountStore, CodeStore codeStore, Address address, byte[] code) throws IOException {
         Hash codeHash = HashUtils.calculateHash(code);
         codeStore.putCode(codeHash, code);
         Account account = new Account(Coin.ZERO, 0, codeHash, null);
@@ -147,11 +148,11 @@ public class FactoryHelper {
         }
     }
 
-    public static void extendBlockChainWithBlocks(AccountStoreProvider accountStoreProvider, BlockChain blockChain, int nblocks, int ntransactions, Address sender, long nonce) {
+    public static void extendBlockChainWithBlocks(AccountStoreProvider accountStoreProvider, BlockChain blockChain, int nblocks, int ntransactions, Address sender, long nonce) throws IOException {
         extendBlockChainWithBlocksFromBlock(accountStoreProvider, blockChain, blockChain.getBestBlock(), nblocks, ntransactions, sender, nonce);
     }
 
-    public static void extendBlockChainWithBlocksFromBlock(AccountStoreProvider accountStoreProvider, BlockChain blockChain, Block fromBlock, int nblocks, int ntransactions, Address sender, long nonce) {
+    public static void extendBlockChainWithBlocksFromBlock(AccountStoreProvider accountStoreProvider, BlockChain blockChain, Block fromBlock, int nblocks, int ntransactions, Address sender, long nonce) throws IOException {
         Block block = fromBlock;
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -169,13 +170,13 @@ public class FactoryHelper {
         return createBlock(parent, coinbase, transactions);
     }
 
-    public static Block createBlock(AccountStoreProvider accountStoreProvider, Block parent, Address coinbase, int ntransactions, Address sender, long nonce) {
+    public static Block createBlock(AccountStoreProvider accountStoreProvider, Block parent, Address coinbase, int ntransactions, Address sender, long nonce) throws IOException {
         List<Transaction> transactions = createTransactions(ntransactions, sender, nonce);
 
         return createBlock(accountStoreProvider, parent, coinbase, transactions);
     }
 
-    public static Block createBlock(AccountStoreProvider accountStoreProvider, Block parent, Address coinbase, List<Transaction> transactions) {
+    public static Block createBlock(AccountStoreProvider accountStoreProvider, Block parent, Address coinbase, List<Transaction> transactions) throws IOException {
         AccountStore accountStore = accountStoreProvider.retrieve(parent.getStateRootHash());
 
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -190,23 +191,23 @@ public class FactoryHelper {
         return new Block(parent.getNumber() + 1, parent.getHash(), transactions, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
     }
 
-    public static BlockChain createBlockChain(int size) {
+    public static BlockChain createBlockChain(int size) throws IOException {
         return createBlockChain(size, 0);
     }
 
-    public static BlockChain createBlockChain(int size, int ntransactions) {
+    public static BlockChain createBlockChain(int size, int ntransactions) throws IOException {
         TrieStore trieStore = new TrieStore(new HashMapStore());
 
         return createBlockChain(trieStore, size, ntransactions);
     }
 
-    public static BlockChain createBlockChain(TrieStore trieStore, int size, int ntransactions) {
+    public static BlockChain createBlockChain(TrieStore trieStore, int size, int ntransactions) throws IOException {
         Address senderAddress = FactoryHelper.createRandomAddress();
 
         return createBlockChainWithAccount(senderAddress, 1000000, trieStore, size, ntransactions);
     }
 
-    public static BlockChain createBlockChainWithAccount(Address senderAddress, long balance, TrieStore trieStore, int size, int ntransactions) {
+    public static BlockChain createBlockChainWithAccount(Address senderAddress, long balance, TrieStore trieStore, int size, int ntransactions) throws IOException {
         Account sender = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
 
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);

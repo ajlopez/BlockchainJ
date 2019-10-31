@@ -10,6 +10,7 @@ import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.utils.HexUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class AccountsProcessor extends AbstractJsonRpcProcessor {
     }
 
     @Override
-    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
+    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException, IOException {
         if (request.check("eth_getBalance", 1, 2))
             return getBalance(request);
 
@@ -33,7 +34,7 @@ public class AccountsProcessor extends AbstractJsonRpcProcessor {
         return super.processRequest(request);
     }
 
-    private JsonRpcResponse getBalance(JsonRpcRequest request) throws JsonRpcException {
+    private JsonRpcResponse getBalance(JsonRpcRequest request) throws JsonRpcException, IOException {
         Account account = getAccount(request);
 
         Coin balance = account.getBalance();
@@ -42,13 +43,13 @@ public class AccountsProcessor extends AbstractJsonRpcProcessor {
         return JsonRpcResponse.createResponse(request, result);
     }
 
-    private JsonRpcResponse getTransactionCount(JsonRpcRequest request) throws JsonRpcException {
+    private JsonRpcResponse getTransactionCount(JsonRpcRequest request) throws JsonRpcException, IOException {
         Account account = getAccount(request);
 
         return JsonRpcResponse.createResponse(request, account.getNonce());
     }
 
-    private Account getAccount(JsonRpcRequest request) throws JsonRpcException {
+    private Account getAccount(JsonRpcRequest request) throws JsonRpcException, IOException {
         List<JsonValue> params = request.getParams();
 
         Address address = new Address(HexUtils.hexStringToBytes(params.get(0).getValue().toString()));

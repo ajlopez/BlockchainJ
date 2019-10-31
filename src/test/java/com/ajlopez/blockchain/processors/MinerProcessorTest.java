@@ -17,6 +17,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -26,7 +27,7 @@ import java.util.concurrent.Semaphore;
  */
 public class MinerProcessorTest {
     @Test
-    public void mineBlockWithNoTransactions() {
+    public void mineBlockWithNoTransactions()  throws IOException {
         TransactionPool transactionPool = new TransactionPool();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -48,7 +49,7 @@ public class MinerProcessorTest {
     }
 
     @Test
-    public void mineBlockWithOneTransaction() {
+    public void mineBlockWithOneTransaction() throws IOException {
         Transaction tx = FactoryHelper.createTransaction(100);
 
         TransactionPool transactionPool = new TransactionPool();
@@ -99,7 +100,7 @@ public class MinerProcessorTest {
     }
 
     @Test
-    public void processBlockWithOneTransaction() {
+    public void processBlockWithOneTransaction() throws IOException {
         Address sender = FactoryHelper.createRandomAddress();
         Transaction tx = FactoryHelper.createTransaction(100, sender, 0);
 
@@ -135,7 +136,7 @@ public class MinerProcessorTest {
     }
 
     @Test
-    public void mineOneBlockUsingStartAndStop() throws InterruptedException {
+    public void mineOneBlockUsingStartAndStop() throws InterruptedException, IOException {
         Transaction tx = FactoryHelper.createTransaction(100);
 
         TransactionPool transactionPool = new TransactionPool();
@@ -188,7 +189,7 @@ public class MinerProcessorTest {
     }
 
     @Test
-    public void mineTwoBlocksUsingStartAndStop() throws InterruptedException {
+    public void mineTwoBlocksUsingStartAndStop() throws InterruptedException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         TransactionPool transactionPool = new TransactionPool();

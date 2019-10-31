@@ -2,6 +2,8 @@ package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 2019/04/08.
  */
@@ -13,7 +15,7 @@ public class NetworkProcessor extends AbstractJsonRpcProcessor {
     }
 
     @Override
-    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
+    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException, IOException {
         if (request.check("net_version", 0))
             return getVersion(request);
 

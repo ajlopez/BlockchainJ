@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public class BlockForkTest {
     @Test
-    public void processTwoBestBlocks() {
+    public void processTwoBestBlocks() throws IOException {
         Address senderAddress = FactoryHelper.createRandomAddress();
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);

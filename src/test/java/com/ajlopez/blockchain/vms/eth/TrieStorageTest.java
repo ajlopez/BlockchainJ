@@ -9,12 +9,14 @@ import com.ajlopez.blockchain.store.TrieStore;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 17/02/2019.
  */
 public class TrieStorageTest {
     @Test
-    public void getZeroIfUndefinedValue() {
+    public void getZeroIfUndefinedValue() throws IOException {
         Storage storage = new TrieStorage(new Trie());
 
         DataWord result = storage.getValue(DataWord.fromHexadecimalString("0102"));
@@ -24,7 +26,7 @@ public class TrieStorageTest {
     }
 
     @Test
-    public void setAndGetValue() {
+    public void setAndGetValue() throws IOException {
         Storage storage = new TrieStorage(new Trie());
         DataWord address = DataWord.fromHexadecimalString("0x010203");
         DataWord value = DataWord.fromHexadecimalString("2a");
@@ -38,7 +40,7 @@ public class TrieStorageTest {
     }
 
     @Test
-    public void setResetAndGetValue() {
+    public void setResetAndGetValue() throws IOException {
         Storage storage = new TrieStorage(new Trie());
         DataWord address = DataWord.fromHexadecimalString("0x010203");
         DataWord value = DataWord.fromHexadecimalString("2a");
@@ -53,7 +55,7 @@ public class TrieStorageTest {
     }
 
     @Test
-    public void setResetToZeroAndGetValue() {
+    public void setResetToZeroAndGetValue() throws IOException {
         TrieStorage storage = new TrieStorage(new Trie());
 
         Hash initialHash = storage.getRootHash();
@@ -72,7 +74,7 @@ public class TrieStorageTest {
     }
 
     @Test
-    public void setAndGetValueAndCommit() {
+    public void setAndGetValueAndCommit() throws IOException {
         TrieStore store = new TrieStore(new HashMapStore());
         TrieStorage storage = new TrieStorage(new Trie(store));
 

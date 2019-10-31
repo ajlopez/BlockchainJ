@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -101,7 +102,7 @@ public class VirtualMachine {
         return this.gasUsed;
     }
 
-    public void execute(byte[] bytecodes) throws VirtualMachineException {
+    public void execute(byte[] bytecodes) throws VirtualMachineException, IOException {
         int l = bytecodes.length;
 
         for (int pc = 0; pc < l; pc++) {

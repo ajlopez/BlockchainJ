@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.TrieStore;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -24,7 +25,7 @@ public class WarpProcessor {
 
     public Set<Long> getExpectedBlocks() { return this.expectedBlocks; }
 
-    public Set<Hash> processBlock(Block block) {
+    public Set<Hash> processBlock(Block block) throws IOException {
         Hash hash = block.getStateRootHash();
 
         if (accountCollectors.containsKey(hash))
@@ -38,7 +39,7 @@ public class WarpProcessor {
         return Collections.singleton(hash);
     }
 
-    public Set<Hash> processAccountNode(Hash topHash, byte[] nodeData) {
+    public Set<Hash> processAccountNode(Hash topHash, byte[] nodeData) throws IOException {
         if (!this.accountCollectors.containsKey(topHash))
             return Collections.emptySet();
 

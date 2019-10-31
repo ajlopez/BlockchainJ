@@ -6,19 +6,21 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 21/01/2019.
  */
 public class CodeStoreTest {
     @Test
-    public void getUnknownCode() {
+    public void getUnknownCode() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
 
         Assert.assertNull(codeStore.getCode(FactoryHelper.createRandomHash()));
     }
 
     @Test
-    public void putAndGetCode() {
+    public void putAndGetCode() throws IOException {
         Hash codeHash = FactoryHelper.createRandomHash();
         byte[] code = FactoryHelper.createRandomBytes(42);
 

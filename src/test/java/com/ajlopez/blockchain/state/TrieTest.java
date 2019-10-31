@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -19,7 +20,7 @@ public class TrieTest {
     private static Random random = new Random();
 
     @Test
-    public void getUnknownValueAsNull() {
+    public void getUnknownValueAsNull() throws IOException {
         Trie trie = new Trie();
 
         Assert.assertNull(trie.get(new byte[] { 0x01, 0x02 }));
@@ -164,7 +165,7 @@ public class TrieTest {
     }
 
     @Test
-    public void putKeyValueTwice() {
+    public void putKeyValueTwice() throws IOException {
         byte[] value1 = new byte[Hash.HASH_BYTES];
         random.nextBytes(value1);
         byte[] value2 = new byte[Hash.HASH_BYTES];
@@ -182,7 +183,7 @@ public class TrieTest {
     }
 
     @Test
-    public void putKeyValueTwiceUsingSave() {
+    public void putKeyValueTwiceUsingSave() throws IOException {
         byte[] value1 = new byte[Hash.HASH_BYTES];
         random.nextBytes(value1);
         byte[] value2 = new byte[Hash.HASH_BYTES];
@@ -203,7 +204,7 @@ public class TrieTest {
     }
 
     @Test
-    public void retrieveTrieFromEncodedTrieWithValue() {
+    public void retrieveTrieFromEncodedTrieWithValue() throws IOException {
         byte[] value = new byte[32];
         random.nextBytes(value);
         byte[] key = new byte[0];
@@ -247,7 +248,7 @@ public class TrieTest {
     }
 
     @Test
-    public void getUnknownValueWithEmptyKeyAsNull() {
+    public void getUnknownValueWithEmptyKeyAsNull() throws IOException {
         Trie trie = new Trie();
 
         Assert.assertNull(trie.get(new byte[0]));
@@ -255,7 +256,7 @@ public class TrieTest {
     }
 
     @Test
-    public void putAndGetKeyValue() {
+    public void putAndGetKeyValue() throws IOException {
         byte[] key = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value = new byte[] { 0x01, 0x02, 0x03 };
 
@@ -268,7 +269,7 @@ public class TrieTest {
     }
 
     @Test
-    public void putAndGetKeyNullValue() {
+    public void putAndGetKeyNullValue() throws IOException {
         byte[] key = new byte[0];
         byte[] value = new byte[] { 0x01, 0x02, 0x03 };
 
@@ -281,7 +282,7 @@ public class TrieTest {
     }
 
     @Test
-    public void putRemoveAndGetKeyValue() {
+    public void putRemoveAndGetKeyValue() throws IOException {
         byte[] key = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value = new byte[] { 0x01, 0x02, 0x03 };
 
@@ -294,7 +295,7 @@ public class TrieTest {
     }
 
     @Test
-    public void putRemoveAndGetTwoKeyValue() {
+    public void putRemoveAndGetTwoKeyValue() throws IOException {
         byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
         byte[] key2 = new byte[] { (byte)0xab, (byte)0xce };
@@ -314,7 +315,7 @@ public class TrieTest {
     }
 
     @Test
-    public void putAndGetTwoKeyValues() {
+    public void putAndGetTwoKeyValues() throws IOException {
         byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
         byte[] key2 = new byte[] { (byte)0xcd, (byte)0xab };
@@ -331,7 +332,7 @@ public class TrieTest {
     }
 
     @Test
-    public void putAndGetTwoKeyValuesSamePath() {
+    public void putAndGetTwoKeyValuesSamePath() throws IOException {
         byte[] key1 = new byte[] { (byte)0xab };
         byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
         byte[] key2 = new byte[] { (byte)0xab, (byte)0xab };
@@ -348,7 +349,7 @@ public class TrieTest {
     }
 
     @Test
-    public void putChangeAndGetKeyValue() {
+    public void putChangeAndGetKeyValue() throws IOException {
         byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
         byte[] value2 = new byte[] { 0x01, 0x02, 0x03, 0x04 };

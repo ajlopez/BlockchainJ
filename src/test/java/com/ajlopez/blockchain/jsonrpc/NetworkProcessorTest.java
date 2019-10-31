@@ -7,6 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class NetworkProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void unknownMethod() throws JsonRpcException {
+    public void unknownMethod() throws JsonRpcException, IOException {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "net_foo", params);
 
@@ -31,7 +32,7 @@ public class NetworkProcessorTest {
     }
 
     @Test
-    public void networkIdUsingNetworkConfiguration() throws JsonRpcException {
+    public void networkIdUsingNetworkConfiguration() throws JsonRpcException, IOException {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "net_version", params);
 

@@ -15,6 +15,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
  */
 public class BlockValidatorTest {
     @Test
-    public void validEmptyBlock() {
+    public void validEmptyBlock() throws IOException {
         Block genesis = GenesisGenerator.generateGenesis();
         Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
 
@@ -39,7 +40,7 @@ public class BlockValidatorTest {
     }
 
     @Test
-    public void validBlockWithTransaction() {
+    public void validBlockWithTransaction() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
@@ -73,7 +74,7 @@ public class BlockValidatorTest {
     }
 
     @Test
-    public void validBlockWithInvaidTransaction() {
+    public void validBlockWithInvaidTransaction() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
@@ -98,7 +99,7 @@ public class BlockValidatorTest {
     }
 
     @Test
-    public void invalidEmptyBlock() {
+    public void invalidEmptyBlock() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         Block genesis = GenesisGenerator.generateGenesis();
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), new ArrayList<>(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);

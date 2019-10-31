@@ -5,6 +5,8 @@ import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.execution.CodeProvider;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 14/12/2018.
  */
@@ -21,7 +23,7 @@ public class ProgramEnvironment {
 
     public Address getAddress() { return this.messageData.getAddress(); }
 
-    public byte[] getCode(Address address) { return this.codeProvider.getCode(address); }
+    public byte[] getCode(Address address) throws IOException { return this.codeProvider.getCode(address); }
 
     public Address getOrigin() { return this.messageData.getOrigin(); }
 

@@ -24,6 +24,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,7 +39,7 @@ public class AccountsProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void unknownMethod() throws JsonRpcException {
+    public void unknownMethod() throws JsonRpcException, IOException {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);
 
@@ -50,7 +51,7 @@ public class AccountsProcessorTest {
     }
 
     @Test
-    public void getBalanceWithNoParameter() throws JsonRpcException {
+    public void getBalanceWithNoParameter() throws JsonRpcException, IOException {
         List<JsonValue> params = Collections.emptyList();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getBalance", params);
 
@@ -62,7 +63,7 @@ public class AccountsProcessorTest {
     }
 
     @Test
-    public void getBalanceWithThreeParameters() throws JsonRpcException {
+    public void getBalanceWithThreeParameters() throws JsonRpcException, IOException {
         List<JsonValue> params = new ArrayList();
         params.add(new JsonStringValue("foo"));
         params.add(new JsonStringValue("bar"));
@@ -78,7 +79,7 @@ public class AccountsProcessorTest {
     }
 
     @Test
-    public void getBalances() throws JsonRpcException {
+    public void getBalances() throws JsonRpcException, IOException {
         Address sender = FactoryHelper.createRandomAddress();
         Address receiver = FactoryHelper.createRandomAddress();
 
@@ -110,7 +111,7 @@ public class AccountsProcessorTest {
     }
 
     @Test
-    public void getTransactionCountWithNoParameter() throws JsonRpcException {
+    public void getTransactionCountWithNoParameter() throws JsonRpcException, IOException {
         List<JsonValue> params = Collections.emptyList();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
 
@@ -122,7 +123,7 @@ public class AccountsProcessorTest {
     }
 
     @Test
-    public void getTransactionCountWithThreeParameters() throws JsonRpcException {
+    public void getTransactionCountWithThreeParameters() throws JsonRpcException, IOException {
         List<JsonValue> params = new ArrayList();
         params.add(new JsonStringValue("foo"));
         params.add(new JsonStringValue("bar"));
@@ -138,7 +139,7 @@ public class AccountsProcessorTest {
     }
 
     @Test
-    public void getTransactionCounts() throws JsonRpcException {
+    public void getTransactionCounts() throws JsonRpcException, IOException {
         Address sender = FactoryHelper.createRandomAddress();
         Address receiver = FactoryHelper.createRandomAddress();
 
@@ -169,7 +170,7 @@ public class AccountsProcessorTest {
         }
     }
 
-    private static void checkBalance(AccountsProcessor processor, Address address, String blockId, long expectedBalance) throws JsonRpcException {
+    private static void checkBalance(AccountsProcessor processor, Address address, String blockId, long expectedBalance) throws JsonRpcException, IOException {
         JsonStringValue addressValue = new JsonStringValue(address.toString());
         JsonStringValue blockIdValue = new JsonStringValue(blockId);
 
@@ -182,7 +183,7 @@ public class AccountsProcessorTest {
         checkBalanceResponse(processor.processRequest(request), expectedBalance);
     }
 
-    private static void checkBalance(AccountsProcessor processor, Address address, long expectedBalance) throws JsonRpcException {
+    private static void checkBalance(AccountsProcessor processor, Address address, long expectedBalance) throws JsonRpcException, IOException {
         JsonStringValue addressValue = new JsonStringValue(address.toString());
 
         List<JsonValue> params = new ArrayList<>();
@@ -210,7 +211,7 @@ public class AccountsProcessorTest {
         Assert.assertEquals(expectedBalance, (new BigInteger(1, bytes)).longValue());
     }
 
-    private static void checkTransactionCount(AccountsProcessor processor, Address address, String blockId, long expectedNonce) throws JsonRpcException {
+    private static void checkTransactionCount(AccountsProcessor processor, Address address, String blockId, long expectedNonce) throws JsonRpcException, IOException {
         JsonStringValue addressValue = new JsonStringValue(address.toString());
         JsonStringValue blockIdValue = new JsonStringValue(blockId);
 
@@ -223,7 +224,7 @@ public class AccountsProcessorTest {
         checkTransactionCountResponse(processor.processRequest(request), expectedNonce);
     }
 
-    private static void checkTransactionCount(AccountsProcessor processor, Address address, long expectedNonce) throws JsonRpcException {
+    private static void checkTransactionCount(AccountsProcessor processor, Address address, long expectedNonce) throws JsonRpcException, IOException {
         JsonStringValue addressValue = new JsonStringValue(address.toString());
 
         List<JsonValue> params = new ArrayList<>();
@@ -251,7 +252,7 @@ public class AccountsProcessorTest {
         Assert.assertEquals(expectedNonce, (new BigInteger(1, bytes)).longValue());
     }
 
-    private static AccountsProcessor createProcessor(Address sender, Address receiver, long initialBalance, long transferAmount, int nblocks) {
+    private static AccountsProcessor createProcessor(Address sender, Address receiver, long initialBalance, long transferAmount, int nblocks) throws IOException {
         TrieStore accountTrieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(accountTrieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 

@@ -9,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +23,7 @@ public class BlocksProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void blockNumberUsingBlockchainGenesis() throws JsonRpcException {
+    public void blockNumberUsingBlockchainGenesis() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         List<JsonValue> params = new ArrayList<>();
@@ -39,7 +40,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void blockNumberUsingBlockchainWithTenBlocks() throws JsonRpcException {
+    public void blockNumberUsingBlockchainWithTenBlocks() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -57,7 +58,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void getBlockByNumberUsingBlockchainWithTenBlocks() throws JsonRpcException {
+    public void getBlockByNumberUsingBlockchainWithTenBlocks() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -81,7 +82,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void getBlockByHexadecimalNumberUsingBlockchainWithTenBlocks() throws JsonRpcException {
+    public void getBlockByHexadecimalNumberUsingBlockchainWithTenBlocks() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -105,7 +106,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void getUnknownBlockByHexadecimalNumber() throws JsonRpcException {
+    public void getUnknownBlockByHexadecimalNumber() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         List<JsonValue> params = new ArrayList<>();
@@ -123,7 +124,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void getBlockByHashUsingBlockchainWithTenBlocks() throws JsonRpcException {
+    public void getBlockByHashUsingBlockchainWithTenBlocks() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
         Block block = blockChain.getBlockByNumber(3);
@@ -149,7 +150,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void getUnknownBlockByHash() throws JsonRpcException {
+    public void getUnknownBlockByHash() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -168,7 +169,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void getLatestBlockUsingBlockchainWithTenBlocks() throws JsonRpcException {
+    public void getLatestBlockUsingBlockchainWithTenBlocks() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -192,7 +193,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void getEarliestBlockUsingBlockchainWithTenBlocks() throws JsonRpcException {
+    public void getEarliestBlockUsingBlockchainWithTenBlocks() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -216,7 +217,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void unknownMethod() throws JsonRpcException {
+    public void unknownMethod() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         List<JsonValue> params = new ArrayList<>();
@@ -230,7 +231,7 @@ public class BlocksProcessorTest {
     }
 
     @Test
-    public void invalidNumberOfParameters() throws JsonRpcException {
+    public void invalidNumberOfParameters() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         List<JsonValue> params = Collections.singletonList(JsonConverter.convert("foo"));

@@ -7,6 +7,8 @@ import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.vms.eth.Storage;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 26/11/2018.
  */
@@ -23,7 +25,7 @@ public class TopExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    protected AccountState retrieveAccountState(Address address) {
+    protected AccountState retrieveAccountState(Address address) throws IOException {
         return AccountState.fromAccount(this.accountStore.getAccount(address));
     }
 
@@ -33,7 +35,7 @@ public class TopExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    public Storage retrieveAccountStorage(Address address) {
+    public Storage retrieveAccountStorage(Address address) throws IOException {
         AccountState accountState = this.getAccountState(address);
         Storage storage = this.trieStorageProvider.retrieve(accountState);
 
@@ -41,7 +43,7 @@ public class TopExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    public byte[] getCode(Address address) {
+    public byte[] getCode(Address address) throws IOException {
         AccountState accountState = this.getAccountState(address);
 
         if (accountState == null)
@@ -56,7 +58,7 @@ public class TopExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    public void commit() {
+    public void commit() throws IOException {
         super.commit();
         // TODO save other stores??
         this.accountStore.save();

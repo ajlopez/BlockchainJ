@@ -5,6 +5,8 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.AccountState;
 import com.ajlopez.blockchain.state.Trie;
 
+import java.io.IOException;
+
 /**
  * Created by Angel on 17/02/2019.
  */
@@ -16,7 +18,7 @@ public class TrieStorage implements Storage {
     }
 
     @Override
-    public boolean hasValue(DataWord address) {
+    public boolean hasValue(DataWord address) throws IOException {
         byte[] data = this.trie.get(address.getBytes());
 
         return data == null;
@@ -35,7 +37,7 @@ public class TrieStorage implements Storage {
     }
 
     @Override
-    public DataWord getValue(DataWord address) {
+    public DataWord getValue(DataWord address) throws IOException {
         byte[] data = this.trie.get(address.getBytes());
 
         if (data == null)
@@ -49,7 +51,7 @@ public class TrieStorage implements Storage {
     }
 
     @Override
-    public void commit() {
+    public void commit() throws IOException {
         this.trie.save();
     }
 }

@@ -8,12 +8,14 @@ import com.ajlopez.blockchain.state.Trie;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 26/11/2018.
  */
 public class AccountStoreTest {
     @Test
-    public void getUnknownAccount() {
+    public void getUnknownAccount() throws IOException {
         AccountStore store = new AccountStore(new Trie());
         Address address = new Address(new byte[] { 0x01, 0x02 });
 
@@ -25,7 +27,7 @@ public class AccountStoreTest {
     }
 
     @Test
-    public void putAndGetAccount() {
+    public void putAndGetAccount() throws IOException {
         AccountStore store = new AccountStore(new Trie());
         Account account = new Account(Coin.TEN, 42, null, null);
         Address address = new Address(new byte[] { 0x01, 0x02 });

@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.vms.eth.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class TransactionExecutor {
         this.executionContext = executionContext;
     }
 
-    public List<Transaction> executeTransactions(List<Transaction> transactions, BlockData blockData) {
+    public List<Transaction> executeTransactions(List<Transaction> transactions, BlockData blockData) throws IOException {
         List<Transaction> executed = new ArrayList<>();
 
         for (Transaction transaction : transactions)
@@ -31,7 +32,7 @@ public class TransactionExecutor {
         return executed;
     }
 
-    private boolean executeTransaction(Transaction transaction, BlockData blockData) {
+    private boolean executeTransaction(Transaction transaction, BlockData blockData) throws IOException {
         Address sender = transaction.getSender();
 
         if (transaction.getNonce() != this.executionContext.getNonce(sender))
@@ -66,6 +67,8 @@ public class TransactionExecutor {
             catch (VirtualMachineException ex) {
                 // TODO revert all
                 return false;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 

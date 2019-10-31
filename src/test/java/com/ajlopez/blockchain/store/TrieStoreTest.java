@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -14,14 +15,14 @@ public class TrieStoreTest {
     private static Random random = new Random();
 
     @Test(expected = RuntimeException.class)
-    public void retrieveUnknownTrie() {
+    public void retrieveUnknownTrie() throws IOException {
         TrieStore store = new TrieStore(new HashMapStore());
 
         store.retrieve(FactoryHelper.createRandomHash());
     }
 
     @Test
-    public void saveAndRetrieveEmptyTrie() {
+    public void saveAndRetrieveEmptyTrie() throws IOException {
         TrieStore store = new TrieStore(new HashMapStore());
         Trie trie = new Trie();
 
@@ -34,7 +35,7 @@ public class TrieStoreTest {
     }
 
     @Test
-    public void retrieveEmptyTrieIfHashIsNull() {
+    public void retrieveEmptyTrieIfHashIsNull() throws IOException {
         TrieStore store = new TrieStore(new HashMapStore());
         Trie trie = store.retrieve(null);
 
@@ -43,7 +44,7 @@ public class TrieStoreTest {
     }
 
     @Test
-    public void saveAndRetrieveTrieWithKeyValue() {
+    public void saveAndRetrieveTrieWithKeyValue() throws IOException {
         byte[] value = new byte[32];
         random.nextBytes(value);
         byte[] key = new byte[2];
@@ -66,7 +67,7 @@ public class TrieStoreTest {
     }
 
     @Test
-    public void saveAndRetrieveTrieWithOneHundredKeyValues() {
+    public void saveAndRetrieveTrieWithOneHundredKeyValues() throws IOException {
         byte[][] values = new byte[100][];
         byte[][] keys = new byte[100][];
 
@@ -97,14 +98,14 @@ public class TrieStoreTest {
     }
 
     @Test
-    public void unknownHashDoesNotExists() {
+    public void unknownHashDoesNotExists() throws IOException {
         TrieStore store = new TrieStore(new HashMapStore());
 
         Assert.assertFalse(store.exists(FactoryHelper.createRandomHash()));
     }
 
     @Test
-    public void knownHashExists() {
+    public void knownHashExists() throws IOException {
         TrieStore store = new TrieStore(new HashMapStore());
 
         byte[] value = new byte[32];
@@ -119,7 +120,7 @@ public class TrieStoreTest {
     }
 
     @Test
-    public void emptyTryExists() {
+    public void emptyTryExists() throws IOException {
         TrieStore store = new TrieStore(new HashMapStore());
 
         Assert.assertTrue(store.exists(null));

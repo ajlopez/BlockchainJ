@@ -5,13 +5,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.xml.crypto.Data;
+import java.io.IOException;
 
 /**
  * Created by ajlopez on 20/02/2019.
  */
 public class ChildMapStorageTest {
     @Test
-    public void getUndefinedValue() {
+    public void getUndefinedValue() throws IOException {
         Storage parentStorage = new MapStorage();
         Storage storage = new ChildMapStorage(parentStorage);
 
@@ -21,7 +22,7 @@ public class ChildMapStorageTest {
     }
 
     @Test
-    public void getParentDefinedValue() {
+    public void getParentDefinedValue() throws IOException {
         Storage parentStorage = new MapStorage();
 
         parentStorage.setValue(DataWord.ONE, DataWord.ONE);
@@ -34,7 +35,7 @@ public class ChildMapStorageTest {
     }
 
     @Test
-    public void setAndGetValue() {
+    public void setAndGetValue() throws IOException {
         Storage parentStorage = new MapStorage();
 
         ChildMapStorage storage = new ChildMapStorage(parentStorage);
@@ -50,7 +51,7 @@ public class ChildMapStorageTest {
     }
 
     @Test
-    public void setCommitAndGetValue() {
+    public void setCommitAndGetValue() throws IOException {
         Storage parentStorage = new MapStorage();
 
         ChildMapStorage storage = new ChildMapStorage(parentStorage);

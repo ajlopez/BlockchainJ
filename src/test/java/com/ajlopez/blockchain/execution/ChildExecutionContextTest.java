@@ -18,12 +18,14 @@ import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 27/11/2018.
  */
 public class ChildExecutionContextTest {
     @Test
-    public void getZeroBalanceFromNewAccount() {
+    public void getZeroBalanceFromNewAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -36,7 +38,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void getBalanceFromAccountAndCommitDoesNotChangeStore() {
+    public void getBalanceFromAccountAndCommitDoesNotChangeStore() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Account account = new Account(Coin.TEN, 42, null, null);
         Address address = FactoryHelper.createRandomAddress();
@@ -64,7 +66,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void getZeroBalanceFromAccountAndCommitDoesNotChangeStore() {
+    public void getZeroBalanceFromAccountAndCommitDoesNotChangeStore() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -89,7 +91,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccount() {
+    public void incrementNonceAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -109,7 +111,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccountAndCommitOneLevel() {
+    public void incrementNonceAccountAndCommitOneLevel() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -133,7 +135,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccountAndCommitTwoLevels() {
+    public void incrementNonceAccountAndCommitTwoLevels() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -155,7 +157,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccountAndRollback() {
+    public void incrementNonceAccountAndRollback() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -179,7 +181,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void getNonceFromNewAccountAndCommit() {
+    public void getNonceFromNewAccountAndCommit() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -200,7 +202,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void transferToAccount() {
+    public void transferToAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -231,7 +233,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void transferToAccountAndCommitOneLevel() {
+    public void transferToAccountAndCommitOneLevel() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -271,7 +273,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void transferToAccountAndCommitTwoLevels() {
+    public void transferToAccountAndCommitTwoLevels() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -304,7 +306,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void transferToAccountAndRollback() {
+    public void transferToAccountAndRollback() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -336,7 +338,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void getNullCodeHashFromNewAccount() {
+    public void getNullCodeHashFromNewAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -348,7 +350,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void getNullStorageHashFromNewAccount() {
+    public void getNullStorageHashFromNewAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -360,7 +362,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void setAndGetCodeHashFromNewAccount() {
+    public void setAndGetCodeHashFromNewAccount() throws IOException {
         Hash codeHash = FactoryHelper.createRandomHash();
         Address address = FactoryHelper.createRandomAddress();
 
@@ -383,7 +385,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void getStorageFromNewAccountAndSetKeyValue() {
+    public void getStorageFromNewAccountAndSetKeyValue() throws IOException {
         Address address = FactoryHelper.createRandomAddress();
         AccountStore accountStore = new AccountStore(new Trie());
         KeyValueStore keyValueStore = new HashMapStore();
@@ -432,7 +434,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void getStorageFromNewAccountAndSetKeyValueAndRollback() {
+    public void getStorageFromNewAccountAndSetKeyValueAndRollback() throws IOException {
         Address address = FactoryHelper.createRandomAddress();
         AccountStore accountStore = new AccountStore(new Trie());
         KeyValueStore keyValueStore = new HashMapStore();

@@ -3,6 +3,8 @@ package com.ajlopez.blockchain.storage;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.KeyValueStore;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 13/08/2019.
  */
@@ -13,7 +15,7 @@ public class ChunkStore {
         this.store = store;
     }
 
-    public Chunk getChunk(Hash hash) {
+    public Chunk getChunk(Hash hash) throws IOException {
         byte[] data = this.store.getValue(hash.getBytes());
 
         if (data == null)
@@ -22,7 +24,7 @@ public class ChunkStore {
         return new Chunk(data);
     }
 
-    public void saveChunk(Chunk chunk) {
+    public void saveChunk(Chunk chunk) throws IOException {
         this.store.setValue(chunk.getHash().getBytes(), chunk.getData());
     }
 }

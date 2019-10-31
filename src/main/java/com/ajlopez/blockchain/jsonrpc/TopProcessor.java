@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.jsonrpc;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public class TopProcessor extends AbstractJsonRpcProcessor {
     private final Map<String, JsonRpcProcessor> processors = new HashMap<>();
 
     @Override
-    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException {
+    public JsonRpcResponse processRequest(JsonRpcRequest request) throws JsonRpcException, IOException {
         String method = request.getMethod();
 
         if (this.processors.containsKey(method))

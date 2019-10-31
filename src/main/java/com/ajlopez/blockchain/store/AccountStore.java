@@ -18,7 +18,7 @@ public class AccountStore {
         this.trie = trie;
     }
 
-    public Account getAccount(Address address) {
+    public Account getAccount(Address address) throws IOException {
         byte[] key = address.getBytes();
         byte[] value = this.trie.get(key);
 

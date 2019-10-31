@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.DataWord;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class ChildMapStorage extends MapStorage {
     }
 
     @Override
-    public boolean hasValue(DataWord address) {
+    public boolean hasValue(DataWord address) throws IOException {
         if (super.hasValue(address))
             return true;
 
@@ -32,7 +33,7 @@ public class ChildMapStorage extends MapStorage {
     }
 
     @Override
-    public DataWord getValue(DataWord address) {
+    public DataWord getValue(DataWord address) throws IOException {
         if (super.hasValue(address))
             return super.getValue(address);
 
@@ -44,7 +45,7 @@ public class ChildMapStorage extends MapStorage {
     }
 
     @Override
-    public void commit() {
+    public void commit() throws IOException {
         for (DataWord address : changed)
             this.parentStorage.setValue(address, super.getValue(address));
 

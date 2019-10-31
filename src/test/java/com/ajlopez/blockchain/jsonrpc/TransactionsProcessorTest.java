@@ -20,6 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class TransactionsProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void getUnknownTransaction() throws JsonRpcException {
+    public void getUnknownTransaction() throws JsonRpcException, IOException {
         TransactionPool transactionPool = new TransactionPool();
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 
@@ -50,7 +51,7 @@ public class TransactionsProcessorTest {
     }
 
     @Test
-    public void getTransaction() throws JsonRpcException {
+    public void getTransaction() throws JsonRpcException, IOException {
         TransactionPool transactionPool = new TransactionPool();
         Transaction transaction = FactoryHelper.createTransaction(1000);
         transactionPool.addTransaction(transaction);
@@ -88,7 +89,7 @@ public class TransactionsProcessorTest {
     }
 
     @Test
-    public void sendTransaction() throws JsonRpcException {
+    public void sendTransaction() throws JsonRpcException, IOException {
         TransactionPool transactionPool = new TransactionPool();
         TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
         Transaction transaction = FactoryHelper.createTransaction(1000);
@@ -114,7 +115,7 @@ public class TransactionsProcessorTest {
     }
 
     @Test
-    public void sendTransactionWithoutNonce() throws JsonRpcException {
+    public void sendTransactionWithoutNonce() throws JsonRpcException, IOException {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         BlockChain blockchain = FactoryHelper.createBlockChain(trieStore,10, 1);
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
@@ -151,7 +152,7 @@ public class TransactionsProcessorTest {
     }
 
     @Test
-    public void sendTwoTransactionsWithoutNonce() throws JsonRpcException {
+    public void sendTwoTransactionsWithoutNonce() throws JsonRpcException, IOException {
         TrieStore trieStore = new TrieStore(new HashMapStore());
         BlockChain blockchain = FactoryHelper.createBlockChain(trieStore,10, 1);
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
@@ -202,7 +203,7 @@ public class TransactionsProcessorTest {
     }
 
     @Test
-    public void unknownMethod() throws JsonRpcException {
+    public void unknownMethod() throws JsonRpcException, IOException {
         TransactionPool transactionPool = new TransactionPool();
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
 

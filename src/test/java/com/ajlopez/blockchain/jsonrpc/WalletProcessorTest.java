@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,7 @@ public class WalletProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void getNoAccount() throws JsonRpcException {
+    public void getNoAccount() throws JsonRpcException, IOException {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_accounts", params);
 
@@ -44,7 +45,7 @@ public class WalletProcessorTest {
     }
 
     @Test
-    public void getAccounts() throws JsonRpcException {
+    public void getAccounts() throws JsonRpcException, IOException {
         List<Address> addresses = FactoryHelper.createRandomAddresses(10);
 
         List<JsonValue> params = new ArrayList<>();
@@ -74,7 +75,7 @@ public class WalletProcessorTest {
     }
 
     @Test
-    public void unknownMethod() throws JsonRpcException {
+    public void unknownMethod() throws JsonRpcException, IOException {
         List<JsonValue> params = new ArrayList<>();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);
 
@@ -86,7 +87,7 @@ public class WalletProcessorTest {
     }
 
     @Test
-    public void invalidNumberOfParameters() throws JsonRpcException {
+    public void invalidNumberOfParameters() throws JsonRpcException, IOException {
         List<JsonValue> params = Collections.singletonList(JsonConverter.convert("foo"));
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_accounts", params);
 

@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.TrieStore;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -14,12 +15,12 @@ public class TrieCollector {
     private final TrieStore trieStore;
     private final Set<Hash> pendingHashes = new HashSet<>();
 
-    public TrieCollector(TrieStore trieStore, Hash expectedHash) {
+    public TrieCollector(TrieStore trieStore, Hash expectedHash) throws IOException {
         this.trieStore = trieStore;
         this.expectHash(expectedHash);
     }
 
-    public boolean expectHash(Hash expectedHash) {
+    public boolean expectHash(Hash expectedHash) throws IOException {
         if (this.trieStore.exists(expectedHash))
             return false;
 
@@ -31,7 +32,7 @@ public class TrieCollector {
         return true;
     }
 
-    public Set<Hash> saveNode(byte[] nodeData) {
+    public Set<Hash> saveNode(byte[] nodeData) throws IOException {
         Trie trie = Trie.fromEncoded(nodeData, this.trieStore);
         Hash trieHash = trie.getHash();
 

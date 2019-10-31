@@ -10,6 +10,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class BlockJsonEncoderTest {
     @Test
-    public void encodeBlockWithoutTransactions() {
+    public void encodeBlockWithoutTransactions() throws IOException {
         Block block = FactoryHelper.createBlockChain(1).getBlockByNumber(1);
 
         JsonValue result = BlockJsonEncoder.encode(block);
@@ -56,7 +57,7 @@ public class BlockJsonEncoderTest {
     }
 
     @Test
-    public void encodeBlockWithTransactions() {
+    public void encodeBlockWithTransactions() throws IOException {
         Block block = FactoryHelper.createBlockChain(1, 10).getBlockByNumber(1);
 
         Assert.assertEquals(10, block.getTransactions().size());

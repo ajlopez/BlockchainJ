@@ -16,6 +16,7 @@ import com.ajlopez.blockchain.vms.eth.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public class TransactionExecutorTest {
     @Test
-    public void executeTransaction() {
+    public void executeTransaction() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
@@ -58,7 +59,7 @@ public class TransactionExecutorTest {
     }
 
     @Test
-    public void executeTransactionWithGasPrice() {
+    public void executeTransactionWithGasPrice() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 100000);
@@ -97,7 +98,7 @@ public class TransactionExecutorTest {
     }
 
     @Test
-    public void executeTwoTransactions() {
+    public void executeTwoTransactions() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
@@ -135,7 +136,7 @@ public class TransactionExecutorTest {
     }
 
     @Test
-    public void secondTransactionRejectedByNonce() {
+    public void secondTransactionRejectedByNonce() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
@@ -172,7 +173,7 @@ public class TransactionExecutorTest {
     }
 
     @Test
-    public void secondTransactionRejectedByInsufficientBalance() {
+    public void secondTransactionRejectedByInsufficientBalance() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
@@ -208,7 +209,7 @@ public class TransactionExecutorTest {
     }
 
     @Test
-    public void secondTransactionRejectedByInsufficientBalanceToCoverGasLimit() {
+    public void secondTransactionRejectedByInsufficientBalanceToCoverGasLimit() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
@@ -244,7 +245,7 @@ public class TransactionExecutorTest {
     }
 
     @Test
-    public void execute999Transactions() {
+    public void execute999Transactions() throws IOException {
         int ntxs = 1000;
         AccountStore accountStore = new AccountStore(new Trie());
 
@@ -280,12 +281,12 @@ public class TransactionExecutorTest {
         Assert.assertEquals(transactions.size(), executed.size());
     }
 
-    private static Storage executeTransactionInvokingCode(byte[] code) {
+    private static Storage executeTransactionInvokingCode(byte[] code) throws IOException {
         return executeTransactionInvokingCode(code, FactoryHelper.createRandomAddress(), FactoryHelper.createRandomAddress());
     }
 
     @Test
-    public void executeTransactionInvokingContractCode() {
+    public void executeTransactionInvokingContractCode() throws IOException {
         byte[] code = new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x00, OpCodes.SSTORE };
 
         Storage storage = executeTransactionInvokingCode(code);
@@ -295,7 +296,7 @@ public class TransactionExecutorTest {
     }
 
     @Test
-    public void executeTransactionInvokingContractCodeUsingData() {
+    public void executeTransactionInvokingContractCodeUsingData() throws IOException {
         byte[] code = new byte[] { OpCodes.PUSH1, 0x00, OpCodes.CALLDATALOAD, OpCodes.PUSH1, 0x00, OpCodes.SSTORE };
 
         Storage storage = executeTransactionInvokingCode(code);
@@ -305,7 +306,7 @@ public class TransactionExecutorTest {
     }
 
     @Test
-    public void executeTransactionInvokingContractCodeGettingMessageData() {
+    public void executeTransactionInvokingContractCodeGettingMessageData() throws IOException {
         byte[] code = new byte[] {
                 OpCodes.ORIGIN, OpCodes.PUSH1, 0x00, OpCodes.SSTORE,
                 OpCodes.CALLER, OpCodes.PUSH1, 0x01, OpCodes.SSTORE,
@@ -330,7 +331,7 @@ public class TransactionExecutorTest {
     }
 
     @Test
-    public void executeTransactionInvokingContractCodeGettingBlockData() {
+    public void executeTransactionInvokingContractCodeGettingBlockData() throws IOException {
         byte[] code = new byte[] {
                 OpCodes.NUMBER, OpCodes.PUSH1, 0x00, OpCodes.SSTORE,
                 OpCodes.TIMESTAMP, OpCodes.PUSH1, 0x01, OpCodes.SSTORE,
@@ -351,14 +352,13 @@ public class TransactionExecutorTest {
         Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.fromUnsignedInteger(3)));
     }
 
-    private static Storage executeTransactionInvokingCode(byte[] code, Address senderAddress, Address receiverAddress)
-    {
+    private static Storage executeTransactionInvokingCode(byte[] code, Address senderAddress, Address receiverAddress) throws IOException {
         Address coinbase = FactoryHelper.createRandomAddress();
 
         return executeTransactionInvokingCode(code, coinbase, senderAddress, receiverAddress);
     }
 
-    private static Storage executeTransactionInvokingCode(byte[] code, Address coinbase, Address senderAddress, Address receiverAddress) {
+    private static Storage executeTransactionInvokingCode(byte[] code, Address coinbase, Address senderAddress, Address receiverAddress) throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
         AccountStore accountStore = new AccountStore(new Trie());

@@ -11,6 +11,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -60,7 +61,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void addFirstBlock() {
+    public void addFirstBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -81,7 +82,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void addFirstBlockAndEmitNewBestBlock() {
+    public void addFirstBlockAndEmitNewBestBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         BlockConsumer consumer = new BlockConsumer();
@@ -110,7 +111,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void addOrphanBlock() {
+    public void addOrphanBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -125,7 +126,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void getUnknownAncestorHash() {
+    public void getUnknownAncestorHash() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -145,7 +146,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void getNotOrphanUnknownAncestorHash() {
+    public void getNotOrphanUnknownAncestorHash() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -158,7 +159,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void getNullUnknownAncestorHash() {
+    public void getNullUnknownAncestorHash() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         BlockHash hash = processor.getUnknownAncestorHash(null);
@@ -167,7 +168,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void addOrphanBlockAndNoEmitNewBestBlock() {
+    public void addOrphanBlockAndNoEmitNewBestBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         BlockConsumer consumer = new BlockConsumer();
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -182,7 +183,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void switchToABetterForkUsingOrphan() {
+    public void switchToABetterForkUsingOrphan() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -216,7 +217,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void switchToABetterForkUsingOrphanAndEmitNewBestBlock() {
+    public void switchToABetterForkUsingOrphanAndEmitNewBestBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 

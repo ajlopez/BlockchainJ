@@ -14,6 +14,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -21,7 +22,7 @@ import java.util.Set;
  */
 public class WarpProcessorTest {
     @Test
-    public void processEmptyBlock() {
+    public void processEmptyBlock() throws IOException {
         Block block = GenesisGenerator.generateGenesis();
         TrieStore accountStore = new TrieStore(new HashMapStore());
 
@@ -46,7 +47,7 @@ public class WarpProcessorTest {
     }
 
     @Test
-    public void processBlockWithTransactions() {
+    public void processBlockWithTransactions() throws IOException {
         Block block = FactoryHelper.createBlockChain(1, 10).getBlockByNumber(1);
         TrieStore accountStore = new TrieStore(new HashMapStore());
 
@@ -68,7 +69,7 @@ public class WarpProcessorTest {
     }
 
     @Test
-    public void processBlockWithTransactionsTwice() {
+    public void processBlockWithTransactionsTwice() throws IOException {
         Block block = FactoryHelper.createBlockChain(1, 10).getBlockByNumber(1);
         TrieStore accountStore = new TrieStore(new HashMapStore());
 
@@ -91,7 +92,7 @@ public class WarpProcessorTest {
     }
 
     @Test
-    public void processBlockWithTransactionsAndTopNode() {
+    public void processBlockWithTransactionsAndTopNode() throws IOException {
         KeyValueStore keyValueStore0 = new HashMapStore();
         TrieStore trieStore0 = new TrieStore(keyValueStore0);
 
@@ -119,7 +120,7 @@ public class WarpProcessorTest {
 
 
     @Test
-    public void processAccountNodeWithRandomTopHash() {
+    public void processAccountNodeWithRandomTopHash() throws IOException {
         TrieStore accountStore = new TrieStore(new HashMapStore());
 
         WarpProcessor processor = new WarpProcessor(accountStore);
@@ -131,7 +132,7 @@ public class WarpProcessorTest {
     }
 
     @Test
-    public void copyCompleteStateOfBlockWithTransactions() {
+    public void copyCompleteStateOfBlockWithTransactions() throws IOException {
         KeyValueStore keyValueStore0 = new HashMapStore();
         TrieStore trieStore0 = new TrieStore(keyValueStore0);
 

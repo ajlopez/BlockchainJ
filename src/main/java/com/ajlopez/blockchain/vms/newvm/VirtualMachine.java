@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.newvm;
 
 import com.ajlopez.blockchain.utils.ByteUtils;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Stack;
@@ -34,7 +35,7 @@ public class VirtualMachine {
         return this.memory;
     }
 
-    public void execute(byte[] opcodes) throws VirtualMachineException {
+    public void execute(byte[] opcodes) throws VirtualMachineException, IOException {
         this.pc = 0;
         this.opcodes = opcodes;
         this.jumpdests = makeJumpDests(opcodes);
@@ -45,7 +46,7 @@ public class VirtualMachine {
             execute(opcodes[pc]);
     }
 
-    private void execute(byte opcode) throws VirtualMachineException {
+    private void execute(byte opcode) throws VirtualMachineException, IOException {
         BigInteger value1;
         BigInteger value2;
 

@@ -12,6 +12,7 @@ import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +88,7 @@ public class World {
         this.blocks.put(name, block);
     }
 
-    public Account getAccount(String name) {
+    public Account getAccount(String name) throws IOException {
         if (!this.accounts.containsKey(name))
             return null;
 
@@ -104,11 +105,11 @@ public class World {
         this.accountStore.putAccount(address, account);
     }
 
-    public void setCode(Hash codeHash, byte[] code) {
+    public void setCode(Hash codeHash, byte[] code) throws IOException {
         this.codeStore.putCode(codeHash, code);
     }
 
-    public byte[] getCode(Hash codeHash) {
+    public byte[] getCode(Hash codeHash) throws IOException {
         return this.codeStore.getCode(codeHash);
     }
 

@@ -17,6 +17,7 @@ import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +26,14 @@ import java.util.List;
  */
 public class WorldTest {
     @Test
-    public void getUnknownAccount() {
+    public void getUnknownAccount() throws IOException {
         World world = new World();
 
         Assert.assertNull(world.getAccount("foo"));
     }
 
     @Test
-    public void setAndGetAccount() {
+    public void setAndGetAccount() throws IOException {
         World world = new World();
         Account account = new Account();
 
@@ -236,7 +237,7 @@ public class WorldTest {
     }
 
     @Test
-    public void getUnknownCode() {
+    public void getUnknownCode() throws IOException {
         Hash codeHash = FactoryHelper.createRandomHash();
         World world = new World();
 
@@ -244,7 +245,7 @@ public class WorldTest {
     }
 
     @Test
-    public void setAndGetCode() {
+    public void setAndGetCode() throws IOException {
         byte[] code = FactoryHelper.createRandomBytes(42);
         Hash hash = HashUtils.calculateHash(code);
 

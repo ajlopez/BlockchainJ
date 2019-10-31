@@ -5,6 +5,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
 import java.util.Stack;
 
 /**
@@ -16,7 +17,7 @@ public class VirtualMachineTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void executeEmptyOpCodes() throws VirtualMachineException {
+    public void executeEmptyOpCodes() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[0]);
@@ -27,7 +28,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executePushThreeBytes() throws VirtualMachineException {
+    public void executePushThreeBytes() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x03, 0x01, 0x02, 0x03 });
@@ -40,7 +41,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executePushAndPop() throws VirtualMachineException {
+    public void executePushAndPop() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x03, 0x01, 0x02, 0x03, OpCodes.OP_POP });
@@ -51,7 +52,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeAddTwoBytes() throws VirtualMachineException {
+    public void executeAddTwoBytes() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_ADD });
@@ -64,7 +65,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeAddTwoBytesWithOverflow() throws VirtualMachineException {
+    public void executeAddTwoBytesWithOverflow() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, (byte)0xff, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_ADD });
@@ -77,7 +78,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeMultiplyTwoBytes() throws VirtualMachineException {
+    public void executeMultiplyTwoBytes() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, (byte)0xff, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_MULTIPLY });
@@ -90,7 +91,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeDivideTwoBytes() throws VirtualMachineException {
+    public void executeDivideTwoBytes() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x54, OpCodes.OP_DIVIDE });
@@ -103,7 +104,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSubtractTwoBytes() throws VirtualMachineException {
+    public void executeSubtractTwoBytes() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_SUBTRACT });
@@ -116,7 +117,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSubtractTwoBytesWithUnsignedIntegers() throws VirtualMachineException {
+    public void executeSubtractTwoBytesWithUnsignedIntegers() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x02, 0x01, 0x00, OpCodes.OP_SUBTRACT });
@@ -129,7 +130,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeModTwoBytes() throws VirtualMachineException {
+    public void executeModTwoBytes() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x03, OpCodes.OP_PUSH, 0x01, 0x08, OpCodes.OP_MOD });
@@ -142,7 +143,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeExpTwoBytes() throws VirtualMachineException {
+    public void executeExpTwoBytes() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x03, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_EXP });
@@ -155,7 +156,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeDupTopOfStack() throws VirtualMachineException {
+    public void executeDupTopOfStack() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_DUP, 0x00 });
@@ -169,7 +170,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeDupSecondElementOfStack() throws VirtualMachineException {
+    public void executeDupSecondElementOfStack() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_DUP, 0x01 });
@@ -184,7 +185,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSwapOfStack() throws VirtualMachineException {
+    public void executeSwapOfStack() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_SWAP, 0x01 });
@@ -198,7 +199,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSwapOfThirdElementOfStack() throws VirtualMachineException {
+    public void executeSwapOfThirdElementOfStack() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x03, OpCodes.OP_SWAP, 0x02 });
@@ -213,7 +214,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeEqualTwoElementsOfStack() throws VirtualMachineException {
+    public void executeEqualTwoElementsOfStack() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_EQUAL});
@@ -226,7 +227,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeEqualTwoDifferentElementsOfStack() throws VirtualMachineException {
+    public void executeEqualTwoDifferentElementsOfStack() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_EQUAL});
@@ -239,7 +240,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLessThanTwoElementsOfStack() throws VirtualMachineException {
+    public void executeLessThanTwoElementsOfStack() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x10, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_LT});
@@ -252,7 +253,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLessThanTwoElementsOfStackGivenFalse() throws VirtualMachineException {
+    public void executeLessThanTwoElementsOfStackGivenFalse() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x10, OpCodes.OP_PUSH, 0x01, 0x20, OpCodes.OP_LT});
@@ -266,7 +267,7 @@ public class VirtualMachineTest {
 
 
     @Test
-    public void executeGreaterThanTwoElementsOfStack() throws VirtualMachineException {
+    public void executeGreaterThanTwoElementsOfStack() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x10, OpCodes.OP_GT});
@@ -279,7 +280,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeGreaterThanTwoElementsOfStackGivenFalse() throws VirtualMachineException {
+    public void executeGreaterThanTwoElementsOfStackGivenFalse() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x20, OpCodes.OP_PUSH, 0x01, 0x10, OpCodes.OP_GT});
@@ -292,7 +293,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeStoreValueToStorage() throws VirtualMachineException {
+    public void executeStoreValueToStorage() throws VirtualMachineException, IOException {
         Storage storage = new Storage();
         VirtualMachine vm = new VirtualMachine(storage);
 
@@ -305,7 +306,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLoadValueFromStorage() throws VirtualMachineException {
+    public void executeLoadValueFromStorage() throws VirtualMachineException, IOException {
         Storage storage = new Storage();
         storage.setValue(new byte[] { 0x01, 0x02 }, new byte[] { 0x03, 0x04, 0x05 });
         VirtualMachine vm = new VirtualMachine(storage);
@@ -320,7 +321,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeStoreValueToMemory() throws VirtualMachineException {
+    public void executeStoreValueToMemory() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_MSTORE});
@@ -332,7 +333,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeStoreMultiByteValueToMemory() throws VirtualMachineException {
+    public void executeStoreMultiByteValueToMemory() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x02, 0x01, 0x02, OpCodes.OP_PUSH, 0x01, 0x02, OpCodes.OP_MSTORE});
@@ -345,7 +346,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLoadValueFromMemory() throws VirtualMachineException {
+    public void executeLoadValueFromMemory() throws VirtualMachineException, IOException {
         Storage storage = new Storage();
         VirtualMachine vm = new VirtualMachine(storage);
         vm.getMemory().setValue(0x0102, (byte)0x03);
@@ -360,7 +361,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeJumpToJumpDest() throws VirtualMachineException {
+    public void executeJumpToJumpDest() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_JUMP, 0x01, 0x06, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_JUMPDEST, OpCodes.OP_PUSH, 0x01, 0x02 });
@@ -373,7 +374,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeJumpWithoutJumpDestRaiseException() throws VirtualMachineException {
+    public void executeJumpWithoutJumpDestRaiseException() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         exception.expect(VirtualMachineException.class);
@@ -382,7 +383,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeJumpToFalseJumpDestRaiseException() throws VirtualMachineException {
+    public void executeJumpToFalseJumpDestRaiseException() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         exception.expect(VirtualMachineException.class);
@@ -391,7 +392,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeJumpIfZeroToJumpDest() throws VirtualMachineException {
+    public void executeJumpIfZeroToJumpDest() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         vm.execute(new byte[] { OpCodes.OP_PUSH, 0x01, 0x00, OpCodes.OP_JUMPI, 0x01, 0x09, OpCodes.OP_PUSH, 0x01, 0x01, OpCodes.OP_JUMPDEST, OpCodes.OP_PUSH, 0x01, 0x02 });
@@ -404,7 +405,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeJumpIfZeroWithoutJumpDestRaiseException() throws VirtualMachineException {
+    public void executeJumpIfZeroWithoutJumpDestRaiseException() throws VirtualMachineException, IOException {
         VirtualMachine vm = new VirtualMachine(null);
 
         exception.expect(VirtualMachineException.class);

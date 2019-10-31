@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Set;
  */
 public class TrieCollectorTest {
     @Test
-    public void processEmptyTrie() {
+    public void processEmptyTrie() throws IOException {
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
 
@@ -36,7 +37,7 @@ public class TrieCollectorTest {
     }
 
     @Test
-    public void processTrieWithOneKeyValue() {
+    public void processTrieWithOneKeyValue() throws IOException {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 
@@ -67,7 +68,7 @@ public class TrieCollectorTest {
     }
 
     @Test
-    public void processTrieWithOneKeyValueTwice() {
+    public void processTrieWithOneKeyValueTwice() throws IOException {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 
@@ -100,7 +101,7 @@ public class TrieCollectorTest {
     }
 
     @Test
-    public void processTrieThatIsAlreadyInStore() {
+    public void processTrieThatIsAlreadyInStore() throws IOException {
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
 
@@ -118,7 +119,7 @@ public class TrieCollectorTest {
     }
 
     @Test
-    public void processUnexpectedTrie() {
+    public void processUnexpectedTrie() throws IOException {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
         byte[] key2 = FactoryHelper.createRandomBytes(32);

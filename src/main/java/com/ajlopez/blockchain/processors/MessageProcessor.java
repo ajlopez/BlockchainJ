@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.*;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class MessageProcessor {
         this.warpProcessor = warpProcessor;
     }
 
-    public void processMessage(Message message, Peer sender) {
+    public void processMessage(Message message, Peer sender) throws IOException {
         MessageType msgtype = message.getMessageType();
 
         if (msgtype == MessageType.BLOCK)
@@ -45,7 +46,7 @@ public class MessageProcessor {
             this.processTrieNodeMessage((TrieNodeMessage)message);
     }
 
-    private void processBlockMessage(BlockMessage message, Peer sender) {
+    private void processBlockMessage(BlockMessage message, Peer sender) throws IOException {
         List<Block> processed = this.blockProcessor.processBlock(message.getBlock());
 
         if (this.outputProcessor == null)
@@ -129,7 +130,7 @@ public class MessageProcessor {
             outputProcessor.postMessage(sender, new BlockMessage(block));
     }
 
-    private void processTrieNodeMessage(TrieNodeMessage message) {
+    private void processTrieNodeMessage(TrieNodeMessage message) throws IOException {
         this.warpProcessor.processAccountNode(message.getTopHash(), message.getTrieNode());
     }
 }

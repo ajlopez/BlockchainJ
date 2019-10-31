@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import sun.security.smartcardio.SunPCSC;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeAccountCommand() {
+    public void executeAccountCommand() throws IOException {
         String verb = "account";
         List<String> arguments = new ArrayList<>();
         arguments.add("acc1");
@@ -79,7 +80,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeAccountCommandWithCode() {
+    public void executeAccountCommandWithCode() throws IOException {
         String verb = "account";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=acc1");
@@ -107,7 +108,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeAccountCommandUsingNamedArguments() {
+    public void executeAccountCommandUsingNamedArguments() throws IOException {
         String verb = "account";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=acc1");
@@ -127,7 +128,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeAccountCommandUsingNamedArgumentsAndDefaultArguments() {
+    public void executeAccountCommandUsingNamedArgumentsAndDefaultArguments() throws IOException {
         String verb = "account";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=acc1");
@@ -145,7 +146,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeTransactionCommand() {
+    public void executeTransactionCommand() throws IOException {
         String verb = "transaction";
         Address from = FactoryHelper.createRandomAddress();
         Address to = FactoryHelper.createRandomAddress();
@@ -172,7 +173,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeTransactionCommandUsingNamedArguments() {
+    public void executeTransactionCommandUsingNamedArguments() throws IOException {
         String verb = "transaction";
         Address from = FactoryHelper.createRandomAddress();
         Address to = FactoryHelper.createRandomAddress();
@@ -199,7 +200,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommand() {
+    public void executeBlockCommand() throws IOException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("blk1");
@@ -220,7 +221,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommandWithTransactions() {
+    public void executeBlockCommandWithTransactions() throws IOException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("blk1");
@@ -250,7 +251,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommandUsingDefaultParent() {
+    public void executeBlockCommandUsingDefaultParent() throws IOException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("blk1");
@@ -268,7 +269,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommandUsingNamedArguments() {
+    public void executeBlockCommandUsingNamedArguments() throws IOException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=blk1");
@@ -287,7 +288,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommandUsingNamedArgumentsWithTransactions() {
+    public void executeBlockCommandUsingNamedArgumentsWithTransactions() throws IOException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=blk1");
@@ -317,7 +318,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeConnectBlock() {
+    public void executeConnectBlock() throws IOException {
         World world = new World();
         Block genesis = world.getBlock("genesis");
         Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
@@ -340,7 +341,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeConnectBlockUsingNamedArgument() {
+    public void executeConnectBlockUsingNamedArgument() throws IOException {
         World world = new World();
         Block genesis = world.getBlock("genesis");
         Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);

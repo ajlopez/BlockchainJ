@@ -12,6 +12,7 @@ import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -35,7 +36,7 @@ public class MinerProcessor {
         this.coinbase = coinbase;
     }
 
-    public Block process() {
+    public Block process() throws IOException {
         Block bestBlock = this.blockChain.getBestBlock();
 
         Block newBlock = this.mineBlock(bestBlock);
@@ -49,7 +50,7 @@ public class MinerProcessor {
         this.minedBlockConsumers.add(consumer);
     }
 
-    public Block mineBlock(Block parent) {
+    public Block mineBlock(Block parent) throws IOException {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
         AccountStore accountStore = this.accountStoreProvider.retrieve(parentStateRootHash);
         // TODO set storage provider, code store

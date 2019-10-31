@@ -4,12 +4,14 @@ import com.ajlopez.blockchain.core.types.DataWord;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 09/12/2018.
  */
 public class MapStorageTest {
     @Test
-    public void getZeroIfUndefinedValue() {
+    public void getZeroIfUndefinedValue() throws IOException {
         Storage storage = new MapStorage();
 
         DataWord result = storage.getValue(DataWord.fromHexadecimalString("0102"));
@@ -19,7 +21,7 @@ public class MapStorageTest {
     }
 
     @Test
-    public void setAndGetValue() {
+    public void setAndGetValue() throws IOException {
         Storage storage = new MapStorage();
         DataWord address = DataWord.fromHexadecimalString("0x010203");
         DataWord value = DataWord.fromHexadecimalString("2a");
@@ -33,7 +35,7 @@ public class MapStorageTest {
     }
 
     @Test
-    public void setZeroAndGetValue() {
+    public void setZeroAndGetValue() throws IOException {
         Storage storage = new MapStorage();
         DataWord address = DataWord.fromHexadecimalString("0x010203");
 
@@ -46,7 +48,7 @@ public class MapStorageTest {
     }
 
     @Test
-    public void setResetAndGetValue() {
+    public void setResetAndGetValue() throws IOException {
         Storage storage = new MapStorage();
         DataWord address = DataWord.fromHexadecimalString("0x010203");
         DataWord value = DataWord.fromHexadecimalString("2a");

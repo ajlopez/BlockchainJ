@@ -16,6 +16,7 @@ import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import java.util.List;
  */
 public class BlockExecutorTest {
     @Test
-    public void executeBlockWithoutTransactions() {
+    public void executeBlockWithoutTransactions() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
@@ -41,7 +42,7 @@ public class BlockExecutorTest {
     }
 
     @Test
-    public void executeBlockWithOneTransaction() {
+    public void executeBlockWithOneTransaction() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
@@ -71,7 +72,7 @@ public class BlockExecutorTest {
     }
 
     @Test
-    public void executeBlockWithOneTransactionGettingBlockData() {
+    public void executeBlockWithOneTransactionGettingBlockData() throws IOException {
         byte[] code = new byte[] {
                 OpCodes.NUMBER, OpCodes.PUSH1, 0x00, OpCodes.SSTORE,
                 OpCodes.TIMESTAMP, OpCodes.PUSH1, 0x01, OpCodes.SSTORE,
@@ -131,7 +132,7 @@ public class BlockExecutorTest {
     }
 
     @Test
-    public void executeBlockWithOneTransactionWithInvalidNonce() {
+    public void executeBlockWithOneTransactionWithInvalidNonce() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
@@ -161,7 +162,7 @@ public class BlockExecutorTest {
     }
 
     @Test
-    public void executeBlockWithOneTransactionWithSenderWithoutEnoughBalance() {
+    public void executeBlockWithOneTransactionWithSenderWithoutEnoughBalance() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
