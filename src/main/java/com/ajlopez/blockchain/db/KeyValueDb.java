@@ -13,7 +13,7 @@ public class KeyValueDb implements KeyValueStore {
 
     public KeyValueDb(String name, int keyLength) throws IOException {
         this.valueFile = new ValueFile(name + ".values");
-        this.keyFile = new KeyFile(name + ".values", keyLength);
+        this.keyFile = new KeyFile(name + ".keys", keyLength);
     }
 
     @Override

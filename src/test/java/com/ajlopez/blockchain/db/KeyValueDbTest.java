@@ -24,4 +24,13 @@ public class KeyValueDbTest {
         Assert.assertNotNull(result);
         Assert.assertArrayEquals(value, result);
     }
+
+    @Test
+    public void retrieveUnknownValueAsNull() throws IOException {
+        KeyValueDb keyValueDb = new KeyValueDb("data1", 32);
+
+        byte[] key = FactoryHelper.createRandomBytes(32);
+
+        Assert.assertNull(keyValueDb.getValue(key));
+    }
 }
