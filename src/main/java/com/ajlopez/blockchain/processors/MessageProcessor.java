@@ -29,21 +29,27 @@ public class MessageProcessor {
         this.warpProcessor = warpProcessor;
     }
 
-    public void processMessage(Message message, Peer sender) throws IOException {
+    public void processMessage(Message message, Peer sender) {
         MessageType msgtype = message.getMessageType();
 
-        if (msgtype == MessageType.BLOCK)
-            this.processBlockMessage((BlockMessage)message, sender);
-        else if (msgtype == MessageType.GET_BLOCK_BY_HASH)
-            this.processGetBlockByHashMessage((GetBlockByHashMessage) message, sender);
-        else if (msgtype == MessageType.GET_BLOCK_BY_NUMBER)
-            this.processGetBlockByNumberMessage((GetBlockByNumberMessage) message, sender);
-        else if (msgtype == MessageType.TRANSACTION)
-            this.processTransactionMessage((TransactionMessage)message, sender);
-        else if (msgtype == MessageType.STATUS)
-            this.processStatusMessage((StatusMessage)message, sender);
-        else if (msgtype == MessageType.TRIE_NODE)
-            this.processTrieNodeMessage((TrieNodeMessage)message);
+        try {
+            if (msgtype == MessageType.BLOCK)
+                this.processBlockMessage((BlockMessage) message, sender);
+            else if (msgtype == MessageType.GET_BLOCK_BY_HASH)
+                this.processGetBlockByHashMessage((GetBlockByHashMessage) message, sender);
+            else if (msgtype == MessageType.GET_BLOCK_BY_NUMBER)
+                this.processGetBlockByNumberMessage((GetBlockByNumberMessage) message, sender);
+            else if (msgtype == MessageType.TRANSACTION)
+                this.processTransactionMessage((TransactionMessage) message, sender);
+            else if (msgtype == MessageType.STATUS)
+                this.processStatusMessage((StatusMessage) message, sender);
+            else if (msgtype == MessageType.TRIE_NODE)
+                this.processTrieNodeMessage((TrieNodeMessage) message);
+        }
+        catch (IOException ex) {
+            // Add to logger
+            ex.printStackTrace();
+        }
     }
 
     private void processBlockMessage(BlockMessage message, Peer sender) throws IOException {
