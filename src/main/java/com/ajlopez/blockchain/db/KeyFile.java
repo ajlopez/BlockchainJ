@@ -67,6 +67,10 @@ public class KeyFile {
         return this.keys.get(new ByteArrayWrapper(key));
     }
 
+    public boolean containsKey(byte[] key) {
+        return this.keys.containsKey(new ByteArrayWrapper(key));
+    }
+
     public void close() throws IOException {
         this.file.close();
     }

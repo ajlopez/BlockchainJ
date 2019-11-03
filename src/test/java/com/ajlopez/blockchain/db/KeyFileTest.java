@@ -22,6 +22,8 @@ public class KeyFileTest {
 
         byte[] key = FactoryHelper.createRandomBytes(32);
 
+        Assert.assertFalse(keyFile.containsKey(key));
+
         keyFile.writeKey(key, 0L, 42);
 
         ValueInfo result = keyFile.readKey(key);
@@ -29,6 +31,7 @@ public class KeyFileTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(0L, result.position);
         Assert.assertEquals(42, result.length);
+        Assert.assertTrue(keyFile.containsKey(key));
     }
 
     @Test

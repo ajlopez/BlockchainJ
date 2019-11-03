@@ -42,3 +42,5 @@ target/
 #Classes
 classes/
 
+*.data
+
