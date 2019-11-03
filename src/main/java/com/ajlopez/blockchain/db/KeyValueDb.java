@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.db;
 import com.ajlopez.blockchain.store.KeyValueStore;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by ajlopez on 20/10/2019.
@@ -18,6 +19,15 @@ public class KeyValueDb implements KeyValueStore {
 
     @Override
     public void setValue(byte[] key, byte[] value) throws IOException {
+        if (this.keyFile.containsKey(key)) {
+            byte[] oldvalue = this.getValue(key);
+
+            if (!Arrays.equals(value, oldvalue))
+                throw new IllegalStateException("cannot change value for key");
+
+            return;
+        }
+
         long position = this.valueFile.writeValue(value);
         this.keyFile.writeKey(key, position, value.length);
     }
