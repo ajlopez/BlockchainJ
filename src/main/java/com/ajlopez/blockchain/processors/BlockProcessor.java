@@ -46,22 +46,22 @@ public class BlockProcessor {
 
         Block initialBestBlock = this.getBestBlock();
 
-        if (blockChain.connectBlock(block)) {
-            List<Block> connectedBlocks = new ArrayList<>();
-            connectedBlocks.add(block);
-            connectedBlocks.addAll(connectDescendants(block));
+        if (!blockChain.connectBlock(block)) {
+            orphanBlocks.addToOrphans(block);
 
-            Block newBestBlock = this.getBestBlock();
-
-            if (initialBestBlock == null || !newBestBlock.getHash().equals(initialBestBlock.getHash()))
-                emitNewBestBlock(newBestBlock);
-
-            return connectedBlocks;
+            return emptyList;
         }
 
-        orphanBlocks.addToOrphans(block);
+        List<Block> connectedBlocks = new ArrayList<>();
+        connectedBlocks.add(block);
+        connectedBlocks.addAll(connectDescendants(block));
 
-        return emptyList;
+        Block newBestBlock = this.getBestBlock();
+
+        if (initialBestBlock == null || !newBestBlock.getHash().equals(initialBestBlock.getHash()))
+            emitNewBestBlock(newBestBlock);
+
+        return connectedBlocks;
     }
 
     public Block getBestBlock() {
