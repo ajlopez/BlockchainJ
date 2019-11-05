@@ -62,4 +62,35 @@ public class BlockForkTest {
         for (Block b : toBeAdded)
             Assert.assertTrue(blockFork.getNewBlocks().contains(b));
     }
+
+    @Test
+    public void processOneBestBlocks() throws IOException {
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithAccount(senderAddress, 1000000, trieStore, 0, 0);
+
+        FactoryHelper.extendBlockChainWithBlocks(accountStoreProvider, blockChain, 3, 0, null, 0);
+
+        Block bestBlock = blockChain.getBestBlock();
+
+        Assert.assertNotNull(bestBlock);
+        Assert.assertEquals(3, bestBlock.getNumber());
+
+        List<Block> toBeAdded = new ArrayList<>();
+
+        for (int k = 0; k <= 3; k++)
+            toBeAdded.add(blockChain.getBlockByNumber(k));
+
+        BlockFork blockFork = BlockFork.fromBlocks(blockChain, null, bestBlock);
+
+        Assert.assertNotNull(blockFork);
+        Assert.assertNotNull(blockFork.getOldBlocks());
+        Assert.assertEquals(0, blockFork.getOldBlocks().size());
+        Assert.assertNotNull(blockFork.getNewBlocks());
+        Assert.assertEquals(4, blockFork.getNewBlocks().size());
+
+        for (Block b : toBeAdded)
+            Assert.assertTrue(blockFork.getNewBlocks().contains(b));
+    }
 }

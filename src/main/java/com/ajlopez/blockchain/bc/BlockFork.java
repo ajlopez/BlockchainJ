@@ -28,12 +28,18 @@ public class BlockFork {
         Block oldBlock = oldBestBlock;
         Block newBlock = newBestBlock;
 
-        while (oldBlock.getNumber() != newBlock.getNumber() || !oldBlock.getHash().equals(newBlock.getHash())) {
-            if (oldBlock.getNumber() >= newBlock.getNumber()) {
+        while (true) {
+            if (oldBlock == null && newBlock == null)
+                break;
+
+            if (oldBlock != null && newBlock != null && oldBlock.getHash().equals(newBlock.getHash()))
+                break;
+
+            if (oldBlock != null && (newBlock == null || oldBlock.getNumber() >= newBlock.getNumber())) {
                 oldBlocks.add(oldBlock);
                 oldBlock = blockChain.getBlockByHash(oldBlock.getParentHash());
             }
-            else if (newBlock.getNumber() >= oldBlock.getNumber()) {
+            else if (oldBlock == null || newBlock.getNumber() >= oldBlock.getNumber()) {
                 newBlocks.add(newBlock);
                 newBlock = blockChain.getBlockByHash(newBlock.getParentHash());
             }
