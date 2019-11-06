@@ -18,15 +18,18 @@ import java.util.function.Consumer;
 public class BlockProcessor {
     private static final List<Block> emptyList = Collections.unmodifiableList(Arrays.asList());
 
-    private final BlockValidator blockValidator;
-    private final OrphanBlocks orphanBlocks;
     private final BlockChain blockChain;
+    private final OrphanBlocks orphanBlocks;
+    private final BlockValidator blockValidator;
+    private final TransactionPool transactionPool;
+
     private final List<Consumer<Block>> newBestBlockConsumers = new ArrayList<>();
 
-    public BlockProcessor(BlockChain blockChain, OrphanBlocks orphanBlocks, BlockValidator blockValidator) {
+    public BlockProcessor(BlockChain blockChain, OrphanBlocks orphanBlocks, BlockValidator blockValidator, TransactionPool transactionPool) {
         this.blockChain = blockChain;
         this.orphanBlocks = orphanBlocks;
         this.blockValidator = blockValidator;
+        this.transactionPool = transactionPool;
     }
 
     public List<Block> processBlock(Block block) throws IOException {

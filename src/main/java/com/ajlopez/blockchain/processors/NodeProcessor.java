@@ -35,9 +35,9 @@ public class NodeProcessor implements PeerNode {
         this.peer = peer;
 
         OrphanBlocks orphanBlocks = new OrphanBlocks();
-
-        this.blockProcessor = new BlockProcessor(blockChain, orphanBlocks, new BlockValidator(new BlockExecutor(accountStoreProvider, trieStorageProvider, codeStore)));
         this.transactionPool = new TransactionPool();
+
+        this.blockProcessor = new BlockProcessor(blockChain, orphanBlocks, new BlockValidator(new BlockExecutor(accountStoreProvider, trieStorageProvider, codeStore)), transactionPool);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(this.transactionPool);
         PeerProcessor peerProcessor = new PeerProcessor(this.networkConfiguration.getNetworkNumber());

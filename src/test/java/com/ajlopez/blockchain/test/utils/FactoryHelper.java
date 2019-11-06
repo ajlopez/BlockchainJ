@@ -242,7 +242,11 @@ public class FactoryHelper {
     }
 
     public static BlockProcessor createBlockProcessor(BlockChain blockChain) {
-        return new BlockProcessor(blockChain, new OrphanBlocks(), createBlockValidator(new AccountStoreProvider(new TrieStore(new HashMapStore()))));
+        return createBlockProcessor(blockChain, new TransactionPool());
+    }
+
+    public static BlockProcessor createBlockProcessor(BlockChain blockChain, TransactionPool transactionPool) {
+        return new BlockProcessor(blockChain, new OrphanBlocks(), createBlockValidator(new AccountStoreProvider(new TrieStore(new HashMapStore()))), transactionPool);
     }
 
     public static BlockValidator createBlockValidator(AccountStoreProvider accountStoreProvider) {

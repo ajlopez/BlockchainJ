@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
@@ -79,6 +80,31 @@ public class BlockProcessorTest {
 
         Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
         Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
+    }
+
+    @Test
+    public void addFirstBlockCheckingTransactionPool() throws IOException {
+        BlockChain blockChain = new BlockChain();
+        TransactionPool transactionPool = new TransactionPool();
+        BlockProcessor processor = FactoryHelper.createBlockProcessor(blockChain, transactionPool);
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(0, null, Hash.EMPTY_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        List<Block> processedBlocks = processor.processBlock(block);
+
+        Assert.assertNotNull(processedBlocks);
+        Assert.assertFalse(processedBlocks.isEmpty());
+        Assert.assertEquals(1, processedBlocks.size());
+        Assert.assertEquals(block, processedBlocks.get(0));
+
+        Assert.assertNotNull(processor.getBestBlock());
+        Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
+
+        Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
+        Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
+
+        Assert.assertTrue(transactionPool.getTransactions().isEmpty());
     }
 
     @Test
