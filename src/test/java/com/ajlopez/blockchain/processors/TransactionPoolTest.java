@@ -6,6 +6,8 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -280,5 +282,29 @@ public class TransactionPoolTest {
         Assert.assertEquals(transaction.getNonce() + 3, transactionPool.getTransactionNonceBySenderFromNonce(transaction.getSender(), transaction.getNonce() + 1));
         Assert.assertEquals(transaction.getNonce() + 5, transactionPool.getTransactionNonceBySenderFromNonce(transaction.getSender(), transaction.getNonce() + 4));
         Assert.assertEquals(transaction.getNonce() + 42, transactionPool.getTransactionNonceBySenderFromNonce(transaction.getSender(), transaction.getNonce() + 42));
+    }
+    
+    @Test
+    public void updateTransactions() {
+        TransactionPool pool = new TransactionPool();
+        Transaction transaction1 = FactoryHelper.createTransaction(100);
+        Transaction transaction2 = FactoryHelper.createTransaction(200);
+
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction1);
+        transactions.add(transaction2);
+
+        pool.updateTransactions(Collections.emptyList(), transactions);
+        List<Transaction> result = pool.getTransactions();
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(2, result.size());
+        Assert.assertTrue(result.contains(transaction1));
+        Assert.assertTrue(result.contains(transaction2));
+
+        pool.updateTransactions(transactions, Collections.emptyList());
+        List<Transaction> result2 = pool.getTransactions();
+        Assert.assertNotNull(result2);
+        Assert.assertTrue(result2.isEmpty());
     }
 }

@@ -89,6 +89,14 @@ public class TransactionPool {
         return result;
     }
 
+    public void updateTransactions(List<Transaction> toremove, List<Transaction> toadd) {
+        for (Transaction tx: toremove)
+            this.removeTransaction(tx);
+
+        for (Transaction tx: toadd)
+            this.addTransaction(tx);
+    }
+
     class NonceComparator implements Comparator<Transaction> {
         public int compare(Transaction t1, Transaction t2) {
             return (int)(t1.getNonce() - t2.getNonce());
