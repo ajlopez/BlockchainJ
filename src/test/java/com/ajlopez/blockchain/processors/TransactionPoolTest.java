@@ -283,7 +283,7 @@ public class TransactionPoolTest {
         Assert.assertEquals(transaction.getNonce() + 5, transactionPool.getTransactionNonceBySenderFromNonce(transaction.getSender(), transaction.getNonce() + 4));
         Assert.assertEquals(transaction.getNonce() + 42, transactionPool.getTransactionNonceBySenderFromNonce(transaction.getSender(), transaction.getNonce() + 42));
     }
-    
+
     @Test
     public void updateTransactions() {
         TransactionPool pool = new TransactionPool();
@@ -302,9 +302,17 @@ public class TransactionPoolTest {
         Assert.assertTrue(result.contains(transaction1));
         Assert.assertTrue(result.contains(transaction2));
 
-        pool.updateTransactions(transactions, Collections.emptyList());
+        pool.updateTransactions(transactions, transactions);
         List<Transaction> result2 = pool.getTransactions();
         Assert.assertNotNull(result2);
-        Assert.assertTrue(result2.isEmpty());
+        Assert.assertFalse(result2.isEmpty());
+        Assert.assertEquals(2, result2.size());
+        Assert.assertTrue(result2.contains(transaction1));
+        Assert.assertTrue(result2.contains(transaction2));
+
+        pool.updateTransactions(transactions, Collections.emptyList());
+        List<Transaction> result3 = pool.getTransactions();
+        Assert.assertNotNull(result3);
+        Assert.assertTrue(result3.isEmpty());
     }
 }
