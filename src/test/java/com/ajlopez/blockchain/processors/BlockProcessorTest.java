@@ -152,6 +152,21 @@ public class BlockProcessorTest {
     }
 
     @Test
+    public void addManyBlocks() throws IOException {
+        BlockChain blockChain = FactoryHelper.createBlockChain(2, 4);
+
+        Assert.assertEquals(2, blockChain.getBestBlockNumber());
+
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        for (int k = 0; k <= 2; k++)
+            processor.processBlock(blockChain.getBlockByNumber(k));
+
+        Assert.assertNotNull(processor.getBestBlock());
+        Assert.assertEquals(2, processor.getBestBlockNumber());
+    }
+
+    @Test
     public void getUnknownAncestorHash() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
