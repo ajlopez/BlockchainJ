@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.bc.BlockFork;
 import com.ajlopez.blockchain.bc.BlockValidator;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.bc.BlockChain;
@@ -63,6 +64,11 @@ public class BlockProcessor {
 
         if (initialBestBlock == null || !newBestBlock.getHash().equals(initialBestBlock.getHash()))
             emitNewBestBlock(newBestBlock);
+
+        // TODO review the point of this execution
+        // put the code in a method
+        BlockFork blockFork = BlockFork.fromBlocks(this.blockChain, initialBestBlock, newBestBlock);
+        this.transactionPool.updateTransactions(blockFork.getNewTransactions(), blockFork.getOldTransactions());
 
         return connectedBlocks;
     }

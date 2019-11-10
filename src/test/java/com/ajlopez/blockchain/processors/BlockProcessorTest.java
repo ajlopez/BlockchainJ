@@ -2,11 +2,15 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.AccountStoreProvider;
+import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.BlockConsumer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -153,17 +157,44 @@ public class BlockProcessorTest {
 
     @Test
     public void addManyBlocks() throws IOException {
-        BlockChain blockChain = FactoryHelper.createBlockChain(2, 4);
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        BlockChain blockChain = FactoryHelper.createBlockChain(trieStore,2, 4);
 
         Assert.assertEquals(2, blockChain.getBestBlockNumber());
 
-        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+        BlockProcessor processor = new BlockProcessor(new BlockChain(), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(trieStore)), new TransactionPool());
 
         for (int k = 0; k <= 2; k++)
             processor.processBlock(blockChain.getBlockByNumber(k));
 
         Assert.assertNotNull(processor.getBestBlock());
         Assert.assertEquals(2, processor.getBestBlockNumber());
+    }
+
+    @Test
+    public void addManyBlocksRemovingThemFromTransactionPool() throws IOException {
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        TransactionPool transactionPool = new TransactionPool();
+        BlockChain blockChain = FactoryHelper.createBlockChain(trieStore,2, 4);
+
+        Assert.assertEquals(2, blockChain.getBestBlockNumber());
+
+        BlockProcessor processor = new BlockProcessor(new BlockChain(), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(trieStore)), transactionPool);
+
+        for (int k = 0; k <= 2; k++) {
+            Block block = blockChain.getBlockByNumber(k);
+
+            for (Transaction transaction : block.getTransactions())
+                transactionPool.addTransaction(transaction);
+        }
+
+        for (int k = 0; k <= 2; k++)
+            processor.processBlock(blockChain.getBlockByNumber(k));
+
+        Assert.assertNotNull(processor.getBestBlock());
+        Assert.assertEquals(2, processor.getBestBlockNumber());
+
+        Assert.assertTrue(transactionPool.getTransactions().isEmpty());
     }
 
     @Test

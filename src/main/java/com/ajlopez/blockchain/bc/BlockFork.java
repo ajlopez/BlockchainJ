@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,26 @@ public class BlockFork {
     public List<Block> getOldBlocks() { return this.oldBlocks; }
 
     public List<Block> getNewBlocks() { return this.newBlocks; }
+
+    public List<Transaction> getOldTransactions() {
+        List<Transaction> result = new ArrayList<>();
+
+        for (Block block : this.oldBlocks)
+            for (Transaction transaction : block.getTransactions())
+                result.add(transaction);
+
+        return result;
+    }
+
+    public List<Transaction> getNewTransactions() {
+        List<Transaction> result = new ArrayList<>();
+
+        for (Block block : this.newBlocks)
+            for (Transaction transaction : block.getTransactions())
+                result.add(transaction);
+
+        return result;
+    }
 
     public static BlockFork fromBlocks(BlockChain blockChain, Block oldBestBlock, Block newBestBlock) {
         List<Block> oldBlocks = new ArrayList<>();
