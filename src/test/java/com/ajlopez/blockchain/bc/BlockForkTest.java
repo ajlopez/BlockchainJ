@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.HashMapStore;
@@ -61,6 +62,58 @@ public class BlockForkTest {
 
         for (Block b : toBeAdded)
             Assert.assertTrue(blockFork.getNewBlocks().contains(b));
+    }
+
+    @Test
+    public void getTransactions() throws IOException {
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        TrieStore trieStore = new TrieStore(new HashMapStore());
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithAccount(senderAddress, 1000000, trieStore, 10, 10);
+
+        Block firstBestBlock = blockChain.getBestBlock();
+
+        Assert.assertNotNull(firstBestBlock);
+        Assert.assertEquals(10, firstBestBlock.getNumber());
+
+        List<Transaction> toBeRemoved = new ArrayList<>();
+
+        for (int k = 1; k < 10; k++) {
+            Block block = blockChain.getBlockByNumber(k);
+
+            for (Transaction transaction : block.getTransactions())
+                toBeRemoved.add(transaction);
+        }
+
+        FactoryHelper.extendBlockChainWithBlocksFromBlock(accountStoreProvider, blockChain, blockChain.getBlockByNumber(0), 15, 10, senderAddress, 0);
+
+        Block secondBestBlock = blockChain.getBestBlock();
+
+        Assert.assertNotNull(secondBestBlock);
+        Assert.assertEquals(15, secondBestBlock.getNumber());
+
+        List<Transaction> toBeAdded = new ArrayList<>();
+
+        for (int k = 1; k < 15; k++) {
+            Block block = blockChain.getBlockByNumber(k);
+
+            for (Transaction transaction : block.getTransactions())
+                toBeAdded.add(transaction);
+        }
+
+        BlockFork blockFork = BlockFork.fromBlocks(blockChain, firstBestBlock, secondBestBlock);
+
+        Assert.assertNotNull(blockFork);
+        Assert.assertNotNull(blockFork.getOldTransactions());
+        Assert.assertEquals(10 * 10, blockFork.getOldTransactions().size());
+        Assert.assertNotNull(blockFork.getNewTransactions());
+        Assert.assertEquals(15 * 10, blockFork.getNewTransactions().size());
+
+        for (Transaction transaction : toBeRemoved)
+            Assert.assertTrue(blockFork.getOldTransactions().contains(transaction));
+
+        for (Transaction transaction : toBeAdded)
+            Assert.assertTrue(blockFork.getNewTransactions().contains(transaction));
     }
 
     @Test
