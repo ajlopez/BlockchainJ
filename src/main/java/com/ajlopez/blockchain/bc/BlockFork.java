@@ -23,19 +23,17 @@ public class BlockFork {
     public List<Block> getNewBlocks() { return this.newBlocks; }
 
     public List<Transaction> getOldTransactions() {
-        List<Transaction> result = new ArrayList<>();
-
-        for (Block block : this.oldBlocks)
-            for (Transaction transaction : block.getTransactions())
-                result.add(transaction);
-
-        return result;
+        return getTransactionsFromBlocks(this.oldBlocks);
     }
 
     public List<Transaction> getNewTransactions() {
+        return getTransactionsFromBlocks(this.newBlocks);
+    }
+
+    private static List<Transaction> getTransactionsFromBlocks(List<Block> blocks) {
         List<Transaction> result = new ArrayList<>();
 
-        for (Block block : this.newBlocks)
+        for (Block block : blocks)
             for (Transaction transaction : block.getTransactions())
                 result.add(transaction);
 
