@@ -49,6 +49,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [EIP 2124, Fork identifier for chain compatibility checks](https://twitter.com/trent_vanepps/status/1184677267995320322)
 - [Special-purpose light clients for old receipts and transactions](https://ethereum-magicians.org/t/special-purpose-light-clients-for-old-receipts-and-transactions/3711)
 - [A Primer on Ethereum Blockchain Light Clients](https://medium.com/@rauljordan/a-primer-on-ethereum-blockchain-light-clients-f3cadde49137)
+- [Byzantine Failure — Why Blockchain Development is Difficult](https://medium.com/codechain/byzantine-failure-why-blockchain-development-is-difficult-1d2da8de9f03)
+
 
 ## To Do
 

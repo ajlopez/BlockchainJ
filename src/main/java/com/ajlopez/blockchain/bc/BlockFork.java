@@ -47,23 +47,37 @@ public class BlockFork {
         Block oldBlock = oldBestBlock;
         Block newBlock = newBestBlock;
 
-        while (true) {
-            if (oldBlock == null && newBlock == null)
-                break;
-
-            if (oldBlock != null && newBlock != null && oldBlock.getHash().equals(newBlock.getHash()))
-                break;
-
-            if (oldBlock != null && (newBlock == null || oldBlock.getNumber() >= newBlock.getNumber())) {
+        while (!sameBlock(oldBlock, newBlock)) {
+            if (isPreviousBlock(newBlock, oldBlock)) {
                 oldBlocks.add(oldBlock);
                 oldBlock = blockChain.getBlockByHash(oldBlock.getParentHash());
             }
-            else if (oldBlock == null || newBlock.getNumber() >= oldBlock.getNumber()) {
+            else {
                 newBlocks.add(newBlock);
                 newBlock = blockChain.getBlockByHash(newBlock.getParentHash());
             }
         }
 
         return new BlockFork(oldBlocks, newBlocks);
+    }
+
+    private static boolean isPreviousBlock(Block block1, Block block2) {
+        if (block1 == null)
+            return true;
+
+        if (block2 == null)
+            return false;
+
+        return block1.getNumber() < block2.getNumber();
+    }
+
+    private static boolean sameBlock(Block block1, Block block2) {
+        if (block1 == null && block2 == null)
+            return true;
+
+        if (block1 != null && block2 != null && block1.getHash().equals(block2.getHash()))
+            return true;
+
+        return false;
     }
 }
