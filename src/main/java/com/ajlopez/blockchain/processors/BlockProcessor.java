@@ -62,8 +62,10 @@ public class BlockProcessor {
 
         Block newBestBlock = this.getBestBlock();
 
-        if (initialBestBlock == null || !newBestBlock.getHash().equals(initialBestBlock.getHash()))
-            emitNewBestBlock(newBestBlock);
+        if (initialBestBlock != null && newBestBlock.getHash().equals(initialBestBlock.getHash()))
+            return connectedBlocks;
+
+        emitNewBestBlock(newBestBlock);
 
         // TODO review the point of this execution
         // put the code in a method
