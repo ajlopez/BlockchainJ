@@ -36,7 +36,8 @@ public class BlockValidatorTest {
 
         BlockValidator blockValidator = new BlockValidator(blockExecutor);
 
-        Assert.assertTrue(blockValidator.isValid(block, genesis.getStateRootHash()));
+        Assert.assertTrue(blockValidator.isValid(genesis, null));
+        Assert.assertTrue(blockValidator.isValid(block, genesis));
     }
 
     @Test
@@ -70,11 +71,12 @@ public class BlockValidatorTest {
 
         BlockValidator blockValidator = new BlockValidator(blockExecutor);
 
-        Assert.assertTrue(blockValidator.isValid(block, genesis.getStateRootHash()));
+        Assert.assertTrue(blockValidator.isValid(genesis, null));
+        Assert.assertTrue(blockValidator.isValid(block, genesis));
     }
 
     @Test
-    public void validBlockWithInvaidTransaction() throws IOException {
+    public void validBlockWithInvalidTransaction() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
@@ -95,7 +97,8 @@ public class BlockValidatorTest {
 
         BlockValidator blockValidator = new BlockValidator(blockExecutor);
 
-        Assert.assertTrue(blockValidator.isValid(block, genesis.getStateRootHash()));
+        Assert.assertTrue(blockValidator.isValid(genesis, null));
+        Assert.assertTrue(blockValidator.isValid(block, genesis));
     }
 
     @Test
@@ -111,6 +114,7 @@ public class BlockValidatorTest {
 
         BlockValidator blockValidator = new BlockValidator(blockExecutor);
 
-        Assert.assertFalse(blockValidator.isValid(block, genesis.getStateRootHash()));
+        Assert.assertTrue(blockValidator.isValid(genesis, null));
+        Assert.assertFalse(blockValidator.isValid(block, genesis));
     }
 }

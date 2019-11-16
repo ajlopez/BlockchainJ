@@ -44,9 +44,8 @@ public class BlockProcessor {
 
         Block parent = this.blockChain.getBlockByHash(block.getParentHash());
 
-        if (parent != null)
-            if (!this.blockValidator.isValid(block, parent.getStateRootHash()))
-                return emptyList;
+        if (!this.blockValidator.isValid(block, parent))
+            return emptyList;
 
         Block initialBestBlock = this.getBestBlock();
 
