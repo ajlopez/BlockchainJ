@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.utils.HashUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,9 +35,9 @@ public class Block {
         this.header = header;
 
         if (transactions == null)
-            this.transactions = new ArrayList<>();
+            this.transactions = Collections.EMPTY_LIST;
         else
-            this.transactions = transactions;
+            this.transactions = Collections.unmodifiableList(transactions);
     }
 
     public BlockHeader getHeader() {

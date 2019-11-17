@@ -5,7 +5,9 @@ import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,10 @@ import java.util.List;
  * Created by ajlopez on 12/08/2017.
  */
 public class BlockTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void createWithNumberAndParentHash() {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
@@ -37,6 +43,22 @@ public class BlockTest {
 
         Assert.assertNotNull(transactions);
         Assert.assertTrue(transactions.isEmpty());
+    }
+
+    @Test
+    public void cannotAddTransactionToEmptyTransactionList() {
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        List<Transaction> transactions = block.getTransactions();
+
+        Assert.assertNotNull(transactions);
+        Assert.assertTrue(transactions.isEmpty());
+
+        exception.expect(UnsupportedOperationException.class);
+        transactions.add(FactoryHelper.createTransaction(42));
     }
 
     @Test
@@ -99,5 +121,25 @@ public class BlockTest {
         Assert.assertFalse(transactions.isEmpty());
         Assert.assertEquals(1, transactions.size());
         Assert.assertEquals(tx.getHash(), transactions.get(0).getHash());
+    }
+
+    @Test
+    public void withTwoTransactionInmmutable() {
+        Transaction tx1 = FactoryHelper.createTransaction(42);
+        Transaction tx2 = FactoryHelper.createTransaction(100);
+
+        List<Transaction> txs = new ArrayList<>();
+        txs.add(tx1);
+        txs.add(tx2);
+
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(1L, hash, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        List<Transaction> transactions = block.getTransactions();
+
+        exception.expect(UnsupportedOperationException.class);
+        transactions.add(FactoryHelper.createTransaction(1));
     }
 }
