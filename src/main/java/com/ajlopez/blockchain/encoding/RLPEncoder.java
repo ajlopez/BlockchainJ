@@ -4,8 +4,6 @@ import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
-import java.math.BigInteger;
-
 /**
  * Created by ajlopez on 24/02/2019.
  */

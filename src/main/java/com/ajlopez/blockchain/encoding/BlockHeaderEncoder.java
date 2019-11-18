@@ -15,7 +15,7 @@ public class BlockHeaderEncoder {
     public static byte[] encode(BlockHeader header) {
         byte[] rlpNumber = RLPEncoder.encodeUnsignedLong(header.getNumber());
         byte[] rlpParentHash = RLPEncoder.encodeBlockHash(header.getParentHash());
-        byte[] rlpTransactionsHash = RLPEncoder.encodeHash(header.getTransactionsHash());
+        byte[] rlpTransactionsHash = RLPEncoder.encodeHash(header.getTransactionsRootHash());
         byte[] rlpStateRootHash = RLPEncoder.encodeHash(header.getStateRootHash());
         byte[] rlpTimestamp = RLPEncoder.encodeUnsignedLong(header.getTimestamp());
         byte[] rlpCoinbase = RLPEncoder.encodeAddress(header.getCoinbase());

@@ -28,6 +28,7 @@ public abstract class AbstractBytesValue {
             this.bytes = ByteUtils.copyBytes(bytes, length, false, signed);
     }
 
+    // TODO consider immutability
     public byte[] getBytes() {
         return this.bytes;
     }

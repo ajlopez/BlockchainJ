@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.core;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
+import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -43,6 +44,8 @@ public class BlockTest {
 
         Assert.assertNotNull(transactions);
         Assert.assertTrue(transactions.isEmpty());
+
+        Assert.assertEquals(Trie.EMPTY_TRIE_HASH, block.getTransactionRootHash());
     }
 
     @Test
@@ -101,6 +104,9 @@ public class BlockTest {
         Block block2 = new Block(1L, hash, txs2, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
+
+        Assert.assertEquals(Block.calculateTransactionsRootHash(txs1), block1.getTransactionRootHash());
+        Assert.assertEquals(Block.calculateTransactionsRootHash(txs2), block2.getTransactionRootHash());
     }
 
     @Test
@@ -121,6 +127,8 @@ public class BlockTest {
         Assert.assertFalse(transactions.isEmpty());
         Assert.assertEquals(1, transactions.size());
         Assert.assertEquals(tx.getHash(), transactions.get(0).getHash());
+
+        Assert.assertEquals(Block.calculateTransactionsRootHash(txs), block.getTransactionRootHash());
     }
 
     @Test
@@ -138,6 +146,8 @@ public class BlockTest {
         Block block = new Block(1L, hash, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Transaction> transactions = block.getTransactions();
+
+        Assert.assertEquals(Block.calculateTransactionsRootHash(txs), block.getTransactionRootHash());
 
         exception.expect(UnsupportedOperationException.class);
         transactions.add(FactoryHelper.createTransaction(1));

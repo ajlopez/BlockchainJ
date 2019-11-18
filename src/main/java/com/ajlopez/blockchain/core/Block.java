@@ -5,6 +5,8 @@ import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
+import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
 
 import java.util.ArrayList;
@@ -23,11 +25,11 @@ public class Block {
     }
 
     public Block(long number, BlockHash parentHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
-        this(number, parentHash, new ArrayList<>(), stateRootHash, timestamp, coinbase, difficulty);
+        this(number, parentHash, Collections.emptyList(), stateRootHash, timestamp, coinbase, difficulty);
     }
 
     public Block(long number, BlockHash parentHash, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
-        this(new BlockHeader(number, parentHash, HashUtils.calculateHash(TransactionEncoder.encode(txs)), stateRootHash, timestamp, coinbase, difficulty), txs);
+        this(new BlockHeader(number, parentHash, calculateTransactionsRootHash(txs), stateRootHash, timestamp, coinbase, difficulty), txs);
     }
 
     public Block(BlockHeader header, List<Transaction> transactions)
@@ -63,7 +65,7 @@ public class Block {
     }
 
     public Hash getTransactionRootHash() {
-        return this.header.getTransactionsHash();
+        return this.header.getTransactionsRootHash();
     }
 
     public long getTimestamp() { return this.header.getTimestamp(); }
@@ -72,5 +74,15 @@ public class Block {
 
     public List<Transaction> getTransactions() {
         return this.transactions;
+    }
+
+    public static Hash calculateTransactionsRootHash(List<Transaction> transactions) {
+        Trie trie = new Trie();
+        int ntransactions = transactions.size();
+
+        for (int k = 0; k < ntransactions; k++)
+            trie = trie.put(ByteUtils.unsignedIntegerToNormalizedBytes(k), TransactionEncoder.encode(transactions.get(k)));
+
+        return trie.getHash();
     }
 }

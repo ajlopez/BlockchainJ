@@ -13,7 +13,7 @@ import com.ajlopez.blockchain.utils.HashUtils;
 public class BlockHeader {
     private final long number;
     private final BlockHash parentHash;
-    private final Hash transactionsHash;
+    private final Hash transactionsRootHash;
     private final Hash stateRootHash;
     private final long timestamp;
     private final Address coinbase;
@@ -21,13 +21,13 @@ public class BlockHeader {
 
     private BlockHash hash;
 
-    public BlockHeader(long number, BlockHash parentHash, Hash transactionsHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+    public BlockHeader(long number, BlockHash parentHash, Hash transactionsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
         this.number = number;
         this.parentHash = parentHash == null ? BlockHash.EMPTY_BLOCK_HASH : parentHash;
-        this.transactionsHash = transactionsHash;
+        this.transactionsRootHash = transactionsRootHash;
         this.stateRootHash = stateRootHash;
         this.timestamp = timestamp;
         this.coinbase = coinbase;
@@ -55,7 +55,7 @@ public class BlockHeader {
         return this.parentHash;
     }
 
-    public Hash getTransactionsHash() { return this.transactionsHash; }
+    public Hash getTransactionsRootHash() { return this.transactionsRootHash; }
 
     public Hash getStateRootHash() {
         return this.stateRootHash;

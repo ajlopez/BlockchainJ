@@ -24,7 +24,7 @@ public class BlockHeaderTest {
 
         Assert.assertEquals(1L, header.getNumber());
         Assert.assertEquals(hash, header.getParentHash());
-        Assert.assertEquals(transactionsHash, header.getTransactionsHash());
+        Assert.assertEquals(transactionsHash, header.getTransactionsRootHash());
         Assert.assertNotNull(header.getHash());
         Assert.assertEquals(Difficulty.fromUnsignedLong(42), header.getDifficulty());
     }

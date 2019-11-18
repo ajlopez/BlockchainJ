@@ -32,7 +32,7 @@ public class BlockHeaderEncoderTest {
         Assert.assertEquals(42, result.getNumber());
         Assert.assertEquals(hash, result.getParentHash());
         Assert.assertEquals(header.getHash(), result.getHash());
-        Assert.assertEquals(header.getTransactionsHash(), result.getTransactionsHash());
+        Assert.assertEquals(header.getTransactionsRootHash(), result.getTransactionsRootHash());
         Assert.assertEquals(header.getCoinbase(), result.getCoinbase());
         Assert.assertEquals(header.getDifficulty(), result.getDifficulty());
     }
