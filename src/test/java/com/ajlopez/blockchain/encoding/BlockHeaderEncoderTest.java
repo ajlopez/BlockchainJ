@@ -9,6 +9,9 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by usuario on 23/09/2017.
  */
@@ -36,4 +39,31 @@ public class BlockHeaderEncoderTest {
         Assert.assertEquals(header.getCoinbase(), result.getCoinbase());
         Assert.assertEquals(header.getDifficulty(), result.getDifficulty());
     }
+
+    @Test
+    public void encodeDecodeBlockHeaderList() {
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Hash transactionsHash = FactoryHelper.createRandomHash();
+        Hash stateRootHash = FactoryHelper.createRandomHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        BlockHeader header1 = new BlockHeader(42, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42));
+        BlockHeader header2 = new BlockHeader(100, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(100));
+
+        List<BlockHeader> headers = new ArrayList<>();
+        headers.add(header1);
+        headers.add(header2);
+
+        byte[] encoded = BlockHeaderEncoder.encode(headers);
+
+        Assert.assertNotNull(encoded);
+
+        List<BlockHeader> result = BlockHeaderEncoder.decodeList(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.size());
+        Assert.assertEquals(header1.getHash(), result.get(0).getHash());
+        Assert.assertEquals(header2.getHash(), result.get(1).getHash());
+    }
 }
+
