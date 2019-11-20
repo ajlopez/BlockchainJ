@@ -7,9 +7,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.utils.ByteUtils;
-import com.ajlopez.blockchain.utils.HashUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,23 +16,29 @@ import java.util.List;
  */
 public class Block {
     private final BlockHeader header;
+    private final List<BlockHeader> uncles;
     private final List<Transaction> transactions;
 
-    public Block(Block parent, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
-        this(parent.getNumber() + 1, parent.getHash(), txs, stateRootHash, timestamp, coinbase, difficulty);
+    public Block(Block parent, List<BlockHeader> uncles, List<Transaction> transactions, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+        this(parent.getNumber() + 1, parent.getHash(), uncles, transactions, stateRootHash, timestamp, coinbase, difficulty);
     }
 
     public Block(long number, BlockHash parentHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
-        this(number, parentHash, Collections.emptyList(), stateRootHash, timestamp, coinbase, difficulty);
+        this(number, parentHash, Collections.emptyList(), Collections.emptyList(), stateRootHash, timestamp, coinbase, difficulty);
     }
 
-    public Block(long number, BlockHash parentHash, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
-        this(new BlockHeader(number, parentHash, calculateTransactionsRootHash(txs), stateRootHash, timestamp, coinbase, difficulty), txs);
+    public Block(long number, BlockHash parentHash, List<BlockHeader> uncles, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+        this(new BlockHeader(number, parentHash, calculateTransactionsRootHash(txs), stateRootHash, timestamp, coinbase, difficulty), null, txs);
     }
 
-    public Block(BlockHeader header, List<Transaction> transactions)
+    public Block(BlockHeader header, List<BlockHeader> uncles, List<Transaction> transactions)
     {
         this.header = header;
+
+        if (uncles == null)
+            this.uncles = Collections.EMPTY_LIST;
+        else
+            this.uncles = uncles;
 
         if (transactions == null)
             this.transactions = Collections.EMPTY_LIST;
@@ -71,6 +75,8 @@ public class Block {
     public long getTimestamp() { return this.header.getTimestamp(); }
 
     public Difficulty getDifficulty() { return this.header.getDifficulty(); }
+
+    public List<BlockHeader> getUncles() { return this.uncles; }
 
     public List<Transaction> getTransactions() {
         return this.transactions;

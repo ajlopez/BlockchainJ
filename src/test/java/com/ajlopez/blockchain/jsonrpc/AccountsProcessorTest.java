@@ -275,7 +275,7 @@ public class AccountsProcessorTest {
 
             accountStore.save();
 
-            Block block = new Block(parent.getNumber() + 1, parent.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+            Block block = new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
             blockChain.connectBlock(block);
         }

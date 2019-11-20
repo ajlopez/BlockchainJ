@@ -31,6 +31,12 @@ public class BlockTest {
         Assert.assertEquals(1L, block.getNumber());
         Assert.assertEquals(hash, block.getParentHash());
         Assert.assertNotNull(block.getHash());
+
+        Assert.assertNotNull(block.getUncles());
+        Assert.assertTrue(block.getUncles().isEmpty());
+
+        Assert.assertNotNull(block.getTransactions());
+        Assert.assertTrue(block.getTransactions().isEmpty());
     }
 
     @Test
@@ -62,6 +68,22 @@ public class BlockTest {
 
         exception.expect(UnsupportedOperationException.class);
         transactions.add(FactoryHelper.createTransaction(42));
+    }
+
+    @Test
+    public void cannotAddUnclesToEmptyUncleList() {
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(1L, hash, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        List<BlockHeader> uncles = block.getUncles();
+
+        Assert.assertNotNull(uncles);
+        Assert.assertTrue(uncles.isEmpty());
+
+        exception.expect(UnsupportedOperationException.class);
+        uncles.add(null);
     }
 
     @Test
@@ -100,8 +122,8 @@ public class BlockTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1L, hash, txs1, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block2 = new Block(1L, hash, txs2, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block1 = new Block(1L, hash, null, txs1, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2 = new Block(1L, hash, null, txs2, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
 
@@ -119,7 +141,7 @@ public class BlockTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1L, hash, null, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Transaction> transactions = block.getTransactions();
 
@@ -143,7 +165,7 @@ public class BlockTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1L, hash, null, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Transaction> transactions = block.getTransactions();
 

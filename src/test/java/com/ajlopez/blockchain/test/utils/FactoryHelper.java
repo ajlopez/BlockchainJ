@@ -184,11 +184,11 @@ public class FactoryHelper {
 
         transactionExecutor.executeTransactions(transactions, null);
 
-        return new Block(parent.getNumber() + 1, parent.getHash(), transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
     }
 
     public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions) {
-        return new Block(parent.getNumber() + 1, parent.getHash(), transactions, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
     }
 
     public static BlockChain createBlockChain(int size) throws IOException {

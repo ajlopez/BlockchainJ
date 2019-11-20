@@ -59,7 +59,7 @@ public class MinerProcessor {
 
         List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions(), null);
 
-        return new Block(parent, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
+        return new Block(parent, null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
     }
 
     public void start() {

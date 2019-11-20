@@ -20,6 +20,6 @@ public class BlockEncoder {
 
         BlockHeader header = BlockHeaderEncoder.decode(bytes[0]);
 
-        return new Block(header, TransactionEncoder.decodeList(bytes[1]));
+        return new Block(header, null, TransactionEncoder.decodeList(bytes[1]));
     }
 }
