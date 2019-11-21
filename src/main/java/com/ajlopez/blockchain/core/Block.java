@@ -28,7 +28,7 @@ public class Block {
     }
 
     public Block(long number, BlockHash parentHash, List<BlockHeader> uncles, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
-        this(new BlockHeader(number, parentHash, calculateTransactionsRootHash(txs), stateRootHash, timestamp, coinbase, difficulty), null, txs);
+        this(new BlockHeader(number, parentHash, calculateTransactionsRootHash(txs), stateRootHash, timestamp, coinbase, difficulty), uncles, txs);
     }
 
     public Block(BlockHeader header, List<BlockHeader> uncles, List<Transaction> transactions)
@@ -38,7 +38,7 @@ public class Block {
         if (uncles == null)
             this.uncles = Collections.EMPTY_LIST;
         else
-            this.uncles = uncles;
+            this.uncles = Collections.unmodifiableList(uncles);
 
         if (transactions == null)
             this.transactions = Collections.EMPTY_LIST;
@@ -84,6 +84,10 @@ public class Block {
 
     public static Hash calculateTransactionsRootHash(List<Transaction> transactions) {
         Trie trie = new Trie();
+
+        if (transactions == null)
+            return trie.getHash();
+
         int ntransactions = transactions.size();
 
         for (int k = 0; k < ntransactions; k++)

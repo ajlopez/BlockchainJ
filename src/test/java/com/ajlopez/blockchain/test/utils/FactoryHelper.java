@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Transaction;
@@ -303,5 +304,15 @@ public class FactoryHelper {
         }
 
         return blocks;
+    }
+
+    public static BlockHeader createBlockHeader(long blockNumber) {
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Hash transactionsHash = FactoryHelper.createRandomHash();
+        Hash stateRootHash = FactoryHelper.createRandomHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+        Difficulty difficulty = Difficulty.fromUnsignedLong(42);
+
+        return new BlockHeader(1L, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty);
     }
 }

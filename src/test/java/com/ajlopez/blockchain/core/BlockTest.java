@@ -87,6 +87,31 @@ public class BlockTest {
     }
 
     @Test
+    public void twoUncles() {
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+        BlockHeader uncle1 = FactoryHelper.createBlockHeader(1);
+        BlockHeader uncle2 = FactoryHelper.createBlockHeader(1);
+
+        List<BlockHeader> uncles = new ArrayList<>();
+        uncles.add(uncle1);
+        uncles.add(uncle2);
+
+        Block block = new Block(2L, hash, uncles, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        List<BlockHeader> result = block.getUncles();
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(2, result.size());
+        Assert.assertEquals(uncle1, result.get(0));
+        Assert.assertEquals(uncle2, result.get(1));
+
+        exception.expect(UnsupportedOperationException.class);
+        result.add(null);
+    }
+
+    @Test
     public void blockWithDifferentParentHashesHaveDifferentHashes() {
         Address coinbase = FactoryHelper.createRandomAddress();
 
