@@ -34,6 +34,9 @@ public class BlockEncoderTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getNumber(), result.getNumber());
         Assert.assertEquals(block.getParentHash(), result.getParentHash());
+
+        Assert.assertNotNull(result.getUncles());
+        Assert.assertTrue(result.getUncles().isEmpty());
     }
 
     @Test
@@ -104,6 +107,38 @@ public class BlockEncoderTest {
         Assert.assertEquals(tx2.getValue(), result.getTransactions().get(1).getValue());
         Assert.assertEquals(tx2.getNonce(), result.getTransactions().get(1).getNonce());
         Assert.assertEquals(tx2.getHash(), result.getTransactions().get(1).getHash());
+    }
+
+    @Test
+    public void encodeDecodeBlockWithTwoUncles() {
+        BlockHeader uncle1 = FactoryHelper.createBlockHeader(1);
+        BlockHeader uncle2 = FactoryHelper.createBlockHeader(1);
+
+        List<BlockHeader> uncles = new ArrayList<>();
+        uncles.add(uncle1);
+        uncles.add(uncle2);
+
+        BlockHash parentHash = FactoryHelper.createRandomBlockHash();
+        Hash stateRootHash = FactoryHelper.createRandomHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(42, parentHash, uncles, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        byte[] encoded = BlockEncoder.encode(block);
+
+        Assert.assertNotNull(encoded);
+
+        Block result = BlockEncoder.decode(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(block.getNumber(), result.getNumber());
+        Assert.assertEquals(block.getParentHash(), result.getParentHash());
+        Assert.assertNotNull(result.getUncles());
+        Assert.assertEquals(2, result.getUncles().size());
+
+        // TODO implements BlockHeader.equals
+        Assert.assertEquals(uncle1.getHash(), result.getUncles().get(0).getHash());
+        Assert.assertEquals(uncle2.getHash(), result.getUncles().get(1).getHash());
     }
 
     @Test

@@ -12,7 +12,7 @@ public class BlockEncoder {
     public static byte[] encode(Block block) {
         byte[] rlpHeader = BlockHeaderEncoder.encode(block.getHeader());
 
-        return RLP.encodeList(rlpHeader, TransactionEncoder.encode(block.getTransactions()));
+        return RLP.encodeList(rlpHeader, BlockHeaderEncoder.encode(block.getUncles()), TransactionEncoder.encode(block.getTransactions()));
     }
 
     public static Block decode(byte[] encoded) {
@@ -20,6 +20,6 @@ public class BlockEncoder {
 
         BlockHeader header = BlockHeaderEncoder.decode(bytes[0]);
 
-        return new Block(header, null, TransactionEncoder.decodeList(bytes[1]));
+        return new Block(header, BlockHeaderEncoder.decodeList(bytes[1]), TransactionEncoder.decodeList(bytes[2]));
     }
 }
