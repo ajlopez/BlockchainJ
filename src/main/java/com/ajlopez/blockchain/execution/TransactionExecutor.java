@@ -51,8 +51,16 @@ public class TransactionExecutor {
 
         Address receiver = transaction.getReceiver();
         byte[] code = context.getCode(receiver);
+        byte[] data = transaction.getData();
 
         long gasUsed = FeeSchedule.TRANSFER.getValue();
+
+        if (!ByteUtils.isNullOrEmpty(data))
+            for (int k = 0; k < data.length; k++)
+                if (data[k] == 0)
+                    gasUsed += FeeSchedule.DATAZERO.getValue();
+                else
+                    gasUsed += FeeSchedule.DATANONZERO.getValue();
 
         if (!ByteUtils.isNullOrEmpty(code)) {
             Storage storage = context.getAccountStorage(receiver);

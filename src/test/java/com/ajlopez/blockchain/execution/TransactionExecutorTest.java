@@ -98,6 +98,47 @@ public class TransactionExecutorTest {
     }
 
     @Test
+    public void executeTransactionWithGasPriceAndData() throws IOException {
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 100000);
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        byte[] data = new byte[] { 0x00, 0x01, 0x02, 0x00, 0x03 };
+
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, data, 60000, Coin.ONE);
+
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
+
+        Address coinbase = FactoryHelper.createRandomAddress();
+        BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE);
+        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(1, result.size());
+
+        Transaction tresult = result.get(0);
+
+        Assert.assertEquals(transaction, tresult);
+
+        Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Assert.assertNotNull(senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(100000 - FeeSchedule.TRANSFER.getValue() - 2 * FeeSchedule.DATAZERO.getValue() - 3 * FeeSchedule.DATANONZERO.getValue() - 100), senderBalance);
+
+        Coin receiverBalance = accountStore.getAccount(receiverAddress).getBalance();
+        Assert.assertNotNull(receiverAddress);
+        Assert.assertEquals(Coin.fromUnsignedLong(100), receiverBalance);
+
+        Coin coinbaseBalance = accountStore.getAccount(coinbase).getBalance();
+        Assert.assertNotNull(coinbase);
+        Assert.assertEquals(Coin.fromUnsignedLong(FeeSchedule.TRANSFER.getValue() + 2 * FeeSchedule.DATAZERO.getValue() + 3 * FeeSchedule.DATANONZERO.getValue()), coinbaseBalance);
+
+        Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
+        Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
+    }
+
+    @Test
     public void executeTwoTransactions() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 

@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.bc;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.BlockExecutor;
-import com.ajlopez.blockchain.state.Trie;
 
 import java.io.IOException;
 

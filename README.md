@@ -50,6 +50,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Special-purpose light clients for old receipts and transactions](https://ethereum-magicians.org/t/special-purpose-light-clients-for-old-receipts-and-transactions/3711)
 - [A Primer on Ethereum Blockchain Light Clients](https://medium.com/@rauljordan/a-primer-on-ethereum-blockchain-light-clients-f3cadde49137)
 - [Byzantine Failure — Why Blockchain Development is Difficult](https://medium.com/codechain/byzantine-failure-why-blockchain-development-is-difficult-1d2da8de9f03)
+- [How does Ethereum work, anyway?](https://medium.com/@preethikasireddy/how-does-ethereum-work-anyway-22d1df506369)
 
 
 ## To Do

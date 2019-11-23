@@ -15,7 +15,10 @@ public enum FeeSchedule {
     SSET(20000),
     SRESET(5000),
     SCLEAR(15000),
-    TRANSFER(21000);
+    TRANSFER(21000),
+    DATAZERO(4),
+    DATANONZERO(68),
+    CREATION(32000);
 
     private long value;
 
