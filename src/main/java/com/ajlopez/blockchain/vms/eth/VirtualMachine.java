@@ -81,6 +81,8 @@ public class VirtualMachine {
 
         opCodeFees[OpCodes.GAS] = FeeSchedule.BASE;
 
+        opCodeFees[OpCodes.RETURN & 0xff] = FeeSchedule.ZERO;
+
         for (int k = 0; k < 32; k++)
             opCodeFees[OpCodes.PUSH1 + k] = FeeSchedule.VERYLOW;
 
@@ -102,7 +104,7 @@ public class VirtualMachine {
         return this.gasUsed;
     }
 
-    public void execute(byte[] bytecodes) throws VirtualMachineException, IOException {
+    public ExecutionResult execute(byte[] bytecodes) throws VirtualMachineException, IOException {
         int l = bytecodes.length;
 
         for (int pc = 0; pc < l; pc++) {
@@ -121,7 +123,7 @@ public class VirtualMachine {
 
             switch (bytecode) {
                 case OpCodes.STOP:
-                    return;
+                    return new ExecutionResult(null);
 
                 case OpCodes.ADD:
                     DataWord word1 = this.stack.pop();
@@ -634,10 +636,20 @@ public class VirtualMachine {
 
                     break;
 
+                case OpCodes.RETURN:
+                    offset = this.stack.pop().asUnsignedInteger();
+                    length = this.stack.pop().asUnsignedInteger();
+
+                    byte[] returnedData = this.memory.getBytes(offset, length);
+
+                    return new ExecutionResult(returnedData);
+
                 default:
                     throw new VirtualMachineException("Invalid opcode");
             }
         }
+
+        return new ExecutionResult(null);
     }
 
     private int getNewPc(byte[] bytecodes, DataWord word1) throws VirtualMachineException {

@@ -1104,6 +1104,44 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeReturn() throws VirtualMachineException, IOException {
+        byte[] code = FactoryHelper.createRandomBytes(42);
+        code[0] = OpCodes.PUSH1;
+        code[1] = 0x10;
+        code[2] = OpCodes.PUSH1;
+        code[3] = 0x08;
+        code[4] = OpCodes.MSTORE;
+        code[5] = OpCodes.PUSH1;
+        code[6] = 0x28;
+        code[7] = OpCodes.PUSH1;
+        code[8] = 0x00;
+        code[9] = OpCodes.RETURN;
+
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        ExecutionResult result = virtualMachine.execute(code);
+
+        byte[] expected = new byte[40];
+        expected[39] = 0x10;
+
+        Assert.assertNotNull(result);
+        Assert.assertNotNull(result.getReturnedData());
+        Assert.assertEquals(expected.length, result.getReturnedData().length);
+        Assert.assertArrayEquals(expected, result.getReturnedData());
+
+        // TODO check gas uses
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+    }
+
+    @Test
     public void executeCodeCopyWithPartialCode() throws VirtualMachineException, IOException {
         byte[] code = FactoryHelper.createRandomBytes(42);
         code[0] = OpCodes.PUSH1;
@@ -1121,7 +1159,10 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(code);
+        ExecutionResult result = virtualMachine.execute(code);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(ByteUtils.isNullOrEmpty(result.getReturnedData()));
 
         // TODO check gas uses
 
