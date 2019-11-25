@@ -32,9 +32,9 @@ public class VirtualMachineTest {
     public void executeEmptyCode() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[0]);
+        ExecutionResult executionResult = virtualMachine.execute(new byte[0]);
 
-        Assert.assertEquals(0, virtualMachine.getGasUsed());
+        Assert.assertEquals(0, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -51,9 +51,9 @@ public class VirtualMachineTest {
     public void executePushOneByte() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01});
+        ExecutionResult executionResult = virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01});
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -78,9 +78,9 @@ public class VirtualMachineTest {
 
             VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-            virtualMachine.execute(opcodes);
+            ExecutionResult executionResult = virtualMachine.execute(opcodes);
 
-            Assert.assertEquals(FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
+            Assert.assertEquals(FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
             Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -99,9 +99,9 @@ public class VirtualMachineTest {
     public void executeProgramCounter() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PC });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PC });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -118,9 +118,9 @@ public class VirtualMachineTest {
     public void executeAdd() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -145,9 +145,10 @@ public class VirtualMachineTest {
     public void executeAddWithOverflow() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
         byte[] bytecodes = HexUtils.hexStringToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600101");
-        virtualMachine.execute(bytecodes);
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, virtualMachine.getGasUsed());
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
+
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -262,9 +263,9 @@ public class VirtualMachineTest {
     public void executeSub() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.SUB });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.SUB });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -290,9 +291,10 @@ public class VirtualMachineTest {
     public void executeSubWithUnderflow() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
         byte[] bytecodes = HexUtils.hexStringToBytes("6001600003");
-        virtualMachine.execute(bytecodes);
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, virtualMachine.getGasUsed());
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
+
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -310,9 +312,9 @@ public class VirtualMachineTest {
     public void executeDupTopOfStack() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.DUP1 });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.DUP1 });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -345,9 +347,9 @@ public class VirtualMachineTest {
 
             bytecodes[bytecodes.length - 1] = (byte)(OpCodes.DUP1 + k);
 
-            virtualMachine.execute(bytecodes);
+            ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
-            Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * (values.length + 1), virtualMachine.getGasUsed());
+            Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * (values.length + 1), executionResult.getGasUsed());
 
             Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -380,9 +382,9 @@ public class VirtualMachineTest {
 
             bytecodes[bytecodes.length - 1] = (byte)(OpCodes.SWAP1 + k);
 
-            virtualMachine.execute(bytecodes);
+            ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
-            Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * (values.length + 1), virtualMachine.getGasUsed());
+            Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * (values.length + 1), executionResult.getGasUsed());
 
             Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -399,9 +401,9 @@ public class VirtualMachineTest {
     public void executePop() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.POP });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.POP });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -423,9 +425,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), storage);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.SLOAD });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.SLOAD });
 
-        Assert.assertEquals(FeeSchedule.SLOAD.getValue() + FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.SLOAD.getValue() + FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -441,10 +443,10 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), storage);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
 
         // TODO other SSTORE cases for gas cost
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -469,9 +471,9 @@ public class VirtualMachineTest {
     public void executeMemoryStore() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -487,9 +489,9 @@ public class VirtualMachineTest {
     public void executeMemoryStoreAndMemoryLoad() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.MLOAD });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.MLOAD });
 
-        Assert.assertEquals(5 * FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(5 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -507,9 +509,9 @@ public class VirtualMachineTest {
     public void executeMemoryStoreAndMemorySize() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.MSIZE });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.MSIZE });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -528,9 +530,9 @@ public class VirtualMachineTest {
     public void executeMemoryStoreByte() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE8 });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE8 });
 
-        Assert.assertEquals(3 * FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(3 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -847,9 +849,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.GASPRICE });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.GASPRICE });
 
-        Assert.assertEquals(FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -870,9 +872,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.ADDRESS, OpCodes.ORIGIN, OpCodes.CALLER, OpCodes.CALLVALUE });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.ADDRESS, OpCodes.ORIGIN, OpCodes.CALLER, OpCodes.CALLVALUE });
 
-        Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -893,9 +895,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.CALLDATASIZE });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.CALLDATASIZE });
 
-        Assert.assertEquals(FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -913,9 +915,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x02, OpCodes.CALLDATALOAD });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x02, OpCodes.CALLDATALOAD });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -933,9 +935,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x20, OpCodes.CALLDATALOAD });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x20, OpCodes.CALLDATALOAD });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -956,9 +958,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x70, OpCodes.CALLDATALOAD });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x70, OpCodes.CALLDATALOAD });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1232,9 +1234,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.COINBASE, OpCodes.TIMESTAMP, OpCodes.NUMBER, OpCodes.DIFFICULTY });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.COINBASE, OpCodes.TIMESTAMP, OpCodes.NUMBER, OpCodes.DIFFICULTY });
 
-        Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1250,9 +1252,9 @@ public class VirtualMachineTest {
     public void executeCodeSizeOperation() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.CODESIZE, OpCodes.STOP });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.CODESIZE, OpCodes.STOP });
 
-        Assert.assertEquals(FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1389,22 +1391,23 @@ public class VirtualMachineTest {
     public void executeStopOperation() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
-        virtualMachine.execute(new byte[] { OpCodes.STOP, OpCodes.PUSH1, 0x01 });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.STOP, OpCodes.PUSH1, 0x01 });
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
-        Assert.assertEquals(0, virtualMachine.getGasUsed());
+
+        Assert.assertEquals(0, executionResult.getGasUsed());
     }
 
     @Test
     public void executeGasOperation() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.GAS });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.GAS });
 
-        Assert.assertEquals(FeeSchedule.BASE.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1417,9 +1420,9 @@ public class VirtualMachineTest {
     public void executeJumpOperation() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMP, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMP, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
 
-        Assert.assertEquals(FeeSchedule.MID.getValue() + 2 * FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.MID.getValue() + 2 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1460,9 +1463,9 @@ public class VirtualMachineTest {
     public void executeConditionalJumpOperation() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.HIGH.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.HIGH.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1529,9 +1532,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(bytecodes);
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
-        Assert.assertEquals(expectedGasUsed, virtualMachine.getGasUsed());
+        Assert.assertEquals(expectedGasUsed, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1551,9 +1554,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(bytecodes);
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
-        Assert.assertEquals(expectedGasUsed, virtualMachine.getGasUsed());
+        Assert.assertEquals(expectedGasUsed, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1576,9 +1579,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(bytecodes);
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
-        Assert.assertEquals(expectedGasUsed + 2 * FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(expectedGasUsed + 2 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1602,9 +1605,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(bytecodes);
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
-        Assert.assertEquals(expectedGasUsed + 2 * FeeSchedule.VERYLOW.getValue(), virtualMachine.getGasUsed());
+        Assert.assertEquals(expectedGasUsed + 2 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1630,9 +1633,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(bytecodes);
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
-        Assert.assertEquals(expectedGasUsed + FeeSchedule.VERYLOW.getValue() * 3, virtualMachine.getGasUsed());
+        Assert.assertEquals(expectedGasUsed + FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1660,6 +1663,8 @@ public class VirtualMachineTest {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         virtualMachine.execute(bytecodes);
+
+        // TODO check gas used
 
         Stack<DataWord> stack = virtualMachine.getStack();
 

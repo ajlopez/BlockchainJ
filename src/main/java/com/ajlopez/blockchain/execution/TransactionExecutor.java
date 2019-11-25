@@ -69,8 +69,8 @@ public class TransactionExecutor {
             VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
             try {
-                vm.execute(code);
-                gasUsed += vm.getGasUsed();
+                ExecutionResult executionResult = vm.execute(code);
+                gasUsed += executionResult.getGasUsed();
             }
             catch (VirtualMachineException ex) {
                 // TODO revert all

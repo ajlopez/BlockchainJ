@@ -21,8 +21,6 @@ public class VirtualMachine {
     private final Stack<DataWord> stack = new Stack<>();
     private final List<Log> logs = new ArrayList<>();
 
-    private long gasUsed;
-
     static {
         opCodeFees[OpCodes.ADDRESS] = FeeSchedule.BASE;
         opCodeFees[OpCodes.ORIGIN] = FeeSchedule.BASE;
@@ -100,11 +98,8 @@ public class VirtualMachine {
 
     public List<Log> getLogs() { return this.logs; }
 
-    public long getGasUsed() {
-        return this.gasUsed;
-    }
-
     public ExecutionResult execute(byte[] bytecodes) throws VirtualMachineException, IOException {
+        long gasUsed = 0;
         int l = bytecodes.length;
 
         for (int pc = 0; pc < l; pc++) {
@@ -115,15 +110,15 @@ public class VirtualMachine {
             if (fee != null) {
                 long gasCost = fee.getValue();
 
-                if (this.gasUsed + gasCost > this.programEnvironment.getGas())
+                if (gasUsed + gasCost > this.programEnvironment.getGas())
                     throw new VirtualMachineException("Insufficient gas");
 
-                this.gasUsed += gasCost;
+                gasUsed += gasCost;
             }
 
             switch (bytecode) {
                 case OpCodes.STOP:
-                    return new ExecutionResult(null);
+                    return new ExecutionResult(gasUsed, null);
 
                 case OpCodes.ADD:
                     DataWord word1 = this.stack.pop();
@@ -525,7 +520,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.GAS:
-                    this.stack.push(DataWord.fromUnsignedLong(this.programEnvironment.getGas() - this.gasUsed));
+                    this.stack.push(DataWord.fromUnsignedLong(this.programEnvironment.getGas() - gasUsed));
 
                     break;
 
@@ -642,14 +637,14 @@ public class VirtualMachine {
 
                     byte[] returnedData = this.memory.getBytes(offset, length);
 
-                    return new ExecutionResult(returnedData);
+                    return new ExecutionResult(gasUsed, returnedData);
 
                 default:
                     throw new VirtualMachineException("Invalid opcode");
             }
         }
 
-        return new ExecutionResult(null);
+        return new ExecutionResult(gasUsed, null);
     }
 
     private int getNewPc(byte[] bytecodes, DataWord word1) throws VirtualMachineException {
