@@ -19,7 +19,6 @@ public class VirtualMachine {
     private final Storage storage;
     private final Memory memory = new Memory();
     private final Stack<DataWord> stack = new Stack<>();
-    private final List<Log> logs = new ArrayList<>();
 
     static {
         opCodeFees[OpCodes.ADDRESS] = FeeSchedule.BASE;
@@ -96,10 +95,9 @@ public class VirtualMachine {
         this.storage = storage;
     }
 
-    public List<Log> getLogs() { return this.logs; }
-
     public ExecutionResult execute(byte[] bytecodes) throws VirtualMachineException, IOException {
         long gasUsed = 0;
+        List<Log> logs = new ArrayList<>();
         int l = bytecodes.length;
 
         for (int pc = 0; pc < l; pc++) {
@@ -118,7 +116,7 @@ public class VirtualMachine {
 
             switch (bytecode) {
                 case OpCodes.STOP:
-                    return new ExecutionResult(gasUsed, null);
+                    return new ExecutionResult(gasUsed, null, logs);
 
                 case OpCodes.ADD:
                     DataWord word1 = this.stack.pop();
@@ -627,7 +625,7 @@ public class VirtualMachine {
 
                     Log log = new Log(this.programEnvironment.getAddress(), bytes, topics);
 
-                    this.logs.add(log);
+                    logs.add(log);
 
                     break;
 
@@ -637,17 +635,17 @@ public class VirtualMachine {
 
                     byte[] returnedData = this.memory.getBytes(offset, length);
 
-                    return new ExecutionResult(gasUsed, returnedData);
+                    return new ExecutionResult(gasUsed, returnedData, logs);
 
                 default:
                     throw new VirtualMachineException("Invalid opcode");
             }
         }
 
-        return new ExecutionResult(gasUsed, null);
+        return new ExecutionResult(gasUsed, null, logs);
     }
 
-    private int getNewPc(byte[] bytecodes, DataWord word1) throws VirtualMachineException {
+    private static int getNewPc(byte[] bytecodes, DataWord word1) throws VirtualMachineException {
         int newpc;
 
         if (!word1.isUnsignedInteger())

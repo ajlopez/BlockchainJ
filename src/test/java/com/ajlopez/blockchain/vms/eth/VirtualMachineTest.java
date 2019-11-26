@@ -41,7 +41,7 @@ public class VirtualMachineTest {
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
 
-        List<Log> logs = virtualMachine.getLogs();
+        List<Log> logs = executionResult.getLogs();
 
         Assert.assertNotNull(logs);
         Assert.assertTrue(logs.isEmpty());
@@ -548,7 +548,7 @@ public class VirtualMachineTest {
     public void executeLog0() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG0 });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG0 });
 
         // TODO check gas uses
 
@@ -561,7 +561,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(32, memory.size());
 
-        List<Log> logs = virtualMachine.getLogs();
+        List<Log> logs = executionResult.getLogs();
 
         Assert.assertNotNull(logs);
         Assert.assertFalse(logs.isEmpty());
@@ -574,7 +574,7 @@ public class VirtualMachineTest {
     public void executeLog1() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG1 });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG1 });
 
         // TODO check gas used
 
@@ -587,7 +587,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(32, memory.size());
 
-        List<Log> logs = virtualMachine.getLogs();
+        List<Log> logs = executionResult.getLogs();
 
         Assert.assertNotNull(logs);
         Assert.assertFalse(logs.isEmpty());
@@ -602,7 +602,7 @@ public class VirtualMachineTest {
     public void executeLog2() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG2 });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG2 });
 
         // TODO check gas used
 
@@ -615,7 +615,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(32, memory.size());
 
-        List<Log> logs = virtualMachine.getLogs();
+        List<Log> logs = executionResult.getLogs();
 
         Assert.assertNotNull(logs);
         Assert.assertFalse(logs.isEmpty());
@@ -631,7 +631,7 @@ public class VirtualMachineTest {
     public void executeLog3() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG3 });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG3 });
 
         // TODO check gas used
 
@@ -644,7 +644,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(32, memory.size());
 
-        List<Log> logs = virtualMachine.getLogs();
+        List<Log> logs = executionResult.getLogs();
 
         Assert.assertNotNull(logs);
         Assert.assertFalse(logs.isEmpty());
@@ -661,7 +661,7 @@ public class VirtualMachineTest {
     public void executeLog4() throws VirtualMachineException, IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG4 });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG4 });
 
         // TODO check gas used
 
@@ -674,7 +674,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(32, memory.size());
 
-        List<Log> logs = virtualMachine.getLogs();
+        List<Log> logs = executionResult.getLogs();
 
         Assert.assertNotNull(logs);
         Assert.assertFalse(logs.isEmpty());
