@@ -1125,17 +1125,17 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
-        ExecutionResult result = virtualMachine.execute(code);
+        ExecutionResult executionResult = virtualMachine.execute(code);
 
         byte[] expected = new byte[40];
         expected[39] = 0x10;
 
-        Assert.assertNotNull(result);
-        Assert.assertNotNull(result.getReturnedData());
-        Assert.assertEquals(expected.length, result.getReturnedData().length);
-        Assert.assertArrayEquals(expected, result.getReturnedData());
+        Assert.assertNotNull(executionResult);
+        Assert.assertNotNull(executionResult.getReturnedData());
+        Assert.assertEquals(expected.length, executionResult.getReturnedData().length);
+        Assert.assertArrayEquals(expected, executionResult.getReturnedData());
 
-        // TODO check gas uses
+        Assert.assertEquals(5 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
