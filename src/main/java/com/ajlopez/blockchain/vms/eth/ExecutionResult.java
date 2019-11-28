@@ -10,7 +10,11 @@ public class ExecutionResult {
     private final byte[] returnedData;
     private final List<Log> logs;
 
-    public ExecutionResult(long gasUsed, byte[] returnedData, List<Log> logs) {
+    public static ExecutionResult OkWithoutData(long gasUsed, List<Log> logs) { return new ExecutionResult(gasUsed, null, logs); }
+
+    public static ExecutionResult OkWithData(long gasUsed, byte[] returnedData, List<Log> logs) { return new ExecutionResult(gasUsed, returnedData, logs); }
+
+    private ExecutionResult(long gasUsed, byte[] returnedData, List<Log> logs) {
         this.gasUsed = gasUsed;
         this.returnedData = returnedData;
         this.logs = logs;

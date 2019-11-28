@@ -116,7 +116,7 @@ public class VirtualMachine {
 
             switch (bytecode) {
                 case OpCodes.STOP:
-                    return new ExecutionResult(gasUsed, null, logs);
+                    return ExecutionResult.OkWithoutData(gasUsed, logs);
 
                 case OpCodes.ADD:
                     DataWord word1 = this.stack.pop();
@@ -635,14 +635,14 @@ public class VirtualMachine {
 
                     byte[] returnedData = this.memory.getBytes(offset, length);
 
-                    return new ExecutionResult(gasUsed, returnedData, logs);
+                    return ExecutionResult.OkWithData(gasUsed, returnedData, logs);
 
                 default:
                     throw new VirtualMachineException("Invalid opcode");
             }
         }
 
-        return new ExecutionResult(gasUsed, null, logs);
+        return ExecutionResult.OkWithoutData(gasUsed, logs);
     }
 
     private static int getNewPc(byte[] bytecodes, DataWord word1) throws VirtualMachineException {
