@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
+import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.KeyValueStore;
 import com.ajlopez.blockchain.store.TrieStore;
@@ -31,7 +32,7 @@ public class MessageProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, Hash.EMPTY_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message = new BlockMessage(block);
 
@@ -55,7 +56,7 @@ public class MessageProcessorTest {
         outputProcessor.connectToPeer(sender, channel);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message message = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
@@ -82,8 +83,8 @@ public class MessageProcessorTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1, blockChain.getBestBlock().getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block2 = new Block(2, block1.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block1 = new Block(1, blockChain.getBestBlock().getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2 = new Block(2, block1.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message message = new BlockMessage(block2);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);
@@ -115,7 +116,7 @@ public class MessageProcessorTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message message = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, sendProcessor);
@@ -144,7 +145,7 @@ public class MessageProcessorTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message blockMessage = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, sendProcessor);
@@ -191,7 +192,7 @@ public class MessageProcessorTest {
         SendProcessor outputProcessor = new SendProcessor(sender);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message blockMessage = new BlockMessage(block);
 
         MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor);

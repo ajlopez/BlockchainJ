@@ -70,7 +70,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, Hash.EMPTY_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -93,7 +93,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor(blockChain, transactionPool);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, Hash.EMPTY_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -121,7 +121,7 @@ public class BlockProcessorTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, Hash.EMPTY_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -145,7 +145,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Block> connectedBlocks = processor.processBlock(block);
 
@@ -202,7 +202,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Block> connectedBlocks = processor.processBlock(block);
 
@@ -245,7 +245,7 @@ public class BlockProcessorTest {
         BlockConsumer consumer = new BlockConsumer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         processor.onNewBestBlock(consumer);
         processor.processBlock(block);
