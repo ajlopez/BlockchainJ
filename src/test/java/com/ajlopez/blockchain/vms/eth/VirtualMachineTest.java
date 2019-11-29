@@ -1127,6 +1127,49 @@ public class VirtualMachineTest {
 
         ExecutionResult executionResult = virtualMachine.execute(code);
 
+        Assert.assertTrue(executionResult.wasSuccesful());
+
+        byte[] expected = new byte[40];
+        expected[39] = 0x10;
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertNotNull(executionResult.getReturnedData());
+        Assert.assertEquals(expected.length, executionResult.getReturnedData().length);
+        Assert.assertArrayEquals(expected, executionResult.getReturnedData());
+
+        Assert.assertEquals(5 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+    }
+
+
+    @Test
+    public void executeRevert() throws VirtualMachineException, IOException {
+        byte[] code = FactoryHelper.createRandomBytes(42);
+        code[0] = OpCodes.PUSH1;
+        code[1] = 0x10;
+        code[2] = OpCodes.PUSH1;
+        code[3] = 0x08;
+        code[4] = OpCodes.MSTORE;
+        code[5] = OpCodes.PUSH1;
+        code[6] = 0x28;
+        code[7] = OpCodes.PUSH1;
+        code[8] = 0x00;
+        code[9] = OpCodes.REVERT;
+
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
+
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        ExecutionResult executionResult = virtualMachine.execute(code);
+
+        Assert.assertFalse(executionResult.wasSuccesful());
+
         byte[] expected = new byte[40];
         expected[39] = 0x10;
 

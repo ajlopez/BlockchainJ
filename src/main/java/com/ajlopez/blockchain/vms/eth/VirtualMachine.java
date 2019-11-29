@@ -637,6 +637,14 @@ public class VirtualMachine {
 
                     return ExecutionResult.OkWithData(gasUsed, returnedData, logs);
 
+                case OpCodes.REVERT:
+                    offset = this.stack.pop().asUnsignedInteger();
+                    length = this.stack.pop().asUnsignedInteger();
+
+                    returnedData = this.memory.getBytes(offset, length);
+
+                    return ExecutionResult.ErrorReverted(gasUsed, returnedData);
+
                 default:
                     throw new VirtualMachineException("Invalid opcode");
             }

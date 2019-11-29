@@ -9,16 +9,22 @@ public class ExecutionResult {
     private final long gasUsed;
     private final byte[] returnedData;
     private final List<Log> logs;
+    private final boolean success;
 
-    public static ExecutionResult OkWithoutData(long gasUsed, List<Log> logs) { return new ExecutionResult(gasUsed, null, logs); }
+    public static ExecutionResult OkWithoutData(long gasUsed, List<Log> logs) { return new ExecutionResult(gasUsed, null, logs, true); }
 
-    public static ExecutionResult OkWithData(long gasUsed, byte[] returnedData, List<Log> logs) { return new ExecutionResult(gasUsed, returnedData, logs); }
+    public static ExecutionResult OkWithData(long gasUsed, byte[] returnedData, List<Log> logs) { return new ExecutionResult(gasUsed, returnedData, logs, true); }
 
-    private ExecutionResult(long gasUsed, byte[] returnedData, List<Log> logs) {
+    public static ExecutionResult ErrorReverted(long gasUsed, byte[] returnedData) { return new ExecutionResult(gasUsed, returnedData, null, false); }
+
+    private ExecutionResult(long gasUsed, byte[] returnedData, List<Log> logs, boolean success) {
         this.gasUsed = gasUsed;
         this.returnedData = returnedData;
         this.logs = logs;
+        this.success = success;
     }
+
+    public boolean wasSuccesful() { return this.success; }
 
     public long getGasUsed() {
         return this.gasUsed;

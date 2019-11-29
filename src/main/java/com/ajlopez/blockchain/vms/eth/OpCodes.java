@@ -144,4 +144,5 @@ public class OpCodes {
     public static final byte LOG4 = (byte)0xa4;
 
     public static final byte RETURN = (byte)0xf3;
+    public static final byte REVERT = (byte)0xfd;
 }
