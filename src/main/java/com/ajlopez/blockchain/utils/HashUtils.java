@@ -3,6 +3,8 @@ package com.ajlopez.blockchain.utils;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.crypto.SpongyCastleProvider;
+import com.ajlopez.blockchain.encoding.RLP;
+import com.ajlopez.blockchain.encoding.RLPEncoder;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.MessageDigest;
@@ -44,5 +46,12 @@ public class HashUtils {
         byte[] abytes = new byte[Address.ADDRESS_BYTES];
         System.arraycopy(bytes, Hash.HASH_BYTES - Address.ADDRESS_BYTES, abytes, 0, Address.ADDRESS_BYTES);
         return new Address(abytes);
+    }
+
+    public static Address calculateNewAddress(Address address, long nonce) {
+        byte[] rlpAddress = RLPEncoder.encodeAddress(address);
+        byte[] rlpNonce = RLPEncoder.encodeUnsignedLong(nonce);
+
+        return calculateAddress(RLP.encodeList(rlpAddress, rlpNonce));
     }
 }
