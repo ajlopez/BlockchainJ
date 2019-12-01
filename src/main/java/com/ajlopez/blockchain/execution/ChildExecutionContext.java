@@ -36,4 +36,10 @@ public class ChildExecutionContext extends AbstractExecutionContext {
         // TODO implement in child context
         return parentContext.getCode(address);
     }
+
+    @Override
+    public void setCode(Address address, byte[] code) throws IOException {
+        // TODO implement in child context
+        parentContext.setCode(address, code);
+    }
 }

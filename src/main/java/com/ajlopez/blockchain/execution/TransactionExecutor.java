@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.*;
 
 import java.io.IOException;
@@ -47,11 +48,15 @@ public class TransactionExecutor {
 
         ExecutionContext context = new ChildExecutionContext(this.executionContext);
 
-        context.transfer(transaction.getSender(), transaction.getReceiver(), transaction.getValue());
-
         Address receiver = transaction.getReceiver();
-        byte[] code = context.getCode(receiver);
         byte[] data = transaction.getData();
+        byte[] code = receiver == null ? data : context.getCode(receiver);
+
+        // TODO improve contract creation code detection
+        if (receiver == null)
+            receiver = HashUtils.calculateNewAddress(sender, transaction.getNonce());
+
+        context.transfer(transaction.getSender(), receiver, transaction.getValue());
 
         long gasUsed = FeeSchedule.TRANSFER.getValue();
 
@@ -71,6 +76,9 @@ public class TransactionExecutor {
             try {
                 ExecutionResult executionResult = vm.execute(code);
                 gasUsed += executionResult.getGasUsed();
+
+                if (transaction.getReceiver() == null)
+                    context.setCode(receiver, executionResult.getReturnedData());
             }
             catch (VirtualMachineException ex) {
                 // TODO revert all

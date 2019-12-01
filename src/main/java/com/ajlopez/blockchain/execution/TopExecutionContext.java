@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.CodeStore;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.Storage;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
@@ -46,15 +47,22 @@ public class TopExecutionContext extends AbstractExecutionContext {
     public byte[] getCode(Address address) throws IOException {
         AccountState accountState = this.getAccountState(address);
 
-        if (accountState == null)
-            return null;
-
         Hash codeHash = accountState.getCodeHash();
 
         if (codeHash == null)
             return null;
 
         return this.codeStore.getCode(codeHash);
+    }
+
+    @Override
+    public void setCode(Address address, byte[] code) throws IOException {
+        AccountState accountState = this.getAccountState(address);
+        Hash codeHash = HashUtils.calculateHash(code);
+
+        this.codeStore.putCode(codeHash, code);
+
+        accountState.setCodeHash(codeHash);
     }
 
     @Override

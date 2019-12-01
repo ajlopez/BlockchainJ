@@ -12,6 +12,7 @@ import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -337,6 +338,30 @@ public class TransactionExecutorTest {
     }
 
     @Test
+    public void executeTransactionCreatingContract() throws IOException {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address sender = FactoryHelper.createRandomAddress();
+
+        byte[] code = new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x00, OpCodes.RETURN };
+
+        executeTransactionCreatingContract(sender, code, accountStore, codeStore);
+
+        Address newContractAddress = HashUtils.calculateNewAddress(sender, 0);
+
+        Account contractAccount = accountStore.getAccount(newContractAddress);
+
+        Assert.assertNotNull(contractAccount);
+        Assert.assertNotNull(contractAccount.getCodeHash());
+
+        byte[] newcode = codeStore.getCode(contractAccount.getCodeHash());
+
+        Assert.assertNotNull(newcode);
+        Assert.assertEquals(1, newcode.length);
+        Assert.assertEquals(0, newcode[0]);
+    }
+
+    @Test
     public void executeTransactionInvokingContractCodeUsingData() throws IOException {
         byte[] code = new byte[] { OpCodes.PUSH1, 0x00, OpCodes.CALLDATALOAD, OpCodes.PUSH1, 0x00, OpCodes.SSTORE };
 
@@ -445,5 +470,38 @@ public class TransactionExecutorTest {
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
 
         return trieStorageProvider.retrieve(receiver.getStorageHash());
+    }
+
+    private static void executeTransactionCreatingContract(Address senderAddress, byte[] code, AccountStore accountStore, CodeStore codeStore) throws IOException {
+        Address coinbase = FactoryHelper.createRandomAddress();
+        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
+
+        FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
+
+        Transaction transaction = new Transaction(senderAddress, null, Coin.ZERO, 0, code, 200000, Coin.ZERO);
+
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
+
+        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE);
+
+        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(1, result.size());
+
+        Transaction tresult = result.get(0);
+
+        Assert.assertEquals(transaction, tresult);
+
+        Coin coinbaseBalance = accountStore.getAccount(coinbase).getBalance();
+        Assert.assertNotNull(coinbaseBalance);
+        Assert.assertEquals(Coin.ZERO, coinbaseBalance);
+
+        Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
+        Assert.assertNotNull(senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(1000000), senderBalance);
+
+        Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
     }
 }
