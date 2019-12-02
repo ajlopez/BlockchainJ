@@ -25,7 +25,7 @@ public class TransactionExecutor {
         List<Transaction> executed = new ArrayList<>();
 
         for (Transaction transaction : transactions)
-            if (this.executeTransaction(transaction, blockData))
+            if (this.executeTransaction(transaction, blockData) != null)
                 executed.add(transaction);
 
         this.executionContext.commit();
@@ -33,18 +33,18 @@ public class TransactionExecutor {
         return executed;
     }
 
-    private boolean executeTransaction(Transaction transaction, BlockData blockData) throws IOException {
+    private ExecutionResult executeTransaction(Transaction transaction, BlockData blockData) throws IOException {
         Address sender = transaction.getSender();
 
         if (transaction.getNonce() != this.executionContext.getNonce(sender))
-            return false;
+            return null;
 
         Coin senderBalance = this.executionContext.getBalance(sender);
         Coin gasPrice = transaction.getGasPrice();
         Coin gasLimitToPay = gasPrice.multiply(transaction.getGas());
 
         if (senderBalance.compareTo(transaction.getValue().add(gasLimitToPay)) < 0)
-            return false;
+            return null;
 
         ExecutionContext context = new ChildExecutionContext(this.executionContext);
 
@@ -52,7 +52,7 @@ public class TransactionExecutor {
         byte[] data = transaction.getData();
         byte[] code = receiver == null ? data : context.getCode(receiver);
 
-        // TODO improve contract creation code detection
+        // TODO improve contract creation code detectionn
         if (receiver == null)
             receiver = HashUtils.calculateNewAddress(sender, transaction.getNonce());
 
@@ -67,6 +67,8 @@ public class TransactionExecutor {
                 else
                     gasUsed += FeeSchedule.DATANONZERO.getValue();
 
+        ExecutionResult executionResult = ExecutionResult.OkWithoutData(gasUsed, null);
+
         if (!ByteUtils.isNullOrEmpty(code)) {
             Storage storage = context.getAccountStorage(receiver);
             MessageData messageData = new MessageData(receiver, sender, sender, transaction.getValue(), transaction.getGas(), transaction.getGasPrice(), transaction.getData(), false);
@@ -74,22 +76,22 @@ public class TransactionExecutor {
             VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
             try {
-                ExecutionResult executionResult = vm.execute(code);
-                gasUsed += executionResult.getGasUsed();
+                executionResult = vm.execute(code);
+                executionResult.addGasUsed(gasUsed);
 
                 if (transaction.getReceiver() == null)
                     context.setCode(receiver, executionResult.getReturnedData());
             }
             catch (VirtualMachineException ex) {
                 // TODO revert all
-                return false;
+                return null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         if (!gasPrice.isZero()) {
-            Coin gasPayment = gasPrice.multiply(gasUsed);
+            Coin gasPayment = gasPrice.multiply(executionResult.getGasUsed());
             context.transfer(sender, blockData.getCoinbase(), gasPayment);
         }
 
@@ -101,6 +103,6 @@ public class TransactionExecutor {
 
         context.commit();
 
-        return true;
+        return executionResult;
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
  * Created by ajlopez on 24/11/2019.
  */
 public class ExecutionResult {
-    private final long gasUsed;
+    private long gasUsed;
     private final byte[] returnedData;
     private final List<Log> logs;
     private final boolean success;
@@ -29,6 +29,8 @@ public class ExecutionResult {
     public long getGasUsed() {
         return this.gasUsed;
     }
+
+    public void addGasUsed(long gas) { this.gasUsed += gas; }
 
     // TODO return copy?
     public byte[] getReturnedData() {
