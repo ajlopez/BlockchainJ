@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
+import com.ajlopez.blockchain.execution.TransactionResult;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 
@@ -57,7 +58,12 @@ public class MinerProcessor {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        List<Transaction> transactions = transactionExecutor.executeTransactions(this.transactionPool.getTransactions(), null);
+        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(this.transactionPool.getTransactions(), null);
+
+        List<Transaction> transactions = new ArrayList<>(transactionResults.size());
+
+        for (TransactionResult transactionResult : transactionResults)
+            transactions.add(transactionResult.getTransaction());
 
         return new Block(parent, null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
     }

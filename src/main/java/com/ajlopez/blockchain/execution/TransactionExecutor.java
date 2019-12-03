@@ -21,12 +21,15 @@ public class TransactionExecutor {
         this.executionContext = executionContext;
     }
 
-    public List<Transaction> executeTransactions(List<Transaction> transactions, BlockData blockData) throws IOException {
-        List<Transaction> executed = new ArrayList<>();
+    public List<TransactionResult> executeTransactions(List<Transaction> transactions, BlockData blockData) throws IOException {
+        List<TransactionResult> executed = new ArrayList<>();
 
-        for (Transaction transaction : transactions)
-            if (this.executeTransaction(transaction, blockData) != null)
-                executed.add(transaction);
+        for (Transaction transaction : transactions) {
+            ExecutionResult executionResult = this.executeTransaction(transaction, blockData);
+
+            if (executionResult != null)
+                executed.add(new TransactionResult(transaction, executionResult));
+        }
 
         this.executionContext.commit();
 

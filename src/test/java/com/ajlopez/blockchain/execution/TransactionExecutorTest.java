@@ -37,13 +37,13 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
-        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), null);
+        List<TransactionResult> result = executor.executeTransactions(Collections.singletonList(transaction), null);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(1, result.size());
 
-        Transaction tresult = result.get(0);
+        Transaction tresult = result.get(0).getTransaction();
 
         Assert.assertEquals(transaction, tresult);
 
@@ -72,13 +72,14 @@ public class TransactionExecutorTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
         BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE);
-        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
+
+        List<TransactionResult> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(1, result.size());
 
-        Transaction tresult = result.get(0);
+        Transaction tresult = result.get(0).getTransaction();
 
         Assert.assertEquals(transaction, tresult);
 
@@ -113,13 +114,13 @@ public class TransactionExecutorTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
         BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE);
-        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
+        List<TransactionResult> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(1, result.size());
 
-        Transaction tresult = result.get(0);
+        Transaction tresult = result.get(0).getTransaction();
 
         Assert.assertEquals(transaction, tresult);
 
@@ -154,15 +155,15 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
-        List<Transaction> result = executor.executeTransactions(transactions, null);
+        List<TransactionResult> result = executor.executeTransactions(transactions, null);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(2, result.size());
 
-        Transaction tresult1 = result.get(0);
+        Transaction tresult1 = result.get(0).getTransaction();
         Assert.assertEquals(transaction1, tresult1);
-        Transaction tresult2 = result.get(1);
+        Transaction tresult2 = result.get(1).getTransaction();
         Assert.assertEquals(transaction2, tresult2);
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
@@ -193,13 +194,13 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
-        List<Transaction> result = executor.executeTransactions(transactions, null);
+        List<TransactionResult> result = executor.executeTransactions(transactions, null);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(1, result.size());
 
-        Transaction tresult1 = result.get(0);
+        Transaction tresult1 = result.get(0).getTransaction();
         Assert.assertEquals(transaction1, tresult1);
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
@@ -229,13 +230,13 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
-        List<Transaction> result = executor.executeTransactions(transactions, null);
+        List<TransactionResult> result = executor.executeTransactions(transactions, null);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(1, result.size());
 
-        Transaction tresult1 = result.get(0);
+        Transaction tresult1 = result.get(0).getTransaction();
         Assert.assertEquals(transaction1, tresult1);
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
@@ -265,13 +266,13 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
-        List<Transaction> result = executor.executeTransactions(transactions, null);
+        List<TransactionResult> result = executor.executeTransactions(transactions, null);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(1, result.size());
 
-        Transaction tresult1 = result.get(0);
+        Transaction tresult1 = result.get(0).getTransaction();
         Assert.assertEquals(transaction1, tresult1);
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
@@ -310,7 +311,7 @@ public class TransactionExecutorTest {
         TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
         long millis = System.currentTimeMillis();
-        List<Transaction> executed = transactionExecutor.executeTransactions(transactions, null);
+        List<TransactionResult> executed = transactionExecutor.executeTransactions(transactions, null);
         millis = System.currentTimeMillis() - millis;
         System.out.println(millis);
 
@@ -438,7 +439,7 @@ public class TransactionExecutorTest {
 
         BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE);
 
-        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
+        List<TransactionResult> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 
         Account receiver = accountStore.getAccount(receiverAddress);
 
@@ -449,7 +450,7 @@ public class TransactionExecutorTest {
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(1, result.size());
 
-        Transaction tresult = result.get(0);
+        Transaction tresult = result.get(0).getTransaction();
 
         Assert.assertEquals(transaction, tresult);
 
@@ -484,13 +485,13 @@ public class TransactionExecutorTest {
 
         BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE);
 
-        List<Transaction> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
+        List<TransactionResult> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(1, result.size());
 
-        Transaction tresult = result.get(0);
+        Transaction tresult = result.get(0).getTransaction();
 
         Assert.assertEquals(transaction, tresult);
 
