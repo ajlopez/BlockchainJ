@@ -63,6 +63,9 @@ public class TransactionExecutor {
 
         long gasUsed = FeeSchedule.TRANSFER.getValue();
 
+        if (transaction.getReceiver() == null)
+            gasUsed += FeeSchedule.CREATION.getValue();
+
         if (!ByteUtils.isNullOrEmpty(data))
             for (int k = 0; k < data.length; k++)
                 if (data[k] == 0)

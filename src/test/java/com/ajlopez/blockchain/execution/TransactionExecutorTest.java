@@ -479,7 +479,7 @@ public class TransactionExecutorTest {
 
         FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
 
-        Transaction transaction = new Transaction(senderAddress, null, Coin.ZERO, 0, code, 200000, Coin.ZERO);
+        Transaction transaction = new Transaction(senderAddress, null, Coin.ZERO, 0, code, 200000, Coin.ONE);
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
@@ -492,16 +492,19 @@ public class TransactionExecutorTest {
         Assert.assertEquals(1, result.size());
 
         Transaction tresult = result.get(0).getTransaction();
+        long gasUsed = result.get(0).getExecutionResult().getGasUsed();
+
+        Assert.assertTrue(gasUsed > FeeSchedule.TRANSFER.getValue() + FeeSchedule.CREATION.getValue());
 
         Assert.assertEquals(transaction, tresult);
 
         Coin coinbaseBalance = accountStore.getAccount(coinbase).getBalance();
         Assert.assertNotNull(coinbaseBalance);
-        Assert.assertEquals(Coin.ZERO, coinbaseBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(gasUsed), coinbaseBalance);
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(Coin.fromUnsignedLong(1000000), senderBalance);
+        Assert.assertEquals(Coin.fromUnsignedLong(1000000 - gasUsed), senderBalance);
 
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
     }
