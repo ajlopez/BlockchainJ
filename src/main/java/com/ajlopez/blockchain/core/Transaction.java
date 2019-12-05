@@ -70,6 +70,10 @@ public class Transaction {
         return new TransactionHash(HashUtils.keccak256(TransactionEncoder.encode(this)));
     }
 
+    public boolean isContractCreation() {
+        return this.receiver == null;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null)

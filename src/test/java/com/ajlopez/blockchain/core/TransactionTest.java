@@ -29,6 +29,8 @@ public class TransactionTest {
 
         Assert.assertEquals(6000000, tx.getGas());
         Assert.assertEquals(Coin.ZERO, tx.getGasPrice());
+
+        Assert.assertFalse(tx.isContractCreation());
     }
 
     @Test
@@ -96,6 +98,8 @@ public class TransactionTest {
         Transaction transaction = new Transaction(sender, null, value, 42, null, 6000000, Coin.ZERO);
 
         Assert.assertNull(transaction.getReceiver());
+
+        Assert.assertTrue(transaction.isContractCreation());
     }
 
     @Test
@@ -106,6 +110,8 @@ public class TransactionTest {
         Transaction transaction = new Transaction(sender, new Address(new byte[0]), value, 42, null, 6000000, Coin.ZERO);
 
         Assert.assertNull(transaction.getReceiver());
+
+        Assert.assertTrue(transaction.isContractCreation());
     }
 
     @Test
