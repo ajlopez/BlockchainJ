@@ -49,21 +49,22 @@ public class TransactionExecutor {
         if (senderBalance.compareTo(transaction.getValue().add(gasLimitToPay)) < 0)
             return null;
 
+        boolean isContractCreation = transaction.isContractCreation();
+
         ExecutionContext context = new ChildExecutionContext(this.executionContext);
 
         Address receiver = transaction.getReceiver();
         byte[] data = transaction.getData();
-        byte[] code = receiver == null ? data : context.getCode(receiver);
+        byte[] code = isContractCreation ? data : context.getCode(receiver);
 
-        // TODO improve contract creation code detectionn
-        if (receiver == null)
+        if (isContractCreation)
             receiver = HashUtils.calculateNewAddress(sender, transaction.getNonce());
 
         context.transfer(transaction.getSender(), receiver, transaction.getValue());
 
         long gasUsed = FeeSchedule.TRANSFER.getValue();
 
-        if (transaction.getReceiver() == null)
+        if (isContractCreation)
             gasUsed += FeeSchedule.CREATION.getValue();
 
         if (!ByteUtils.isNullOrEmpty(data))
@@ -85,7 +86,7 @@ public class TransactionExecutor {
                 executionResult = vm.execute(code);
                 executionResult.addGasUsed(gasUsed);
 
-                if (transaction.getReceiver() == null)
+                if (isContractCreation)
                     context.setCode(receiver, executionResult.getReturnedData());
             }
             catch (VirtualMachineException ex) {
