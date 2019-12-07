@@ -58,7 +58,7 @@ public class TransactionExecutor {
         byte[] code = isContractCreation ? data : context.getCode(receiver);
 
         if (isContractCreation)
-            receiver = HashUtils.calculateNewAddress(sender, transaction.getNonce());
+            receiver = transaction.getNewContractAddress();
 
         context.transfer(transaction.getSender(), receiver, transaction.getValue());
 

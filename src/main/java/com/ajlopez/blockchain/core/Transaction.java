@@ -62,6 +62,10 @@ public class Transaction {
         return this.hash;
     }
 
+    public Address getNewContractAddress() {
+        return HashUtils.calculateNewAddress(this.getSender(), this.getNonce());
+    }
+
     public Transaction withNonce(long newnonce) {
         return new Transaction(this.sender, this.receiver, this.value, newnonce, this.data, this.gas, this.gasPrice);
     }
