@@ -67,12 +67,7 @@ public class TransactionExecutor {
         if (isContractCreation)
             gasUsed += FeeSchedule.CREATION.getValue();
 
-        if (!ByteUtils.isNullOrEmpty(data))
-            for (int k = 0; k < data.length; k++)
-                if (data[k] == 0)
-                    gasUsed += FeeSchedule.DATAZERO.getValue();
-                else
-                    gasUsed += FeeSchedule.DATANONZERO.getValue();
+        gasUsed += transaction.getDataCost();
 
         ExecutionResult executionResult = ExecutionResult.OkWithoutData(gasUsed, null);
 

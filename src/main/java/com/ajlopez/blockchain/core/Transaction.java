@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
+import com.ajlopez.blockchain.vms.eth.FeeSchedule;
 
 /**
  * Created by ajlopez on 12/08/2017.
@@ -64,6 +65,21 @@ public class Transaction {
 
     public Address getNewContractAddress() {
         return HashUtils.calculateNewAddress(this.getSender(), this.getNonce());
+    }
+
+    public long getDataCost() {
+        if (ByteUtils.isNullOrEmpty(this.data))
+            return 0;
+
+        long gasCost = 0;
+
+        for (int k = 0; k < data.length; k++)
+            if (data[k] == 0)
+                gasCost += FeeSchedule.DATAZERO.getValue();
+            else
+                gasCost += FeeSchedule.DATANONZERO.getValue();
+
+        return gasCost;
     }
 
     public Transaction withNonce(long newnonce) {
