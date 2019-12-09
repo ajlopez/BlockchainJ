@@ -4,7 +4,6 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.utils.ByteUtils;
-import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.*;
 
 import java.io.IOException;
@@ -62,12 +61,7 @@ public class TransactionExecutor {
 
         context.transfer(transaction.getSender(), receiver, transaction.getValue());
 
-        long gasUsed = FeeSchedule.TRANSFER.getValue();
-
-        if (isContractCreation)
-            gasUsed += FeeSchedule.CREATION.getValue();
-
-        gasUsed += transaction.getDataCost();
+        long gasUsed = transaction.getGasCost();
 
         ExecutionResult executionResult = ExecutionResult.OkWithoutData(gasUsed, null);
 

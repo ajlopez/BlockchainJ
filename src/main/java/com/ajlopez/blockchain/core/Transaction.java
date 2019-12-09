@@ -67,7 +67,13 @@ public class Transaction {
         return HashUtils.calculateNewAddress(this.getSender(), this.getNonce());
     }
 
-    public long getDataCost() {
+    public long getGasCost() {
+        return FeeSchedule.TRANSFER.getValue() +
+                this.getDataGasCost() +
+                (this.isContractCreation() ? FeeSchedule.CREATION.getValue() : 0);
+    }
+
+    public long getDataGasCost() {
         if (ByteUtils.isNullOrEmpty(this.data))
             return 0;
 
