@@ -73,7 +73,7 @@ public class Transaction {
                 (this.isContractCreation() ? FeeSchedule.CREATION.getValue() : 0);
     }
 
-    public long getDataGasCost() {
+    private long getDataGasCost() {
         if (ByteUtils.isNullOrEmpty(this.data))
             return 0;
 

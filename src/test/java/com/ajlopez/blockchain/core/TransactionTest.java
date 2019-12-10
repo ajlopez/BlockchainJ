@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.core;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.vms.eth.FeeSchedule;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,6 +32,7 @@ public class TransactionTest {
         Assert.assertEquals(Coin.ZERO, tx.getGasPrice());
 
         Assert.assertFalse(tx.isContractCreation());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), tx.getGasCost());
     }
 
     @Test
@@ -51,6 +53,9 @@ public class TransactionTest {
 
         Assert.assertEquals(6000000, tx.getGas());
         Assert.assertEquals(Coin.ZERO, tx.getGasPrice());
+
+        Assert.assertFalse(tx.isContractCreation());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), tx.getGasCost());
     }
 
     @Test
@@ -71,6 +76,9 @@ public class TransactionTest {
 
         Assert.assertEquals(6000000, tx.getGas());
         Assert.assertEquals(Coin.ZERO, tx.getGasPrice());
+
+        Assert.assertFalse(tx.isContractCreation());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), tx.getGasCost());
     }
 
     @Test(expected = IllegalStateException.class)
@@ -100,6 +108,7 @@ public class TransactionTest {
         Assert.assertNull(transaction.getReceiver());
 
         Assert.assertTrue(transaction.isContractCreation());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue() + FeeSchedule.CREATION.getValue(), transaction.getGasCost());
     }
 
     @Test
@@ -112,6 +121,21 @@ public class TransactionTest {
         Assert.assertNull(transaction.getReceiver());
 
         Assert.assertTrue(transaction.isContractCreation());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue() + FeeSchedule.CREATION.getValue(), transaction.getGasCost());
+    }
+
+    @Test
+    public void createTransactionWithReceiverZeroAndData() {
+        Address sender = FactoryHelper.createRandomAddress();
+        Coin value = Coin.ONE;
+        byte[] data = new byte[] { 0x00, 0x01, 0x00, 0x02, 0x03 };
+
+        Transaction transaction = new Transaction(sender, new Address(new byte[0]), value, 42, data, 6000000, Coin.ZERO);
+
+        Assert.assertNull(transaction.getReceiver());
+
+        Assert.assertTrue(transaction.isContractCreation());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue() + FeeSchedule.CREATION.getValue() + FeeSchedule.DATAZERO.getValue() * 2 + FeeSchedule.DATANONZERO.getValue() * 3, transaction.getGasCost());
     }
 
     @Test
