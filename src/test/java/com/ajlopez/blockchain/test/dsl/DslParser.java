@@ -11,15 +11,10 @@ import java.util.StringTokenizer;
  */
 public class DslParser {
     public DslCommand parse(BufferedReader reader) throws IOException {
-        String line = reader.readLine();
+        String line = readLine(reader);
 
         if (line == null)
             return null;
-
-        int p = line.indexOf('#');
-
-        if (p >= 0)
-            line = line.substring(0, p - 1);
 
         StringTokenizer tokenizer = new StringTokenizer(line);
         String verb = tokenizer.nextToken();
@@ -30,5 +25,19 @@ public class DslParser {
             arguments.add(tokenizer.nextToken());
 
         return new DslCommand(verb, arguments);
+    }
+
+    private static String readLine(BufferedReader reader) throws IOException {
+        String line = reader.readLine();
+
+        if (line == null)
+            return null;
+
+        int p = line.indexOf('#');
+
+        if (p >= 0)
+            line = line.substring(0, p - 1);
+
+        return line;
     }
 }
