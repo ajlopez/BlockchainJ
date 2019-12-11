@@ -52,6 +52,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Byzantine Failure — Why Blockchain Development is Difficult](https://medium.com/codechain/byzantine-failure-why-blockchain-development-is-difficult-1d2da8de9f03)
 - [How does Ethereum work, anyway?](https://medium.com/@preethikasireddy/how-does-ethereum-work-anyway-22d1df506369)
 - [Understanding Ethereum’s P2P Network](https://medium.com/shyft-network-media/understanding-ethereums-p2p-network-86eeaa3345)
+- [Guidelines for low-level cryptography software](https://github.com/veorq/cryptocoding)
 
 ## To Do
 
