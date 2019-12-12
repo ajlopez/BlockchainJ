@@ -10,8 +10,14 @@ import java.util.StringTokenizer;
  * Created by ajlopez on 11/05/2019.
  */
 public class DslParser {
-    public DslCommand parse(BufferedReader reader) throws IOException {
-        String line = readLine(reader);
+    private final BufferedReader reader;
+
+    public DslParser(BufferedReader reader) {
+        this.reader = reader;
+    }
+
+    public DslCommand parse() throws IOException {
+        String line = readLine(this.reader);
 
         if (line == null)
             return null;

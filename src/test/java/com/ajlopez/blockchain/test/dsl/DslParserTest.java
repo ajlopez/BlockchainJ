@@ -13,8 +13,8 @@ import java.io.StringReader;
 public class DslParserTest {
     @Test
     public void parseDslCommand() throws IOException {
-        DslParser parser = new DslParser();
-        DslCommand dslCommand = parser.parse(new BufferedReader(new StringReader("account acc1 10000")));
+        DslParser parser = new DslParser(new BufferedReader(new StringReader("account acc1 10000")));
+        DslCommand dslCommand = parser.parse();
 
         Assert.assertNotNull(dslCommand);
         Assert.assertEquals("account", dslCommand.getVerb());
@@ -25,8 +25,8 @@ public class DslParserTest {
 
     @Test
     public void parseDslCommandSkippingSpacesAndTabs() throws IOException {
-        DslParser parser = new DslParser();
-        DslCommand dslCommand = parser.parse(new BufferedReader(new StringReader("  account  \t acc1   10000   ")));
+        DslParser parser = new DslParser(new BufferedReader(new StringReader("  account  \t acc1   10000   ")));
+        DslCommand dslCommand = parser.parse();
 
         Assert.assertNotNull(dslCommand);
         Assert.assertEquals("account", dslCommand.getVerb());
@@ -37,8 +37,8 @@ public class DslParserTest {
 
     @Test
     public void parseDslCommandSkippingComment() throws IOException {
-        DslParser parser = new DslParser();
-        DslCommand dslCommand = parser.parse(new BufferedReader(new StringReader("  account  \t acc1   10000   # a comment")));
+        DslParser parser = new DslParser(new BufferedReader(new StringReader("  account  \t acc1   10000   # a comment")));
+        DslCommand dslCommand = parser.parse();
 
         Assert.assertNotNull(dslCommand);
         Assert.assertEquals("account", dslCommand.getVerb());
