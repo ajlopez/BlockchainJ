@@ -17,7 +17,7 @@ public class DslParser {
     }
 
     public DslCommand parse() throws IOException {
-        String line = readLine(this.reader);
+        String line = readLine();
 
         if (line == null)
             return null;
@@ -33,8 +33,8 @@ public class DslParser {
         return new DslCommand(verb, arguments);
     }
 
-    private static String readLine(BufferedReader reader) throws IOException {
-        String line = reader.readLine();
+    private String readLine() throws IOException {
+        String line = this.reader.readLine();
 
         if (line == null)
             return null;
