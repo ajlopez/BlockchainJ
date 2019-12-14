@@ -27,13 +27,9 @@ public interface ExecutionContext extends CodeProvider {
 
     void rollback();
 
-    AccountState getAccountState(Address address) throws IOException;
-
-    void setAccountState(Address address, AccountState accountState);
-
     Storage getAccountStorage(Address address) throws IOException;
 
-    Storage retrieveAccountStorage(Address address) throws IOException;
-
     void setCode(Address address, byte[] code) throws IOException;
+
+    ExecutionContext createChildExecutionContext();
 }

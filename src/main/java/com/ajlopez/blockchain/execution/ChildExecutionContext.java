@@ -10,9 +10,9 @@ import java.io.IOException;
  * Created by ajlopez on 27/11/2018.
  */
 public class ChildExecutionContext extends AbstractExecutionContext {
-    private final ExecutionContext parentContext;
+    private final AbstractExecutionContext parentContext;
 
-    public ChildExecutionContext(ExecutionContext parentContext) {
+    public ChildExecutionContext(AbstractExecutionContext parentContext) {
         this.parentContext = parentContext;
     }
 

@@ -82,7 +82,6 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
         this.accountStates.clear();
     }
 
-    @Override
     public AccountState getAccountState(Address address) throws IOException {
         if (this.accountStates.containsKey(address))
             return this.accountStates.get(address);
@@ -94,7 +93,6 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
         return accountState;
     }
 
-    @Override
     public void setAccountState(Address address, AccountState accountState) {
         this.accountStates.put(address, accountState);
     }
@@ -116,4 +114,9 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
     abstract void updateAccountState(Address address, AccountState accountState);
 
     abstract public Storage retrieveAccountStorage(Address address) throws IOException;
+
+    @Override
+    public ExecutionContext createChildExecutionContext() {
+        return new ChildExecutionContext(this);
+    }
 }

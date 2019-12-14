@@ -50,7 +50,7 @@ public class TransactionExecutor {
 
         boolean isContractCreation = transaction.isContractCreation();
 
-        ExecutionContext context = new ChildExecutionContext(this.executionContext);
+        ExecutionContext context = this.executionContext.createChildExecutionContext();
 
         Address receiver = transaction.getReceiver();
         byte[] data = transaction.getData();
