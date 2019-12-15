@@ -44,31 +44,19 @@ public class TopExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    public byte[] getCode(Address address) throws IOException {
-        AccountState accountState = this.getAccountState(address);
-
-        Hash codeHash = accountState.getCodeHash();
-
-        if (codeHash == null)
-            return null;
-
-        return this.codeStore.getCode(codeHash);
-    }
-
-    @Override
-    public void setCode(Address address, byte[] code) throws IOException {
-        AccountState accountState = this.getAccountState(address);
-        Hash codeHash = HashUtils.calculateHash(code);
-
-        this.codeStore.putCode(codeHash, code);
-
-        accountState.setCodeHash(codeHash);
-    }
-
-    @Override
     public void commit() throws IOException {
         super.commit();
         // TODO save other stores??
         this.accountStore.save();
+    }
+
+    @Override
+    public void updateCode(Hash hash, byte[] code) throws IOException {
+        this.codeStore.putCode(hash, code);
+    }
+
+    @Override
+    public byte[] retrieveCode(Hash hash) throws IOException {
+        return this.codeStore.getCode(hash);
     }
 }

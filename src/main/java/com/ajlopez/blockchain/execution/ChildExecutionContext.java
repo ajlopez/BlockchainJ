@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.vms.eth.ChildMapStorage;
 import com.ajlopez.blockchain.vms.eth.Storage;
 
@@ -32,14 +33,12 @@ public class ChildExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    public byte[] getCode(Address address) throws IOException {
-        // TODO implement in child context
-        return parentContext.getCode(address);
+    public void updateCode(Hash hash, byte[] code) throws IOException {
+        this.parentContext.setCode(hash, code);
     }
 
     @Override
-    public void setCode(Address address, byte[] code) throws IOException {
-        // TODO implement in child context
-        parentContext.setCode(address, code);
+    public byte[] retrieveCode(Hash hash) throws IOException {
+        return this.parentContext.getCode(hash);
     }
 }

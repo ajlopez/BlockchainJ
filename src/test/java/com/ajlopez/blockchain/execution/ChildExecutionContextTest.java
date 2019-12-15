@@ -6,10 +6,7 @@ import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.KeyValueStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.vms.eth.ChildMapStorage;
 import com.ajlopez.blockchain.vms.eth.Storage;
@@ -91,7 +88,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccount() throws IOException {
+    public void incrementAccountNonce() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -111,7 +108,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccountAndCommitOneLevel() throws IOException {
+    public void incrementAccountNonceAndCommitOneLevel() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -135,7 +132,7 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccountAndCommitTwoLevels() throws IOException {
+    public void incrementAccountNonceAndCommitTwoLevels() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -362,29 +359,6 @@ public class ChildExecutionContextTest {
     }
 
     @Test
-    public void setAndGetCodeHashFromNewAccount() throws IOException {
-        Hash codeHash = FactoryHelper.createRandomHash();
-        Address address = FactoryHelper.createRandomAddress();
-
-        AccountStore accountStore = new AccountStore(new Trie());
-
-        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
-        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
-
-        executionContext.setCodeHash(address, codeHash);
-
-        Hash result = executionContext.getCodeHash(address);
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(codeHash, result);
-        Assert.assertNull(parentExecutionContext.getCodeHash(address));
-
-        executionContext.commit();
-
-        Assert.assertEquals(codeHash, parentExecutionContext.getCodeHash(address));
-    }
-
-    @Test
     public void getStorageFromNewAccountAndSetKeyValue() throws IOException {
         Address address = FactoryHelper.createRandomAddress();
         AccountStore accountStore = new AccountStore(new Trie());
@@ -474,5 +448,71 @@ public class ChildExecutionContextTest {
 
         Assert.assertNull(parentExecutionContext.getAccountState(address).getStorageHash());
         Assert.assertNull(keyValueStore.getValue(tresult2.getRootHash().getBytes()));
+    }
+
+    @Test
+    public void setCode() throws IOException {
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+        byte[] code = FactoryHelper.createRandomBytes(42);
+
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
+        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
+
+        Assert.assertNull(executionContext.getCode(address));
+
+        executionContext.setCode(address, code);
+
+        Assert.assertNotNull(executionContext.getCodeHash(address));
+        Assert.assertArrayEquals(code, executionContext.getCode(address));
+    }
+
+    @Test
+    public void setCodeAndCommit() throws IOException {
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        Address address = FactoryHelper.createRandomAddress();
+        byte[] code = FactoryHelper.createRandomBytes(42);
+
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
+        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
+
+        Assert.assertNull(executionContext.getCode(address));
+
+        executionContext.setCode(address, code);
+
+        Assert.assertNotNull(executionContext.getCodeHash(address));
+        Assert.assertArrayEquals(code, executionContext.getCode(address));
+
+        executionContext.commit();
+
+        Assert.assertNotNull(executionContext.getCodeHash(address));
+        Assert.assertArrayEquals(code, executionContext.getCode(address));
+
+        Assert.assertNotNull(parentExecutionContext.getCodeHash(address));
+        Assert.assertArrayEquals(code, parentExecutionContext.getCode(address));
+    }
+
+    @Test
+    public void setCodeAndRollback() throws IOException {
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        Address address = FactoryHelper.createRandomAddress();
+        byte[] code = FactoryHelper.createRandomBytes(42);
+
+        TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
+        ChildExecutionContext executionContext = new ChildExecutionContext(parentExecutionContext);
+
+        Assert.assertNull(executionContext.getCode(address));
+
+        executionContext.setCode(address, code);
+
+        Assert.assertNotNull(executionContext.getCodeHash(address));
+        Assert.assertArrayEquals(code, executionContext.getCode(address));
+
+        executionContext.rollback();
+
+        Assert.assertNull(executionContext.getCodeHash(address));
+        Assert.assertNull(parentExecutionContext.getCodeHash(address));
     }
 }

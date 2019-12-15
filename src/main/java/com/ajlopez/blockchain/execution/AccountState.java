@@ -114,7 +114,7 @@ public class AccountState {
     }
 
     public AccountState cloneState() {
-        AccountState clonedState = new AccountState(this.balance, this.nonce, this.codeHash, null);
+        AccountState clonedState = new AccountState(this.balance, this.nonce, this.codeHash, this.storageHash);
 
         clonedState.changed = this.changed;
 

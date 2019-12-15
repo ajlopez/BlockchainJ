@@ -239,6 +239,23 @@ public class AccountStateTest {
     }
 
     @Test
+    public void cloneWithInitialBalanceAndNonceAndCodeAndStorageHash() {
+        Hash codeHash = FactoryHelper.createRandomHash();
+        Hash storageHash = FactoryHelper.createRandomHash();
+
+        AccountState accountState = new AccountState(Coin.TEN, 42, codeHash, storageHash);
+
+        AccountState result = accountState.cloneState();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(Coin.TEN, result.getBalance());
+        Assert.assertEquals(42, result.getNonce());
+        Assert.assertEquals(codeHash, result.getCodeHash());
+        Assert.assertEquals(storageHash, result.getStorageHash());
+        Assert.assertFalse(result.wasChanged());
+    }
+
+    @Test
     public void cloneWithInitialBalanceAndNonceAfterIncrementNonce() {
         AccountState accountState = new AccountState(Coin.TEN, 41, null, null);
 

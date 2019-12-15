@@ -96,23 +96,6 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void setAndGetCodeHashFromNewAccount() throws IOException {
-        Hash codeHash = FactoryHelper.createRandomHash();
-        Address address = FactoryHelper.createRandomAddress();
-
-        AccountStore accountStore = new AccountStore(new Trie());
-
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
-
-        executionContext.setCodeHash(address, codeHash);
-
-        Hash result = executionContext.getCodeHash(address);
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(codeHash, result);
-    }
-
-    @Test
     public void getEmptyStorageFromNewAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         TrieStore trieStore = new TrieStore(new HashMapStore());
@@ -270,7 +253,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccount() throws IOException {
+    public void incrementAccountNonce() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -289,7 +272,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccountAndCommit() throws IOException {
+    public void incrementAccountNonceAndCommit() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -309,7 +292,7 @@ public class TopExecutionContextTest {
     }
 
     @Test
-    public void incrementNonceAccountAndRollback() throws IOException {
+    public void incrementAccountNonceAndRollback() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
@@ -438,5 +421,68 @@ public class TopExecutionContextTest {
         Account receiver2 = accountStore.getAccount(receiverAddress);
         Assert.assertNotNull(receiver2);
         Assert.assertEquals(Coin.ZERO, receiver2.getBalance());
+    }
+
+    @Test
+    public void setCode() throws IOException {
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+        byte[] code = FactoryHelper.createRandomBytes(42);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
+
+        Assert.assertNull(executionContext.getCode(address));
+
+        executionContext.setCode(address, code);
+
+        Assert.assertNotNull(executionContext.getCodeHash(address));
+        Assert.assertArrayEquals(code, executionContext.getCode(address));
+    }
+
+    @Test
+    public void setCodeAndCommit() throws IOException {
+        AccountStore accountStore = new AccountStore(new Trie());
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+
+        Address address = FactoryHelper.createRandomAddress();
+        byte[] code = FactoryHelper.createRandomBytes(42);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        Assert.assertNull(executionContext.getCode(address));
+
+        executionContext.setCode(address, code);
+
+        Assert.assertNotNull(executionContext.getCodeHash(address));
+        Assert.assertArrayEquals(code, executionContext.getCode(address));
+
+        executionContext.commit();
+
+        Assert.assertNotNull(executionContext.getCodeHash(address));
+        Assert.assertArrayEquals(code, executionContext.getCode(address));
+
+        Assert.assertArrayEquals(code, codeStore.getCode(executionContext.getCodeHash(address)));
+    }
+
+    @Test
+    public void setCodeAndRollback() throws IOException {
+        AccountStore accountStore = new AccountStore(new Trie());
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+
+        Address address = FactoryHelper.createRandomAddress();
+        byte[] code = FactoryHelper.createRandomBytes(42);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        Assert.assertNull(executionContext.getCode(address));
+
+        executionContext.setCode(address, code);
+
+        Assert.assertNotNull(executionContext.getCodeHash(address));
+        Assert.assertArrayEquals(code, executionContext.getCode(address));
+
+        executionContext.rollback();
+
+        Assert.assertNull(executionContext.getCodeHash(address));
     }
 }
