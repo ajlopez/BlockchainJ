@@ -29,5 +29,7 @@ public interface ExecutionContext extends CodeProvider {
 
     void setCode(Address address, byte[] code) throws IOException;
 
+    byte[] getCode(Address address) throws IOException;
+
     ExecutionContext createChildExecutionContext();
 }
