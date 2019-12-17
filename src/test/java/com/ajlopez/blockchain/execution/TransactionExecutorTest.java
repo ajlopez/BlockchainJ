@@ -11,6 +11,7 @@ import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.test.builders.ExecutorBuilder;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.*;
@@ -28,14 +29,14 @@ import java.util.List;
 public class TransactionExecutorTest {
     @Test
     public void executeTransaction() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        ExecutorBuilder builder = new ExecutorBuilder();
+        TransactionExecutor executor = builder.buildTransactionExecutor();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
         Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 6000000, Coin.ZERO);
-
-        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
         List<TransactionResult> result = executor.executeTransactions(Collections.singletonList(transaction), null);
 
@@ -46,6 +47,7 @@ public class TransactionExecutorTest {
         Transaction tresult = result.get(0).getTransaction();
 
         Assert.assertEquals(transaction, tresult);
+
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
@@ -61,14 +63,14 @@ public class TransactionExecutorTest {
 
     @Test
     public void executeTransactionWithGasPrice() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        ExecutorBuilder builder = new ExecutorBuilder();
+        TransactionExecutor executor = builder.buildTransactionExecutor();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 100000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
         Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 60000, Coin.ONE);
-
-        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
         Address coinbase = FactoryHelper.createRandomAddress();
         BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE);
@@ -101,7 +103,9 @@ public class TransactionExecutorTest {
 
     @Test
     public void executeTransactionWithGasPriceAndData() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        ExecutorBuilder builder = new ExecutorBuilder();
+        TransactionExecutor executor = builder.buildTransactionExecutor();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 100000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -109,8 +113,6 @@ public class TransactionExecutorTest {
         byte[] data = new byte[] { 0x00, 0x01, 0x02, 0x00, 0x03 };
 
         Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, data, 60000, Coin.ONE);
-
-        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
         Address coinbase = FactoryHelper.createRandomAddress();
         BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE);
