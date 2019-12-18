@@ -23,31 +23,31 @@ public class ExecutorBuilder {
     }
 
     public AccountStore getAccountStore() {
+        if (this.accountStore == null)
+            this.accountStore = new AccountStore(new Trie());
+
         return this.accountStore;
     }
 
     public TrieStorageProvider getTrieStorageProvider() {
+        if (this.trieStorageProvider == null)
+            this.trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
+
         return this.trieStorageProvider;
     }
 
     public CodeStore getCodeStore() {
+        if (this.codeStore == null)
+            this.codeStore = new CodeStore(new HashMapStore());
+
         return this.codeStore;
     }
 
     public ExecutionContext buildExecutionContext() throws IOException {
-        if (this.accountStore == null)
-            this.accountStore = new AccountStore(new Trie());
-
-        if (this.trieStorageProvider == null)
-            this.trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
-
-        if (this.codeStore == null)
-            this.codeStore = new CodeStore(new HashMapStore());
-
         return new TopExecutionContext(
-            this.accountStore,
-            this.trieStorageProvider,
-            this.codeStore
+            this.getAccountStore(),
+            this.getTrieStorageProvider(),
+            this.getCodeStore()
         );
     }
 

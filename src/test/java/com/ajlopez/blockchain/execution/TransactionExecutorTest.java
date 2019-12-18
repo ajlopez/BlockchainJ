@@ -48,7 +48,6 @@ public class TransactionExecutorTest {
 
         Assert.assertEquals(transaction, tresult);
 
-
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
         Assert.assertEquals(Coin.fromUnsignedLong(1000 - 100), senderBalance);
