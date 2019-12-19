@@ -143,7 +143,9 @@ public class TransactionExecutorTest {
 
     @Test
     public void executeTwoTransactions() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        ExecutorBuilder builder = new ExecutorBuilder();
+        TransactionExecutor executor = builder.buildTransactionExecutor();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -153,8 +155,6 @@ public class TransactionExecutorTest {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
-
-        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
         List<TransactionResult> result = executor.executeTransactions(transactions, null);
 
@@ -181,7 +181,9 @@ public class TransactionExecutorTest {
 
     @Test
     public void secondTransactionRejectedByNonce() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        ExecutorBuilder builder = new ExecutorBuilder();
+        TransactionExecutor executor = builder.buildTransactionExecutor();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -192,8 +194,6 @@ public class TransactionExecutorTest {
 
         transactions.add(transaction1);
         transactions.add(transaction2);
-
-        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
         List<TransactionResult> result = executor.executeTransactions(transactions, null);
 
@@ -218,7 +218,9 @@ public class TransactionExecutorTest {
 
     @Test
     public void secondTransactionRejectedByInsufficientBalance() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        ExecutorBuilder builder = new ExecutorBuilder();
+        TransactionExecutor executor = builder.buildTransactionExecutor();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -228,8 +230,6 @@ public class TransactionExecutorTest {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
-
-        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
         List<TransactionResult> result = executor.executeTransactions(transactions, null);
 
@@ -254,7 +254,9 @@ public class TransactionExecutorTest {
 
     @Test
     public void secondTransactionRejectedByInsufficientBalanceToCoverGasLimit() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        ExecutorBuilder builder = new ExecutorBuilder();
+        TransactionExecutor executor = builder.buildTransactionExecutor();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -264,8 +266,6 @@ public class TransactionExecutorTest {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction1);
         transactions.add(transaction2);
-
-        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
 
         List<TransactionResult> result = executor.executeTransactions(transactions, null);
 
@@ -291,7 +291,9 @@ public class TransactionExecutorTest {
     @Test
     public void execute999Transactions() throws IOException {
         int ntxs = 1000;
-        AccountStore accountStore = new AccountStore(new Trie());
+        ExecutorBuilder builder = new ExecutorBuilder();
+        TransactionExecutor executor = builder.buildTransactionExecutor();
+        AccountStore accountStore = builder.getAccountStore();
 
         List<Address> addresses = new ArrayList<>();
 
@@ -309,10 +311,8 @@ public class TransactionExecutorTest {
             transactions.add(transaction);
         }
 
-        TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
-
         long millis = System.currentTimeMillis();
-        List<TransactionResult> executed = transactionExecutor.executeTransactions(transactions, null);
+        List<TransactionResult> executed = executor.executeTransactions(transactions, null);
         millis = System.currentTimeMillis() - millis;
         System.out.println(millis);
 
