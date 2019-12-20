@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
+import com.ajlopez.blockchain.test.builders.ExecutorBuilder;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.BlockData;
@@ -26,11 +27,9 @@ import java.util.List;
 public class BlockExecutorTest {
     @Test
     public void executeBlockWithoutTransactions() throws IOException {
-        CodeStore codeStore = new CodeStore(new HashMapStore());
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        ExecutorBuilder builder = new ExecutorBuilder();
 
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
+        BlockExecutor blockExecutor = builder.buildBlockExecutor();
 
         Block genesis = GenesisGenerator.generateGenesis();
         Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);

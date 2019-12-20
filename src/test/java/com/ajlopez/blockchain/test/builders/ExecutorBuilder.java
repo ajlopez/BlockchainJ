@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test.builders;
 
+import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
@@ -19,6 +20,9 @@ public class ExecutorBuilder {
     private CodeStore codeStore;
 
     public AccountStoreProvider getAccountStoreProvider() {
+        if (this.accountStoreProvider == null)
+            this.accountStoreProvider = new AccountStoreProvider(new TrieStore(new HashMapStore()));
+
         return this.accountStoreProvider;
     }
 
@@ -53,5 +57,13 @@ public class ExecutorBuilder {
 
     public TransactionExecutor buildTransactionExecutor() throws IOException {
         return new TransactionExecutor(this.buildExecutionContext());
+    }
+
+    public BlockExecutor buildBlockExecutor() {
+        return new BlockExecutor(
+            this.getAccountStoreProvider(),
+            this.getTrieStorageProvider(),
+            this.getCodeStore()
+        );
     }
 }
