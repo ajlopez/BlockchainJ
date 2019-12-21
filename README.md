@@ -53,6 +53,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [How does Ethereum work, anyway?](https://medium.com/@preethikasireddy/how-does-ethereum-work-anyway-22d1df506369)
 - [Understanding Ethereum’s P2P Network](https://medium.com/shyft-network-media/understanding-ethereums-p2p-network-86eeaa3345)
 - [Guidelines for low-level cryptography software](https://github.com/veorq/cryptocoding)
+- [Breaking down the differences between PoW and PoS](https://medium.com/@stakingrewards/research-report-is-proof-of-stake-better-than-proof-of-work-222d048ccef5)
 
 ## To Do
 
