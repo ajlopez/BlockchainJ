@@ -26,9 +26,9 @@ public class ExecutorBuilder {
         return this.accountStoreProvider;
     }
 
-    public AccountStore getAccountStore() {
+    public AccountStore getAccountStore() throws IOException {
         if (this.accountStore == null)
-            this.accountStore = new AccountStore(new Trie());
+            this.accountStore = getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
 
         return this.accountStore;
     }

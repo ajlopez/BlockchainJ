@@ -42,10 +42,9 @@ public class BlockExecutorTest {
 
     @Test
     public void executeBlockWithOneTransaction() throws IOException {
-        CodeStore codeStore = new CodeStore(new HashMapStore());
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
-        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        ExecutorBuilder builder = new ExecutorBuilder();
+        BlockExecutor blockExecutor = builder.buildBlockExecutor();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 10000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -56,12 +55,9 @@ public class BlockExecutorTest {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
-        ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
-        TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
+        TransactionExecutor transactionExecutor = builder.buildTransactionExecutor();
 
         transactionExecutor.executeTransactions(transactions, null);
-
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
@@ -81,13 +77,12 @@ public class BlockExecutorTest {
 
         Hash codeHash = HashUtils.calculateHash(code);
 
-        CodeStore codeStore = new CodeStore(new HashMapStore());
+        ExecutorBuilder builder = new ExecutorBuilder();
+
+        CodeStore codeStore = builder.getCodeStore();
         codeStore.putCode(codeHash, code);
 
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(trieStore);
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
-        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -103,15 +98,14 @@ public class BlockExecutorTest {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
-        ExecutionContext executionContext = new TopExecutionContext(accountStore, trieStorageProvider, codeStore);
-        TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
+        TransactionExecutor transactionExecutor = builder.buildTransactionExecutor();
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TWO);
 
         BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty());
         transactionExecutor.executeTransactions(transactions, blockData);
 
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, trieStorageProvider, codeStore);
+        BlockExecutor blockExecutor = builder.buildBlockExecutor();
 
         Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
@@ -121,7 +115,7 @@ public class BlockExecutorTest {
         Assert.assertNotNull(receiver);
         Assert.assertNotNull(receiver.getStorageHash());
 
-        Storage storage = trieStorageProvider.retrieve(receiver.getStorageHash());
+        Storage storage = builder.getTrieStorageProvider().retrieve(receiver.getStorageHash());
 
         Assert.assertNotNull(storage);
         Assert.assertEquals(DataWord.fromUnsignedLong(block.getNumber()), storage.getValue(DataWord.ZERO));
@@ -132,10 +126,8 @@ public class BlockExecutorTest {
 
     @Test
     public void executeBlockWithOneTransactionWithInvalidNonce() throws IOException {
-        CodeStore codeStore = new CodeStore(new HashMapStore());
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
-        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        ExecutorBuilder builder = new ExecutorBuilder();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore,10000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -146,12 +138,11 @@ public class BlockExecutorTest {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
-        ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
-        TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
+        TransactionExecutor transactionExecutor = builder.buildTransactionExecutor();
 
         transactionExecutor.executeTransactions(transactions, null);
 
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
+        BlockExecutor blockExecutor = builder.buildBlockExecutor();
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TEN);
 
@@ -162,10 +153,8 @@ public class BlockExecutorTest {
 
     @Test
     public void executeBlockWithOneTransactionWithSenderWithoutEnoughBalance() throws IOException {
-        CodeStore codeStore = new CodeStore(new HashMapStore());
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
-        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        ExecutorBuilder builder = new ExecutorBuilder();
+        AccountStore accountStore = builder.getAccountStore();
 
         Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 10000);
         Address receiverAddress = FactoryHelper.createRandomAddress();
@@ -176,12 +165,11 @@ public class BlockExecutorTest {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
-        ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
-        TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
+        TransactionExecutor transactionExecutor = builder.buildTransactionExecutor();
 
         transactionExecutor.executeTransactions(transactions, null);
 
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
+        BlockExecutor blockExecutor = builder.buildBlockExecutor();
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
