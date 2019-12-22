@@ -29,7 +29,7 @@ public class VirtualMachineTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void executeEmptyCode() throws VirtualMachineException, IOException {
+    public void executeEmptyCode() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[0]);
@@ -48,7 +48,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executePushOneByte() throws VirtualMachineException, IOException {
+    public void executePushOneByte() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01});
@@ -68,7 +68,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executePushBytes() throws VirtualMachineException, IOException {
+    public void executePushBytes() throws IOException {
         for (int k = 0; k < 32; k++) {
             byte[] value = FactoryHelper.createRandomBytes(k + 1);
             byte[] opcodes = new byte[k + 2];
@@ -96,7 +96,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeProgramCounter() throws VirtualMachineException, IOException {
+    public void executeProgramCounter() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PC });
@@ -115,7 +115,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeAdd() throws VirtualMachineException, IOException {
+    public void executeAdd() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
@@ -134,7 +134,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeAddOperations() throws VirtualMachineException, IOException {
+    public void executeAddOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.ADD, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.ADD, 3, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(40, 2, OpCodes.ADD, 42, FeeSchedule.VERYLOW.getValue());
@@ -142,7 +142,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeAddWithOverflow() throws VirtualMachineException, IOException {
+    public void executeAddWithOverflow() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
         byte[] bytecodes = HexUtils.hexStringToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600101");
 
@@ -163,7 +163,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeMulOperations() throws VirtualMachineException, IOException {
+    public void executeMulOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.MUL, 0, FeeSchedule.LOW.getValue());
         executeBinaryOp(1, 2, OpCodes.MUL, 2, FeeSchedule.LOW.getValue());
         executeBinaryOp(21, 2, OpCodes.MUL, 42, FeeSchedule.LOW.getValue());
@@ -174,7 +174,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeMulModOperations() throws VirtualMachineException, IOException {
+    public void executeMulModOperations() throws IOException {
         // TODO test add without 2^256 modulus
         executeTernaryOp(0, 0, 0, OpCodes.MULMOD, 0, FeeSchedule.MID.getValue());
         executeTernaryOp(1, 1, 1, OpCodes.MULMOD, 0, FeeSchedule.MID.getValue());
@@ -188,7 +188,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeDivOperations() throws VirtualMachineException, IOException {
+    public void executeDivOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.DIV, 0, FeeSchedule.LOW.getValue());
         executeBinaryOp(1, 2, OpCodes.DIV, 2, FeeSchedule.LOW.getValue());
         executeBinaryOp(2, 84, OpCodes.DIV, 42, FeeSchedule.LOW.getValue());
@@ -199,7 +199,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSignedDivOperations() throws VirtualMachineException, IOException {
+    public void executeSignedDivOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.SDIV, 0, FeeSchedule.LOW.getValue());
         executeBinaryOp(1, 2, OpCodes.SDIV, 2, FeeSchedule.LOW.getValue());
         executeBinaryOp(2, 84, OpCodes.SDIV, 42, FeeSchedule.LOW.getValue());
@@ -217,7 +217,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeModOperations() throws VirtualMachineException, IOException {
+    public void executeModOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.MOD, 0, FeeSchedule.LOW.getValue());
         executeBinaryOp(1, 2, OpCodes.MOD, 0, FeeSchedule.LOW.getValue());
         executeBinaryOp(2, 3, OpCodes.MOD, 1, FeeSchedule.LOW.getValue());
@@ -230,7 +230,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSignedModOperations() throws VirtualMachineException, IOException {
+    public void executeSignedModOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.SMOD, 0, FeeSchedule.LOW.getValue());
         executeBinaryOp(1, 2, OpCodes.SMOD, 0, FeeSchedule.LOW.getValue());
         executeBinaryOp(1, -2, OpCodes.SMOD, 0, FeeSchedule.LOW.getValue());
@@ -246,7 +246,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeAddModOperations() throws VirtualMachineException, IOException {
+    public void executeAddModOperations() throws IOException {
         // TODO test mul without 2^256 modulus
         executeTernaryOp(0, 0, 0, OpCodes.ADDMOD, 0, FeeSchedule.MID.getValue());
         executeTernaryOp(1, 1, 1, OpCodes.ADDMOD, 0, FeeSchedule.MID.getValue());
@@ -260,7 +260,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSub() throws VirtualMachineException, IOException {
+    public void executeSub() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.SUB });
@@ -280,7 +280,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSubOperations() throws VirtualMachineException, IOException {
+    public void executeSubOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.SUB, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 3, OpCodes.SUB, 2, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(2, 44, OpCodes.SUB, 42, FeeSchedule.VERYLOW.getValue());
@@ -288,7 +288,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSubWithUnderflow() throws VirtualMachineException, IOException {
+    public void executeSubWithUnderflow() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
         byte[] bytecodes = HexUtils.hexStringToBytes("6001600003");
 
@@ -309,7 +309,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeDupTopOfStack() throws VirtualMachineException, IOException {
+    public void executeDupTopOfStack() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.DUP1 });
@@ -327,7 +327,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeDups() throws VirtualMachineException, IOException {
+    public void executeDups() throws IOException {
         for (int k = 0; k < 16; k++) {
             VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
@@ -362,7 +362,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSwaps() throws VirtualMachineException, IOException {
+    public void executeSwaps() throws IOException {
         for (int k = 0; k < 16; k++) {
             VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
@@ -398,7 +398,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executePop() throws VirtualMachineException, IOException {
+    public void executePop() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.POP });
@@ -418,7 +418,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeStorageLoad() throws VirtualMachineException, IOException {
+    public void executeStorageLoad() throws IOException {
         Storage storage = new MapStorage();
 
         storage.setValue(DataWord.ONE, DataWord.fromUnsignedInteger(42));
@@ -438,7 +438,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeStorageStore() throws VirtualMachineException, IOException {
+    public void executeStorageStore() throws IOException {
         Storage storage = new MapStorage();
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), storage);
@@ -457,18 +457,22 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void cannotExecuteStorageStoreIfMessageIsReadOnly() throws VirtualMachineException, IOException {
+    public void cannotExecuteStorageStoreIfMessageIsReadOnly() throws IOException {
         Storage storage = new MapStorage();
 
         VirtualMachine virtualMachine = new VirtualMachine(createReadOnlyProgramEnvironment(), storage);
 
-        exception.expect(VirtualMachineException.class);
-        exception.expectMessage("Read-only message");
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Read-only message", executionResult.getException().getMessage());
     }
 
     @Test
-    public void executeMemoryStore() throws VirtualMachineException, IOException {
+    public void executeMemoryStore() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE });
@@ -486,7 +490,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeMemoryStoreAndMemoryLoad() throws VirtualMachineException, IOException {
+    public void executeMemoryStoreAndMemoryLoad() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.MLOAD });
@@ -506,7 +510,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeMemoryStoreAndMemorySize() throws VirtualMachineException, IOException {
+    public void executeMemoryStoreAndMemorySize() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.MSIZE });
@@ -527,7 +531,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeMemoryStoreByte() throws VirtualMachineException, IOException {
+    public void executeMemoryStoreByte() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE8 });
@@ -545,7 +549,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLog0() throws VirtualMachineException, IOException {
+    public void executeLog0() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG0 });
@@ -571,7 +575,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLog1() throws VirtualMachineException, IOException {
+    public void executeLog1() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG1 });
@@ -599,7 +603,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLog2() throws VirtualMachineException, IOException {
+    public void executeLog2() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG2 });
@@ -628,7 +632,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLog3() throws VirtualMachineException, IOException {
+    public void executeLog3() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG3 });
@@ -658,7 +662,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLog4() throws VirtualMachineException, IOException {
+    public void executeLog4() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG4 });
@@ -689,7 +693,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeLessThanOperations() throws VirtualMachineException, IOException {
+    public void executeLessThanOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.LT, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.LT, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(40, 2, OpCodes.LT, 1, FeeSchedule.VERYLOW.getValue());
@@ -697,7 +701,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeGreaterThanOperations() throws VirtualMachineException, IOException {
+    public void executeGreaterThanOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.GT, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.GT, 1, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(40, 2, OpCodes.GT, 0, FeeSchedule.VERYLOW.getValue());
@@ -705,7 +709,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSignedLessThanOperations() throws VirtualMachineException, IOException {
+    public void executeSignedLessThanOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.SLT, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.SLT, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(-1, 2, OpCodes.SLT, 0, FeeSchedule.VERYLOW.getValue());
@@ -716,7 +720,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeSignedGreaterThanOperations() throws VirtualMachineException, IOException {
+    public void executeSignedGreaterThanOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.SGT, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.SGT, 1, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(-1, 2, OpCodes.SGT, 1, FeeSchedule.VERYLOW.getValue());
@@ -728,7 +732,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeEqualsOperations() throws VirtualMachineException, IOException {
+    public void executeEqualsOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.EQ, 1, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.EQ, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(42, 42, OpCodes.EQ, 1, FeeSchedule.VERYLOW.getValue());
@@ -737,7 +741,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeAndOperations() throws VirtualMachineException, IOException {
+    public void executeAndOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.AND, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.AND, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(3, 3, OpCodes.AND, 3, FeeSchedule.VERYLOW.getValue());
@@ -747,7 +751,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeOrOperations() throws VirtualMachineException, IOException {
+    public void executeOrOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.OR, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.OR, 3, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(3, 3, OpCodes.OR, 3, FeeSchedule.VERYLOW.getValue());
@@ -757,7 +761,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeXorOperations() throws VirtualMachineException, IOException {
+    public void executeXorOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.XOR, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.XOR, 3, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(3, 3, OpCodes.XOR, 0, FeeSchedule.VERYLOW.getValue());
@@ -767,7 +771,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeByteOperations() throws VirtualMachineException, IOException {
+    public void executeByteOperations() throws IOException {
         executeBinaryOp(0x20, 0x1f, OpCodes.BYTE, 0x20, FeeSchedule.VERYLOW.getValue());
 
         executeBinaryOp("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "00", OpCodes.BYTE, "01", FeeSchedule.VERYLOW.getValue());
@@ -779,7 +783,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeShiftLeftOperations() throws VirtualMachineException, IOException {
+    public void executeShiftLeftOperations() throws IOException {
         executeBinaryOp(0x20, 0x01, OpCodes.SHL, 0x40, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x2020, 0x01, OpCodes.SHL, 0x4040, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x2020, 0x08, OpCodes.SHL, 0x202000, FeeSchedule.VERYLOW.getValue());
@@ -790,7 +794,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeShiftRightOperations() throws VirtualMachineException, IOException {
+    public void executeShiftRightOperations() throws IOException {
         executeBinaryOp(0x20, 0x05, OpCodes.SHR, 0x01, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x2020, 0x01, OpCodes.SHR, 0x1010, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x20200000, 0x08, OpCodes.SHR, 0x202000, FeeSchedule.VERYLOW.getValue());
@@ -801,7 +805,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeShiftArithmeticRightOperations() throws VirtualMachineException, IOException {
+    public void executeShiftArithmeticRightOperations() throws IOException {
         executeBinaryOp(0x20, 0x05, OpCodes.SAR, 0x01, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x2020, 0x01, OpCodes.SAR, 0x1010, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(0x20200000, 0x08, OpCodes.SAR, 0x202000, FeeSchedule.VERYLOW.getValue());
@@ -814,7 +818,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeExpOperations() throws VirtualMachineException, IOException {
+    public void executeExpOperations() throws IOException {
         // TODO calculate and check gas
         executeBinaryOp(0x05, 0x10, OpCodes.EXP, 0x100000, 0);
         executeBinaryOp(0x01, 0x2020, OpCodes.EXP, 0x2020, 0);
@@ -827,21 +831,21 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeIsZeroOperations() throws VirtualMachineException, IOException {
+    public void executeIsZeroOperations() throws IOException {
         executeUnaryOp(OpCodes.ISZERO, 1, 0, FeeSchedule.VERYLOW.getValue() * 2);
         executeUnaryOp(OpCodes.ISZERO, 0, 42, FeeSchedule.VERYLOW.getValue() * 2);
         executeUnaryOp(OpCodes.ISZERO, 0, 1024 * 1024 * 1024, FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
-    public void executeNotOperations() throws VirtualMachineException, IOException {
+    public void executeNotOperations() throws IOException {
         executeUnaryOp("00", OpCodes.NOT, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", FeeSchedule.VERYLOW.getValue() * 2);
         executeUnaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", OpCodes.NOT, "00", FeeSchedule.VERYLOW.getValue() * 2);
         executeUnaryOp("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00", OpCodes.NOT, "ff", FeeSchedule.VERYLOW.getValue() * 2);
     }
 
     @Test
-    public void executeGasPriceOperations() throws VirtualMachineException, IOException {
+    public void executeGasPriceOperations() throws IOException {
         Coin gasPrice = Coin.fromUnsignedLong(42L);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, gasPrice, null, false);
 
@@ -861,7 +865,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeAddressOriginCallerCallValueOperations() throws VirtualMachineException, IOException {
+    public void executeAddressOriginCallerCallValueOperations() throws IOException {
         Address address = FactoryHelper.createRandomAddress();
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
@@ -887,7 +891,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCallDataSize() throws VirtualMachineException, IOException {
+    public void executeCallDataSize() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
@@ -907,7 +911,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCallDataLoad() throws VirtualMachineException, IOException {
+    public void executeCallDataLoad() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
@@ -927,7 +931,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCallDataLoadWithAdditionalBytes() throws VirtualMachineException, IOException {
+    public void executeCallDataLoadWithAdditionalBytes() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
@@ -950,7 +954,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCallDataLoadBeyondData() throws VirtualMachineException, IOException {
+    public void executeCallDataLoadBeyondData() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
@@ -970,7 +974,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCallDataCopy() throws VirtualMachineException, IOException {
+    public void executeCallDataCopy() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
@@ -1003,7 +1007,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCallDataCopyWithPartialData() throws VirtualMachineException, IOException {
+    public void executeCallDataCopyWithPartialData() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
@@ -1036,7 +1040,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCallDataCopyBeyondData() throws VirtualMachineException, IOException {
+    public void executeCallDataCopyBeyondData() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
@@ -1068,7 +1072,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCodeCopy() throws VirtualMachineException, IOException {
+    public void executeCodeCopy() throws IOException {
         byte[] code = FactoryHelper.createRandomBytes(42);
         code[0] = OpCodes.PUSH1;
         code[1] = 0x10;
@@ -1106,7 +1110,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeReturn() throws VirtualMachineException, IOException {
+    public void executeReturn() throws IOException {
         byte[] code = FactoryHelper.createRandomBytes(42);
         code[0] = OpCodes.PUSH1;
         code[1] = 0x10;
@@ -1147,7 +1151,7 @@ public class VirtualMachineTest {
 
 
     @Test
-    public void executeRevert() throws VirtualMachineException, IOException {
+    public void executeRevert() throws IOException {
         byte[] code = FactoryHelper.createRandomBytes(42);
         code[0] = OpCodes.PUSH1;
         code[1] = 0x10;
@@ -1187,7 +1191,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCodeCopyWithPartialCode() throws VirtualMachineException, IOException {
+    public void executeCodeCopyWithPartialCode() throws IOException {
         byte[] code = FactoryHelper.createRandomBytes(42);
         code[0] = OpCodes.PUSH1;
         code[1] = 0x10;
@@ -1228,7 +1232,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCodeCopyBeyondCode() throws VirtualMachineException, IOException {
+    public void executeCodeCopyBeyondCode() throws IOException {
         byte[] code = FactoryHelper.createRandomBytes(42);
         code[0] = OpCodes.PUSH1;
         code[1] = 0x10;
@@ -1265,7 +1269,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCoinbaseTimestampNumberDifficultyOperations() throws VirtualMachineException, IOException {
+    public void executeCoinbaseTimestampNumberDifficultyOperations() throws IOException {
         long number = 1;
         long timestamp = 2;
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -1292,7 +1296,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeCodeSizeOperation() throws VirtualMachineException, IOException {
+    public void executeCodeSizeOperation() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.CODESIZE, OpCodes.STOP });
@@ -1307,7 +1311,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeExtCodeSizeOperationForUnknownAccount() throws VirtualMachineException, IOException {
+    public void executeExtCodeSizeOperationForUnknownAccount() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(new Trie());
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
@@ -1326,7 +1330,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeExtCodeSizeOperationForAccountWithCode() throws VirtualMachineException, IOException {
+    public void executeExtCodeSizeOperationForAccountWithCode() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         Hash codeHash = FactoryHelper.createRandomHash();
         byte[] code = FactoryHelper.createRandomBytes(100);
@@ -1358,7 +1362,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeExtCodeCopyOperationForUnknownAccount() throws VirtualMachineException, IOException {
+    public void executeExtCodeCopyOperationForUnknownAccount() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(new Trie());
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
@@ -1385,7 +1389,7 @@ public class VirtualMachineTest {
 
 
     @Test
-    public void executeExtCodeCopyOperationForAccountWithCode() throws VirtualMachineException, IOException {
+    public void executeExtCodeCopyOperationForAccountWithCode() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         Hash codeHash = FactoryHelper.createRandomHash();
         byte[] code = FactoryHelper.createRandomBytes(100);
@@ -1431,7 +1435,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeStopOperation() throws VirtualMachineException, IOException {
+    public void executeStopOperation() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.STOP, OpCodes.PUSH1, 0x01 });
@@ -1445,7 +1449,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeGasOperation() throws VirtualMachineException, IOException {
+    public void executeGasOperation() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.GAS });
@@ -1460,7 +1464,7 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeJumpOperation() throws VirtualMachineException, IOException {
+    public void executeJumpOperation() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMP, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
@@ -1476,34 +1480,46 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeJumpWithoutJumpDestRaiseException() throws VirtualMachineException, IOException {
+    public void executeJumpWithoutJumpDestRaiseException() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        exception.expect(VirtualMachineException.class);
-        exception.expectMessage("Invalid jump");
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid jump", executionResult.getException().getMessage());
     }
 
     @Test
-    public void executeJumpWithNot32BitsIntegerTargetRaiseException() throws VirtualMachineException, IOException {
+    public void executeJumpWithNot32BitsIntegerTargetRaiseException() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        exception.expect(VirtualMachineException.class);
-        exception.expectMessage("Invalid jump");
-        virtualMachine.execute(new byte[] { OpCodes.PUSH5, 0x01, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH5, 0x01, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid jump", executionResult.getException().getMessage());
     }
 
     @Test
-    public void executeJumpWithTwoLarge32BitsIntegerTargetRaiseException() throws VirtualMachineException, IOException {
+    public void executeJumpWithTwoLarge32BitsIntegerTargetRaiseException() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        exception.expect(VirtualMachineException.class);
-        exception.expectMessage("Invalid jump");
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, (byte)0xff, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, (byte)0xff, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid jump", executionResult.getException().getMessage());
     }
 
     @Test
-    public void executeConditionalJumpOperation() throws VirtualMachineException, IOException {
+    public void executeConditionalJumpOperation() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
@@ -1519,52 +1535,72 @@ public class VirtualMachineTest {
     }
 
     @Test
-    public void executeConditionalJumpWithoutJumpDestRaiseException() throws VirtualMachineException, IOException {
+    public void executeConditionalJumpWithoutJumpDestRaiseException() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        exception.expect(VirtualMachineException.class);
-        exception.expectMessage("Invalid jump");
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid jump", executionResult.getException().getMessage());
     }
 
     @Test
-    public void executeConditionalJumpWithNot32BitsIntegerTargetRaiseException() throws VirtualMachineException, IOException {
+    public void executeConditionalJumpWithNot32BitsIntegerTargetRaiseException() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        exception.expect(VirtualMachineException.class);
-        exception.expectMessage("Invalid jump");
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH5, 0x01, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH5, 0x01, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid jump", executionResult.getException().getMessage());
     }
 
     @Test
-    public void executeConditionalJumpWithTwoLarge32BitsIntegerTargetRaiseException() throws VirtualMachineException, IOException {
+    public void executeConditionalJumpWithTwoLarge32BitsIntegerTargetRaiseException() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        exception.expect(VirtualMachineException.class);
-        exception.expectMessage("Invalid jump");
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 1, OpCodes.PUSH1, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 1, OpCodes.PUSH1, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid jump", executionResult.getException().getMessage());
     }
 
     @Test
-    public void executeInvalidOpCodeRaiseException() throws VirtualMachineException, IOException {
+    public void executeInvalidOpCodeRaiseException() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
-        exception.expect(VirtualMachineException.class);
-        exception.expectMessage("Invalid opcode");
-        virtualMachine.execute(new byte[] { (byte)0xfe });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { (byte)0xfe });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid opcode", executionResult.getException().getMessage());
     }
 
     @Test
-    public void executeWithInsufficientGasRaiseException() throws VirtualMachineException, IOException {
+    public void executeWithInsufficientGasRaiseException() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 0, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
 
-        exception.expect(VirtualMachineException.class);
-        exception.expectMessage("Insufficient gas");
-        virtualMachine.execute(new byte[] { OpCodes.ADDRESS });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.ADDRESS });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Insufficient gas", executionResult.getException().getMessage());
     }
 
-    private static void executeUnaryOp(byte opcode, int expected, int operand, long expectedGasUsed) throws VirtualMachineException, IOException {
+    private static void executeUnaryOp(byte opcode, int expected, int operand, long expectedGasUsed) throws IOException {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
         byte[] bytecodes = new byte[2 + boperand.length];
@@ -1586,7 +1622,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromUnsignedInteger(expected), stack.pop());
     }
 
-    private static void executeUnaryOp(String operand, byte opcode, String expected, long expectedGasUsed) throws VirtualMachineException, IOException {
+    private static void executeUnaryOp(String operand, byte opcode, String expected, long expectedGasUsed) throws IOException {
         byte[] boperand = DataWord.fromHexadecimalString(operand).toNormalizedBytes();
 
         byte[] bytecodes = new byte[2 + boperand.length];
@@ -1608,7 +1644,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
     }
 
-    private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected, long expectedGasUsed) throws VirtualMachineException, IOException {
+    private static void executeBinaryOp(int operand1, int operand2, byte opcode, int expected, long expectedGasUsed) throws IOException {
         byte[] boperand1 = (operand1 < 0 ? DataWord.fromUnsignedLong(-operand1).negate() : DataWord.fromUnsignedLong(operand1)).toNormalizedBytes();
         byte[] boperand2 = (operand2 < 0 ? DataWord.fromUnsignedLong(-operand2).negate(): DataWord.fromUnsignedLong(operand2)).toNormalizedBytes();
 
@@ -1634,7 +1670,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(dwexpected, stack.pop());
     }
 
-    private static void executeBinaryOp(String operand1, String operand2, byte opcode, String expected, long expectedGasUsed) throws VirtualMachineException, IOException {
+    private static void executeBinaryOp(String operand1, String operand2, byte opcode, String expected, long expectedGasUsed) throws IOException {
         byte[] boperand1 = DataWord.fromHexadecimalString(operand1).toNormalizedBytes();
         byte[] boperand2 = DataWord.fromHexadecimalString(operand2).toNormalizedBytes();
 
@@ -1659,7 +1695,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
     }
 
-    private static void executeTernaryOp(int operand1, int operand2, int operand3, byte opcode, int expected, long expectedGasUsed) throws VirtualMachineException, IOException {
+    private static void executeTernaryOp(int operand1, int operand2, int operand3, byte opcode, int expected, long expectedGasUsed) throws IOException {
         byte[] boperand1 = (operand1 < 0 ? DataWord.fromUnsignedLong(operand1).negate() : DataWord.fromUnsignedLong(operand1)).toNormalizedBytes();
         byte[] boperand2 = (operand2 < 0 ? DataWord.fromUnsignedLong(operand2).negate() : DataWord.fromUnsignedLong(operand2)).toNormalizedBytes();
         byte[] boperand3 = (operand3 < 0 ? DataWord.fromUnsignedLong(operand3).negate() : DataWord.fromUnsignedLong(operand3)).toNormalizedBytes();
@@ -1688,7 +1724,7 @@ public class VirtualMachineTest {
         Assert.assertEquals(dwexpected, stack.pop());
     }
 
-    private static void executeTernaryOp(String operand1, String operand2, String operand3, byte opcode, String expected) throws VirtualMachineException, IOException {
+    private static void executeTernaryOp(String operand1, String operand2, String operand3, byte opcode, String expected) throws IOException {
         byte[] boperand1 = DataWord.fromHexadecimalString(operand1).toNormalizedBytes();
         byte[] boperand2 = DataWord.fromHexadecimalString(operand2).toNormalizedBytes();
         byte[] boperand3 = DataWord.fromHexadecimalString(operand3).toNormalizedBytes();

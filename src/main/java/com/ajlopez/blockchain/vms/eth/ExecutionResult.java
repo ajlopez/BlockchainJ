@@ -10,18 +10,22 @@ public class ExecutionResult {
     private final byte[] returnedData;
     private final List<Log> logs;
     private final boolean success;
+    private final Exception exception;
 
-    public static ExecutionResult OkWithoutData(long gasUsed, List<Log> logs) { return new ExecutionResult(gasUsed, null, logs, true); }
+    public static ExecutionResult OkWithoutData(long gasUsed, List<Log> logs) { return new ExecutionResult(gasUsed, null, logs, true, null); }
 
-    public static ExecutionResult OkWithData(long gasUsed, byte[] returnedData, List<Log> logs) { return new ExecutionResult(gasUsed, returnedData, logs, true); }
+    public static ExecutionResult OkWithData(long gasUsed, byte[] returnedData, List<Log> logs) { return new ExecutionResult(gasUsed, returnedData, logs, true, null); }
 
-    public static ExecutionResult ErrorReverted(long gasUsed, byte[] returnedData) { return new ExecutionResult(gasUsed, returnedData, null, false); }
+    public static ExecutionResult ErrorReverted(long gasUsed, byte[] returnedData) { return new ExecutionResult(gasUsed, returnedData, null, false, null); }
 
-    private ExecutionResult(long gasUsed, byte[] returnedData, List<Log> logs, boolean success) {
+    public static ExecutionResult ErrorException(long gasUsed, Exception exception) { return new ExecutionResult(gasUsed, null, null, false, exception); }
+
+    private ExecutionResult(long gasUsed, byte[] returnedData, List<Log> logs, boolean success, Exception exception) {
         this.gasUsed = gasUsed;
         this.returnedData = returnedData;
         this.logs = logs;
         this.success = success;
+        this.exception = exception;
     }
 
     public boolean wasSuccesful() { return this.success; }
@@ -40,5 +44,9 @@ public class ExecutionResult {
     // TODO return inmutable? or in constructor?
     public List<Log> getLogs() {
         return this.logs;
+    }
+
+    public Exception getException() {
+        return this.exception;
     }
 }

@@ -95,7 +95,7 @@ public class VirtualMachine {
         this.storage = storage;
     }
 
-    public ExecutionResult execute(byte[] bytecodes) throws VirtualMachineException, IOException {
+    public ExecutionResult execute(byte[] bytecodes) throws IOException {
         long gasUsed = 0;
         List<Log> logs = new ArrayList<>();
         int l = bytecodes.length;
@@ -109,7 +109,7 @@ public class VirtualMachine {
                 long gasCost = fee.getValue();
 
                 if (gasUsed + gasCost > this.programEnvironment.getGas())
-                    throw new VirtualMachineException("Insufficient gas");
+                    return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Insufficient gas"));
 
                 gasUsed += gasCost;
             }
@@ -476,7 +476,7 @@ public class VirtualMachine {
 
                 case OpCodes.SSTORE:
                     if (this.programEnvironment.isReadOnly())
-                        throw new VirtualMachineException("Read-only message");
+                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Read-only message"));
 
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
@@ -488,7 +488,12 @@ public class VirtualMachine {
                 case OpCodes.JUMP:
                     word = this.stack.pop();
 
-                    pc = getNewPc(bytecodes, word);
+                    try {
+                        pc = getNewPc(bytecodes, word);
+                    }
+                    catch (VirtualMachineException ex) {
+                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), ex);
+                    }
 
                     break;
 
@@ -499,7 +504,12 @@ public class VirtualMachine {
                     if (word2.isZero())
                         break;
 
-                    pc = getNewPc(bytecodes, word1);
+                    try {
+                        pc = getNewPc(bytecodes, word1);
+                    }
+                    catch (VirtualMachineException ex) {
+                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), ex);
+                    }
 
                     break;
 
@@ -646,7 +656,7 @@ public class VirtualMachine {
                     return ExecutionResult.ErrorReverted(gasUsed, returnedData);
 
                 default:
-                    throw new VirtualMachineException("Invalid opcode");
+                    return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid opcode"));
             }
         }
 

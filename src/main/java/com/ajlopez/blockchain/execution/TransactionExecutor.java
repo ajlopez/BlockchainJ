@@ -67,20 +67,17 @@ public class TransactionExecutor {
 
         if (!ByteUtils.isNullOrEmpty(code)) {
             Storage storage = context.getAccountStorage(receiver);
-            MessageData messageData = new MessageData(receiver, sender, sender, transaction.getValue(), transaction.getGas(), transaction.getGasPrice(), transaction.getData(), false);
+            MessageData messageData = new MessageData(receiver, sender, sender, transaction.getValue(), transaction.getGas() - gasUsed, transaction.getGasPrice(), transaction.getData(), false);
             ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, blockData, null);
             VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
             try {
+                // TODO revert context if execution fails
                 executionResult = vm.execute(code);
                 executionResult.addGasUsed(gasUsed);
 
                 if (isContractCreation)
                     context.setCode(receiver, executionResult.getReturnedData());
-            }
-            catch (VirtualMachineException ex) {
-                // TODO revert all
-                return null;
             } catch (IOException e) {
                 e.printStackTrace();
             }

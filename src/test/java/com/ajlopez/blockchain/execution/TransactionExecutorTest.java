@@ -394,7 +394,7 @@ public class TransactionExecutorTest {
         Assert.assertEquals(DataWord.fromAddress(senderAddress), storage.getValue(DataWord.ONE));
         Assert.assertEquals(DataWord.fromAddress(receiverAddress), storage.getValue(DataWord.TWO));
         Assert.assertEquals(DataWord.fromUnsignedInteger(100), storage.getValue(DataWord.fromUnsignedInteger(3)));
-        Assert.assertEquals(DataWord.fromUnsignedLong(200000L - FeeSchedule.BASE.getValue() - 4 * (FeeSchedule.BASE.getValue() + FeeSchedule.VERYLOW.getValue() + FeeSchedule.SSET.getValue())), storage.getValue(DataWord.fromUnsignedInteger(4)));
+        Assert.assertEquals(DataWord.fromUnsignedLong(200000L - FeeSchedule.TRANSFER.getValue() - FeeSchedule.DATANONZERO.getValue() * 4 - FeeSchedule.BASE.getValue() - 4 * (FeeSchedule.BASE.getValue() + FeeSchedule.VERYLOW.getValue() + FeeSchedule.SSET.getValue())), storage.getValue(DataWord.fromUnsignedInteger(4)));
         Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.fromUnsignedInteger(5)));
     }
 

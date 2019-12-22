@@ -13,7 +13,6 @@ import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.BlockData;
 import com.ajlopez.blockchain.vms.eth.OpCodes;
 import com.ajlopez.blockchain.vms.eth.Storage;
-import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
