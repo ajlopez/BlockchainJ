@@ -63,9 +63,11 @@ public class TransactionExecutor {
 
         long gasUsed = transaction.getGasCost();
 
+        // TODO consider alternative to this initialization
         ExecutionResult executionResult = ExecutionResult.OkWithoutData(gasUsed, null);
 
         if (!ByteUtils.isNullOrEmpty(code))
+            // TODO why execution result is needed?
             executionResult = executeCode(transaction, blockData, sender, isContractCreation, context, receiver, code, gasUsed, executionResult);
 
         if (!gasPrice.isZero()) {
@@ -84,6 +86,7 @@ public class TransactionExecutor {
         return executionResult;
     }
 
+    // TODO refactor arguments, simplify code
     private ExecutionResult executeCode(Transaction transaction, BlockData blockData, Address sender, boolean isContractCreation, ExecutionContext context, Address receiver, byte[] code, long gasUsed, ExecutionResult executionResult) throws IOException {
         Storage storage = context.getAccountStorage(receiver);
         MessageData messageData = new MessageData(receiver, sender, sender, transaction.getValue(), transaction.getGas() - gasUsed, transaction.getGasPrice(), transaction.getData(), false);
@@ -100,6 +103,7 @@ public class TransactionExecutor {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return executionResult;
     }
 }
