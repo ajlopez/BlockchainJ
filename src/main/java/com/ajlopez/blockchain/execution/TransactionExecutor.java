@@ -61,14 +61,12 @@ public class TransactionExecutor {
 
         context.transfer(transaction.getSender(), receiver, transaction.getValue());
 
-        long gasUsed = transaction.getGasCost();
-
-        // TODO consider alternative to this initialization
-        ExecutionResult executionResult = ExecutionResult.OkWithoutData(gasUsed, null);
+        ExecutionResult executionResult;
 
         if (!ByteUtils.isNullOrEmpty(code))
-            // TODO why execution result is needed?
-            executionResult = executeCode(transaction, blockData, sender, isContractCreation, context, receiver, code, gasUsed, executionResult);
+            executionResult = executeCode(transaction, blockData, sender, isContractCreation, context, receiver, code);
+        else
+            executionResult = ExecutionResult.OkWithoutData(transaction.getGasCost(), null);
 
         if (!gasPrice.isZero()) {
             Coin gasPayment = gasPrice.multiply(executionResult.getGasUsed());
@@ -87,23 +85,28 @@ public class TransactionExecutor {
     }
 
     // TODO refactor arguments, simplify code
-    private ExecutionResult executeCode(Transaction transaction, BlockData blockData, Address sender, boolean isContractCreation, ExecutionContext context, Address receiver, byte[] code, long gasUsed, ExecutionResult executionResult) throws IOException {
+    private ExecutionResult executeCode(Transaction transaction, BlockData blockData, Address sender, boolean isContractCreation, ExecutionContext context, Address receiver, byte[] code) throws IOException {
+        long transactionGas = transaction.getGasCost();
+
         Storage storage = context.getAccountStorage(receiver);
-        MessageData messageData = new MessageData(receiver, sender, sender, transaction.getValue(), transaction.getGas() - gasUsed, transaction.getGasPrice(), transaction.getData(), false);
+        MessageData messageData = new MessageData(receiver, sender, sender, transaction.getValue(), transaction.getGas() - transactionGas, transaction.getGasPrice(), transaction.getData(), false);
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, blockData, null);
         VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
         try {
             // TODO revert context if execution fails
-            executionResult = vm.execute(code);
-            executionResult.addGasUsed(gasUsed);
+            ExecutionResult executionResult = vm.execute(code);
+            executionResult.addGasUsed(transactionGas);
 
             if (isContractCreation)
                 context.setCode(receiver, executionResult.getReturnedData());
+
+            return executionResult;
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return executionResult;
+        // TODO consider this case
+        return null;
     }
 }
