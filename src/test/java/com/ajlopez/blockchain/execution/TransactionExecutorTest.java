@@ -420,6 +420,29 @@ public class TransactionExecutorTest {
         Assert.assertEquals(DataWord.ONE, storage.getValue(DataWord.fromUnsignedInteger(3)));
     }
 
+    @Test
+    public void executeTransactionInvokingContractCodeWithRevert() throws IOException {
+        byte[] code = new byte[] {
+                OpCodes.NUMBER, OpCodes.PUSH1, 0x00, OpCodes.SSTORE,
+                OpCodes.TIMESTAMP, OpCodes.PUSH1, 0x01, OpCodes.SSTORE,
+                OpCodes.COINBASE, OpCodes.PUSH1, 0x02, OpCodes.SSTORE,
+                OpCodes.DIFFICULTY, OpCodes.PUSH1, 0x03, OpCodes.SSTORE,
+                OpCodes.PUSH1, 0x00, OpCodes.PUSH1, 0x00, OpCodes.REVERT
+        };
+
+        Address coinbase = FactoryHelper.createRandomAddress();
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        Storage storage = executeTransactionInvokingCode(code, coinbase, senderAddress, receiverAddress);
+
+        Assert.assertNotNull(storage);
+        Assert.assertEquals(DataWord.ZERO, storage.getValue(DataWord.ZERO));
+        Assert.assertEquals(DataWord.ZERO, storage.getValue(DataWord.ONE));
+        Assert.assertEquals(DataWord.ZERO, storage.getValue(DataWord.TWO));
+        Assert.assertEquals(DataWord.ZERO, storage.getValue(DataWord.fromUnsignedInteger(3)));
+    }
+
     private static Storage executeTransactionInvokingCode(byte[] code, Address senderAddress, Address receiverAddress) throws IOException {
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -445,7 +468,11 @@ public class TransactionExecutorTest {
         Account receiver = accountStore.getAccount(receiverAddress);
 
         Assert.assertNotNull(receiver);
-        Assert.assertNotNull(receiver.getStorageHash());
+
+        boolean wasSuccesful = result.get(0).getExecutionResult().wasSuccesful();
+
+        if (wasSuccesful)
+            Assert.assertNotNull(receiver.getStorageHash());
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
@@ -461,12 +488,20 @@ public class TransactionExecutorTest {
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
-        Assert.assertEquals(Coin.fromUnsignedLong(1000000 - 100).subtract(coinbaseBalance), senderBalance);
+
+        if (wasSuccesful)
+            Assert.assertEquals(Coin.fromUnsignedLong(1000000 - 100).subtract(coinbaseBalance), senderBalance);
+        else
+            Assert.assertEquals(Coin.fromUnsignedLong(1000000).subtract(coinbaseBalance), senderBalance);
 
         Assert.assertNotNull(receiverAddress);
 
         Coin receiverBalance = receiver.getBalance();
-        Assert.assertEquals(Coin.fromUnsignedLong(100), receiverBalance);
+
+        if (wasSuccesful)
+            Assert.assertEquals(Coin.fromUnsignedLong(100), receiverBalance);
+        else
+            Assert.assertEquals(Coin.ZERO, receiverBalance);
 
         Assert.assertEquals(0, accountStore.getAccount(receiverAddress).getNonce());
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());

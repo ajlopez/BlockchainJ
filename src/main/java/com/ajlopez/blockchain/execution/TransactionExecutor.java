@@ -68,18 +68,21 @@ public class TransactionExecutor {
         else
             executionResult = ExecutionResult.OkWithoutData(transaction.getGasCost(), null);
 
+        if (executionResult.wasSuccesful())
+            context.commit();
+        else
+            context.rollback();
+
         if (!gasPrice.isZero()) {
             Coin gasPayment = gasPrice.multiply(executionResult.getGasUsed());
-            context.transfer(sender, blockData.getCoinbase(), gasPayment);
+            this.executionContext.transfer(sender, blockData.getCoinbase(), gasPayment);
         }
 
-        context.incrementNonce(transaction.getSender());
+        this.executionContext.incrementNonce(transaction.getSender());
 
         // TODO apply gas limit gas price
         // TODO apply data cost
         // TODO apply contract creation cost
-
-        context.commit();
 
         return executionResult;
     }
