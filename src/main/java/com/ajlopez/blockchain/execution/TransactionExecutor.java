@@ -80,10 +80,6 @@ public class TransactionExecutor {
 
         this.executionContext.incrementNonce(transaction.getSender());
 
-        // TODO apply gas limit gas price
-        // TODO apply data cost
-        // TODO apply contract creation cost
-
         return executionResult;
     }
 
@@ -97,11 +93,10 @@ public class TransactionExecutor {
         VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
         try {
-            // TODO revert context if execution fails
             ExecutionResult executionResult = vm.execute(code);
             executionResult.addGasUsed(transactionGas);
 
-            if (isContractCreation)
+            if (executionResult.wasSuccesful() && isContractCreation)
                 context.setCode(receiver, executionResult.getReturnedData());
 
             return executionResult;
