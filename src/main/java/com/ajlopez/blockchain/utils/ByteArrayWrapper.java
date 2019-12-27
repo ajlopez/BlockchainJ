@@ -6,10 +6,12 @@ import java.util.Arrays;
  * Created by ajlopez on 21/11/2017.
  */
 public class ByteArrayWrapper {
-    private byte[] bytes;
+    private final byte[] bytes;
+    private final int hashCode;
 
     public ByteArrayWrapper(byte[] bytes) {
         this.bytes = bytes;
+        this.hashCode = Arrays.hashCode(bytes);
     }
 
     public byte[] getBytes() {
@@ -18,7 +20,7 @@ public class ByteArrayWrapper {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(this.bytes);
+        return this.hashCode;
     }
 
     @Override
