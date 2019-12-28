@@ -75,6 +75,17 @@ public class ByteUtils {
         return result;
     }
 
+    public static int bytesToInteger(byte[] bytes, int offset) {
+        int result = 0;
+
+        for (int k = 0; k + offset < bytes.length && k < Integer.BYTES; k++) {
+            result <<= 8;
+            result |= bytes[k + offset] & 0xff;
+        }
+
+        return result;
+    }
+
     public static byte[] unsignedIntegerToBytes(int value) {
         byte[] result = new byte[Integer.BYTES];
 

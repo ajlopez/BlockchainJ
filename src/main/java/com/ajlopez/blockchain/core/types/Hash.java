@@ -16,4 +16,8 @@ public class Hash extends AbstractBytesValue {
     public long asLong() {
         return ByteUtils.bytesToLong(this.bytes, HASH_BYTES - Long.BYTES);
     }
+
+    public int asInteger() {
+        return ByteUtils.bytesToInteger(this.bytes, HASH_BYTES - Integer.BYTES);
+    }
 }

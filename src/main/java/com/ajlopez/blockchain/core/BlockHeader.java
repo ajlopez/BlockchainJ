@@ -7,6 +7,8 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockHeaderEncoder;
 import com.ajlopez.blockchain.utils.HashUtils;
 
+import java.util.Arrays;
+
 /**
  * Created by ajlopez on 12/08/2017.
  */
@@ -63,5 +65,23 @@ public class BlockHeader {
 
     private BlockHash calculateHash() {
         return new BlockHash(HashUtils.keccak256(BlockHeaderEncoder.encode(this)));
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getHash().asInteger();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+
+        if (!(obj instanceof BlockHeader))
+            return false;
+
+        BlockHeader bh = (BlockHeader)obj;
+
+        return Arrays.equals(BlockHeaderEncoder.encode(this), BlockHeaderEncoder.encode(bh));
     }
 }
