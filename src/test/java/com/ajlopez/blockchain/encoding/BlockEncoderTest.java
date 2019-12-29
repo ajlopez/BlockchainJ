@@ -136,9 +136,8 @@ public class BlockEncoderTest {
         Assert.assertNotNull(result.getUncles());
         Assert.assertEquals(2, result.getUncles().size());
 
-        // TODO implements BlockHeader.equals
-        Assert.assertEquals(uncle1.getHash(), result.getUncles().get(0).getHash());
-        Assert.assertEquals(uncle2.getHash(), result.getUncles().get(1).getHash());
+        Assert.assertEquals(uncle1, result.getUncles().get(0));
+        Assert.assertEquals(uncle2, result.getUncles().get(1));
     }
 
     @Test
