@@ -83,7 +83,6 @@ public class TransactionExecutor {
         return executionResult;
     }
 
-    // TODO refactor arguments, simplify code
     private ExecutionResult executeCode(Transaction transaction, BlockData blockData, Address sender, boolean isContractCreation, ExecutionContext context, Address receiver, byte[] code) throws IOException {
         long transactionGas = transaction.getGasCost();
 
@@ -92,19 +91,12 @@ public class TransactionExecutor {
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, blockData, null);
         VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
-        try {
-            ExecutionResult executionResult = vm.execute(code);
-            executionResult.addGasUsed(transactionGas);
+        ExecutionResult executionResult = vm.execute(code);
+        executionResult.addGasUsed(transactionGas);
 
-            if (executionResult.wasSuccesful() && isContractCreation)
-                context.setCode(receiver, executionResult.getReturnedData());
+        if (executionResult.wasSuccesful() && isContractCreation)
+            context.setCode(receiver, executionResult.getReturnedData());
 
-            return executionResult;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // TODO consider this case
-        return null;
+        return executionResult;
     }
 }
