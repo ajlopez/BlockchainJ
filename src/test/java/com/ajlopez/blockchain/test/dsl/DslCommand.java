@@ -59,7 +59,8 @@ public class DslCommand {
             executeTransaction(world);
         else if ("connect".equals(this.verb))
             executeConnect(world);
-        // TODO process unknown command
+        else
+            throw new UnsupportedOperationException(String.format("unknown verb '%s'", this.verb));
     }
 
     private void executeConnect(World world) {

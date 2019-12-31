@@ -8,7 +8,9 @@ import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import sun.security.smartcardio.SunPCSC;
 
 import java.io.IOException;
@@ -21,6 +23,10 @@ import java.util.Map;
  * Created by ajlopez on 10/05/2019.
  */
 public class DslCommandTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void createCommandWithVerbAndArguments() {
         String verb = "account";
@@ -361,5 +367,20 @@ public class DslCommandTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(1, result.getNumber());
         Assert.assertEquals(block.getHash(), result.getHash());
+    }
+
+    @Test
+    public void unknownVerb() throws IOException {
+        World world = new World();
+
+        String verb = "foo";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("bar");
+
+        DslCommand command = new DslCommand(verb, arguments);
+
+        exception.expect(UnsupportedOperationException.class);
+        exception.expectMessage("unknown verb 'foo'");
+        command.execute(world);
     }
 }
