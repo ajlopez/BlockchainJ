@@ -7,10 +7,7 @@ import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.net.peers.TcpPeerServer;
 import com.ajlopez.blockchain.processors.NodeProcessor;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
-import com.ajlopez.blockchain.store.CodeStore;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,11 +30,10 @@ public class NodeRunner {
         this.peers = peers;
         this.network = networkConfiguration.getNetworkNumber();
 
-        // TODO replace store and store provider
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(new TrieStore(new HashMapStore()));
-        CodeStore codeStore = new CodeStore(new HashMapStore());
+        // TODO inject stores
+        Stores stores = new MemoryStores();
 
-        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), blockChain, accountStoreProvider, null, codeStore, coinbase);
+        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), blockChain, stores, coinbase);
         this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
     }
 

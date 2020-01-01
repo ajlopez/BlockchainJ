@@ -11,6 +11,7 @@ import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.net.peers.PeerConnection;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.MemoryStores;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.test.utils.NodesHelper;
 import org.junit.Assert;
@@ -30,7 +31,7 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, blockChain, null, null, null, coinbase);
+        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, blockChain, new MemoryStores(), coinbase);
 
         Assert.assertSame(peer, nodeProcessor.getPeer());
     }
@@ -42,7 +43,7 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, blockChain, null, null, null, coinbase);
+        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, blockChain, new MemoryStores(), coinbase);
 
         Status result = nodeProcessor.getStatus();
 
