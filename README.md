@@ -55,6 +55,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Guidelines for low-level cryptography software](https://github.com/veorq/cryptocoding)
 - [Breaking down the differences between PoW and PoS](https://medium.com/@stakingrewards/research-report-is-proof-of-stake-better-than-proof-of-work-222d048ccef5)
 - [Mastering The Fundamentals of Ethereum (For New Blockchain Devs) Part III — Wallets, Keys, And Accounts](https://medium.com/@markmuskardin/mastering-the-fundamentals-of-ethereum-for-new-blockchain-devs-part-iii-wallets-keys-and-4cd3175b535b)
+- [Byzantine Fault Tolerance in a nutshell](https://medium.com/coinmonks/byzantine-fault-tolerance-in-a-nutshell-bc7762ffb996)
 
 ## To Do
 
