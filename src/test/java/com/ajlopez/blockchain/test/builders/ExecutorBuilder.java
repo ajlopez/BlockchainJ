@@ -14,14 +14,22 @@ import java.io.IOException;
  * Created by ajlopez on 17/12/2019.
  */
 public class ExecutorBuilder {
+    private TrieStore accountTrieStore;
     private AccountStoreProvider accountStoreProvider;
     private AccountStore accountStore;
     private TrieStorageProvider trieStorageProvider;
     private CodeStore codeStore;
 
+    public TrieStore getAccountTrieStore() {
+        if (this.accountTrieStore == null)
+            this.accountTrieStore = new TrieStore(new HashMapStore());
+
+        return this.accountTrieStore;
+    }
+
     public AccountStoreProvider getAccountStoreProvider() {
         if (this.accountStoreProvider == null)
-            this.accountStoreProvider = new AccountStoreProvider(new TrieStore(new HashMapStore()));
+            this.accountStoreProvider = new AccountStoreProvider(this.getAccountTrieStore());
 
         return this.accountStoreProvider;
     }
