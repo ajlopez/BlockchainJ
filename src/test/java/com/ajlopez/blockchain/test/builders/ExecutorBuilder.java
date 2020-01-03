@@ -15,6 +15,7 @@ import java.io.IOException;
  */
 public class ExecutorBuilder {
     private TrieStore accountTrieStore;
+    private TrieStore storageTrieStore;
     private AccountStoreProvider accountStoreProvider;
     private AccountStore accountStore;
     private TrieStorageProvider trieStorageProvider;
@@ -25,6 +26,13 @@ public class ExecutorBuilder {
             this.accountTrieStore = new TrieStore(new HashMapStore());
 
         return this.accountTrieStore;
+    }
+
+    public TrieStore getStorageTrieStore() {
+        if (this.storageTrieStore == null)
+            this.storageTrieStore = new TrieStore(new HashMapStore());
+
+        return this.storageTrieStore;
     }
 
     public AccountStoreProvider getAccountStoreProvider() {
@@ -43,7 +51,7 @@ public class ExecutorBuilder {
 
     public TrieStorageProvider getTrieStorageProvider() {
         if (this.trieStorageProvider == null)
-            this.trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
+            this.trieStorageProvider = new TrieStorageProvider(this.getStorageTrieStore());
 
         return this.trieStorageProvider;
     }
