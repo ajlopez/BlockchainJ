@@ -27,7 +27,8 @@ import java.util.concurrent.Semaphore;
 public class NodeProcessorTest {
     @Test
     public void createWithPeer() {
-        BlockChain blockChain = new BlockChain();
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -56,11 +57,11 @@ public class NodeProcessorTest {
 
     @Test
     public void processBlockMessage() throws InterruptedException {
-        BlockChain blockChain = new BlockChain();
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, blockChain.getBestBlock().getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message message = new BlockMessage(block);
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
@@ -100,11 +101,11 @@ public class NodeProcessorTest {
 
     @Test
     public void processTenRepeatedBlockMessages() throws InterruptedException {
-        BlockChain blockChain = new BlockChain();
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, blockChain.getBlockByNumber(0).getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message = new BlockMessage(block);
 
@@ -121,30 +122,30 @@ public class NodeProcessorTest {
 
     @Test
     public void processTwoConsecutiveBlockMessages() throws InterruptedException {
-        BlockChain blockChain = new BlockChain();
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block1 = new Block(1, blockChain.getBlockByNumber(0).getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block2 = new Block(2, block1.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
-        Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
+        Message message2 = new BlockMessage(block2);
 
-        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message0);
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message1);
+        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message2);
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(block1.getHash(), result.getHash());
+        Assert.assertEquals(block2.getHash(), result.getHash());
     }
 
     @Test
     public void processTenBlockMessages() throws InterruptedException {
-        BlockChain blockChain = new BlockChain();
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         List<Block> blocks = FactoryHelper.createBlocks(9);
 
@@ -164,25 +165,25 @@ public class NodeProcessorTest {
 
     @Test
     public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException {
-        BlockChain blockChain = new BlockChain();
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block1 = new Block(1, genesis.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block1 = new Block(1, blockChain.getBlockByNumber(0).getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block2 = new Block(2, block1.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
-        Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
+        Message message2 = new BlockMessage(block2);
 
+        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message2);
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message1);
-        nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message0);
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(block1.getHash(), result.getHash());
+        Assert.assertEquals(block2.getHash(), result.getHash());
     }
 
     @Test
