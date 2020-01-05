@@ -58,6 +58,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Byzantine Fault Tolerance in a nutshell](https://medium.com/coinmonks/byzantine-fault-tolerance-in-a-nutshell-bc7762ffb996)
 - [The 1.x Files: The State of Stateless Ethereum](https://blog.ethereum.org/2019/12/30/eth1x-files-state-of-stateless-ethereum/)
 - [Stateless Ethereum: Binary Tries Experiment](https://medium.com/@mandrigin/stateless-ethereum-binary-tries-experiment-b2c035497768)
+- [Protocol changes to bound witness size](https://ethereum-magicians.org/t/protocol-changes-to-bound-witness-size/3885)
 
 ## To Do
 
