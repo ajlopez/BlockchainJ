@@ -28,6 +28,16 @@ public class TrieTest {
     }
 
     @Test
+    public void getUnknownValuePathAsEmpty() throws IOException {
+        Trie trie = new Trie();
+
+        TriePath result = trie.getPath(new byte[] { 0x01, 0x02 });
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(0, result.getSize());
+    }
+
+    @Test
     public void getEncodedEmptyTrie() {
         Trie trie = new Trie();
 

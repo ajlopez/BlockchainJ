@@ -64,6 +64,10 @@ public class Trie {
         return result;
     }
 
+    public TriePath getPath(byte[] key) {
+        return new TriePath();
+    }
+
     public byte[] get(byte[] key) throws IOException {
         return this.get(key, 0);
     }
