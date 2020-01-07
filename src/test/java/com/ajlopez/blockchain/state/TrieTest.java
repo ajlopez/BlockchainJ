@@ -84,6 +84,20 @@ public class TrieTest {
     }
 
     @Test
+    public void getPathFromTrieWithOneKeyValue() throws IOException {
+        byte[] key = FactoryHelper.createRandomBytes(32);
+        byte[] value = FactoryHelper.createRandomBytes(32);
+
+        Trie trie = new Trie().put(key, value);
+
+        TriePath triePath = trie.getPath(key);
+
+        Assert.assertNotNull(triePath);
+        Assert.assertNotEquals(0, triePath.getSize());
+        Assert.assertEquals(key.length * 2 + 1, triePath.getSize());
+    }
+
+    @Test
     public void getSubhashesFromTrieIsACopy() {
         Trie trie = new Trie().put(FactoryHelper.createRandomBytes(32), FactoryHelper.createRandomBytes(42));
 

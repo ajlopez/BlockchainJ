@@ -64,8 +64,32 @@ public class Trie {
         return result;
     }
 
-    public TriePath getPath(byte[] key) {
+    public TriePath getPath(byte[] key) throws IOException {
+        TriePath path = new TriePath();
+
+        if (this.buildPath(path, key, 0))
+            return path;
+
         return new TriePath();
+    }
+
+    private boolean buildPath(TriePath path, byte[] key, int position) throws IOException {
+        if (position == key.length * 2) {
+            path.addLastTrie(this);
+
+            return true;
+        }
+
+        int nibble = getOffset(key, position);
+
+        Trie trie = this.getSubNode(nibble);
+
+        if (trie == null)
+            return false;
+
+        path.addTrieAndChildPosition(this, nibble);
+
+        return trie.buildPath(path, key, position + 1);
     }
 
     public byte[] get(byte[] key) throws IOException {
