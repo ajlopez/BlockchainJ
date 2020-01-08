@@ -25,6 +25,7 @@ public class TrieTest {
 
         Assert.assertNull(trie.get(new byte[] { 0x01, 0x02 }));
         Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertNull(trie.getValue());
     }
 
     @Test
@@ -95,6 +96,14 @@ public class TrieTest {
         Assert.assertNotNull(triePath);
         Assert.assertNotEquals(0, triePath.getSize());
         Assert.assertEquals(key.length * 2 + 1, triePath.getSize());
+        Assert.assertArrayEquals(value, triePath.getTrie(triePath.getSize() - 1).getValue());
+
+        for (int k = 0; k < key.length; k++) {
+            byte bt = key[k];
+
+            Assert.assertEquals(0xf & (bt >> 4), triePath.getChildPosition(k* 2));
+            Assert.assertEquals(0xf & bt, triePath.getChildPosition(k* 2 + 1));
+        }
     }
 
     @Test

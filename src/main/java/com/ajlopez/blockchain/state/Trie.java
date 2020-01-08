@@ -96,6 +96,13 @@ public class Trie {
         return this.get(key, 0);
     }
 
+    public byte[] getValue() {
+        if (this.value == null)
+            return null;
+
+        return Arrays.copyOf(this.value, this.value.length);
+    }
+
     private byte[] get(byte[] key, int position) throws IOException {
         if (position == key.length * 2)
             return this.value;
