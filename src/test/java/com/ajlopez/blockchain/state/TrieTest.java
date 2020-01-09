@@ -107,6 +107,30 @@ public class TrieTest {
     }
 
     @Test
+    public void getPathFromTrieWithTwoKeyValues() throws IOException {
+        byte[] key = FactoryHelper.createRandomBytes(32);
+        byte[] value = FactoryHelper.createRandomBytes(32);
+        byte[] key2 = FactoryHelper.createRandomBytes(32);
+        byte[] value2 = FactoryHelper.createRandomBytes(32);
+
+        Trie trie = new Trie().put(key, value).put(key2, value2);
+
+        TriePath triePath = trie.getPath(key);
+
+        Assert.assertNotNull(triePath);
+        Assert.assertNotEquals(0, triePath.getSize());
+        Assert.assertEquals(key.length * 2 + 1, triePath.getSize());
+        Assert.assertArrayEquals(value, triePath.getTrie(triePath.getSize() - 1).getValue());
+
+        for (int k = 0; k < key.length; k++) {
+            byte bt = key[k];
+
+            Assert.assertEquals(0xf & (bt >> 4), triePath.getChildPosition(k* 2));
+            Assert.assertEquals(0xf & bt, triePath.getChildPosition(k* 2 + 1));
+        }
+    }
+
+    @Test
     public void getSubhashesFromTrieIsACopy() {
         Trie trie = new Trie().put(FactoryHelper.createRandomBytes(32), FactoryHelper.createRandomBytes(42));
 
