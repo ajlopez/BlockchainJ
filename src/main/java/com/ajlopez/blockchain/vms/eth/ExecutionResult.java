@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.vms.eth;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,7 +24,12 @@ public class ExecutionResult {
     private ExecutionResult(long gasUsed, byte[] returnedData, List<Log> logs, boolean success, Exception exception) {
         this.gasUsed = gasUsed;
         this.returnedData = returnedData;
-        this.logs = logs;
+
+        if (logs == null)
+            this.logs = Collections.emptyList();
+        else
+            this.logs = Collections.unmodifiableList(logs);
+        
         this.success = success;
         this.exception = exception;
     }
@@ -41,7 +47,6 @@ public class ExecutionResult {
         return this.returnedData;
     }
 
-    // TODO return inmutable? or in constructor?
     public List<Log> getLogs() {
         return this.logs;
     }
