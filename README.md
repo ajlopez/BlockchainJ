@@ -61,6 +61,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Protocol changes to bound witness size](https://ethereum-magicians.org/t/protocol-changes-to-bound-witness-size/3885)
 - [Developing the EigenTrust Algorithm and Determining Authenticity Online](https://medium.com/oscar-tech/developing-the-eigentrust-algorithm-and-determining-trustworthiness-online-6c51b2c2938f)
 - [The EigenTrust Algorithm for Reputation Management in P2P Networks](https://nlp.stanford.edu/pubs/eigentrust.pdf)
+- [State Provider Models in Ethereum 2.0](https://ethresear.ch/t/state-provider-models-in-ethereum-2-0/6750)
+- [With fraud-proof-free data availability proofs, we can have scalable data chains without committees](https://ethresear.ch/t/with-fraud-proof-free-data-availability-proofs-we-can-have-scalable-data-chains-without-committees/6725)
+- [Requirements for Ethereum Private Sidechains](https://arxiv.org/pdf/1806.09834.pdf)
 
 ## To Do
 
