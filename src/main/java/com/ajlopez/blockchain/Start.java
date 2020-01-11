@@ -10,6 +10,7 @@ import com.ajlopez.blockchain.jsonrpc.BlocksProcessor;
 import com.ajlopez.blockchain.jsonrpc.NetworkProcessor;
 import com.ajlopez.blockchain.jsonrpc.TopProcessor;
 import com.ajlopez.blockchain.net.http.HttpServer;
+import com.ajlopez.blockchain.store.MemoryStores;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class Start {
         Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"), coinbase, networkConfiguration);
+        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"), coinbase, networkConfiguration, new MemoryStores());
 
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));

@@ -29,7 +29,7 @@ public class ExecutionResult {
             this.logs = Collections.emptyList();
         else
             this.logs = Collections.unmodifiableList(logs);
-        
+
         this.success = success;
         this.exception = exception;
     }

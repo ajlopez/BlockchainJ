@@ -10,6 +10,7 @@ import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.MemoryStores;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42));
+        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), new MemoryStores());
 
         runner.start();
 
@@ -60,7 +61,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42));
+        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), new MemoryStores());
 
         runner.start();
 
@@ -98,8 +99,8 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner1 = new NodeRunner(blockChain1, true, 3001, null, coinbase, new NetworkConfiguration((short)42));
-        NodeRunner runner2 = new NodeRunner(blockChain2, false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42));
+        NodeRunner runner1 = new NodeRunner(blockChain1, true, 3001, null, coinbase, new NetworkConfiguration((short)42), new MemoryStores());
+        NodeRunner runner2 = new NodeRunner(blockChain2, false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), new MemoryStores());
 
         runner1.start();
         runner2.start();
