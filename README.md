@@ -64,6 +64,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [State Provider Models in Ethereum 2.0](https://ethresear.ch/t/state-provider-models-in-ethereum-2-0/6750)
 - [With fraud-proof-free data availability proofs, we can have scalable data chains without committees](https://ethresear.ch/t/with-fraud-proof-free-data-availability-proofs-we-can-have-scalable-data-chains-without-committees/6725)
 - [Requirements for Ethereum Private Sidechains](https://arxiv.org/pdf/1806.09834.pdf)
+- [Ren Project](https://github.com/renproject/ren/wiki/Introduction)
 
 ## To Do
 
