@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,6 +85,25 @@ public class BlockProcessorTest {
 
         Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
         Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
+    }
+
+    @Test
+    public void rejectBlockByInvalidTransactionRoot() throws IOException {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+        Address coinbase = FactoryHelper.createRandomAddress();
+        Transaction transaction = FactoryHelper.createTransaction(1000);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+
+        Block block0 = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(block0.getHeader(), null, transactions);
+
+        List<Block> processedBlocks = processor.processBlock(block);
+
+        Assert.assertNotNull(processedBlocks);
+        Assert.assertTrue(processedBlocks.isEmpty());
+
+        Assert.assertNull(processor.getBestBlock());
     }
 
     @Test

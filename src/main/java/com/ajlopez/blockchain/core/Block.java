@@ -36,6 +36,7 @@ public class Block {
     {
         this.header = header;
 
+        // TODO copy uncle list
         if (uncles == null)
             this.uncles = Collections.EMPTY_LIST;
         else

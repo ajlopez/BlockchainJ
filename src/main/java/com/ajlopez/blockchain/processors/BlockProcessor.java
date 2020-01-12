@@ -42,6 +42,9 @@ public class BlockProcessor {
         if (this.blockChain.isChainedBlock(hash))
             return emptyList;
 
+        if (!this.blockValidator.isValid(block))
+            return emptyList;
+
         Block parent = this.blockChain.getBlockByHash(block.getParentHash());
 
         if (!this.blockValidator.isValid(block, parent))

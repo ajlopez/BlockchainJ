@@ -16,6 +16,13 @@ public class BlockValidator {
         this.blockExecutor = blockExecutor;
     }
 
+    public boolean isValid(Block block) {
+        if (!Block.calculateTransactionsRootHash(block.getTransactions()).equals(block.getTransactionRootHash()))
+            return false;
+
+        return true;
+    }
+
     public boolean isValid(Block block, Block parent) throws IOException {
         Hash initialStateRoot = parent == null ? block.getStateRootHash() : parent.getStateRootHash();
 

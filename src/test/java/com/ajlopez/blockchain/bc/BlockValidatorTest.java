@@ -76,6 +76,23 @@ public class BlockValidatorTest {
     }
 
     @Test
+    public void invalidBlockWithInvalidTransactionsRoot() throws IOException {
+        Transaction transaction = FactoryHelper.createTransaction(1000);
+        Transaction transaction2 = FactoryHelper.createTransaction(2000);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+
+        Block block0 = new Block(1, FactoryHelper.createRandomBlockHash(), null, transactions, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        transactions.add(transaction2);
+        Block block = new Block(block0.getHeader(), null, transactions);
+
+        BlockValidator blockValidator = new BlockValidator(null);
+
+        Assert.assertTrue(blockValidator.isValid(block0));
+        Assert.assertFalse(blockValidator.isValid(block));
+    }
+
+    @Test
     public void validBlockWithInvalidTransaction() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStore trieStore = new TrieStore(new HashMapStore());
