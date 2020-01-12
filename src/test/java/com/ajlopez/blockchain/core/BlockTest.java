@@ -71,6 +71,29 @@ public class BlockTest {
     }
 
     @Test
+    public void addingTransactionsToOriginalListDoesNotChangeBlockTransactionList() {
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+        Transaction transaction = FactoryHelper.createTransaction(1000);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+
+        Block block = new Block(1L, hash, null, transactions, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        Assert.assertNotNull(block.getTransactions());
+        Assert.assertFalse(block.getTransactions().isEmpty());
+        Assert.assertTrue(block.getTransactions().contains(transaction));
+        Assert.assertEquals(1, block.getTransactions().size());
+
+        transactions.add(FactoryHelper.createTransaction(2000));
+
+        Assert.assertNotNull(block.getTransactions());
+        Assert.assertFalse(block.getTransactions().isEmpty());
+        Assert.assertTrue(block.getTransactions().contains(transaction));
+        Assert.assertEquals(1, block.getTransactions().size());
+    }
+
+    @Test
     public void cannotAddUnclesToEmptyUncleList() {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
