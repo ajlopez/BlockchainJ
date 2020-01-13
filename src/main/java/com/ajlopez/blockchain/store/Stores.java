@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.store;
 
 
+import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
+
 /**
  * Created by ajlopez on 01/01/2020.
  */
@@ -10,4 +12,12 @@ public interface Stores {
     TrieStore getStorageTrieStore();
 
     CodeStore getCodeStore();
+
+    default AccountStoreProvider getAccountStoreProvider() {
+        return new AccountStoreProvider(this.getAccountTrieStore());
+    }
+
+    default TrieStorageProvider getTrieStorageProvider() {
+        return new TrieStorageProvider(this.getStorageTrieStore());
+    }
 }

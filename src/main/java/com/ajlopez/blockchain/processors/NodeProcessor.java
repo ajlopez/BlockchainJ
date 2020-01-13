@@ -32,8 +32,8 @@ public class NodeProcessor implements PeerNode {
     private final BlockProcessor blockProcessor;
 
     public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, BlockChain blockChain, Stores stores, Address coinbase) {
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
-        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(stores.getStorageTrieStore());
+        AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
+        TrieStorageProvider trieStorageProvider = stores.getTrieStorageProvider();
         CodeStore codeStore = stores.getCodeStore();
 
         this.networkConfiguration = networkConfiguration;

@@ -30,6 +30,7 @@ public class MinerProcessor {
 
     private boolean stopped = false;
 
+    // TODO inject stores
     public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, AccountStoreProvider accountStoreProvider, Address coinbase) {
         this.blockChain = blockChain;
         this.transactionPool = transactionPool;
