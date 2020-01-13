@@ -65,6 +65,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [With fraud-proof-free data availability proofs, we can have scalable data chains without committees](https://ethresear.ch/t/with-fraud-proof-free-data-availability-proofs-we-can-have-scalable-data-chains-without-committees/6725)
 - [Requirements for Ethereum Private Sidechains](https://arxiv.org/pdf/1806.09834.pdf)
 - [Ren Project](https://github.com/renproject/ren/wiki/Introduction)
+- [Interledger: How to Interconnect All Blockchains and Value Networks](https://medium.com/xpring/interledger-how-to-interconnect-all-blockchains-and-value-networks-74f432e64543)
 
 ## To Do
 
