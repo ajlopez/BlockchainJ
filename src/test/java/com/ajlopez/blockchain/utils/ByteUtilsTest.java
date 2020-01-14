@@ -469,4 +469,17 @@ public class ByteUtilsTest {
         exception.expectMessage("Invalid negative value");
         ByteUtils.bytesToUnsignedInteger(new byte[] { (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff });
     }
+    
+    @Test
+    public void concatenate() {
+        byte[] left = FactoryHelper.createRandomBytes(42);
+        byte[] right = FactoryHelper.createRandomBytes(10);
+
+        byte[] result = ByteUtils.concatenate(left, right);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(left.length + right.length, result.length);
+        Assert.assertTrue(ByteUtils.equals(result, 0, left, 0, left.length));
+        Assert.assertTrue(ByteUtils.equals(result, left.length, right, 0, right.length));
+    }
 }

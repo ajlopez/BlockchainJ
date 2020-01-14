@@ -66,6 +66,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Requirements for Ethereum Private Sidechains](https://arxiv.org/pdf/1806.09834.pdf)
 - [Ren Project](https://github.com/renproject/ren/wiki/Introduction)
 - [Interledger: How to Interconnect All Blockchains and Value Networks](https://medium.com/xpring/interledger-how-to-interconnect-all-blockchains-and-value-networks-74f432e64543)
+- [Transaction Announcements and Retrievals](https://github.com/ethereum/EIPs/issues/2465)
+
 
 ## To Do
 
