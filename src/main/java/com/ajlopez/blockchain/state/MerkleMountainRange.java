@@ -1,8 +1,8 @@
 package com.ajlopez.blockchain.state;
 
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
-import org.spongycastle.pqc.math.linearalgebra.ByteUtils;
 
 /**
  * Created by ajlopez on 25/07/2019.

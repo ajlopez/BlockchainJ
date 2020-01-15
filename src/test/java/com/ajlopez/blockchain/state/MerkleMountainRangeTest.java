@@ -2,10 +2,10 @@ package com.ajlopez.blockchain.state;
 
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.spongycastle.pqc.math.linearalgebra.ByteUtils;
 
 /**
  * Created by ajlopez on 12/08/2017.
