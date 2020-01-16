@@ -40,7 +40,7 @@ public class Block {
         if (uncles == null)
             this.uncles = Collections.EMPTY_LIST;
         else
-            this.uncles = Collections.unmodifiableList(uncles);
+            this.uncles = Collections.unmodifiableList(new ArrayList<>(uncles));
 
         if (transactions == null)
             this.transactions = Collections.EMPTY_LIST;
