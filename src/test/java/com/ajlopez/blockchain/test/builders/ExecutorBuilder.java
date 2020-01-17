@@ -14,6 +14,7 @@ import java.io.IOException;
  * Created by ajlopez on 17/12/2019.
  */
 public class ExecutorBuilder {
+    private Stores stores;
     private TrieStore accountTrieStore;
     private TrieStore storageTrieStore;
     private AccountStoreProvider accountStoreProvider;
@@ -21,23 +22,30 @@ public class ExecutorBuilder {
     private TrieStorageProvider trieStorageProvider;
     private CodeStore codeStore;
 
+    public Stores getStores() {
+        if (this.stores == null)
+            this.stores = new MemoryStores();
+
+        return this.stores;
+    }
+
     public TrieStore getAccountTrieStore() {
         if (this.accountTrieStore == null)
-            this.accountTrieStore = new TrieStore(new HashMapStore());
+            this.accountTrieStore = getStores().getAccountTrieStore();
 
         return this.accountTrieStore;
     }
 
     public TrieStore getStorageTrieStore() {
         if (this.storageTrieStore == null)
-            this.storageTrieStore = new TrieStore(new HashMapStore());
+            this.storageTrieStore = this.getStores().getStorageTrieStore();
 
         return this.storageTrieStore;
     }
 
     public AccountStoreProvider getAccountStoreProvider() {
         if (this.accountStoreProvider == null)
-            this.accountStoreProvider = new AccountStoreProvider(this.getAccountTrieStore());
+            this.accountStoreProvider = this.getStores().getAccountStoreProvider();
 
         return this.accountStoreProvider;
     }
@@ -51,14 +59,14 @@ public class ExecutorBuilder {
 
     public TrieStorageProvider getTrieStorageProvider() {
         if (this.trieStorageProvider == null)
-            this.trieStorageProvider = new TrieStorageProvider(this.getStorageTrieStore());
+            this.trieStorageProvider = this.getStores().getTrieStorageProvider();
 
         return this.trieStorageProvider;
     }
 
     public CodeStore getCodeStore() {
         if (this.codeStore == null)
-            this.codeStore = new CodeStore(new HashMapStore());
+            this.codeStore = this.getStores().getCodeStore();
 
         return this.codeStore;
     }
