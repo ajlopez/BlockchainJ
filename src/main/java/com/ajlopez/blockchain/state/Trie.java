@@ -80,7 +80,7 @@ public class Trie {
             return true;
         }
 
-        int nibble = getOffset(key, position);
+        int nibble = TrieKeyUtils.getOffset(key, position);
 
         Trie trie = this.getSubNode(nibble);
 
@@ -107,7 +107,7 @@ public class Trie {
         if (position == key.length * 2)
             return this.value;
 
-        int nibble = getOffset(key, position);
+        int nibble = TrieKeyUtils.getOffset(key, position);
 
         Trie trie = this.getSubNode(nibble);
 
@@ -336,7 +336,7 @@ public class Trie {
             else
                 return createNewTrie(this.nodes, this.hashes, value, true, this.store);
 
-        int offset = getOffset(key, position);
+        int offset = TrieKeyUtils.getOffset(key, position);
 
         Trie[] childNodes = copyNodes(this.nodes, true);
         Hash[] childHashes = copyHashes(this.hashes, true);
@@ -387,12 +387,5 @@ public class Trie {
             return create ? new Hash[ARITY] : null;
 
         return Arrays.copyOf(hashes, ARITY);
-    }
-
-    private static int getOffset(byte[] key, int position) {
-        if (position % 2 == 0)
-            return (key[position / 2] >> 4) & 0x0f;
-
-        return key[position / 2] & 0x0f;
     }
 }
