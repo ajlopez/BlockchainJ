@@ -33,4 +33,8 @@ public class TrieKeyUtils {
 
         return subkey;
     }
+
+    public static int getSharedLength(byte[] sharedKey, int sharedKeyLength, byte[] key, int position) {
+        return 0;
+    }
 }
