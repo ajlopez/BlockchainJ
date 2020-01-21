@@ -35,6 +35,15 @@ public class TrieKeyUtils {
     }
 
     public static int getSharedLength(byte[] sharedKey, int sharedKeyLength, byte[] key, int position) {
-        return 0;
+        int l = 0;
+
+        // TODO improve algorithm if position is even
+        while (l < sharedKeyLength)
+            if (getOffset(sharedKey, l) == getOffset(key, position + l))
+                l++;
+            else
+                break;
+
+        return l;
     }
 }

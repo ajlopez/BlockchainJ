@@ -35,7 +35,7 @@ public class TrieKeyUtilsTest {
         Assert.assertArrayEquals(skey12, TrieKeyUtils.getSubKey(key, 1, 2));
         Assert.assertArrayEquals(skey33, TrieKeyUtils.getSubKey(key, 3, 3));
     }
-    
+
     @Test
     public void getSharedLength() {
         byte[] key = { 0x12, 0x34, (byte)0xfe };
