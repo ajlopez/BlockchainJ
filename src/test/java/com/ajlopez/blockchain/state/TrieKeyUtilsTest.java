@@ -51,6 +51,7 @@ public class TrieKeyUtilsTest {
         Assert.assertEquals(1, TrieKeyUtils.getSharedLength(skey11, 1, key, 1));
         Assert.assertEquals(2, TrieKeyUtils.getSharedLength(skey12, 2, key, 1));
         Assert.assertEquals(3, TrieKeyUtils.getSharedLength(skey33, 3, key, 3));
+        Assert.assertEquals(2, TrieKeyUtils.getSharedLength(skey33, 2, key, 3));
         Assert.assertEquals(0, TrieKeyUtils.getSharedLength(skey33, 3, key, 0));
     }
 }

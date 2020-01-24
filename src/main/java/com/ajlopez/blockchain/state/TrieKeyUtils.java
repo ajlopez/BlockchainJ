@@ -36,9 +36,13 @@ public class TrieKeyUtils {
 
     public static int getSharedLength(byte[] sharedKey, int sharedKeyLength, byte[] key, int position) {
         int l = 0;
+        int keylength = key.length;
 
         if (position % 2 == 0) {
             while (l < sharedKeyLength) {
+                if (position + l/2 >= keylength)
+                    break;
+
                 if (sharedKey[l/2] != key[position + l/2])
                     break;
 
