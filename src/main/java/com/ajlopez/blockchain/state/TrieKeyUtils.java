@@ -51,7 +51,7 @@ public class TrieKeyUtils {
 
             // TODO review these checks, more test use cases
             if (l < sharedKeyLength)
-                if ((sharedKey[l/2] & (byte)0xf0) == (key[position + l/2] & (byte)0xf0))
+                if (getOffset(sharedKey, l) == getOffset(key, position + l))
                     return l + 1;
 
             return l;
