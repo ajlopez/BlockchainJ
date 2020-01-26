@@ -14,7 +14,7 @@ public class TriePath {
 
     }
 
-    public int getSize() { return this.tries.size(); }
+    public int size() { return this.tries.size(); }
 
     public Trie getTrie(int n) { return this.tries.get(n); }
 

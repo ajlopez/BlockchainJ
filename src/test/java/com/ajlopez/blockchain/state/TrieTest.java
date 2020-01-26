@@ -35,7 +35,7 @@ public class TrieTest {
         TriePath result = trie.getPath(new byte[] { 0x01, 0x02 });
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(0, result.getSize());
+        Assert.assertEquals(0, result.size());
     }
 
     @Test
@@ -94,9 +94,9 @@ public class TrieTest {
         TriePath triePath = trie.getPath(key);
 
         Assert.assertNotNull(triePath);
-        Assert.assertNotEquals(0, triePath.getSize());
-        Assert.assertEquals(key.length * 2 + 1, triePath.getSize());
-        Assert.assertArrayEquals(value, triePath.getTrie(triePath.getSize() - 1).getValue());
+        Assert.assertNotEquals(0, triePath.size());
+        Assert.assertEquals(key.length * 2 + 1, triePath.size());
+        Assert.assertArrayEquals(value, triePath.getTrie(triePath.size() - 1).getValue());
 
         for (int k = 0; k < key.length; k++) {
             byte bt = key[k];
@@ -118,9 +118,9 @@ public class TrieTest {
         TriePath triePath = trie.getPath(key);
 
         Assert.assertNotNull(triePath);
-        Assert.assertNotEquals(0, triePath.getSize());
-        Assert.assertEquals(key.length * 2 + 1, triePath.getSize());
-        Assert.assertArrayEquals(value, triePath.getTrie(triePath.getSize() - 1).getValue());
+        Assert.assertNotEquals(0, triePath.size());
+        Assert.assertEquals(key.length * 2 + 1, triePath.size());
+        Assert.assertArrayEquals(value, triePath.getTrie(triePath.size() - 1).getValue());
 
         for (int k = 0; k < key.length; k++) {
             byte bt = key[k];
@@ -258,6 +258,33 @@ public class TrieTest {
         Assert.assertArrayEquals(value1, trie1.get(key));
         Assert.assertArrayEquals(value2, trie2.get(key));
         Assert.assertNotEquals(trie1.getHash(), trie2.getHash());
+    }
+
+    @Test
+    public void putKeySameValueTwiceUsingSaveAndStore() throws IOException {
+        byte[] value = FactoryHelper.createRandomBytes(Hash.HASH_BYTES);
+        byte[] key = FactoryHelper.createRandomBytes(Address.ADDRESS_BYTES);
+
+        random.nextBytes(key);
+
+        TrieStore store = new TrieStore(new HashMapStore());
+        Trie trie1 = new Trie(store).put(key, value);
+        trie1.save();
+
+        Trie trie1b = store.retrieve(trie1.getHash());
+
+        TriePath path1 = trie1b.getPath(key);
+        Trie trie2 = trie1b.put(key, value);
+        TriePath path2 = trie1b.getPath(key);
+
+        Assert.assertArrayEquals(value, trie1.get(key));
+        Assert.assertArrayEquals(value, trie2.get(key));
+        Assert.assertEquals(trie1.getHash(), trie2.getHash());
+
+        Assert.assertEquals(path1.size(), path2.size());
+
+        for (int k = 0; k < path1.size(); k++)
+            Assert.assertSame(path1.getTrie(k), path2.getTrie(k));
     }
 
     @Test

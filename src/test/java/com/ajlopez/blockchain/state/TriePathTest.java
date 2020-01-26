@@ -11,7 +11,7 @@ public class TriePathTest {
     public void createEmptyTriePath() {
         TriePath triePath = new TriePath();
 
-        Assert.assertEquals(0, triePath.getSize());
+        Assert.assertEquals(0, triePath.size());
     }
 
     @Test
@@ -21,7 +21,7 @@ public class TriePathTest {
 
         triePath.addLastTrie(trie);
 
-        Assert.assertEquals(1, triePath.getSize());
+        Assert.assertEquals(1, triePath.size());
         Assert.assertSame(trie, triePath.getTrie(0));
     }
 
@@ -34,7 +34,7 @@ public class TriePathTest {
         triePath.addTrieAndChildPosition(trie1, 1);
         triePath.addLastTrie(trie2);
 
-        Assert.assertEquals(2, triePath.getSize());
+        Assert.assertEquals(2, triePath.size());
         Assert.assertSame(trie1, triePath.getTrie(0));
         Assert.assertSame(trie2, triePath.getTrie(1));
         Assert.assertEquals(1, triePath.getChildPosition(0));
