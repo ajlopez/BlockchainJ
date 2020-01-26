@@ -146,7 +146,7 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
 
     abstract AccountState retrieveAccountState(Address address) throws IOException;
 
-    abstract void updateAccountState(Address address, AccountState accountState);
+    abstract void updateAccountState(Address address, AccountState accountState) throws IOException;
 
     abstract void updateCode(Hash hash, byte[] code) throws IOException;
 

@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -92,7 +93,13 @@ public class Block {
         int ntransactions = transactions.size();
 
         for (int k = 0; k < ntransactions; k++)
-            trie = trie.put(ByteUtils.unsignedIntegerToNormalizedBytes(k), TransactionEncoder.encode(transactions.get(k)));
+            try {
+                trie = trie.put(ByteUtils.unsignedIntegerToNormalizedBytes(k), TransactionEncoder.encode(transactions.get(k)));
+            }
+            catch (IOException ex) {
+                // It should not happen, no I/O
+                throw new RuntimeException(ex);
+            }
 
         return trie.getHash();
     }

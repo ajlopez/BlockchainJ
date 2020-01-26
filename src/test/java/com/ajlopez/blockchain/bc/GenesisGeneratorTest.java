@@ -10,6 +10,8 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 29/11/2018.
  */
@@ -29,7 +31,7 @@ public class GenesisGeneratorTest {
     }
 
     @Test
-    public void generateGenesisWithInitialAccounts() {
+    public void generateGenesisWithInitialAccounts() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
         accountStore.putAccount(FactoryHelper.createRandomAddress(), new Account(Coin.TEN, 42, null, null));

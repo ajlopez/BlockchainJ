@@ -67,7 +67,7 @@ public class TrieTest {
     }
 
     @Test
-    public void getSubhashesFromTrieWithOneKeyValue() {
+    public void getSubhashesFromTrieWithOneKeyValue() throws IOException {
         Trie trie = new Trie().put(FactoryHelper.createRandomBytes(32), FactoryHelper.createRandomBytes(42));
 
         Hash[] hashes = trie.getSubHashes();
@@ -131,7 +131,7 @@ public class TrieTest {
     }
 
     @Test
-    public void getSubhashesFromTrieIsACopy() {
+    public void getSubhashesFromTrieIsACopy() throws IOException {
         Trie trie = new Trie().put(FactoryHelper.createRandomBytes(32), FactoryHelper.createRandomBytes(42));
 
         Hash[] hashes = trie.getSubHashes();
@@ -155,7 +155,7 @@ public class TrieTest {
     }
 
     @Test
-    public void getEncodedTrieWithValueAndNoSubNodes() {
+    public void getEncodedTrieWithValueAndNoSubNodes() throws IOException {
         byte[] value = new byte[32];
         random.nextBytes(value);
 
@@ -176,7 +176,7 @@ public class TrieTest {
     }
 
     @Test
-    public void getEncodedTrieWithoutValueAndSubNode() {
+    public void getEncodedTrieWithoutValueAndSubNode() throws IOException {
         byte[] value = new byte[32];
         random.nextBytes(value);
 
@@ -207,7 +207,7 @@ public class TrieTest {
     }
 
     @Test
-    public void retrieveFromEncodedTrieWithKeyValueInSubTrie() {
+    public void retrieveFromEncodedTrieWithKeyValueInSubTrie() throws IOException {
         byte[] value = new byte[32];
         random.nextBytes(value);
         byte[] key = new byte[] { 0x01 };
@@ -287,7 +287,7 @@ public class TrieTest {
     }
 
     @Test
-    public void getHashFromTrieWithValueAndNoSubNodes() {
+    public void getHashFromTrieWithValueAndNoSubNodes() throws IOException {
         byte[] value = new byte[32];
         random.nextBytes(value);
 

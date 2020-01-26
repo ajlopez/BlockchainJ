@@ -28,7 +28,7 @@ public class AccountStore {
         return AccountEncoder.decode(value);
     }
 
-    public void putAccount(Address address, Account account) {
+    public void putAccount(Address address, Account account) throws IOException {
         byte[] key = address.getBytes();
         byte[] value = AccountEncoder.encode(account);
 

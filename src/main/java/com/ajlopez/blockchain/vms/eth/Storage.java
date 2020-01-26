@@ -11,7 +11,7 @@ import java.io.IOException;
 public interface Storage {
     boolean hasValue(DataWord address) throws IOException;
 
-    void setValue(DataWord address, DataWord value);
+    void setValue(DataWord address, DataWord value) throws IOException;
 
     DataWord getValue(DataWord address) throws IOException;
 

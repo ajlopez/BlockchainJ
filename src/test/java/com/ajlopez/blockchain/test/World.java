@@ -99,7 +99,7 @@ public class World {
         return this.accounts.get(name);
     }
 
-    public void setAccount(String name, Account account) {
+    public void setAccount(String name, Account account) throws IOException {
         Address address = FactoryHelper.createRandomAddress();
         this.accounts.put(name, address);
         this.accountStore.putAccount(address, account);

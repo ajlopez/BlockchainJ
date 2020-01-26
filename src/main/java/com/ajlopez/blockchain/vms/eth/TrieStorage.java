@@ -25,7 +25,7 @@ public class TrieStorage implements Storage {
     }
 
     @Override
-    public void setValue(DataWord address, DataWord value) {
+    public void setValue(DataWord address, DataWord value) throws IOException {
         byte[] bkey = address.getBytes();
 
         if (value.equals(DataWord.ZERO))

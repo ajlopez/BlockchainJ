@@ -117,7 +117,7 @@ public class Trie {
         return trie.get(key, position + 1);
     }
 
-    public Trie put(byte[] key, byte[] value) {
+    public Trie put(byte[] key, byte[] value) throws IOException {
         Trie trie = this.put(key, 0, value);
 
         if (trie == null)
@@ -126,7 +126,7 @@ public class Trie {
         return trie;
     }
 
-    public Trie delete(byte[] key) {
+    public Trie delete(byte[] key) throws IOException {
         return this.put(key, null);
     }
 
@@ -329,37 +329,44 @@ public class Trie {
         return nsubnodes;
     }
 
-    private Trie put(byte[] key, int position, byte[] value) {
+    private Trie put(byte[] key, int position, byte[] value) throws IOException {
         if (position == key.length * 2)
             if (Arrays.equals(value, this.value))
                 return this;
             else
-                return createNewTrie(this.nodes, this.hashes, value, true, this.store);
+                return createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, this.store);
 
         int offset = TrieKeyUtils.getOffset(key, position);
 
         Trie[] childNodes = copyNodes(this.nodes, true);
         Hash[] childHashes = copyHashes(this.hashes, true);
 
-        childHashes[offset] = null;
+        Trie childNode = this.getSubNode(offset);
 
-        if (childNodes[offset] == null)
+        if (childNode == null) {
             childNodes[offset] = new Trie(this.store).put(key, position + 1, value);
-        else
-            childNodes[offset] = childNodes[offset].put(key, position + 1, value);
+            childHashes[offset] = null;
+        }
+        else {
+            childNodes[offset] = childNode.put(key, position + 1, value);
+            childHashes[offset] = null;
+        }
 
         if (noNodes(childNodes))
             childNodes = null;
 
-        return createNewTrie(childNodes, childHashes, this.value, false, this.store);
+        return createNewTrie(childNodes, childHashes, this.value, this.store);
     }
 
-    private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, boolean copy, TrieStore store) {
-        if (value == null && noNodes(nodes))
-            return null;
+    private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, TrieStore store) {
+        if (noNodes(nodes))
+            nodes = null;
 
-        if (copy)
-            return new Trie(copyNodes(nodes, false), hashes, value, store);
+        if (noHashes(hashes))
+            hashes = null;
+
+        if (value == null && nodes == null && hashes == null)
+            return null;
 
         return new Trie(nodes, hashes, value, store);
     }
@@ -370,6 +377,17 @@ public class Trie {
 
         for (int k = 0; k < nodes.length; k++)
             if (nodes[k] != null)
+                return false;
+
+        return true;
+    }
+
+    private static boolean noHashes(Hash[] hashes) {
+        if (hashes == null)
+            return true;
+
+        for (int k = 0; k < hashes.length; k++)
+            if (hashes[k] != null)
                 return false;
 
         return true;

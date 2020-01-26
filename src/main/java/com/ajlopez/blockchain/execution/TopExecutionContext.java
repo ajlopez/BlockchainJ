@@ -31,7 +31,7 @@ public class TopExecutionContext extends AbstractExecutionContext {
     }
 
     @Override
-    protected void updateAccountState(Address address, AccountState accountState) {
+    protected void updateAccountState(Address address, AccountState accountState) throws IOException {
         this.accountStore.putAccount(address, accountState.toAccount());
     }
 

@@ -14,7 +14,7 @@ public class Storage {
         return this.trie.get(address);
     }
 
-    public void setValue(byte[] address, byte[] value) {
+    public void setValue(byte[] address, byte[] value) throws IOException {
         this.trie = this.trie.put(address, value);
     }
 }

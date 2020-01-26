@@ -46,7 +46,7 @@ public class WorldTest {
     }
 
     @Test
-    public void getAccountAddress() {
+    public void getAccountAddress() throws IOException {
         World world = new World();
         Account account = new Account();
 
@@ -208,7 +208,7 @@ public class WorldTest {
     }
 
     @Test
-    public void getBlockChainWithInitialAccounts() {
+    public void getBlockChainWithInitialAccounts() throws IOException {
         World world = new World();
         Account account1 = new Account(Coin.TEN, 10, null, null);
         Account account2 = new Account(Coin.ONE, 20, null, null);
