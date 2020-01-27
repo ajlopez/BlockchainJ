@@ -68,6 +68,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Interledger: How to Interconnect All Blockchains and Value Networks](https://medium.com/xpring/interledger-how-to-interconnect-all-blockchains-and-value-networks-74f432e64543)
 - [Transaction Announcements and Retrievals](https://github.com/ethereum/EIPs/issues/2465)
 - [A-to-Z of Blockchain Consensus](https://medium.com/tendermint/a-to-z-of-blockchain-consensus-81e2406af5a3)
+- [Archive Node](https://infura.io/docs/ethereum/add-ons/archiveData)
 
 ## To Do
 
