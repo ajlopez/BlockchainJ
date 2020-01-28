@@ -18,6 +18,8 @@ public class Trie {
     private byte[] value;
     private Trie[] nodes;
     private Hash[] hashes;
+    private byte[] sharedKey;
+    private short sharedKeyLength;
     private TrieStore store;
 
     private Hash hash;
@@ -105,6 +107,11 @@ public class Trie {
     }
 
     private byte[] get(byte[] key, int position) throws IOException {
+        int sharedLength = TrieKeyUtils.getSharedLength(this.sharedKey, this.sharedKeyLength, key, position);
+
+        if (sharedLength == this.sharedKeyLength)
+            position += sharedLength;
+
         if (position == key.length * 2)
             return this.value;
 
