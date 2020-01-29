@@ -95,15 +95,8 @@ public class TrieTest {
 
         Assert.assertNotNull(triePath);
         Assert.assertNotEquals(0, triePath.size());
-        Assert.assertEquals(key.length * 2 + 1, triePath.size());
-        Assert.assertArrayEquals(value, triePath.getTrie(triePath.size() - 1).getValue());
-
-        for (int k = 0; k < key.length; k++) {
-            byte bt = key[k];
-
-            Assert.assertEquals(0xf & (bt >> 4), triePath.getChildPosition(k* 2));
-            Assert.assertEquals(0xf & bt, triePath.getChildPosition(k* 2 + 1));
-        }
+        Assert.assertEquals(1, triePath.size());
+        Assert.assertArrayEquals(value, triePath.getTrie(0).getValue());
     }
 
     @Test
@@ -119,15 +112,8 @@ public class TrieTest {
 
         Assert.assertNotNull(triePath);
         Assert.assertNotEquals(0, triePath.size());
-        Assert.assertEquals(key.length * 2 + 1, triePath.size());
-        Assert.assertArrayEquals(value, triePath.getTrie(triePath.size() - 1).getValue());
-
-        for (int k = 0; k < key.length; k++) {
-            byte bt = key[k];
-
-            Assert.assertEquals(0xf & (bt >> 4), triePath.getChildPosition(k* 2));
-            Assert.assertEquals(0xf & bt, triePath.getChildPosition(k* 2 + 1));
-        }
+        Assert.assertEquals(2, triePath.size());
+        Assert.assertArrayEquals(value, triePath.getTrie(1).getValue());
     }
 
     @Test
@@ -447,7 +433,7 @@ public class TrieTest {
         Assert.assertArrayEquals(value1, trie.get(key1));
         Assert.assertArrayEquals(value2, trie.get(key2));
         Assert.assertNull(trie.get(key3));
-        Assert.assertEquals(5, trie.nodesSize());
+        Assert.assertEquals(2, trie.nodesSize());
     }
 
     @Test

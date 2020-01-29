@@ -79,6 +79,13 @@ public class Trie {
     }
 
     private boolean buildPath(TriePath path, byte[] key, int position) throws IOException {
+        int sharedLength = TrieKeyUtils.getSharedLength(this.sharedKey, this.sharedKeyLength, key, position);
+
+        if (sharedLength < this.sharedKeyLength)
+            return false;
+
+        position += sharedLength;
+
         if (position == key.length * 2) {
             path.addLastTrie(this);
 
@@ -111,8 +118,10 @@ public class Trie {
     private byte[] get(byte[] key, int position) throws IOException {
         int sharedLength = TrieKeyUtils.getSharedLength(this.sharedKey, this.sharedKeyLength, key, position);
 
-        if (sharedLength == this.sharedKeyLength)
-            position += sharedLength;
+        if (sharedLength < this.sharedKeyLength)
+            return null;
+
+        position += sharedLength;
 
         if (position == key.length * 2)
             return this.value;
@@ -363,7 +372,7 @@ public class Trie {
     private Trie put(byte[] key, int position, byte[] value) throws IOException {
         int sharedLength = TrieKeyUtils.getSharedLength(this.sharedKey, this.sharedKeyLength, key, position);
 
-        if (sharedLength > 0 && sharedLength < this.sharedKeyLength)
+        if (sharedLength < this.sharedKeyLength)
             return this.split(sharedLength).put(key, position, value);
 
         if (position + sharedLength == key.length * 2)
