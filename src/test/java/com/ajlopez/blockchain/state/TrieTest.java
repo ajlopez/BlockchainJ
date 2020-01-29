@@ -45,9 +45,9 @@ public class TrieTest {
         byte[] encoded = trie.getEncoded();
 
         Assert.assertNotNull(encoded);
-        Assert.assertEquals(5, encoded.length);
+        Assert.assertEquals(6, encoded.length);
 
-        byte[] expected = new byte[5];
+        byte[] expected = new byte[6];
         expected[1] = 16; // arity
 
         Assert.assertArrayEquals(expected, encoded);
@@ -81,7 +81,7 @@ public class TrieTest {
             if (hashes[k] != null)
                 nhashes++;
 
-        Assert.assertEquals(1, nhashes);
+        Assert.assertEquals(0, nhashes);
     }
 
     @Test
@@ -349,7 +349,25 @@ public class TrieTest {
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value, trie.get(key));
-        Assert.assertEquals(5, trie.nodesSize());
+        Assert.assertEquals(1, trie.nodesSize());
+    }
+
+    @Test
+    public void putAndGetTwoKeyValue() throws IOException {
+        byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
+        byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
+        byte[] key2 = new byte[] { (byte)0xab, (byte)0xce };
+        byte[] value2 = new byte[] { 0x01, 0x02, 0x03, 0x04 };
+
+        Trie trie = new Trie();
+        trie = trie.put(key1, value1);
+        trie = trie.put(key2, value2);
+
+        Assert.assertNotNull(trie);
+        Assert.assertArrayEquals(value1, trie.get(key1));
+        Assert.assertArrayEquals(value2, trie.get(key2));
+
+        Assert.assertEquals(3, trie.nodesSize());
     }
 
     @Test
@@ -412,7 +430,7 @@ public class TrieTest {
         Assert.assertArrayEquals(value1, trie.get(key1));
         Assert.assertArrayEquals(value2, trie.get(key2));
         Assert.assertNull(trie.get(key3));
-        Assert.assertEquals(9, trie.nodesSize());
+        Assert.assertEquals(3, trie.nodesSize());
     }
 
     @Test
@@ -442,6 +460,6 @@ public class TrieTest {
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value2, trie.get(key1));
-        Assert.assertEquals(5, trie.nodesSize());
+        Assert.assertEquals(1, trie.nodesSize());
     }
 }

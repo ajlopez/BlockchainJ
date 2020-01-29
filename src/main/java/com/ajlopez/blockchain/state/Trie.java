@@ -19,7 +19,7 @@ public class Trie {
     private Trie[] nodes;
     private Hash[] hashes;
     private byte[] sharedKey;
-    private short sharedKeyLength;
+    private int sharedKeyLength;
     private TrieStore store;
 
     private Hash hash;
@@ -29,13 +29,15 @@ public class Trie {
     public Trie() {}
 
     public Trie(TrieStore store) {
-        this(null, null, null, store);
+        this(null, null, null, null, 0, store);
     }
 
-    private Trie(Trie[] nodes, Hash[] hashes, byte[] value, TrieStore store) {
+    private Trie(Trie[] nodes, Hash[] hashes, byte[] value, byte[] sharedKey, int sharedKeyLength, TrieStore store) {
         this.nodes = nodes;
         this.hashes = hashes;
         this.value = value;
+        this.sharedKey = sharedKey;
+        this.sharedKeyLength = sharedKeyLength;
         this.store = store;
     }
 
@@ -159,11 +161,28 @@ public class Trie {
             valbytes = this.value.length;
         }
 
+        int sksizebytes = 0;
+        int skbytes = 0;
+
+        if (this.sharedKeyLength > 0) {
+            sksizebytes = Short.BYTES;
+            skbytes = this.sharedKey.length;
+        }
+
         int nsubnodes = this.getSubNodesCount();
 
-        byte[] bytes = new byte[1 + 1 + 1 + Short.BYTES + HashUtils.HASH_BYTES * nsubnodes + valsizebytes + valbytes];
+        int prefixLength = 1 + 1 + 1 + 1;
+        int hashBitsOffset = prefixLength;
+        int hashesOffset = hashBitsOffset + Short.BYTES;
+        int valueSizeOffset = hashesOffset + Hash.HASH_BYTES * nsubnodes;
+        int valueOffset = valueSizeOffset + valsizebytes;
+        int skSizeOffset = valueOffset + valbytes;
+        int skOffset = skSizeOffset + sksizebytes;
+        int bsize = skOffset + skbytes;
 
-        getSubNodes(bytes, 1 + 1 + 1);
+        byte[] bytes = new byte[bsize];
+
+        getSubNodes(bytes, 1 + 1 + 1 + 1);
 
         // byte[0] version == 0
 
@@ -174,11 +193,15 @@ public class Trie {
 
         bytes[2] = (byte)valsizebytes;
 
+        // shared key size
+
+        bytes[3] = (byte)sksizebytes;
+
         // value encoding
 
         if (valsizebytes > 0) {
-            System.arraycopy(ByteUtils.unsignedIntegerToBytes(valbytes), 0, bytes, 1 + 1 + 1 + Short.BYTES + HashUtils.HASH_BYTES * nsubnodes, valsizebytes);
-            System.arraycopy(this.value, 0, bytes, 1 + 1 + 1 + Short.BYTES + HashUtils.HASH_BYTES * nsubnodes + valsizebytes, valbytes);
+            System.arraycopy(ByteUtils.unsignedIntegerToBytes(valbytes), 0, bytes, valueSizeOffset, valsizebytes);
+            System.arraycopy(this.value, 0, bytes, valueOffset, valbytes);
         }
 
         // subnodes hashes
@@ -211,7 +234,7 @@ public class Trie {
 
     public static Trie fromEncoded(byte[] bytes, TrieStore store) {
         short valsizebytes = bytes[2];
-        short subnodes = ByteUtils.bytesToShort(bytes, 3);
+        short subnodes = ByteUtils.bytesToShort(bytes, 4);
 
         if (subnodes == 0 && valsizebytes == 0)
             return new Trie(store);
@@ -224,21 +247,21 @@ public class Trie {
                 continue;
 
             byte[] bhash = new byte[HashUtils.HASH_BYTES];
-            System.arraycopy(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h, bhash, 0, HashUtils.HASH_BYTES);
+            System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h, bhash, 0, HashUtils.HASH_BYTES);
             hashes[k] = new Hash(bhash);
 
             h++;
         }
 
         if (valsizebytes == 0)
-            return new Trie(null, hashes, null, store);
+            return new Trie(null, hashes, null, null, 0, store);
 
-        int lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h);
+        int lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h);
 
         byte[] value = new byte[lvalue];
-        System.arraycopy(bytes, 3 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes, value, 0, lvalue);
+        System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes, value, 0, lvalue);
 
-        return new Trie(null, hashes, value, store);
+        return new Trie(null, hashes, value, null, 0, store);
     }
 
     private void getSubNodes(byte[] bytes, int offset) {
@@ -338,13 +361,21 @@ public class Trie {
     }
 
     private Trie put(byte[] key, int position, byte[] value) throws IOException {
-        if (position == key.length * 2)
+        int sharedLength = TrieKeyUtils.getSharedLength(this.sharedKey, this.sharedKeyLength, key, position);
+
+        if (sharedLength > 0 && sharedLength < this.sharedKeyLength)
+            return this.split(sharedLength).put(key, position, value);
+
+        if (position + sharedLength == key.length * 2)
             if (Arrays.equals(value, this.value))
                 return this;
             else
-                return createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, this.store);
+                return createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, sharedKey, sharedKeyLength, this.store);
 
-        int offset = TrieKeyUtils.getOffset(key, position);
+        if (this.empty())
+            return createNewTrie(value, TrieKeyUtils.getSubKey(key, position, key.length * 2 - position), (short)(key.length * 2 - position), this.store);
+
+        int offset = TrieKeyUtils.getOffset(key, position + sharedLength);
 
         Trie[] childNodes = copyNodes(this.nodes, true);
         Hash[] childHashes = copyHashes(this.hashes, true);
@@ -352,28 +383,50 @@ public class Trie {
         Trie childNode = this.getSubNode(offset);
 
         if (childNode == null) {
-            childNodes[offset] = new Trie(this.store).put(key, position + 1, value);
+            childNodes[offset] = new Trie(this.store).put(key, position + sharedLength + 1, value);
             childHashes[offset] = null;
         }
         else {
-            childNodes[offset] = childNode.put(key, position + 1, value);
+            childNodes[offset] = childNode.put(key, position + sharedLength + 1, value);
             childHashes[offset] = null;
         }
 
-        return createNewTrie(childNodes, childHashes, this.value, this.store);
+        return createNewTrie(childNodes, childHashes, this.value, this.sharedKey, this.sharedKeyLength, this.store);
     }
 
-    private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, TrieStore store) {
+    private Trie split(int sharedLength) {
+        Trie splitChild = createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, TrieKeyUtils.getSubKey(this.sharedKey, sharedLength + 1, sharedKeyLength - sharedLength - 1), sharedKeyLength - sharedLength - 1, this.store);
+        int offset = TrieKeyUtils.getOffset(this.sharedKey, sharedLength);
+
+        Trie[] newNodes = new Trie[Trie.ARITY];
+
+        newNodes[offset] = splitChild;
+
+        return createNewTrie(newNodes, null, null, TrieKeyUtils.getSubKey(this.sharedKey, 0, sharedLength), sharedLength, this.store);
+    }
+
+    private static Trie createNewTrie(byte[] value, byte[] sharedKey, short sharedKeyLength, TrieStore store) {
+        return new Trie(null, null, value, sharedKey, sharedKeyLength, store);
+    }
+
+    private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, byte[] sharedKey, int sharedKeyLength, TrieStore store) {
         if (emptyNodes(nodes))
             nodes = null;
 
         if (emptyHashes(hashes))
             hashes = null;
 
+        if (sharedKeyLength == 0)
+            sharedKey = null;
+
         if (value == null && nodes == null && hashes == null)
             return null;
 
-        return new Trie(nodes, hashes, value, store);
+        return new Trie(nodes, hashes, value, sharedKey, sharedKeyLength, store);
+    }
+
+    private boolean empty() {
+        return emptyNodes(this.nodes) && emptyHashes(this.hashes) && value == null;
     }
 
     private static boolean emptyNodes(Trie[] nodes) {
