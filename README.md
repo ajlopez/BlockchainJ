@@ -69,6 +69,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Transaction Announcements and Retrievals](https://github.com/ethereum/EIPs/issues/2465)
 - [A-to-Z of Blockchain Consensus](https://medium.com/tendermint/a-to-z-of-blockchain-consensus-81e2406af5a3)
 - [Filecoin Specification](https://filecoin-project.github.io/specs/)
+- [Archive Node](https://infura.io/docs/ethereum/add-ons/archiveData)
 
 ## To Do
 

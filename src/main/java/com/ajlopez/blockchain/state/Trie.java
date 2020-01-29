@@ -18,6 +18,8 @@ public class Trie {
     private byte[] value;
     private Trie[] nodes;
     private Hash[] hashes;
+    private byte[] sharedKey;
+    private short sharedKeyLength;
     private TrieStore store;
 
     private Hash hash;
@@ -37,6 +39,7 @@ public class Trie {
         this.store = store;
     }
 
+    // TODO remove or visibility for testing
     public int nodesSize() {
         int count = 1;
 
@@ -104,6 +107,11 @@ public class Trie {
     }
 
     private byte[] get(byte[] key, int position) throws IOException {
+        int sharedLength = TrieKeyUtils.getSharedLength(this.sharedKey, this.sharedKeyLength, key, position);
+
+        if (sharedLength == this.sharedKeyLength)
+            position += sharedLength;
+
         if (position == key.length * 2)
             return this.value;
 
@@ -352,17 +360,14 @@ public class Trie {
             childHashes[offset] = null;
         }
 
-        if (noNodes(childNodes))
-            childNodes = null;
-
         return createNewTrie(childNodes, childHashes, this.value, this.store);
     }
 
     private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, TrieStore store) {
-        if (noNodes(nodes))
+        if (emptyNodes(nodes))
             nodes = null;
 
-        if (noHashes(hashes))
+        if (emptyHashes(hashes))
             hashes = null;
 
         if (value == null && nodes == null && hashes == null)
@@ -371,7 +376,7 @@ public class Trie {
         return new Trie(nodes, hashes, value, store);
     }
 
-    private static boolean noNodes(Trie[] nodes) {
+    private static boolean emptyNodes(Trie[] nodes) {
         if (nodes == null)
             return true;
 
@@ -382,7 +387,7 @@ public class Trie {
         return true;
     }
 
-    private static boolean noHashes(Hash[] hashes) {
+    private static boolean emptyHashes(Hash[] hashes) {
         if (hashes == null)
             return true;
 
