@@ -150,34 +150,37 @@ public class TrieTest {
         byte[] encoded = trie.getEncoded();
 
         Assert.assertNotNull(encoded);
-        Assert.assertEquals(5 + Integer.BYTES + 32, encoded.length);
+        Assert.assertEquals(6 + Integer.BYTES + 32, encoded.length);
 
-        byte[] expected = new byte[5 + Integer.BYTES + 32];
+        byte[] expected = new byte[6 + Integer.BYTES + 32];
         expected[1] = 16; // arity
         expected[2] = Integer.BYTES; // value length in bytes
-        expected[8] = 32; // value length in bytes[5..8]
-        System.arraycopy(value, 0, expected, 9, value.length);
+        expected[9] = 32; // value length in bytes[5..8]
+        System.arraycopy(value, 0, expected, 10, value.length);
 
         Assert.assertArrayEquals(expected, encoded);
     }
 
     @Test
-    public void getEncodedTrieWithoutValueAndSubNode() throws IOException {
+    public void getEncodedTrieWithoutValueAndTwoSubNodes() throws IOException {
         byte[] value = new byte[32];
         random.nextBytes(value);
 
-        Trie trie = new Trie().put(new byte[] { 0x01 }, value);
+        Trie trie = new Trie().put(new byte[] { 0x01 }, value).put(new byte[] { 0x02 }, value);
+
+        Assert.assertNull(trie.getValue());
 
         byte[] encoded = trie.getEncoded();
 
         Assert.assertNotNull(encoded);
-        Assert.assertEquals(5 + HashUtils.HASH_BYTES, encoded.length);
+        Assert.assertEquals(4 + Short.BYTES + HashUtils.HASH_BYTES * 2 + Short.BYTES + 1, encoded.length);
 
-        byte[] firstexpected = new byte[5];
+        byte[] firstexpected = new byte[6];
         firstexpected[1] = 16; // arity
-        firstexpected[4] = 1; // first subnode
+        firstexpected[3] = 2; // shared key length bytes
+        firstexpected[5] = 2 | 4; // two subnodes
 
-        Assert.assertArrayEquals(firstexpected, Arrays.copyOfRange(encoded, 0, 5));
+        Assert.assertArrayEquals(firstexpected, Arrays.copyOfRange(encoded, 0, 6));
     }
 
     @Test
