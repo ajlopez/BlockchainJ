@@ -243,9 +243,11 @@ public class Trie {
 
     public static Trie fromEncoded(byte[] bytes, TrieStore store) {
         short valsizebytes = bytes[2];
+        short sksizebytes = bytes[3];
+
         short subnodes = ByteUtils.bytesToShort(bytes, 4);
 
-        if (subnodes == 0 && valsizebytes == 0)
+        if (subnodes == 0 && valsizebytes == 0 && sksizebytes == 0)
             return new Trie(store);
 
         Hash[] hashes = new Hash[ARITY];
@@ -262,15 +264,18 @@ public class Trie {
             h++;
         }
 
-        if (valsizebytes == 0)
-            return new Trie(null, hashes, null, null, 0, store);
+        byte[] value = null;
+        byte[] sharedKey = null;
+        int sharedKeyLength = 0;
 
-        int lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h);
+        if (valsizebytes > 0) {
+            int lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h);
 
-        byte[] value = new byte[lvalue];
-        System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes, value, 0, lvalue);
+            value = new byte[lvalue];
+            System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes, value, 0, lvalue);
+        }
 
-        return new Trie(null, hashes, value, null, 0, store);
+        return new Trie(null, hashes, value, sharedKey, sharedKeyLength, store);
     }
 
     private void getSubNodes(byte[] bytes, int offset) {
