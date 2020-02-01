@@ -213,6 +213,14 @@ public class Trie {
             System.arraycopy(this.value, 0, bytes, valueOffset, valbytes);
         }
 
+        // shared key encoding
+
+        if (sksizebytes > 0) {
+            // TODO implement unsigned short to bytes
+            System.arraycopy(ByteUtils.shortToBytes((short)this.sharedKeyLength), 0, bytes, skSizeOffset, sksizebytes);
+            System.arraycopy(this.sharedKey, 0, bytes, skOffset, skbytes);
+        }
+
         // subnodes hashes
 
         this.encoded = bytes;
@@ -265,14 +273,23 @@ public class Trie {
         }
 
         byte[] value = null;
+        int lvalue = 0;
         byte[] sharedKey = null;
         int sharedKeyLength = 0;
 
         if (valsizebytes > 0) {
-            int lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h);
+            lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h);
 
             value = new byte[lvalue];
             System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes, value, 0, lvalue);
+        }
+
+        if (sksizebytes > 0) {
+            // TODO implement to unsigned short
+            sharedKeyLength = ByteUtils.bytesToShort(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes + lvalue);
+
+            sharedKey = new byte[(sharedKeyLength + 1) / 2];
+            System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h  + valsizebytes + lvalue + sksizebytes, sharedKey, 0, sharedKey.length);
         }
 
         return new Trie(null, hashes, value, sharedKey, sharedKeyLength, store);
