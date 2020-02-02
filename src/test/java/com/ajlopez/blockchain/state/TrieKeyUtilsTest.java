@@ -46,6 +46,9 @@ public class TrieKeyUtilsTest {
         byte[] skey12 = { 0x23 };
         byte[] skey33 = { 0x4f, (byte)0xe0 };
 
+        Assert.assertEquals(2, TrieKeyUtils.getSharedLength(new byte[] { 0x12 }, 2, new byte[] { 0x34, 0x12 }, 2));
+        Assert.assertEquals(2, TrieKeyUtils.getSharedLength(new byte[] { 0x41 }, 2, new byte[] { 0x34, 0x12 }, 1));
+
         Assert.assertEquals(0, TrieKeyUtils.getSharedLength(skey01, 0, key, 0));
         Assert.assertEquals(0, TrieKeyUtils.getSharedLength(null, 0, key, 0));
         Assert.assertEquals(1, TrieKeyUtils.getSharedLength(skey01, 1, key, 0));

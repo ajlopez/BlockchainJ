@@ -406,6 +406,51 @@ public class TrieTest {
     }
 
     @Test
+    public void putRemoveAndGetTwoKeyValueWithShortSharedKey() throws IOException {
+        byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
+        byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
+        byte[] key2 = new byte[] { (byte)0xac, (byte)0xcd };
+        byte[] value2 = new byte[] { 0x01, 0x02, 0x03, 0x04 };
+
+        Trie trie = new Trie();
+        trie = trie.put(key1, value1)
+                .put(key2, value2)
+                .delete(key1)
+                .delete(key2);
+
+        Assert.assertNotNull(trie);
+        Assert.assertNull(trie.get(key1));
+        Assert.assertNull(trie.get(key2));
+        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals((new Trie()).getHash(), trie.getHash());
+    }
+
+    @Test
+    public void putTwoKeyValuesRemoveOneKeyValue() throws IOException {
+        byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
+        byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
+        byte[] key2 = new byte[] { (byte)0xac, (byte)0xcd };
+        byte[] value2 = new byte[] { 0x01, 0x02, 0x03, 0x04 };
+
+        Trie trie = new Trie();
+        trie = trie.put(key1, value1)
+                .put(key2, value2)
+                .delete(key1);
+
+        Trie trie2 = new Trie().put(key2, value2);
+
+        Assert.assertNotNull(trie);
+        Assert.assertNull(trie.get(key1));
+        Assert.assertArrayEquals(value2, trie.get(key2));
+
+        Assert.assertNotNull(trie2);
+        Assert.assertNull(trie2.get(key1));
+        Assert.assertArrayEquals(value2, trie2.get(key2));
+
+        Assert.assertEquals(trie.getHash(), trie2.getHash());
+    }
+
+    @Test
     public void putAndGetTwoKeyValues() throws IOException {
         byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };

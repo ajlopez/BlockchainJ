@@ -40,10 +40,10 @@ public class TrieKeyUtils {
 
         if (position % 2 == 0) {
             while (l < sharedKeyLength) {
-                if (position + l/2 >= keylength)
+                if (position + l >= keylength * 2)
                     break;
 
-                if (sharedKey[l/2] != key[position + l/2])
+                if (sharedKey[l/2] != key[(position + l)/2])
                     break;
 
                 l += 2;
