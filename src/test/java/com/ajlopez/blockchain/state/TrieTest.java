@@ -386,6 +386,20 @@ public class TrieTest {
     }
 
     @Test
+    public void putKeyValueAndRemoveUnknownKey() throws IOException {
+        byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
+        byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
+        byte[] key2 = new byte[] { (byte)0xab, (byte)0xce };
+
+        Trie trie = new Trie();
+        trie = trie.put(key1, value1);
+
+        Trie trie2 = trie.delete(key2);
+
+        Assert.assertSame(trie, trie2);
+    }
+
+    @Test
     public void putRemoveAndGetTwoKeyValue() throws IOException {
         byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };

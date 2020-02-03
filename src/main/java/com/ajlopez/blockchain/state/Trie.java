@@ -395,7 +395,10 @@ public class Trie {
         int sharedLength = TrieKeyUtils.getSharedLength(this.sharedKey, this.sharedKeyLength, key, position);
 
         if (sharedLength < this.sharedKeyLength)
-            return this.split(sharedLength).put(key, position, value);
+            if (value == null)
+                return this;
+            else
+                return this.split(sharedLength).put(key, position, value);
 
         if (position + sharedLength == key.length * 2)
             if (Arrays.equals(value, this.value))
@@ -418,7 +421,12 @@ public class Trie {
             childHashes[offset] = null;
         }
         else {
-            childNodes[offset] = childNode.put(key, position + sharedLength + 1, value);
+            Trie newChildNode = childNode.put(key, position + sharedLength + 1, value);
+
+            if (newChildNode == childNode)
+                return this;
+
+            childNodes[offset] = newChildNode;
             childHashes[offset] = null;
         }
 
