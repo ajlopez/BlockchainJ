@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.state;
 
+import java.util.Arrays;
+
 /**
  * Created by ajlopez on 18/01/2020.
  */
@@ -64,5 +66,13 @@ public class TrieKeyUtils {
                     break;
 
         return l;
+    }
+
+    public static byte[] concatenateKeys(byte[] key1, int lengthKey1, int offset, byte[] key2, int lengthKey2) {
+        byte[] result = Arrays.copyOf(key1, key1.length);
+
+        result[result.length - 1] |= (byte)offset;
+
+        return result;
     }
 }

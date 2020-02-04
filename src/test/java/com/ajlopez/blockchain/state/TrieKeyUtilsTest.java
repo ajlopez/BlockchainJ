@@ -59,4 +59,18 @@ public class TrieKeyUtilsTest {
         Assert.assertEquals(2, TrieKeyUtils.getSharedLength(skey33, 2, key, 3));
         Assert.assertEquals(0, TrieKeyUtils.getSharedLength(skey33, 3, key, 0));
     }
+
+    @Test
+    public void concatenateKeys() {
+        byte[] key11 = new byte[] { 0x12, 0x30 };
+        byte[] key21 = null;
+        byte[] result1 = new byte[] { 0x12, 0x34 };
+        byte[] key12 = new byte[] { 0x12, 0x34 };
+        byte[] key22 = null;
+        byte[] result2 = new byte[] { 0x12, 0x34, 0x50 };
+
+        Assert.assertArrayEquals(result1, TrieKeyUtils.concatenateKeys(key11, 3, 4, key21, 0));
+        Assert.assertArrayEquals(new byte[] { 0x12, 0x30 }, key11);
+        Assert.assertArrayEquals(result2, TrieKeyUtils.concatenateKeys(key12, 4, 5, key22, 0));
+    }
 }
