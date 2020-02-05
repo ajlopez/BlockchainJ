@@ -68,10 +68,19 @@ public class TrieKeyUtils {
         return l;
     }
 
-    public static byte[] concatenateKeys(byte[] key1, int lengthKey1, int offset, byte[] key2, int lengthKey2) {
-        byte[] result = Arrays.copyOf(key1, key1.length);
+    public static int concatenateKeysLength(byte[] key1, int lengthKey1, int offset, byte[] key2, int lengthKey2) {
+        return lengthKey1 + 1;
+    }
 
-        result[result.length - 1] |= (byte)offset;
+    public static byte[] concatenateKeys(byte[] key1, int lengthKey1, int offset, byte[] key2, int lengthKey2) {
+        int rlength = concatenateKeysLength(key1, lengthKey1, offset, key2, lengthKey2);
+
+        byte[] result = Arrays.copyOf(key1, (rlength + 1) / 2);
+
+        if (rlength % 2 == 0)
+            result[result.length - 1] |= (byte)offset;
+        else
+            result[result.length - 1] |= (byte)(offset << 4);
 
         return result;
     }
