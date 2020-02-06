@@ -75,8 +75,11 @@ public class TrieKeyUtils {
     public static byte[] concatenateKeys(byte[] key1, int lengthKey1, int offset, byte[] key2, int lengthKey2) {
         int rlength = concatenateKeysLength(key1, lengthKey1, offset, key2, lengthKey2);
 
-        byte[] result = Arrays.copyOf(key1, (rlength + 1) / 2);
+        byte[] result = new byte[(rlength + 1)/2];
 
+        if (key1 != null)
+            System.arraycopy(key1, 0, result, 0, key1.length);
+ 
         if (rlength % 2 == 0)
             result[result.length - 1] |= (byte)offset;
         else

@@ -68,9 +68,13 @@ public class TrieKeyUtilsTest {
         byte[] key12 = new byte[] { 0x12, 0x34 };
         byte[] key22 = null;
         byte[] result2 = new byte[] { 0x12, 0x34, 0x50 };
+        byte[] key13 = null;
+        byte[] key23 = null;
+        byte[] result3 = new byte[] { (byte)0xf0 };
 
         Assert.assertArrayEquals(result1, TrieKeyUtils.concatenateKeys(key11, 3, 4, key21, 0));
         Assert.assertArrayEquals(new byte[] { 0x12, 0x30 }, key11);
         Assert.assertArrayEquals(result2, TrieKeyUtils.concatenateKeys(key12, 4, 5, key22, 0));
+        Assert.assertArrayEquals(result3, TrieKeyUtils.concatenateKeys(key13, 0, 15, key23, 0));
     }
 }
