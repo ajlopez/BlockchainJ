@@ -80,10 +80,23 @@ public class TrieKeyUtils {
         if (key1 != null)
             System.arraycopy(key1, 0, result, 0, key1.length);
 
-        if (rlength % 2 == 0)
-            result[result.length - 1] |= (byte)offset;
+        if (lengthKey1 % 2 == 0)
+            result[lengthKey1 / 2] |= (byte)(offset << 4);
         else
-            result[result.length - 1] |= (byte)(offset << 4);
+            result[lengthKey1 / 2] |= (byte)(offset & 0x0f);
+
+        if (key2 != null) {
+            int p = lengthKey1 + 1;
+
+            for (int k = 0; k < lengthKey2; k++) {
+                int value = getOffset(key2, k);
+
+                if ((p + k) % 2 == 0)
+                    result[(p + k) / 2] |= (byte)(value << 4);
+                else
+                    result[(p + k) / 2] |= (byte)(value & 0x0f);
+            }
+        }
 
         return result;
     }
