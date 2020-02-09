@@ -417,6 +417,9 @@ public class Trie {
         Trie childNode = this.getSubNode(offset);
 
         if (childNode == null) {
+            if (value == null)
+                return this;
+
             childNodes[offset] = new Trie(this.store).put(key, position + sharedLength + 1, value);
             childHashes[offset] = null;
         }
