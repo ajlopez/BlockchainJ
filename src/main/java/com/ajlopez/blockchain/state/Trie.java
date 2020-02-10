@@ -464,7 +464,31 @@ public class Trie {
         if (value == null && nodes == null && hashes == null)
             return null;
 
-        return new Trie(nodes, hashes, value, sharedKey, sharedKeyLength, store);
+        Trie trie = new Trie(nodes, hashes, value, sharedKey, sharedKeyLength, store);
+
+        if (!trie.canCoalesce())
+            return trie;
+
+        return trie.coalesce();
+    }
+
+    private Trie coalesce() {
+        return this;
+    }
+
+    private boolean canCoalesce() {
+        if (value != null)
+            return false;
+
+        int nchildren = 0;
+
+        for (int k = 0; k < Trie.ARITY; k++)
+            if (this.nodes != null && this.nodes[k] != null)
+                nchildren++;
+            else if (this.hashes != null && this.hashes[k] != null)
+                nchildren++;
+
+        return nchildren == 0;
     }
 
     private boolean empty() {
