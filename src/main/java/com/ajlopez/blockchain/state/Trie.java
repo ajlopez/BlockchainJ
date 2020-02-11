@@ -436,7 +436,7 @@ public class Trie {
         return createNewTrie(childNodes, childHashes, this.value, this.sharedKey, this.sharedKeyLength, this.store);
     }
 
-    private Trie split(int sharedLength) {
+    private Trie split(int sharedLength) throws IOException {
         Trie splitChild = createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, TrieKeyUtils.getSubKey(this.sharedKey, sharedLength + 1, sharedKeyLength - sharedLength - 1), sharedKeyLength - sharedLength - 1, this.store);
         int offset = TrieKeyUtils.getOffset(this.sharedKey, sharedLength);
 
@@ -451,7 +451,7 @@ public class Trie {
         return new Trie(null, null, value, sharedKey, sharedKeyLength, store);
     }
 
-    private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, byte[] sharedKey, int sharedKeyLength, TrieStore store) {
+    private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, byte[] sharedKey, int sharedKeyLength, TrieStore store) throws IOException {
         if (emptyNodes(nodes))
             nodes = null;
 
@@ -472,8 +472,27 @@ public class Trie {
         return trie.coalesce();
     }
 
-    private Trie coalesce() {
-        return this;
+    private Trie coalesce() throws IOException {
+        int firstChildOffset = this.getFirstChildOffset();
+        Trie firstChild = this.getSubNode(firstChildOffset);
+
+        int newSharedKeyLength = TrieKeyUtils.concatenateKeysLength(this.sharedKeyLength, firstChild.sharedKeyLength);
+        byte[] newSharedKey = TrieKeyUtils.concatenateKeys(this.sharedKey, this.sharedKeyLength, firstChildOffset, firstChild.sharedKey, firstChild.sharedKeyLength);
+
+        Trie[] newNodes = copyNodes(this.nodes, false);
+        Hash[] newHashes = copyHashes(this.hashes, false);
+
+        return createNewTrie(newNodes, newHashes, this.value, newSharedKey, newSharedKeyLength, this.store);
+    }
+
+    private int getFirstChildOffset() throws IOException {
+        for (int k = 0; k < Trie.ARITY; k++)
+            if (this.nodes != null && this.nodes[k] != null)
+                return k;
+            else if (this.hashes != null && this.hashes[k] != null)
+                return k;
+
+        return -1;
     }
 
     private boolean canCoalesce() {
