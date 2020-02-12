@@ -404,7 +404,7 @@ public class Trie {
             if (Arrays.equals(value, this.value))
                 return this;
             else
-                return createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, sharedKey, sharedKeyLength, this.store);
+                return createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, sharedKey, sharedKeyLength, this.store, true);
 
         if (this.empty())
             return createNewTrie(value, TrieKeyUtils.getSubKey(key, position, key.length * 2 - position), (short)(key.length * 2 - position), this.store);
@@ -433,25 +433,25 @@ public class Trie {
             childHashes[offset] = null;
         }
 
-        return createNewTrie(childNodes, childHashes, this.value, this.sharedKey, this.sharedKeyLength, this.store);
+        return createNewTrie(childNodes, childHashes, this.value, this.sharedKey, this.sharedKeyLength, this.store, true);
     }
 
     private Trie split(int sharedLength) throws IOException {
-        Trie splitChild = createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, TrieKeyUtils.getSubKey(this.sharedKey, sharedLength + 1, sharedKeyLength - sharedLength - 1), sharedKeyLength - sharedLength - 1, this.store);
+        Trie splitChild = createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, TrieKeyUtils.getSubKey(this.sharedKey, sharedLength + 1, sharedKeyLength - sharedLength - 1), sharedKeyLength - sharedLength - 1, this.store, true);
         int offset = TrieKeyUtils.getOffset(this.sharedKey, sharedLength);
 
         Trie[] newNodes = new Trie[Trie.ARITY];
 
         newNodes[offset] = splitChild;
 
-        return createNewTrie(newNodes, null, null, TrieKeyUtils.getSubKey(this.sharedKey, 0, sharedLength), sharedLength, this.store);
+        return createNewTrie(newNodes, null, null, TrieKeyUtils.getSubKey(this.sharedKey, 0, sharedLength), sharedLength, this.store, false);
     }
 
     private static Trie createNewTrie(byte[] value, byte[] sharedKey, short sharedKeyLength, TrieStore store) {
         return new Trie(null, null, value, sharedKey, sharedKeyLength, store);
     }
 
-    private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, byte[] sharedKey, int sharedKeyLength, TrieStore store) throws IOException {
+    private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, byte[] sharedKey, int sharedKeyLength, TrieStore store, boolean tryCoalesce) throws IOException {
         if (emptyNodes(nodes))
             nodes = null;
 
@@ -466,7 +466,7 @@ public class Trie {
 
         Trie trie = new Trie(nodes, hashes, value, sharedKey, sharedKeyLength, store);
 
-        if (!trie.canCoalesce())
+        if (!tryCoalesce || !trie.canCoalesce())
             return trie;
 
         return trie.coalesce();
@@ -479,10 +479,10 @@ public class Trie {
         int newSharedKeyLength = TrieKeyUtils.concatenateKeysLength(this.sharedKeyLength, firstChild.sharedKeyLength);
         byte[] newSharedKey = TrieKeyUtils.concatenateKeys(this.sharedKey, this.sharedKeyLength, firstChildOffset, firstChild.sharedKey, firstChild.sharedKeyLength);
 
-        Trie[] newNodes = copyNodes(this.nodes, false);
-        Hash[] newHashes = copyHashes(this.hashes, false);
+        Trie[] newNodes = copyNodes(firstChild.nodes, false);
+        Hash[] newHashes = copyHashes(firstChild.hashes, false);
 
-        return createNewTrie(newNodes, newHashes, this.value, newSharedKey, newSharedKeyLength, this.store);
+        return createNewTrie(newNodes, newHashes, firstChild.value, newSharedKey, newSharedKeyLength, this.store, true);
     }
 
     private int getFirstChildOffset() throws IOException {
@@ -507,7 +507,7 @@ public class Trie {
             else if (this.hashes != null && this.hashes[k] != null)
                 nchildren++;
 
-        return nchildren == 0;
+        return nchildren == 1;
     }
 
     private boolean empty() {
