@@ -406,8 +406,6 @@ public class Trie {
             else
                 return createNewTrie(copyNodes(this.nodes, false), copyHashes(this.hashes, false), value, sharedKey, sharedKeyLength, this.store, true);
 
-        if (this.empty())
-            return createNewTrie(value, TrieKeyUtils.getSubKey(key, position, key.length * 2 - position), (short)(key.length * 2 - position), this.store);
 
         int offset = TrieKeyUtils.getOffset(key, position + sharedLength);
 
@@ -508,10 +506,6 @@ public class Trie {
                 nchildren++;
 
         return nchildren == 1;
-    }
-
-    private boolean empty() {
-        return emptyNodes(this.nodes) && emptyHashes(this.hashes) && value == null;
     }
 
     private static boolean emptyNodes(Trie[] nodes) {
