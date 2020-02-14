@@ -71,7 +71,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Filecoin Specification](https://filecoin-project.github.io/specs/)
 - [Archive Node](https://infura.io/docs/ethereum/add-ons/archiveData)
 - [Understanding Merkle pollards](https://medium.com/@jgm.orinoco/understanding-merkle-pollards-1547fc7efaa)
-
+- [Kadcast: A Structured Approach to Broadcast in Blockchain Networks](https://eprint.iacr.org/2019/876.pdf)
 
 ## To Do
 
