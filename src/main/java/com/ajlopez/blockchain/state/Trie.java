@@ -445,10 +445,6 @@ public class Trie {
         return createNewTrie(newNodes, null, null, TrieKeyUtils.getSubKey(this.sharedKey, 0, sharedLength), sharedLength, this.store, false);
     }
 
-    private static Trie createNewTrie(byte[] value, byte[] sharedKey, short sharedKeyLength, TrieStore store) {
-        return new Trie(null, null, value, sharedKey, sharedKeyLength, store);
-    }
-
     private static Trie createNewTrie(Trie[] nodes, Hash[] hashes, byte[] value, byte[] sharedKey, int sharedKeyLength, TrieStore store, boolean tryCoalesce) throws IOException {
         if (emptyNodes(nodes))
             nodes = null;
@@ -483,7 +479,7 @@ public class Trie {
         return createNewTrie(newNodes, newHashes, firstChild.value, newSharedKey, newSharedKeyLength, this.store, true);
     }
 
-    private int getFirstChildOffset() throws IOException {
+    private int getFirstChildOffset() {
         for (int k = 0; k < Trie.ARITY; k++)
             if (this.nodes != null && this.nodes[k] != null)
                 return k;
