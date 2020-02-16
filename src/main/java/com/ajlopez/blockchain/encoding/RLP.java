@@ -13,6 +13,7 @@ public class RLP {
     private static final int EMPTY_MARK = 128;
     private static final int TINY_SIZE = 55;
     private static final int BASE_PREFIX = EMPTY_MARK + TINY_SIZE;
+    private static final int LIST_PREFIX = BASE_PREFIX + 8 + 1;
 
     private static byte[] emptyEncoding = new byte[] { (byte)0x80 };
 
@@ -81,7 +82,7 @@ public class RLP {
 
         if (length <= TINY_SIZE) {
             encoded = new byte[length + 1];
-            encoded[0] = (byte)(192 + length);
+            encoded[0] = (byte)(LIST_PREFIX + length);
             offset = 1;
         }
         else {
@@ -110,7 +111,7 @@ public class RLP {
             length = bytesToLength(encoded, 1, b0 - 247);
         }
         else
-            length = b0 - 192;
+            length = b0 - LIST_PREFIX;
 
         List<byte[]> items = new ArrayList<>();
 
@@ -137,18 +138,18 @@ public class RLP {
             return 1 + nbytes + bytesToLength(bytes, position + 1, nbytes);
         }
 
-        if (b0 >= 192)
-            return b0 - 192 + 1;
+        if (b0 >= LIST_PREFIX)
+            return b0 - LIST_PREFIX + 1;
 
         if (b0 > BASE_PREFIX) {
             int nbytes = b0 - BASE_PREFIX;
             return 1 + nbytes + bytesToLength(bytes, position + 1, nbytes);
         }
 
-        if (b0 <= 128)
+        if (b0 <= EMPTY_MARK)
             return 1;
 
-        return b0 - 128 + 1;
+        return b0 - EMPTY_MARK + 1;
     }
 
     public static byte[] lengthToBytes(int length) {
