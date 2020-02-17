@@ -14,6 +14,7 @@ public class RLP {
     private static final int TINY_SIZE = 55;
     private static final int BASE_PREFIX = EMPTY_MARK + TINY_SIZE;
     private static final int LIST_PREFIX = BASE_PREFIX + 8 + 1;
+    private static final int BASE_LIST_PREFIX = LIST_PREFIX + TINY_SIZE;
 
     private static byte[] emptyEncoding = new byte[] { (byte)0x80 };
 
@@ -89,7 +90,7 @@ public class RLP {
             byte[] blength = lengthToBytes(length);
             offset = 1 + blength.length;
             encoded = new byte[length + blength.length + 1];
-            encoded[0] = (byte)(247 + blength.length);
+            encoded[0] = (byte)(BASE_LIST_PREFIX + blength.length);
             System.arraycopy(blength, 0, encoded, 1, blength.length);
         }
 
@@ -106,9 +107,9 @@ public class RLP {
         int length;
         int offset = 1;
 
-        if (b0 > 247) {
-            offset = b0 - 247 + 1;
-            length = bytesToLength(encoded, 1, b0 - 247);
+        if (b0 > BASE_LIST_PREFIX) {
+            offset = b0 - BASE_LIST_PREFIX + 1;
+            length = bytesToLength(encoded, 1, b0 - BASE_LIST_PREFIX);
         }
         else
             length = b0 - LIST_PREFIX;
@@ -133,8 +134,8 @@ public class RLP {
     public static int getTotalLength(byte[] bytes, int position) {
         int b0 = bytes[position] & 0xff;
 
-        if (b0 > 247) {
-            int nbytes = b0 - 247;
+        if (b0 > BASE_LIST_PREFIX) {
+            int nbytes = b0 - BASE_LIST_PREFIX;
             return 1 + nbytes + bytesToLength(bytes, position + 1, nbytes);
         }
 
