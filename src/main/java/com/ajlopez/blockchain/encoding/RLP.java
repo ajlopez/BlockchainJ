@@ -12,8 +12,8 @@ import java.util.List;
 public class RLP {
     private static final int EMPTY_MARK = 128;
     private static final int TINY_SIZE = 55;
-    private static final int BASE_PREFIX = EMPTY_MARK + TINY_SIZE;
-    private static final int LIST_PREFIX = BASE_PREFIX + 8 + 1;
+    private static final int BASE_PREFIX = EMPTY_MARK + TINY_SIZE + 1;
+    private static final int LIST_PREFIX = BASE_PREFIX + 8;
     private static final int BASE_LIST_PREFIX = LIST_PREFIX + TINY_SIZE;
 
     private static byte[] emptyEncoding = new byte[] { (byte)0x80 };
@@ -38,7 +38,7 @@ public class RLP {
 
         byte[] blength = lengthToBytes(bytes.length);
         byte[] encoded = new byte[1 + blength.length + bytes.length];
-        encoded[0] = (byte) ((BASE_PREFIX) + blength.length);
+        encoded[0] = (byte) (BASE_PREFIX + blength.length - 1);
         System.arraycopy(blength, 0, encoded, 1, blength.length);
         System.arraycopy(bytes, 0, encoded, 1 + blength.length, bytes.length);
 
@@ -57,9 +57,10 @@ public class RLP {
         int length;
         int offset;
 
-        if (b0 > (BASE_PREFIX)) {
-            offset = b0 - (BASE_PREFIX) + 1;
-            length = bytesToLength(bytes, 1, offset - 1);
+        if (b0 >= BASE_PREFIX) {
+            int nbytes = b0 - BASE_PREFIX + 1;
+            offset = nbytes + 1;
+            length = bytesToLength(bytes, 1, nbytes);
         }
         else {
             length = b0 & 0x7f;
@@ -142,8 +143,8 @@ public class RLP {
         if (b0 >= LIST_PREFIX)
             return b0 - LIST_PREFIX + 1;
 
-        if (b0 > BASE_PREFIX) {
-            int nbytes = b0 - BASE_PREFIX;
+        if (b0 >= BASE_PREFIX) {
+            int nbytes = b0 - BASE_PREFIX + 1;
             return 1 + nbytes + bytesToLength(bytes, position + 1, nbytes);
         }
 
