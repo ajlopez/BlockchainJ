@@ -12,6 +12,7 @@ import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.execution.TransactionResult;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
+import com.ajlopez.blockchain.store.Stores;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,16 +26,16 @@ public class MinerProcessor {
     private final BlockChain blockChain;
     private final TransactionPool transactionPool;
     private final List<Consumer<Block>> minedBlockConsumers = new ArrayList<>();
-    private final AccountStoreProvider accountStoreProvider;
+    private final Stores stores;
     private final Address coinbase;
 
     private boolean stopped = false;
 
     // TODO inject stores
-    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, AccountStoreProvider accountStoreProvider, Address coinbase) {
+    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, Stores stores, Address coinbase) {
         this.blockChain = blockChain;
         this.transactionPool = transactionPool;
-        this.accountStoreProvider = accountStoreProvider;
+        this.stores = stores;
         this.coinbase = coinbase;
     }
 
@@ -54,11 +55,11 @@ public class MinerProcessor {
 
     public Block mineBlock(Block parent) throws IOException {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
-        AccountStore accountStore = this.accountStoreProvider.retrieve(parentStateRootHash);
-        // TODO set storage provider, code store
-        ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
+        AccountStore accountStore = this.stores.getAccountStoreProvider().retrieve(parentStateRootHash);
+        ExecutionContext executionContext = new TopExecutionContext(accountStore, this.stores.getTrieStorageProvider(), this.stores.getCodeStore());
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
+        // TODO create and use blockdata
         List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(this.transactionPool.getTransactions(), null);
 
         List<Transaction> transactions = new ArrayList<>(transactionResults.size());

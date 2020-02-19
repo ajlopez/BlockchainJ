@@ -69,8 +69,6 @@ public class BlockProcessor {
 
         emitNewBestBlock(newBestBlock);
 
-        // TODO review the point of this execution
-        // put the code in a method
         BlockFork blockFork = BlockFork.fromBlocks(this.blockChain, initialBestBlock, newBestBlock);
         this.transactionPool.updateTransactions(blockFork.getNewTransactions(), blockFork.getOldTransactions());
 

@@ -14,7 +14,6 @@ public class JsonWriter {
     }
 
     public void write(JsonValue jsonValue) throws IOException {
-        // TODO avoid full toString, write each value type
         switch(jsonValue.getType()) {
             case OBJECT:
                 this.writer.write("{");

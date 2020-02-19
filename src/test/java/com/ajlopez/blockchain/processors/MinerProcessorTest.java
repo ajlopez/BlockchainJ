@@ -3,17 +3,14 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.vms.eth.OpCodes;
+import com.ajlopez.blockchain.vms.eth.TrieStorage;
+import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,8 +27,9 @@ public class MinerProcessorTest {
     public void mineBlockWithNoTransactions()  throws IOException {
         TransactionPool transactionPool = new TransactionPool();
         Address coinbase = FactoryHelper.createRandomAddress();
+        Stores stores = new MemoryStores();
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, new AccountStoreProvider(new TrieStore(new HashMapStore())), coinbase);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase);
 
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
@@ -55,20 +53,18 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         transactionPool.addTransaction(tx);
 
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        Stores stores = new MemoryStores();
+        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 0, null, null);
-        accountStore.putAccount(tx.getSender(), account);
-        accountStore.save();
+        FactoryHelper.createAccountWithBalance(accountStore, tx.getSender(), 1000);
 
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, accountStoreProvider, coinbase);
+        AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase);
 
         Block block = processor.mineBlock(parent);
 
@@ -100,6 +96,71 @@ public class MinerProcessorTest {
     }
 
     @Test
+    public void mineBlockWithOneTransactionExecutingCode() throws IOException {
+        byte[] code = new byte[] {
+                OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x00, OpCodes.SSTORE
+        };
+
+        Address senderAddress = FactoryHelper.createRandomAddress();
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        Stores stores = new MemoryStores();
+
+        CodeStore codeStore = stores.getCodeStore();
+        AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
+        AccountStore accountStore = accountStoreProvider.retrieve(Trie.EMPTY_TRIE_HASH);
+
+        FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
+        FactoryHelper.createAccountWithCode(accountStore, codeStore, receiverAddress, code);
+
+        Transaction tx = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, new byte[] { 0x01, 0x02, 0x03, 0x04 }, 200000, Coin.ZERO);
+
+        TransactionPool transactionPool = new TransactionPool();
+        transactionPool.addTransaction(tx);
+
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase);
+
+        Block block = processor.mineBlock(parent);
+
+        Assert.assertNotNull(block);
+        Assert.assertEquals(2, block.getNumber());
+        Assert.assertEquals(parent.getHash(), block.getParentHash());
+        Assert.assertEquals(coinbase, block.getCoinbase());
+
+        List<Transaction> txs = block.getTransactions();
+
+        Assert.assertNotNull(txs);
+        Assert.assertFalse(txs.isEmpty());
+        Assert.assertEquals(1, txs.size());
+        Assert.assertSame(tx, txs.get(0));
+
+        Assert.assertFalse(transactionPool.getTransactions().isEmpty());
+
+        AccountStore newAccountStore = accountStoreProvider.retrieve(block.getStateRootHash());
+        Account updatedSenderAccount = newAccountStore.getAccount(tx.getSender());
+        Account updatedReceiverAccount = newAccountStore.getAccount(tx.getReceiver());
+
+        Assert.assertNotNull(updatedSenderAccount);
+        Assert.assertEquals(1, updatedSenderAccount.getNonce());
+        Assert.assertEquals(Coin.fromUnsignedLong(1000000 - 100), updatedSenderAccount.getBalance());
+
+        Assert.assertNotNull(updatedReceiverAccount);
+        Assert.assertEquals(0, updatedReceiverAccount.getNonce());
+        Assert.assertEquals(Coin.fromUnsignedLong(100), updatedReceiverAccount.getBalance());
+        Assert.assertNotEquals(Trie.EMPTY_TRIE_HASH, updatedReceiverAccount.getStorageHash());
+
+        TrieStorage trieStorage = stores.getTrieStorageProvider().retrieve(updatedReceiverAccount.getStorageHash());
+
+        Assert.assertNotNull(trieStorage);
+        Assert.assertEquals(DataWord.ONE, trieStorage.getValue(DataWord.ZERO));
+    }
+
+    @Test
     public void processBlockWithOneTransaction() throws IOException {
         Address sender = FactoryHelper.createRandomAddress();
         Transaction tx = FactoryHelper.createTransaction(100, sender, 0);
@@ -107,8 +168,8 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         transactionPool.addTransaction(tx);
 
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        Stores stores = new MemoryStores();
+        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
 
         Account account = new Account(Coin.fromUnsignedLong(1000), 0, null, null);
         accountStore.putAccount(sender, account);
@@ -117,7 +178,7 @@ public class MinerProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new AccountStoreProvider(trieStore), coinbase);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, coinbase);
 
         Block block = processor.process();
 
@@ -142,8 +203,8 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         transactionPool.addTransaction(tx);
 
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        Stores stores = new MemoryStores();
+        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
 
         Account account = new Account(Coin.fromUnsignedLong(1000), 0, null, null);
         accountStore.putAccount(tx.getSender(), account);
@@ -152,7 +213,7 @@ public class MinerProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new AccountStoreProvider(trieStore), coinbase);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, coinbase);
 
         Semaphore sem = new Semaphore(0, true);
 
@@ -195,7 +256,7 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new AccountStoreProvider(new TrieStore(new HashMapStore())), coinbase);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new MemoryStores(), coinbase);
 
         Semaphore sem = new Semaphore(0, true);
 
