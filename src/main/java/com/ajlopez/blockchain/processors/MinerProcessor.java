@@ -13,6 +13,7 @@ import com.ajlopez.blockchain.execution.TransactionResult;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.Stores;
+import com.ajlopez.blockchain.vms.eth.BlockData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ public class MinerProcessor {
 
     private boolean stopped = false;
 
-    // TODO inject stores
     public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, Stores stores, Address coinbase) {
         this.blockChain = blockChain;
         this.transactionPool = transactionPool;
@@ -58,9 +58,11 @@ public class MinerProcessor {
         AccountStore accountStore = this.stores.getAccountStoreProvider().retrieve(parentStateRootHash);
         ExecutionContext executionContext = new TopExecutionContext(accountStore, this.stores.getTrieStorageProvider(), this.stores.getCodeStore());
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
+        long timestamp = System.currentTimeMillis();
+        // TODO use difficulty instead of a constant
+        BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, Difficulty.ONE);
 
-        // TODO create and use blockdata
-        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(this.transactionPool.getTransactions(), null);
+        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(this.transactionPool.getTransactions(), blockData);
 
         List<Transaction> transactions = new ArrayList<>(transactionResults.size());
 
