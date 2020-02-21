@@ -217,7 +217,7 @@ public class Trie {
 
         if (sksizebytes > 0) {
             // TODO implement unsigned short to bytes
-            System.arraycopy(ByteUtils.shortToBytes((short)this.sharedKeyLength), 0, bytes, skSizeOffset, sksizebytes);
+            System.arraycopy(ByteUtils.unsignedShortToBytes(this.sharedKeyLength), 0, bytes, skSizeOffset, sksizebytes);
             System.arraycopy(this.sharedKey, 0, bytes, skOffset, skbytes);
         }
 
@@ -296,7 +296,7 @@ public class Trie {
     }
 
     private void getSubNodes(byte[] bytes, int offset) {
-        short subnodes = 0;
+        int subnodes = 0;
         int nsubnode = 0;
 
         if (this.nodes != null || this.hashes != null)
@@ -311,7 +311,7 @@ public class Trie {
                 nsubnode++;
             }
 
-        byte[] subnodesbits = ByteUtils.shortToBytes(subnodes);
+        byte[] subnodesbits = ByteUtils.unsignedShortToBytes(subnodes);
 
         System.arraycopy(subnodesbits, 0, bytes, offset, subnodesbits.length);
     }

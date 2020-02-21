@@ -149,7 +149,8 @@ public class ByteUtils {
         return result;
     }
 
-    public static byte[] shortToBytes(short value) {
+    public static byte[] unsignedShortToBytes(int value) {
+        value &= 0xffff;
         byte[] result = new byte[Short.BYTES];
 
         for (int k = Short.BYTES; value != 0 && k-- > 0;) {
