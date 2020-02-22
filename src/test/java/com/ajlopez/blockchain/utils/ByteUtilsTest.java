@@ -492,4 +492,12 @@ public class ByteUtilsTest {
         Assert.assertArrayEquals(new byte[] { 0x7f, (byte)0xff }, ByteUtils.unsignedShortToBytes(Short.MAX_VALUE));
         Assert.assertArrayEquals(new byte[] { (byte)0xff, (byte)0xff }, ByteUtils.unsignedShortToBytes(0xffff));
     }
+
+    @Test
+    public void bytesToUnsignedShort() {
+        Assert.assertEquals(0, ByteUtils.bytesToUnsignedShort(new byte[] { 0x00, 0x00 }, 0));
+        Assert.assertEquals(0, ByteUtils.bytesToUnsignedShort(new byte[] { 0x01, 0x00, 0x00, 0x01 }, 1));
+        Assert.assertEquals(255, ByteUtils.bytesToUnsignedShort(new byte[] { 0x01, 0x00, (byte)0xff, 0x01 }, 1));
+        Assert.assertEquals(256 * 256 - 1, ByteUtils.bytesToUnsignedShort(new byte[] { 0x01, (byte)0xff, (byte)0xff, 0x01 }, 1));
+    }
 }

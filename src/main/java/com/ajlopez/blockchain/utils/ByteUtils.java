@@ -108,8 +108,8 @@ public class ByteUtils {
         }
     }
 
-    public static short bytesToShort(byte[] bytes, int offset) {
-        short result = 0;
+    public static int bytesToUnsignedShort(byte[] bytes, int offset) {
+        int result = 0;
 
         for (int k = 0; k < Short.BYTES && k + offset < bytes.length; k++) {
             result <<= 8;

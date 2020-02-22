@@ -253,7 +253,7 @@ public class Trie {
         short valsizebytes = bytes[2];
         short sksizebytes = bytes[3];
 
-        short subnodes = ByteUtils.bytesToShort(bytes, 4);
+        int subnodes = ByteUtils.bytesToUnsignedShort(bytes, 4);
 
         if (subnodes == 0 && valsizebytes == 0 && sksizebytes == 0)
             return new Trie(store);
@@ -286,7 +286,7 @@ public class Trie {
 
         if (sksizebytes > 0) {
             // TODO implement to unsigned short
-            sharedKeyLength = ByteUtils.bytesToShort(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes + lvalue);
+            sharedKeyLength = ByteUtils.bytesToUnsignedShort(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes + lvalue);
 
             sharedKey = new byte[(sharedKeyLength + 1) / 2];
             System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h  + valsizebytes + lvalue + sksizebytes, sharedKey, 0, sharedKey.length);
