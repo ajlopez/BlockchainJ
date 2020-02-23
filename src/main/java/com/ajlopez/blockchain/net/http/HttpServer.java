@@ -58,6 +58,7 @@ public class HttpServer {
             }
         }
         catch (IOException | JsonLexerException | JsonParserException | JsonRpcException ex) {
+            // TODO process exception
         }
     }
 }

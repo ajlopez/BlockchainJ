@@ -216,7 +216,6 @@ public class Trie {
         // shared key encoding
 
         if (sksizebytes > 0) {
-            // TODO implement unsigned short to bytes
             System.arraycopy(ByteUtils.unsignedShortToBytes(this.sharedKeyLength), 0, bytes, skSizeOffset, sksizebytes);
             System.arraycopy(this.sharedKey, 0, bytes, skOffset, skbytes);
         }
@@ -285,7 +284,6 @@ public class Trie {
         }
 
         if (sksizebytes > 0) {
-            // TODO implement to unsigned short
             sharedKeyLength = ByteUtils.bytesToUnsignedShort(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes + lvalue);
 
             sharedKey = new byte[(sharedKeyLength + 1) / 2];

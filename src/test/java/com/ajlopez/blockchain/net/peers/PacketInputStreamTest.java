@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain.net.peers;
 
-import com.ajlopez.blockchain.net.peers.PacketInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -59,6 +58,7 @@ public class PacketInputStreamTest {
         Packet result = messageInputStream.readPacket();
 
         Assert.assertNull(result);
+        Assert.assertTrue(messageInputStream.isClosed());
     }
 
     @Test
@@ -83,5 +83,6 @@ public class PacketInputStreamTest {
         Packet result = messageInputStream.readPacket();
 
         Assert.assertNull(result);
+        Assert.assertTrue(messageInputStream.isClosed());
     }
 }
