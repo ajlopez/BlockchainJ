@@ -17,11 +17,11 @@ public class MessageInputStream {
 
     public Message readMessage() {
         // TODO process protocol
-        while (true) {
-            Packet packet = this.packetInputStream.readPacket();
+        Packet packet = this.packetInputStream.readPacket();
 
-            if (packet.getNetwork() == this.network)
-                return MessageEncoder.decode(packet.getBytes());
-        }
+        if (packet.getNetwork() != this.network)
+            this.packetInputStream.close();
+
+        return MessageEncoder.decode(packet.getBytes());
     }
 }

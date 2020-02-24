@@ -39,7 +39,7 @@ public class PacketInputStream {
 
                 if (bread == -1) {
                     this.close();
-                    
+
                     return null;
                 }
 
