@@ -14,6 +14,7 @@ import com.ajlopez.blockchain.store.MemoryStores;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by ajlopez on 24/11/2018.
@@ -29,11 +30,13 @@ public class Start {
         blockChain.onBlock(Start::printBlock);
 
         String coinbaseText = argsproc.getString("coinbase");
-
         Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
+        boolean isMiner = argsproc.getBoolean("miner");
+        int port = argsproc.getInteger("port");
+        List<String> peers = argsproc.getStringList("peers");
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        NodeRunner runner = new NodeRunner(blockChain, argsproc.getBoolean("miner"), argsproc.getInteger("port"), argsproc.getStringList("peers"), coinbase, networkConfiguration, new MemoryStores());
+        NodeRunner runner = new NodeRunner(blockChain, isMiner, port, peers, coinbase, networkConfiguration, new MemoryStores());
 
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
@@ -46,7 +49,8 @@ public class Start {
         topProcessor.registerProcess("eth_getBlockByNumber", blocksProcessor);
         topProcessor.registerProcess("net_version", networkProcessor);
 
-        HttpServer server = new HttpServer(argsproc.getInteger("rpcport"), topProcessor);
+        int rpcport = argsproc.getInteger("rpcport");
+        HttpServer server = new HttpServer(rpcport, topProcessor);
 
         server.start();
         Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
