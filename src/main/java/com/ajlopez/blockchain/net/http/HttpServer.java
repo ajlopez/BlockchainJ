@@ -50,10 +50,15 @@ public class HttpServer {
                 InputStream inputStream = new ByteArrayInputStream(data, 0, ndata);
                 Reader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-                Writer writer = new PrintWriter(clientSocket.getOutputStream());
+                OutputStream outputStream = clientSocket.getOutputStream();
+                Writer writer = new PrintWriter(outputStream);
                 HttpProcessor processor = new HttpProcessor(this.jsonRpcProcessor, reader, writer);
 
                 processor.process();
+
+                outputStream.flush();
+                outputStream.close();
+
                 clientSocket.close();
             }
         }

@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.jsonrpc.JsonRpcResponse;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
