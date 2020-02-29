@@ -2,10 +2,9 @@ package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
-import com.ajlopez.blockchain.jsonrpc.BlocksProcessor;
-import com.ajlopez.blockchain.jsonrpc.NetworkProcessor;
-import com.ajlopez.blockchain.jsonrpc.TopProcessor;
+import com.ajlopez.blockchain.jsonrpc.*;
 import com.ajlopez.blockchain.net.http.HttpServer;
+import com.ajlopez.blockchain.processors.TransactionPool;
 
 /**
  * Created by ajlopez on 26/02/2020.
@@ -14,13 +13,16 @@ public class RpcRunner {
     private final int port;
     private final HttpServer httpServer;
 
-    public RpcRunner(int port, BlockChain blockChain, NetworkConfiguration networkConfiguration) {
+    public RpcRunner(int port, BlockChain blockChain, TransactionPool transactionPool, NetworkConfiguration networkConfiguration) {
         TopProcessor topProcessor = new TopProcessor();
         BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
+        TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null, null);
         NetworkProcessor networkProcessor = new NetworkProcessor(networkConfiguration);
 
         topProcessor.registerProcess("eth_blockNumber", blocksProcessor);
         topProcessor.registerProcess("eth_getBlockByNumber", blocksProcessor);
+        topProcessor.registerProcess("eth_getTransactionByHash", transactionsProcessor);
         topProcessor.registerProcess("net_version", networkProcessor);
 
         this.port = port;

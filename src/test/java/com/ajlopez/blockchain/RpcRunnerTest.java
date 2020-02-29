@@ -2,6 +2,8 @@ package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
+import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,7 +20,7 @@ import java.net.Socket;
 public class RpcRunnerTest {
     @Test
     public void simpleRequest() throws IOException {
-        RpcRunner rpcRunner = new RpcRunner(6000, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6000, null, null, null);
 
         rpcRunner.start();
 
@@ -43,7 +45,7 @@ public class RpcRunnerTest {
     public void getBlockNumber() throws IOException {
         BlockChain blockChain = FactoryHelper.createBlockChain(10);
 
-        RpcRunner rpcRunner = new RpcRunner(6001, blockChain, null);
+        RpcRunner rpcRunner = new RpcRunner(6001, blockChain, null, null);
 
         rpcRunner.start();
 
@@ -71,7 +73,7 @@ public class RpcRunnerTest {
     public void getNetworkVersion() throws IOException {
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)42);
 
-        RpcRunner rpcRunner = new RpcRunner(6002, null, networkConfiguration);
+        RpcRunner rpcRunner = new RpcRunner(6002, null, null, networkConfiguration);
 
         rpcRunner.start();
 
@@ -93,5 +95,35 @@ public class RpcRunnerTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals("HTTP/1.1 200 OK\r\n\r\n{ \"id\": \"1\", \"jsonrpc\": \"2.0\", \"result\": \"0x2a\" }", result);
+    }
+
+    @Test
+    public void getUnknownTransactionByHash() throws IOException {
+        Hash transactionHash = FactoryHelper.createRandomHash();
+        String hash = transactionHash.toString();
+        TransactionPool transactionPool = new TransactionPool();
+
+        RpcRunner rpcRunner = new RpcRunner(6003, null, transactionPool, null);
+
+        rpcRunner.start();
+
+        Socket socket = new Socket("127.0.0.1", 6003);
+        PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
+        String request = "POST /\r\n\r\n{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_getTransactionByHash\", \"params\": [ \"" + hash + "\"] }";
+        writer.println(request);
+        writer.flush();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        String result = reader.readLine() + "\r\n"
+                + reader.readLine() + "\r\n"
+                + reader.readLine();
+
+        rpcRunner.stop();
+        socket.close();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("HTTP/1.1 200 OK\r\n\r\n{ \"id\": \"1\", \"jsonrpc\": \"2.0\", \"result\": null }", result);
     }
 }
