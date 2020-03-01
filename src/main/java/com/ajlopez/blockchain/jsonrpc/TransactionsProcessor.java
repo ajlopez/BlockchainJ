@@ -28,7 +28,7 @@ public class TransactionsProcessor extends AbstractJsonRpcProcessor {
         if (request.check("eth_getTransactionByHash", 1)) {
             String txid = request.getParams().get(0).getValue().toString();
             Transaction transaction = this.transactionsProvider.getTransaction(txid);
-            return JsonRpcResponse.createResponse(request, TransactionJsonEncoder.encode(transaction));
+            return JsonRpcResponse.createResponse(request, TransactionJsonEncoder.encode(transaction, true));
         }
 
         if (request.check("eth_sendTransaction", 1)) {

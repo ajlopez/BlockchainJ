@@ -12,15 +12,18 @@ import com.ajlopez.blockchain.utils.HexUtils;
 public class TransactionJsonEncoder {
     private TransactionJsonEncoder() {}
 
-    public static JsonValue encode(Transaction transaction) {
+    // TODO support not include nonce
+    public static JsonValue encode(Transaction transaction, boolean includeHash) {
         if (transaction == null)
             return JsonNullValue.getInstance();
 
         JsonObjectBuilder builder = new JsonObjectBuilder(new JsonBuilder());
 
-        builder.name("hash")
-            .value(transaction.getHash())
-            .name("from")
+        if (includeHash)
+            builder.name("hash")
+                .value(transaction.getHash());
+
+        builder.name("from")
             .value(transaction.getSender());
 
         if (transaction.getReceiver() != null)

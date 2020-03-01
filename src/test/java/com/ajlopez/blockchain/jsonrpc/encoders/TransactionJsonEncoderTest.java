@@ -23,7 +23,7 @@ public class TransactionJsonEncoderTest {
     public void encodeTransaction() {
         Transaction transaction = FactoryHelper.createTransaction(1000);
 
-        JsonValue result = TransactionJsonEncoder.encode(transaction);
+        JsonValue result = TransactionJsonEncoder.encode(transaction, true);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(JsonValueType.OBJECT, result.getType());
@@ -60,7 +60,7 @@ public class TransactionJsonEncoderTest {
 
         Transaction transaction = new Transaction(from, to, value, nonce, data, gas, gasPrice);
 
-        JsonValue result = TransactionJsonEncoder.encode(transaction);
+        JsonValue result = TransactionJsonEncoder.encode(transaction, true);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(JsonValueType.OBJECT, result.getType());
@@ -88,7 +88,7 @@ public class TransactionJsonEncoderTest {
 
     @Test
     public void encodeNullTransaction() {
-        Assert.assertEquals(JsonNullValue.getInstance(), TransactionJsonEncoder.encode(null));
+        Assert.assertEquals(JsonNullValue.getInstance(), TransactionJsonEncoder.encode(null, true));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class TransactionJsonEncoderTest {
     public void encodeDecodeTransaction() {
         Transaction transaction = FactoryHelper.createTransaction(1000);
 
-        JsonValue jsonValue = TransactionJsonEncoder.encode(transaction);
+        JsonValue jsonValue = TransactionJsonEncoder.encode(transaction, true);
 
         Transaction result = TransactionJsonEncoder.decode(jsonValue);
 
@@ -122,7 +122,7 @@ public class TransactionJsonEncoderTest {
 
         Transaction transaction = new Transaction(from, to, value, nonce, data, gas, gasPrice);
 
-        JsonValue jsonValue = TransactionJsonEncoder.encode(transaction);
+        JsonValue jsonValue = TransactionJsonEncoder.encode(transaction, true);
 
         Transaction result = TransactionJsonEncoder.decode(jsonValue);
 
@@ -144,7 +144,7 @@ public class TransactionJsonEncoderTest {
 
         Transaction transaction = new Transaction(from, to, value, nonce, data, gas, gasPrice);
 
-        JsonValue jsonValue = removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction), "nonce");
+        JsonValue jsonValue = removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction, true), "nonce");
 
         Transaction result = TransactionJsonEncoder.decode(jsonValue);
 
@@ -166,7 +166,7 @@ public class TransactionJsonEncoderTest {
 
         Transaction transaction = new Transaction(from, to, value, nonce, data, gas, gasPrice);
 
-        JsonValue jsonValue = removeProperty(removeProperty(removeProperty(removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction), "nonce"), "gas"), "gasPrice"), "value");
+        JsonValue jsonValue = removeProperty(removeProperty(removeProperty(removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction, true), "nonce"), "gas"), "gasPrice"), "value");
 
         Transaction result = TransactionJsonEncoder.decode(jsonValue);
 
@@ -189,7 +189,7 @@ public class TransactionJsonEncoderTest {
 
         Transaction transaction = new Transaction(from, null, value, nonce, data, gas, gasPrice);
 
-        JsonValue jsonValue = TransactionJsonEncoder.encode(transaction);
+        JsonValue jsonValue = TransactionJsonEncoder.encode(transaction, true);
 
         Assert.assertFalse(((JsonObjectValue)jsonValue).hasProperty("to"));
 
