@@ -2,6 +2,7 @@ package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.json.JsonValue;
@@ -171,5 +172,34 @@ public class RpcRunnerTest {
 
         Assert.assertNotNull(processed);
         Assert.assertEquals(transaction.getHash(), processed.getHash());
+    }
+
+    @Test
+    public void getBlockByHash() throws IOException {
+        BlockChain blockChain = FactoryHelper.createBlockChain(10);
+
+        RpcRunner rpcRunner = new RpcRunner(6005, blockChain, null, null, null);
+
+        rpcRunner.start();
+
+        Socket socket = new Socket("127.0.0.1", 6005);
+        PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
+        Block block = blockChain.getBlockByNumber(1);
+
+        String request = "POST /\r\n\r\n{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_getBlockByHash\", \"params\": [ \"" + block.getHash().toString() + "\" ] }";
+        writer.println(request);
+        writer.flush();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        String result = reader.readLine();
+
+        rpcRunner.stop();
+        socket.close();
+
+        Assert.assertNotNull(result);
+        // TODO improve test
+        Assert.assertEquals("HTTP/1.1 200 OK", result);
     }
 }

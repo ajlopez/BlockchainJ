@@ -23,6 +23,7 @@ public class RpcRunner {
 
         topProcessor.registerProcess("eth_blockNumber", blocksProcessor);
         topProcessor.registerProcess("eth_getBlockByNumber", blocksProcessor);
+        topProcessor.registerProcess("eth_getBlockByHash", blocksProcessor);
 
         topProcessor.registerProcess("eth_getTransactionByHash", transactionsProcessor);
         topProcessor.registerProcess("eth_sendTransaction", transactionsProcessor);
