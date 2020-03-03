@@ -73,7 +73,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Understanding Merkle pollards](https://medium.com/@jgm.orinoco/understanding-merkle-pollards-1547fc7efaa)
 - [Kadcast: A Structured Approach to Broadcast in Blockchain Networks](https://eprint.iacr.org/2019/876.pdf)
 - [Semi-Stateless Initial Sync Experiment](https://medium.com/@mandrigin/semi-stateless-initial-sync-experiment-897cc9c330cb)
-
+- [Ethereum does it too! A deep dive into DHT](https://medium.com/unitychain/intro-to-dht-e98425fc05f1)
+- [DHT: Attacks and Defenses](https://medium.com/unitychain/dht-attacks-and-defenses-e159b3d1bcf8)
+- [Private Ethereum by Example](https://medium.com/coinmonks/private-ethereum-by-example-b77063bb634f)
 
 ## To Do
 
