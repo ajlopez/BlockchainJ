@@ -5,11 +5,14 @@ import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.jsonrpc.BlocksProcessor;
 import com.ajlopez.blockchain.jsonrpc.NetworkProcessor;
 import com.ajlopez.blockchain.jsonrpc.TopProcessor;
 import com.ajlopez.blockchain.net.http.HttpServer;
+import com.ajlopez.blockchain.processors.TransactionPool;
+import com.ajlopez.blockchain.processors.TransactionProcessor;
 import com.ajlopez.blockchain.store.MemoryStores;
 import com.ajlopez.blockchain.utils.HexUtils;
 
@@ -22,6 +25,9 @@ import java.util.List;
 public class Start {
     public static void main(String[] args) throws IOException {
         BlockChain blockChain = new BlockChain();
+        TransactionPool transactionPool = new TransactionPool();
+        // TODO processor only uses pool?
+        TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
         Block genesis = GenesisGenerator.generateGenesis();
         blockChain.connectBlock(genesis);
 
@@ -41,19 +47,12 @@ public class Start {
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
 
-        TopProcessor topProcessor = new TopProcessor();
-        BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
-        NetworkProcessor networkProcessor = new NetworkProcessor(networkConfiguration);
-
-        topProcessor.registerProcess("eth_blockNumber", blocksProcessor);
-        topProcessor.registerProcess("eth_getBlockByNumber", blocksProcessor);
-        topProcessor.registerProcess("net_version", networkProcessor);
-
         int rpcport = argsproc.getInteger("rpcport");
-        HttpServer server = new HttpServer(rpcport, topProcessor);
 
-        server.start();
-        Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
+        if (rpcport > 0) {
+            RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, transactionPool, transactionProcessor, networkConfiguration);
+            Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));
+        }
     }
 
     public static ArgumentsProcessor processArguments(String[] args) {

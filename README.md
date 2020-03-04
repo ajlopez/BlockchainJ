@@ -76,6 +76,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Ethereum does it too! A deep dive into DHT](https://medium.com/unitychain/intro-to-dht-e98425fc05f1)
 - [DHT: Attacks and Defenses](https://medium.com/unitychain/dht-attacks-and-defenses-e159b3d1bcf8)
 - [Private Ethereum by Example](https://medium.com/coinmonks/private-ethereum-by-example-b77063bb634f)
+- [What is Ethereum’s Uncle Rate and Why Does It Matter?](https://ethgasstation.info/blog/ethereum-uncle-rate/)
+- [Ethereum Miner Test — Results](https://medium.com/bloxroute/ethereum-miner-test-results-8fbee68b7088)
+- [Uncle Mining, an Ethereum Consensus Protocol Flaw](https://bitslog.com/2016/04/28/uncle-mining-an-ethereum-consensus-protocol-flaw/)
 
 ## To Do
 
