@@ -5,12 +5,7 @@ import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.jsonrpc.BlocksProcessor;
-import com.ajlopez.blockchain.jsonrpc.NetworkProcessor;
-import com.ajlopez.blockchain.jsonrpc.TopProcessor;
-import com.ajlopez.blockchain.net.http.HttpServer;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.processors.TransactionProcessor;
 import com.ajlopez.blockchain.store.MemoryStores;
@@ -47,9 +42,11 @@ public class Start {
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
 
-        int rpcport = argsproc.getInteger("rpcport");
+        boolean rpc = argsproc.getBoolean("rpc");
 
-        if (rpcport > 0) {
+        if (rpc) {
+            int rpcport = argsproc.getInteger("rpcport");
+
             RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, transactionPool, transactionProcessor, networkConfiguration);
             Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));
         }
@@ -59,8 +56,12 @@ public class Start {
         ArgumentsProcessor processor = new ArgumentsProcessor();
 
         processor.defineInteger("p", "port", 0);
+
+        processor.defineBoolean("r", "rpc", false);
         processor.defineInteger("rp", "rpcport", 4445);
+
         processor.defineStringList("ps", "peers", "");
+
         processor.defineBoolean("m", "miner", false);
         processor.defineString("k", "coinbase", "");
 
