@@ -6,11 +6,13 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.json.JsonValue;
-import com.ajlopez.blockchain.jsonrpc.TransactionsProcessorTest;
 import com.ajlopez.blockchain.jsonrpc.TransactionsProvider;
 import com.ajlopez.blockchain.jsonrpc.encoders.TransactionJsonEncoder;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.processors.TransactionProcessor;
+import com.ajlopez.blockchain.store.AccountStoreProvider;
+import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +29,7 @@ import java.net.Socket;
 public class RpcRunnerTest {
     @Test
     public void simpleRequest() throws IOException {
-        RpcRunner rpcRunner = new RpcRunner(6000, null, null, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6000, null, null, null, null, null);
 
         rpcRunner.start();
 
@@ -52,7 +54,7 @@ public class RpcRunnerTest {
     public void getBlockNumber() throws IOException {
         BlockChain blockChain = FactoryHelper.createBlockChain(10);
 
-        RpcRunner rpcRunner = new RpcRunner(6001, blockChain, null, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6001, blockChain, null, null, null, null);
 
         rpcRunner.start();
 
@@ -80,7 +82,7 @@ public class RpcRunnerTest {
     public void getNetworkVersion() throws IOException {
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)42);
 
-        RpcRunner rpcRunner = new RpcRunner(6002, null, null, null, networkConfiguration);
+        RpcRunner rpcRunner = new RpcRunner(6002, null, null, null, null, networkConfiguration);
 
         rpcRunner.start();
 
@@ -110,7 +112,7 @@ public class RpcRunnerTest {
         String hash = transactionHash.toString();
         TransactionPool transactionPool = new TransactionPool();
 
-        RpcRunner rpcRunner = new RpcRunner(6003, null, transactionPool, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6003, null, null, transactionPool, null, null);
 
         rpcRunner.start();
 
@@ -136,15 +138,17 @@ public class RpcRunnerTest {
 
     @Test
     public void sendTransaction() throws IOException {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(new TrieStore(new HashMapStore()));
         Transaction transaction = FactoryHelper.createTransaction(1000);
         TransactionPool transactionPool = new TransactionPool();
         TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
 
-        RpcRunner rpcRunner = new RpcRunner(6004, null, transactionPool, transactionProcessor, null);
+        RpcRunner rpcRunner = new RpcRunner(6004, blockChain, accountStoreProvider, transactionPool, transactionProcessor, null);
 
         rpcRunner.start();
 
-        JsonValue transactionJson = TransactionJsonEncoder.encode(transaction, false);
+        JsonValue transactionJson = TransactionJsonEncoder.encode(transaction, false, false);
 
         String request = "POST /\r\n\r\n{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_sendTransaction\", \"params\": [ " + transactionJson.toString() + " ] }";
 
@@ -178,7 +182,7 @@ public class RpcRunnerTest {
     public void getBlockByHash() throws IOException {
         BlockChain blockChain = FactoryHelper.createBlockChain(10);
 
-        RpcRunner rpcRunner = new RpcRunner(6005, blockChain, null, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6005, blockChain, null, null, null, null);
 
         rpcRunner.start();
 

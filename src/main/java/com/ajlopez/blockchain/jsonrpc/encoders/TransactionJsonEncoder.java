@@ -13,7 +13,7 @@ public class TransactionJsonEncoder {
     private TransactionJsonEncoder() {}
 
     // TODO support not include nonce
-    public static JsonValue encode(Transaction transaction, boolean includeHash) {
+    public static JsonValue encode(Transaction transaction, boolean includeHash, boolean includeNonce) {
         if (transaction == null)
             return JsonNullValue.getInstance();
 
@@ -30,9 +30,11 @@ public class TransactionJsonEncoder {
             builder.name("to")
             .value(transaction.getReceiver());
 
-        builder.name("nonce")
-            .value(transaction.getNonce())
-            .name("value")
+        if (includeNonce)
+            builder.name("nonce")
+                .value(transaction.getNonce());
+
+        builder.name("value")
             .value(transaction.getValue())
             .name("gas")
             .value(transaction.getGas())

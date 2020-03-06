@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.jsonrpc.*;
 import com.ajlopez.blockchain.net.http.HttpServer;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.processors.TransactionProcessor;
+import com.ajlopez.blockchain.store.AccountStoreProvider;
 
 /**
  * Created by ajlopez on 26/02/2020.
@@ -14,11 +15,13 @@ public class RpcRunner {
     private final int port;
     private final HttpServer httpServer;
 
-    public RpcRunner(int port, BlockChain blockChain, TransactionPool transactionPool, TransactionProcessor transactionProcessor, NetworkConfiguration networkConfiguration) {
+    public RpcRunner(int port, BlockChain blockChain, AccountStoreProvider accountStoreProvider, TransactionPool transactionPool, TransactionProcessor transactionProcessor, NetworkConfiguration networkConfiguration) {
         TopProcessor topProcessor = new TopProcessor();
         BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
-        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null, transactionProcessor);
+        BlocksProvider blocksProvider = new BlocksProvider(blockChain);
+        AccountsProvider accountsProvider = new AccountsProvider(blocksProvider, accountStoreProvider);
+        TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, accountsProvider, transactionProcessor);
         NetworkProcessor networkProcessor = new NetworkProcessor(networkConfiguration);
 
         topProcessor.registerProcess("eth_blockNumber", blocksProcessor);

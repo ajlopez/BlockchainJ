@@ -37,7 +37,7 @@ public class TransactionsProcessor extends AbstractJsonRpcProcessor {
     private JsonRpcResponse getTransactionByHash(JsonRpcRequest request) {
         String txid = request.getParams().get(0).getValue().toString();
         Transaction transaction = this.transactionsProvider.getTransaction(txid);
-        return JsonRpcResponse.createResponse(request, TransactionJsonEncoder.encode(transaction, true));
+        return JsonRpcResponse.createResponse(request, TransactionJsonEncoder.encode(transaction, true, true));
     }
 
     private JsonRpcResponse sendTransaction(JsonRpcRequest request) throws JsonRpcException, IOException {

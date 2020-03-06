@@ -47,7 +47,7 @@ public class Start {
         if (rpc) {
             int rpcport = argsproc.getInteger("rpcport");
 
-            RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, transactionPool, transactionProcessor, networkConfiguration);
+            RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, null, transactionPool, transactionProcessor, networkConfiguration);
             Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));
         }
     }

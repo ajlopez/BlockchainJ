@@ -98,7 +98,7 @@ public class TransactionsProcessorTest {
         TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, null, transactionProcessor);
 
         List<JsonValue> params = new ArrayList<>();
-        params.add(TransactionJsonEncoder.encode(transaction, true));
+        params.add(TransactionJsonEncoder.encode(transaction, true, true));
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_sendTransaction", params);
 
         JsonRpcResponse response = transactionsProcessor.processRequest(request);
@@ -131,7 +131,7 @@ public class TransactionsProcessorTest {
 
         TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, accountsProvider, transactionProcessor);
 
-        JsonObjectValue jovalue = TransactionJsonEncoderTest.removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction, true), "nonce");
+        JsonObjectValue jovalue = TransactionJsonEncoderTest.removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction, true, true), "nonce");
 
         List<JsonValue> params = new ArrayList<>();
         params.add(jovalue);
@@ -169,7 +169,7 @@ public class TransactionsProcessorTest {
 
         TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, accountsProvider, transactionProcessor);
 
-        JsonObjectValue jovalue1 = TransactionJsonEncoderTest.removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction1, true), "nonce");
+        JsonObjectValue jovalue1 = TransactionJsonEncoderTest.removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction1, true, true), "nonce");
 
         List<JsonValue> params1 = new ArrayList<>();
         params1.add(jovalue1);
@@ -181,7 +181,7 @@ public class TransactionsProcessorTest {
         Assert.assertNotNull(response1.getResult());
         Assert.assertEquals(JsonValueType.STRING, response1.getResult().getType());
 
-        JsonObjectValue jovalue2 = TransactionJsonEncoderTest.removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction2, true), "nonce");
+        JsonObjectValue jovalue2 = TransactionJsonEncoderTest.removeProperty((JsonObjectValue)TransactionJsonEncoder.encode(transaction2, true, true), "nonce");
 
         List<JsonValue> params2 = new ArrayList<>();
         params2.add(jovalue2);
