@@ -30,4 +30,13 @@ public class Difficulty extends NaturalValue {
     public boolean isZero() {
         return this.asBigInteger().signum() == 0;
     }
+
+    public Difficulty add(Difficulty difficulty) {
+        DataWord diff1 = DataWord.fromBigInteger(this.asBigInteger());
+        DataWord diff2 = DataWord.fromBigInteger(difficulty.asBigInteger());
+
+        DataWord result = diff1.add(diff2);
+
+        return Difficulty.fromBytes(result.getBytes());
+    }
 }

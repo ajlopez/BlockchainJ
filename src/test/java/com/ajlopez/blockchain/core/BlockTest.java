@@ -35,6 +35,8 @@ public class BlockTest {
         Assert.assertNotNull(block.getUncles());
         Assert.assertTrue(block.getUncles().isEmpty());
 
+        Assert.assertEquals(block.getDifficulty(), block.getTotalDifficulty());
+
         Assert.assertNotNull(block.getTransactions());
         Assert.assertTrue(block.getTransactions().isEmpty());
     }
@@ -132,6 +134,12 @@ public class BlockTest {
 
         exception.expect(UnsupportedOperationException.class);
         result.add(null);
+
+        long totdiff = block.getDifficulty().asBigInteger().longValue()
+            + uncle1.getDifficulty().asBigInteger().longValue()
+            + uncle2.getDifficulty().asBigInteger().longValue();
+
+        Assert.assertEquals(Difficulty.fromUnsignedLong(totdiff), block.getTotalDifficulty());
     }
 
     @Test

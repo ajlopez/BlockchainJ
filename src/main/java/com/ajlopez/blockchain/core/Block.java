@@ -78,6 +78,15 @@ public class Block {
 
     public Difficulty getDifficulty() { return this.header.getDifficulty(); }
 
+    public Difficulty getTotalDifficulty() {
+        Difficulty result = this.getDifficulty();
+
+        for (BlockHeader uncle : this.uncles)
+            result = result.add(uncle.getDifficulty());
+
+        return result;
+    }
+
     public List<BlockHeader> getUncles() { return this.uncles; }
 
     public List<Transaction> getTransactions() {
