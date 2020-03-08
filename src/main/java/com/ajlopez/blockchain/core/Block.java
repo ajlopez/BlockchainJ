@@ -78,7 +78,7 @@ public class Block {
 
     public Difficulty getDifficulty() { return this.header.getDifficulty(); }
 
-    public Difficulty getTotalDifficulty() {
+    public Difficulty getCummulativeDifficulty() {
         Difficulty result = this.getDifficulty();
 
         for (BlockHeader uncle : this.uncles)
