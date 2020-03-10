@@ -198,6 +198,17 @@ public class ByteUtilsTest {
     }
 
     @Test
+    public void longToBytes() {
+        Assert.assertArrayEquals(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, ByteUtils.longToBytes(0));
+        Assert.assertArrayEquals(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 }, ByteUtils.longToBytes(1));
+        Assert.assertArrayEquals(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02 }, ByteUtils.longToBytes(2));
+        Assert.assertArrayEquals(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xff }, ByteUtils.longToBytes(255));
+        Assert.assertArrayEquals(new byte[] { 0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }, ByteUtils.longToBytes(Long.MAX_VALUE));
+        Assert.assertArrayEquals(new byte[] { (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }, ByteUtils.longToBytes(-1));
+        Assert.assertArrayEquals(new byte[] { (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xfe }, ByteUtils.longToBytes(-2));
+    }
+
+    @Test
     public void unsignedIntegerToBytesUsingNegativeValue() {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("Invalid negative value");
@@ -439,6 +450,7 @@ public class ByteUtilsTest {
         Assert.assertEquals(256, ByteUtils.bytesToUnsignedLong(new byte[] { 0x01, 0x00 }));
         Assert.assertEquals(Long.MAX_VALUE, ByteUtils.bytesToUnsignedLong(new byte[] { (byte)0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }));
     }
+    
     @Test
     public void bytesToLong() {
         Assert.assertEquals(0, ByteUtils.bytesToLong(new byte[] { }));

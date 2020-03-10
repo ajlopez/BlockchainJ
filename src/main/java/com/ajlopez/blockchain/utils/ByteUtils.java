@@ -47,6 +47,17 @@ public class ByteUtils {
         return result;
     }
 
+    public static byte[] longToBytes(long value) {
+        byte[] result = new byte[Long.BYTES];
+
+        for (int k = Long.BYTES; value != 0 && k-- > 0;) {
+            result[k] = (byte)(value & 0xff);
+            value >>= 8;
+        }
+
+        return result;
+    }
+
     public static byte[] unsignedLongToNormalizedBytes(long value) {
         return normalizedBytes(unsignedLongToBytes(value));
     }
