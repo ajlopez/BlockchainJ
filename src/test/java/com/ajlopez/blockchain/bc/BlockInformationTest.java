@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by ajlopez on 26/08/2017.
+ * Created by ajlopez on 09/03/2020.
  */
 public class BlockInformationTest {
     @Test
