@@ -24,7 +24,7 @@ public class BlocksInformationTest {
 
         BlocksInformation blocksInformation = new BlocksInformation();
 
-        blocksInformation.addBlockInformation(blockHash, totalDifficulty, false);
+        blocksInformation.addBlockInformation(blockHash, totalDifficulty);
 
         BlockInformation blockInformation = blocksInformation.getBlockInformation(blockHash);
 
@@ -42,7 +42,8 @@ public class BlocksInformationTest {
 
         BlocksInformation blocksInformation = new BlocksInformation();
 
-        blocksInformation.addBlockInformation(blockHash, totalDifficulty, true);
+        blocksInformation.addBlockInformation(blockHash, totalDifficulty);
+        blocksInformation.setBlockOnChain(blockHash);
 
         BlockInformation blockInformation = blocksInformation.getBlockInformation(blockHash);
 
@@ -51,5 +52,25 @@ public class BlocksInformationTest {
         Assert.assertEquals(totalDifficulty, blockInformation.getTotalDifficulty());
 
         Assert.assertSame(blockInformation, blocksInformation.getBlockOnChain());
+    }
+
+    @Test
+    public void addBlockOnChainAndThenOffChain() {
+        BlockHash blockHash = FactoryHelper.createRandomBlockHash();
+        Difficulty totalDifficulty = Difficulty.fromUnsignedLong(42);
+
+        BlocksInformation blocksInformation = new BlocksInformation();
+
+        blocksInformation.addBlockInformation(blockHash, totalDifficulty);
+        blocksInformation.setBlockOnChain(blockHash);
+        blocksInformation.setBlockOffChain(blockHash);
+
+        BlockInformation blockInformation = blocksInformation.getBlockInformation(blockHash);
+
+        Assert.assertNotNull(blockInformation);
+        Assert.assertEquals(blockHash, blockInformation.getBlockHash());
+        Assert.assertEquals(totalDifficulty, blockInformation.getTotalDifficulty());
+
+        Assert.assertNull(blocksInformation.getBlockOnChain());
     }
 }
