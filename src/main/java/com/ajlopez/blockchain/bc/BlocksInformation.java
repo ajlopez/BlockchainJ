@@ -41,7 +41,7 @@ public class BlocksInformation {
                 return;
             }
 
-        // TODO not found case
+        throw new IllegalArgumentException("Block not found");
     }
 
     public BlockInformation getBlockInformation(BlockHash blockHash) {

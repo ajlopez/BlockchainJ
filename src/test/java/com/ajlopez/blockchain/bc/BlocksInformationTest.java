@@ -4,12 +4,18 @@ import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Created by ajlopez on 11/03/2020.
  */
 public class BlocksInformationTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void noBlockInChain() {
         BlocksInformation blocksInformation = new BlocksInformation();
@@ -52,6 +58,17 @@ public class BlocksInformationTest {
         Assert.assertEquals(totalDifficulty, blockInformation.getTotalDifficulty());
 
         Assert.assertSame(blockInformation, blocksInformation.getBlockOnChain());
+    }
+
+    @Test
+    public void setUnknownBlockOnChain() {
+        BlockHash blockHash = FactoryHelper.createRandomBlockHash();
+
+        BlocksInformation blocksInformation = new BlocksInformation();
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Block not found");
+        blocksInformation.setBlockOnChain(blockHash);
     }
 
     @Test
