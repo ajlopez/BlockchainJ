@@ -21,6 +21,8 @@ public class BlocksInformationTest {
         BlocksInformation blocksInformation = new BlocksInformation();
 
         Assert.assertNull(blocksInformation.getBlockOnChain());
+        Assert.assertEquals(-1, blocksInformation.getBlockOnChainPosition());
+        Assert.assertTrue(blocksInformation.getBlockInformationList().isEmpty());
     }
 
     @Test
@@ -39,6 +41,8 @@ public class BlocksInformationTest {
         Assert.assertEquals(totalDifficulty, blockInformation.getTotalDifficulty());
 
         Assert.assertNull(blocksInformation.getBlockOnChain());
+        Assert.assertEquals(-1, blocksInformation.getBlockOnChainPosition());
+        Assert.assertEquals(1, blocksInformation.getBlockInformationList().size());
     }
 
     @Test

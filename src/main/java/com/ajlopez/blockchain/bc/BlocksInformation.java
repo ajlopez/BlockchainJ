@@ -56,4 +56,12 @@ public class BlocksInformation {
 
         return null;
     }
+
+    public int getBlockOnChainPosition() {
+        return this.blockOnChainPosition;
+    }
+
+    public List<BlockInformation> getBlockInformationList() {
+        return this.blocksInformation;
+    }
 }
