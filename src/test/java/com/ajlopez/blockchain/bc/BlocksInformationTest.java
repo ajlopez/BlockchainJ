@@ -62,6 +62,7 @@ public class BlocksInformationTest {
         Assert.assertEquals(totalDifficulty, blockInformation.getTotalDifficulty());
 
         Assert.assertSame(blockInformation, blocksInformation.getBlockOnChain());
+        Assert.assertEquals(1, blocksInformation.getBlockInformationList().size());
     }
 
     @Test
@@ -93,5 +94,6 @@ public class BlocksInformationTest {
         Assert.assertEquals(totalDifficulty, blockInformation.getTotalDifficulty());
 
         Assert.assertNull(blocksInformation.getBlockOnChain());
+        Assert.assertEquals(1, blocksInformation.getBlockInformationList().size());
     }
 }
