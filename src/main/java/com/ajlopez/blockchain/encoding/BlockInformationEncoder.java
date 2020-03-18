@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.bc.BlockInformation;
-import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
 

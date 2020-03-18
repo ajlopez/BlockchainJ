@@ -45,6 +45,14 @@ public class RLPEncoder {
         return ByteUtils.bytesToUnsignedLong(RLP.decode(data));
     }
 
+    public static byte[] encodeLong(long value) {
+        return RLP.encode(ByteUtils.longToNormalizedBytes(value));
+    }
+
+    public static long decodeLong(byte[] data) {
+        return ByteUtils.bytesToLong(RLP.decode(data));
+    }
+
     public static byte[] encodeBlockHash(BlockHash blockHash) {
         return RLP.encode(blockHash.getBytes());
     }

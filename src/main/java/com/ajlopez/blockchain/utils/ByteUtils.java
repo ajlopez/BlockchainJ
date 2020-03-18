@@ -58,6 +58,10 @@ public class ByteUtils {
         return result;
     }
 
+    public static byte[] longToNormalizedBytes(long value) {
+        return normalizedBytes(longToBytes(value));
+    }
+
     public static byte[] unsignedLongToNormalizedBytes(long value) {
         return normalizedBytes(unsignedLongToBytes(value));
     }
