@@ -54,7 +54,7 @@ public class BlocksInformation {
                 return blockInformation;
         }
 
-        return null;
+        throw new IllegalArgumentException("Block not found");
     }
 
     public int getBlockOnChainPosition() {

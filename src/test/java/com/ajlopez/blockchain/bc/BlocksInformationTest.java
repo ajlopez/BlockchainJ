@@ -77,6 +77,17 @@ public class BlocksInformationTest {
     }
 
     @Test
+    public void getUnknownBlockInformation() {
+        BlockHash blockHash = FactoryHelper.createRandomBlockHash();
+
+        BlocksInformation blocksInformation = new BlocksInformation();
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Block not found");
+        blocksInformation.getBlockInformation(blockHash);
+    }
+
+    @Test
     public void addBlockOnChainAndThenOffChain() {
         BlockHash blockHash = FactoryHelper.createRandomBlockHash();
         Difficulty totalDifficulty = Difficulty.fromUnsignedLong(42);
