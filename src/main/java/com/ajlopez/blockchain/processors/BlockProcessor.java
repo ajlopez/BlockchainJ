@@ -87,7 +87,7 @@ public class BlockProcessor {
         return this.blockChain.getBlockByHash(hash);
     }
 
-    public Block getBlockByNumber(long number) {
+    public Block getBlockByNumber(long number) throws IOException {
         return this.blockChain.getBlockByNumber(number);
     }
 

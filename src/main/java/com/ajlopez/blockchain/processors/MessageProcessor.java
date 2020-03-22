@@ -129,7 +129,7 @@ public class MessageProcessor {
             outputProcessor.postMessage(sender, new BlockMessage(block));
     }
 
-    private void processGetBlockByNumberMessage(GetBlockByNumberMessage message, Peer sender) {
+    private void processGetBlockByNumberMessage(GetBlockByNumberMessage message, Peer sender) throws IOException {
         Block block = this.blockProcessor.getBlockByNumber(message.getNumber());
 
         if (block != null)

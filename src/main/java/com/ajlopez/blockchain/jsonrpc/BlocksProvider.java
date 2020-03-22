@@ -3,6 +3,8 @@ package com.ajlopez.blockchain.jsonrpc;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 02/12/2018.
  */
@@ -13,7 +15,7 @@ public class BlocksProvider {
         this.blockChain = blockChain;
     }
 
-    public Block getBlock(String blockId) throws JsonRpcException {
+    public Block getBlock(String blockId) throws JsonRpcException, IOException {
         if ("latest".equals(blockId))
             return blockChain.getBestBlock();
         if ("earliest".equals(blockId))

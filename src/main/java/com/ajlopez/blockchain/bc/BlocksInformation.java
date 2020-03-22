@@ -44,6 +44,13 @@ public class BlocksInformation {
         throw new IllegalArgumentException("Block not found");
     }
 
+    public BlockInformation getBlockOnChainInformation() {
+        if (this.blockOnChainPosition < 0)
+            return null;
+
+        return this.blocksInformation.get(this.blockOnChainPosition);
+    }
+
     public BlockInformation getBlockInformation(BlockHash blockHash) {
         int nb = this.blocksInformation.size();
 

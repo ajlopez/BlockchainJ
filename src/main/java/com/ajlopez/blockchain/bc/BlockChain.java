@@ -1,8 +1,11 @@
 package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.store.HashMapStore;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -14,8 +17,10 @@ public class BlockChain implements BlockProvider {
     public static final long NO_BEST_BLOCK_NUMBER = -1;
 
     private Block best;
+
+    // TODO inject stores
     private final BlockHashStore blocksByHash = new BlockHashStore();
-    private final BlockNumberStore blocksByNumber = new BlockNumberStore();
+    private final BlocksInformationStore blocksInformationStore = new BlocksInformationStore(new HashMapStore());
 
     private List<Consumer<Block>> blockConsumers = new ArrayList<>();
 
@@ -30,12 +35,12 @@ public class BlockChain implements BlockProvider {
         return this.best.getNumber();
     }
 
-    public boolean connectBlock(Block block) {
+    public boolean connectBlock(Block block) throws IOException {
         if (isOrphan(block))
             return false;
 
         if (this.blocksByHash.containsBlock(block.getHash()))
-            return this.blocksByNumber.containsBlock(block);
+            return true;
 
         this.saveBlock(block);
 
@@ -66,8 +71,18 @@ public class BlockChain implements BlockProvider {
     }
 
     @Override
-    public Block getBlockByNumber(long number) {
-        return this.blocksByNumber.getBlock(number);
+    public Block getBlockByNumber(long number) throws IOException {
+        BlocksInformation blocksInformation = this.blocksInformationStore.get(number);
+
+        if (blocksInformation == null)
+            return null;
+
+        BlockInformation blockInformation = blocksInformation.getBlockOnChainInformation();
+
+        if (blockInformation == null)
+            return null;
+
+        return this.blocksByHash.getBlock(blockInformation.getBlockHash());
     }
 
     private boolean isOrphan(Block block) {
@@ -77,19 +92,35 @@ public class BlockChain implements BlockProvider {
         return !blocksByHash.containsBlock(block.getParentHash());
     }
 
-    private void saveBlock(Block block) {
-        if (!this.blocksByHash.containsBlock(block.getHash()))
-            this.blocksByHash.saveBlock(block);
+    private void saveBlock(Block block) throws IOException {
+        if (this.blocksByHash.containsBlock(block.getHash()))
+            return;
+
+        this.blocksByHash.saveBlock(block);
+
+        BlocksInformation blocksInformation = this.blocksInformationStore.get(block.getNumber());
+
+        if (blocksInformation == null)
+            blocksInformation = new BlocksInformation();
+
+        // TODO process total difficulty
+        blocksInformation.addBlockInformation(block.getHash(), Difficulty.ONE);
+
+        this.blocksInformationStore.put(block.getNumber(), blocksInformation);
     }
 
-    private void saveBestBlock(Block block) {
+    private void saveBestBlock(Block block) throws IOException {
         this.best = block;
 
-        this.blocksByNumber.saveBlock(block);
+        BlocksInformation blocksInformation = this.blocksInformationStore.get(block.getNumber());
+        blocksInformation.setBlockOnChain(block.getHash());
+        this.blocksInformationStore.put(block.getNumber(), blocksInformation);
 
-        while (block.getNumber() > 0 && !this.blocksByNumber.getBlock(block.getNumber() - 1).getHash().equals(block.getParentHash())) {
+        while (block.getNumber() > 0 && !this.getBlockByNumber(block.getNumber() - 1).getHash().equals(block.getParentHash())) {
             block = this.blocksByHash.getBlock(block.getParentHash());
-            this.blocksByNumber.saveBlock(block);
+            blocksInformation = this.blocksInformationStore.get(block.getNumber());
+            blocksInformation.setBlockOnChain(block.getHash());
+            this.blocksInformationStore.put(block.getNumber(), blocksInformation);
         }
     }
 }

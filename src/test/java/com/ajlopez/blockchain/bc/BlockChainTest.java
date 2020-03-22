@@ -8,6 +8,8 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * Created by ajlopez on 26/08/2017.
  */
@@ -28,7 +30,7 @@ public class BlockChainTest {
     }
 
     @Test
-    public void noBlockByNumber() {
+    public void noBlockByNumber() throws IOException {
         BlockChain blockChain = new BlockChain();
 
         Assert.assertNull(blockChain.getBlockByNumber(0));
@@ -37,7 +39,7 @@ public class BlockChainTest {
     }
 
     @Test
-    public void addFirstBlock() {
+    public void addFirstBlock() throws IOException {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -55,7 +57,7 @@ public class BlockChainTest {
     }
 
     @Test
-    public void addSecondBlock() {
+    public void addSecondBlock() throws IOException {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -75,7 +77,7 @@ public class BlockChainTest {
     }
 
     @Test
-    public void addSecondBlockTwice() {
+    public void addSecondBlockTwice() throws IOException {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -91,7 +93,7 @@ public class BlockChainTest {
     }
 
     @Test
-    public void addFirstBlockTwice() {
+    public void addFirstBlockTwice() throws IOException {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -107,7 +109,7 @@ public class BlockChainTest {
     }
 
     @Test
-    public void rejectBlockIfNotChild() {
+    public void rejectBlockIfNotChild() throws IOException {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -123,7 +125,7 @@ public class BlockChainTest {
     }
 
     @Test
-    public void switchToABetterFork() {
+    public void switchToABetterFork() throws IOException {
         BlockChain blockChain = new BlockChain();
         Address coinbase = FactoryHelper.createRandomAddress();
 

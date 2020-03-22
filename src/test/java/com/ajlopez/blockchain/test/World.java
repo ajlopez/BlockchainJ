@@ -57,7 +57,7 @@ public class World {
         this.transactions.put(name, transaction);
     }
 
-    public Block getBlock(String name) {
+    public Block getBlock(String name) throws IOException {
         Block block = this.blocks.get(name);
 
         if (block != null)
@@ -71,7 +71,7 @@ public class World {
         return block;
     }
 
-    public List<Block> getBlocks(List<String> names) {
+    public List<Block> getBlocks(List<String> names) throws IOException {
         List<Block> result = new ArrayList<>();
 
         for (String name : names) {
@@ -113,7 +113,7 @@ public class World {
         return this.codeStore.getCode(codeHash);
     }
 
-    public BlockChain getBlockChain() {
+    public BlockChain getBlockChain() throws IOException {
         if (this.blockChain == null)
             this.blockChain = FactoryHelper.createBlockChainWithGenesis(this.accountStore);
 

@@ -134,11 +134,11 @@ public class FactoryHelper {
         return transactions;
     }
 
-    public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks) {
+    public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks) throws IOException {
         extendBlockChainWithBlocks(blockChain, nblocks, 0);
     }
 
-    public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks, int ntransactions) {
+    public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks, int ntransactions) throws IOException {
         Block block = blockChain.getBestBlock();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -223,15 +223,15 @@ public class FactoryHelper {
         return blockChain;
     }
 
-    public static BlockChain createBlockChainWithGenesis() {
+    public static BlockChain createBlockChainWithGenesis() throws IOException {
         return createBlockChainWithGenesis(GenesisGenerator.generateGenesis());
     }
 
-    public static BlockChain createBlockChainWithGenesis(AccountStore accountStore) {
+    public static BlockChain createBlockChainWithGenesis(AccountStore accountStore) throws IOException {
         return createBlockChainWithGenesis(GenesisGenerator.generateGenesis(accountStore));
     }
 
-    public static BlockChain createBlockChainWithGenesis(Block genesis) {
+    public static BlockChain createBlockChainWithGenesis(Block genesis) throws IOException {
         BlockChain blockChain = new BlockChain();
         blockChain.connectBlock(genesis);
 

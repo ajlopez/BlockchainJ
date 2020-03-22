@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class BlocksProviderTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void retrieveLatestBlock() throws JsonRpcException {
+    public void retrieveLatestBlock() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -36,7 +37,7 @@ public class BlocksProviderTest {
     }
 
     @Test
-    public void retrieveEarliestBlock() throws JsonRpcException {
+    public void retrieveEarliestBlock() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -50,7 +51,7 @@ public class BlocksProviderTest {
     }
 
     @Test
-    public void retrieveBlockByDecimalNumber() throws JsonRpcException {
+    public void retrieveBlockByDecimalNumber() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
 
@@ -64,7 +65,7 @@ public class BlocksProviderTest {
     }
 
     @Test
-    public void retrieveBlockByHexadecimalNumber() throws JsonRpcException {
+    public void retrieveBlockByHexadecimalNumber() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 20);
 
@@ -78,7 +79,7 @@ public class BlocksProviderTest {
     }
 
     @Test
-    public void pendingNotSupported() throws JsonRpcException {
+    public void pendingNotSupported() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 20);
 
@@ -90,7 +91,7 @@ public class BlocksProviderTest {
     }
 
     @Test
-    public void invalidNumberFormat() throws JsonRpcException {
+    public void invalidNumberFormat() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 20);
 

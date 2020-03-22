@@ -39,7 +39,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void noBlockByNumber() {
+    public void noBlockByNumber() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         Assert.assertNull(processor.getBlockByNumber(1));

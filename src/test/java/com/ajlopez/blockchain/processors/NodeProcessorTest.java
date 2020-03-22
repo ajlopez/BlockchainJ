@@ -26,7 +26,7 @@ import java.util.concurrent.Semaphore;
  */
 public class NodeProcessorTest {
     @Test
-    public void createWithPeer() {
+    public void createWithPeer() throws IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
 
         Peer peer = FactoryHelper.createRandomPeer();
@@ -38,7 +38,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void getStatus() {
+    public void getStatus() throws IOException {
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)42);
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         Peer peer = FactoryHelper.createRandomPeer();
@@ -56,7 +56,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void processBlockMessage() throws InterruptedException {
+    public void processBlockMessage() throws InterruptedException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -75,7 +75,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void mineBlock() throws InterruptedException {
+    public void mineBlock() throws InterruptedException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
@@ -100,7 +100,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void processTenRepeatedBlockMessages() throws InterruptedException {
+    public void processTenRepeatedBlockMessages() throws InterruptedException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -121,7 +121,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void processTwoConsecutiveBlockMessages() throws InterruptedException {
+    public void processTwoConsecutiveBlockMessages() throws InterruptedException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -144,7 +144,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void processTenBlockMessages() throws InterruptedException {
+    public void processTenBlockMessages() throws InterruptedException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         List<Block> blocks = FactoryHelper.createBlocks(9);
@@ -164,7 +164,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException {
+    public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -253,7 +253,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void synchronizeTwoNodes() throws InterruptedException {
+    public void synchronizeTwoNodes() throws InterruptedException, IOException {
         List<Block> blocks = FactoryHelper.createBlocks(9);
         Block bestBlock = blocks.get(9);
 
@@ -290,7 +290,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void synchronizeTwoNodesCheckingOnBlock() throws InterruptedException {
+    public void synchronizeTwoNodesCheckingOnBlock() throws InterruptedException, IOException {
         List<Block> blocks = FactoryHelper.createBlocks(9);
         Block bestBlock = blocks.get(9);
 
@@ -374,7 +374,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void synchronizeThreeNodes() throws InterruptedException {
+    public void synchronizeThreeNodes() throws InterruptedException, IOException {
         List<Block> blocks = FactoryHelper.createBlocks(9);
         Block bestBlock = blocks.get(9);
 

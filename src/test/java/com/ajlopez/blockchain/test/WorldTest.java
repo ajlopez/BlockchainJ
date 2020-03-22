@@ -122,7 +122,7 @@ public class WorldTest {
     }
 
     @Test
-    public void getUnknownBlock() {
+    public void getUnknownBlock() throws IOException {
         World world = new World();
 
         Assert.assertNull(world.getBlock("blk1"));
@@ -130,7 +130,7 @@ public class WorldTest {
 
 
     @Test
-    public void getUnknownBlocks() {
+    public void getUnknownBlocks() throws IOException {
         World world = new World();
         List<String> names = new ArrayList<>();
         names.add("blk1");
@@ -143,7 +143,7 @@ public class WorldTest {
     }
 
     @Test
-    public void setAndGetBlock() {
+    public void setAndGetBlock() throws IOException {
         World world = new World();
         Block block = FactoryHelper.createBlocks(1).get(0);
 
@@ -156,7 +156,7 @@ public class WorldTest {
     }
 
     @Test
-    public void setAndGetBlocks() {
+    public void setAndGetBlocks() throws IOException {
         World world = new World();
         Block genesis = world.getBlock("genesis");
 
@@ -178,7 +178,7 @@ public class WorldTest {
     }
 
     @Test
-    public void getGenesisBlock() {
+    public void getGenesisBlock() throws IOException {
         World world = new World();
 
         Block result = world.getBlock("genesis");
@@ -193,7 +193,7 @@ public class WorldTest {
     }
 
     @Test
-    public void getBlockChain() {
+    public void getBlockChain() throws IOException {
         World world = new World();
         BlockChain blockChain = world.getBlockChain();
 

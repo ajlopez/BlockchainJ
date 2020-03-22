@@ -63,7 +63,7 @@ public class DslCommand {
             throw new UnsupportedOperationException(String.format("unknown verb '%s'", this.verb));
     }
 
-    private void executeConnect(World world) {
+    private void executeConnect(World world) throws IOException {
         String name = this.getName(0, "name");
         Block block = world.getBlock(name);
         world.getBlockChain().connectBlock(block);
@@ -81,7 +81,7 @@ public class DslCommand {
         world.setTransaction(name, transaction);
     }
 
-    private void executeBlock(World world) {
+    private void executeBlock(World world) throws IOException {
         String name = this.getName(0, "name");
         String parentName = this.getName(1, "parent");
 

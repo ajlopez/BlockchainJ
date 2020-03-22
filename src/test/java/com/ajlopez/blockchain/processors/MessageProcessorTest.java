@@ -72,7 +72,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processOrphanBlockMessageAndSendGetBlockByHashToSender() {
+    public void processOrphanBlockMessageAndSendGetBlockByHashToSender() throws IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor(blockChain);
 
