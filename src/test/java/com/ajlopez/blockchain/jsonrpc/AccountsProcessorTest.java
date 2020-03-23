@@ -13,10 +13,7 @@ import com.ajlopez.blockchain.json.JsonStringValue;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.json.JsonValueType;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
@@ -253,15 +250,15 @@ public class AccountsProcessorTest {
     }
 
     private static AccountsProcessor createProcessor(Address sender, Address receiver, long initialBalance, long transferAmount, int nblocks) throws IOException {
-        TrieStore accountTrieStore = new TrieStore(new HashMapStore());
-        AccountStore accountStore = new AccountStore(accountTrieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        Stores stores = new MemoryStores();
+        AccountStore accountStore = new AccountStore(stores.getAccountTrieStore().retrieve(Trie.EMPTY_TRIE_HASH));
 
         Account senderAccount = new Account(Coin.fromUnsignedLong(initialBalance), 0, null, null);
 
         accountStore.putAccount(sender, senderAccount);
         accountStore.save();
 
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores, accountStore);
 
         for (int k = 0; k < nblocks; k++) {
             Transaction transaction = new Transaction(sender, receiver, Coin.fromUnsignedLong(transferAmount), k, null, 6000000, Coin.ZERO);
@@ -281,7 +278,7 @@ public class AccountsProcessorTest {
         }
 
         BlocksProvider blocksProvider = new BlocksProvider(blockChain);
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(accountTrieStore);
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
         AccountsProvider accountsProvider = new AccountsProvider(blocksProvider, accountStoreProvider);
 
         return new AccountsProcessor(accountsProvider);

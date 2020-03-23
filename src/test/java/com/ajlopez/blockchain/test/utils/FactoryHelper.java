@@ -197,49 +197,47 @@ public class FactoryHelper {
     }
 
     public static BlockChain createBlockChain(int size, int ntransactions) throws IOException {
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-
-        return createBlockChain(trieStore, size, ntransactions);
+        return createBlockChain(new MemoryStores(), size, ntransactions);
     }
 
-    public static BlockChain createBlockChain(TrieStore trieStore, int size, int ntransactions) throws IOException {
+    public static BlockChain createBlockChain(Stores stores, int size, int ntransactions) throws IOException {
         Address senderAddress = FactoryHelper.createRandomAddress();
 
-        return createBlockChainWithAccount(senderAddress, 1000000, trieStore, size, ntransactions);
+        return createBlockChainWithAccount(stores, senderAddress, 1000000, size, ntransactions);
     }
 
-    public static BlockChain createBlockChainWithAccount(Address senderAddress, long balance, TrieStore trieStore, int size, int ntransactions) throws IOException {
+    public static BlockChain createBlockChainWithAccount(Stores stores, Address senderAddress, long balance, int size, int ntransactions) throws IOException {
         Account sender = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
 
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
         AccountStore accountStore = accountStoreProvider.retrieve(Trie.EMPTY_TRIE_HASH);
 
         accountStore.putAccount(senderAddress, sender);
         accountStore.save();
 
-        BlockChain blockChain = createBlockChainWithGenesis(accountStore);
+        BlockChain blockChain = createBlockChainWithGenesis(stores, accountStore);
         extendBlockChainWithBlocks(accountStoreProvider, blockChain, size, ntransactions, senderAddress, 0);
 
         return blockChain;
     }
 
     public static BlockChain createBlockChainWithGenesis() throws IOException {
-        return createBlockChainWithGenesis(GenesisGenerator.generateGenesis());
+        return createBlockChainWithGenesis(new MemoryStores(), GenesisGenerator.generateGenesis());
     }
 
-    public static BlockChain createBlockChainWithGenesis(AccountStore accountStore) throws IOException {
-        return createBlockChainWithGenesis(GenesisGenerator.generateGenesis(accountStore));
+    public static BlockChain createBlockChainWithGenesis(Stores stores, AccountStore accountStore) throws IOException {
+        return createBlockChainWithGenesis(stores, GenesisGenerator.generateGenesis(accountStore));
     }
 
-    public static BlockChain createBlockChainWithGenesis(Block genesis) throws IOException {
-        BlockChain blockChain = new BlockChain();
+    public static BlockChain createBlockChainWithGenesis(Stores stores, Block genesis) throws IOException {
+        BlockChain blockChain = new BlockChain(stores);
         blockChain.connectBlock(genesis);
 
         return blockChain;
     }
 
     public static BlockProcessor createBlockProcessor() {
-        return createBlockProcessor(new BlockChain());
+        return createBlockProcessor(new BlockChain(new MemoryStores()));
     }
 
     public static BlockProcessor createBlockProcessor(BlockChain blockChain) {
@@ -283,7 +281,7 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor() {
-        return createNodeProcessor(new BlockChain());
+        return createNodeProcessor(new BlockChain(new MemoryStores()));
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {

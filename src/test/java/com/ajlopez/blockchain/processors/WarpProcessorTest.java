@@ -6,10 +6,7 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.KeyValueStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -93,12 +90,11 @@ public class WarpProcessorTest {
 
     @Test
     public void processBlockWithTransactionsAndTopNode() throws IOException {
-        KeyValueStore keyValueStore0 = new HashMapStore();
-        TrieStore trieStore0 = new TrieStore(keyValueStore0);
+        Stores stores = new MemoryStores();
 
-        Block block = FactoryHelper.createBlockChain(trieStore0, 1, 10).getBlockByNumber(1);
+        Block block = FactoryHelper.createBlockChain(stores, 1, 10).getBlockByNumber(1);
 
-        Assert.assertTrue(trieStore0.exists(block.getStateRootHash()));
+        Assert.assertNotNull(stores.getAccountStoreProvider().retrieve(block.getStateRootHash()));
 
         TrieStore accountStore = new TrieStore(new HashMapStore());
 
@@ -111,7 +107,7 @@ public class WarpProcessorTest {
         Assert.assertTrue(hashes.contains(block.getStateRootHash()));
         Assert.assertEquals(1, hashes.size());
 
-        Set<Hash> result = processor.processAccountNode(block.getStateRootHash(), trieStore0.retrieve(block.getStateRootHash()).getEncoded());
+        Set<Hash> result = processor.processAccountNode(block.getStateRootHash(), stores.getAccountTrieStore().retrieve(block.getStateRootHash()).getEncoded());
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
@@ -133,10 +129,9 @@ public class WarpProcessorTest {
 
     @Test
     public void copyCompleteStateOfBlockWithTransactions() throws IOException {
-        KeyValueStore keyValueStore0 = new HashMapStore();
-        TrieStore trieStore0 = new TrieStore(keyValueStore0);
+        Stores stores = new MemoryStores();
 
-        BlockChain blockChain = FactoryHelper.createBlockChain(trieStore0, 1, 10);
+        BlockChain blockChain = FactoryHelper.createBlockChain(stores, 1, 10);
         Block genesis = blockChain.getBlockByNumber(0);
         Block block = blockChain.getBlockByNumber(1);
 
@@ -144,10 +139,10 @@ public class WarpProcessorTest {
         Assert.assertFalse(block.getTransactions().isEmpty());
         Assert.assertEquals(10, block.getTransactions().size());
 
-        Assert.assertTrue(trieStore0.exists(block.getStateRootHash()));
+        Assert.assertTrue(stores.getBlockHashStore().containsBlock(block.getStateRootHash()));
 
         TrieStore accountTrieStore = new TrieStore(new HashMapStore());
-        AccountStore accountStore0 = new AccountStore(trieStore0.retrieve(block.getStateRootHash()));
+        AccountStore accountStore0 = new AccountStore(stores.getAccountTrieStore().retrieve(block.getStateRootHash()));
 
         for (Transaction transaction : block.getTransactions()) {
             Account account0 = accountStore0.getAccount(transaction.getReceiver());
@@ -163,7 +158,7 @@ public class WarpProcessorTest {
 
         for (Set<Hash> pendingHashes = processor.getPendingAccountHashes(topHash); !pendingHashes.isEmpty(); pendingHashes = processor.getPendingAccountHashes(topHash))
             for (Hash pendingHash : pendingHashes)
-                processor.processAccountNode(topHash, trieStore0.retrieve(pendingHash).getEncoded());
+                processor.processAccountNode(topHash, stores.getAccountTrieStore().retrieve(pendingHash).getEncoded());
 
         Assert.assertTrue(accountTrieStore.exists(block.getStateRootHash()));
 

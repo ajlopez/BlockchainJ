@@ -4,6 +4,8 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
+import com.ajlopez.blockchain.store.MemoryStores;
+import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +18,8 @@ import java.io.IOException;
 public class BlockChainTest {
     @Test
     public void noBestBlock() {
-        BlockChain blockChain = new BlockChain();
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
 
         Assert.assertNull(blockChain.getBestBlock());
         Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, blockChain.getBestBlockNumber());
@@ -24,14 +27,16 @@ public class BlockChainTest {
 
     @Test
     public void noBlockByHash() {
-        BlockChain blockChain = new BlockChain();
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
 
         Assert.assertNull(blockChain.getBlockByHash(FactoryHelper.createRandomHash()));
     }
 
     @Test
     public void noBlockByNumber() throws IOException {
-        BlockChain blockChain = new BlockChain();
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
 
         Assert.assertNull(blockChain.getBlockByNumber(0));
         Assert.assertNull(blockChain.getBlockByNumber(1));
@@ -40,7 +45,9 @@ public class BlockChainTest {
 
     @Test
     public void addFirstBlock() throws IOException {
-        BlockChain blockChain = new BlockChain();
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
+
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
@@ -58,7 +65,9 @@ public class BlockChainTest {
 
     @Test
     public void addSecondBlock() throws IOException {
-        BlockChain blockChain = new BlockChain();
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
+
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
@@ -78,7 +87,9 @@ public class BlockChainTest {
 
     @Test
     public void addSecondBlockTwice() throws IOException {
-        BlockChain blockChain = new BlockChain();
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
+
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
@@ -94,7 +105,9 @@ public class BlockChainTest {
 
     @Test
     public void addFirstBlockTwice() throws IOException {
-        BlockChain blockChain = new BlockChain();
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
+
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
@@ -110,7 +123,9 @@ public class BlockChainTest {
 
     @Test
     public void rejectBlockIfNotChild() throws IOException {
-        BlockChain blockChain = new BlockChain();
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
+
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
@@ -126,7 +141,9 @@ public class BlockChainTest {
 
     @Test
     public void switchToABetterFork() throws IOException {
-        BlockChain blockChain = new BlockChain();
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
+
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);

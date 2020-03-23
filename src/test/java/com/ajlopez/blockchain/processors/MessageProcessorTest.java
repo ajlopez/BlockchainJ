@@ -10,9 +10,7 @@ import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.KeyValueStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.simples.SimpleMessageChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import javafx.util.Pair;
@@ -390,10 +388,9 @@ public class MessageProcessorTest {
 
     @Test
     public void processNodeTrieMessage() throws IOException {
-        KeyValueStore keyValueStore0 = new HashMapStore();
-        TrieStore trieStore0 = new TrieStore(keyValueStore0);
+        Stores stores = new MemoryStores();
 
-        Block block = FactoryHelper.createBlockChain(trieStore0, 1, 10).getBlockByNumber(1);
+        Block block = FactoryHelper.createBlockChain(stores, 1, 10).getBlockByNumber(1);
         TrieStore accountStore = new TrieStore(new HashMapStore());
 
         WarpProcessor warpProcessor = new WarpProcessor(accountStore);
@@ -401,7 +398,7 @@ public class MessageProcessorTest {
 
         MessageProcessor processor = new MessageProcessor(null, null, null, null, warpProcessor);
 
-        TrieNodeMessage message = new TrieNodeMessage(block.getStateRootHash(), TrieType.ACCOUNT, trieStore0.retrieve(block.getStateRootHash()).getEncoded());
+        TrieNodeMessage message = new TrieNodeMessage(block.getStateRootHash(), TrieType.ACCOUNT, stores.getAccountTrieStore().retrieve(block.getStateRootHash()).getEncoded());
 
         processor.processMessage(message, null);
 

@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.Stores;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,10 +20,15 @@ public class BlockChain implements BlockProvider {
     private Block best;
 
     // TODO inject stores
-    private final BlockHashStore blocksByHash = new BlockHashStore();
-    private final BlocksInformationStore blocksInformationStore = new BlocksInformationStore(new HashMapStore());
+    private final BlockHashStore blocksByHash;
+    private final BlocksInformationStore blocksInformationStore;
 
     private List<Consumer<Block>> blockConsumers = new ArrayList<>();
+
+    public BlockChain(Stores stores) {
+        this.blocksByHash = stores.getBlockHashStore();
+        this.blocksInformationStore = stores.getBlocksInformationStore();
+    }
 
     public Block getBestBlock() {
         return this.best;

@@ -11,9 +11,7 @@ import com.ajlopez.blockchain.jsonrpc.encoders.TransactionJsonEncoder;
 import com.ajlopez.blockchain.jsonrpc.encoders.TransactionJsonEncoderTest;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.processors.TransactionProcessor;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -116,9 +114,9 @@ public class TransactionsProcessorTest {
 
     @Test
     public void sendTransactionWithoutNonce() throws JsonRpcException, IOException {
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        BlockChain blockchain = FactoryHelper.createBlockChain(trieStore,10, 1);
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        Stores stores = new MemoryStores();
+        BlockChain blockchain = FactoryHelper.createBlockChain(stores,10, 1);
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
         Address sender = blockchain.getBlockByNumber(1).getTransactions().get(0).getSender();
 
         BlocksProvider blocksProvider = new BlocksProvider(blockchain);
@@ -153,9 +151,9 @@ public class TransactionsProcessorTest {
 
     @Test
     public void sendTwoTransactionsWithoutNonce() throws JsonRpcException, IOException {
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        BlockChain blockchain = FactoryHelper.createBlockChain(trieStore,10, 1);
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
+        Stores stores = new MemoryStores();
+        BlockChain blockchain = FactoryHelper.createBlockChain(stores,10, 1);
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
         Address sender = blockchain.getBlockByNumber(1).getTransactions().get(0).getSender();
 
         BlocksProvider blocksProvider = new BlocksProvider(blockchain);

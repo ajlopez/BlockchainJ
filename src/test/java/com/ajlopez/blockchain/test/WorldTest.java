@@ -58,9 +58,8 @@ public class WorldTest {
     }
 
     @Test
-    public void getUnknownAccountAddress() {
+    public void getUnknownAccountAddress() throws IOException {
         World world = new World();
-        Account account = new Account();
 
         Address result = world.getAccountAddress("acc1");
 
@@ -68,14 +67,14 @@ public class WorldTest {
     }
 
     @Test
-    public void getUnknownTransaction() {
+    public void getUnknownTransaction() throws IOException {
         World world = new World();
 
         Assert.assertNull(world.getTransaction("foo"));
     }
 
     @Test
-    public void getUnknownTransactions() {
+    public void getUnknownTransactions() throws IOException {
         World world = new World();
         List<String> names = new ArrayList<>();
         names.add("tx1");
@@ -88,7 +87,7 @@ public class WorldTest {
     }
 
     @Test
-    public void setAndGetTransaction() {
+    public void setAndGetTransaction() throws IOException {
         Transaction transaction = FactoryHelper.createTransaction(1000);
 
         World world = new World();
@@ -102,7 +101,7 @@ public class WorldTest {
     }
 
     @Test
-    public void setAndGetTransactions() {
+    public void setAndGetTransactions() throws IOException {
         Transaction transaction1 = FactoryHelper.createTransaction(1000);
         Transaction transaction2 = FactoryHelper.createTransaction(2000);
 

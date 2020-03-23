@@ -6,11 +6,8 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.BlockConsumer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -108,7 +105,7 @@ public class BlockProcessorTest {
 
     @Test
     public void addFirstBlockCheckingTransactionPool() throws IOException {
-        BlockChain blockChain = new BlockChain();
+        BlockChain blockChain = new BlockChain(new MemoryStores());
         TransactionPool transactionPool = new TransactionPool();
         BlockProcessor processor = FactoryHelper.createBlockProcessor(blockChain, transactionPool);
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -177,12 +174,12 @@ public class BlockProcessorTest {
 
     @Test
     public void addManyBlocks() throws IOException {
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        BlockChain blockChain = FactoryHelper.createBlockChain(trieStore,2, 4);
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = FactoryHelper.createBlockChain(stores, 2, 4);
 
         Assert.assertEquals(2, blockChain.getBestBlockNumber());
 
-        BlockProcessor processor = new BlockProcessor(new BlockChain(), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(trieStore)), new TransactionPool());
+        BlockProcessor processor = new BlockProcessor(new BlockChain(stores), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(stores.getAccountTrieStore())), new TransactionPool());
 
         for (int k = 0; k <= 2; k++)
             processor.processBlock(blockChain.getBlockByNumber(k));
@@ -193,13 +190,13 @@ public class BlockProcessorTest {
 
     @Test
     public void addManyBlocksRemovingThemFromTransactionPool() throws IOException {
-        TrieStore trieStore = new TrieStore(new HashMapStore());
+        Stores stores = new MemoryStores();
         TransactionPool transactionPool = new TransactionPool();
-        BlockChain blockChain = FactoryHelper.createBlockChain(trieStore,2, 4);
+        BlockChain blockChain = FactoryHelper.createBlockChain(stores,2, 4);
 
         Assert.assertEquals(2, blockChain.getBestBlockNumber());
 
-        BlockProcessor processor = new BlockProcessor(new BlockChain(), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(trieStore)), transactionPool);
+        BlockProcessor processor = new BlockProcessor(new BlockChain(stores), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(stores.getAccountTrieStore())), transactionPool);
 
         for (int k = 0; k <= 2; k++) {
             Block block = blockChain.getBlockByNumber(k);

@@ -188,9 +188,9 @@ public class NodeProcessorTest {
 
     @Test
     public void processTwoBlockMessagesUsingTwoNodes() throws InterruptedException {
-        BlockChain blockChain1 = new BlockChain();
+        BlockChain blockChain1 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
-        BlockChain blockChain2 = new BlockChain();
+        BlockChain blockChain2 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
@@ -220,9 +220,9 @@ public class NodeProcessorTest {
 
     @Test
     public void processTwoBlockMessagesUsingTwoNodesConnectedByPipes() throws InterruptedException, IOException {
-        BlockChain blockChain1 = new BlockChain();
+        BlockChain blockChain1 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
-        BlockChain blockChain2 = new BlockChain();
+        BlockChain blockChain2 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
@@ -257,9 +257,9 @@ public class NodeProcessorTest {
         List<Block> blocks = FactoryHelper.createBlocks(9);
         Block bestBlock = blocks.get(9);
 
-        BlockChain blockChain1 = new BlockChain();
+        BlockChain blockChain1 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
-        BlockChain blockChain2 = new BlockChain();
+        BlockChain blockChain2 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
@@ -294,9 +294,9 @@ public class NodeProcessorTest {
         List<Block> blocks = FactoryHelper.createBlocks(9);
         Block bestBlock = blocks.get(9);
 
-        BlockChain blockChain1 = new BlockChain();
+        BlockChain blockChain1 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
-        BlockChain blockChain2 = new BlockChain();
+        BlockChain blockChain2 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
@@ -340,9 +340,9 @@ public class NodeProcessorTest {
         List<Block> blocks = FactoryHelper.createBlocks(9);
         Block bestBlock = blocks.get(9);
 
-        BlockChain blockChain1 = new BlockChain();
+        BlockChain blockChain1 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
-        BlockChain blockChain2 = new BlockChain();
+        BlockChain blockChain2 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
@@ -378,11 +378,11 @@ public class NodeProcessorTest {
         List<Block> blocks = FactoryHelper.createBlocks(9);
         Block bestBlock = blocks.get(9);
 
-        BlockChain blockChain1 = new BlockChain();
+        BlockChain blockChain1 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
-        BlockChain blockChain2 = new BlockChain();
+        BlockChain blockChain2 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
-        BlockChain blockChain3 = new BlockChain();
+        BlockChain blockChain3 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(blockChain3);
 
         nodeProcessor1.connectTo(nodeProcessor2);
@@ -423,11 +423,11 @@ public class NodeProcessorTest {
         List<Block> blocks = FactoryHelper.createBlocks(9);
         Block bestBlock = blocks.get(9);
 
-        BlockChain blockChain1 = new BlockChain();
+        BlockChain blockChain1 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
-        BlockChain blockChain2 = new BlockChain();
+        BlockChain blockChain2 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
-        BlockChain blockChain3 = new BlockChain();
+        BlockChain blockChain3 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(blockChain3);
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
@@ -468,7 +468,7 @@ public class NodeProcessorTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 
-        BlockChain blockChain = new BlockChain();
+        BlockChain blockChain = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);

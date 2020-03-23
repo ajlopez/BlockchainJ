@@ -3,9 +3,7 @@ package com.ajlopez.blockchain.bc;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,10 +18,10 @@ import java.util.List;
 public class BlockForkTest {
     @Test
     public void processTwoBestBlocks() throws IOException {
+        Stores stores = new MemoryStores();
         Address senderAddress = FactoryHelper.createRandomAddress();
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithAccount(senderAddress, 1000000, trieStore, 0, 0);
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
+        BlockChain blockChain = FactoryHelper.createBlockChainWithAccount(stores, senderAddress, 1000000,0, 0);
 
         FactoryHelper.extendBlockChainWithBlocks(accountStoreProvider, blockChain, 3, 0, null, 0);
 
@@ -67,9 +65,9 @@ public class BlockForkTest {
     @Test
     public void getTransactions() throws IOException {
         Address senderAddress = FactoryHelper.createRandomAddress();
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithAccount(senderAddress, 1000000, trieStore, 10, 10);
+        Stores stores = new MemoryStores();
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
+        BlockChain blockChain = FactoryHelper.createBlockChainWithAccount(stores, senderAddress, 1000000, 10, 10);
 
         Block firstBestBlock = blockChain.getBestBlock();
 
@@ -118,10 +116,10 @@ public class BlockForkTest {
 
     @Test
     public void processOneBestBlocks() throws IOException {
+        Stores stores = new MemoryStores();
         Address senderAddress = FactoryHelper.createRandomAddress();
-        TrieStore trieStore = new TrieStore(new HashMapStore());
-        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithAccount(senderAddress, 1000000, trieStore, 0, 0);
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
+        BlockChain blockChain = FactoryHelper.createBlockChainWithAccount(stores, senderAddress, 1000000, 0, 0);
 
         FactoryHelper.extendBlockChainWithBlocks(accountStoreProvider, blockChain, 3, 0, null, 0);
 

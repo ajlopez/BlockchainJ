@@ -240,7 +240,7 @@ public class MinerProcessorTest {
         accountStore.putAccount(sender, account);
         accountStore.save();
 
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores, accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
         MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, coinbase);
@@ -275,7 +275,7 @@ public class MinerProcessorTest {
         accountStore.putAccount(tx.getSender(), account);
         accountStore.save();
 
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(accountStore);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores, accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
         MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, coinbase);

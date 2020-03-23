@@ -7,9 +7,7 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.CodeStore;
-import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 
 import java.io.IOException;
@@ -22,6 +20,7 @@ import java.util.Map;
  * Created by ajlopez on 12/05/2019.
  */
 public class World {
+    private final Stores stores = new MemoryStores();
     private final AccountStore accountStore;
     private final CodeStore codeStore;
 
@@ -31,9 +30,9 @@ public class World {
 
     private BlockChain blockChain;
 
-    public World() {
-        this.accountStore = new AccountStore(new Trie());
-        this.codeStore = new CodeStore(new HashMapStore());
+    public World() throws IOException {
+        this.accountStore = new AccountStore(this.stores.getAccountTrieStore().retrieve(Trie.EMPTY_TRIE_HASH));
+        this.codeStore = this.stores.getCodeStore();
     }
 
     public Transaction getTransaction(String name) {
@@ -115,7 +114,7 @@ public class World {
 
     public BlockChain getBlockChain() throws IOException {
         if (this.blockChain == null)
-            this.blockChain = FactoryHelper.createBlockChainWithGenesis(this.accountStore);
+            this.blockChain = FactoryHelper.createBlockChainWithGenesis(this.stores, this.accountStore);
 
         return this.blockChain;
     }
