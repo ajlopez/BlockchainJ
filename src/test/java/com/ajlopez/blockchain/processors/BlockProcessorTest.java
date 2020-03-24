@@ -179,7 +179,7 @@ public class BlockProcessorTest {
 
         Assert.assertEquals(2, blockChain.getBestBlockNumber());
 
-        BlockProcessor processor = new BlockProcessor(new BlockChain(stores), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(stores.getAccountTrieStore())), new TransactionPool());
+        BlockProcessor processor = new BlockProcessor(new BlockChain(new MemoryStores()), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(stores.getAccountTrieStore())), new TransactionPool());
 
         for (int k = 0; k <= 2; k++)
             processor.processBlock(blockChain.getBlockByNumber(k));
@@ -196,7 +196,7 @@ public class BlockProcessorTest {
 
         Assert.assertEquals(2, blockChain.getBestBlockNumber());
 
-        BlockProcessor processor = new BlockProcessor(new BlockChain(stores), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(stores.getAccountTrieStore())), transactionPool);
+        BlockProcessor processor = new BlockProcessor(new BlockChain(new MemoryStores()), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(stores.getAccountTrieStore())), transactionPool);
 
         for (int k = 0; k <= 2; k++) {
             Block block = blockChain.getBlockByNumber(k);
