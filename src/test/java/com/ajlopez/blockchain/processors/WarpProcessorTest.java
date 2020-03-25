@@ -139,7 +139,7 @@ public class WarpProcessorTest {
         Assert.assertFalse(block.getTransactions().isEmpty());
         Assert.assertEquals(10, block.getTransactions().size());
 
-        Assert.assertTrue(stores.getBlockHashStore().containsBlock(block.getStateRootHash()));
+        Assert.assertTrue(stores.getAccountTrieStore().exists(block.getStateRootHash()));
 
         TrieStore accountTrieStore = new TrieStore(new HashMapStore());
         AccountStore accountStore0 = new AccountStore(stores.getAccountTrieStore().retrieve(block.getStateRootHash()));
