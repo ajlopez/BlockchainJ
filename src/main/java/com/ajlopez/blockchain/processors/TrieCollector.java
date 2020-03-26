@@ -50,7 +50,9 @@ public class TrieCollector {
         Set<Hash> newHashes = new HashSet<>();
 
         for (int k = 0; k < subHashes.length; k++)
-            if (this.expectHash(subHashes[k]))
+            if (subHashes[k] == null)
+                continue;
+            else if (this.expectHash(subHashes[k]))
                 newHashes.add(subHashes[k]);
 
         return newHashes;

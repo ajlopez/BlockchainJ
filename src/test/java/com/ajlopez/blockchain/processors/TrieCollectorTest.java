@@ -56,14 +56,16 @@ public class TrieCollectorTest {
 
         Hash[] subHashes = trie.getSubHashes();
 
+        Assert.assertNotNull(subHashes);
+        Assert.assertEquals(Trie.ARITY, subHashes.length);
+
         for (int k = 0; k < subHashes.length; k++)
             if (subHashes[k] != null) {
                 Assert.assertFalse(trieStore.exists(subHashes[k]));
                 Assert.assertTrue(hashes.contains(subHashes[k]));
             }
 
-        Assert.assertFalse(trieCollector.getPendingHashes().isEmpty());
-        Assert.assertEquals(1, trieCollector.getPendingHashes().size());
+        Assert.assertTrue(trieCollector.getPendingHashes().isEmpty());
         Assert.assertFalse(trieCollector.getPendingHashes().contains(trie.getHash()));
     }
 
@@ -95,8 +97,7 @@ public class TrieCollectorTest {
             if (subHashes[k] != null)
                 Assert.assertFalse(trieStore.exists(subHashes[k]));
 
-        Assert.assertFalse(trieCollector.getPendingHashes().isEmpty());
-        Assert.assertEquals(1, trieCollector.getPendingHashes().size());
+        Assert.assertTrue(trieCollector.getPendingHashes().isEmpty());
         Assert.assertFalse(trieCollector.getPendingHashes().contains(trie.getHash()));
     }
 
