@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.bc;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.Stores;
 
 import java.io.IOException;
@@ -19,7 +18,6 @@ public class BlockChain implements BlockProvider {
 
     private Block best;
 
-    // TODO inject stores
     private final BlockHashStore blocksByHash;
     private final BlocksInformationStore blocksInformationStore;
 
@@ -50,12 +48,20 @@ public class BlockChain implements BlockProvider {
 
         this.saveBlock(block);
 
-        if (this.best == null || block.getNumber() > this.best.getNumber())
+        if (isBetterBlock(block))
             this.saveBestBlock(block);
 
         this.emitBlock(block);
 
         return true;
+    }
+
+    private boolean isBetterBlock(Block block) {
+        if (this.best == null)
+            return true;
+
+        // TODO use total difficulty
+        return block.getNumber() > this.best.getNumber();
     }
 
     private void emitBlock(Block block) {
