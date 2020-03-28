@@ -46,9 +46,12 @@ public class BlockChain implements BlockProvider {
         if (this.blocksByHash.containsBlock(block.getHash()))
             return true;
 
-        this.saveBlock(block);
+        boolean isBetterBlock = this.isBetterBlock(block);
 
-        if (isBetterBlock(block))
+        // TODO use total difficulty
+        this.saveBlock(block, block.getDifficulty(), isBetterBlock);
+
+        if (isBetterBlock)
             this.saveBestBlock(block);
 
         this.emitBlock(block);
@@ -104,19 +107,19 @@ public class BlockChain implements BlockProvider {
         return !blocksByHash.containsBlock(block.getParentHash());
     }
 
-    private void saveBlock(Block block) throws IOException {
-        if (this.blocksByHash.containsBlock(block.getHash()))
-            return;
-
-        this.blocksByHash.saveBlock(block);
+    private void saveBlock(Block block, Difficulty totalDifficulty, boolean isBetterBlock) throws IOException {
+        if (!this.blocksByHash.containsBlock(block.getHash()))
+            this.blocksByHash.saveBlock(block);
 
         BlocksInformation blocksInformation = this.blocksInformationStore.get(block.getNumber());
 
         if (blocksInformation == null)
             blocksInformation = new BlocksInformation();
 
-        // TODO process total difficulty
-        blocksInformation.addBlockInformation(block.getHash(), Difficulty.ONE);
+        blocksInformation.addBlockInformation(block.getHash(), totalDifficulty);
+
+        if (isBetterBlock)
+            blocksInformation.setBlockOnChain(block.getHash());
 
         this.blocksInformationStore.put(block.getNumber(), blocksInformation);
     }
@@ -124,13 +127,9 @@ public class BlockChain implements BlockProvider {
     private void saveBestBlock(Block block) throws IOException {
         this.best = block;
 
-        BlocksInformation blocksInformation = this.blocksInformationStore.get(block.getNumber());
-        blocksInformation.setBlockOnChain(block.getHash());
-        this.blocksInformationStore.put(block.getNumber(), blocksInformation);
-
         while (block.getNumber() > 0 && !this.getBlockByNumber(block.getNumber() - 1).getHash().equals(block.getParentHash())) {
             block = this.blocksByHash.getBlock(block.getParentHash());
-            blocksInformation = this.blocksInformationStore.get(block.getNumber());
+            BlocksInformation blocksInformation = this.blocksInformationStore.get(block.getNumber());
             blocksInformation.setBlockOnChain(block.getHash());
             this.blocksInformationStore.put(block.getNumber(), blocksInformation);
         }
