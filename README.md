@@ -81,7 +81,12 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Uncle Mining, an Ethereum Consensus Protocol Flaw](https://bitslog.com/2016/04/28/uncle-mining-an-ethereum-consensus-protocol-flaw/)
 - [Does anyone understand the behavior of abi.encodePacked()?](https://www.reddit.com/r/ethdev/comments/a9i594/does_anyone_understand_the_behavior_of/)
 - [“Merry Go Round” sync](https://ethresear.ch/t/merry-go-round-sync/7158)
-
+- [Understanding Merkle pollards](https://medium.com/@jgm.orinoco/understanding-merkle-pollards-1547fc7efaa)
+- [EIP 2464: eth/65: transaction announcements and retrievals](https://eips.ethereum.org/EIPS/eip-2464)
+- [Survey of proposals to reduce block witness size](https://ethresear.ch/t/survey-of-proposals-to-reduce-block-witness-size/7173)
+- [Understanding sparse Merkle multiproofs](https://www.wealdtech.com/articles/understanding-sparse-merkle-multiproofs/)
+- [Understanding Merkle pollards](https://www.wealdtech.com/articles/understanding-merkle-pollards/)
+- [Modified Merkle Patricia Trie — How Ethereum saves a state](https://medium.com/codechain/modified-merkle-patricia-trie-how-ethereum-saves-a-state-e6d7555078dd)
 
 ## To Do
 
