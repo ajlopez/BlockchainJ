@@ -47,11 +47,18 @@ public class BlockChain implements BlockProvider {
         if (this.blocksByHash.containsBlock(block.getHash()))
             return true;
 
-        // TODO use total difficulty
-        boolean isBetterBlock = this.isBetterBlock(block, block.getDifficulty());
+        Difficulty parentTotalDifficulty;
 
-        // TODO use total difficulty
-        this.saveBlock(block, block.getDifficulty(), isBetterBlock);
+        if (block.getNumber() == 0)
+            parentTotalDifficulty = Difficulty.ZERO;
+        else
+            parentTotalDifficulty = this.blocksInformationStore.get(block.getNumber() - 1).getBlockInformation(block.getParentHash()).getTotalDifficulty();
+
+        Difficulty totalDifficulty = parentTotalDifficulty.add(block.getCummulativeDifficulty());
+
+        boolean isBetterBlock = this.isBetterBlock(block, totalDifficulty);
+
+        this.saveBlock(block, totalDifficulty, isBetterBlock);
 
         if (isBetterBlock)
             this.saveBestBlock(block, block.getDifficulty());
