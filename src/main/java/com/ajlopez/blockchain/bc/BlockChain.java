@@ -61,19 +61,18 @@ public class BlockChain implements BlockProvider {
         this.saveBlock(block, totalDifficulty, isBetterBlock);
 
         if (isBetterBlock)
-            this.saveBestBlock(block, block.getDifficulty());
+            this.saveBestBlock(block, totalDifficulty);
 
         this.emitBlock(block);
 
         return true;
     }
 
-    private boolean isBetterBlock(Block block, Difficulty bestTotalDifficulty) {
+    private boolean isBetterBlock(Block block, Difficulty totalDifficulty) {
         if (this.bestBlock == null)
             return true;
 
-        // TODO use total difficulty
-        return block.getNumber() > this.bestBlock.getNumber();
+        return totalDifficulty.compareTo(this.bestTotalDifficulty) > 0;
     }
 
     private void emitBlock(Block block) {
