@@ -87,6 +87,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Understanding sparse Merkle multiproofs](https://www.wealdtech.com/articles/understanding-sparse-merkle-multiproofs/)
 - [Understanding Merkle pollards](https://www.wealdtech.com/articles/understanding-merkle-pollards/)
 - [Modified Merkle Patricia Trie — How Ethereum saves a state](https://medium.com/codechain/modified-merkle-patricia-trie-how-ethereum-saves-a-state-e6d7555078dd)
+- [Berty (P2P) is opening its code!](https://berty.tech/blog/open-source/)
 
 ## To Do
 
