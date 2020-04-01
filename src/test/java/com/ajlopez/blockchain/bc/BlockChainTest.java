@@ -215,5 +215,7 @@ public class BlockChainTest {
         Assert.assertNotNull(blockChain.getBestBlock());
         Assert.assertEquals(2, blockChain.getBestBlock().getNumber());
         Assert.assertEquals(block2b.getHash(), blockChain.getBestBlock().getHash());
+
+        Assert.assertNull(blockChain.getBlockByNumber(3));
     }
 }

@@ -142,5 +142,13 @@ public class BlockChain implements BlockProvider {
             blocksInformation.setBlockOnChain(block.getHash());
             this.blocksInformationStore.put(block.getNumber(), blocksInformation);
         }
+
+        long n = this.bestBlock.getNumber() + 1;
+
+        for (BlocksInformation blocksInformation = this.blocksInformationStore.get(n); blocksInformation != null; blocksInformation = this.blocksInformationStore.get(n)) {
+            blocksInformation.noBlockOnChain();
+            this.blocksInformationStore.put(n, blocksInformation);
+            n++;
+        }
     }
 }

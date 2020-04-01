@@ -26,6 +26,10 @@ public class BlocksInformation {
         this.blocksInformation.add(blockInformation);
     }
 
+    public void noBlockOnChain() {
+        this.blockOnChainPosition = -1;
+    }
+
     public void setBlockOffChain(BlockHash blockHash) {
         if (this.blockOnChainPosition >= 0 && this.blocksInformation.get(this.blockOnChainPosition).getBlockHash().equals(blockHash))
             this.blockOnChainPosition = -1;
