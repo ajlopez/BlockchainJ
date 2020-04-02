@@ -4,7 +4,6 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.store.MemoryStores;
 import com.ajlopez.blockchain.store.Stores;

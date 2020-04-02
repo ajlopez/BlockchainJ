@@ -4,20 +4,27 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 
 import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Created by ajlopez on 21/01/2018.
  */
 public class TransactionPool {
-    private Set<Transaction> transactions = new HashSet<>();
+    private final Set<Transaction> transactions = new HashSet<>();
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     public List<Transaction> addTransaction(Transaction transaction) {
         if (transaction == null)
             throw new IllegalArgumentException("Null transaction");
 
-        synchronized (this.transactions) {
+        this.lock.writeLock().lock();
+
+        try {
             if (!this.transactions.add(transaction))
                 return Collections.emptyList();
+        }
+        finally {
+            this.lock.writeLock().unlock();
         }
 
         return Collections.singletonList(transaction);
@@ -27,16 +34,26 @@ public class TransactionPool {
         if (transaction == null)
             throw new IllegalArgumentException("Null transaction");
 
-        synchronized (this.transactions) {
+        this.lock.writeLock().lock();
+
+        try {
             this.transactions.remove(transaction);
+        }
+        finally {
+            this.lock.writeLock().unlock();
         }
     }
 
     public List<Transaction> getTransactions() {
         List<Transaction> list = new ArrayList<>();
 
-        synchronized (this.transactions) {
+        this.lock.readLock().lock();
+
+        try {
             list.addAll(this.transactions);
+        }
+        finally {
+            this.lock.readLock().unlock();
         }
 
         return list;
@@ -45,17 +62,22 @@ public class TransactionPool {
     public List<Transaction> getTransactionsWithSender(Address sender) {
         List<Transaction> list = new ArrayList<>();
 
-        synchronized (this.transactions) {
+        this.lock.readLock().lock();
+
+        try {
             for (Transaction transaction : this.transactions)
                 if (transaction.getSender().equals(sender))
                     list.add(transaction);
+        }
+        finally {
+            this.lock.readLock().unlock();
         }
 
         return list;
     }
 
     public long getTransactionNonceBySenderFromNonce(Address sender, long fromNonce) {
-        List<Transaction> list = getTransactionsWithSenderFromNonce(sender, fromNonce);
+        List<Transaction> list = this.getTransactionsWithSenderFromNonce(sender, fromNonce);
 
         if (list.isEmpty())
             return fromNonce;
@@ -66,10 +88,15 @@ public class TransactionPool {
     public List<Transaction> getTransactionsWithSenderFromNonce(Address sender, long firstNonce) {
         List<Transaction> list = new ArrayList<>();
 
-        synchronized (this.transactions) {
+        this.lock.readLock().lock();
+
+        try {
             for (Transaction transaction : this.transactions)
                 if (transaction.getSender().equals(sender) && transaction.getNonce() >= firstNonce)
                     list.add(transaction);
+        }
+        finally {
+            this.lock.readLock().unlock();
         }
 
         Collections.sort(list, new NonceComparator());
@@ -90,11 +117,18 @@ public class TransactionPool {
     }
 
     public void updateTransactions(List<Transaction> toremove, List<Transaction> toadd) {
-        for (Transaction tx: toremove)
-            this.removeTransaction(tx);
+        this.lock.writeLock().lock();
 
-        for (Transaction tx: toadd)
-            this.addTransaction(tx);
+        try {
+            for (Transaction tx : toremove)
+                this.removeTransaction(tx);
+
+            for (Transaction tx : toadd)
+                this.addTransaction(tx);
+        }
+        finally {
+            this.lock.writeLock().unlock();
+        }
     }
 
     class NonceComparator implements Comparator<Transaction> {
