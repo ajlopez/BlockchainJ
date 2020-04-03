@@ -48,7 +48,8 @@ public class AccountStoreTest {
     public void createTenMillionAccounts() throws IOException {
         int naccounts = 10000000;
 
-        AccountStore store = new AccountStore(new Trie());
+        Trie trie = new Trie();
+        AccountStore store = new AccountStore(trie);
 
         System.out.println("KB: " + (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024);
         long millis = System.currentTimeMillis();
@@ -63,5 +64,6 @@ public class AccountStoreTest {
         millis = System.currentTimeMillis() - millis;
         System.out.println(millis);
         System.out.println("KB: " + (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024);
+        System.out.println("Trie size: " + store.getTrie().nodesSize());
     }
 }

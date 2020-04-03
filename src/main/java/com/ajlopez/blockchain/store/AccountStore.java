@@ -42,4 +42,9 @@ public class AccountStore {
     public void save() throws IOException {
         this.trie.save();
     }
+
+    // TODO visibility for test
+    public Trie getTrie() {
+        return this.trie;
+    }
 }
