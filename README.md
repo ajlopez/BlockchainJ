@@ -89,6 +89,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Modified Merkle Patricia Trie — How Ethereum saves a state](https://medium.com/codechain/modified-merkle-patricia-trie-how-ethereum-saves-a-state-e6d7555078dd)
 - [Implementing Merkle Tree and Patricia Trie](https://medium.com/coinmonks/implementing-merkle-tree-and-patricia-trie-b8badd6d9591)
 - [Berty (P2P) is opening its code!](https://berty.tech/blog/open-source/)
+- [Kadcast: A Structured Approach to Broadcast in Blockchain Networks](https://eprint.iacr.org/2019/876.pdf)
+
 
 ## To Do
 
