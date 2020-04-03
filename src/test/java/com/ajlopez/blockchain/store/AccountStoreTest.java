@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,5 +42,26 @@ public class AccountStoreTest {
         Assert.assertEquals(42, result.getNonce());
 
         Assert.assertArrayEquals(AccountEncoder.encode(account), AccountEncoder.encode(result));
+    }
+
+    @Test
+    public void createTenMillionAccounts() throws IOException {
+        int naccounts = 10000000;
+
+        AccountStore store = new AccountStore(new Trie());
+
+        System.out.println("KB: " + (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024);
+        long millis = System.currentTimeMillis();
+
+        for (int k = 0; k < naccounts; k++) {
+            Address address = FactoryHelper.createRandomAddress();
+            Account account = new Account(Coin.TEN, 0, null, null);
+
+            store.putAccount(address, account);
+        }
+
+        millis = System.currentTimeMillis() - millis;
+        System.out.println(millis);
+        System.out.println("KB: " + (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024);
     }
 }
