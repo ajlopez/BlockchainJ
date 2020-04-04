@@ -207,13 +207,15 @@ public class FactoryHelper {
     }
 
     public static BlockChain createBlockChainWithAccount(Stores stores, Address senderAddress, long balance, int size, int ntransactions) throws IOException {
-        Account sender = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
-
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
         AccountStore accountStore = accountStoreProvider.retrieve(Trie.EMPTY_TRIE_HASH);
 
-        accountStore.putAccount(senderAddress, sender);
-        accountStore.save();
+        if (ntransactions > 0) {
+            Account sender = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
+
+            accountStore.putAccount(senderAddress, sender);
+            accountStore.save();
+        }
 
         BlockChain blockChain = createBlockChainWithGenesis(stores, accountStore);
         extendBlockChainWithBlocks(accountStoreProvider, blockChain, size, ntransactions, senderAddress, 0);

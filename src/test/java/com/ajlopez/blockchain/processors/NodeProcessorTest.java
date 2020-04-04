@@ -254,24 +254,18 @@ public class NodeProcessorTest {
 
     @Test
     public void synchronizeTwoNodes() throws InterruptedException, IOException {
-        List<Block> blocks = FactoryHelper.createBlocks(9);
-        Block bestBlock = blocks.get(9);
-
-        BlockChain blockChain1 = new BlockChain(new MemoryStores());
+        BlockChain blockChain1 = FactoryHelper.createBlockChain(300);
+        Block bestBlock = blockChain1.getBestBlock();
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+
         BlockChain blockChain2 = new BlockChain(new MemoryStores());
+
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
 
-        for (Block block : blocks)
-            Assert.assertTrue(blockChain1.connectBlock(block));
-
-        for (int k = 0; k < 10; k++)
-            Assert.assertNotNull(blockChain1.getBlockByNumber(k));
-
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,9, FactoryHelper.createRandomBlockHash());
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash());
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -291,11 +285,10 @@ public class NodeProcessorTest {
 
     @Test
     public void synchronizeTwoNodesCheckingOnBlock() throws InterruptedException, IOException {
-        List<Block> blocks = FactoryHelper.createBlocks(9);
-        Block bestBlock = blocks.get(9);
-
-        BlockChain blockChain1 = new BlockChain(new MemoryStores());
+        BlockChain blockChain1 = FactoryHelper.createBlockChain(300);
+        Block bestBlock = blockChain1.getBestBlock();
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+
         BlockChain blockChain2 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
@@ -309,13 +302,7 @@ public class NodeProcessorTest {
                 semaphore.release();
         });
 
-        for (Block block : blocks)
-            Assert.assertTrue(blockChain1.connectBlock(block));
-
-        for (int k = 0; k < 10; k++)
-            Assert.assertNotNull(blockChain1.getBlockByNumber(k));
-
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,9, FactoryHelper.createRandomBlockHash());
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash());
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -337,23 +324,16 @@ public class NodeProcessorTest {
 
     @Test
     public void synchronizeTwoNodesConnectedByPipes() throws InterruptedException, IOException {
-        List<Block> blocks = FactoryHelper.createBlocks(9);
-        Block bestBlock = blocks.get(9);
-
-        BlockChain blockChain1 = new BlockChain(new MemoryStores());
+        BlockChain blockChain1 = FactoryHelper.createBlockChain(300);
+        Block bestBlock = blockChain1.getBestBlock();
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+
         BlockChain blockChain2 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
 
-        for (Block block : blocks)
-            Assert.assertTrue(blockChain1.connectBlock(block));
-
-        for (int k = 0; k < 10; k++)
-            Assert.assertNotNull(blockChain1.getBlockByNumber(k));
-
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,9, FactoryHelper.createRandomBlockHash());
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash());
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);

@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -44,7 +45,9 @@ public class AccountStoreTest {
         Assert.assertArrayEquals(AccountEncoder.encode(account), AccountEncoder.encode(result));
     }
 
+    // TODO move to main performance entry point
     @Test
+    @Ignore
     public void createTenMillionAccounts() throws IOException {
         int naccounts = 10000000;
 
