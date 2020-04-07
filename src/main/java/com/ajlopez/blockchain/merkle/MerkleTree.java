@@ -12,19 +12,36 @@ import java.util.List;
 public class MerkleTree {
     public static final Hash EMPTY_MERKLE_TREE_HASH = HashUtils.calculateHash(ByteUtils.EMPTY_BYTE_ARRAY);
     private static final Hash[] EMPTY_HASH_ARRAY = new Hash[0];
+    private static final MerkleTree[] EMPTY_NODE_ARRAY = new MerkleTree[0];
 
     private final Hash[] hashes;
+    private final MerkleTree[] nodes;
+
+    public static MerkleTree fromHashes(List<Hash> hashes) {
+        return new MerkleTree(hashes.toArray(EMPTY_HASH_ARRAY));
+    }
+
+    public static MerkleTree fromNodes(List<MerkleTree> nodes) {
+        return new MerkleTree(nodes.toArray(EMPTY_NODE_ARRAY));
+    }
 
     public MerkleTree() {
         this.hashes = new Hash[0];
+        this.nodes = null;
     }
 
-    public MerkleTree(List<Hash> hashes) {
-        this.hashes = hashes.toArray(EMPTY_HASH_ARRAY);
+    public MerkleTree(Hash[] hashes) {
+        this.hashes = hashes;
+        this.nodes = null;
+    }
+
+    public MerkleTree(MerkleTree[] nodes) {
+        this.nodes = nodes;
+        this.hashes = new Hash[this.nodes.length];
     }
 
     public boolean isLeaf() {
-        return true;
+        return this.nodes == null;
     }
 
     public Hash getHash() {
@@ -32,6 +49,10 @@ public class MerkleTree {
 
         if (nhashes == 0)
             return EMPTY_MERKLE_TREE_HASH;
+
+        if (this.hashes[0] == null)
+            for (int k = 0; k < nhashes; k++)
+                this.hashes[k] = this.nodes[k].getHash();
 
         byte[] bytes = new byte[Hash.HASH_BYTES * nhashes];
 

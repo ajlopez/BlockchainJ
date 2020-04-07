@@ -37,7 +37,7 @@ public class MerkleTreeTest {
         Hash hash = FactoryHelper.createRandomHash();
         List<Hash> hashes = Collections.singletonList(hash);
 
-        MerkleTree merkleTree = new MerkleTree(hashes);
+        MerkleTree merkleTree = MerkleTree.fromHashes(hashes);
 
         Assert.assertTrue(merkleTree.isLeaf());
 
@@ -59,7 +59,7 @@ public class MerkleTreeTest {
         hashes.add(hash1);
         hashes.add(hash2);
 
-        MerkleTree merkleTree = new MerkleTree(hashes);
+        MerkleTree merkleTree = MerkleTree.fromHashes(hashes);
 
         Assert.assertTrue(merkleTree.isLeaf());
 
@@ -69,6 +69,34 @@ public class MerkleTreeTest {
         Assert.assertNotEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, result);
 
         Hash expected = HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes()));
+
+        Assert.assertEquals(expected, result);
+    }
+
+    @Test
+    public void createMerkleTreeWithTwoNodes() {
+        Hash hash1 = FactoryHelper.createRandomHash();
+        Hash hash2 = FactoryHelper.createRandomHash();
+        List<Hash> hashes1 = Collections.singletonList(hash1);
+        List<Hash> hashes2 = Collections.singletonList(hash2);
+
+        MerkleTree node1 = MerkleTree.fromHashes(hashes1);
+        MerkleTree node2 = MerkleTree.fromHashes(hashes2);
+
+        List<MerkleTree> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+
+        MerkleTree merkleTree = MerkleTree.fromNodes(nodes);
+
+        Assert.assertFalse(merkleTree.isLeaf());
+
+        Hash result = merkleTree.getHash();
+
+        Assert.assertNotNull(result);
+        Assert.assertNotEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, result);
+
+        Hash expected = HashUtils.calculateHash(ByteUtils.concatenate(node1.getHash().getBytes(), node2.getHash().getBytes()));
 
         Assert.assertEquals(expected, result);
     }
