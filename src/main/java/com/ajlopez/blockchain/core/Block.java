@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
+import com.ajlopez.blockchain.merkle.MerkleTreeBuilder;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
@@ -94,22 +95,14 @@ public class Block {
     }
 
     public static Hash calculateTransactionsRootHash(List<Transaction> transactions) {
-        Trie trie = new Trie();
+        MerkleTreeBuilder merkleTreeBuilder = new MerkleTreeBuilder();
 
         if (transactions == null)
-            return trie.getHash();
+            return merkleTreeBuilder.build().getHash();
 
-        int ntransactions = transactions.size();
+        for (Transaction transaction : transactions)
+            merkleTreeBuilder.add(transaction.getHash());
 
-        for (int k = 0; k < ntransactions; k++)
-            try {
-                trie = trie.put(ByteUtils.unsignedIntegerToNormalizedBytes(k), TransactionEncoder.encode(transactions.get(k)));
-            }
-            catch (IOException ex) {
-                // It should not happen, no I/O
-                throw new RuntimeException(ex);
-            }
-
-        return trie.getHash();
+        return merkleTreeBuilder.build().getHash();
     }
 }

@@ -1,5 +1,9 @@
 package com.ajlopez.blockchain.merkle;
 
+import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,5 +26,68 @@ public class MerkleTreeBuilderTest {
 
         Assert.assertNotNull(merkleTreeBuilder);
         Assert.assertEquals(16, merkleTreeBuilder.getArity());
+    }
+
+    @Test
+    public void buildEmptyMerkleTree() {
+        MerkleTree merkleTree = new MerkleTreeBuilder().build();
+
+        Assert.assertNotNull(merkleTree);
+        Assert.assertTrue(merkleTree.isLeaf());
+        Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, merkleTree.getHash());
+    }
+
+    @Test
+    public void buildMerkleTreeWithOneHash() {
+        Hash hash = FactoryHelper.createRandomHash();
+
+        MerkleTree merkleTree = new MerkleTreeBuilder()
+                .add(hash)
+                .build();
+
+        Assert.assertNotNull(merkleTree);
+        Assert.assertTrue(merkleTree.isLeaf());
+
+        Hash expected = HashUtils.calculateHash(hash.getBytes());
+
+        Assert.assertEquals(expected, merkleTree.getHash());
+    }
+
+    @Test
+    public void buildMerkleTreeWithTwoHashes() {
+        Hash hash1 = FactoryHelper.createRandomHash();
+        Hash hash2 = FactoryHelper.createRandomHash();
+
+        MerkleTree merkleTree = new MerkleTreeBuilder()
+                .add(hash1)
+                .add(hash2)
+                .build();
+
+        Assert.assertNotNull(merkleTree);
+        Assert.assertTrue(merkleTree.isLeaf());
+
+        Hash expected = HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes()));
+
+        Assert.assertEquals(expected, merkleTree.getHash());
+    }
+
+    @Test
+    public void buildMerkleTreeWithThreeHashes() {
+        Hash hash1 = FactoryHelper.createRandomHash();
+        Hash hash2 = FactoryHelper.createRandomHash();
+        Hash hash3 = FactoryHelper.createRandomHash();
+
+        MerkleTree merkleTree = new MerkleTreeBuilder()
+                .add(hash1)
+                .add(hash2)
+                .add(hash3)
+                .build();
+
+        Assert.assertNotNull(merkleTree);
+        Assert.assertFalse(merkleTree.isLeaf());
+
+        Hash expected = HashUtils.calculateHash(ByteUtils.concatenate(HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes())).getBytes(), hash3.getBytes()));
+
+        Assert.assertEquals(expected, merkleTree.getHash());
     }
 }

@@ -3,7 +3,7 @@ package com.ajlopez.blockchain.core;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
-import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.merkle.MerkleTree;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -53,7 +53,7 @@ public class BlockTest {
         Assert.assertNotNull(transactions);
         Assert.assertTrue(transactions.isEmpty());
 
-        Assert.assertEquals(Trie.EMPTY_TRIE_HASH, block.getTransactionRootHash());
+        Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getTransactionRootHash());
     }
 
     @Test
