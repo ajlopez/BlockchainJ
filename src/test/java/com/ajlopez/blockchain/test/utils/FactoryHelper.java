@@ -313,6 +313,6 @@ public class FactoryHelper {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.fromUnsignedLong(42);
 
-        return new BlockHeader(1L, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty);
+        return new BlockHeader(1L, hash, 0, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty);
     }
 }

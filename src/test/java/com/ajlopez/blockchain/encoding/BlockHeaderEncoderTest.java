@@ -23,7 +23,7 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header = new BlockHeader(42, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42));
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42));
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -35,6 +35,7 @@ public class BlockHeaderEncoderTest {
         Assert.assertEquals(42, result.getNumber());
         Assert.assertEquals(hash, result.getParentHash());
         Assert.assertEquals(header.getHash(), result.getHash());
+        Assert.assertEquals(header.getTransactionsCount(), result.getTransactionsCount());
         Assert.assertEquals(header.getTransactionsRootHash(), result.getTransactionsRootHash());
         Assert.assertEquals(header.getCoinbase(), result.getCoinbase());
         Assert.assertEquals(header.getDifficulty(), result.getDifficulty());
@@ -47,8 +48,8 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header1 = new BlockHeader(42, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42));
-        BlockHeader header2 = new BlockHeader(100, hash, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(100));
+        BlockHeader header1 = new BlockHeader(42, hash, 0, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42));
+        BlockHeader header2 = new BlockHeader(100, hash, 0, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(100));
 
         List<BlockHeader> headers = new ArrayList<>();
         headers.add(header1);

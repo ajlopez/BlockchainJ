@@ -232,6 +232,8 @@ public class BlockTest {
 
         Block block = new Block(1L, hash, null, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
+        Assert.assertEquals(1, block.getTransactionsCount());
+
         List<Transaction> transactions = block.getTransactions();
 
         Assert.assertNotNull(transactions);
@@ -255,6 +257,8 @@ public class BlockTest {
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(1L, hash, null, txs, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        Assert.assertEquals(2, block.getTransactionsCount());
 
         List<Transaction> transactions = block.getTransactions();
 

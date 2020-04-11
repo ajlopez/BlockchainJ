@@ -4,12 +4,8 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.merkle.MerkleTreeBuilder;
-import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.utils.ByteUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,8 +26,8 @@ public class Block {
         this(number, parentHash, Collections.emptyList(), Collections.emptyList(), stateRootHash, timestamp, coinbase, difficulty);
     }
 
-    public Block(long number, BlockHash parentHash, List<BlockHeader> uncles, List<Transaction> txs, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
-        this(new BlockHeader(number, parentHash, calculateTransactionsRootHash(txs), stateRootHash, timestamp, coinbase, difficulty), uncles, txs);
+    public Block(long number, BlockHash parentHash, List<BlockHeader> uncles, List<Transaction> transactions, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+        this(new BlockHeader(number, parentHash, transactions == null ? 0 : transactions.size(), calculateTransactionsRootHash(transactions), stateRootHash, timestamp, coinbase, difficulty), uncles, transactions);
     }
 
     public Block(BlockHeader header, List<BlockHeader> uncles, List<Transaction> transactions)
@@ -70,6 +66,8 @@ public class Block {
     public Hash getStateRootHash() {
         return this.header.getStateRootHash();
     }
+
+    public int getTransactionsCount() { return this.header.getTransactionsCount(); }
 
     public Hash getTransactionRootHash() {
         return this.header.getTransactionsRootHash();

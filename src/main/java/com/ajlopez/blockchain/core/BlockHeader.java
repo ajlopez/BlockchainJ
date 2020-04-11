@@ -15,6 +15,7 @@ import java.util.Arrays;
 public class BlockHeader {
     private final long number;
     private final BlockHash parentHash;
+    private final int transactionsCount;
     private final Hash transactionsRootHash;
     private final Hash stateRootHash;
     private final long timestamp;
@@ -23,12 +24,13 @@ public class BlockHeader {
 
     private BlockHash hash;
 
-    public BlockHeader(long number, BlockHash parentHash, Hash transactionsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+    public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
         this.number = number;
         this.parentHash = parentHash == null ? BlockHash.EMPTY_BLOCK_HASH : parentHash;
+        this.transactionsCount = transactionsCount;
         this.transactionsRootHash = transactionsRootHash;
         this.stateRootHash = stateRootHash;
         this.timestamp = timestamp;
@@ -56,6 +58,8 @@ public class BlockHeader {
     public BlockHash getParentHash() {
         return this.parentHash;
     }
+
+    public int getTransactionsCount() { return this.transactionsCount; }
 
     public Hash getTransactionsRootHash() { return this.transactionsRootHash; }
 

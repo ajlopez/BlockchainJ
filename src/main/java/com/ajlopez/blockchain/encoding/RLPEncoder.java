@@ -37,8 +37,16 @@ public class RLPEncoder {
         return Difficulty.fromBytes(RLP.decode(data));
     }
 
+    public static byte[] encodeUnsignedInteger(int value) {
+        return RLP.encode(ByteUtils.unsignedIntegerToNormalizedBytes(value));
+    }
+
     public static byte[] encodeUnsignedLong(long value) {
         return RLP.encode(ByteUtils.unsignedLongToNormalizedBytes(value));
+    }
+
+    public static int decodeUnsignedInteger(byte[] data) {
+        return ByteUtils.bytesToUnsignedInteger(RLP.decode(data));
     }
 
     public static long decodeUnsignedLong(byte[] data) {
