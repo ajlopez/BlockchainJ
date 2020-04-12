@@ -61,4 +61,20 @@ public class MerkleTree {
 
         return HashUtils.calculateHash(bytes);
     }
+
+    public Hash[] getLeftHashes(int position) {
+        Hash[] leftHashes = new Hash[position];
+
+        System.arraycopy(this.hashes, 0, leftHashes, 0, leftHashes.length);
+
+        return leftHashes;
+    }
+
+    public Hash[] getRightHashes(int position) {
+        Hash[] rightHashes = new Hash[this.hashes.length - position - 1];
+
+        System.arraycopy(this.hashes, position + 1, rightHashes, 0, rightHashes.length);
+
+        return rightHashes;
+    }
 }

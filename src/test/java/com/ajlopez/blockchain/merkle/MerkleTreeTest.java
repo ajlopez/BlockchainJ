@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -99,5 +100,32 @@ public class MerkleTreeTest {
         Hash expected = HashUtils.calculateHash(ByteUtils.concatenate(node1.getHash().getBytes(), node2.getHash().getBytes()));
 
         Assert.assertEquals(expected, result);
+    }
+
+    @Test
+    public void getLeftAndRightHashes() {
+        Hash[] hashes = new Hash[16];
+
+        for (int k = 0; k < hashes.length; k++)
+            hashes[k] = FactoryHelper.createRandomHash();
+
+        MerkleTree merkleTree = MerkleTree.fromHashes(Arrays.asList(hashes));
+
+        for (int k = 0; k < hashes.length; k++) {
+            Hash[] leftHashes = merkleTree.getLeftHashes(k);
+            Hash[] rightHashes = merkleTree.getRightHashes(k);
+
+            Assert.assertNotNull(leftHashes);
+            Assert.assertNotNull(rightHashes);
+
+            Assert.assertEquals(k, leftHashes.length);
+            Assert.assertEquals(15 - k, rightHashes.length);
+
+            for (int j = 0; j < leftHashes.length; j++)
+                Assert.assertEquals(hashes[j], leftHashes[j]);
+
+            for (int j = 0; j < rightHashes.length; j++)
+                Assert.assertEquals(hashes[k + 1 + j], rightHashes[j]);
+        }
     }
 }
