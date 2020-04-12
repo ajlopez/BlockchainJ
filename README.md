@@ -93,6 +93,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Why are transaction tries in Ethereum not plain Merkle Tries?](https://ethereum.stackexchange.com/questions/66729/why-are-transaction-tries-in-ethereum-not-plain-merkle-tries)
 - [Replicate Ethereum’s mainnet in a development environment with Ganache’s forking feature](https://medium.com/@samajammin/how-to-interact-with-ethereums-mainnet-in-a-development-environment-with-ganache-3d8649df0876)
 - [Awesome Chaos Engineering](https://github.com/dastergon/awesome-chaos-engineering)
+- [Intro to Beam Sync](https://blog.ethereum.org/2019/12/30/eth1x-files-state-of-stateless-ethereum/)
 
 ## To Do
 
