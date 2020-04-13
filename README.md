@@ -94,6 +94,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Replicate Ethereum’s mainnet in a development environment with Ganache’s forking feature](https://medium.com/@samajammin/how-to-interact-with-ethereums-mainnet-in-a-development-environment-with-ganache-3d8649df0876)
 - [Awesome Chaos Engineering](https://github.com/dastergon/awesome-chaos-engineering)
 - [Intro to Beam Sync](https://blog.ethereum.org/2019/12/30/eth1x-files-state-of-stateless-ethereum/)
+- [An Ethereum Storage Decode tool](https://inuka.dev/an-ethereum-storage-decode-tool/)
+- [EVM Bytecode Merklization](https://medium.com/ewasm/evm-bytecode-merklization-2a8366ab0c90)
+- [Data from the Ethereum stateless prototype](https://medium.com/@akhounov/data-from-the-ethereum-stateless-prototype-8c69479c8abc)
 
 ## To Do
 
