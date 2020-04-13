@@ -77,4 +77,8 @@ public class MerkleTree {
 
         return rightHashes;
     }
+
+    public MerkleTree getNode(int position) {
+        return this.nodes[position];
+    }
 }

@@ -100,6 +100,9 @@ public class MerkleTreeTest {
         Hash expected = HashUtils.calculateHash(ByteUtils.concatenate(node1.getHash().getBytes(), node2.getHash().getBytes()));
 
         Assert.assertEquals(expected, result);
+
+        Assert.assertSame(node1, merkleTree.getNode(0));
+        Assert.assertSame(node2, merkleTree.getNode(1));
     }
 
     @Test
