@@ -44,6 +44,18 @@ public class MerkleTree {
         return this.nodes == null;
     }
 
+    public int size() {
+        if (this.isLeaf())
+            return this.hashes.length;
+
+        int size = 0;
+
+        for (int k = 0; k < this.nodes.length; k++)
+            size += this.nodes[k].size();
+
+        return size;
+    }
+
     public Hash getHash() {
         int nhashes = this.hashes.length;
 

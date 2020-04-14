@@ -21,6 +21,7 @@ public class MerkleTreeTest {
         MerkleTree merkleTree = new MerkleTree();
 
         Assert.assertTrue(merkleTree.isLeaf());
+        Assert.assertEquals(0, merkleTree.size());
     }
 
     @Test
@@ -50,6 +51,8 @@ public class MerkleTreeTest {
         Hash expected = HashUtils.calculateHash(hash.getBytes());
 
         Assert.assertEquals(expected, result);
+
+        Assert.assertEquals(1, merkleTree.size());
     }
 
     @Test
@@ -72,6 +75,8 @@ public class MerkleTreeTest {
         Hash expected = HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes()));
 
         Assert.assertEquals(expected, result);
+
+        Assert.assertEquals(2, merkleTree.size());
     }
 
     @Test
@@ -103,6 +108,8 @@ public class MerkleTreeTest {
 
         Assert.assertSame(node1, merkleTree.getNode(0));
         Assert.assertSame(node2, merkleTree.getNode(1));
+
+        Assert.assertEquals(2, merkleTree.size());
     }
 
     @Test
@@ -113,6 +120,8 @@ public class MerkleTreeTest {
             hashes[k] = FactoryHelper.createRandomHash();
 
         MerkleTree merkleTree = MerkleTree.fromHashes(Arrays.asList(hashes));
+
+        Assert.assertEquals(hashes.length, merkleTree.size());
 
         for (int k = 0; k < hashes.length; k++) {
             Hash[] leftHashes = merkleTree.getLeftHashes(k);
