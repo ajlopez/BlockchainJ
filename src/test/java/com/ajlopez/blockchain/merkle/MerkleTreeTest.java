@@ -22,6 +22,7 @@ public class MerkleTreeTest {
 
         Assert.assertTrue(merkleTree.isLeaf());
         Assert.assertEquals(0, merkleTree.size());
+        Assert.assertEquals(1, merkleTree.getDepth());
     }
 
     @Test
@@ -53,6 +54,7 @@ public class MerkleTreeTest {
         Assert.assertEquals(expected, result);
 
         Assert.assertEquals(1, merkleTree.size());
+        Assert.assertEquals(1, merkleTree.getDepth());
     }
 
     @Test
@@ -77,6 +79,7 @@ public class MerkleTreeTest {
         Assert.assertEquals(expected, result);
 
         Assert.assertEquals(2, merkleTree.size());
+        Assert.assertEquals(1, merkleTree.getDepth());
     }
 
     @Test
@@ -110,6 +113,7 @@ public class MerkleTreeTest {
         Assert.assertSame(node2, merkleTree.getNode(1));
 
         Assert.assertEquals(2, merkleTree.size());
+        Assert.assertEquals(2, merkleTree.getDepth());
     }
 
     @Test

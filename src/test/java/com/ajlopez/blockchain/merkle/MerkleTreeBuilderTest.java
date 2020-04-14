@@ -35,6 +35,7 @@ public class MerkleTreeBuilderTest {
         Assert.assertNotNull(merkleTree);
         Assert.assertTrue(merkleTree.isLeaf());
         Assert.assertEquals(0, merkleTree.size());
+        Assert.assertEquals(1, merkleTree.getDepth());
         Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, merkleTree.getHash());
     }
 
@@ -49,6 +50,7 @@ public class MerkleTreeBuilderTest {
         Assert.assertNotNull(merkleTree);
         Assert.assertTrue(merkleTree.isLeaf());
         Assert.assertEquals(1, merkleTree.size());
+        Assert.assertEquals(1, merkleTree.getDepth());
 
         Hash expected = HashUtils.calculateHash(hash.getBytes());
 
@@ -68,6 +70,7 @@ public class MerkleTreeBuilderTest {
         Assert.assertNotNull(merkleTree);
         Assert.assertTrue(merkleTree.isLeaf());
         Assert.assertEquals(2, merkleTree.size());
+        Assert.assertEquals(1, merkleTree.getDepth());
 
         Hash expected = HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes()));
 
@@ -89,6 +92,7 @@ public class MerkleTreeBuilderTest {
         Assert.assertNotNull(merkleTree);
         Assert.assertFalse(merkleTree.isLeaf());
         Assert.assertEquals(3, merkleTree.size());
+        Assert.assertEquals(2, merkleTree.getDepth());
 
         Hash expected = HashUtils.calculateHash(ByteUtils.concatenate(HashUtils.calculateHash(ByteUtils.concatenate(hash1.getBytes(), hash2.getBytes())).getBytes(), HashUtils.calculateHash(hash3.getBytes()).getBytes()));
 

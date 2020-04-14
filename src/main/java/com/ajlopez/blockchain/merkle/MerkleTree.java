@@ -56,6 +56,15 @@ public class MerkleTree {
         return size;
     }
 
+    public int getDepth() {
+        int depth = 1;
+
+        if (!this.isLeaf())
+            depth += this.nodes[0].getDepth();
+
+        return depth;
+    }
+
     public Hash getHash() {
         int nhashes = this.hashes.length;
 
