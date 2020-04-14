@@ -23,6 +23,7 @@ public class MerkleTreeTest {
         Assert.assertTrue(merkleTree.isLeaf());
         Assert.assertEquals(0, merkleTree.size());
         Assert.assertEquals(1, merkleTree.getDepth());
+        Assert.assertEquals(0, merkleTree.getArity());
     }
 
     @Test
@@ -55,6 +56,7 @@ public class MerkleTreeTest {
 
         Assert.assertEquals(1, merkleTree.size());
         Assert.assertEquals(1, merkleTree.getDepth());
+        Assert.assertEquals(1, merkleTree.getArity());
     }
 
     @Test
@@ -80,6 +82,7 @@ public class MerkleTreeTest {
 
         Assert.assertEquals(2, merkleTree.size());
         Assert.assertEquals(1, merkleTree.getDepth());
+        Assert.assertEquals(2, merkleTree.getArity());
     }
 
     @Test
@@ -114,6 +117,7 @@ public class MerkleTreeTest {
 
         Assert.assertEquals(2, merkleTree.size());
         Assert.assertEquals(2, merkleTree.getDepth());
+        Assert.assertEquals(1, merkleTree.getArity());
     }
 
     @Test
@@ -126,6 +130,8 @@ public class MerkleTreeTest {
         MerkleTree merkleTree = MerkleTree.fromHashes(Arrays.asList(hashes));
 
         Assert.assertEquals(hashes.length, merkleTree.size());
+        Assert.assertEquals(1, merkleTree.getDepth());
+        Assert.assertEquals(hashes.length, merkleTree.getArity());
 
         for (int k = 0; k < hashes.length; k++) {
             Hash[] leftHashes = merkleTree.getLeftHashes(k);
