@@ -97,6 +97,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [An Ethereum Storage Decode tool](https://inuka.dev/an-ethereum-storage-decode-tool/)
 - [EVM Bytecode Merklization](https://medium.com/ewasm/evm-bytecode-merklization-2a8366ab0c90)
 - [Data from the Ethereum stateless prototype](https://medium.com/@akhounov/data-from-the-ethereum-stateless-prototype-8c69479c8abc)
+- [State Rent Rough Proposal](https://github.com/ledgerwatch/eth_state/blob/58351eb8b70fa6031da1e23c1a77d982be677078/State_rent.pdf)
 
 ## To Do
 
