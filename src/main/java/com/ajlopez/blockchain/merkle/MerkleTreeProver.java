@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.merkle;
 import com.ajlopez.blockchain.core.types.Hash;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +30,30 @@ public class MerkleTreeProver {
         if (this.size == 1)
             return Collections.singletonList(new Pair<>(this.merkleTree.getLeftHashes(0), this.merkleTree.getRightHashes(0)));
 
-        return Collections.singletonList(new Pair<>(this.merkleTree.getLeftHashes(position), this.merkleTree.getRightHashes(position)));
+        List<Pair<Hash[], Hash[]>> list = new ArrayList<>();
+
+        MerkleTree mt = this.merkleTree;
+        int p = position;
+        int d = this.depth - 1;
+
+        while (true) {
+            int divisor = 1;
+
+            for (int k = 0; k < d; k++)
+                divisor *= this.arity;
+
+            int nnode = p / divisor;
+
+            list.add(new Pair<>(mt.getLeftHashes(nnode), mt.getRightHashes(nnode)));
+
+            if (d == 0)
+                break;
+
+            d--;
+            mt = mt.getNode(nnode);
+            p = p - nnode * divisor;
+        }
+
+        return list;
     }
 }

@@ -70,4 +70,41 @@ public class MerkleTreeProverTest {
         Assert.assertEquals(0, proof2.get(0).getValue().length);
         Assert.assertEquals(hash1, proof2.get(0).getKey()[0]);
     }
+
+    @Test
+    public void merkleTreeWithThreeHashesProof() {
+        Hash hash1 = FactoryHelper.createRandomHash();
+        Hash hash2 = FactoryHelper.createRandomHash();
+        Hash hash3 = FactoryHelper.createRandomHash();
+
+        MerkleTree merkleTree = new MerkleTreeBuilder()
+                .add(hash1)
+                .add(hash2)
+                .add(hash3)
+                .build();
+
+        MerkleTreeProver merkleTreeProver = new MerkleTreeProver(merkleTree);
+
+        List<Pair<Hash[], Hash[]>> proof1 = merkleTreeProver.getProof(0);
+
+        Assert.assertNotNull(proof1);
+        Assert.assertFalse(proof1.isEmpty());
+        Assert.assertEquals(2, proof1.size());
+        Assert.assertEquals(0, proof1.get(0).getKey().length);
+        Assert.assertEquals(0, proof1.get(0).getValue().length);
+        Assert.assertEquals(0, proof1.get(1).getKey().length);
+        Assert.assertEquals(1, proof1.get(1).getValue().length);
+        Assert.assertEquals(hash2, proof1.get(1).getValue()[0]);
+
+        List<Pair<Hash[], Hash[]>> proof2 = merkleTreeProver.getProof(1);
+
+        Assert.assertNotNull(proof2);
+        Assert.assertFalse(proof2.isEmpty());
+        Assert.assertEquals(2, proof1.size());
+        Assert.assertEquals(0, proof1.get(0).getKey().length);
+        Assert.assertEquals(0, proof1.get(0).getValue().length);
+        Assert.assertEquals(1, proof1.get(1).getKey().length);
+        Assert.assertEquals(0, proof1.get(1).getValue().length);
+        Assert.assertEquals(hash1, proof1.get(1).getKey()[0]);
+    }
 }
