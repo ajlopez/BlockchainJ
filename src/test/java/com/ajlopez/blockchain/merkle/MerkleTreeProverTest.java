@@ -91,7 +91,7 @@ public class MerkleTreeProverTest {
         Assert.assertFalse(proof1.isEmpty());
         Assert.assertEquals(2, proof1.size());
         Assert.assertEquals(0, proof1.get(0).getKey().length);
-        Assert.assertEquals(0, proof1.get(0).getValue().length);
+        Assert.assertEquals(1, proof1.get(0).getValue().length);
         Assert.assertEquals(0, proof1.get(1).getKey().length);
         Assert.assertEquals(1, proof1.get(1).getValue().length);
         Assert.assertEquals(hash2, proof1.get(1).getValue()[0]);
@@ -100,11 +100,21 @@ public class MerkleTreeProverTest {
 
         Assert.assertNotNull(proof2);
         Assert.assertFalse(proof2.isEmpty());
-        Assert.assertEquals(2, proof1.size());
-        Assert.assertEquals(0, proof1.get(0).getKey().length);
-        Assert.assertEquals(0, proof1.get(0).getValue().length);
-        Assert.assertEquals(1, proof1.get(1).getKey().length);
-        Assert.assertEquals(0, proof1.get(1).getValue().length);
-        Assert.assertEquals(hash1, proof1.get(1).getKey()[0]);
+        Assert.assertEquals(2, proof2.size());
+        Assert.assertEquals(0, proof2.get(0).getKey().length);
+        Assert.assertEquals(1, proof2.get(0).getValue().length);
+        Assert.assertEquals(1, proof2.get(1).getKey().length);
+        Assert.assertEquals(0, proof2.get(1).getValue().length);
+        Assert.assertEquals(hash1, proof2.get(1).getKey()[0]);
+
+        List<Pair<Hash[], Hash[]>> proof3 = merkleTreeProver.getProof(2);
+
+        Assert.assertNotNull(proof3);
+        Assert.assertFalse(proof3.isEmpty());
+        Assert.assertEquals(2, proof3.size());
+        Assert.assertEquals(1, proof3.get(0).getKey().length);
+        Assert.assertEquals(0, proof3.get(0).getValue().length);
+        Assert.assertEquals(0, proof3.get(1).getKey().length);
+        Assert.assertEquals(0, proof3.get(1).getValue().length);
     }
 }
