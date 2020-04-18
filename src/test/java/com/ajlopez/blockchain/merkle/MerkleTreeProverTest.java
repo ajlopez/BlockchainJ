@@ -29,6 +29,7 @@ public class MerkleTreeProverTest {
         MerkleTree merkleTree = new MerkleTreeBuilder()
                 .add(hash)
                 .build();
+
         MerkleTreeProver merkleTreeProver = new MerkleTreeProver(merkleTree);
 
         List<Pair<Hash[], Hash[]>> proof = merkleTreeProver.getProof(0);
@@ -38,6 +39,8 @@ public class MerkleTreeProverTest {
         Assert.assertEquals(1, proof.size());
         Assert.assertEquals(0, proof.get(0).getKey().length);
         Assert.assertEquals(0, proof.get(0).getValue().length);
+
+        Assert.assertEquals(merkleTree.getHash(), MerkleTreeProver.calculateHash(hash, proof));
     }
 
     @Test
@@ -61,6 +64,8 @@ public class MerkleTreeProverTest {
         Assert.assertEquals(1, proof1.get(0).getValue().length);
         Assert.assertEquals(hash2, proof1.get(0).getValue()[0]);
 
+        Assert.assertEquals(merkleTree.getHash(), MerkleTreeProver.calculateHash(hash1, proof1));
+
         List<Pair<Hash[], Hash[]>> proof2 = merkleTreeProver.getProof(1);
 
         Assert.assertNotNull(proof2);
@@ -69,6 +74,8 @@ public class MerkleTreeProverTest {
         Assert.assertEquals(1, proof2.get(0).getKey().length);
         Assert.assertEquals(0, proof2.get(0).getValue().length);
         Assert.assertEquals(hash1, proof2.get(0).getKey()[0]);
+
+        Assert.assertEquals(merkleTree.getHash(), MerkleTreeProver.calculateHash(hash2, proof2));
     }
 
     @Test
@@ -96,6 +103,8 @@ public class MerkleTreeProverTest {
         Assert.assertEquals(1, proof1.get(1).getValue().length);
         Assert.assertEquals(hash2, proof1.get(1).getValue()[0]);
 
+        Assert.assertEquals(merkleTree.getHash(), MerkleTreeProver.calculateHash(hash1, proof1));
+
         List<Pair<Hash[], Hash[]>> proof2 = merkleTreeProver.getProof(1);
 
         Assert.assertNotNull(proof2);
@@ -107,6 +116,8 @@ public class MerkleTreeProverTest {
         Assert.assertEquals(0, proof2.get(1).getValue().length);
         Assert.assertEquals(hash1, proof2.get(1).getKey()[0]);
 
+        Assert.assertEquals(merkleTree.getHash(), MerkleTreeProver.calculateHash(hash2, proof2));
+
         List<Pair<Hash[], Hash[]>> proof3 = merkleTreeProver.getProof(2);
 
         Assert.assertNotNull(proof3);
@@ -116,5 +127,27 @@ public class MerkleTreeProverTest {
         Assert.assertEquals(0, proof3.get(0).getValue().length);
         Assert.assertEquals(0, proof3.get(1).getKey().length);
         Assert.assertEquals(0, proof3.get(1).getValue().length);
+
+        Assert.assertEquals(merkleTree.getHash(), MerkleTreeProver.calculateHash(hash3, proof3));
+    }
+
+    @Test
+    public void proveMerkleTreeWithSixtheenHashes() {
+        Hash[] hashes = new Hash[16];
+        MerkleTreeBuilder merkleTreeBuilder = new MerkleTreeBuilder();
+
+        for (int k = 0; k < hashes.length; k++) {
+            hashes[k] = FactoryHelper.createRandomHash();
+            merkleTreeBuilder.add(hashes[k]);
+        }
+
+        MerkleTree merkleTree = merkleTreeBuilder.build();
+
+        MerkleTreeProver merkleTreeProver = new MerkleTreeProver(merkleTree);
+
+        Hash rootHash = merkleTree.getHash();
+
+        for (int k = 0; k < hashes.length; k++)
+            Assert.assertEquals(rootHash, MerkleTreeProver.calculateHash(hashes[k], merkleTreeProver.getProof(k)));
     }
 }

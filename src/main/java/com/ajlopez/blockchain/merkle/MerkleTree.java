@@ -93,6 +93,10 @@ public class MerkleTree {
     public Hash[] getLeftHashes(int position) {
         Hash[] leftHashes = new Hash[position];
 
+        if (this.hashes[0] == null)
+            for (int k = 0; k < this.hashes.length; k++)
+                this.hashes[k] = this.nodes[k].getHash();
+
         System.arraycopy(this.hashes, 0, leftHashes, 0, leftHashes.length);
 
         return leftHashes;
@@ -100,6 +104,10 @@ public class MerkleTree {
 
     public Hash[] getRightHashes(int position) {
         Hash[] rightHashes = new Hash[this.hashes.length - position - 1];
+
+        if (this.hashes[0] == null)
+            for (int k = 0; k < this.hashes.length; k++)
+                this.hashes[k] = this.nodes[k].getHash();
 
         System.arraycopy(this.hashes, position + 1, rightHashes, 0, rightHashes.length);
 
