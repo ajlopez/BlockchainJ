@@ -23,7 +23,6 @@ public class Trie {
     private TrieStore store;
 
     private Hash hash;
-    private byte[] encoded;
     private boolean saved;
 
     public Trie() {}
@@ -159,9 +158,6 @@ public class Trie {
     }
 
     public byte[] getEncoded() {
-        if (this.encoded != null)
-            return this.encoded;
-
         int valsizebytes = 0;
         int valbytes = 0;
 
@@ -220,11 +216,7 @@ public class Trie {
             System.arraycopy(this.sharedKey, 0, bytes, skOffset, skbytes);
         }
 
-        // subnodes hashes
-
-        this.encoded = bytes;
-
-        return this.encoded;
+        return bytes;
     }
 
     public void save() throws IOException {
