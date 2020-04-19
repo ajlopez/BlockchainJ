@@ -45,3 +45,6 @@ classes/
 *.data
 *.values
 *.keys
+
+trietest*.txt
+

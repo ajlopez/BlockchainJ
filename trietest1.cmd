@@ -1,0 +1,10 @@
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 10 --csv > trietest1.txt
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 20 --csv >> trietest1.txt
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 30 --csv >> trietest1.txt
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 40 --csv >> trietest1.txt
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 50 --csv >> trietest1.txt
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 60 --csv >> trietest1.txt
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 70 --csv >> trietest1.txt
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 80 --csv >> trietest1.txt
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 90 --csv >> trietest1.txt
+java -cp build\libs\all-in-one-jar-1.0-SNAPSHOT.jar -Xms4g com.ajlopez.blockchain.TrieMemoryPerformance 1048576 32 100 --csv >> trietest1.txt

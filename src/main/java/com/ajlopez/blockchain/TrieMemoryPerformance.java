@@ -15,11 +15,15 @@ public class TrieMemoryPerformance {
     public static void main(String[] args) throws IOException {
         ArgumentsProcessor argumentsProcessor = new ArgumentsProcessor();
 
+        argumentsProcessor.defineBoolean("c", "csv", false);
+
         argumentsProcessor.processArguments(args);
 
         int noValues = argumentsProcessor.getInteger(0);
         int keySize = argumentsProcessor.getInteger(1);
         int valueSize = argumentsProcessor.getInteger(2);
+
+        boolean dumpCSV = argumentsProcessor.getBoolean("csv");
 
         CollectedData collectedData = new CollectedData();
 
@@ -61,6 +65,13 @@ public class TrieMemoryPerformance {
 
         collectedData.hashTime = System.currentTimeMillis() - millis2;
 
+        if (dumpCSV)
+            dumpCollectedDataAsCsv(collectedData);
+        else
+            dumpCollectedData(collectedData);
+    }
+
+    private static void dumpCollectedData(CollectedData collectedData) {
         System.out.println("No values: " + collectedData.noValues);
         System.out.println("Key size: " + collectedData.keySize);
         System.out.println("Value size: " + collectedData.valueSize);
@@ -73,6 +84,18 @@ public class TrieMemoryPerformance {
         System.out.println("Hash time (ms): " + collectedData.hashTime);
 
         System.out.println("Trie size (nodes): " + collectedData.trieSize);
+    }
+
+    private static void dumpCollectedDataAsCsv(CollectedData collectedData) {
+        System.out.println("" + collectedData.noValues + "," +
+                collectedData.keySize + "," +
+                collectedData.valueSize + "," +
+                collectedData.megaBytesBefore + "," +
+                collectedData.megaBytesAfter + "," +
+                collectedData.megaBytesAfterGC + "," +
+                collectedData.creationTime + "," +
+                collectedData.hashTime + "," +
+                collectedData.trieSize);
     }
 
     private static byte[] createRandomBytes(int length) {
