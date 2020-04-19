@@ -45,6 +45,41 @@ public class ArgumentsProcessorTest {
     }
 
     @Test
+    public void defineStringProcessArgumentsAndGetValueAndWithPositionalArgument() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.defineString("p", "peer", "localhost:3000");
+
+        processor.processArguments(new String[] { "save", "--peer", "localhost:4000" });
+
+        String result = processor.getString("peer");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("localhost:4000", result);
+
+        String verb = processor.getString(0);
+
+        Assert.assertNotNull(verb);
+        Assert.assertEquals("save", verb);
+    }
+
+    @Test
+    public void getTwoPositionalArguments() {
+        ArgumentsProcessor processor = new ArgumentsProcessor();
+
+        processor.processArguments(new String[] { "save", "42" });
+
+        String verb = processor.getString(0);
+
+        Assert.assertNotNull(verb);
+        Assert.assertEquals("save", verb);
+
+        int value = processor.getInteger(1);
+
+        Assert.assertEquals(42, value);
+    }
+
+    @Test
     public void defineStringProcessArgumentWithShortNameAndGetValue() {
         ArgumentsProcessor processor = new ArgumentsProcessor();
 

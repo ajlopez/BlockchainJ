@@ -6,10 +6,12 @@ import java.util.*;
  * Created by ajlopez on 25/11/2018.
  */
 public class ArgumentsProcessor {
-    private Map<String, String> values = new HashMap();
-    private Map<String, Object> defaults = new HashMap<>();
-    private Map<String, String> shortNames = new HashMap<>();
-    private Set<String> booleans = new HashSet<>();
+    private final Map<String, String> values = new HashMap();
+    private final Map<Integer, String> pvalues = new HashMap();
+
+    private final Map<String, Object> defaults = new HashMap<>();
+    private final Map<String, String> shortNames = new HashMap<>();
+    private final Set<String> booleans = new HashSet<>();
 
     public void defineString(String shortName, String fullName, String defaultValue) {
         this.defaults.put(fullName, defaultValue);
@@ -33,6 +35,9 @@ public class ArgumentsProcessor {
     }
 
     public void processArguments(String[] args) {
+        values.clear();
+        pvalues.clear();
+
         for (int k = 0; k < args.length; k++) {
             String arg = args[k];
 
@@ -58,6 +63,8 @@ public class ArgumentsProcessor {
 
                 continue;
             }
+
+            this.pvalues.put(this.pvalues.size(), arg);
         }
     }
 
@@ -68,11 +75,19 @@ public class ArgumentsProcessor {
         return (String)this.defaults.get(name);
     }
 
+    public String getString(int position) {
+        return (String)this.pvalues.get(position);
+    }
+
     public int getInteger(String name) {
         if (this.values.containsKey(name))
             return Integer.parseInt(this.values.get(name));
 
         return (int)this.defaults.get(name);
+    }
+
+    public int getInteger(int position) {
+        return Integer.parseInt(this.pvalues.get(position));
     }
 
     public boolean getBoolean(String name) {
