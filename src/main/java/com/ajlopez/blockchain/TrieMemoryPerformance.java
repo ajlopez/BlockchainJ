@@ -47,17 +47,11 @@ public class TrieMemoryPerformance {
         collectedData.creationTime = System.currentTimeMillis() - millis;
         collectedData.trieSize = trie.nodesSize();
 
-        // System.out.println("Creation time (ms): " + millis);
-
-        // System.out.println("Trie size (nodes): " + trie.nodesSize());
-
         collectedData.megaBytesAfter = (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
-        // System.out.println("MB after: " + (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024));
 
         System.gc();
 
         collectedData.megaBytesAfterGC = (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
-        //System.out.println("MB after gc: " + (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024));
 
         long millis2 = System.currentTimeMillis();
 

@@ -101,6 +101,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Ethereum Series — Understanding Nonce](https://medium.com/swlh/ethereum-series-understanding-nonce-3858194b39bf)
 - [What are the -Xms and -Xmx parameters when starting JVM?](https://stackoverflow.com/questions/14763079/what-are-the-xms-and-xmx-parameters-when-starting-jvm)
 - [Java Xmx and Various Memory Management Options in Java](https://www.udemy.com/blog/java-xmx/)
+- [Account Abstraction, Stateless Mining Eth1.x/Eth 2 Implementation, Rationale Document](https://hackmd.io/y7uhNbeuSziYn1bbSXt4ww?view)
 
 ## To Do
 

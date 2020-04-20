@@ -15,6 +15,8 @@ public class BloomTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
+    private Random random = new Random();
+
     @Test
     public void createEmptyBloom() {
         Bloom bloom = new Bloom();
@@ -87,6 +89,25 @@ public class BloomTest {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("Invalid bloom element");
         bloom.add(-1);
+    }
+
+    @Test
+    public void createAndCopyBloom() {
+        Bloom bloom = new Bloom();
+
+        for (int k = 0; k < 100; k++)
+            bloom.add(random.nextInt(Bloom.BLOOM_BITS));
+
+        Bloom bloom2 = new Bloom(bloom.getBytes());
+
+        Assert.assertTrue(bloom.include(bloom2));
+        Assert.assertTrue(bloom2.include(bloom));
+
+        for (int k = 0; k < 100; k++)
+            bloom.add(random.nextInt(Bloom.BLOOM_BITS));
+
+        Assert.assertTrue(bloom.include(bloom2));
+        Assert.assertFalse(bloom2.include(bloom));
     }
 
     @Test

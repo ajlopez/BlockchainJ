@@ -12,6 +12,10 @@ public class Bloom {
     public Bloom() {
     }
 
+    public Bloom(byte[] data) {
+        System.arraycopy(data, 0, this.data, 0, BLOOM_BYTES);
+    }
+
     public int size() {
         int count = 0;
 
@@ -50,5 +54,9 @@ public class Bloom {
                 return false;
 
         return true;
+    }
+
+    public byte[] getBytes() {
+        return this.data;
     }
 }
