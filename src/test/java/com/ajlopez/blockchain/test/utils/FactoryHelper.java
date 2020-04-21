@@ -315,4 +315,13 @@ public class FactoryHelper {
 
         return new BlockHeader(1L, hash, 0, transactionsHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty);
     }
+
+    public static Bloom createRandomBloom(int npositives) {
+        Bloom bloom = new Bloom();
+
+        for (int k = 0; k < npositives; k++)
+            bloom.add(random.nextInt(Bloom.BLOOM_BITS));
+
+        return bloom;
+    }
 }
