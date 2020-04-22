@@ -38,4 +38,56 @@ public class BloomEncoderTest {
         Assert.assertEquals(bloom.size(), result.size());
         Assert.assertArrayEquals(bloom.getBytes(), result.getBytes());
     }
+
+    @Test
+    public void encodeEmptyBloomUsingNonZeroAlgorithm() {
+        Bloom bloom = new Bloom();
+
+        byte[] encoded = BloomEncoder.encodeNonZero(bloom);
+
+        Assert.assertNotNull(encoded);
+        Assert.assertEquals(0, encoded.length);
+    }
+
+    @Test
+    public void encodeBloomSizeOneUsingNonZeroAlgorithm() {
+        Bloom bloom = new Bloom();
+        bloom.add(2);
+
+        byte[] encoded = BloomEncoder.encodeNonZero(bloom);
+
+        Assert.assertNotNull(encoded);
+        Assert.assertEquals(2, encoded.length);
+        Assert.assertEquals(0, encoded[0]);
+        Assert.assertEquals(32, encoded[1]);
+    }
+
+    @Test
+    public void encodeBloomSizeOneLastBitUsingNonZeroAlgorithm() {
+        Bloom bloom = new Bloom();
+        bloom.add(Bloom.BLOOM_BITS - 1);
+
+        byte[] encoded = BloomEncoder.encodeNonZero(bloom);
+
+        Assert.assertNotNull(encoded);
+        Assert.assertEquals(2, encoded.length);
+        Assert.assertEquals(Bloom.BLOOM_BYTES - 1, encoded[0] & 0xff);
+        Assert.assertEquals(1, encoded[1]);
+    }
+
+    @Test
+    public void encodeBloomSizeTwoUsingNonZeroAlgorithm() {
+        Bloom bloom = new Bloom();
+        bloom.add(2);
+        bloom.add(10);
+
+        byte[] encoded = BloomEncoder.encodeNonZero(bloom);
+
+        Assert.assertNotNull(encoded);
+        Assert.assertEquals(4, encoded.length);
+        Assert.assertEquals(0, encoded[0]);
+        Assert.assertEquals(32, encoded[1]);
+        Assert.assertEquals(1, encoded[2]);
+        Assert.assertEquals(32, encoded[3]);
+    }
 }
