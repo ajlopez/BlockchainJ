@@ -38,4 +38,22 @@ public class BloomEncoder {
 
         return Arrays.copyOf(nonzero, n);
     }
+
+    public static Bloom decodeNonZero(byte[] encoded) {
+        Bloom bloom = new Bloom();
+
+        for (int k = 0; k < encoded.length; k += 2) {
+            int position = encoded[k] & 0xff;
+            int values = encoded[k + 1] & 0xff;
+
+            for (int j = 0; j < 8; j++) {
+                if ((values & 0x80) != 0)
+                    bloom.add(position * 8 + j);
+
+                values <<= 1;
+            }
+        }
+
+        return bloom;
+    }
 }
