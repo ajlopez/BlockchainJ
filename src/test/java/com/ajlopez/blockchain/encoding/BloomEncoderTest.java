@@ -44,6 +44,25 @@ public class BloomEncoderTest {
     }
 
     @Test
+    public void encodeDecodeRandomBlooms() {
+        for (int k = 0; k < 1000; k++) {
+            Bloom bloom = FactoryHelper.createRandomBloom(random.nextInt(Bloom.BLOOM_BITS));
+
+            byte[] encoded = BloomEncoder.encode(bloom);
+
+            Assert.assertNotNull(encoded);
+
+            Bloom result = BloomEncoder.decode(encoded);
+
+            Assert.assertNotNull(result);
+            Assert.assertEquals(bloom.size(), result.size());
+            Assert.assertTrue(bloom.include(result));
+            Assert.assertTrue(result.include(bloom));
+            Assert.assertArrayEquals(bloom.getBytes(), result.getBytes());
+        }
+    }
+
+    @Test
     public void encodeEmptyBloomUsingNonZeroAlgorithm() {
         Bloom bloom = new Bloom();
 

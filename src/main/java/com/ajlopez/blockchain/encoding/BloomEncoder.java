@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.types.Bloom;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -16,11 +17,20 @@ public class BloomEncoder {
     }
 
     public static byte[] encode(Bloom bloom) {
-        return RLP.encode(bloom.getBytes());
+        byte[] bytes = bloom.getBytes();
+        byte[] bytes2 = encodeNonZero(bloom);
+
+        if (bytes2.length < Bloom.BLOOM_BYTES)
+            return RLP.encode(bytes2);
+
+        return RLP.encode(bytes);
     }
 
     public static Bloom decode(byte[] encoded) {
         byte[] bytes = RLP.decode(encoded);
+
+        if (bytes.length < Bloom.BLOOM_BYTES)
+            return decodeNonZero(bytes);
 
         return new Bloom(bytes);
     }
