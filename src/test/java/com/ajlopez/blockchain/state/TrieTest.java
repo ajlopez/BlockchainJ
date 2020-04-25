@@ -45,12 +45,8 @@ public class TrieTest {
         byte[] encoded = trie.getEncoded();
 
         Assert.assertNotNull(encoded);
-        Assert.assertEquals(6, encoded.length);
-
-        byte[] expected = new byte[6];
-        expected[1] = 16; // arity
-
-        Assert.assertArrayEquals(expected, encoded);
+        Assert.assertEquals(1, encoded.length);
+        Assert.assertEquals(0, encoded[0]);
     }
 
     @Test
@@ -150,13 +146,11 @@ public class TrieTest {
         byte[] encoded = trie.getEncoded();
 
         Assert.assertNotNull(encoded);
-        Assert.assertEquals(6 + Integer.BYTES + 32, encoded.length);
+        Assert.assertEquals(1 + value.length, encoded.length);
 
-        byte[] expected = new byte[6 + Integer.BYTES + 32];
-        expected[1] = 16; // arity
-        expected[2] = Integer.BYTES; // value length in bytes
-        expected[9] = 32; // value length in bytes[5..8]
-        System.arraycopy(value, 0, expected, 10, value.length);
+        byte[] expected = new byte[1 + value.length];
+        expected[0] |= Trie.HAS_VALUE_FLAG;
+        System.arraycopy(value, 0, expected, 1, value.length);
 
         Assert.assertArrayEquals(expected, encoded);
     }
@@ -173,14 +167,19 @@ public class TrieTest {
         byte[] encoded = trie.getEncoded();
 
         Assert.assertNotNull(encoded);
-        Assert.assertEquals(4 + Short.BYTES + HashUtils.HASH_BYTES * 2 + Short.BYTES + 1, encoded.length);
+        Assert.assertEquals(1 + Short.BYTES + HashUtils.HASH_BYTES * 2 + 1 + 1, encoded.length);
 
-        byte[] firstexpected = new byte[6];
-        firstexpected[1] = 16; // arity
-        firstexpected[3] = 2; // shared key length bytes
-        firstexpected[5] = 2 | 4; // two subnodes
+        byte[] expected = new byte[1 + Short.BYTES + HashUtils.HASH_BYTES * 2 + 1 + 1];
+        Hash[] subhashes = trie.getSubHashes();
+        expected[0] |= Trie.HAS_NODES_FLAG;
+        expected[0] |= Trie.HAS_SHARED_KEY_FLAG;
+        expected[2] = 0x06;
+        System.arraycopy(subhashes[1].getBytes(), 0, expected, 1 + Short.BYTES, Hash.HASH_BYTES);
+        System.arraycopy(subhashes[2].getBytes(), 0, expected, 1 + Short.BYTES + Hash.HASH_BYTES, Hash.HASH_BYTES);
+        expected[1 + Short.BYTES + Hash.HASH_BYTES * 2] = 1;
+        expected[1 + Short.BYTES + Hash.HASH_BYTES * 2 + 1] = 0;
 
-        Assert.assertArrayEquals(firstexpected, Arrays.copyOfRange(encoded, 0, 6));
+        Assert.assertArrayEquals(expected, encoded);
     }
 
     @Test
@@ -278,8 +277,7 @@ public class TrieTest {
 
     @Test
     public void retrieveTrieFromEncodedTrieWithValue() throws IOException {
-        byte[] value = new byte[32];
-        random.nextBytes(value);
+        byte[] value = FactoryHelper.createRandomBytes(32);
         byte[] key = new byte[0];
         Trie trie = new Trie().put(key, value);
 

@@ -13,6 +13,9 @@ import java.util.Arrays;
  */
 public class Trie {
     public static final Hash EMPTY_TRIE_HASH = new Trie().getHash();
+    public static final int HAS_NODES_FLAG = 1;
+    public static final int HAS_VALUE_FLAG = 2;
+    public static final int HAS_SHARED_KEY_FLAG = 4;
     public static final int ARITY = 16;
 
     private byte[] value;
@@ -158,63 +161,54 @@ public class Trie {
     }
 
     public byte[] getEncoded() {
-        int valsizebytes = 0;
+        boolean hasvalue = false;
         int valbytes = 0;
 
         if (this.value != null && this.value.length > 0) {
-            valsizebytes = Integer.BYTES;
             valbytes = this.value.length;
+            hasvalue = true;
         }
 
+        boolean hassk = false;
         int sksizebytes = 0;
         int skbytes = 0;
 
         if (this.sharedKeyLength > 0) {
-            sksizebytes = Short.BYTES;
+            sksizebytes = 1;
             skbytes = this.sharedKey.length;
+            hassk = true;
         }
 
         int nsubnodes = this.getSubNodesCount();
 
-        int prefixLength = 1 + 1 + 1 + 1;
-        int hashBitsOffset = prefixLength;
-        int hashesOffset = hashBitsOffset + Short.BYTES;
-        int valueSizeOffset = hashesOffset + Hash.HASH_BYTES * nsubnodes;
-        int valueOffset = valueSizeOffset + valsizebytes;
-        int skSizeOffset = valueOffset + valbytes;
-        int skOffset = skSizeOffset + sksizebytes;
-        int bsize = skOffset + skbytes;
+        boolean hasnodes = nsubnodes > 0;
+
+        int bsize = 1 + (hasnodes ? Short.BYTES : 0) + nsubnodes * Hash.HASH_BYTES + sksizebytes + skbytes + valbytes;
 
         byte[] bytes = new byte[bsize];
 
-        getSubNodes(bytes, 1 + 1 + 1 + 1);
+        if (hasnodes)
+            bytes[0] |= HAS_NODES_FLAG;
+        if (hasvalue)
+            bytes[0] |= HAS_VALUE_FLAG;
+        if (hassk)
+            bytes[0] |= HAS_SHARED_KEY_FLAG;
 
-        // byte[0] version == 0
+        int offset = 1;
 
-        // arity
-        bytes[1] = ARITY;
-
-        // value size
-
-        bytes[2] = (byte)valsizebytes;
-
-        // shared key size
-
-        bytes[3] = (byte)sksizebytes;
-
-        // value encoding
-
-        if (valsizebytes > 0) {
-            System.arraycopy(ByteUtils.unsignedIntegerToBytes(valbytes), 0, bytes, valueSizeOffset, valsizebytes);
-            System.arraycopy(this.value, 0, bytes, valueOffset, valbytes);
+        if (hasnodes) {
+            this.getSubNodes(bytes, offset);
+            offset += Short.BYTES + nsubnodes * Hash.HASH_BYTES;
         }
 
-        // shared key encoding
-
-        if (sksizebytes > 0) {
-            System.arraycopy(ByteUtils.unsignedShortToBytes(this.sharedKeyLength), 0, bytes, skSizeOffset, sksizebytes);
-            System.arraycopy(this.sharedKey, 0, bytes, skOffset, skbytes);
+        if (hassk) {
+            bytes[offset++] = (byte)this.sharedKeyLength;
+            System.arraycopy(this.sharedKey, 0, bytes, offset, this.sharedKey.length);
+            offset += this.sharedKey.length;
         }
+
+        if (hasvalue)
+            System.arraycopy(this.value, 0, bytes, offset, this.value.length);
 
         return bytes;
     }
@@ -241,45 +235,47 @@ public class Trie {
     }
 
     public static Trie fromEncoded(byte[] bytes, TrieStore store) {
-        short valsizebytes = bytes[2];
-        short sksizebytes = bytes[3];
-
-        int subnodes = ByteUtils.bytesToUnsignedShort(bytes, 4);
-
-        if (subnodes == 0 && valsizebytes == 0 && sksizebytes == 0)
-            return new Trie(store);
-
-        Hash[] hashes = new Hash[ARITY];
-        int h = 0;
-
-        for (int k = 0; k < ARITY; k++) {
-            if ((subnodes & (1 << k)) == 0)
-                continue;
-
-            byte[] bhash = new byte[HashUtils.HASH_BYTES];
-            System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h, bhash, 0, HashUtils.HASH_BYTES);
-            hashes[k] = new Hash(bhash);
-
-            h++;
-        }
+        byte flags = bytes[0];
 
         byte[] value = null;
-        int lvalue = 0;
         byte[] sharedKey = null;
         int sharedKeyLength = 0;
+        Hash[] hashes = null;
 
-        if (valsizebytes > 0) {
-            lvalue = ByteUtils.bytesToUnsignedInteger(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h);
+        int offset = 1;
 
-            value = new byte[lvalue];
-            System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes, value, 0, lvalue);
+        if ((flags & HAS_NODES_FLAG) == HAS_NODES_FLAG) {
+            int subnodes = ByteUtils.bytesToUnsignedShort(bytes, offset);
+            offset += Short.BYTES;
+
+            hashes = new Hash[ARITY];
+            int h = 0;
+
+            for (int k = 0; k < ARITY; k++) {
+                if ((subnodes & (1 << k)) == 0)
+                    continue;
+
+                byte[] bhash = new byte[HashUtils.HASH_BYTES];
+                System.arraycopy(bytes, offset, bhash, 0, HashUtils.HASH_BYTES);
+                offset += Hash.HASH_BYTES;
+                hashes[k] = new Hash(bhash);
+
+                h++;
+            }
         }
 
-        if (sksizebytes > 0) {
-            sharedKeyLength = ByteUtils.bytesToUnsignedShort(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h + valsizebytes + lvalue);
+        if ((flags & HAS_SHARED_KEY_FLAG) == HAS_SHARED_KEY_FLAG) {
+            sharedKeyLength = bytes[offset++] & 0xff;
+            int lsk = (sharedKeyLength + 1) / 2;
+            sharedKey = new byte[lsk];
+            System.arraycopy(bytes, offset, sharedKey, 0, lsk);
+            offset += lsk;
+        }
 
-            sharedKey = new byte[(sharedKeyLength + 1) / 2];
-            System.arraycopy(bytes, 4 + Short.BYTES + HashUtils.HASH_BYTES * h  + valsizebytes + lvalue + sksizebytes, sharedKey, 0, sharedKey.length);
+        if ((flags & HAS_VALUE_FLAG) == HAS_VALUE_FLAG) {
+            int lvalue = bytes.length - offset;
+            value = new byte[lvalue];
+            System.arraycopy(bytes, offset, value, 0, lvalue);
         }
 
         return new Trie(null, hashes, value, sharedKey, sharedKeyLength, store);
