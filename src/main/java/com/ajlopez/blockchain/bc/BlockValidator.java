@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.bc;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.BlockExecutor;
-import com.ajlopez.blockchain.state.Trie;
 
 import java.io.IOException;
 
@@ -18,8 +17,13 @@ public class BlockValidator {
     }
 
     public boolean isValid(Block block) {
-        if (!Block.calculateTransactionsRootHash(block.getTransactions()).equals(block.getTransactionRootHash()))
+        if (block.getTransactions().size() != block.getHeader().getTransactionsCount())
             return false;
+
+        if (!Block.calculateTransactionsRootHash(block.getTransactions()).equals(block.getTransactionsRootHash()))
+            return false;
+
+        // TODO validate uncles
 
         return true;
     }

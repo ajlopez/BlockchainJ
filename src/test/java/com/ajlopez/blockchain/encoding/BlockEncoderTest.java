@@ -97,6 +97,8 @@ public class BlockEncoderTest {
         Assert.assertEquals(2, result.getTransactionsCount());
         Assert.assertNotNull(result.getTransactions());
         Assert.assertEquals(2, result.getTransactions().size());
+        Assert.assertEquals(0, result.getUnclesCount());
+        Assert.assertEquals(block.getUnclesRootHash(), result.getUnclesRootHash());
 
         Assert.assertEquals(tx1.getSender(), result.getTransactions().get(0).getSender());
         Assert.assertEquals(tx1.getReceiver(), result.getTransactions().get(0).getReceiver());
@@ -136,8 +138,10 @@ public class BlockEncoderTest {
         Assert.assertEquals(block.getNumber(), result.getNumber());
         Assert.assertEquals(block.getParentHash(), result.getParentHash());
         Assert.assertEquals(0, result.getTransactionsCount());
+        Assert.assertEquals(block.getTransactionsRootHash(), result.getTransactionsRootHash());
         Assert.assertNotNull(result.getUncles());
         Assert.assertEquals(2, result.getUncles().size());
+        Assert.assertEquals(block.getUnclesRootHash(), result.getUnclesRootHash());
 
         Assert.assertEquals(uncle1, result.getUncles().get(0));
         Assert.assertEquals(uncle2, result.getUncles().get(1));

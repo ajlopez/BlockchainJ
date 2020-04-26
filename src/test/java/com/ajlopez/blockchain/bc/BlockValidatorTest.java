@@ -76,15 +76,35 @@ public class BlockValidatorTest {
     }
 
     @Test
-    public void invalidBlockWithInvalidTransactionsRoot() throws IOException {
+    public void invalidBlockWithInvalidTransactionsRoot() {
         Transaction transaction = FactoryHelper.createTransaction(1000);
         Transaction transaction2 = FactoryHelper.createTransaction(2000);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
+        List<Transaction> transactions2 = new ArrayList<>();
+        transactions2.add(transaction2);
 
         Block block0 = new Block(1, FactoryHelper.createRandomBlockHash(), null, transactions, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
-        transactions.add(transaction2);
-        Block block = new Block(block0.getHeader(), null, transactions);
+        Block block = new Block(block0.getHeader(), null, transactions2);
+
+        BlockValidator blockValidator = new BlockValidator(null);
+
+        Assert.assertTrue(blockValidator.isValid(block0));
+        Assert.assertFalse(blockValidator.isValid(block));
+    }
+
+    @Test
+    public void invalidBlockWithInvalidNumberOfTransactions() {
+        Transaction transaction = FactoryHelper.createTransaction(1000);
+        Transaction transaction2 = FactoryHelper.createTransaction(2000);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+        List<Transaction> transactions2 = new ArrayList<>();
+        transactions2.add(transaction);
+        transactions2.add(transaction2);
+
+        Block block0 = new Block(1, FactoryHelper.createRandomBlockHash(), null, transactions, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block = new Block(block0.getHeader(), null, transactions2);
 
         BlockValidator blockValidator = new BlockValidator(null);
 

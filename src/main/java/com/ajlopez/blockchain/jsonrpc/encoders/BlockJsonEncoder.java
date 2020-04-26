@@ -31,7 +31,7 @@ public class BlockJsonEncoder {
                 .name("miner")
                 .value(block.getCoinbase())
                 .name("transactionRoot")
-                .value(block.getTransactionRootHash())
+                .value(block.getTransactionsRootHash())
                 .name("stateRoot")
                 .value(block.getStateRootHash())
                 .name("timestamp")

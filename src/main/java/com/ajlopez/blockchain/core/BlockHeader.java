@@ -17,6 +17,8 @@ public class BlockHeader {
     private final BlockHash parentHash;
     private final int transactionsCount;
     private final Hash transactionsRootHash;
+    private final int unclesCount;
+    private final Hash unclesRootHash;
     private final Hash stateRootHash;
     private final long timestamp;
     private final Address coinbase;
@@ -24,7 +26,7 @@ public class BlockHeader {
 
     private BlockHash hash;
 
-    public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+    public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, int unclesCount, Hash unclesRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
@@ -32,6 +34,8 @@ public class BlockHeader {
         this.parentHash = parentHash == null ? BlockHash.EMPTY_BLOCK_HASH : parentHash;
         this.transactionsCount = transactionsCount;
         this.transactionsRootHash = transactionsRootHash;
+        this.unclesCount = unclesCount;
+        this.unclesRootHash = unclesRootHash;
         this.stateRootHash = stateRootHash;
         this.timestamp = timestamp;
         this.coinbase = coinbase;
@@ -62,6 +66,10 @@ public class BlockHeader {
     public int getTransactionsCount() { return this.transactionsCount; }
 
     public Hash getTransactionsRootHash() { return this.transactionsRootHash; }
+
+    public int getUnclesCount() { return this.unclesCount; }
+
+    public Hash getUnclesRootHash() { return this.unclesRootHash; }
 
     public Hash getStateRootHash() {
         return this.stateRootHash;

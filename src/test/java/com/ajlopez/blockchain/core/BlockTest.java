@@ -53,7 +53,7 @@ public class BlockTest {
         Assert.assertNotNull(transactions);
         Assert.assertTrue(transactions.isEmpty());
 
-        Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getTransactionRootHash());
+        Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getTransactionsRootHash());
     }
 
     @Test
@@ -216,8 +216,8 @@ public class BlockTest {
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
 
-        Assert.assertEquals(Block.calculateTransactionsRootHash(txs1), block1.getTransactionRootHash());
-        Assert.assertEquals(Block.calculateTransactionsRootHash(txs2), block2.getTransactionRootHash());
+        Assert.assertEquals(Block.calculateTransactionsRootHash(txs1), block1.getTransactionsRootHash());
+        Assert.assertEquals(Block.calculateTransactionsRootHash(txs2), block2.getTransactionsRootHash());
     }
 
     @Test
@@ -241,7 +241,7 @@ public class BlockTest {
         Assert.assertEquals(1, transactions.size());
         Assert.assertEquals(tx.getHash(), transactions.get(0).getHash());
 
-        Assert.assertEquals(Block.calculateTransactionsRootHash(txs), block.getTransactionRootHash());
+        Assert.assertEquals(Block.calculateTransactionsRootHash(txs), block.getTransactionsRootHash());
     }
 
     @Test
@@ -262,7 +262,7 @@ public class BlockTest {
 
         List<Transaction> transactions = block.getTransactions();
 
-        Assert.assertEquals(Block.calculateTransactionsRootHash(txs), block.getTransactionRootHash());
+        Assert.assertEquals(Block.calculateTransactionsRootHash(txs), block.getTransactionsRootHash());
 
         exception.expect(UnsupportedOperationException.class);
         transactions.add(FactoryHelper.createTransaction(1));

@@ -27,7 +27,7 @@ public class Block {
     }
 
     public Block(long number, BlockHash parentHash, List<BlockHeader> uncles, List<Transaction> transactions, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
-        this(new BlockHeader(number, parentHash, transactions == null ? 0 : transactions.size(), calculateTransactionsRootHash(transactions), stateRootHash, timestamp, coinbase, difficulty), uncles, transactions);
+        this(new BlockHeader(number, parentHash, transactions == null ? 0 : transactions.size(), calculateTransactionsRootHash(transactions), uncles == null ? 0 : uncles.size(), calculateUnclesRootHash(uncles), stateRootHash, timestamp, coinbase, difficulty), uncles, transactions);
     }
 
     public Block(BlockHeader header, List<BlockHeader> uncles, List<Transaction> transactions)
@@ -69,8 +69,14 @@ public class Block {
 
     public int getTransactionsCount() { return this.header.getTransactionsCount(); }
 
-    public Hash getTransactionRootHash() {
+    public Hash getTransactionsRootHash() {
         return this.header.getTransactionsRootHash();
+    }
+
+    public int getUnclesCount() { return this.header.getUnclesCount(); }
+
+    public Hash getUnclesRootHash() {
+        return this.header.getUnclesRootHash();
     }
 
     public long getTimestamp() { return this.header.getTimestamp(); }
@@ -103,4 +109,17 @@ public class Block {
 
         return merkleTreeBuilder.build().getHash();
     }
+
+    public static Hash calculateUnclesRootHash(List<BlockHeader> uncles) {
+        MerkleTreeBuilder merkleTreeBuilder = new MerkleTreeBuilder();
+
+        if (uncles == null)
+            return merkleTreeBuilder.build().getHash();
+
+        for (BlockHeader uncle : uncles)
+            merkleTreeBuilder.add(uncle.getHash());
+
+        return merkleTreeBuilder.build().getHash();
+    }
 }
+

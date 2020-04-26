@@ -20,12 +20,14 @@ public class BlockHeaderEncoder {
         byte[] rlpParentHash = RLPEncoder.encodeBlockHash(blockHeader.getParentHash());
         byte[] rlpTransactionsCount = RLPEncoder.encodeUnsignedInteger(blockHeader.getTransactionsCount());
         byte[] rlpTransactionsHash = RLPEncoder.encodeHash(blockHeader.getTransactionsRootHash());
+        byte[] rlpUnclesCount = RLPEncoder.encodeUnsignedInteger(blockHeader.getUnclesCount());
+        byte[] rlpUnclesHash = RLPEncoder.encodeHash(blockHeader.getUnclesRootHash());
         byte[] rlpStateRootHash = RLPEncoder.encodeHash(blockHeader.getStateRootHash());
         byte[] rlpTimestamp = RLPEncoder.encodeUnsignedLong(blockHeader.getTimestamp());
         byte[] rlpCoinbase = RLPEncoder.encodeAddress(blockHeader.getCoinbase());
         byte[] rlpDifficulty = RLPEncoder.encodeDifficulty(blockHeader.getDifficulty());
 
-        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsCount, rlpTransactionsHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty);
+        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsCount, rlpTransactionsHash, rlpUnclesCount, rlpUnclesHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty);
     }
 
     public static BlockHeader decode(byte[] encoded) {
@@ -36,12 +38,14 @@ public class BlockHeaderEncoder {
         BlockHash parentHash = RLPEncoder.decodeBlockHash(bytes[1]);
         int transactionsCount = RLPEncoder.decodeUnsignedInteger(bytes[2]);
         Hash transactionsHash = RLPEncoder.decodeHash(bytes[3]);
-        Hash stateRootHash = RLPEncoder.decodeHash(bytes[4]);
-        long timestamp = RLPEncoder.decodeUnsignedLong(bytes[5]);
-        Address coinbase = RLPEncoder.decodeAddress(bytes[6]);
-        Difficulty difficulty = RLPEncoder.decodeDifficulty(bytes[7]);
+        int unclesCount = RLPEncoder.decodeUnsignedInteger(bytes[4]);
+        Hash unclesHash = RLPEncoder.decodeHash(bytes[5]);
+        Hash stateRootHash = RLPEncoder.decodeHash(bytes[6]);
+        long timestamp = RLPEncoder.decodeUnsignedLong(bytes[7]);
+        Address coinbase = RLPEncoder.decodeAddress(bytes[8]);
+        Difficulty difficulty = RLPEncoder.decodeDifficulty(bytes[9]);
 
-        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, stateRootHash, timestamp, coinbase, difficulty);
+        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty);
     }
 
     public static byte[] encode(List<BlockHeader> blockHeaders) {
