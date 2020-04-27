@@ -7,15 +7,21 @@ import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by usuario on 23/09/2017.
+ * Created by ajlopez on 23/09/2017.
  */
 public class BlockHeaderEncoderTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void encodeDecodeBlockHeader() {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
@@ -65,6 +71,16 @@ public class BlockHeaderEncoderTest {
         Assert.assertEquals(2, result.size());
         Assert.assertEquals(header1.getHash(), result.get(0).getHash());
         Assert.assertEquals(header2.getHash(), result.get(1).getHash());
+    }
+
+    @Test
+    public void decodeInvalidEncodedBlockHeader() {
+        byte[] bytes = FactoryHelper.createRandomBytes(42);
+        byte[] encoded = RLP.encodeList(RLP.encode(bytes));
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid block encoding");
+        BlockHeaderEncoder.decode(encoded);
     }
 }
 

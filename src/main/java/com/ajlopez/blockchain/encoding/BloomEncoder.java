@@ -1,12 +1,8 @@
 package com.ajlopez.blockchain.encoding;
 
 import com.ajlopez.blockchain.core.types.Bloom;
-import com.ajlopez.blockchain.utils.ByteUtils;
-import javafx.util.Pair;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by ajlopez on 21/04/2020.
