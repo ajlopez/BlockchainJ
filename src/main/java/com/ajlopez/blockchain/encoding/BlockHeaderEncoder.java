@@ -34,7 +34,7 @@ public class BlockHeaderEncoder {
         byte[][] bytes = RLP.decodeList(encoded);
 
         if (bytes.length != 10)
-            throw new IllegalArgumentException("Invalid block encoding");
+            throw new IllegalArgumentException("Invalid block header encoding");
 
         long number = RLPEncoder.decodeUnsignedLong(bytes[0]);
         BlockHash parentHash = RLPEncoder.decodeBlockHash(bytes[1]);

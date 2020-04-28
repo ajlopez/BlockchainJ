@@ -79,7 +79,7 @@ public class BlockHeaderEncoderTest {
         byte[] encoded = RLP.encodeList(RLP.encode(bytes));
 
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Invalid block encoding");
+        exception.expectMessage("Invalid block header encoding");
         BlockHeaderEncoder.decode(encoded);
     }
 }

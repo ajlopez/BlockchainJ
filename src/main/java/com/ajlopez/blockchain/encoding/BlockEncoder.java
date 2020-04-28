@@ -18,6 +18,9 @@ public class BlockEncoder {
     public static Block decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
 
+        if (bytes.length != 3)
+            throw new IllegalArgumentException("Invalid block encoding");
+
         BlockHeader header = BlockHeaderEncoder.decode(bytes[0]);
 
         return new Block(header, BlockHeaderEncoder.decodeList(bytes[1]), TransactionEncoder.decodeList(bytes[2]));

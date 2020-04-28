@@ -7,7 +7,9 @@ import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +19,10 @@ import java.util.List;
  * Created by ajlopez on 10/10/2017.
  */
 public class BlockEncoderTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void encodeDecodeBlock() {
         BlockHash parentHash = FactoryHelper.createRandomBlockHash();
@@ -163,5 +169,22 @@ public class BlockEncoderTest {
         Assert.assertNotNull(encoded2);
 
         Assert.assertFalse(Arrays.equals(encoded1, encoded2));
+    }
+
+    @Test
+    public void decodeInvalidEncodedBlock() {
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Hash transactionsHash = FactoryHelper.createRandomHash();
+        Hash stateRootHash = FactoryHelper.createRandomHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42));
+
+        byte[] encodedHeader = BlockHeaderEncoder.encode(header);
+        byte[] bytes = FactoryHelper.createRandomBytes(42);
+        byte[] encoded = RLP.encodeList(encodedHeader, RLP.encode(bytes));
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid block encoding");
+        BlockEncoder.decode(encoded);
     }
 }
