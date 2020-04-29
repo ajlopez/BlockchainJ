@@ -5,12 +5,18 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Created by ajlopezo on 04/10/2017.
  */
 public class TransactionEncoderTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void encodeDecodeTransaction() {
         Transaction tx = FactoryHelper.createTransaction(42);
@@ -112,5 +118,15 @@ public class TransactionEncoderTest {
 
         Assert.assertNotNull(result.getHash());
         Assert.assertEquals(tx.getHash(), result.getHash());
+    }
+
+    @Test
+    public void decodeInvalidEncodedTransaction() {
+        byte[] bytes = FactoryHelper.createRandomBytes(42);
+        byte[] encoded = RLP.encodeList(RLP.encode(bytes));
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid transaction encoding");
+        TransactionEncoder.decode(encoded);
     }
 }

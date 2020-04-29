@@ -37,6 +37,10 @@ public class TransactionEncoder {
 
     public static Transaction decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
+
+        if (bytes.length != 7)
+            throw new IllegalArgumentException("Invalid transaction encoding");
+
         Address sender = RLPEncoder.decodeAddress(bytes[0]);
         Address receiver = RLPEncoder.decodeAddress(bytes[1]);
         Coin value = RLPEncoder.decodeCoin(bytes[2]);
