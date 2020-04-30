@@ -46,7 +46,6 @@ public class AccountEncoderTest {
         Assert.assertNull(result.getStorageHash());
     }
 
-
     @Test
     public void encodeDecodeAccountWithStorageHash() {
         Hash storageHash = FactoryHelper.createRandomHash();
