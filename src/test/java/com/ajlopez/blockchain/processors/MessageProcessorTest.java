@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
@@ -208,6 +209,34 @@ public class MessageProcessorTest {
     }
 
     @Test
+    public void processGetStatusMessage() {
+        BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
+        NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)42);
+
+        Peer receiver = FactoryHelper.createRandomPeer();
+        SendProcessor outputProcessor = new SendProcessor(receiver);
+
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Message blockMessage = new BlockMessage(block);
+
+        MessageProcessor processor = FactoryHelper.createMessageProcessor(blockProcessor, outputProcessor, receiver, networkConfiguration);
+
+        processor.processMessage(blockMessage, null);
+
+        Message getStatusMessage = GetStatusMessage.getInstance();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
+        Peer sender = FactoryHelper.createRandomPeer();
+        outputProcessor.connectToPeer(sender, channel);
+
+        processor.processMessage(getStatusMessage, sender);
+
+        Message statusMessage = new StatusMessage(new Status(receiver.getId(), 42, block.getNumber(), block.getHash()));
+        expectedMessage(channel, receiver, statusMessage);
+    }
+
+    @Test
     public void processGetUnknownBlockByNumberMessage() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
@@ -396,7 +425,7 @@ public class MessageProcessorTest {
         WarpProcessor warpProcessor = new WarpProcessor(accountStore);
         warpProcessor.processBlock(block);
 
-        MessageProcessor processor = new MessageProcessor(null, null, null, null, warpProcessor);
+        MessageProcessor processor = new MessageProcessor(null, null, null, null, null, null, warpProcessor);
 
         TrieNodeMessage message = new TrieNodeMessage(block.getStateRootHash(), TrieType.ACCOUNT, stores.getAccountTrieStore().retrieve(block.getStateRootHash()).getEncoded());
 

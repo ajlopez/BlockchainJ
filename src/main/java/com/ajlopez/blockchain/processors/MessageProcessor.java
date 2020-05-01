@@ -1,9 +1,11 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.*;
 
@@ -15,13 +17,17 @@ import java.util.List;
  * Created by ajlopez on 27/01/2018.
  */
 public class MessageProcessor {
+    private final Peer peer;
+    private final NetworkConfiguration networkConfiguration;
     private final BlockProcessor blockProcessor;
     private final TransactionProcessor transactionProcessor;
     private final PeerProcessor peerProcessor;
     private final SendProcessor outputProcessor;
     private final WarpProcessor warpProcessor;
 
-    public MessageProcessor(BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor, WarpProcessor warpProcessor) {
+    public MessageProcessor(Peer peer, NetworkConfiguration networkConfiguration, BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor, WarpProcessor warpProcessor) {
+        this.peer = peer;
+        this.networkConfiguration = networkConfiguration;
         this.blockProcessor = blockProcessor;
         this.transactionProcessor = transactionProcessor;
         this.peerProcessor = peerProcessor;
@@ -45,11 +51,21 @@ public class MessageProcessor {
                 this.processStatusMessage((StatusMessage) message, sender);
             else if (msgtype == MessageType.TRIE_NODE)
                 this.processTrieNodeMessage((TrieNodeMessage) message);
+            else if (msgtype == MessageType.GET_STATUS)
+                this.processGetStatusMessage(sender);
         }
         catch (IOException ex) {
             // Add to logger
             ex.printStackTrace();
         }
+    }
+
+    private void processGetStatusMessage(Peer sender) {
+        Block bestBlock = this.blockProcessor.getBestBlock();
+        Status status = new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash());
+        StatusMessage statusMessage = new StatusMessage(status);
+
+        this.outputProcessor.postMessage(sender, statusMessage);
     }
 
     private void processBlockMessage(BlockMessage message, Peer sender) throws IOException {
