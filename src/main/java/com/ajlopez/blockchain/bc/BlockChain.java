@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.store.Stores;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 
 /**
@@ -24,48 +25,71 @@ public class BlockChain implements BlockProvider {
 
     private List<Consumer<Block>> blockConsumers = new ArrayList<>();
 
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+
     public BlockChain(Stores stores) {
         this.blocksByHash = stores.getBlockHashStore();
         this.blocksInformationStore = stores.getBlocksInformationStore();
     }
 
     public Block getBestBlock() {
-        return this.bestBlock;
+        this.lock.readLock().lock();
+
+        try {
+            return this.bestBlock;
+        }
+        finally {
+            this.lock.readLock().unlock();
+        }
     }
 
     public long getBestBlockNumber() {
-        if (this.bestBlock == null)
-            return NO_BEST_BLOCK_NUMBER;
+        this.lock.readLock().lock();
 
-        return this.bestBlock.getNumber();
+        try {
+            if (this.bestBlock == null)
+                return NO_BEST_BLOCK_NUMBER;
+
+            return this.bestBlock.getNumber();
+        }
+        finally {
+            this.lock.readLock().unlock();
+        }
     }
 
     public boolean connectBlock(Block block) throws IOException {
-        if (isOrphan(block))
-            return false;
+        this.lock.writeLock().lock();
 
-        if (this.blocksByHash.containsBlock(block.getHash()))
+        try {
+            if (isOrphan(block))
+                return false;
+
+            if (this.blocksByHash.containsBlock(block.getHash()))
+                return true;
+
+            Difficulty parentTotalDifficulty;
+
+            if (block.getNumber() == 0)
+                parentTotalDifficulty = Difficulty.ZERO;
+            else
+                parentTotalDifficulty = this.blocksInformationStore.get(block.getNumber() - 1).getBlockInformation(block.getParentHash()).getTotalDifficulty();
+
+            Difficulty totalDifficulty = parentTotalDifficulty.add(block.getCummulativeDifficulty());
+
+            boolean isBetterBlock = this.isBetterBlock(block, totalDifficulty);
+
+            this.saveBlock(block, totalDifficulty, isBetterBlock);
+
+            if (isBetterBlock)
+                this.saveBestBlock(block, totalDifficulty);
+
+            this.emitBlock(block);
+
             return true;
-
-        Difficulty parentTotalDifficulty;
-
-        if (block.getNumber() == 0)
-            parentTotalDifficulty = Difficulty.ZERO;
-        else
-            parentTotalDifficulty = this.blocksInformationStore.get(block.getNumber() - 1).getBlockInformation(block.getParentHash()).getTotalDifficulty();
-
-        Difficulty totalDifficulty = parentTotalDifficulty.add(block.getCummulativeDifficulty());
-
-        boolean isBetterBlock = this.isBetterBlock(block, totalDifficulty);
-
-        this.saveBlock(block, totalDifficulty, isBetterBlock);
-
-        if (isBetterBlock)
-            this.saveBestBlock(block, totalDifficulty);
-
-        this.emitBlock(block);
-
-        return true;
+        }
+        finally {
+            this.lock.writeLock().unlock();
+        }
     }
 
     private boolean isBetterBlock(Block block, Difficulty totalDifficulty) {
@@ -86,26 +110,47 @@ public class BlockChain implements BlockProvider {
 
     @Override
     public Block getBlockByHash(Hash hash) {
-        return this.blocksByHash.getBlock(hash);
+        this.lock.readLock().lock();
+
+        try {
+            return this.blocksByHash.getBlock(hash);
+        }
+        finally {
+            this.lock.readLock().unlock();
+        }
     }
 
     public boolean isChainedBlock(Hash hash) {
-        return this.blocksByHash.containsBlock(hash);
+        this.lock.readLock().lock();
+
+        try {
+            return this.blocksByHash.containsBlock(hash);
+        }
+        finally {
+            this.lock.readLock().unlock();
+        }
     }
 
     @Override
     public Block getBlockByNumber(long number) throws IOException {
-        BlocksInformation blocksInformation = this.blocksInformationStore.get(number);
+        this.lock.readLock().lock();
 
-        if (blocksInformation == null)
-            return null;
+        try {
+            BlocksInformation blocksInformation = this.blocksInformationStore.get(number);
 
-        BlockInformation blockInformation = blocksInformation.getBlockOnChainInformation();
+            if (blocksInformation == null)
+                return null;
 
-        if (blockInformation == null)
-            return null;
+            BlockInformation blockInformation = blocksInformation.getBlockOnChainInformation();
 
-        return this.blocksByHash.getBlock(blockInformation.getBlockHash());
+            if (blockInformation == null)
+                return null;
+
+            return this.blocksByHash.getBlock(blockInformation.getBlockHash());
+        }
+        finally {
+            this.lock.readLock().unlock();
+        }
     }
 
     private boolean isOrphan(Block block) {

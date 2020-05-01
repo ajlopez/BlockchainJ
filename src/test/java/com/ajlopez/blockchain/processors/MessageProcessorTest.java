@@ -330,7 +330,7 @@ public class MessageProcessorTest {
 
         Assert.assertEquals(11, channel.getPeerMessages().size());
 
-        for (int k = 0; k < 11; k++) {
+        for (int k = 0; k < 10; k++) {
             Message msg = channel.getPeerMessages().get(k).getValue();
 
             Assert.assertNotNull(msg);
@@ -340,6 +340,11 @@ public class MessageProcessorTest {
 
             Assert.assertEquals(k, gmsg.getNumber());
         }
+
+        Message msg = channel.getPeerMessages().get(10).getValue();
+
+        Assert.assertNotNull(msg);
+        Assert.assertEquals(MessageType.GET_STATUS, msg.getMessageType());
     }
 
     @Test
@@ -365,7 +370,7 @@ public class MessageProcessorTest {
 
         Assert.assertEquals(11, channel.getPeerMessages().size());
 
-        for (int k = 0; k < 11; k++) {
+        for (int k = 0; k < 10; k++) {
             Assert.assertEquals(firstPeer, channel.getPeerMessages().get(k).getKey());
             Message msg = channel.getPeerMessages().get(k).getValue();
 
@@ -376,6 +381,11 @@ public class MessageProcessorTest {
 
             Assert.assertEquals(k, gmsg.getNumber());
         }
+
+        Message msg = channel.getPeerMessages().get(10).getValue();
+
+        Assert.assertNotNull(msg);
+        Assert.assertEquals(MessageType.GET_STATUS, msg.getMessageType());
     }
 
     @Test
@@ -400,9 +410,9 @@ public class MessageProcessorTest {
         Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
         Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(secondPeer.getId()));
 
-        Assert.assertEquals(11, channel.getPeerMessages().size());
+        Assert.assertEquals(18, channel.getPeerMessages().size());
 
-        for (int k = 0; k < 11; k++) {
+        for (int k = 0; k < 10; k++) {
             Assert.assertEquals(firstPeer, channel.getPeerMessages().get(k).getKey());
             Message msg = channel.getPeerMessages().get(k).getValue();
 
@@ -413,6 +423,11 @@ public class MessageProcessorTest {
 
             Assert.assertEquals(k, gmsg.getNumber());
         }
+
+        Message msg = channel.getPeerMessages().get(10).getValue();
+
+        Assert.assertNotNull(msg);
+        Assert.assertEquals(MessageType.GET_STATUS, msg.getMessageType());
     }
 
     @Test
