@@ -103,6 +103,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Java Xmx and Various Memory Management Options in Java](https://www.udemy.com/blog/java-xmx/)
 - [Account Abstraction, Stateless Mining Eth1.x/Eth 2 Implementation, Rationale Document](https://hackmd.io/y7uhNbeuSziYn1bbSXt4ww?view)
 - [Testground: A platform for testing, benchmarking, and simulating distributed and p2p systems at scale](https://github.com/testground/testground)
+- [UTXO vs Account/Balance Model](https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf)
+
 
 ## To Do
 
