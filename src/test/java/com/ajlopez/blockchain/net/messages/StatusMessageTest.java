@@ -22,5 +22,6 @@ public class StatusMessageTest {
         Assert.assertEquals(2, message.getStatus().getNetworkNumber());
         Assert.assertEquals(blockHash, message.getStatus().getBestBlockHash());
         Assert.assertEquals(3, message.getStatus().getBestBlockNumber());
+        Assert.assertTrue(message.isPriorityMessage());
     }
 }

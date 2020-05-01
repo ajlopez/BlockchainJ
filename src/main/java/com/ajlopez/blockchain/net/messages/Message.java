@@ -14,5 +14,7 @@ public abstract class Message {
         return this.type;
     }
 
+    public boolean isPriorityMessage() { return false; }
+
     public abstract byte[] getPayload();
 }

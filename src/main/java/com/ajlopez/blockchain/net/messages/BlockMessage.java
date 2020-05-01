@@ -19,6 +19,9 @@ public class BlockMessage extends Message {
     }
 
     @Override
+    public boolean isPriorityMessage() { return true; }
+
+    @Override
     public byte[] getPayload() {
         return BlockEncoder.encode(this.block);
     }

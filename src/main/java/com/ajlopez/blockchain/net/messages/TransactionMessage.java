@@ -19,6 +19,9 @@ public class TransactionMessage extends Message {
     }
 
     @Override
+    public boolean isPriorityMessage() { return true; }
+
+    @Override
     public byte[] getPayload() {
         return TransactionEncoder.encode(this.transaction);
     }

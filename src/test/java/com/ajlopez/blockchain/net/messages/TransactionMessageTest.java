@@ -18,5 +18,6 @@ public class TransactionMessageTest {
 
         Assert.assertEquals(MessageType.TRANSACTION, message.getMessageType());
         Assert.assertArrayEquals(TransactionEncoder.encode(tx), message.getPayload());
+        Assert.assertTrue(message.isPriorityMessage());
     }
 }

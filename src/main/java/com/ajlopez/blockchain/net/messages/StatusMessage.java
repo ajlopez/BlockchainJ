@@ -19,6 +19,9 @@ public class StatusMessage extends Message {
     }
 
     @Override
+    public boolean isPriorityMessage() { return true; }
+
+    @Override
     public byte[] getPayload() {
         return StatusEncoder.encode(this.status);
     }

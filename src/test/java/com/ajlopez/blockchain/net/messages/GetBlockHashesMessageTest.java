@@ -12,5 +12,6 @@ public class GetBlockHashesMessageTest {
         Assert.assertEquals(42, message.getBlockHeight());
         Assert.assertEquals(10, message.getNoBlocks());
         Assert.assertEquals(2, message.getBlockGap());
+        Assert.assertFalse(message.isPriorityMessage());
     }
 }
