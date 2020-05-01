@@ -339,7 +339,7 @@ public class NodeProcessorTest {
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
         connections.forEach(connection -> connection.start());
-        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(5000, nodeProcessor1, nodeProcessor2);
         connections.forEach(connection -> connection.stop());
 
         Block result1 = blockChain1.getBestBlock();

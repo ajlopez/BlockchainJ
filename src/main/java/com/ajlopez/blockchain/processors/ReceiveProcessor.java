@@ -13,9 +13,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by ajlopez on 28/01/2018.
  */
-public class ReceiveProcessor implements Runnable, MessageChannel {
+public class ReceiveProcessor implements MessageChannel {
     private MessageProcessor messageProcessor;
-    private BlockingQueue<MessageTask> messageTaskQueue = new LinkedBlockingDeque<>();
+    private BlockingQueue<MessageTask> messageTaskNormalQueue = new LinkedBlockingDeque<>();
+    private BlockingQueue<MessageTask> messageTaskPriorityQueue = new LinkedBlockingDeque<>();
     private boolean stopped = false;
     private List<Runnable> emptyActions = new ArrayList<>();
 
@@ -24,22 +25,44 @@ public class ReceiveProcessor implements Runnable, MessageChannel {
     }
 
     public void start() {
-        new Thread(this).start();
+        new Thread(() -> { this.processPriorityQueue(); }).start();
+        new Thread(() -> { this.processNormalQueue(); }).start();
     }
 
     public void stop() {
         this.stopped = true;
     }
 
-    public void run() {
+    public void processNormalQueue() {
         while (!this.stopped) {
             try {
-                MessageTask task = this.messageTaskQueue.poll(1, TimeUnit.SECONDS);
+                MessageTask task = this.messageTaskNormalQueue.poll(1, TimeUnit.SECONDS);
 
                 if (task != null)
                     this.messageProcessor.processMessage(task.getMessage(), task.getSender());
                 else {
-                    emitEmpty();
+                    if (this.messageTaskPriorityQueue.isEmpty())
+                        emitEmpty();
+
+                    Thread.sleep(1000);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void processPriorityQueue() {
+        while (!this.stopped) {
+            try {
+                MessageTask task = this.messageTaskPriorityQueue.poll(1, TimeUnit.SECONDS);
+
+                if (task != null)
+                    this.messageProcessor.processMessage(task.getMessage(), task.getSender());
+                else {
+                    if (this.messageTaskNormalQueue.isEmpty())
+                        emitEmpty();
+
                     Thread.sleep(1000);
                 }
             } catch (Exception e) {
@@ -49,7 +72,10 @@ public class ReceiveProcessor implements Runnable, MessageChannel {
     }
 
     public void postMessage(Peer sender, Message message) {
-        this.messageTaskQueue.add(new MessageTask(message, sender));
+        if (message.isPriorityMessage())
+            this.messageTaskPriorityQueue.add(new MessageTask(message, sender));
+        else
+            this.messageTaskNormalQueue.add(new MessageTask(message, sender));
     }
 
     public void onEmpty(Runnable action) {
