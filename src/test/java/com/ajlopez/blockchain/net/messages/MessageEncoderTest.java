@@ -151,6 +151,23 @@ public class MessageEncoderTest {
     }
 
     @Test
+    public void encodeAndDecodeGetStatusMessage() {
+        Message message = GetStatusMessage.getInstance();
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+        Assert.assertEquals(1, bytes.length);
+        Assert.assertEquals(MessageType.GET_STATUS.ordinal(), bytes[0]);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.GET_STATUS, result.getMessageType());
+        Assert.assertSame(GetStatusMessage.getInstance(), result);
+    }
+
+    @Test
     public void encodeAndDecodeTrieNodeMessage() {
         Hash topHash = FactoryHelper.createRandomHash();
         byte[] nodeData = FactoryHelper.createRandomBytes(42);
