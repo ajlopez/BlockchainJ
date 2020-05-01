@@ -368,7 +368,7 @@ public class MessageProcessorTest {
         Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
         Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(secondPeer.getId()));
 
-        Assert.assertEquals(11, channel.getPeerMessages().size());
+        Assert.assertEquals(22, channel.getPeerMessages().size());
 
         for (int k = 0; k < 10; k++) {
             Assert.assertEquals(firstPeer, channel.getPeerMessages().get(k).getKey());
@@ -401,16 +401,16 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(secondPeer, channel);
 
-        Message message1 = new StatusMessage(new Status(secondPeer.getId(), 1, 5, FactoryHelper.createRandomBlockHash()));
+        Message message1 = new StatusMessage(new Status(firstPeer.getId(), 1, 5, FactoryHelper.createRandomBlockHash()));
         Message message2 = new StatusMessage(new Status(secondPeer.getId(), 1, 10, FactoryHelper.createRandomBlockHash()));
 
-        processor.processMessage(message1, secondPeer);
+        processor.processMessage(message1, firstPeer);
         processor.processMessage(message2, secondPeer);
 
         Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
         Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(secondPeer.getId()));
 
-        Assert.assertEquals(18, channel.getPeerMessages().size());
+        Assert.assertEquals(11, channel.getPeerMessages().size());
 
         for (int k = 0; k < 10; k++) {
             Assert.assertEquals(firstPeer, channel.getPeerMessages().get(k).getKey());
