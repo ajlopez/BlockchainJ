@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test.utils;
 
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.net.peers.PeerConnection;
 import com.ajlopez.blockchain.processors.NodeProcessor;
 
@@ -18,7 +19,7 @@ public class NodesHelper {
 
     }
 
-    public static void runNodeProcessors(int millisecondsToWait, NodeProcessor... nodeProcessors) throws InterruptedException {
+    public static void runNodeProcessors(NodeProcessor... nodeProcessors) throws InterruptedException {
         List<Semaphore> semaphores = new ArrayList<>();
 
         for (NodeProcessor nodeProcessor : nodeProcessors) {
@@ -31,18 +32,37 @@ public class NodesHelper {
             semaphores.add(semaphore);
         }
 
+        runProcessors(semaphores, nodeProcessors);
+    }
+
+    private static void runProcessors(List<Semaphore> semaphores, NodeProcessor[] nodeProcessors) throws InterruptedException {
         for (NodeProcessor nodeProcessor : nodeProcessors)
             nodeProcessor.startMessagingProcess();
-
-        // TODO improve
-        if (millisecondsToWait > 0)
-            Thread.sleep(millisecondsToWait);
 
         for (Semaphore semaphore : semaphores)
             semaphore.acquire();
 
         for (NodeProcessor nodeProcessor : nodeProcessors)
             nodeProcessor.stopMessagingProcess();
+    }
+
+    public static void runNodeProcessors(Block bestBlock, NodeProcessor... nodeProcessors) throws InterruptedException {
+        List<Semaphore> semaphores = new ArrayList<>();
+
+        for (int k = 1; k < nodeProcessors.length; k++) {
+            NodeProcessor nodeProcessor = nodeProcessors[k];
+
+            Semaphore semaphore = new Semaphore(0, true);
+
+            nodeProcessor.onNewBestBlock((block) -> {
+                if (block.getHash().equals(bestBlock.getHash()))
+                    semaphore.release();
+            });
+
+            semaphores.add(semaphore);
+        }
+
+        runProcessors(semaphores, nodeProcessors);
     }
 
     public static List<PeerConnection> connectNodeProcessors(NodeProcessor ...nodeProcessors) throws IOException {

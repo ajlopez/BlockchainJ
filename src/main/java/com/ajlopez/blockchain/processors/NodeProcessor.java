@@ -18,6 +18,7 @@ import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by ajlopez on 14/10/2018.
@@ -81,6 +82,10 @@ public class NodeProcessor implements PeerNode {
 
     public void onEmpty(Runnable action) {
         this.receiveProcessor.onEmpty(action);
+    }
+
+    public void onNewBestBlock(Consumer<Block> consumer) {
+        this.blockProcessor.onNewBestBlock(consumer);
     }
 
     public void postMessage(Peer sender, Message message) {

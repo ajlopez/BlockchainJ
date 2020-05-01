@@ -66,7 +66,7 @@ public class NodeProcessorTest {
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -112,7 +112,7 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -135,7 +135,7 @@ public class NodeProcessorTest {
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message1);
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message2);
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -154,7 +154,7 @@ public class NodeProcessorTest {
             nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
         }
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -178,7 +178,7 @@ public class NodeProcessorTest {
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message2);
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message1);
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         Block result = blockChain.getBestBlock();
 
@@ -205,7 +205,7 @@ public class NodeProcessorTest {
         nodeProcessor1.postMessage(null, message0);
         nodeProcessor1.postMessage(null, message1);
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -238,7 +238,7 @@ public class NodeProcessorTest {
         nodeProcessor1.postMessage(null, message1);
 
         connections.forEach(connection -> connection.start());
-        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
         connections.forEach(connection -> connection.stop());
 
         Block result1 = blockChain1.getBestBlock();
@@ -270,46 +270,7 @@ public class NodeProcessorTest {
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2);
-
-        Block result1 = blockChain1.getBestBlock();
-
-        Assert.assertNotNull(result1);
-        Assert.assertEquals(bestBlock.getHash(), result1.getHash());
-
-        Block result2 = blockChain2.getBestBlock();
-
-        Assert.assertNotNull(result2);
-        Assert.assertEquals(bestBlock.getHash(), result2.getHash());
-    }
-
-    @Test
-    public void synchronizeTwoNodesCheckingOnBlock() throws InterruptedException, IOException {
-        BlockChain blockChain1 = FactoryHelper.createBlockChain(300);
-        Block bestBlock = blockChain1.getBestBlock();
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
-
-        BlockChain blockChain2 = new BlockChain(new MemoryStores());
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
-
-        nodeProcessor1.connectTo(nodeProcessor2);
-        nodeProcessor2.connectTo(nodeProcessor1);
-
-        Semaphore semaphore = new Semaphore(0, true);
-
-        blockChain2.onBlock(blk -> {
-            if (blk.getNumber() == bestBlock.getNumber())
-                semaphore.release();
-        });
-
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash());
-        StatusMessage statusMessage = new StatusMessage(status);
-
-        nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
-
-        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2);
-
-        semaphore.acquire();
+        NodesHelper.runNodeProcessors(blockChain1.getBestBlock(), nodeProcessor1, nodeProcessor2);
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -339,7 +300,7 @@ public class NodeProcessorTest {
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
         connections.forEach(connection -> connection.start());
-        NodesHelper.runNodeProcessors(5000, nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(blockChain1.getBestBlock(), nodeProcessor1, nodeProcessor2);
         connections.forEach(connection -> connection.stop());
 
         Block result1 = blockChain1.getBestBlock();
@@ -382,7 +343,7 @@ public class NodeProcessorTest {
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2, nodeProcessor3);
+        NodesHelper.runNodeProcessors(blockChain1.getBestBlock(), nodeProcessor1, nodeProcessor2, nodeProcessor3);
 
         Block result1 = blockChain1.getBestBlock();
 
@@ -426,7 +387,7 @@ public class NodeProcessorTest {
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
 
         connections.forEach(connection -> connection.start());
-        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2, nodeProcessor3);
+        NodesHelper.runNodeProcessors(blockChain1.getBestBlock(), nodeProcessor1, nodeProcessor2, nodeProcessor3);
         connections.forEach(connection -> connection.stop());
 
         Block result1 = blockChain1.getBestBlock();
@@ -455,7 +416,7 @@ public class NodeProcessorTest {
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor);
+        NodesHelper.runNodeProcessors(nodeProcessor);
 
         List<Transaction> transactions = nodeProcessor.getTransactions();
 
@@ -481,7 +442,7 @@ public class NodeProcessorTest {
 
         nodeProcessor1.postMessage(null, message);
 
-        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
         List<Transaction> transactions1 = nodeProcessor1.getTransactions();
 
