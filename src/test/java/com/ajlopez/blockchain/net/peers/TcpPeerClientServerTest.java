@@ -45,7 +45,7 @@ public class TcpPeerClientServerTest {
 
         nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);
 
-        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2);
 
         semaphore.acquire();
 
@@ -90,7 +90,7 @@ public class TcpPeerClientServerTest {
         TcpPeerClient client = new TcpPeerClient("localhost", 4001, (short)1, nodeProcessor1);
         client.connect();
 
-        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2);
 
         semaphore.acquire();
 
@@ -137,7 +137,7 @@ public class TcpPeerClientServerTest {
         TcpPeerClient client = new TcpPeerClient("localhost", 4002, (short)1, nodeProcessor1);
         client.connect();
 
-        NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
+        NodesHelper.runNodeProcessors(0, nodeProcessor1, nodeProcessor2);
 
         semaphore.acquire();
 

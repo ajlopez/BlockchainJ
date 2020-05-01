@@ -18,7 +18,7 @@ public class NodesHelper {
 
     }
 
-    public static void runNodeProcessors(NodeProcessor...nodeProcessors) throws InterruptedException {
+    public static void runNodeProcessors(int millisecondsToWait, NodeProcessor... nodeProcessors) throws InterruptedException {
         List<Semaphore> semaphores = new ArrayList<>();
 
         for (NodeProcessor nodeProcessor : nodeProcessors) {
@@ -34,6 +34,10 @@ public class NodesHelper {
         for (NodeProcessor nodeProcessor : nodeProcessors)
             nodeProcessor.startMessagingProcess();
 
+        // TODO improve
+        if (millisecondsToWait > 0)
+            Thread.sleep(millisecondsToWait);
+
         for (Semaphore semaphore : semaphores)
             semaphore.acquire();
 
@@ -41,7 +45,7 @@ public class NodesHelper {
             nodeProcessor.stopMessagingProcess();
     }
 
-    public static List<PeerConnection> connectNodeProcessors(NodeProcessor ...nodeProcessors) throws InterruptedException, IOException {
+    public static List<PeerConnection> connectNodeProcessors(NodeProcessor ...nodeProcessors) throws IOException {
         List<PeerConnection> connections = new ArrayList<>();
         int nnodes = nodeProcessors.length;
 

@@ -123,19 +123,17 @@ public class MessageProcessor {
 
         Hash senderId = sender.getId();
 
-        long peerNumber = this.peerProcessor.getPeerBestBlockNumber(senderId);
-
         this.peerProcessor.registerBestBlockNumber(senderId, message.getStatus().getNetworkNumber(), message.getStatus().getBestBlockNumber());
 
         long fromNumber = this.blockProcessor.getBestBlockNumber();
 
-        if (fromNumber < peerNumber)
-            fromNumber = peerNumber;
-
-        long toNumber = this.peerProcessor.getPeerBestBlockNumber(senderId);
+        long toNumber = Math.min(fromNumber + 10, this.peerProcessor.getPeerBestBlockNumber(senderId));
 
         for (long number = fromNumber + 1; number <= toNumber; number++)
             outputProcessor.postMessage(sender, new GetBlockByNumberMessage(number));
+
+        if (fromNumber < toNumber)
+            outputProcessor.postMessage(sender, GetStatusMessage.getInstance());
     }
 
     private void processGetBlockByHashMessage(GetBlockByHashMessage message, Peer sender) {
