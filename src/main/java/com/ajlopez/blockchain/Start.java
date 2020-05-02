@@ -50,6 +50,8 @@ public class Start {
             int rpcport = argsproc.getInteger("rpcport");
 
             RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, null, transactionPool, transactionProcessor, networkConfiguration);
+            rpcrunner.start();
+
             Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));
         }
     }
