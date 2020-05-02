@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.BlockConsumer;
+import com.ajlopez.blockchain.test.BlocksConsumer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -158,6 +159,35 @@ public class BlockProcessorTest {
     }
 
     @Test
+    public void addFirstBlockAndEmitNewBlock() throws IOException {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+
+        BlockConsumer consumer = new BlockConsumer();
+
+        processor.onNewBlock(consumer);
+
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        List<Block> processedBlocks = processor.processBlock(block);
+
+        Assert.assertNotNull(processedBlocks);
+        Assert.assertFalse(processedBlocks.isEmpty());
+        Assert.assertEquals(1, processedBlocks.size());
+        Assert.assertEquals(block, processedBlocks.get(0));
+
+        Assert.assertNotNull(processor.getBestBlock());
+        Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
+
+        Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
+        Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
+
+        Assert.assertNotNull(consumer.getBlock());
+        Assert.assertEquals(block.getHash(), consumer.getBlock().getHash());
+    }
+
+    @Test
     public void addOrphanBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -272,6 +302,21 @@ public class BlockProcessorTest {
     }
 
     @Test
+    public void addOrphanBlockAndNoEmitNewBlock() throws IOException {
+        BlockProcessor processor = FactoryHelper.createBlockProcessor();
+        BlockConsumer consumer = new BlockConsumer();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block block = new Block(1, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        processor.onNewBlock(consumer);
+        processor.processBlock(block);
+
+        Assert.assertNull(processor.getBestBlock());
+        Assert.assertNull(consumer.getBlock());
+    }
+
+    @Test
     public void switchToABetterForkUsingOrphan() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -294,10 +339,25 @@ public class BlockProcessorTest {
         Assert.assertEquals(block1.getNumber(), processor.getBestBlock().getNumber());
         Assert.assertEquals(block1.getHash(), processor.getBestBlock().getHash());
 
+        BlockConsumer consumer = new BlockConsumer();
+        BlocksConsumer consumer2 = new BlocksConsumer();
+
+        processor.onNewBestBlock(consumer);
+        processor.onNewBlock(consumer2);
+
         processor.processBlock(block2);
 
         Assert.assertNotNull(processor.getBestBlock());
         Assert.assertEquals(block3.getHash(), processor.getBestBlock().getHash());
+
+        Assert.assertNotNull(consumer.getBlock());
+        Assert.assertEquals(block3.getHash(), consumer.getBlock().getHash());
+
+        Assert.assertNotNull(consumer2.getBlocks());
+        Assert.assertFalse(consumer2.getBlocks().isEmpty());
+        Assert.assertEquals(2, consumer2.getBlocks().size());
+        Assert.assertEquals(block2.getHash(), consumer2.getBlocks().get(0).getHash());
+        Assert.assertEquals(block3.getHash(), consumer2.getBlocks().get(1).getHash());
 
         Assert.assertEquals(genesis.getHash(), processor.getBlockByHash(genesis.getHash()).getHash());
         Assert.assertEquals(block1.getHash(), processor.getBlockByHash(block1.getHash()).getHash());

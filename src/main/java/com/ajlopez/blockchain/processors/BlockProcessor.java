@@ -24,6 +24,7 @@ public class BlockProcessor {
     private final BlockValidator blockValidator;
     private final TransactionPool transactionPool;
 
+    private final List<Consumer<Block>> newBlockConsumers = new ArrayList<>();
     private final List<Consumer<Block>> newBestBlockConsumers = new ArrayList<>();
 
     public BlockProcessor(BlockChain blockChain, OrphanBlocks orphanBlocks, BlockValidator blockValidator, TransactionPool transactionPool) {
@@ -60,6 +61,9 @@ public class BlockProcessor {
 
         List<Block> connectedBlocks = new ArrayList<>();
         connectedBlocks.add(block);
+
+        this.emitNewBlock(block);
+
         connectedBlocks.addAll(connectDescendants(block));
 
         Block newBestBlock = this.getBestBlock();
@@ -67,7 +71,7 @@ public class BlockProcessor {
         if (initialBestBlock != null && newBestBlock.getHash().equals(initialBestBlock.getHash()))
             return connectedBlocks;
 
-        emitNewBestBlock(newBestBlock);
+        this.emitNewBestBlock(newBestBlock);
 
         BlockFork blockFork = BlockFork.fromBlocks(this.blockChain, initialBestBlock, newBestBlock);
         this.transactionPool.updateTransactions(blockFork.getNewTransactions(), blockFork.getOldTransactions());
@@ -107,6 +111,10 @@ public class BlockProcessor {
         return this.orphanBlocks.getUnknownAncestorHash(hash);
     }
 
+    public void onNewBlock(Consumer<Block> consumer) {
+        this.newBlockConsumers.add(consumer);
+    }
+
     public void onNewBestBlock(Consumer<Block> consumer) {
         this.newBestBlockConsumers.add(consumer);
     }
@@ -125,6 +133,10 @@ public class BlockProcessor {
         });
 
         return connected;
+    }
+
+    private void emitNewBlock(Block block) {
+        this.newBlockConsumers.forEach(a -> a.accept(block));
     }
 
     private void emitNewBestBlock(Block block) {
