@@ -215,6 +215,30 @@ public class MessageEncoderTest {
     }
 
     @Test
+    public void encodeAndDecodeStoredKeyValueMessage() {
+        StoreType storeType = StoreType.BLOCKS;
+        byte[] key = FactoryHelper.createRandomBytes(32);
+        byte[] value = FactoryHelper.createRandomBytes(42);
+
+        StoredKeyValueMessage message = new StoredKeyValueMessage(storeType, key, value);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.STORED_KEY_VALUE, result.getMessageType());
+
+        StoredKeyValueMessage skvresult = (StoredKeyValueMessage)result;
+
+        Assert.assertEquals(StoreType.BLOCKS, skvresult.getStoreType());
+        Assert.assertArrayEquals(key, skvresult.getKey());
+        Assert.assertArrayEquals(value, skvresult.getValue());
+    }
+
+    @Test
     public void encodeAndDecodeGetTrieNodeMessage() {
         Hash topHash = FactoryHelper.createRandomHash();
         Hash trieHash = FactoryHelper.createRandomHash();

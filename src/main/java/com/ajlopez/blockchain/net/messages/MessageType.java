@@ -12,6 +12,7 @@ public enum MessageType {
     TRIE_NODE,
     GET_TRIE_NODE,
     GET_STORED_VALUE,
+    STORED_KEY_VALUE,
     GET_BLOCK_HASHES,
     GET_STATUS
 }

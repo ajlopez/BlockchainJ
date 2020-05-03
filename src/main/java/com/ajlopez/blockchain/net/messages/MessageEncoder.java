@@ -113,6 +113,16 @@ public class MessageEncoder {
             return new GetStoredValueMessage(storeType, bkey);
         }
 
+        if (bytes[0] == MessageType.STORED_KEY_VALUE.ordinal()) {
+            byte[][] lbytes = RLP.decodeList(bbytes);
+            byte[] btype = RLP.decode(lbytes[0]);
+            byte[] bkey = RLP.decode(lbytes[1]);
+            byte[] bvalue = RLP.decode(lbytes[2]);
+            StoreType storeType = StoreType.values()[btype[0]];
+
+            return new StoredKeyValueMessage(storeType, bkey, bvalue);
+        }
+
         if (bytes[0] == MessageType.GET_BLOCK_HASHES.ordinal()) {
             byte[][] lbytes = RLP.decodeList(bbytes);
             byte[] bheight = RLP.decode(lbytes[0]);
