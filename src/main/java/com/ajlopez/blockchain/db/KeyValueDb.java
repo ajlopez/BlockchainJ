@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.store.KeyValueStore;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Created by ajlopez on 20/10/2019.
@@ -12,6 +13,8 @@ public class KeyValueDb implements KeyValueStore {
     private final ValueFile valueFile;
     private final KeyFile keyFile;
 
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+
     public KeyValueDb(String name, int keyLength) throws IOException {
         this.valueFile = new ValueFile(name + ".values");
         this.keyFile = new KeyFile(name + ".keys", keyLength);
@@ -19,31 +22,45 @@ public class KeyValueDb implements KeyValueStore {
 
     @Override
     public void setValue(byte[] key, byte[] value) throws IOException {
-        if (this.keyFile.containsKey(key)) {
-            byte[] oldvalue = this.getValue(key);
+        this.lock.writeLock().lock();
 
-            if (!Arrays.equals(value, oldvalue))
-                throw new IllegalStateException("cannot change value for key");
+        try {
+            if (this.keyFile.containsKey(key)) {
+                byte[] oldvalue = this.getValue(key);
 
-            return;
+                if (!Arrays.equals(value, oldvalue))
+                    throw new IllegalStateException("cannot change value for key");
+
+                return;
+            }
+
+            long position = this.valueFile.writeValue(value);
+            this.keyFile.writeKey(key, position, value.length);
         }
-
-        long position = this.valueFile.writeValue(value);
-        this.keyFile.writeKey(key, position, value.length);
+        finally {
+            this.lock.writeLock().unlock();
+        }
     }
 
     @Override
     public byte[] getValue(byte[] key) throws IOException {
-        ValueInfo valueInfo = this.keyFile.readKey(key);
+        this.lock.readLock().lock();
 
-        if (valueInfo == null)
-            return null;
+        try {
+            ValueInfo valueInfo = this.keyFile.readKey(key);
 
-        byte[] buffer = new byte[valueInfo.length];
+            if (valueInfo == null)
+                return null;
 
-        // TODO Check read
-        int read = this.valueFile.readValue(valueInfo.position, buffer);
+            byte[] buffer = new byte[valueInfo.length];
 
-        return buffer;
+            // TODO Check read
+            int read = this.valueFile.readValue(valueInfo.position, buffer);
+
+            return buffer;
+        }
+        finally {
+            this.lock.readLock().unlock();
+        }
     }
 }
