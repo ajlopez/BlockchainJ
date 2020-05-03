@@ -6,6 +6,8 @@ import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
+import com.ajlopez.blockchain.store.StoreType;
+import com.ajlopez.blockchain.store.TrieType;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import org.junit.Assert;
@@ -188,6 +190,28 @@ public class MessageEncoderTest {
         Assert.assertEquals(topHash, tnresult.getTopHash());
         Assert.assertEquals(TrieType.ACCOUNT, tnresult.getTrieType());
         Assert.assertArrayEquals(nodeData, tnresult.getTrieNode());
+    }
+
+    @Test
+    public void encodeAndDecodeGetStoredValueMessage() {
+        StoreType storeType = StoreType.CONTRACTS;
+        byte[] key = FactoryHelper.createRandomBytes(32);
+
+        GetStoredValueMessage message = new GetStoredValueMessage(storeType, key);
+
+        byte[] bytes = MessageEncoder.encode(message);
+
+        Assert.assertNotNull(bytes);
+
+        Message result = MessageEncoder.decode(bytes);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(MessageType.GET_STORED_VALUE, result.getMessageType());
+
+        GetStoredValueMessage gsvresult = (GetStoredValueMessage)result;
+
+        Assert.assertEquals(StoreType.CONTRACTS, gsvresult.getStoreType());
+        Assert.assertArrayEquals(key, gsvresult.getKey());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.store.TrieType;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;

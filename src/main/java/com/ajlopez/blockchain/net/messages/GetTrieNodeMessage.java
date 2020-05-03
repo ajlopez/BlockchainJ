@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.RLP;
+import com.ajlopez.blockchain.store.TrieType;
 
 /**
  * Created by ajlopez on 21/06/2019.

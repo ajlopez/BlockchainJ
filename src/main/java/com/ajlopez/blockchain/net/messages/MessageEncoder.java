@@ -9,8 +9,9 @@ import com.ajlopez.blockchain.encoding.RLP;
 import com.ajlopez.blockchain.encoding.StatusEncoder;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.net.Status;
+import com.ajlopez.blockchain.store.StoreType;
+import com.ajlopez.blockchain.store.TrieType;
 import com.ajlopez.blockchain.utils.ByteUtils;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.NodeType;
 
 public class MessageEncoder {
     private MessageEncoder() {
@@ -101,6 +102,15 @@ public class MessageEncoder {
             TrieType trieType = TrieType.values()[btype[0]];
 
             return new GetTrieNodeMessage(new Hash(btophash), trieType, new Hash(bhash));
+        }
+
+        if (bytes[0] == MessageType.GET_STORED_VALUE.ordinal()) {
+            byte[][] lbytes = RLP.decodeList(bbytes);
+            byte[] btype = RLP.decode(lbytes[0]);
+            byte[] bkey = RLP.decode(lbytes[1]);
+            StoreType storeType = StoreType.values()[btype[0]];
+
+            return new GetStoredValueMessage(storeType, bkey);
         }
 
         if (bytes[0] == MessageType.GET_BLOCK_HASHES.ordinal()) {

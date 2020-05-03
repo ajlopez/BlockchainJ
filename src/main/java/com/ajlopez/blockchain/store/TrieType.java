@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain.net.messages;
+package com.ajlopez.blockchain.store;
 
 /**
  * Created by ajlopez on 07/06/2019.
