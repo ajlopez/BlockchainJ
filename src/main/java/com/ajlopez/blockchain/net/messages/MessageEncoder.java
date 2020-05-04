@@ -9,7 +9,7 @@ import com.ajlopez.blockchain.encoding.RLP;
 import com.ajlopez.blockchain.encoding.StatusEncoder;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.net.Status;
-import com.ajlopez.blockchain.store.StoreType;
+import com.ajlopez.blockchain.store.KeyValueStoreType;
 import com.ajlopez.blockchain.store.TrieType;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
@@ -108,7 +108,7 @@ public class MessageEncoder {
             byte[][] lbytes = RLP.decodeList(bbytes);
             byte[] btype = RLP.decode(lbytes[0]);
             byte[] bkey = RLP.decode(lbytes[1]);
-            StoreType storeType = StoreType.values()[btype[0]];
+            KeyValueStoreType storeType = KeyValueStoreType.values()[btype[0]];
 
             return new GetStoredValueMessage(storeType, bkey);
         }
@@ -118,7 +118,7 @@ public class MessageEncoder {
             byte[] btype = RLP.decode(lbytes[0]);
             byte[] bkey = RLP.decode(lbytes[1]);
             byte[] bvalue = RLP.decode(lbytes[2]);
-            StoreType storeType = StoreType.values()[btype[0]];
+            KeyValueStoreType storeType = KeyValueStoreType.values()[btype[0]];
 
             return new StoredKeyValueMessage(storeType, bkey, bvalue);
         }

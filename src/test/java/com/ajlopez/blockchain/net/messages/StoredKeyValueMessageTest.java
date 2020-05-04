@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.net.messages;
 
-import com.ajlopez.blockchain.store.StoreType;
+import com.ajlopez.blockchain.store.KeyValueStoreType;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.junit.Test;
 public class StoredKeyValueMessageTest {
     @Test
     public void createMessage() {
-        StoreType storeType = StoreType.BLOCKS;
+        KeyValueStoreType storeType = KeyValueStoreType.BLOCKS;
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 

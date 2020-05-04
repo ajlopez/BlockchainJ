@@ -18,12 +18,12 @@ public class DelayedKeyValueStoreTest {
 
         KeyValueResolver keyValueResolver = new KeyValueResolver() {
             @Override
-            public void resolve(StoreType storeType, byte[] key, CompletableFuture<byte[]> future) {
+            public void resolve(KeyValueStoreType storeType, byte[] key, CompletableFuture<byte[]> future) {
                 new Thread(() -> { future.complete(value); }).start();
             }
         };
 
-        DelayedKeyValueStore delayedKeyValueStore = new DelayedKeyValueStore(StoreType.BLOCKS, keyValueResolver);
+        DelayedKeyValueStore delayedKeyValueStore = new DelayedKeyValueStore(KeyValueStoreType.BLOCKS, keyValueResolver);
 
         byte[] result = delayedKeyValueStore.getValue(key);
 

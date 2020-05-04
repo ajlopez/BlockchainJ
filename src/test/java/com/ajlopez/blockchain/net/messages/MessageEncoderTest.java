@@ -6,7 +6,7 @@ import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
-import com.ajlopez.blockchain.store.StoreType;
+import com.ajlopez.blockchain.store.KeyValueStoreType;
 import com.ajlopez.blockchain.store.TrieType;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
@@ -194,7 +194,7 @@ public class MessageEncoderTest {
 
     @Test
     public void encodeAndDecodeGetStoredValueMessage() {
-        StoreType storeType = StoreType.CONTRACTS;
+        KeyValueStoreType storeType = KeyValueStoreType.CONTRACTS;
         byte[] key = FactoryHelper.createRandomBytes(32);
 
         GetStoredValueMessage message = new GetStoredValueMessage(storeType, key);
@@ -210,13 +210,13 @@ public class MessageEncoderTest {
 
         GetStoredValueMessage gsvresult = (GetStoredValueMessage)result;
 
-        Assert.assertEquals(StoreType.CONTRACTS, gsvresult.getStoreType());
+        Assert.assertEquals(KeyValueStoreType.CONTRACTS, gsvresult.getStoreType());
         Assert.assertArrayEquals(key, gsvresult.getKey());
     }
 
     @Test
     public void encodeAndDecodeStoredKeyValueMessage() {
-        StoreType storeType = StoreType.BLOCKS;
+        KeyValueStoreType storeType = KeyValueStoreType.BLOCKS;
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 
@@ -233,7 +233,7 @@ public class MessageEncoderTest {
 
         StoredKeyValueMessage skvresult = (StoredKeyValueMessage)result;
 
-        Assert.assertEquals(StoreType.BLOCKS, skvresult.getStoreType());
+        Assert.assertEquals(KeyValueStoreType.BLOCKS, skvresult.getStoreType());
         Assert.assertArrayEquals(key, skvresult.getKey());
         Assert.assertArrayEquals(value, skvresult.getValue());
     }

@@ -8,10 +8,10 @@ import java.util.concurrent.TimeUnit;
  * Created by ajlopez on 03/05/2020.
  */
 public class DelayedKeyValueStore implements KeyValueStore {
-    private final StoreType storeType;
+    private final KeyValueStoreType storeType;
     private final KeyValueResolver keyValueResolver;
 
-    public DelayedKeyValueStore(StoreType storeType, KeyValueResolver keyValueResolver) {
+    public DelayedKeyValueStore(KeyValueStoreType storeType, KeyValueResolver keyValueResolver) {
         this.storeType = storeType;
         this.keyValueResolver = keyValueResolver;
     }

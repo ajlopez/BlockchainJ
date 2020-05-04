@@ -7,11 +7,24 @@ import com.ajlopez.blockchain.bc.BlocksInformationStore;
  * Created by Angel on 01/01/2020.
  */
 public class MemoryStores implements Stores {
-    private final TrieStore accountTrieStore = new TrieStore(new HashMapStore());
-    private final TrieStore storageTrieStore = new TrieStore(new HashMapStore());
-    private final CodeStore codeStore = new CodeStore(new HashMapStore());
-    private final BlockHashStore blockHashStore = new BlockHashStore();
-    private final BlocksInformationStore blocksInformationStore = new BlocksInformationStore(new HashMapStore());
+    private final TrieStore accountTrieStore;
+    private final TrieStore storageTrieStore;
+    private final CodeStore codeStore;
+    private final BlockHashStore blockHashStore;
+    private final BlocksInformationStore blocksInformationStore;
+
+    public MemoryStores() {
+        KeyValueStores keyValueStores = new MemoryKeyValueStores();
+
+        this.accountTrieStore = new TrieStore(keyValueStores.getAccountKeyValueStore());
+        this.storageTrieStore = new TrieStore(keyValueStores.getStorageKeyValueStore());
+        this.codeStore = new CodeStore(keyValueStores.getCodeKeyValueStore());
+
+        // TODO use key value store
+        this.blockHashStore = new BlockHashStore();
+
+        this.blocksInformationStore = new BlocksInformationStore(keyValueStores.getBlockInformationKeyValueStore());
+    }
 
     public TrieStore getAccountTrieStore() {
         return this.accountTrieStore;

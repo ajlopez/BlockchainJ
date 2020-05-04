@@ -1,24 +1,24 @@
 package com.ajlopez.blockchain.net.messages;
 
 import com.ajlopez.blockchain.encoding.RLP;
-import com.ajlopez.blockchain.store.StoreType;
+import com.ajlopez.blockchain.store.KeyValueStoreType;
 
 /**
  * Created by ajlopez on 03/05/2020.
  */
 public class StoredKeyValueMessage extends Message {
-    private final StoreType storeType;
+    private final KeyValueStoreType storeType;
     private final byte[] key;
     private final byte[] value;
 
-    public StoredKeyValueMessage(StoreType storeType, byte[] key, byte[] value) {
+    public StoredKeyValueMessage(KeyValueStoreType storeType, byte[] key, byte[] value) {
         super(MessageType.STORED_KEY_VALUE);
         this.storeType = storeType;
         this.key = key;
         this.value = value;
     }
 
-    public StoreType getStoreType() { return this.storeType; }
+    public KeyValueStoreType getStoreType() { return this.storeType; }
 
     public byte[] getKey() { return this.key; }
 
