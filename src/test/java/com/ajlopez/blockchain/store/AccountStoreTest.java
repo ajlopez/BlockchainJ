@@ -44,29 +44,4 @@ public class AccountStoreTest {
 
         Assert.assertArrayEquals(AccountEncoder.encode(account), AccountEncoder.encode(result));
     }
-
-    // TODO move to main performance entry point
-    @Test
-    @Ignore
-    public void createTenMillionAccounts() throws IOException {
-        int naccounts = 10000000;
-
-        Trie trie = new Trie();
-        AccountStore store = new AccountStore(trie);
-
-        System.out.println("KB: " + (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024);
-        long millis = System.currentTimeMillis();
-
-        for (int k = 0; k < naccounts; k++) {
-            Address address = FactoryHelper.createRandomAddress();
-            Account account = new Account(Coin.TEN, 0, null, null);
-
-            store.putAccount(address, account);
-        }
-
-        millis = System.currentTimeMillis() - millis;
-        System.out.println(millis);
-        System.out.println("KB: " + (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024);
-        System.out.println("Trie size: " + store.getTrie().nodesSize());
-    }
 }
