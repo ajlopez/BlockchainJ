@@ -5,7 +5,8 @@ package com.ajlopez.blockchain.store;
  */
 public enum KeyValueStoreType {
     BLOCKS,
-    CONTRACTS,
+    BLOCKS_INFORMATION,
+    CODES,
     ACCOUNTS,
     STORAGE
 }

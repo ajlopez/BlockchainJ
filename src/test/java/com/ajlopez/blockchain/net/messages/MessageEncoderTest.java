@@ -194,7 +194,7 @@ public class MessageEncoderTest {
 
     @Test
     public void encodeAndDecodeGetStoredValueMessage() {
-        KeyValueStoreType storeType = KeyValueStoreType.CONTRACTS;
+        KeyValueStoreType storeType = KeyValueStoreType.CODES;
         byte[] key = FactoryHelper.createRandomBytes(32);
 
         GetStoredValueMessage message = new GetStoredValueMessage(storeType, key);
@@ -210,7 +210,7 @@ public class MessageEncoderTest {
 
         GetStoredValueMessage gsvresult = (GetStoredValueMessage)result;
 
-        Assert.assertEquals(KeyValueStoreType.CONTRACTS, gsvresult.getStoreType());
+        Assert.assertEquals(KeyValueStoreType.CODES, gsvresult.getStoreType());
         Assert.assertArrayEquals(key, gsvresult.getKey());
     }
 
