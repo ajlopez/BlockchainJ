@@ -1,13 +1,10 @@
 package com.ajlopez.blockchain.processors;
 
-import com.ajlopez.blockchain.store.DelayedKeyValueStore;
-import com.ajlopez.blockchain.store.KeyValueResolver;
 import com.ajlopez.blockchain.store.KeyValueStoreType;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -16,7 +13,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class KeyValueProcessorTest {
     @Test
-    public void resolveValue() throws IOException, ExecutionException, InterruptedException {
+    public void resolveValue() throws ExecutionException, InterruptedException {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 
@@ -42,7 +39,7 @@ public class KeyValueProcessorTest {
     }
 
     @Test
-    public void resolveValueTwice() throws IOException, ExecutionException, InterruptedException {
+    public void resolveValueTwice() throws ExecutionException, InterruptedException {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 
@@ -75,7 +72,7 @@ public class KeyValueProcessorTest {
     }
 
     @Test
-    public void resolveUnexpectedKey() throws IOException, ExecutionException, InterruptedException {
+    public void resolveUnexpectedKey() {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 
