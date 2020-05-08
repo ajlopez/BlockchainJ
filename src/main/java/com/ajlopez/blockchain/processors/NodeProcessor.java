@@ -51,7 +51,7 @@ public class NodeProcessor implements PeerNode {
         this.sendProcessor = new SendProcessor(this.peer);
 
         // TODO inject warp processor
-        MessageProcessor messageProcessor = new MessageProcessor(this.peer, this.networkConfiguration, this.blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor, null);
+        MessageProcessor messageProcessor = new MessageProcessor(this.peer, this.networkConfiguration, this.blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor, null, null);
 
         this.receiveProcessor = new ReceiveProcessor(messageProcessor);
         this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, stores, coinbase);

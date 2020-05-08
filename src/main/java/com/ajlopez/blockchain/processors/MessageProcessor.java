@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.*;
+import com.ajlopez.blockchain.store.KeyValueStores;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -24,8 +25,9 @@ public class MessageProcessor {
     private final PeerProcessor peerProcessor;
     private final SendProcessor outputProcessor;
     private final WarpProcessor warpProcessor;
+    private final KeyValueStores keyValueStores;
 
-    public MessageProcessor(Peer peer, NetworkConfiguration networkConfiguration, BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor, WarpProcessor warpProcessor) {
+    public MessageProcessor(Peer peer, NetworkConfiguration networkConfiguration, BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor, WarpProcessor warpProcessor, KeyValueStores keyValueStores) {
         this.peer = peer;
         this.networkConfiguration = networkConfiguration;
         this.blockProcessor = blockProcessor;
@@ -33,6 +35,7 @@ public class MessageProcessor {
         this.peerProcessor = peerProcessor;
         this.outputProcessor = outputProcessor;
         this.warpProcessor = warpProcessor;
+        this.keyValueStores = keyValueStores;
     }
 
     public void processMessage(Message message, Peer sender) {
@@ -53,11 +56,19 @@ public class MessageProcessor {
                 this.processTrieNodeMessage((TrieNodeMessage) message);
             else if (msgtype == MessageType.GET_STATUS)
                 this.processGetStatusMessage(sender);
+            else if (msgtype == MessageType.GET_STORED_VALUE)
+                this.processGetStoredValueMessage((GetStoredValueMessage) message, sender);
         }
         catch (IOException ex) {
             // Add to logger
             ex.printStackTrace();
         }
+    }
+
+    private void processGetStoredValueMessage(GetStoredValueMessage message, Peer sender) throws IOException {
+        byte[] value = this.keyValueStores.getValue(message.getStoreType(), message.getKey());
+
+        this.outputProcessor.postMessage(sender, new StoredKeyValueMessage(message.getStoreType(), message.getKey(), value));
     }
 
     private void processGetStatusMessage(Peer sender) {

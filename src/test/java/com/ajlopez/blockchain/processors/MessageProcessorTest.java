@@ -440,7 +440,7 @@ public class MessageProcessorTest {
         WarpProcessor warpProcessor = new WarpProcessor(accountStore);
         warpProcessor.processBlock(block);
 
-        MessageProcessor processor = new MessageProcessor(null, null, null, null, null, null, warpProcessor);
+        MessageProcessor processor = new MessageProcessor(null, null, null, null, null, null, warpProcessor, null);
 
         TrieNodeMessage message = new TrieNodeMessage(block.getStateRootHash(), TrieType.ACCOUNT, stores.getAccountTrieStore().retrieve(block.getStateRootHash()).getEncoded());
 
@@ -451,6 +451,33 @@ public class MessageProcessorTest {
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertTrue(accountStore.exists(block.getStateRootHash()));
+    }
+
+
+    @Test
+    public void processGetStoredValueMessage() throws IOException {
+        Peer sender = FactoryHelper.createRandomPeer();
+        SendProcessor outputProcessor = new SendProcessor(sender);
+
+        Peer receiver = FactoryHelper.createRandomPeer();
+        SimpleMessageChannel channel = new SimpleMessageChannel();
+        outputProcessor.connectToPeer(receiver, channel);
+
+        KeyValueStores stores = new MemoryKeyValueStores();
+        byte[] key = FactoryHelper.createRandomBytes(32);
+        byte[] value = FactoryHelper.createRandomBytes(42);
+
+        stores.getBlockKeyValueStore().setValue(key, value);
+
+        MessageProcessor processor = new MessageProcessor(null, null, null, null, null, outputProcessor, null, stores);
+
+        GetStoredValueMessage message = new GetStoredValueMessage(KeyValueStoreType.BLOCKS, key);
+
+        processor.processMessage(message, receiver);
+
+        StoredKeyValueMessage expected = new StoredKeyValueMessage(KeyValueStoreType.BLOCKS, key, value);
+
+        expectedMessage(channel, sender, expected);
     }
 
     public static void expectedMessage(SimpleMessageChannel channel, Peer expectedSender, Message expectedMessage) {
