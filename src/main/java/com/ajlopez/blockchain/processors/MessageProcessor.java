@@ -26,8 +26,9 @@ public class MessageProcessor {
     private final SendProcessor outputProcessor;
     private final WarpProcessor warpProcessor;
     private final KeyValueStores keyValueStores;
+    private final KeyValueProcessor keyValueProcessor;
 
-    public MessageProcessor(Peer peer, NetworkConfiguration networkConfiguration, BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor, WarpProcessor warpProcessor, KeyValueStores keyValueStores) {
+    public MessageProcessor(Peer peer, NetworkConfiguration networkConfiguration, BlockProcessor blockProcessor, TransactionProcessor transactionProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor, WarpProcessor warpProcessor, KeyValueStores keyValueStores, KeyValueProcessor keyValueProcessor) {
         this.peer = peer;
         this.networkConfiguration = networkConfiguration;
         this.blockProcessor = blockProcessor;
@@ -36,6 +37,7 @@ public class MessageProcessor {
         this.outputProcessor = outputProcessor;
         this.warpProcessor = warpProcessor;
         this.keyValueStores = keyValueStores;
+        this.keyValueProcessor = keyValueProcessor;
     }
 
     public void processMessage(Message message, Peer sender) {
@@ -58,11 +60,17 @@ public class MessageProcessor {
                 this.processGetStatusMessage(sender);
             else if (msgtype == MessageType.GET_STORED_VALUE)
                 this.processGetStoredValueMessage((GetStoredValueMessage) message, sender);
+            else if (msgtype == MessageType.STORED_KEY_VALUE)
+                this.processStoredKeyValueMessage((StoredKeyValueMessage) message);
         }
         catch (IOException ex) {
             // Add to logger
             ex.printStackTrace();
         }
+    }
+
+    private void processStoredKeyValueMessage(StoredKeyValueMessage message) {
+        this.keyValueProcessor.resolving(message.getStoreType(), message.getKey(), message.getValue());
     }
 
     private void processGetStoredValueMessage(GetStoredValueMessage message, Peer sender) throws IOException {

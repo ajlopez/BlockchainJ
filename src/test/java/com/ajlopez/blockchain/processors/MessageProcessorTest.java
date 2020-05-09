@@ -21,6 +21,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by ajlopez on 27/01/2018.
@@ -440,7 +442,7 @@ public class MessageProcessorTest {
         WarpProcessor warpProcessor = new WarpProcessor(accountStore);
         warpProcessor.processBlock(block);
 
-        MessageProcessor processor = new MessageProcessor(null, null, null, null, null, null, warpProcessor, null);
+        MessageProcessor processor = new MessageProcessor(null, null, null, null, null, null, warpProcessor, null, null);
 
         TrieNodeMessage message = new TrieNodeMessage(block.getStateRootHash(), TrieType.ACCOUNT, stores.getAccountTrieStore().retrieve(block.getStateRootHash()).getEncoded());
 
@@ -469,7 +471,7 @@ public class MessageProcessorTest {
 
         stores.getBlockKeyValueStore().setValue(key, value);
 
-        MessageProcessor processor = new MessageProcessor(null, null, null, null, null, outputProcessor, null, stores);
+        MessageProcessor processor = new MessageProcessor(null, null, null, null, null, outputProcessor, null, stores, null);
 
         GetStoredValueMessage message = new GetStoredValueMessage(KeyValueStoreType.BLOCKS, key);
 
@@ -478,6 +480,28 @@ public class MessageProcessorTest {
         StoredKeyValueMessage expected = new StoredKeyValueMessage(KeyValueStoreType.BLOCKS, key, value);
 
         expectedMessage(channel, sender, expected);
+    }
+
+    @Test
+    public void processStoredKeyValueMessage() throws ExecutionException, InterruptedException {
+        byte[] key = FactoryHelper.createRandomBytes(32);
+        byte[] value = FactoryHelper.createRandomBytes(42);
+
+        KeyValueProcessor keyValueProcessor = new KeyValueProcessor();
+
+        MessageProcessor processor = new MessageProcessor(null, null, null, null, null, null, null, null, keyValueProcessor);
+
+        CompletableFuture<byte[]> completableFuture = new CompletableFuture<>();
+        keyValueProcessor.resolve(KeyValueStoreType.BLOCKS, key, completableFuture);
+
+        StoredKeyValueMessage message = new StoredKeyValueMessage(KeyValueStoreType.BLOCKS, key, value);
+
+        processor.processMessage(message, null);
+
+        byte[] result = completableFuture.get();
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(value, result);
     }
 
     public static void expectedMessage(SimpleMessageChannel channel, Peer expectedSender, Message expectedMessage) {

@@ -255,27 +255,27 @@ public class FactoryHelper {
     }
 
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor) {
-        return new MessageProcessor(null, null, blockProcessor, null, null, null, null, null);
+        return new MessageProcessor(null, null, blockProcessor, null, null, null, null, null, null);
     }
 
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, PeerProcessor peerProcessor, SendProcessor outputProcessor) {
-        return new MessageProcessor(null, null, blockProcessor, null, peerProcessor, outputProcessor, null, null);
+        return new MessageProcessor(null, null, blockProcessor, null, peerProcessor, outputProcessor, null, null, null);
     }
 
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, SendProcessor outputProcessor, Peer peer, NetworkConfiguration networkConfiguration) {
-        return new MessageProcessor(peer, networkConfiguration, blockProcessor, null, null, outputProcessor, null, null);
+        return new MessageProcessor(peer, networkConfiguration, blockProcessor, null, null, outputProcessor, null, null, null);
     }
 
     public static MessageProcessor createMessageProcessor(BlockProcessor blockProcessor, SendProcessor outputProcessor) {
-        return new MessageProcessor(null, null, blockProcessor, null, null, outputProcessor, null, null);
+        return new MessageProcessor(null, null, blockProcessor, null, null, outputProcessor, null, null, null);
     }
 
     public static MessageProcessor createMessageProcessor(TransactionProcessor transactionProcessor) {
-        return new MessageProcessor(null, null, null, transactionProcessor, null, null, null, null);
+        return new MessageProcessor(null, null, null, transactionProcessor, null, null, null, null, null);
     }
 
     public static MessageProcessor createMessageProcessor(TransactionProcessor transactionProcessor, SendProcessor outputProcessor) {
-        return new MessageProcessor(null, null, null, transactionProcessor, null, outputProcessor, null, null);
+        return new MessageProcessor(null, null, null, transactionProcessor, null, outputProcessor, null, null, null);
     }
 
     public static Peer createRandomPeer() {
