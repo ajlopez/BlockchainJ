@@ -8,22 +8,42 @@ import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 /**
  * Created by ajlopez on 01/01/2020.
  */
-public interface Stores {
-    TrieStore getAccountTrieStore();
+public class Stores {
+    private final TrieStore accountTrieStore;
+    private final TrieStore storageTrieStore;
+    private final CodeStore codeStore;
+    private final BlockStore blockHashStore;
+    private final BlocksInformationStore blocksInformationStore;
 
-    TrieStore getStorageTrieStore();
+    public Stores(KeyValueStores keyValueStores) {
+        this.accountTrieStore = new TrieStore(keyValueStores.getAccountKeyValueStore());
+        this.storageTrieStore = new TrieStore(keyValueStores.getStorageKeyValueStore());
+        this.codeStore = new CodeStore(keyValueStores.getCodeKeyValueStore());
+        this.blockHashStore = new BlockStore(keyValueStores.getBlockKeyValueStore());
+        this.blocksInformationStore = new BlocksInformationStore(keyValueStores.getBlockInformationKeyValueStore());
+    }
 
-    CodeStore getCodeStore();
+    public TrieStore getAccountTrieStore() {
+        return this.accountTrieStore;
+    }
 
-    BlockStore getBlockHashStore();
+    public TrieStore getStorageTrieStore() {
+        return this.storageTrieStore;
+    }
 
-    BlocksInformationStore getBlocksInformationStore();
+    public CodeStore getCodeStore() {
+        return this.codeStore;
+    }
 
-    default AccountStoreProvider getAccountStoreProvider() {
+    public BlockStore getBlockHashStore() { return this.blockHashStore; }
+
+    public BlocksInformationStore getBlocksInformationStore() { return this.blocksInformationStore; }
+
+    public AccountStoreProvider getAccountStoreProvider() {
         return new AccountStoreProvider(this.getAccountTrieStore());
     }
 
-    default TrieStorageProvider getTrieStorageProvider() {
+    public TrieStorageProvider getTrieStorageProvider() {
         return new TrieStorageProvider(this.getStorageTrieStore());
     }
 }
