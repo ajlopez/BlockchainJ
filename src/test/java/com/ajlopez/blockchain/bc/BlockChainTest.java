@@ -30,7 +30,7 @@ public class BlockChainTest {
     }
 
     @Test
-    public void noBlockByHash() {
+    public void noBlockByHash() throws IOException {
         Stores stores = new MemoryStores();
         BlockChain blockChain = new BlockChain(stores);
 

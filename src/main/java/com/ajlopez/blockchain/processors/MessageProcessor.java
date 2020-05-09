@@ -155,7 +155,7 @@ public class MessageProcessor {
             outputProcessor.postMessage(sender, GetStatusMessage.getInstance());
     }
 
-    private void processGetBlockByHashMessage(GetBlockByHashMessage message, Peer sender) {
+    private void processGetBlockByHashMessage(GetBlockByHashMessage message, Peer sender) throws IOException {
         Block block = this.blockProcessor.getBlockByHash(message.getHash());
 
         if (block != null)

@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.store;
 
 
-import com.ajlopez.blockchain.bc.BlockHashStore;
+import com.ajlopez.blockchain.bc.BlockStore;
 import com.ajlopez.blockchain.bc.BlocksInformationStore;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
@@ -15,7 +15,7 @@ public interface Stores {
 
     CodeStore getCodeStore();
 
-    BlockHashStore getBlockHashStore();
+    BlockStore getBlockHashStore();
 
     BlocksInformationStore getBlocksInformationStore();
 

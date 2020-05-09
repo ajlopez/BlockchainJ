@@ -1,6 +1,6 @@
 package com.ajlopez.blockchain.store;
 
-import com.ajlopez.blockchain.bc.BlockHashStore;
+import com.ajlopez.blockchain.bc.BlockStore;
 import com.ajlopez.blockchain.bc.BlocksInformationStore;
 
 /**
@@ -10,7 +10,7 @@ public class MemoryStores implements Stores {
     private final TrieStore accountTrieStore;
     private final TrieStore storageTrieStore;
     private final CodeStore codeStore;
-    private final BlockHashStore blockHashStore;
+    private final BlockStore blockHashStore;
     private final BlocksInformationStore blocksInformationStore;
 
     public MemoryStores() {
@@ -19,10 +19,7 @@ public class MemoryStores implements Stores {
         this.accountTrieStore = new TrieStore(keyValueStores.getAccountKeyValueStore());
         this.storageTrieStore = new TrieStore(keyValueStores.getStorageKeyValueStore());
         this.codeStore = new CodeStore(keyValueStores.getCodeKeyValueStore());
-
-        // TODO use key value store
-        this.blockHashStore = new BlockHashStore();
-
+        this.blockHashStore = new BlockStore(keyValueStores.getBlockKeyValueStore());
         this.blocksInformationStore = new BlocksInformationStore(keyValueStores.getBlockInformationKeyValueStore());
     }
 
@@ -38,7 +35,7 @@ public class MemoryStores implements Stores {
         return this.codeStore;
     }
 
-    public BlockHashStore getBlockHashStore() { return this.blockHashStore; }
+    public BlockStore getBlockHashStore() { return this.blockHashStore; }
 
     public BlocksInformationStore getBlocksInformationStore() { return this.blocksInformationStore; }
 }

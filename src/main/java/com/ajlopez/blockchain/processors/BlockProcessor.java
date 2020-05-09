@@ -87,7 +87,7 @@ public class BlockProcessor {
         return this.blockChain.getBestBlockNumber();
     }
 
-    public Block getBlockByHash(BlockHash hash) {
+    public Block getBlockByHash(BlockHash hash) throws IOException {
         return this.blockChain.getBlockByHash(hash);
     }
 
@@ -95,7 +95,7 @@ public class BlockProcessor {
         return this.blockChain.getBlockByNumber(number);
     }
 
-    public boolean isChainedBlock(BlockHash hash) {
+    public boolean isChainedBlock(BlockHash hash) throws IOException {
         return this.blockChain.isChainedBlock(hash);
     }
 
@@ -103,7 +103,7 @@ public class BlockProcessor {
         return this.orphanBlocks.isKnownOrphan(hash);
     }
 
-    public boolean isKnownBlock(BlockHash hash) {
+    public boolean isKnownBlock(BlockHash hash) throws IOException {
         return this.isChainedBlock(hash) || this.isOrphanBlock(hash);
     }
 

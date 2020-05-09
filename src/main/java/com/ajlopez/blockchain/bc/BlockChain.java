@@ -20,7 +20,7 @@ public class BlockChain implements BlockProvider {
     private Block bestBlock;
     private Difficulty bestTotalDifficulty;
 
-    private final BlockHashStore blocksByHash;
+    private final BlockStore blocksByHash;
     private final BlocksInformationStore blocksInformationStore;
 
     private List<Consumer<Block>> blockConsumers = new ArrayList<>();
@@ -109,18 +109,17 @@ public class BlockChain implements BlockProvider {
     }
 
     @Override
-    public Block getBlockByHash(Hash hash) {
+    public Block getBlockByHash(Hash hash) throws IOException {
         this.lock.readLock().lock();
 
         try {
             return this.blocksByHash.getBlock(hash);
-        }
-        finally {
+        } finally {
             this.lock.readLock().unlock();
         }
     }
 
-    public boolean isChainedBlock(Hash hash) {
+    public boolean isChainedBlock(Hash hash) throws IOException {
         this.lock.readLock().lock();
 
         try {
@@ -153,7 +152,7 @@ public class BlockChain implements BlockProvider {
         }
     }
 
-    private boolean isOrphan(Block block) {
+    private boolean isOrphan(Block block) throws IOException {
         if (block.getNumber() == 0)
             return false;
 

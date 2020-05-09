@@ -9,7 +9,7 @@ import java.io.IOException;
  * Created by ajlopez on 17/07/2019.
  */
 public interface BlockProvider {
-    Block getBlockByHash(Hash hash);
+    Block getBlockByHash(Hash hash) throws IOException;
 
     Block getBlockByNumber(long number) throws IOException;
 }

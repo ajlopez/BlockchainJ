@@ -30,7 +30,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void noBlockByHash() {
+    public void noBlockByHash() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         Assert.assertNull(processor.getBlockByHash(FactoryHelper.createRandomBlockHash()));
@@ -44,7 +44,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void notChainedBlock() {
+    public void notChainedBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         Assert.assertFalse(processor.isChainedBlock(FactoryHelper.createRandomBlockHash()));
@@ -58,7 +58,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void unknownBlock() {
+    public void unknownBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         Assert.assertFalse(processor.isKnownBlock(FactoryHelper.createRandomBlockHash()));

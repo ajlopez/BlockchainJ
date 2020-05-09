@@ -56,7 +56,7 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         return JsonRpcResponse.createResponse(request, json);
     }
 
-    private JsonRpcResponse getBlockByHash(JsonRpcRequest request) {
+    private JsonRpcResponse getBlockByHash(JsonRpcRequest request) throws IOException {
         BlockHash hash = new BlockHash(HexUtils.hexStringToBytes(request.getParams().get(0).getValue().toString()));
         Block block = this.blockChain.getBlockByHash(hash);
 

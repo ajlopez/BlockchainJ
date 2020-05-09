@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.bc;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class BlockFork {
         return result;
     }
 
-    public static BlockFork fromBlocks(BlockChain blockChain, Block oldBestBlock, Block newBestBlock) {
+    public static BlockFork fromBlocks(BlockChain blockChain, Block oldBestBlock, Block newBestBlock) throws IOException {
         List<Block> oldBlocks = new ArrayList<>();
         List<Block> newBlocks = new ArrayList<>();
 
