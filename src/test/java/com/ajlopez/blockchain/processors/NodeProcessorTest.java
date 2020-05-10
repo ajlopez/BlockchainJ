@@ -6,16 +6,17 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
+import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.net.peers.PeerConnection;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.MemoryKeyValueStores;
-import com.ajlopez.blockchain.store.MemoryStores;
-import com.ajlopez.blockchain.store.Stores;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.test.utils.NodesHelper;
+import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -291,12 +292,16 @@ public class NodeProcessorTest {
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain1 = FactoryHelper.createBlockChain(stores,300, 10);
         Block bestBlock = blockChain1.getBestBlock();
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1, keyValueStores);
 
-        MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores(keyValueStores.getAccountKeyValueStore());
+        MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
         Stores stores2 = new Stores(keyValueStores2);
 
         Assert.assertNotNull(stores.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash()));
+
+        Trie genesisTrie = stores.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash());
+        genesisTrie.saveToStore(stores2.getAccountTrieStore());
+
         Assert.assertNotNull(stores2.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash()));
 
         // TODO improve, injecting twice the stores, indirectly in blockchain, and in node processor
@@ -323,6 +328,53 @@ public class NodeProcessorTest {
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(bestBlock.getHash(), result2.getHash());
+    }
+
+    @Test
+    public void executeBlockUsingTwoNodesBeamSynchronization() throws IOException {
+        MemoryKeyValueStores keyValueStores = new MemoryKeyValueStores();
+        Stores stores = new Stores(keyValueStores);
+        BlockChain blockChain1 = FactoryHelper.createBlockChain(stores,300, 10);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1, keyValueStores);
+
+        MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
+        Stores stores2 = new Stores(keyValueStores2);
+
+        // TODO improve, injecting twice the stores, indirectly in blockchain, and in node processor
+        BlockChain blockChain2 = new BlockChain(stores2);
+
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2, keyValueStores2);
+
+        nodeProcessor1.connectTo(nodeProcessor2);
+        nodeProcessor2.connectTo(nodeProcessor1);
+
+        SendProcessor sendProcessor = nodeProcessor2.getSendProcessor();
+        KeyValueProcessor keyValueProcessor = nodeProcessor2.getKeyValueProcessor();
+
+        KeyValueStore remoteCodeKeyValueStore = new RemoteKeyValueStore(KeyValueStoreType.CODES, sendProcessor, keyValueProcessor);
+        KeyValueStore remoteAccountKeyValueStore = new RemoteKeyValueStore(KeyValueStoreType.ACCOUNTS, sendProcessor, keyValueProcessor);
+        KeyValueStore remoteStorageKeyValueStore = new RemoteKeyValueStore(KeyValueStoreType.STORAGE, sendProcessor, keyValueProcessor);
+
+        CodeStore codeStore = new CodeStore(new DualKeyValueStore(remoteCodeKeyValueStore, keyValueStores2.getCodeKeyValueStore()));
+        TrieStore accountTrieStore = new TrieStore(new DualKeyValueStore(remoteAccountKeyValueStore, keyValueStores2.getAccountKeyValueStore()));
+        TrieStore storageTrieStore = new TrieStore(new DualKeyValueStore(remoteStorageKeyValueStore, keyValueStores2.getStorageKeyValueStore()));
+
+        AccountStoreProvider accountStoreProvider = new AccountStoreProvider(accountTrieStore);
+        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(storageTrieStore);
+
+        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, trieStorageProvider, codeStore);
+        Block bestBlock = blockChain1.getBestBlock();
+
+        nodeProcessor1.startMessagingProcess();
+        nodeProcessor2.startMessagingProcess();
+
+        Hash hash = blockExecutor.executeBlock(bestBlock, blockChain1.getBlockByNumber(bestBlock.getNumber() - 1).getStateRootHash());
+
+        nodeProcessor2.stopMessagingProcess();
+        nodeProcessor1.stopMessagingProcess();
+
+        Assert.assertNotNull(hash);
+        Assert.assertEquals(bestBlock.getStateRootHash(), hash);
     }
 
     @Test

@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by ajlopez on 19/04/2020.
  */
-public class KeyValueCopierStoreTest {
+public class DualKeyValueStoreTest {
     @Test
     public void copyKeyValues() throws IOException {
         KeyValueStore originalStore = new HashMapStore();
@@ -28,7 +28,7 @@ public class KeyValueCopierStoreTest {
         for (int k = 0; k < keys.length; k++)
             Assert.assertNull(newStore.getValue(keys[k]));
 
-        KeyValueCopierStore copierStore = new KeyValueCopierStore(originalStore, newStore);
+        DualKeyValueStore copierStore = new DualKeyValueStore(originalStore, newStore);
 
         for (int k = 0; k < keys.length; k++)
             Assert.assertArrayEquals(values[k], copierStore.getValue(keys[k]));

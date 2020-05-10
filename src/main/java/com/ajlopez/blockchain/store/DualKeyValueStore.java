@@ -3,13 +3,13 @@ package com.ajlopez.blockchain.store;
 import java.io.IOException;
 
 /**
- * Created by Angel on 19/04/2020.
+ * Created by ajlopez on 19/04/2020.
  */
-public class KeyValueCopierStore implements KeyValueStore {
+public class DualKeyValueStore implements KeyValueStore {
     private final KeyValueStore originalStore;
     private final KeyValueStore newStore;
 
-    public KeyValueCopierStore(KeyValueStore originalStore, KeyValueStore newStore) {
+    public DualKeyValueStore(KeyValueStore originalStore, KeyValueStore newStore) {
         this.originalStore = originalStore;
         this.newStore = newStore;
     }

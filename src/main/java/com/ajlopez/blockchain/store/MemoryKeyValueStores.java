@@ -11,12 +11,7 @@ public class MemoryKeyValueStores implements KeyValueStores {
     private final KeyValueStore codeKeyValueStore;
 
     public MemoryKeyValueStores() {
-        this(new HashMapStore());
-    }
-
-    // TODO review only injected in tests to have the same genesis status
-    public MemoryKeyValueStores(KeyValueStore accountKeyValueStore) {
-        this.accountKeyValueStore = accountKeyValueStore;
+        this.accountKeyValueStore = new HashMapStore();
         this.storageKeyValueStore = new HashMapStore();
         this.blockKeyValueStore = new HashMapStore();
         this.blockInformationKeyValueStore = new HashMapStore();

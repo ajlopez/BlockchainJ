@@ -29,6 +29,7 @@ public class NodeProcessor implements PeerNode {
     private final Peer peer;
     private final ReceiveProcessor receiveProcessor;
     private final SendProcessor sendProcessor;
+    private final KeyValueProcessor keyValueProcessor;
     private final TransactionPool transactionPool;
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
@@ -52,9 +53,10 @@ public class NodeProcessor implements PeerNode {
         PeerProcessor peerProcessor = new PeerProcessor(this.networkConfiguration.getNetworkNumber());
 
         this.sendProcessor = new SendProcessor(this.peer);
+        this.keyValueProcessor = new KeyValueProcessor();
 
-        // TODO inject warp processor, key value stores, key value processor
-        MessageProcessor messageProcessor = new MessageProcessor(this.peer, this.networkConfiguration, this.blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor, null, null, null);
+        // TODO inject warp processor
+        MessageProcessor messageProcessor = new MessageProcessor(this.peer, this.networkConfiguration, this.blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor, null, keyValueStores, keyValueProcessor);
 
         this.receiveProcessor = new ReceiveProcessor(messageProcessor);
         this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, stores, coinbase);
@@ -107,5 +109,15 @@ public class NodeProcessor implements PeerNode {
         Block bestBlock = this.blockProcessor.getBestBlock();
 
         return new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash());
+    }
+
+    // TODO review: only exposed for beam sync tests
+    public SendProcessor getSendProcessor() {
+        return this.sendProcessor;
+    }
+
+    // TODO review: only exposed for beam sync tests
+    public KeyValueProcessor getKeyValueProcessor() {
+        return this.keyValueProcessor;
     }
 }
