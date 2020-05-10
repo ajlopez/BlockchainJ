@@ -8,7 +8,8 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.processors.TransactionProcessor;
-import com.ajlopez.blockchain.store.MemoryStores;
+import com.ajlopez.blockchain.store.KeyValueStores;
+import com.ajlopez.blockchain.store.MemoryKeyValueStores;
 import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.utils.HexUtils;
 
@@ -20,7 +21,8 @@ import java.util.List;
  */
 public class Start {
     public static void main(String[] args) throws IOException {
-        Stores stores = new MemoryStores();
+        KeyValueStores keyValueStores = new MemoryKeyValueStores();
+        Stores stores = new Stores(keyValueStores);
         BlockChain blockChain = new BlockChain(stores);
         TransactionPool transactionPool = new TransactionPool();
         // TODO processor only uses pool?
@@ -39,7 +41,7 @@ public class Start {
         List<String> peers = argsproc.getStringList("peers");
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        NodeRunner runner = new NodeRunner(blockChain, isMiner, port, peers, coinbase, networkConfiguration, stores);
+        NodeRunner runner = new NodeRunner(blockChain, isMiner, port, peers, coinbase, networkConfiguration, keyValueStores);
 
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));

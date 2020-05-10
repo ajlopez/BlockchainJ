@@ -291,7 +291,11 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
-        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), blockChain, new MemoryStores(), createRandomAddress());
+        return createNodeProcessor(blockChain, new MemoryKeyValueStores());
+    }
+
+    public static NodeProcessor createNodeProcessor(BlockChain blockChain, KeyValueStores keyValueStores) {
+        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), blockChain, keyValueStores, createRandomAddress());
     }
 
     public static List<Block> createBlocks(int nblocks) {

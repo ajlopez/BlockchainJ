@@ -11,7 +11,9 @@ import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.net.peers.PeerConnection;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.MemoryKeyValueStores;
 import com.ajlopez.blockchain.store.MemoryStores;
+import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.test.utils.NodesHelper;
 import org.junit.Assert;
@@ -32,7 +34,7 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, blockChain, new MemoryStores(), coinbase);
+        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, blockChain, new MemoryKeyValueStores(), coinbase);
 
         Assert.assertSame(peer, nodeProcessor.getPeer());
     }
@@ -44,7 +46,7 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, blockChain, new MemoryStores(), coinbase);
+        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, blockChain, new MemoryKeyValueStores(), coinbase);
 
         Status result = nodeProcessor.getStatus();
 
@@ -261,6 +263,46 @@ public class NodeProcessorTest {
         BlockChain blockChain2 = new BlockChain(new MemoryStores());
 
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2);
+
+        nodeProcessor1.connectTo(nodeProcessor2);
+        nodeProcessor2.connectTo(nodeProcessor1);
+
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash());
+        StatusMessage statusMessage = new StatusMessage(status);
+
+        nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
+
+        NodesHelper.runNodeProcessors(blockChain1.getBestBlock(), nodeProcessor1, nodeProcessor2);
+
+        Block result1 = blockChain1.getBestBlock();
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(bestBlock.getHash(), result1.getHash());
+
+        Block result2 = blockChain2.getBestBlock();
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(bestBlock.getHash(), result2.getHash());
+    }
+
+    @Test
+    public void synchronizeTwoNodesWithTransactions() throws InterruptedException, IOException {
+        MemoryKeyValueStores keyValueStores = new MemoryKeyValueStores();
+        Stores stores = new Stores(keyValueStores);
+        BlockChain blockChain1 = FactoryHelper.createBlockChain(stores,300, 10);
+        Block bestBlock = blockChain1.getBestBlock();
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
+
+        MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores(keyValueStores.getAccountKeyValueStore());
+        Stores stores2 = new Stores(keyValueStores2);
+
+        Assert.assertNotNull(stores.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash()));
+        Assert.assertNotNull(stores2.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash()));
+
+        // TODO improve, injecting twice the stores, indirectly in blockchain, and in node processor
+        BlockChain blockChain2 = new BlockChain(stores2);
+
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(blockChain2, keyValueStores2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);

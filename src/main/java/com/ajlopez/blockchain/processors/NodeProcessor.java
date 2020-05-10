@@ -14,6 +14,7 @@ import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.CodeStore;
+import com.ajlopez.blockchain.store.KeyValueStores;
 import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
@@ -32,7 +33,9 @@ public class NodeProcessor implements PeerNode {
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, BlockChain blockChain, Stores stores, Address coinbase) {
+    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, BlockChain blockChain, KeyValueStores keyValueStores, Address coinbase) {
+        Stores stores = new Stores(keyValueStores);
+
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
         TrieStorageProvider trieStorageProvider = stores.getTrieStorageProvider();
         CodeStore codeStore = stores.getCodeStore();

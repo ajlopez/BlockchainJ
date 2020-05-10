@@ -24,13 +24,13 @@ public class NodeRunner {
     private final NodeProcessor nodeProcessor;
     private final TcpPeerServer tcpPeerServer;
 
-    public NodeRunner(BlockChain blockChain, boolean miner, int port, List<String> peers, Address coinbase, NetworkConfiguration networkConfiguration, Stores stores) {
+    public NodeRunner(BlockChain blockChain, boolean miner, int port, List<String> peers, Address coinbase, NetworkConfiguration networkConfiguration, KeyValueStores keyValueStores) {
         this.miner = miner;
         this.port = port;
         this.peers = peers;
         this.network = networkConfiguration.getNetworkNumber();
 
-        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), blockChain, stores, coinbase);
+        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), blockChain, keyValueStores, coinbase);
         this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
     }
 
