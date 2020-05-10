@@ -20,16 +20,16 @@ public class BlockChain implements BlockProvider {
     private Block bestBlock;
     private Difficulty bestTotalDifficulty;
 
-    private final BlockStore blocksByHash;
-    private final BlocksInformationStore blocksInformationStore;
+    private final BlockStore blockStore;
+    private final BlocksInformationStore blockInformationStore;
 
     private List<Consumer<Block>> blockConsumers = new ArrayList<>();
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     public BlockChain(Stores stores) {
-        this.blocksByHash = stores.getBlockHashStore();
-        this.blocksInformationStore = stores.getBlocksInformationStore();
+        this.blockStore = stores.getBlockStore();
+        this.blockInformationStore = stores.getBlocksInformationStore();
     }
 
     public Block getBestBlock() {
@@ -64,7 +64,7 @@ public class BlockChain implements BlockProvider {
             if (isOrphan(block))
                 return false;
 
-            if (this.blocksByHash.containsBlock(block.getHash()))
+            if (this.blockStore.containsBlock(block.getHash()))
                 return true;
 
             Difficulty parentTotalDifficulty;
@@ -72,7 +72,7 @@ public class BlockChain implements BlockProvider {
             if (block.getNumber() == 0)
                 parentTotalDifficulty = Difficulty.ZERO;
             else
-                parentTotalDifficulty = this.blocksInformationStore.get(block.getNumber() - 1).getBlockInformation(block.getParentHash()).getTotalDifficulty();
+                parentTotalDifficulty = this.blockInformationStore.get(block.getNumber() - 1).getBlockInformation(block.getParentHash()).getTotalDifficulty();
 
             Difficulty totalDifficulty = parentTotalDifficulty.add(block.getCummulativeDifficulty());
 
@@ -113,7 +113,7 @@ public class BlockChain implements BlockProvider {
         this.lock.readLock().lock();
 
         try {
-            return this.blocksByHash.getBlock(hash);
+            return this.blockStore.getBlock(hash);
         } finally {
             this.lock.readLock().unlock();
         }
@@ -123,7 +123,7 @@ public class BlockChain implements BlockProvider {
         this.lock.readLock().lock();
 
         try {
-            return this.blocksByHash.containsBlock(hash);
+            return this.blockStore.containsBlock(hash);
         }
         finally {
             this.lock.readLock().unlock();
@@ -135,7 +135,7 @@ public class BlockChain implements BlockProvider {
         this.lock.readLock().lock();
 
         try {
-            BlocksInformation blocksInformation = this.blocksInformationStore.get(number);
+            BlocksInformation blocksInformation = this.blockInformationStore.get(number);
 
             if (blocksInformation == null)
                 return null;
@@ -145,7 +145,7 @@ public class BlockChain implements BlockProvider {
             if (blockInformation == null)
                 return null;
 
-            return this.blocksByHash.getBlock(blockInformation.getBlockHash());
+            return this.blockStore.getBlock(blockInformation.getBlockHash());
         }
         finally {
             this.lock.readLock().unlock();
@@ -156,14 +156,14 @@ public class BlockChain implements BlockProvider {
         if (block.getNumber() == 0)
             return false;
 
-        return !blocksByHash.containsBlock(block.getParentHash());
+        return !blockStore.containsBlock(block.getParentHash());
     }
 
     private void saveBlock(Block block, Difficulty totalDifficulty, boolean isBetterBlock) throws IOException {
-        if (!this.blocksByHash.containsBlock(block.getHash()))
-            this.blocksByHash.saveBlock(block);
+        if (!this.blockStore.containsBlock(block.getHash()))
+            this.blockStore.saveBlock(block);
 
-        BlocksInformation blocksInformation = this.blocksInformationStore.get(block.getNumber());
+        BlocksInformation blocksInformation = this.blockInformationStore.get(block.getNumber());
 
         if (blocksInformation == null)
             blocksInformation = new BlocksInformation();
@@ -173,7 +173,7 @@ public class BlockChain implements BlockProvider {
         if (isBetterBlock)
             blocksInformation.setBlockOnChain(block.getHash());
 
-        this.blocksInformationStore.put(block.getNumber(), blocksInformation);
+        this.blockInformationStore.put(block.getNumber(), blocksInformation);
     }
 
     private void saveBestBlock(Block block, Difficulty totalDifficulty) throws IOException {
@@ -181,17 +181,17 @@ public class BlockChain implements BlockProvider {
         this.bestTotalDifficulty = totalDifficulty;
 
         while (block.getNumber() > 0 && !this.getBlockByNumber(block.getNumber() - 1).getHash().equals(block.getParentHash())) {
-            block = this.blocksByHash.getBlock(block.getParentHash());
-            BlocksInformation blocksInformation = this.blocksInformationStore.get(block.getNumber());
+            block = this.blockStore.getBlock(block.getParentHash());
+            BlocksInformation blocksInformation = this.blockInformationStore.get(block.getNumber());
             blocksInformation.setBlockOnChain(block.getHash());
-            this.blocksInformationStore.put(block.getNumber(), blocksInformation);
+            this.blockInformationStore.put(block.getNumber(), blocksInformation);
         }
 
         long n = this.bestBlock.getNumber() + 1;
 
-        for (BlocksInformation blocksInformation = this.blocksInformationStore.get(n); blocksInformation != null; blocksInformation = this.blocksInformationStore.get(n)) {
+        for (BlocksInformation blocksInformation = this.blockInformationStore.get(n); blocksInformation != null; blocksInformation = this.blockInformationStore.get(n)) {
             blocksInformation.noBlockOnChain();
-            this.blocksInformationStore.put(n, blocksInformation);
+            this.blockInformationStore.put(n, blocksInformation);
             n++;
         }
     }

@@ -12,14 +12,14 @@ public class Stores {
     private final TrieStore accountTrieStore;
     private final TrieStore storageTrieStore;
     private final CodeStore codeStore;
-    private final BlockStore blockHashStore;
+    private final BlockStore blockStore;
     private final BlocksInformationStore blocksInformationStore;
 
     public Stores(KeyValueStores keyValueStores) {
         this.accountTrieStore = new TrieStore(keyValueStores.getAccountKeyValueStore());
         this.storageTrieStore = new TrieStore(keyValueStores.getStorageKeyValueStore());
         this.codeStore = new CodeStore(keyValueStores.getCodeKeyValueStore());
-        this.blockHashStore = new BlockStore(keyValueStores.getBlockKeyValueStore());
+        this.blockStore = new BlockStore(keyValueStores.getBlockKeyValueStore());
         this.blocksInformationStore = new BlocksInformationStore(keyValueStores.getBlockInformationKeyValueStore());
     }
 
@@ -35,7 +35,7 @@ public class Stores {
         return this.codeStore;
     }
 
-    public BlockStore getBlockHashStore() { return this.blockHashStore; }
+    public BlockStore getBlockStore() { return this.blockStore; }
 
     public BlocksInformationStore getBlocksInformationStore() { return this.blocksInformationStore; }
 
