@@ -37,4 +37,20 @@ public class BlocksInformationStore {
 
         return BlocksInformationEncoder.decode(encoded);
     }
+
+    public void putBestHeight(long height) throws IOException {
+        byte[] key = ByteUtils.EMPTY_BYTE_ARRAY;
+        byte[] value = ByteUtils.unsignedLongToNormalizedBytes(height);
+
+        this.store.setValue(key, value);
+    }
+
+    public long getBestHeight() throws IOException {
+        byte[] value = this.store.getValue(ByteUtils.EMPTY_BYTE_ARRAY);
+
+        if (value == null)
+            return -1;
+
+        return ByteUtils.bytesToUnsignedLong(value);
+    }
 }

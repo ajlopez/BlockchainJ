@@ -21,6 +21,22 @@ public class BlocksInformationStoreTest {
     }
 
     @Test
+    public void getInitialBestHeight() throws IOException {
+        BlocksInformationStore blocksInformationStore = new BlocksInformationStore(new HashMapStore());
+
+        Assert.assertEquals(-1, blocksInformationStore.getBestHeight());
+    }
+
+
+    @Test
+    public void putAndGetInitialBestHeight() throws IOException {
+        BlocksInformationStore blocksInformationStore = new BlocksInformationStore(new HashMapStore());
+
+        blocksInformationStore.putBestHeight(42);
+        Assert.assertEquals(42, blocksInformationStore.getBestHeight());
+    }
+    
+    @Test
     public void putAndGetHeight() throws IOException {
         BlocksInformationStore blocksInformationStore = new BlocksInformationStore(new HashMapStore());
 
