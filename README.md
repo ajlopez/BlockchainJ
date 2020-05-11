@@ -106,6 +106,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [UTXO vs Account/Balance Model](https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf)
 - [History of Ethereum Hard Forks](https://medium.com/mycrypto/the-history-of-ethereum-hard-forks-6a6dae76d56f)
 - [What is a light client and why you should care?](https://www.parity.io/what-is-a-light-client/)
+- [The 1.x Files: A Primer for the Witness Specification](https://blog.ethereum.org/2020/05/04/eth1x-witness-primer/)
 
 ## To Do
 
