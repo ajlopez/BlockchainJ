@@ -194,5 +194,7 @@ public class BlockChain implements BlockProvider {
             this.blockInformationStore.put(n, blocksInformation);
             n++;
         }
+
+        this.blockInformationStore.putBestHeight(this.bestBlock.getNumber());
     }
 }

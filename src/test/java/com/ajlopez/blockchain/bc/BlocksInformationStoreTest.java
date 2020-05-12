@@ -35,7 +35,7 @@ public class BlocksInformationStoreTest {
         blocksInformationStore.putBestHeight(42);
         Assert.assertEquals(42, blocksInformationStore.getBestHeight());
     }
-    
+
     @Test
     public void putAndGetHeight() throws IOException {
         BlocksInformationStore blocksInformationStore = new BlocksInformationStore(new HashMapStore());
