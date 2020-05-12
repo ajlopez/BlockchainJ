@@ -107,6 +107,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [History of Ethereum Hard Forks](https://medium.com/mycrypto/the-history-of-ethereum-hard-forks-6a6dae76d56f)
 - [What is a light client and why you should care?](https://www.parity.io/what-is-a-light-client/)
 - [The 1.x Files: A Primer for the Witness Specification](https://blog.ethereum.org/2020/05/04/eth1x-witness-primer/)
+- [The hard DiSC of the world computer](https://medium.com/ethereum-swarm/the-hard-disc-of-the-world-computer-4f3d41bf9ddb)
 
 ## To Do
 
