@@ -27,9 +27,18 @@ public class BlockChain implements BlockProvider {
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-    public BlockChain(Stores stores) {
+    public BlockChain(Stores stores) throws IOException {
         this.blockStore = stores.getBlockStore();
         this.blockInformationStore = stores.getBlocksInformationStore();
+
+        long bestHeight = this.blockInformationStore.getBestHeight();
+
+        if (bestHeight >= 0) {
+            BlocksInformation blocksInformation = this.blockInformationStore.get(bestHeight);
+            BlockInformation blockInformation = blocksInformation.getBlockOnChain();
+            this.bestBlock = this.blockStore.getBlock(blockInformation.getBlockHash());
+            this.bestTotalDifficulty = blockInformation.getTotalDifficulty();
+        }
     }
 
     public Block getBestBlock() {

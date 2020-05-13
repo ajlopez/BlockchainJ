@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class BlockChainTest {
     @Test
-    public void noBestBlock() {
+    public void noBestBlock() throws IOException {
         Stores stores = new MemoryStores();
         BlockChain blockChain = new BlockChain(stores);
 

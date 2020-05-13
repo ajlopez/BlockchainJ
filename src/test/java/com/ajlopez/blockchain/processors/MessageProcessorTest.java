@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class MessageProcessorTest {
     @Test
-    public void processBlockMessage() {
+    public void processBlockMessage() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -48,7 +48,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processBlockMessageAndRelayBlockToPeers() {
+    public void processBlockMessageAndRelayBlockToPeers() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
         Peer sender = FactoryHelper.createRandomPeer();
@@ -101,7 +101,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processBlockMessageAndRelayBlockToOtherPeers() {
+    public void processBlockMessageAndRelayBlockToOtherPeers() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
 
         Peer sender = FactoryHelper.createRandomPeer();
@@ -138,7 +138,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processGetBlockByHashMessage() {
+    public void processGetBlockByHashMessage() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Peer originalSender = FactoryHelper.createRandomPeer();
         Peer sender = FactoryHelper.createRandomPeer();
@@ -164,7 +164,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processGetUnknownBlockByHashMessage() {
+    public void processGetUnknownBlockByHashMessage() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -187,7 +187,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processGetBlockByNumberMessage() {
+    public void processGetBlockByNumberMessage() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Peer sender = FactoryHelper.createRandomPeer();
         SendProcessor outputProcessor = new SendProcessor(sender);
@@ -211,7 +211,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processGetStatusMessage() {
+    public void processGetStatusMessage() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)42);
 
@@ -239,7 +239,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processGetUnknownBlockByNumberMessage() {
+    public void processGetUnknownBlockByNumberMessage() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -312,7 +312,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processStatusMessageAndStartSync() {
+    public void processStatusMessageAndStartSync() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor(1);
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
@@ -350,7 +350,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processStatusMessageTwiceWithSameHeightAndStartSync() {
+    public void processStatusMessageTwiceWithSameHeightAndStartSync() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor(1);
         Peer firstPeer = FactoryHelper.createRandomPeer();
@@ -391,7 +391,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processStatusMessageTwiceWithDifferentHeightsAndStartSync() {
+    public void processStatusMessageTwiceWithDifferentHeightsAndStartSync() throws IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor(1);
         Peer firstPeer = FactoryHelper.createRandomPeer();

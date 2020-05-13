@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class BlockProcessorTest {
     @Test
-    public void noBestBlock() {
+    public void noBestBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         Assert.assertNull(processor.getBestBlock());
@@ -51,7 +51,7 @@ public class BlockProcessorTest {
     }
 
     @Test
-    public void notOrphanBlock() {
+    public void notOrphanBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
         Assert.assertFalse(processor.isOrphanBlock(FactoryHelper.createRandomBlockHash()));

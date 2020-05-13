@@ -12,6 +12,7 @@ import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -20,7 +21,7 @@ import java.util.concurrent.Semaphore;
  */
 public class ReceiveProcessorTest {
     @Test
-    public void processBlockMessage() throws InterruptedException {
+    public void processBlockMessage() throws InterruptedException, IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -51,7 +52,7 @@ public class ReceiveProcessorTest {
     }
 
     @Test
-    public void processTwoConsecutiveBlockMessages() throws InterruptedException {
+    public void processTwoConsecutiveBlockMessages() throws InterruptedException, IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -87,7 +88,7 @@ public class ReceiveProcessorTest {
     }
 
     @Test
-    public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException {
+    public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException, IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -123,7 +124,7 @@ public class ReceiveProcessorTest {
     }
 
     @Test
-    public void processTenRepeatedBlockMessage() throws InterruptedException {
+    public void processTenRepeatedBlockMessage() throws InterruptedException, IOException {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 

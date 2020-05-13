@@ -190,7 +190,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void processTwoBlockMessagesUsingTwoNodes() throws InterruptedException {
+    public void processTwoBlockMessagesUsingTwoNodes() throws InterruptedException, IOException {
         BlockChain blockChain1 = new BlockChain(new MemoryStores());
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(blockChain1);
         BlockChain blockChain2 = new BlockChain(new MemoryStores());
@@ -501,7 +501,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void processTransactionMessage() throws InterruptedException {
+    public void processTransactionMessage() throws InterruptedException, IOException {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 
@@ -525,7 +525,7 @@ public class NodeProcessorTest {
     }
 
     @Test
-    public void processTransactionMessageWithRelayToOtherNode() throws InterruptedException {
+    public void processTransactionMessageWithRelayToOtherNode() throws InterruptedException, IOException {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 

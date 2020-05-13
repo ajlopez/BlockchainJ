@@ -238,7 +238,7 @@ public class FactoryHelper {
         return blockChain;
     }
 
-    public static BlockProcessor createBlockProcessor() {
+    public static BlockProcessor createBlockProcessor() throws IOException {
         return createBlockProcessor(new BlockChain(new MemoryStores()));
     }
 
@@ -286,7 +286,7 @@ public class FactoryHelper {
         return new PeerId(createRandomBytes(Hash.HASH_BYTES));
     }
 
-    public static NodeProcessor createNodeProcessor() {
+    public static NodeProcessor createNodeProcessor() throws IOException {
         return createNodeProcessor(new BlockChain(new MemoryStores()));
     }
 
