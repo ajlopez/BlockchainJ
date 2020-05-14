@@ -79,11 +79,11 @@ public class BlockProcessor {
         return connectedBlocks;
     }
 
-    public Block getBestBlock() {
+    public Block getBestBlock() throws IOException {
         return this.blockChain.getBestBlock();
     }
 
-    public long getBestBlockNumber() {
+    public long getBestBlockNumber() throws IOException {
         return this.blockChain.getBestBlockNumber();
     }
 

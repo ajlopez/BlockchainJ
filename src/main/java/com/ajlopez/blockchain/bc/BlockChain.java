@@ -25,12 +25,16 @@ public class BlockChain implements BlockProvider {
 
     private List<Consumer<Block>> blockConsumers = new ArrayList<>();
 
+    private boolean initialized;
+
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-    public BlockChain(Stores stores) throws IOException {
+    public BlockChain(Stores stores) {
         this.blockStore = stores.getBlockStore();
         this.blockInformationStore = stores.getBlocksInformationStore();
+    }
 
+    private void initialize() throws IOException {
         long bestHeight = this.blockInformationStore.getBestHeight();
 
         if (bestHeight >= 0) {
@@ -39,29 +43,35 @@ public class BlockChain implements BlockProvider {
             this.bestBlock = this.blockStore.getBlock(blockInformation.getBlockHash());
             this.bestTotalDifficulty = blockInformation.getTotalDifficulty();
         }
+
+        initialized = true;
     }
 
-    public Block getBestBlock() {
+    public Block getBestBlock() throws IOException {
         this.lock.readLock().lock();
 
         try {
+            if (!initialized)
+                initialize();
+
             return this.bestBlock;
-        }
-        finally {
+        } finally {
             this.lock.readLock().unlock();
         }
     }
 
-    public long getBestBlockNumber() {
+    public long getBestBlockNumber() throws IOException {
         this.lock.readLock().lock();
 
         try {
+            if (!initialized)
+                initialize();
+
             if (this.bestBlock == null)
                 return NO_BEST_BLOCK_NUMBER;
 
             return this.bestBlock.getNumber();
-        }
-        finally {
+        } finally {
             this.lock.readLock().unlock();
         }
     }
@@ -70,6 +80,9 @@ public class BlockChain implements BlockProvider {
         this.lock.writeLock().lock();
 
         try {
+            if (!initialized)
+                initialize();
+
             if (isOrphan(block))
                 return false;
 
@@ -122,6 +135,9 @@ public class BlockChain implements BlockProvider {
         this.lock.readLock().lock();
 
         try {
+            if (!initialized)
+                initialize();
+
             return this.blockStore.getBlock(hash);
         } finally {
             this.lock.readLock().unlock();
@@ -132,6 +148,9 @@ public class BlockChain implements BlockProvider {
         this.lock.readLock().lock();
 
         try {
+            if (!initialized)
+                initialize();
+
             return this.blockStore.containsBlock(hash);
         }
         finally {
@@ -144,6 +163,9 @@ public class BlockChain implements BlockProvider {
         this.lock.readLock().lock();
 
         try {
+            if (!initialized)
+                initialize();
+
             BlocksInformation blocksInformation = this.blockInformationStore.get(number);
 
             if (blocksInformation == null)

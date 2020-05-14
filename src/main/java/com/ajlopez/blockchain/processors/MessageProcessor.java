@@ -79,7 +79,7 @@ public class MessageProcessor {
         this.outputProcessor.postMessage(sender, new StoredKeyValueMessage(message.getStoreType(), message.getKey(), value));
     }
 
-    private void processGetStatusMessage(Peer sender) {
+    private void processGetStatusMessage(Peer sender) throws IOException {
         Block bestBlock = this.blockProcessor.getBestBlock();
         Status status = new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash());
         StatusMessage statusMessage = new StatusMessage(status);
@@ -136,7 +136,7 @@ public class MessageProcessor {
         }
     }
 
-    private void processStatusMessage(StatusMessage message, Peer sender) {
+    private void processStatusMessage(StatusMessage message, Peer sender) throws IOException {
         if (message.getStatus().getNetworkNumber() != this.peerProcessor.getNetworkNumber())
             return;
 

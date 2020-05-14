@@ -34,7 +34,7 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         return super.processRequest(request);
     }
 
-    private JsonRpcResponse getBestBlockNumber(JsonRpcRequest request) {
+    private JsonRpcResponse getBestBlockNumber(JsonRpcRequest request) throws IOException {
         return JsonRpcResponse.createResponse(request, this.blockChain.getBestBlockNumber());
     }
 

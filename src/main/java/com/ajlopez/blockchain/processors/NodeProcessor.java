@@ -18,6 +18,7 @@ import com.ajlopez.blockchain.store.KeyValueStores;
 import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -105,7 +106,7 @@ public class NodeProcessor implements PeerNode {
         this.sendProcessor.connectToPeer(node.getPeer(), node);
     }
 
-    public Status getStatus() {
+    public Status getStatus() throws IOException {
         Block bestBlock = this.blockProcessor.getBestBlock();
 
         return new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash());
