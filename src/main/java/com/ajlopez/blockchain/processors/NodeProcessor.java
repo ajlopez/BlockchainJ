@@ -35,8 +35,9 @@ public class NodeProcessor implements PeerNode {
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, BlockChain blockChain, KeyValueStores keyValueStores, Address coinbase) {
+    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, BlockChain blockChain2, KeyValueStores keyValueStores, Address coinbase) {
         Stores stores = new Stores(keyValueStores);
+        BlockChain blockChain = new BlockChain(stores);
 
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
         TrieStorageProvider trieStorageProvider = stores.getTrieStorageProvider();
@@ -88,6 +89,10 @@ public class NodeProcessor implements PeerNode {
 
     public void onEmpty(Runnable action) {
         this.receiveProcessor.onEmpty(action);
+    }
+
+    public void onNewBlock(Consumer<Block> consumer) {
+        this.blockProcessor.onNewBlock(consumer);
     }
 
     public void onNewBestBlock(Consumer<Block> consumer) {

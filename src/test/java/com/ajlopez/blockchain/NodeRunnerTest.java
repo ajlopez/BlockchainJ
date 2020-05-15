@@ -10,7 +10,9 @@ import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.KeyValueStores;
 import com.ajlopez.blockchain.store.MemoryKeyValueStores;
+import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,17 +27,19 @@ import java.util.concurrent.Semaphore;
 public class NodeRunnerTest {
     @Test
     public void mineBlockUsingOneRunner() throws InterruptedException, IOException {
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        KeyValueStores keyValueStores = new MemoryKeyValueStores();
+        Stores stores = new Stores(keyValueStores);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
 
         Semaphore semaphore = new Semaphore(0, true);
 
-        blockChain.onBlock(blk -> {
-            semaphore.release();
-        });
-
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), new MemoryKeyValueStores());
+        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
+
+        runner.onNewBlock(blk -> {
+            semaphore.release();
+        });
 
         runner.start();
 
@@ -43,7 +47,7 @@ public class NodeRunnerTest {
 
         runner.stop();
 
-        Block bestBlock = blockChain.getBestBlock();
+        Block bestBlock = new BlockChain(stores).getBestBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertTrue(bestBlock.getNumber() > 0);
@@ -51,7 +55,9 @@ public class NodeRunnerTest {
 
     @Test
     public void processBlockInServerRunner() throws InterruptedException, IOException {
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        KeyValueStores keyValueStores = new MemoryKeyValueStores();
+        Stores stores = new Stores(keyValueStores);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
 
         Semaphore semaphore = new Semaphore(0, true);
 
@@ -61,7 +67,11 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), new MemoryKeyValueStores());
+        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
+
+        runner.onNewBlock(blk -> {
+            semaphore.release();
+        });
 
         runner.start();
 
@@ -79,7 +89,7 @@ public class NodeRunnerTest {
 
         runner.stop();
 
-        Block bestBlock = blockChain.getBestBlock();
+        Block bestBlock = new BlockChain(stores).getBestBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertEquals(1, bestBlock.getNumber());
@@ -88,19 +98,23 @@ public class NodeRunnerTest {
 
     @Test
     public void connectTwoNodeRunners() throws InterruptedException, IOException {
-        BlockChain blockChain1 = FactoryHelper.createBlockChainWithGenesis();
-        BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis();
+        KeyValueStores keyValueStores = new MemoryKeyValueStores();
+        Stores stores = new Stores(keyValueStores);
+        BlockChain blockChain1 = FactoryHelper.createBlockChainWithGenesis(stores);
+        KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
+        Stores stores2 = new Stores(keyValueStores2);
+        BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis(stores2);
 
         Semaphore semaphore = new Semaphore(0, true);
 
-        blockChain2.onBlock(blk -> {
-            semaphore.release();
-        });
-
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner1 = new NodeRunner(blockChain1, true, 3001, null, coinbase, new NetworkConfiguration((short)42), new MemoryKeyValueStores());
-        NodeRunner runner2 = new NodeRunner(blockChain2, false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), new MemoryKeyValueStores());
+        NodeRunner runner1 = new NodeRunner(blockChain1, true, 3001, null, coinbase, new NetworkConfiguration((short)42), keyValueStores);
+        NodeRunner runner2 = new NodeRunner(blockChain2, false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), keyValueStores2);
+
+        runner2.onNewBlock(blk -> {
+            semaphore.release();
+        });
 
         runner1.start();
         runner2.start();
@@ -110,7 +124,7 @@ public class NodeRunnerTest {
         runner2.stop();
         runner1.stop();
 
-        Block bestBlock = blockChain2.getBestBlock();
+        Block bestBlock = new BlockChain(stores2).getBestBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertTrue(bestBlock.getNumber() > 0);

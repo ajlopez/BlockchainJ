@@ -2,6 +2,7 @@ package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
@@ -11,6 +12,7 @@ import com.ajlopez.blockchain.store.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by ajlopez on 25/11/2018.
@@ -66,5 +68,13 @@ public class NodeRunner {
         this.nodeProcessor.stopMessagingProcess();
 
         System.out.println(String.format("Stopping node %s", this.nodeProcessor.getPeer().getId()));
+    }
+
+    public void onNewBlock(Consumer<Block> consumer) {
+        this.nodeProcessor.onNewBlock(consumer);
+    }
+
+    public void onNewBestBlock(Consumer<Block> consumer) {
+        this.nodeProcessor.onNewBestBlock(consumer);
     }
 }

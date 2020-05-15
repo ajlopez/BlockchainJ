@@ -227,6 +227,10 @@ public class FactoryHelper {
         return createBlockChainWithGenesis(new MemoryStores(), GenesisGenerator.generateGenesis());
     }
 
+    public static BlockChain createBlockChainWithGenesis(Stores stores) throws IOException {
+        return createBlockChainWithGenesis(stores, GenesisGenerator.generateGenesis());
+    }
+
     public static BlockChain createBlockChainWithGenesis(Stores stores, AccountStore accountStore) throws IOException {
         return createBlockChainWithGenesis(stores, GenesisGenerator.generateGenesis(accountStore));
     }
@@ -292,6 +296,10 @@ public class FactoryHelper {
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
         return createNodeProcessor(blockChain, new MemoryKeyValueStores());
+    }
+
+    public static NodeProcessor createNodeProcessor(KeyValueStores keyValueStores) {
+        return createNodeProcessor(null, keyValueStores);
     }
 
     public static NodeProcessor createNodeProcessor(BlockChain blockChain, KeyValueStores keyValueStores) {
