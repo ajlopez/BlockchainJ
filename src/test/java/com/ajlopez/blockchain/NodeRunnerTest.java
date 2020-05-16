@@ -35,7 +35,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
+        NodeRunner runner = new NodeRunner(true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -67,7 +67,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(blockChain, true, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
+        NodeRunner runner = new NodeRunner(true, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -109,8 +109,8 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner1 = new NodeRunner(blockChain1, true, 3001, null, coinbase, new NetworkConfiguration((short)42), keyValueStores);
-        NodeRunner runner2 = new NodeRunner(blockChain2, false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), keyValueStores2);
+        NodeRunner runner1 = new NodeRunner(true, 3001, null, coinbase, new NetworkConfiguration((short)42), keyValueStores);
+        NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), keyValueStores2);
 
         runner2.onNewBlock(blk -> {
             semaphore.release();

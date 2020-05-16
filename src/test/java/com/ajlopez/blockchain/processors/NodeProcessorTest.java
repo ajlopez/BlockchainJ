@@ -35,7 +35,7 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, blockChain, new MemoryKeyValueStores(), coinbase);
+        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, new MemoryKeyValueStores(), coinbase);
 
         Assert.assertSame(peer, nodeProcessor.getPeer());
     }
@@ -49,7 +49,7 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, null, keyValueStores, coinbase);
+        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, keyValueStores, coinbase);
 
         Status result = nodeProcessor.getStatus();
 
@@ -535,8 +535,7 @@ public class NodeProcessorTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 
-        BlockChain blockChain = new BlockChain(new MemoryStores());
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(blockChain);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(new MemoryKeyValueStores());
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
 

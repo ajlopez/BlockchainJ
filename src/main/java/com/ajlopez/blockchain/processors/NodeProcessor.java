@@ -35,7 +35,7 @@ public class NodeProcessor implements PeerNode {
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, BlockChain blockChain2, KeyValueStores keyValueStores, Address coinbase) {
+    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, KeyValueStores keyValueStores, Address coinbase) {
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain = new BlockChain(stores);
 

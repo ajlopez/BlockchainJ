@@ -290,20 +290,12 @@ public class FactoryHelper {
         return new PeerId(createRandomBytes(Hash.HASH_BYTES));
     }
 
-    public static NodeProcessor createNodeProcessor() throws IOException {
-        return createNodeProcessor(new BlockChain(new MemoryStores()));
-    }
-
-    public static NodeProcessor createNodeProcessor(BlockChain blockChain) {
-        return createNodeProcessor(blockChain, new MemoryKeyValueStores());
+    public static NodeProcessor createNodeProcessor() {
+        return createNodeProcessor(new MemoryKeyValueStores());
     }
 
     public static NodeProcessor createNodeProcessor(KeyValueStores keyValueStores) {
-        return createNodeProcessor(null, keyValueStores);
-    }
-
-    public static NodeProcessor createNodeProcessor(BlockChain blockChain, KeyValueStores keyValueStores) {
-        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), blockChain, keyValueStores, createRandomAddress());
+        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), keyValueStores, createRandomAddress());
     }
 
     public static List<Block> createBlocks(int nblocks) {

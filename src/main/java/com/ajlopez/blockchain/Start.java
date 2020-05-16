@@ -41,7 +41,7 @@ public class Start {
         List<String> peers = argsproc.getStringList("peers");
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        NodeRunner runner = new NodeRunner(blockChain, isMiner, port, peers, coinbase, networkConfiguration, keyValueStores);
+        NodeRunner runner = new NodeRunner(isMiner, port, peers, coinbase, networkConfiguration, keyValueStores);
 
         runner.start();
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
