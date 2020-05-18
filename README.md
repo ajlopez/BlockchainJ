@@ -109,6 +109,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [The 1.x Files: A Primer for the Witness Specification](https://blog.ethereum.org/2020/05/04/eth1x-witness-primer/)
 - [The hard DiSC of the world computer](https://medium.com/ethereum-swarm/the-hard-disc-of-the-world-computer-4f3d41bf9ddb)
 - [Contra-*: Mechanisms for Countering Spam Attacks on Blockchain’s Memory Pools](https://arxiv.org/pdf/2005.04842.pdf)
+- [What’s Ahead for the OpenEthereum Client](https://blog.gnosis.pm/whats-ahead-for-the-openethereum-client-43da126921c2)
+- [Geth Pink Marble (v1.9.14)](https://github.com/ethereum/go-ethereum/releases/tag/v1.9.14)
+- [Free the Birds: the Case for Tokenized Gas](https://ethresear.ch/t/free-the-birds-the-case-for-tokenized-gas/7385)
 
 ## To Do
 
