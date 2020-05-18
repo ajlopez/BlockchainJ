@@ -23,8 +23,6 @@ public class BlockChain implements BlockProvider {
     private final BlockStore blockStore;
     private final BlocksInformationStore blockInformationStore;
 
-    private List<Consumer<Block>> blockConsumers = new ArrayList<>();
-
     private boolean initialized;
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
@@ -105,8 +103,6 @@ public class BlockChain implements BlockProvider {
             if (isBetterBlock)
                 this.saveBestBlock(block, totalDifficulty);
 
-            this.emitBlock(block);
-
             return true;
         }
         finally {
@@ -119,15 +115,6 @@ public class BlockChain implements BlockProvider {
             return true;
 
         return totalDifficulty.compareTo(this.bestTotalDifficulty) > 0;
-    }
-
-    private void emitBlock(Block block) {
-        for (Consumer<Block> consumer: this.blockConsumers)
-            consumer.accept(block);
-    }
-
-    public void onBlock(Consumer<Block> consumer) {
-        this.blockConsumers.add(consumer);
     }
 
     @Override

@@ -32,8 +32,6 @@ public class Start {
 
         ArgumentsProcessor argsproc = processArguments(args);
 
-        blockChain.onBlock(Start::printBlock);
-
         String coinbaseText = argsproc.getString("coinbase");
         Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
         boolean isMiner = argsproc.getBoolean("miner");
@@ -42,8 +40,10 @@ public class Start {
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
         NodeRunner runner = new NodeRunner(isMiner, port, peers, coinbase, networkConfiguration, keyValueStores);
+        runner.onNewBlock(Start::printBlock);
 
         runner.start();
+
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
 
         boolean rpc = argsproc.getBoolean("rpc");
@@ -52,6 +52,7 @@ public class Start {
             int rpcport = argsproc.getInteger("rpcport");
 
             RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, null, transactionPool, transactionProcessor, networkConfiguration);
+
             rpcrunner.start();
 
             Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));

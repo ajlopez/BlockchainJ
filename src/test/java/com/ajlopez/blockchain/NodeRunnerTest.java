@@ -61,10 +61,6 @@ public class NodeRunnerTest {
 
         Semaphore semaphore = new Semaphore(0, true);
 
-        blockChain.onBlock(blk -> {
-            semaphore.release();
-        });
-
         Address coinbase = FactoryHelper.createRandomAddress();
 
         NodeRunner runner = new NodeRunner(true, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
