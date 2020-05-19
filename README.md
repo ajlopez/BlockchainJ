@@ -114,6 +114,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Free the Birds: the Case for Tokenized Gas](https://ethresear.ch/t/free-the-birds-the-case-for-tokenized-gas/7385)
 - [Mjolnir: Tooling for BAT Apollo](https://brave.com/mjolnir-tooling-for-bat-apollo/)
 - [Getting Synced - Wiki Parity Tech Documentation](https://openethereum.github.io/wiki/Getting-Synced)
+- [Notes on syncing Ethereum nodes](https://medium.com/aleph-zero/notes-on-syncing-ethereum-nodes-77d4161a522e)
 
 ## To Do
 
