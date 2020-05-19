@@ -242,7 +242,7 @@ public class FactoryHelper {
         return blockChain;
     }
 
-    public static BlockProcessor createBlockProcessor() throws IOException {
+    public static BlockProcessor createBlockProcessor() {
         return createBlockProcessor(new BlockChain(new MemoryStores()));
     }
 
@@ -321,7 +321,7 @@ public class FactoryHelper {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.fromUnsignedLong(42);
 
-        return new BlockHeader(1L, hash, 0, transactionsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty);
+        return new BlockHeader(blockNumber, hash, 0, transactionsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty);
     }
 
     public static Bloom createRandomBloom(int npositives) {

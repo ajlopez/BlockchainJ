@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Hash;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +12,8 @@ import java.util.Map;
  * Created by ajlopez on 16/12/2017.
  */
 public class OrphanBlocks {
-    private Map<BlockHash, Block> orphansByHash = new HashMap<>();
-    private Map<BlockHash, List<Block>> orphansByParent = new HashMap<>();
+    private final Map<BlockHash, Block> orphansByHash = new HashMap<>();
+    private final Map<BlockHash, List<Block>> orphansByParent = new HashMap<>();
 
     public boolean isKnownOrphan(BlockHash hash) {
         return this.orphansByHash.containsKey(hash);

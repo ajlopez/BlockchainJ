@@ -11,7 +11,6 @@ import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
 import com.ajlopez.blockchain.execution.TransactionResult;
 import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.vms.eth.BlockData;
 
