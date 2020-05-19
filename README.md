@@ -113,7 +113,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Geth Pink Marble (v1.9.14)](https://github.com/ethereum/go-ethereum/releases/tag/v1.9.14)
 - [Free the Birds: the Case for Tokenized Gas](https://ethresear.ch/t/free-the-birds-the-case-for-tokenized-gas/7385)
 - [Mjolnir: Tooling for BAT Apollo](https://brave.com/mjolnir-tooling-for-bat-apollo/)
-
+- [Getting Synced - Wiki Parity Tech Documentation](https://openethereum.github.io/wiki/Getting-Synced)
 
 ## To Do
 
