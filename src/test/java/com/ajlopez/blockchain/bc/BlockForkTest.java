@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by ajlopez on 14/10/2019.
@@ -32,7 +33,7 @@ public class BlockForkTest {
 
         List<Block> toBeRemoved = new ArrayList<>();
 
-        for (int k = 1; k < 3; k++)
+        for (int k = 1; k <= 3; k++)
             toBeRemoved.add(blockChain.getBlockByNumber(k));
 
         FactoryHelper.extendBlockChainWithBlocksFromBlock(accountStoreProvider, blockChain, blockChain.getBlockByNumber(0), 5, 0, null, 0);
@@ -44,7 +45,7 @@ public class BlockForkTest {
 
         List<Block> toBeAdded = new ArrayList<>();
 
-        for (int k = 1; k < 5; k++)
+        for (int k = 1; k <= 5; k++)
             toBeAdded.add(blockChain.getBlockByNumber(k));
 
         BlockFork blockFork = BlockFork.fromBlocks(blockChain, firstBestBlock, secondBestBlock);
@@ -55,11 +56,13 @@ public class BlockForkTest {
         Assert.assertNotNull(blockFork.getNewBlocks());
         Assert.assertEquals(5, blockFork.getNewBlocks().size());
 
+        // TODO improve
         for (Block b : toBeRemoved)
-            Assert.assertTrue(blockFork.getOldBlocks().contains(b));
+            Assert.assertTrue(blockFork.getOldBlocks().stream().map(Block::getHash).anyMatch(h -> h.equals(b.getHash())));
 
+        // TODO improve
         for (Block b : toBeAdded)
-            Assert.assertTrue(blockFork.getNewBlocks().contains(b));
+            Assert.assertTrue(blockFork.getNewBlocks().stream().map(Block::getHash).anyMatch(h -> h.equals(b.getHash())));
     }
 
     @Test
@@ -141,7 +144,8 @@ public class BlockForkTest {
         Assert.assertNotNull(blockFork.getNewBlocks());
         Assert.assertEquals(4, blockFork.getNewBlocks().size());
 
+        // TODO improve
         for (Block b : toBeAdded)
-            Assert.assertTrue(blockFork.getNewBlocks().contains(b));
+            Assert.assertTrue(blockFork.getNewBlocks().stream().map(Block::getHash).anyMatch(h -> h.equals(b.getHash())));
     }
 }
