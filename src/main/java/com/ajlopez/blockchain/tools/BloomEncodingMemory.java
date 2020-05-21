@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain;
+package com.ajlopez.blockchain.tools;
 
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.core.types.Bloom;
