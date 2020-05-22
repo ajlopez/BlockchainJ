@@ -105,11 +105,11 @@ public class Transaction {
         if (obj == null)
             return false;
 
-        if (this == obj)
-            return true;
-
         if (!(obj instanceof Transaction))
             return false;
+
+        if (this == obj)
+            return true;
 
         return this.getHash().equals(((Transaction)obj).getHash());
     }

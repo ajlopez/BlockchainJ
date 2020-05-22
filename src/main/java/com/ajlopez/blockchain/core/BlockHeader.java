@@ -92,6 +92,9 @@ public class BlockHeader {
         if (!(obj instanceof BlockHeader))
             return false;
 
+        if (this == obj)
+            return true;
+
         BlockHeader bh = (BlockHeader)obj;
 
         return Arrays.equals(BlockHeaderEncoder.encode(this), BlockHeaderEncoder.encode(bh));
