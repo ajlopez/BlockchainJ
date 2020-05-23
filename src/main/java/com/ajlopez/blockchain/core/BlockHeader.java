@@ -23,10 +23,11 @@ public class BlockHeader {
     private final long timestamp;
     private final Address coinbase;
     private final Difficulty difficulty;
+    private final long nonce;
 
     private BlockHash hash;
 
-    public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, int unclesCount, Hash unclesRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty) {
+    public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, int unclesCount, Hash unclesRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long nonce) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
@@ -40,6 +41,7 @@ public class BlockHeader {
         this.timestamp = timestamp;
         this.coinbase = coinbase;
         this.difficulty = difficulty;
+        this.nonce = nonce;
     }
 
     public long getNumber() {
@@ -74,6 +76,8 @@ public class BlockHeader {
     public Hash getStateRootHash() {
         return this.stateRootHash;
     }
+
+    public long getNonce() { return this.nonce; }
 
     private BlockHash calculateHash() {
         return new BlockHash(HashUtils.keccak256(BlockHeaderEncoder.encode(this)));

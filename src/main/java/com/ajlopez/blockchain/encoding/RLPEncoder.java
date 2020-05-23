@@ -57,6 +57,10 @@ public class RLPEncoder {
         return RLP.encode(ByteUtils.longToNormalizedBytes(value));
     }
 
+    public static byte[] encodeNonce(long value) {
+        return RLP.encode(ByteUtils.longToBytes(value));
+    }
+
     public static long decodeLong(byte[] data) {
         return ByteUtils.bytesToLong(RLP.decode(data));
     }
