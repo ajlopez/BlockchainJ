@@ -115,6 +115,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Mjolnir: Tooling for BAT Apollo](https://brave.com/mjolnir-tooling-for-bat-apollo/)
 - [Getting Synced - Wiki Parity Tech Documentation](https://openethereum.github.io/wiki/Getting-Synced)
 - [Notes on syncing Ethereum nodes](https://medium.com/aleph-zero/notes-on-syncing-ethereum-nodes-77d4161a522e)
+- [Why do we need both nonce and mixhash values in a block?](https://ethereum.stackexchange.com/questions/5833/why-do-we-need-both-nonce-and-mixhash-values-in-a-block)
 
 ## To Do
 
@@ -127,6 +128,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - Update transaction pool with new block information
 - Shared path in trie
 - Review incoming message processing (queue(s)?)
+- Create/Call opcodes in virtual machine
 
 ## License
 
