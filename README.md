@@ -116,6 +116,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Getting Synced - Wiki Parity Tech Documentation](https://openethereum.github.io/wiki/Getting-Synced)
 - [Notes on syncing Ethereum nodes](https://medium.com/aleph-zero/notes-on-syncing-ethereum-nodes-77d4161a522e)
 - [Why do we need both nonce and mixhash values in a block?](https://ethereum.stackexchange.com/questions/5833/why-do-we-need-both-nonce-and-mixhash-values-in-a-block)
+- [Snap Synchronization](https://twitter.com/peter_szilagyi/status/1263668104493662210)
+- [Does installing geth download the entire blockchain?](https://ethereum.stackexchange.com/questions/12023/does-installing-geth-download-the-entire-blockchain/12028)
 
 ## To Do
 
