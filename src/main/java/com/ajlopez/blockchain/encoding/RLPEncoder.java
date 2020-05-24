@@ -96,4 +96,17 @@ public class RLPEncoder {
     public static PeerId decodePeerId(byte[] data) {
         return new PeerId(RLP.decode(data));
     }
+
+    public static byte[] encodeBoolean(Boolean value) {
+        return RLP.encode(value ? new byte[] { 0x01 } : new byte[1]);
+    }
+
+    public static boolean decodeBoolean(byte[] data) {
+        byte[] bytes = RLP.decode(data);
+
+        if (bytes.length != 1 || (bytes[0] != 0x01 && bytes[0] != 0x00))
+            throw new IllegalArgumentException("Invalid encoded boolean");
+
+        return bytes[0] == 0x01;
+    }
 }
