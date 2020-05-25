@@ -118,6 +118,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Why do we need both nonce and mixhash values in a block?](https://ethereum.stackexchange.com/questions/5833/why-do-we-need-both-nonce-and-mixhash-values-in-a-block)
 - [Snap Synchronization](https://twitter.com/peter_szilagyi/status/1263668104493662210)
 - [Does installing geth download the entire blockchain?](https://ethereum.stackexchange.com/questions/12023/does-installing-geth-download-the-entire-blockchain/12028)
+- [Ethereum Snapshot Protocol (SNAP)](https://github.com/ethereum/devp2p/blob/3fe9713658f3b3b56e4e99493c54f313e11b43a0/caps/snap.md)
+- [Gas and circuit constraint benchmarks of binary and quinary incremental Merkle trees using the Poseidon hash function](https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446)
 
 ## To Do
 
