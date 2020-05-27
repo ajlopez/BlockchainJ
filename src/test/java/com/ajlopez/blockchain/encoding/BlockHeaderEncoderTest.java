@@ -29,7 +29,7 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 0);
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 0);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -55,7 +55,7 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 100);
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 100);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -81,8 +81,8 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header1 = new BlockHeader(42, hash, 0, transactionsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 0);
-        BlockHeader header2 = new BlockHeader(100, hash, 0, transactionsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(100), 0);
+        BlockHeader header1 = new BlockHeader(42, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 0);
+        BlockHeader header2 = new BlockHeader(100, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(100), 0);
 
         List<BlockHeader> headers = new ArrayList<>();
         headers.add(header1);

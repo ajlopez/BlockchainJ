@@ -49,7 +49,7 @@ public class BlockHeaderEncoder {
         Difficulty difficulty = RLPEncoder.decodeDifficulty(bytes[9]);
         long nonce = RLPEncoder.decodeLong(bytes[10]);
 
-        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, nonce);
+        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, null, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, nonce);
     }
 
     public static byte[] encode(List<BlockHeader> blockHeaders) {
