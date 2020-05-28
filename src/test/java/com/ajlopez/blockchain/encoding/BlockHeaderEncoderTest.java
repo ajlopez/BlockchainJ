@@ -75,6 +75,34 @@ public class BlockHeaderEncoderTest {
     }
 
     @Test
+    public void encodeDecodeBlockHeaderWithReceiptsHash() {
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Hash transactionsHash = FactoryHelper.createRandomHash();
+        Hash receiptsHash = FactoryHelper.createRandomHash();
+        Hash stateRootHash = FactoryHelper.createRandomHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, receiptsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 100);
+
+        byte[] encoded = BlockHeaderEncoder.encode(header);
+
+        Assert.assertNotNull(encoded);
+
+        BlockHeader result = BlockHeaderEncoder.decode(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(42, result.getNumber());
+        Assert.assertEquals(hash, result.getParentHash());
+        Assert.assertEquals(header.getHash(), result.getHash());
+        Assert.assertEquals(header.getTransactionsCount(), result.getTransactionsCount());
+        Assert.assertEquals(header.getTransactionsRootHash(), result.getTransactionsRootHash());
+        Assert.assertEquals(header.getReceiptsRootHash(), result.getReceiptsRootHash());
+        Assert.assertEquals(header.getCoinbase(), result.getCoinbase());
+        Assert.assertEquals(header.getDifficulty(), result.getDifficulty());
+        Assert.assertEquals(header.getNonce(), result.getNonce());
+    }
+
+    @Test
     public void encodeDecodeBlockHeaderList() {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Hash transactionsHash = FactoryHelper.createRandomHash();

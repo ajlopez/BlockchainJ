@@ -71,6 +71,8 @@ public class BlockHeader {
 
     public Hash getTransactionsRootHash() { return this.transactionsRootHash; }
 
+    public Hash getReceiptsRootHash() { return this.receiptsRootHash; }
+
     public int getUnclesCount() { return this.unclesCount; }
 
     public Hash getUnclesRootHash() { return this.unclesRootHash; }

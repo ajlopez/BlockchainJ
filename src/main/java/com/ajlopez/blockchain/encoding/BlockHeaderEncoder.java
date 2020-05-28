@@ -20,6 +20,7 @@ public class BlockHeaderEncoder {
         byte[] rlpParentHash = RLPEncoder.encodeBlockHash(blockHeader.getParentHash());
         byte[] rlpTransactionsCount = RLPEncoder.encodeUnsignedInteger(blockHeader.getTransactionsCount());
         byte[] rlpTransactionsHash = RLPEncoder.encodeHash(blockHeader.getTransactionsRootHash());
+        byte[] rlpReceiptsHash = RLPEncoder.encodeHash(blockHeader.getReceiptsRootHash());
         byte[] rlpUnclesCount = RLPEncoder.encodeUnsignedInteger(blockHeader.getUnclesCount());
         byte[] rlpUnclesHash = RLPEncoder.encodeHash(blockHeader.getUnclesRootHash());
         byte[] rlpStateRootHash = RLPEncoder.encodeHash(blockHeader.getStateRootHash());
@@ -28,28 +29,29 @@ public class BlockHeaderEncoder {
         byte[] rlpDifficulty = RLPEncoder.encodeDifficulty(blockHeader.getDifficulty());
         byte[] rlpNonce = RLPEncoder.encodeNonce(blockHeader.getNonce());
 
-        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsCount, rlpTransactionsHash, rlpUnclesCount, rlpUnclesHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty, rlpNonce);
+        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsCount, rlpTransactionsHash, rlpReceiptsHash, rlpUnclesCount, rlpUnclesHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty, rlpNonce);
     }
 
     public static BlockHeader decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
 
-        if (bytes.length != 11)
+        if (bytes.length != 12)
             throw new IllegalArgumentException("Invalid block header encoding");
 
         long number = RLPEncoder.decodeUnsignedLong(bytes[0]);
         BlockHash parentHash = RLPEncoder.decodeBlockHash(bytes[1]);
         int transactionsCount = RLPEncoder.decodeUnsignedInteger(bytes[2]);
         Hash transactionsHash = RLPEncoder.decodeHash(bytes[3]);
-        int unclesCount = RLPEncoder.decodeUnsignedInteger(bytes[4]);
-        Hash unclesHash = RLPEncoder.decodeHash(bytes[5]);
-        Hash stateRootHash = RLPEncoder.decodeHash(bytes[6]);
-        long timestamp = RLPEncoder.decodeUnsignedLong(bytes[7]);
-        Address coinbase = RLPEncoder.decodeAddress(bytes[8]);
-        Difficulty difficulty = RLPEncoder.decodeDifficulty(bytes[9]);
-        long nonce = RLPEncoder.decodeLong(bytes[10]);
+        Hash receiptsHash = RLPEncoder.decodeHash(bytes[4]);
+        int unclesCount = RLPEncoder.decodeUnsignedInteger(bytes[5]);
+        Hash unclesHash = RLPEncoder.decodeHash(bytes[6]);
+        Hash stateRootHash = RLPEncoder.decodeHash(bytes[7]);
+        long timestamp = RLPEncoder.decodeUnsignedLong(bytes[8]);
+        Address coinbase = RLPEncoder.decodeAddress(bytes[9]);
+        Difficulty difficulty = RLPEncoder.decodeDifficulty(bytes[10]);
+        long nonce = RLPEncoder.decodeLong(bytes[11]);
 
-        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, null, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, nonce);
+        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, receiptsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, nonce);
     }
 
     public static byte[] encode(List<BlockHeader> blockHeaders) {
