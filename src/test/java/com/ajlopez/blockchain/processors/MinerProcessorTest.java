@@ -10,7 +10,6 @@ import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.vms.eth.OpCodes;
 import com.ajlopez.blockchain.vms.eth.TrieStorage;
-import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,7 +31,7 @@ public class MinerProcessorTest {
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase);
 
         BlockHash hash = FactoryHelper.createRandomBlockHash();
-        Block parent = new Block(1L, hash, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Block block = processor.mineBlock(parent);
 
@@ -61,7 +60,7 @@ public class MinerProcessorTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase);
@@ -121,7 +120,7 @@ public class MinerProcessorTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block parent = new Block(1L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase);
 
@@ -186,7 +185,7 @@ public class MinerProcessorTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block parent = new Block(41L, hash, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block parent = new Block(41L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase);
 

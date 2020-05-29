@@ -185,11 +185,11 @@ public class FactoryHelper {
 
         transactionExecutor.executeTransactions(transactions, null);
 
-        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
     }
 
     public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions) {
-        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, null, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
     }
 
     public static BlockChain createBlockChain(int size) throws IOException {
@@ -302,12 +302,12 @@ public class FactoryHelper {
         Address coinbase = createRandomAddress();
         List<Block> blocks = new ArrayList<>();
 
-        Block block = new Block(0, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         blocks.add(block);
 
         for (int k = 0; k < nblocks; k++) {
-            block = new Block(block.getNumber() + 1, block.getHash(), Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+            block = new Block(block.getNumber() + 1, block.getHash(), null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
             blocks.add(block);
         }
 

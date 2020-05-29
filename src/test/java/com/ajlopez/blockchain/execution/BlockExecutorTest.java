@@ -58,7 +58,7 @@ public class BlockExecutorTest {
 
         transactionExecutor.executeTransactions(transactions, null);
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
         Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
@@ -99,7 +99,7 @@ public class BlockExecutorTest {
 
         TransactionExecutor transactionExecutor = builder.buildTransactionExecutor();
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TWO);
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TWO);
 
         BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty());
         transactionExecutor.executeTransactions(transactions, blockData);
@@ -143,7 +143,7 @@ public class BlockExecutorTest {
 
         BlockExecutor blockExecutor = builder.buildBlockExecutor();
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TEN);
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TEN);
 
         Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
@@ -170,7 +170,7 @@ public class BlockExecutorTest {
 
         BlockExecutor blockExecutor = builder.buildBlockExecutor();
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
         Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 

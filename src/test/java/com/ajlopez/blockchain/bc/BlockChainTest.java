@@ -54,7 +54,7 @@ public class BlockChainTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertTrue(blockChain.connectBlock(block));
 
@@ -75,8 +75,8 @@ public class BlockChainTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block genesis = new Block(0, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
@@ -98,8 +98,8 @@ public class BlockChainTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block genesis = new Block(0, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
@@ -117,8 +117,8 @@ public class BlockChainTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block genesis = new Block(0, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
@@ -135,8 +135,8 @@ public class BlockChainTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block genesis = new Block(0, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertFalse(blockChain.connectBlock(block));
@@ -153,10 +153,10 @@ public class BlockChainTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block1 = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block1b = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block2 = new Block(2, block1b.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block genesis = new Block(0, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block1 = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block1b = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2 = new Block(2, block1b.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block1));
@@ -190,18 +190,18 @@ public class BlockChainTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block1 = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block1b = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block1c = new Block(1, genesis.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block2 = new Block(2, block1.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
-        Block block3 = new Block(3, block2.getHash(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block genesis = new Block(0, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block1 = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block1b = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block1c = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2 = new Block(2, block1.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block3 = new Block(3, block2.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         List<Transaction> transactions = Collections.emptyList();
         List<BlockHeader> uncles = new ArrayList<>();
         uncles.add(block1b.getHeader());
         uncles.add(block1c.getHeader());
-        Block block2b = new Block(2, block1.getHash(), uncles, transactions, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block2b = new Block(2, block1.getHash(), uncles, transactions, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Assert.assertEquals(Difficulty.fromUnsignedLong(3), block2b.getCummulativeDifficulty());
 

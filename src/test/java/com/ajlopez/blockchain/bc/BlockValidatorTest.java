@@ -65,7 +65,7 @@ public class BlockValidatorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
         BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
@@ -84,7 +84,7 @@ public class BlockValidatorTest {
         List<Transaction> transactions2 = new ArrayList<>();
         transactions2.add(transaction2);
 
-        Block block0 = new Block(1, FactoryHelper.createRandomBlockHash(), null, transactions, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block0 = new Block(1, FactoryHelper.createRandomBlockHash(), null, transactions, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
         Block block = new Block(block0.getHeader(), null, transactions2);
 
         BlockValidator blockValidator = new BlockValidator(null);
@@ -103,7 +103,7 @@ public class BlockValidatorTest {
         transactions2.add(transaction);
         transactions2.add(transaction2);
 
-        Block block0 = new Block(1, FactoryHelper.createRandomBlockHash(), null, transactions, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block0 = new Block(1, FactoryHelper.createRandomBlockHash(), null, transactions, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
         Block block = new Block(block0.getHeader(), null, transactions2);
 
         BlockValidator blockValidator = new BlockValidator(null);
@@ -128,7 +128,7 @@ public class BlockValidatorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
         BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
@@ -142,7 +142,7 @@ public class BlockValidatorTest {
     public void invalidEmptyBlock() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         Block genesis = GenesisGenerator.generateGenesis();
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, new ArrayList<>(), FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, new ArrayList<>(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);

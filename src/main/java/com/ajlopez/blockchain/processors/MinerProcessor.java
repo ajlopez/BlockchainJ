@@ -68,7 +68,7 @@ public class MinerProcessor {
         for (TransactionResult transactionResult : transactionResults)
             transactions.add(transactionResult.getTransaction());
 
-        return new Block(parent, null, transactions, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
+        return new Block(parent, null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
     }
 
     public void start() {
