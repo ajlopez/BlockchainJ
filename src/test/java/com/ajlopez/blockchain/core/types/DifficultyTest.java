@@ -30,6 +30,14 @@ public class DifficultyTest {
     }
 
     @Test
+    public void cannotCreateWithANegativeLong() {
+        exception.expect(ArithmeticException.class);
+        exception.expectMessage("Natural value cannot be negative");
+
+        Difficulty.fromUnsignedLong(-10);
+    }
+
+    @Test
     public void createUsingBytes() {
         Difficulty difficulty = Difficulty.fromBytes(new byte[] { (byte)0xff, (byte)0xff });
 
@@ -124,5 +132,18 @@ public class DifficultyTest {
         Assert.assertTrue(Difficulty.ZERO.isZero());
         Assert.assertFalse(Difficulty.ONE.isZero());
         Assert.assertFalse(Difficulty.fromUnsignedLong(42).isZero());
+    }
+
+    @Test
+    public void difficultyTwoToTarget() {
+        DataWord result = Difficulty.TWO.toTarget();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(DataWord.DATAWORD_BYTES, result.getBytes().length);
+        Assert.assertEquals((byte)0x80, result.getBytes()[0]);
+
+        DataWord expected = DataWord.fromBigInteger(BigInteger.valueOf(2).pow(255));
+
+        Assert.assertEquals(expected, result);
     }
 }

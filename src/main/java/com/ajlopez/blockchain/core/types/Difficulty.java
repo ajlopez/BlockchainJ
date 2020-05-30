@@ -11,6 +11,8 @@ public class Difficulty extends NaturalValue {
     public static final Difficulty TWO = Difficulty.fromUnsignedLong(2);
     public static final Difficulty TEN = new Difficulty(BigInteger.TEN);
 
+    private static final BigInteger MAX = BigInteger.valueOf(2).pow(256);
+
     public static Difficulty fromUnsignedLong(long value) {
         return new Difficulty(BigInteger.valueOf(value));
     }
@@ -38,5 +40,9 @@ public class Difficulty extends NaturalValue {
         DataWord result = diff1.add(diff2);
 
         return Difficulty.fromBytes(result.getBytes());
+    }
+
+    public DataWord toTarget() {
+        return DataWord.fromBigInteger(MAX.divide(this.asBigInteger()));
     }
 }
