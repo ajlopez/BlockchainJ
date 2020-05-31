@@ -16,7 +16,7 @@ public class TransactionReceiptEncoderTest {
 
     @Test
     public void encodeDecodeTransactionReceipt() {
-        TransactionReceipt transactionReceipt = new TransactionReceipt(42, true);
+        TransactionReceipt transactionReceipt = new TransactionReceipt(42, true, null);
 
         byte[] encoded = TransactionReceiptEncoder.encode(transactionReceipt);
 

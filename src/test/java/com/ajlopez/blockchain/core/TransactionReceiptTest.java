@@ -9,9 +9,10 @@ import org.junit.Test;
 public class TransactionReceiptTest {
     @Test
     public void simpleCreationTest() {
-        TransactionReceipt transactionReceipt = new TransactionReceipt(42, true);
+        TransactionReceipt transactionReceipt = new TransactionReceipt(42, true, null);
 
         Assert.assertEquals(42, transactionReceipt.getGasUsed());
         Assert.assertTrue(transactionReceipt.getSuccess());
+        Assert.assertTrue(transactionReceipt.getLogs().isEmpty());
     }
 }

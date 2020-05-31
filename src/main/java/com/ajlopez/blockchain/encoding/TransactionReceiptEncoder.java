@@ -24,6 +24,6 @@ public class TransactionReceiptEncoder {
         long gasUsed = RLPEncoder.decodeUnsignedLong(bytes[0]);
         boolean success = RLPEncoder.decodeBoolean(bytes[1]);
 
-        return new TransactionReceipt(gasUsed, success);
+        return new TransactionReceipt(gasUsed, success, null);
     }
 }
