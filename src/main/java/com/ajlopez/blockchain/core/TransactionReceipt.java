@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.core;
 
 import com.ajlopez.blockchain.vms.eth.Log;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class TransactionReceipt {
         this.gasUsed = gasUsed;
         this.success = success;
         // TODO make inmutable copy
-        this.logs = logs == null ? Collections.EMPTY_LIST : logs;
+        this.logs = logs == null ? Collections.EMPTY_LIST : Collections.unmodifiableList(new ArrayList<>(logs));
     }
 
     public long getGasUsed() {
