@@ -21,6 +21,10 @@ public class RLPEncoder {
         return new Address(RLP.decode(data));
     }
 
+    public static byte[] encodeDataWord(DataWord value) { return RLP.encode(value.toNormalizedBytes()); }
+
+    public static DataWord decodeDataWord(byte[] data) { return DataWord.fromBytes(RLP.decode(data)); }
+
     public static byte[] encodeCoin(Coin value) {
         return RLP.encode(value.toBytes());
     }

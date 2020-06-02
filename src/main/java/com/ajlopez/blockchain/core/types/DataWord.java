@@ -16,6 +16,7 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
     public static final DataWord ZERO = new DataWord(new byte[0]);
     public static final DataWord ONE = new DataWord(new byte[] { 0x01 });
     public static final DataWord TWO = new DataWord(new byte[] { 0x02 });
+    public static final DataWord MAX = fromBigInteger(_2_256.subtract(BigInteger.ONE));
 
     public static DataWord fromUnsignedInteger(int value) {
         return new DataWord(ByteUtils.unsignedIntegerToBytes(value));
@@ -36,6 +37,10 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
 
     public static DataWord fromCoin(Coin coin) {
         byte[] bytes = coin.toBytes();
+        return fromBytes(bytes, 0, bytes.length);
+    }
+
+    public static DataWord fromBytes(byte[] bytes) {
         return fromBytes(bytes, 0, bytes.length);
     }
 
