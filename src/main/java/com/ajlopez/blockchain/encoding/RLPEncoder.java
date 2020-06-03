@@ -4,6 +4,9 @@ import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ajlopez on 24/02/2019.
  */
@@ -24,6 +27,27 @@ public class RLPEncoder {
     public static byte[] encodeDataWord(DataWord value) { return RLP.encode(value.toNormalizedBytes()); }
 
     public static DataWord decodeDataWord(byte[] data) { return DataWord.fromBytes(RLP.decode(data)); }
+
+    public static byte[] encodeDataWords(List<DataWord> values) {
+        int nvalues = values.size();
+        byte[][] bytes = new byte[nvalues][];
+
+        for (int k = 0; k < nvalues; k++)
+            bytes[k] = encodeDataWord(values.get(k));
+
+        return RLP.encodeList(bytes);
+    }
+
+    public static List<DataWord> decodeDataWords(byte[] data) {
+        byte[][] bytes = RLP.decodeList(data);
+        int nvalues = bytes.length;
+        List<DataWord> values = new ArrayList<>();
+
+        for (int k = 0; k < nvalues; k++)
+            values.add(decodeDataWord(bytes[k]));
+
+        return values;
+    }
 
     public static byte[] encodeCoin(Coin value) {
         return RLP.encode(value.toBytes());

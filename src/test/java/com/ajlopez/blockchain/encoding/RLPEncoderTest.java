@@ -6,7 +6,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.math.BigInteger;
+import javax.xml.crypto.Data;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ajlopez on 24/05/2020.
@@ -70,5 +72,27 @@ public class RLPEncoderTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(DataWord.MAX, result);
+    }
+
+    @Test
+    public void encodeDecodeDataWords() {
+        List<DataWord> dataWords = new ArrayList<>();
+        dataWords.add(DataWord.ONE);
+        dataWords.add(DataWord.TWO);
+        dataWords.add(DataWord.ZERO);
+        dataWords.add(DataWord.MAX);
+
+        byte[] encoded = RLPEncoder.encodeDataWords(dataWords);
+
+        Assert.assertNotNull(encoded);
+
+        List<DataWord> result = RLPEncoder.decodeDataWords(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(4, result.size());
+        Assert.assertEquals(DataWord.ONE, result.get(0));
+        Assert.assertEquals(DataWord.TWO, result.get(1));
+        Assert.assertEquals(DataWord.ZERO, result.get(2));
+        Assert.assertEquals(DataWord.MAX, result.get(3));
     }
 }
