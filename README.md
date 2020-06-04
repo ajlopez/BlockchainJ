@@ -123,6 +123,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Optimizing sparse Merkle trees](https://ethresear.ch/t/optimizing-sparse-merkle-trees/3751/2)
 - [Ethereum 2 Specs: Merkle proofs](https://github.com/ethereum/eth2.0-specs/blob/ced6208d55d26d63f532d4bb031869740b2a111c/specs/light_client/merkle_proofs.md)
 - [Some quick numbers on code merkelization](https://ethresear.ch/t/some-quick-numbers-on-code-merkelization/7260)
+- [Open problem: improving stealth addresses Cryptography](https://ethresear.ch/t/open-problem-improving-stealth-addresses/7438)
 
 ## To Do
 
