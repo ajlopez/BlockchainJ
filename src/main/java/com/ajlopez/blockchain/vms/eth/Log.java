@@ -3,6 +3,8 @@ package com.ajlopez.blockchain.vms.eth;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,7 +18,7 @@ public class Log {
     public Log(Address address, byte[] data, List<DataWord> topics) {
         this.address = address;
         this.data = data;
-        this.topics = topics;
+        this.topics = topics == null ? Collections.EMPTY_LIST : Collections.unmodifiableList(new ArrayList<>(topics));
     }
 
     public Address getAddress() { return this.address; }
