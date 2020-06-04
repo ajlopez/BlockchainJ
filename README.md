@@ -120,6 +120,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Does installing geth download the entire blockchain?](https://ethereum.stackexchange.com/questions/12023/does-installing-geth-download-the-entire-blockchain/12028)
 - [Ethereum Snapshot Protocol (SNAP)](https://github.com/ethereum/devp2p/blob/3fe9713658f3b3b56e4e99493c54f313e11b43a0/caps/snap.md)
 - [Gas and circuit constraint benchmarks of binary and quinary incremental Merkle trees using the Poseidon hash function](https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446)
+- [Optimizing sparse Merkle trees](https://ethresear.ch/t/optimizing-sparse-merkle-trees/3751/2)
+- [Ethereum 2 Specs: Merkle proofs](https://github.com/ethereum/eth2.0-specs/blob/ced6208d55d26d63f532d4bb031869740b2a111c/specs/light_client/merkle_proofs.md)
 
 ## To Do
 
