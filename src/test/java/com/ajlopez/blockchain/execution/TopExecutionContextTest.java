@@ -61,7 +61,7 @@ public class TopExecutionContextTest {
         Hash codeHash = FactoryHelper.createRandomHash();
         codeStore.putCode(codeHash, code);
 
-        Account account = new Account(Coin.ZERO, 0, codeHash, null);
+        Account account = new Account(Coin.ZERO, 0, code.length, codeHash, null);
         Address address = FactoryHelper.createRandomAddress();
         accountStore.putAccount(address, account);
 
@@ -204,7 +204,7 @@ public class TopExecutionContextTest {
     @Test
     public void getBalanceFromAccountAndCommitDoesNotChangeStore() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
-        Account account = new Account(Coin.TEN, 42, null, null);
+        Account account = new Account(Coin.TEN, 42, 0, null, null);
         Address address = FactoryHelper.createRandomAddress();
 
         accountStore.putAccount(address, account);
@@ -257,7 +257,7 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 41, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -276,7 +276,7 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 41, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -296,7 +296,7 @@ public class TopExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 41, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -337,7 +337,7 @@ public class TopExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, 0, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -367,7 +367,7 @@ public class TopExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, 0, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
@@ -398,7 +398,7 @@ public class TopExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, 0, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);

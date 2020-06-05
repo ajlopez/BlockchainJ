@@ -356,7 +356,7 @@ public class AccountStateTest {
 
     @Test
     public void createFromAccount() {
-        Account account = new Account(Coin.TEN, 42, null, null);
+        Account account = new Account(Coin.TEN, 42, 0, null, null);
 
         AccountState result = AccountState.fromAccount(account);
 
@@ -368,7 +368,7 @@ public class AccountStateTest {
 
     @Test
     public void toAccount() {
-        Account account = new Account(Coin.TEN, 42, FactoryHelper.createRandomHash(), null);
+        Account account = new Account(Coin.TEN, 42, 0, FactoryHelper.createRandomHash(), null);
 
         Account result = AccountState.fromAccount(account).toAccount();
 

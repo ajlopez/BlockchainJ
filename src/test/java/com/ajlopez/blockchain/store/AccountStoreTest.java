@@ -5,9 +5,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -31,7 +29,7 @@ public class AccountStoreTest {
     @Test
     public void putAndGetAccount() throws IOException {
         AccountStore store = new AccountStore(new Trie());
-        Account account = new Account(Coin.TEN, 42, null, null);
+        Account account = new Account(Coin.TEN, 42, 0, null, null);
         Address address = new Address(new byte[] { 0x01, 0x02 });
 
         store.putAccount(address, account);

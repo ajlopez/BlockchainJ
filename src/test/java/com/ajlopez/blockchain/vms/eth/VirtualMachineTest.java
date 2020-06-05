@@ -1335,7 +1335,7 @@ public class VirtualMachineTest {
         Hash codeHash = FactoryHelper.createRandomHash();
         byte[] code = FactoryHelper.createRandomBytes(100);
         codeStore.putCode(codeHash, code);
-        Account account = new Account(Coin.ZERO, 0, codeHash, null);
+        Account account = new Account(Coin.ZERO, 0, code.length, codeHash, null);
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
         accountStore.putAccount(address, account);
@@ -1394,7 +1394,7 @@ public class VirtualMachineTest {
         Hash codeHash = FactoryHelper.createRandomHash();
         byte[] code = FactoryHelper.createRandomBytes(100);
         codeStore.putCode(codeHash, code);
-        Account account = new Account(Coin.ZERO, 0, codeHash, null);
+        Account account = new Account(Coin.ZERO, 0, code.length, codeHash, null);
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
         accountStore.putAccount(address, account);

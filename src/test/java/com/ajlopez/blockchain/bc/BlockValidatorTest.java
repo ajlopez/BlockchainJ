@@ -47,7 +47,7 @@ public class BlockValidatorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
         AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account sender = new Account(Coin.fromUnsignedLong(10000), 0, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(10000), 0, 0, null, null);
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 

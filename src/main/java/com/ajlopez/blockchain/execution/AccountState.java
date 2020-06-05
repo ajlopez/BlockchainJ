@@ -106,7 +106,7 @@ public class AccountState {
     }
 
     public Account toAccount() {
-        return new Account(this.balance, this.nonce, this.codeHash, this.storageHash);
+        return new Account(this.balance, this.nonce, 0, this.codeHash, this.storageHash);
     }
 
     public boolean wasChanged() {

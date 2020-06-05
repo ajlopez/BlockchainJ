@@ -300,7 +300,7 @@ public class TransactionExecutorTest {
         for (int k = 0; k < ntxs; k++)
             addresses.add(FactoryHelper.createRandomAddress());
 
-        Account account = new Account(Coin.fromUnsignedLong(ntxs + 1), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(ntxs + 1), 0, 0, null, null);
 
         accountStore.putAccount(addresses.get(0), account);
 

@@ -14,27 +14,30 @@ public class AccountEncoder {
         byte[] rlpBalance = RLPEncoder.encodeCoin(account.getBalance());
         byte[] rlpNonce = RLPEncoder.encodeUnsignedLong(account.getNonce());
 
-        if (account.getCodeHash() == null && account.getStorageHash() == null)
+        if (account.getCodeLength() == 0 && account.getCodeHash() == null && account.getStorageHash() == null)
             return RLP.encodeList(rlpBalance, rlpNonce);
 
+        byte[] rlpCodeLength = RLPEncoder.encodeUnsignedLong(account.getCodeLength());
         byte[] rlpCodeHash = RLPEncoder.encodeHash(account.getCodeHash());
         byte[] rlpStorageHash = RLPEncoder.encodeHash(account.getStorageHash());
 
-        return RLP.encodeList(rlpBalance, rlpNonce, rlpCodeHash, rlpStorageHash);
+        return RLP.encodeList(rlpBalance, rlpNonce, rlpCodeLength, rlpCodeHash, rlpStorageHash);
     }
 
     public static Account decode(byte[] encoded) {
+        // TODO check the number of parts
         byte[][] bytes = RLP.decodeList(encoded);
 
         Coin balance = RLPEncoder.decodeCoin(bytes[0]);
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[1]);
 
         if (bytes.length == 2)
-            return new Account(balance, nonce, null, null);
+            return new Account(balance, nonce, 0, null, null);
 
-        Hash codeHash = RLPEncoder.decodeHash(bytes[2]);
-        Hash storageHash = RLPEncoder.decodeHash(bytes[3]);
+        long codeLength = RLPEncoder.decodeUnsignedLong(bytes[2]);
+        Hash codeHash = RLPEncoder.decodeHash(bytes[3]);
+        Hash storageHash = RLPEncoder.decodeHash(bytes[4]);
 
-        return new Account(balance, nonce, codeHash, storageHash);
+        return new Account(balance, nonce, codeLength, codeHash, storageHash);
     }
 }

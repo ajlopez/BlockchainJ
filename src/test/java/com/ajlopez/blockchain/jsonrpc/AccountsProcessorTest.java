@@ -253,7 +253,7 @@ public class AccountsProcessorTest {
         Stores stores = new MemoryStores();
         AccountStore accountStore = new AccountStore(stores.getAccountTrieStore().retrieve(Trie.EMPTY_TRIE_HASH));
 
-        Account senderAccount = new Account(Coin.fromUnsignedLong(initialBalance), 0, null, null);
+        Account senderAccount = new Account(Coin.fromUnsignedLong(initialBalance), 0, 0, null, null);
 
         accountStore.putAccount(sender, senderAccount);
         accountStore.save();

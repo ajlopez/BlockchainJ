@@ -63,7 +63,7 @@ public class FactoryHelper {
     }
 
     public static void createAccountWithBalance(AccountStore accountStore, Address address, long balance) throws IOException {
-        Account account = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(balance), 0, 0, null, null);
 
         accountStore.putAccount(address, account);
         accountStore.save();
@@ -72,7 +72,7 @@ public class FactoryHelper {
     public static void createAccountWithCode(AccountStore accountStore, CodeStore codeStore, Address address, byte[] code) throws IOException {
         Hash codeHash = HashUtils.calculateHash(code);
         codeStore.putCode(codeHash, code);
-        Account account = new Account(Coin.ZERO, 0, codeHash, null);
+        Account account = new Account(Coin.ZERO, 0, code.length, codeHash, null);
 
         accountStore.putAccount(address, account);
         accountStore.save();
@@ -211,7 +211,7 @@ public class FactoryHelper {
         AccountStore accountStore = accountStoreProvider.retrieve(Trie.EMPTY_TRIE_HASH);
 
         if (ntransactions > 0) {
-            Account sender = new Account(Coin.fromUnsignedLong(balance), 0, null, null);
+            Account sender = new Account(Coin.fromUnsignedLong(balance), 0, 0, null, null);
 
             accountStore.putAccount(senderAddress, sender);
             accountStore.save();

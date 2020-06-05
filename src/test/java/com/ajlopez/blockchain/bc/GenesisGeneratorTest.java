@@ -34,7 +34,7 @@ public class GenesisGeneratorTest {
     public void generateGenesisWithInitialAccounts() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
 
-        accountStore.putAccount(FactoryHelper.createRandomAddress(), new Account(Coin.TEN, 42, null, null));
+        accountStore.putAccount(FactoryHelper.createRandomAddress(), new Account(Coin.TEN, 42, 0, null, null));
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 

@@ -9,14 +9,15 @@ import com.ajlopez.blockchain.core.types.Hash;
 public class Account {
     private final Coin balance;
     private final long nonce;
+    private final long codeLength;
     private final Hash codeHash;
     private final Hash storageHash;
 
     public Account() {
-        this(Coin.ZERO, 0, null, null);
+        this(Coin.ZERO, 0, 0, null, null);
     }
 
-    public Account(Coin balance, long nonce, Hash codeHash, Hash storageHash) {
+    public Account(Coin balance, long nonce, long codeLength, Hash codeHash, Hash storageHash) {
         if (balance == null)
             balance = Coin.ZERO;
 
@@ -25,6 +26,7 @@ public class Account {
 
         this.balance = balance;
         this.nonce = nonce;
+        this.codeLength = codeLength;
         this.codeHash = codeHash;
         this.storageHash = storageHash;
     }
@@ -34,6 +36,8 @@ public class Account {
     }
 
     public long getNonce() { return this.nonce; }
+
+    public long getCodeLength() { return this.codeLength; }
 
     public Hash getCodeHash() { return this.codeHash; }
 

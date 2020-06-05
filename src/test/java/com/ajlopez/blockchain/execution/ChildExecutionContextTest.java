@@ -37,7 +37,7 @@ public class ChildExecutionContextTest {
     @Test
     public void getBalanceFromAccountAndCommitDoesNotChangeStore() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
-        Account account = new Account(Coin.TEN, 42, null, null);
+        Account account = new Account(Coin.TEN, 42, 0, null, null);
         Address address = FactoryHelper.createRandomAddress();
 
         accountStore.putAccount(address, account);
@@ -92,7 +92,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 41, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -112,7 +112,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 41, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -136,7 +136,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 41, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -158,7 +158,7 @@ public class ChildExecutionContextTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 41, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
         accountStore.putAccount(address, account);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -204,7 +204,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, 0, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -235,7 +235,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, 0, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -275,7 +275,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, 0, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);
@@ -308,7 +308,7 @@ public class ChildExecutionContextTest {
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
-        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, null, null);
+        Account sender = new Account(Coin.fromUnsignedLong(1000), 42, 0, null, null);
         accountStore.putAccount(senderAddress, sender);
 
         TopExecutionContext parentExecutionContext = new TopExecutionContext(accountStore, null, null);

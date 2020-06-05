@@ -209,8 +209,8 @@ public class WorldTest {
     @Test
     public void getBlockChainWithInitialAccounts() throws IOException {
         World world = new World();
-        Account account1 = new Account(Coin.TEN, 10, null, null);
-        Account account2 = new Account(Coin.ONE, 20, null, null);
+        Account account1 = new Account(Coin.TEN, 10, 0, null, null);
+        Account account2 = new Account(Coin.ONE, 20, 0, null, null);
 
         world.setAccount("acc1", account1);
         world.setAccount("acc2", account2);

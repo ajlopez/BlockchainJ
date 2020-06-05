@@ -103,14 +103,15 @@ public class DslCommand {
         long nonce = this.getLongInteger(2, "nonce");
         String bytecodes = this.getName(3, "code");
         Hash codeHash = null;
+        byte[] code = null;
 
         if (bytecodes != null) {
-            byte[] code = HexUtils.hexStringToBytes(bytecodes);
+            code = HexUtils.hexStringToBytes(bytecodes);
             codeHash = HashUtils.calculateHash(code);
             world.setCode(codeHash, code);
         }
 
-        Account account = new Account(balance, nonce, codeHash, null);
+        Account account = new Account(balance, nonce, code != null ? code.length : 0, codeHash, null);
 
         world.setAccount(name, account);
     }

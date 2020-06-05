@@ -235,7 +235,7 @@ public class MinerProcessorTest {
         Stores stores = new MemoryStores();
         AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 0, 0, null, null);
         accountStore.putAccount(sender, account);
         accountStore.save();
 
@@ -270,7 +270,7 @@ public class MinerProcessorTest {
         Stores stores = new MemoryStores();
         AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
 
-        Account account = new Account(Coin.fromUnsignedLong(1000), 0, null, null);
+        Account account = new Account(Coin.fromUnsignedLong(1000), 0, 0, null, null);
         accountStore.putAccount(tx.getSender(), account);
         accountStore.save();
 
