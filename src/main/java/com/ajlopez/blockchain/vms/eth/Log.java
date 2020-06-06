@@ -17,7 +17,8 @@ public class Log {
 
     public Log(Address address, byte[] data, List<DataWord> topics) {
         this.address = address;
-        this.data = data;
+        // TODO review if null or empty array normalization
+        this.data = data != null && data.length == 0 ? null : data;
         this.topics = topics == null ? Collections.EMPTY_LIST : Collections.unmodifiableList(new ArrayList<>(topics));
     }
 
