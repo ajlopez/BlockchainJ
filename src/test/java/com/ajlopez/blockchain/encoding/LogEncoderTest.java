@@ -1,11 +1,12 @@
 package com.ajlopez.blockchain.encoding;
 
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.vms.eth.Log;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,10 @@ import java.util.List;
  * Created by ajlopez on 06/06/2020.
  */
 public class LogEncoderTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void encodeDecodeLog() {
         Address address = FactoryHelper.createRandomAddress();
@@ -71,5 +76,16 @@ public class LogEncoderTest {
 
         for (int k = 0; k < log.getTopics().size(); k++)
             Assert.assertEquals(log.getTopics().get(k), result.getTopics().get(k));
+    }
+
+    @Test
+    public void decodeInvalidEncodedLog() {
+        byte[] rlpData1 = RLP.encode(FactoryHelper.createRandomBytes(10));
+        byte[] rlpData2 = RLP.encode(FactoryHelper.createRandomBytes(20));
+        byte[] encoded = RLP.encodeList(rlpData1, rlpData2);
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid log encoding");
+        LogEncoder.decode(encoded);
     }
 }

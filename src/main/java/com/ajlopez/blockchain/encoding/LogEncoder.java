@@ -23,7 +23,8 @@ public class LogEncoder {
     public static Log decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
 
-        // TODO check number of parts
+        if (bytes.length != 3)
+            throw new IllegalArgumentException("Invalid log encoding");
 
         Address address = RLPEncoder.decodeAddress(bytes[0]);
         byte[] data = RLP.decode(bytes[1]);
