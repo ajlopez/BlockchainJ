@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,8 +18,7 @@ public class Log {
 
     public Log(Address address, byte[] data, List<DataWord> topics) {
         this.address = address;
-        // TODO review if null or empty array normalization
-        this.data = data != null && data.length == 0 ? null : data;
+        this.data = ByteUtils.normalizeBytesToNull(data);
         this.topics = topics == null ? Collections.EMPTY_LIST : Collections.unmodifiableList(new ArrayList<>(topics));
     }
 

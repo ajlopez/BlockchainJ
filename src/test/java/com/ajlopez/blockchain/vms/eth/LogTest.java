@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.vms.eth;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,6 +35,25 @@ public class LogTest {
     }
 
     @Test
+    public void createLogWithEmptyData() {
+        Address address = FactoryHelper.createRandomAddress();
+        List<DataWord> topics = new ArrayList<>();
+        DataWord topic1 = DataWord.fromUnsignedInteger(1);
+        DataWord topic2 = DataWord.fromUnsignedInteger(4);
+        DataWord topic3 = DataWord.fromUnsignedInteger(9);
+
+        topics.add(topic1);
+        topics.add(topic2);
+        topics.add(topic3);
+
+        Log log = new Log(address, ByteUtils.EMPTY_BYTE_ARRAY, topics);
+
+        Assert.assertEquals(address, log.getAddress());
+        Assert.assertNull(log.getData());
+        Assert.assertEquals(topics, log.getTopics());
+    }
+
+    @Test
     public void createLogWithoutTopics() {
         Address address = FactoryHelper.createRandomAddress();
         byte[] data = FactoryHelper.createRandomBytes(42);
@@ -46,7 +66,7 @@ public class LogTest {
     }
 
     @Test
-    public void ummodifiableTopicsListInLog() {
+    public void unmodifiableTopicsListInLog() {
         Address address = FactoryHelper.createRandomAddress();
         byte[] data = FactoryHelper.createRandomBytes(42);
         List<DataWord> topics = new ArrayList<>();
