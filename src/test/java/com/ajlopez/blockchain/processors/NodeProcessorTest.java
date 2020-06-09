@@ -6,7 +6,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.BlockExecutionResult;
 import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
@@ -381,13 +381,14 @@ public class NodeProcessorTest {
         nodeProcessor1.startMessagingProcess();
         nodeProcessor2.startMessagingProcess();
 
-        Hash hash = blockExecutor.executeBlock(bestBlock, blockChain1.getBlockByNumber(bestBlock.getNumber() - 1).getStateRootHash());
+        BlockExecutionResult result = blockExecutor.executeBlock(bestBlock, blockChain1.getBlockByNumber(bestBlock.getNumber() - 1).getStateRootHash());
 
         nodeProcessor2.stopMessagingProcess();
         nodeProcessor1.stopMessagingProcess();
 
-        Assert.assertNotNull(hash);
-        Assert.assertEquals(bestBlock.getStateRootHash(), hash);
+        Assert.assertNotNull(result);
+        Assert.assertNotNull(result.getStateRootHash());
+        Assert.assertEquals(bestBlock.getStateRootHash(), result.getStateRootHash());
     }
 
     @Test

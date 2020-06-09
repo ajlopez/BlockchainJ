@@ -33,10 +33,10 @@ public class BlockExecutorTest {
         Block genesis = GenesisGenerator.generateGenesis();
         Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
 
-        Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
+        BlockExecutionResult result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
-        Assert.assertEquals(genesis.getStateRootHash(), result);
-        Assert.assertEquals(Trie.EMPTY_TRIE_HASH, result);
+        Assert.assertEquals(genesis.getStateRootHash(), result.getStateRootHash());
+        Assert.assertEquals(Trie.EMPTY_TRIE_HASH, result.getStateRootHash());
     }
 
     @Test
@@ -60,9 +60,9 @@ public class BlockExecutorTest {
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
-        Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
+        BlockExecutionResult result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
-        Assert.assertEquals(accountStore.getRootHash(), result);
+        Assert.assertEquals(accountStore.getRootHash(), result.getStateRootHash());
     }
 
     @Test
@@ -106,9 +106,9 @@ public class BlockExecutorTest {
 
         BlockExecutor blockExecutor = builder.buildBlockExecutor();
 
-        Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
+        BlockExecutionResult result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
-        Assert.assertEquals(accountStore.getRootHash(), result);
+        Assert.assertEquals(accountStore.getRootHash(), result.getStateRootHash());
 
         Account receiver = accountStore.getAccount(receiverAddress);
         Assert.assertNotNull(receiver);
@@ -145,9 +145,9 @@ public class BlockExecutorTest {
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TEN);
 
-        Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
+        BlockExecutionResult result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
-        Assert.assertEquals(genesis.getStateRootHash(), result);
+        Assert.assertEquals(genesis.getStateRootHash(), result.getStateRootHash());
     }
 
     @Test
@@ -172,8 +172,8 @@ public class BlockExecutorTest {
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
-        Hash result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
+        BlockExecutionResult result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
-        Assert.assertEquals(genesis.getStateRootHash(), result);
+        Assert.assertEquals(genesis.getStateRootHash(), result.getStateRootHash());
     }
 }

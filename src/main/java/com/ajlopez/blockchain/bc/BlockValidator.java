@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.BlockExecutionResult;
 import com.ajlopez.blockchain.execution.BlockExecutor;
 
 import java.io.IOException;
@@ -34,8 +35,8 @@ public class BlockValidator {
 
         Hash initialStateRoot = parent.getStateRootHash();
 
-        Hash hash = this.blockExecutor.executeBlock(block, initialStateRoot);
+        BlockExecutionResult blockExecutionResult = this.blockExecutor.executeBlock(block, initialStateRoot);
 
-        return hash.equals(block.getStateRootHash());
+        return blockExecutionResult.getStateRootHash().equals(block.getStateRootHash());
     }
 }

@@ -24,7 +24,7 @@ public class BlockExecutor {
         this.codeStore = codeStore;
     }
 
-    public Hash executeBlock(Block block, Hash initialStateRoot) throws IOException {
+    public BlockExecutionResult executeBlock(Block block, Hash initialStateRoot) throws IOException {
         AccountStore accountStore = this.accountStoreProvider.retrieve(initialStateRoot);
 
         ExecutionContext executionContext = new TopExecutionContext(accountStore, this.trieStorageProvider, this.codeStore);
@@ -33,6 +33,6 @@ public class BlockExecutor {
         BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty());
         transactionExecutor.executeTransactions(block.getTransactions(), blockData);
 
-        return accountStore.getRootHash();
+        return new BlockExecutionResult(accountStore.getRootHash(), null);
     }
 }
