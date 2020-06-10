@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
+import com.ajlopez.blockchain.core.TransactionReceipt;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -53,5 +55,9 @@ public class ExecutionResult {
 
     public Exception getException() {
         return this.exception;
+    }
+
+    public TransactionReceipt toTransactionReceipt() {
+        return new TransactionReceipt(this.gasUsed, this.success, this.logs);
     }
 }
