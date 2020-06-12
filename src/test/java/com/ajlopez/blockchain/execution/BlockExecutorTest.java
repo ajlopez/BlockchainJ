@@ -37,6 +37,7 @@ public class BlockExecutorTest {
 
         Assert.assertEquals(genesis.getStateRootHash(), result.getStateRootHash());
         Assert.assertEquals(Trie.EMPTY_TRIE_HASH, result.getStateRootHash());
+        Assert.assertTrue(result.getTransactionReceipts().isEmpty());
     }
 
     @Test
@@ -63,6 +64,8 @@ public class BlockExecutorTest {
         BlockExecutionResult result = blockExecutor.executeBlock(block, genesis.getStateRootHash());
 
         Assert.assertEquals(accountStore.getRootHash(), result.getStateRootHash());
+        Assert.assertFalse(result.getTransactionReceipts().isEmpty());
+        Assert.assertEquals(1, result.getTransactionReceipts().size());
     }
 
     @Test
