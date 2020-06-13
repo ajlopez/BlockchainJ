@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.vms.eth.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,5 +32,24 @@ public class LogEncoder {
         List<DataWord> topics = RLPEncoder.decodeDataWords(bytes[2]);
 
         return new Log(address, data, topics);
+    }
+
+    public static byte[] encodeList(List<Log> logs) {
+        byte[][] bytes = new byte[logs.size()][];
+
+        for (int k = 0; k < logs.size(); k++)
+            bytes[k] = encode(logs.get(k));
+
+        return RLP.encodeList(bytes);
+    }
+
+    public static List<Log> decodeList(byte[] encoded) {
+        byte[][] bytes = RLP.decodeList(encoded);
+        List<Log> logs = new ArrayList<>(bytes.length);
+
+        for (int k = 0; k < bytes.length; k++)
+            logs.add(decode(bytes[k]));
+
+        return logs;
     }
 }
