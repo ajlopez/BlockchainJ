@@ -4,7 +4,10 @@ import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.TransactionReceipt;
 import com.ajlopez.blockchain.core.types.*;
+import com.ajlopez.blockchain.merkle.MerkleTree;
+import com.ajlopez.blockchain.merkle.MerkleTreeBuilder;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.builders.ExecutorBuilder;
@@ -38,6 +41,8 @@ public class BlockExecutorTest {
         Assert.assertEquals(genesis.getStateRootHash(), result.getStateRootHash());
         Assert.assertEquals(Trie.EMPTY_TRIE_HASH, result.getStateRootHash());
         Assert.assertTrue(result.getTransactionReceipts().isEmpty());
+
+        Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, result.getTransactionReceiptsHash());
     }
 
     @Test
@@ -66,6 +71,15 @@ public class BlockExecutorTest {
         Assert.assertEquals(accountStore.getRootHash(), result.getStateRootHash());
         Assert.assertFalse(result.getTransactionReceipts().isEmpty());
         Assert.assertEquals(1, result.getTransactionReceipts().size());
+
+        MerkleTreeBuilder merkleTreeBuilder = new MerkleTreeBuilder();
+
+        for (TransactionReceipt transactionReceipt : result.getTransactionReceipts())
+            merkleTreeBuilder.add(transactionReceipt.getHash());
+
+        MerkleTree merkleTree = merkleTreeBuilder.build();
+
+        Assert.assertEquals(merkleTree.getHash(), result.getTransactionReceiptsHash());
     }
 
     @Test

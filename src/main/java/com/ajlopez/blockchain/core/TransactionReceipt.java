@@ -1,5 +1,8 @@
 package com.ajlopez.blockchain.core;
 
+import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.encoding.TransactionReceiptEncoder;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.Log;
 
 import java.util.ArrayList;
@@ -13,6 +16,8 @@ public class TransactionReceipt {
     private final long gasUsed;
     private final boolean success;
     private final List<Log> logs;
+
+    private Hash hash;
 
     public TransactionReceipt(long gasUsed, boolean success, List<Log> logs) {
         this.gasUsed = gasUsed;
@@ -30,4 +35,11 @@ public class TransactionReceipt {
     }
 
     public List<Log> getLogs() { return this.logs; }
+
+    public Hash getHash() {
+        if (this.hash == null)
+            this.hash = HashUtils.calculateHash(TransactionReceiptEncoder.encode(this));
+
+        return this.hash;
+    }
 }
