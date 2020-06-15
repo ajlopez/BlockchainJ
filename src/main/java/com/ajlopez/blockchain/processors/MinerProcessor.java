@@ -3,13 +3,11 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.TransactionReceipt;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.execution.ExecutionContext;
-import com.ajlopez.blockchain.execution.TopExecutionContext;
-import com.ajlopez.blockchain.execution.TransactionExecutor;
-import com.ajlopez.blockchain.execution.TransactionResult;
+import com.ajlopez.blockchain.execution.*;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.vms.eth.BlockData;
@@ -56,6 +54,7 @@ public class MinerProcessor {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
         AccountStore accountStore = this.stores.getAccountStoreProvider().retrieve(parentStateRootHash);
         ExecutionContext executionContext = new TopExecutionContext(accountStore, this.stores.getTrieStorageProvider(), this.stores.getCodeStore());
+        // TODO evaluate to use BlockExecutor instead of TransactionExecutor
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
         long timestamp = System.currentTimeMillis();
         // TODO use difficulty instead of a constant
@@ -68,7 +67,12 @@ public class MinerProcessor {
         for (TransactionResult transactionResult : transactionResults)
             transactions.add(transactionResult.getTransaction());
 
-        return new Block(parent, null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
+        List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
+
+        for (TransactionResult transactionResult : transactionResults)
+            transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
+
+        return new Block(parent, null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
     }
 
     public void start() {

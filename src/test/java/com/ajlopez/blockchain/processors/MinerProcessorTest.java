@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.merkle.MerkleTree;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -43,6 +44,8 @@ public class MinerProcessorTest {
 
         Assert.assertNotNull(txs);
         Assert.assertTrue(txs.isEmpty());
+
+        Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getReceiptsRootHash());
     }
 
     @Test
@@ -92,6 +95,8 @@ public class MinerProcessorTest {
         Assert.assertNotNull(updatedReceiverAccount);
         Assert.assertEquals(0, updatedReceiverAccount.getNonce());
         Assert.assertEquals(Coin.fromUnsignedLong(100), updatedReceiverAccount.getBalance());
+
+        Assert.assertNotEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getReceiptsRootHash());
     }
 
     @Test
@@ -157,6 +162,8 @@ public class MinerProcessorTest {
 
         Assert.assertNotNull(trieStorage);
         Assert.assertEquals(DataWord.ONE, trieStorage.getValue(DataWord.ZERO));
+
+        Assert.assertNotEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getReceiptsRootHash());
     }
 
     @Test
@@ -222,6 +229,8 @@ public class MinerProcessorTest {
 
         Assert.assertNotNull(trieStorage);
         Assert.assertEquals(DataWord.fromUnsignedInteger(42), trieStorage.getValue(DataWord.ZERO));
+
+        Assert.assertNotEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getReceiptsRootHash());
     }
 
     @Test
@@ -258,6 +267,8 @@ public class MinerProcessorTest {
         Assert.assertSame(tx, txs.get(0));
 
         Assert.assertFalse(transactionPool.getTransactions().isEmpty());
+
+        Assert.assertNotEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getReceiptsRootHash());
     }
 
     @Test
@@ -311,6 +322,8 @@ public class MinerProcessorTest {
         Assert.assertSame(tx, txs.get(0));
 
         Assert.assertFalse(transactionPool.getTransactions().isEmpty());
+
+        Assert.assertNotEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getReceiptsRootHash());
     }
 
     @Test
@@ -346,11 +359,15 @@ public class MinerProcessorTest {
         Assert.assertNotNull(block1);
         Assert.assertEquals(1, block1.getNumber());
 
+        Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block1.getReceiptsRootHash());
+
         Block block2 = minedBlocks.get(1);
 
         Assert.assertNotNull(block2);
         Assert.assertEquals(1, block1.getNumber());
 
         Assert.assertTrue(transactionPool.getTransactions().isEmpty());
+
+        Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block2.getReceiptsRootHash());
     }
 }
