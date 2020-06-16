@@ -3,16 +3,10 @@ package com.ajlopez.blockchain.test.utils;
 import com.ajlopez.blockchain.bc.BlockValidator;
 import com.ajlopez.blockchain.bc.GenesisGenerator;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
-import com.ajlopez.blockchain.core.Account;
-import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.BlockHeader;
+import com.ajlopez.blockchain.core.*;
 import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.bc.BlockChain;
-import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.execution.BlockExecutor;
-import com.ajlopez.blockchain.execution.ExecutionContext;
-import com.ajlopez.blockchain.execution.TopExecutionContext;
-import com.ajlopez.blockchain.execution.TransactionExecutor;
+import com.ajlopez.blockchain.execution.*;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
@@ -183,9 +177,15 @@ public class FactoryHelper {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        transactionExecutor.executeTransactions(transactions, null);
+        // TODO evaluate to use BlockExecutor instead of TransactionExecutor
+        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(transactions, null);
 
-        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
+
+        for (TransactionResult transactionResult : transactionResults)
+            transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
+
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
     }
 
     public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions) {

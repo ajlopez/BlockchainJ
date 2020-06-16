@@ -37,6 +37,12 @@ public class BlockValidator {
 
         BlockExecutionResult blockExecutionResult = this.blockExecutor.executeBlock(block, initialStateRoot);
 
-        return blockExecutionResult.getStateRootHash().equals(block.getStateRootHash());
+        if (!blockExecutionResult.getStateRootHash().equals(block.getStateRootHash()))
+            return false;
+
+        if (!blockExecutionResult.getTransactionReceiptsHash().equals(block.getReceiptsRootHash()))
+            return false;
+
+        return true;
     }
 }
