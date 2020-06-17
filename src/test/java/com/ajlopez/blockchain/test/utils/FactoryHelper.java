@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.core.*;
 import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.execution.*;
+import com.ajlopez.blockchain.merkle.MerkleTree;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.processors.*;
@@ -189,7 +190,8 @@ public class FactoryHelper {
     }
 
     public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions) {
-        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, null, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        // TODO consider calculate receipts root if there is any transaction
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, MerkleTree.EMPTY_MERKLE_TREE_HASH, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
     }
 
     public static BlockChain createBlockChain(int size) throws IOException {

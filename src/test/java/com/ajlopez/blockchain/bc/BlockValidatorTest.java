@@ -3,15 +3,15 @@ package com.ajlopez.blockchain.bc;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.TransactionReceipt;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.execution.BlockExecutor;
-import com.ajlopez.blockchain.execution.ExecutionContext;
-import com.ajlopez.blockchain.execution.TopExecutionContext;
-import com.ajlopez.blockchain.execution.TransactionExecutor;
+import com.ajlopez.blockchain.core.types.Difficulty;
+import com.ajlopez.blockchain.execution.*;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.vms.eth.BlockData;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -61,11 +61,20 @@ public class BlockValidatorTest {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        transactionExecutor.executeTransactions(transactions, null);
-
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        // TODO use difficulty instead of a constant
+        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE);
+
+        // TODO evaluate to use BlockExecutor instead of TransactionExecutor
+        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(transactions, blockData);
+
+        List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
+
+        for (TransactionResult transactionResult : transactionResults)
+            transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
+
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
         BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
