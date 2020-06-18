@@ -137,7 +137,21 @@ public class BlockValidatorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
+        ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+        TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
+
+        // TODO use difficulty instead of a constant
+        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE);
+
+        // TODO evaluate to use BlockExecutor instead of TransactionExecutor
+        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(transactions, blockData);
+
+        List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
+
+        for (TransactionResult transactionResult : transactionResults)
+            transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
+
+        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
         BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
 
