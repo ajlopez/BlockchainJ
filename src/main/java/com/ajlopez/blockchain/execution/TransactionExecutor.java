@@ -20,14 +20,14 @@ public class TransactionExecutor {
         this.executionContext = executionContext;
     }
 
+    // TODO use TransactionReceipt list instead TransactionResults
     public List<TransactionResult> executeTransactions(List<Transaction> transactions, BlockData blockData) throws IOException {
         List<TransactionResult> executed = new ArrayList<>();
 
         for (Transaction transaction : transactions) {
             ExecutionResult executionResult = this.executeTransaction(transaction, blockData);
 
-            if (executionResult != null)
-                executed.add(new TransactionResult(transaction, executionResult));
+            executed.add(new TransactionResult(transaction, executionResult));
         }
 
         this.executionContext.commit();

@@ -72,6 +72,7 @@ public class MinerProcessor {
         for (TransactionResult transactionResult : transactionResults)
             transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
 
+        // TODO use uncles
         return new Block(parent, null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
     }
 

@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.vms.eth.BlockData;
+import com.ajlopez.blockchain.vms.eth.ExecutionResult;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
 import java.io.IOException;
@@ -38,8 +39,14 @@ public class BlockExecutor {
 
         List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
 
-        for (TransactionResult transactionResult : transactionResults)
-            transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
+        for (TransactionResult transactionResult : transactionResults) {
+            ExecutionResult executionResult = transactionResult.getExecutionResult();
+
+            if (executionResult == null)
+                continue;
+
+            transactionReceipts.add(executionResult.toTransactionReceipt());
+        }
 
         return new BlockExecutionResult(accountStore.getRootHash(), transactionReceipts);
     }

@@ -199,10 +199,12 @@ public class TransactionExecutorTest {
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
-        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(2, result.size());
 
         Transaction tresult1 = result.get(0).getTransaction();
         Assert.assertEquals(transaction1, tresult1);
+
+        Assert.assertNull(result.get(1).getExecutionResult());
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
@@ -235,10 +237,12 @@ public class TransactionExecutorTest {
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
-        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(2, result.size());
 
         Transaction tresult1 = result.get(0).getTransaction();
         Assert.assertEquals(transaction1, tresult1);
+
+        Assert.assertNull(result.get(1).getExecutionResult());
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
@@ -271,10 +275,12 @@ public class TransactionExecutorTest {
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
-        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(2, result.size());
 
         Transaction tresult1 = result.get(0).getTransaction();
         Assert.assertEquals(transaction1, tresult1);
+
+        Assert.assertNull(result.get(1).getExecutionResult());
 
         Coin senderBalance = accountStore.getAccount(senderAddress).getBalance();
         Assert.assertNotNull(senderBalance);
