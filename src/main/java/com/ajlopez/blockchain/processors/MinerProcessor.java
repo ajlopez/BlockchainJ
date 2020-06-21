@@ -60,17 +60,8 @@ public class MinerProcessor {
         // TODO use difficulty instead of a constant
         BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, Difficulty.ONE);
 
-        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(this.transactionPool.getTransactions(), blockData);
-
-        List<Transaction> transactions = new ArrayList<>(transactionResults.size());
-
-        for (TransactionResult transactionResult : transactionResults)
-            transactions.add(transactionResult.getTransaction());
-
-        List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
-
-        for (TransactionResult transactionResult : transactionResults)
-            transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
+        List<Transaction> transactions = this.transactionPool.getTransactions();
+        List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
 
         // TODO use uncles
         return new Block(parent, null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);

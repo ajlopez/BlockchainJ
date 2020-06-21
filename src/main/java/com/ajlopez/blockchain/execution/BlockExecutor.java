@@ -7,11 +7,9 @@ import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.vms.eth.BlockData;
-import com.ajlopez.blockchain.vms.eth.ExecutionResult;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,18 +33,7 @@ public class BlockExecutor {
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
         BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty());
-        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(block.getTransactions(), blockData);
-
-        List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
-
-        for (TransactionResult transactionResult : transactionResults) {
-            ExecutionResult executionResult = transactionResult.getExecutionResult();
-
-            if (executionResult == null)
-                continue;
-
-            transactionReceipts.add(executionResult.toTransactionReceipt());
-        }
+        List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(block.getTransactions(), blockData);
 
         return new BlockExecutionResult(accountStore.getRootHash(), transactionReceipts);
     }

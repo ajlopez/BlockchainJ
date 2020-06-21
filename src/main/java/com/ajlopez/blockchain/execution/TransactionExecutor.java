@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.TransactionReceipt;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.utils.ByteUtils;
@@ -20,14 +21,15 @@ public class TransactionExecutor {
         this.executionContext = executionContext;
     }
 
-    // TODO use TransactionReceipt list instead TransactionResults
-    public List<TransactionResult> executeTransactions(List<Transaction> transactions, BlockData blockData) throws IOException {
-        List<TransactionResult> executed = new ArrayList<>();
+    public List<TransactionReceipt> executeTransactions(List<Transaction> transactions, BlockData blockData) throws IOException {
+        List<TransactionReceipt> executed = new ArrayList<>();
 
         for (Transaction transaction : transactions) {
             ExecutionResult executionResult = this.executeTransaction(transaction, blockData);
 
-            executed.add(new TransactionResult(transaction, executionResult));
+            TransactionReceipt transactionReceipt = executionResult == null ? null : new TransactionReceipt(executionResult.getGasUsed(), executionResult.wasSuccesful(), executionResult.getLogs());
+
+            executed.add(transactionReceipt);
         }
 
         this.executionContext.commit();

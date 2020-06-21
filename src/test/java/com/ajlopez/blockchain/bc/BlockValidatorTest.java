@@ -67,12 +67,7 @@ public class BlockValidatorTest {
         BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE);
 
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
-        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(transactions, blockData);
-
-        List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
-
-        for (TransactionResult transactionResult : transactionResults)
-            transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
+        List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 
@@ -144,12 +139,7 @@ public class BlockValidatorTest {
         BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE);
 
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
-        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(transactions, blockData);
-
-        List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
-
-        for (TransactionResult transactionResult : transactionResults)
-            transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
+        List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
 

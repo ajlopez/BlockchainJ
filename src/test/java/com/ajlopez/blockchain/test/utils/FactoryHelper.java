@@ -179,12 +179,7 @@ public class FactoryHelper {
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
-        List<TransactionResult> transactionResults = transactionExecutor.executeTransactions(transactions, null);
-
-        List<TransactionReceipt> transactionReceipts = new ArrayList<>(transactionResults.size());
-
-        for (TransactionResult transactionResult : transactionResults)
-            transactionReceipts.add(transactionResult.getExecutionResult().toTransactionReceipt());
+        List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, null);
 
         return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
     }
