@@ -1111,7 +1111,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeReturn() throws IOException {
-        byte[] code = FactoryHelper.createRandomBytes(42);
+        byte[] code = new byte[10];
         code[0] = OpCodes.PUSH1;
         code[1] = 0x10;
         code[2] = OpCodes.PUSH1;
@@ -1149,10 +1149,9 @@ public class VirtualMachineTest {
         Assert.assertTrue(stack.isEmpty());
     }
 
-
     @Test
     public void executeRevert() throws IOException {
-        byte[] code = FactoryHelper.createRandomBytes(42);
+        byte[] code = new byte[10];
         code[0] = OpCodes.PUSH1;
         code[1] = 0x10;
         code[2] = OpCodes.PUSH1;
