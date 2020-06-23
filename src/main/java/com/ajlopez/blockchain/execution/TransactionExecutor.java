@@ -37,7 +37,7 @@ public class TransactionExecutor {
         return executed;
     }
 
-    private ExecutionResult executeTransaction(Transaction transaction, BlockData blockData) throws IOException {
+    public ExecutionResult executeTransaction(Transaction transaction, BlockData blockData) throws IOException {
         Address sender = transaction.getSender();
 
         if (transaction.getNonce() != this.executionContext.getNonce(sender))

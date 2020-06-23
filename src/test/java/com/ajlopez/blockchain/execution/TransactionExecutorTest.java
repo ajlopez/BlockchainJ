@@ -329,6 +329,32 @@ public class TransactionExecutorTest {
     }
 
     @Test
+    public void executeOneTransactionInvokingContractCodeReturningData() throws IOException {
+        byte[] code = new byte[10];
+        code[0] = OpCodes.PUSH1;
+        code[1] = 0x10;
+        code[2] = OpCodes.PUSH1;
+        code[3] = 0x08;
+        code[4] = OpCodes.MSTORE;
+        code[5] = OpCodes.PUSH1;
+        code[6] = 0x28;
+        code[7] = OpCodes.PUSH1;
+        code[8] = 0x00;
+        code[9] = OpCodes.RETURN;
+
+        ExecutionResult executionResult = executeOneTransactionInvokingCode(code, FactoryHelper.createRandomAddress(), FactoryHelper.createRandomAddress(), FactoryHelper.createRandomAddress());
+
+        byte[] expected = new byte[40];
+        expected[39] = 0x10;
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getReturnedData());
+        Assert.assertEquals(expected.length, executionResult.getReturnedData().length);
+        Assert.assertArrayEquals(expected, executionResult.getReturnedData());
+    }
+
+    @Test
     public void executeTransactionCreatingContract() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(new Trie());
@@ -492,6 +518,23 @@ public class TransactionExecutorTest {
         Assert.assertEquals(1, accountStore.getAccount(senderAddress).getNonce());
 
         return trieStorageProvider.retrieve(receiver.getStorageHash());
+    }
+
+    private static ExecutionResult executeOneTransactionInvokingCode(byte[] code, Address coinbase, Address senderAddress, Address receiverAddress) throws IOException {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
+        AccountStore accountStore = new AccountStore(new Trie());
+
+        FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
+        FactoryHelper.createAccountWithCode(accountStore, codeStore, receiverAddress, code);
+
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, new byte[] { 0x01, 0x02, 0x03, 0x04 }, 200000, Coin.ONE);
+
+        TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
+
+        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE);
+
+        return executor.executeTransaction(transaction, blockData);
     }
 
     private static void executeTransactionCreatingContract(Address senderAddress, byte[] code, AccountStore accountStore, CodeStore codeStore) throws IOException {
