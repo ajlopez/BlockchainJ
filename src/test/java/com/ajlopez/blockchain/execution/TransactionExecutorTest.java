@@ -206,6 +206,22 @@ public class TransactionExecutorTest {
     }
 
     @Test
+    public void transactionRejectedByNonce() throws IOException {
+        ExecutorBuilder builder = new ExecutorBuilder();
+        TransactionExecutor executor = builder.buildTransactionExecutor();
+        AccountStore accountStore = builder.getAccountStore();
+
+        Address senderAddress = FactoryHelper.createAccountWithBalance(accountStore, 1000);
+        Address receiverAddress = FactoryHelper.createRandomAddress();
+
+        Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(50), 42, null, 6000000, Coin.ZERO);
+
+        ExecutionResult executionResult = executor.executeTransaction(transaction, null);
+
+        Assert.assertNull(executionResult);
+    }
+
+    @Test
     public void secondTransactionRejectedByInsufficientBalance() throws IOException {
         ExecutorBuilder builder = new ExecutorBuilder();
         TransactionExecutor executor = builder.buildTransactionExecutor();
