@@ -2,11 +2,13 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.TransactionReceipt;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.encoding.BlockHeaderEncoder;
 import com.ajlopez.blockchain.execution.*;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.Stores;
@@ -15,12 +17,15 @@ import com.ajlopez.blockchain.vms.eth.BlockData;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 
 /**
  * Created by ajlopez on 24/01/2018.
  */
 public class MinerProcessor {
+    private static final Random random = new Random();
+
     private final BlockChain blockChain;
     private final TransactionPool transactionPool;
     private final List<Consumer<Block>> minedBlockConsumers = new ArrayList<>();
@@ -64,7 +69,16 @@ public class MinerProcessor {
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
 
         // TODO use uncles
-        return new Block(parent, null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
+        Block block = new Block(parent, null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
+        BlockHeader blockHeader = block.getHeader();
+        byte[] encodedHeader = BlockHeaderEncoder.encode(blockHeader);
+        byte[] encodedNonce = new byte[Long.BYTES];
+
+        random.nextBytes(encodedNonce);
+
+        System.arraycopy(encodedNonce, 0, encodedHeader, encodedHeader.length - encodedNonce.length, encodedNonce.length);
+
+        return new Block(BlockHeaderEncoder.decode(encodedHeader), null, transactions);
     }
 
     public void start() {
