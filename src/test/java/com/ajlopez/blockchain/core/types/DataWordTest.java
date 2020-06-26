@@ -226,6 +226,24 @@ public class DataWordTest {
     }
 
     @Test
+    public void compareDataWordAndHash() {
+        DataWord word1 = DataWord.fromUnsignedInteger(1);
+        DataWord word2 = DataWord.TWO;
+        Hash hash1 = new Hash(word1.getBytes());
+        Hash hash2 = new Hash(DataWord.fromUnsignedInteger(42).getBytes());
+        Hash hash3 = new Hash(DataWord.fromHexadecimalString("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff").getBytes());
+        Hash hash4 = new Hash(DataWord.ONE.getBytes());
+
+        Assert.assertTrue(word1.compareTo(word1) == 0);
+        Assert.assertTrue(word1.compareTo(hash1) == 0);
+
+        Assert.assertTrue(word1.compareTo(hash4) == 0);
+        Assert.assertTrue(word2.compareTo(hash4) > 0);
+        Assert.assertTrue(word1.compareTo(hash2) < 0);
+        Assert.assertTrue(word1.compareTo(hash3) < 0);
+    }
+
+    @Test
     public void executeOrOperations() {
         executeOr("01", "01", "01");
         executeOr("02", "04", "06");

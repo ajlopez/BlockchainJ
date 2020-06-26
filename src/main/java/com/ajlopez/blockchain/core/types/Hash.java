@@ -7,7 +7,6 @@ import com.ajlopez.blockchain.utils.ByteUtils;
  */
 public class Hash extends AbstractBytesValue {
     public static final int HASH_BYTES = 32;
-    public static final Hash EMPTY_HASH = new Hash(new byte[HASH_BYTES]);
 
     public Hash(byte[] bytes) {
         super(bytes, HASH_BYTES);

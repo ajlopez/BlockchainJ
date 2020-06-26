@@ -287,6 +287,17 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return 0;
     }
 
+    public int compareTo(Hash hash) {
+        for (int k = 0; k < DATAWORD_BYTES; k++) {
+            int r = Integer.compare(this.bytes[k] & 0xff, hash.bytes[k] & 0xff);
+
+            if (r != 0)
+                return r;
+        }
+
+        return 0;
+    }
+
     public int compareToSigned(DataWord word) {
         if (this.isNegative()) {
             if (!word.isNegative())
