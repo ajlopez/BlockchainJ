@@ -126,7 +126,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Open problem: improving stealth addresses Cryptography](https://ethresear.ch/t/open-problem-improving-stealth-addresses/7438)
 - [Towards the first release of Turbo-geth](https://ledgerwatch.github.io/turbo_geth_release.html)
 - [Analysis of EIP-1559](https://insights.deribit.com/market-research/analysis-of-eip-1559/)
-
+- [Analysis of EIP-2593 (Escalator)](https://insights.deribit.com/market-research/analysis-of-eip-2593-escalator/)
 
 ## To Do
 
