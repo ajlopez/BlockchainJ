@@ -32,7 +32,7 @@ public class MinerProcessorTest {
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase);
 
         BlockHash hash = FactoryHelper.createRandomBlockHash();
-        Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.TWO);
 
         Block block = processor.mineBlock(parent);
 
@@ -46,6 +46,10 @@ public class MinerProcessorTest {
         Assert.assertTrue(txs.isEmpty());
 
         Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getReceiptsRootHash());
+
+        DataWord target = block.getDifficulty().toTarget();
+
+        Assert.assertTrue(target.compareTo(block.getHash()) >= 0);
     }
 
     @Test

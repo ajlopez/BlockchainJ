@@ -6,12 +6,14 @@ import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.TransactionReceipt;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockHeaderEncoder;
 import com.ajlopez.blockchain.execution.*;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.Stores;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.BlockData;
 
 import java.io.IOException;
@@ -59,24 +61,42 @@ public class MinerProcessor {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
         AccountStore accountStore = this.stores.getAccountStoreProvider().retrieve(parentStateRootHash);
         ExecutionContext executionContext = new TopExecutionContext(accountStore, this.stores.getTrieStorageProvider(), this.stores.getCodeStore());
+
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
         long timestamp = System.currentTimeMillis();
-        // TODO use difficulty instead of a constant
-        BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, Difficulty.ONE);
+
+        // TODO adjust difficulty
+        BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, parent.getDifficulty());
 
         List<Transaction> transactions = this.transactionPool.getTransactions();
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
 
         // TODO use uncles
-        Block block = new Block(parent, null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, Difficulty.ONE);
+        Block block = new Block(parent, null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty());
         BlockHeader blockHeader = block.getHeader();
         byte[] encodedHeader = BlockHeaderEncoder.encode(blockHeader);
         byte[] encodedNonce = new byte[Long.BYTES];
 
-        random.nextBytes(encodedNonce);
+        DataWord target = null;
 
-        System.arraycopy(encodedNonce, 0, encodedHeader, encodedHeader.length - encodedNonce.length, encodedNonce.length);
+        if (block.getDifficulty().compareTo(Difficulty.ONE) > 0)
+            target = block.getDifficulty().toTarget();
+
+        // TODO improve exit
+        while (true) {
+            random.nextBytes(encodedNonce);
+
+            System.arraycopy(encodedNonce, 0, encodedHeader, encodedHeader.length - encodedNonce.length, encodedNonce.length);
+
+            if (target == null)
+                break;
+
+            Hash hash = HashUtils.calculateHash(encodedHeader);
+
+            if (target.compareTo(hash) >= 0)
+                break;
+        }
 
         return new Block(BlockHeaderEncoder.decode(encodedHeader), null, transactions);
     }
