@@ -32,7 +32,7 @@ public class MinerProcessorTest {
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase);
 
         BlockHash hash = FactoryHelper.createRandomBlockHash();
-        Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.TWO);
+        Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.TEN);
 
         Block block = processor.mineBlock(parent);
 

@@ -85,9 +85,9 @@ public class MinerProcessor {
 
         // TODO improve exit
         while (true) {
-            random.nextBytes(encodedNonce);
-
-            System.arraycopy(encodedNonce, 0, encodedHeader, encodedHeader.length - encodedNonce.length, encodedNonce.length);
+            int nbit = random.nextInt(Long.BYTES * 8);
+            int nbyte = nbit / 8;
+            encodedHeader[encodedHeader.length - Long.BYTES + nbyte] ^= 1 << (nbit % 8);
 
             if (target == null)
                 break;
