@@ -13,7 +13,9 @@ import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.vms.eth.BlockData;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +25,10 @@ import java.util.List;
  * Created by ajlopez on 03/06/2019.
  */
 public class BlockValidatorTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void validEmptyBlock() throws IOException {
         Block genesis = GenesisGenerator.generateGenesis();
@@ -117,7 +123,7 @@ public class BlockValidatorTest {
     }
 
     @Test
-    public void validBlockWithInvalidTransaction() throws IOException {
+    public void cannotBuildBlockWithInvalidTransaction() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStore trieStore = new TrieStore(new HashMapStore());
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(trieStore);
@@ -141,14 +147,8 @@ public class BlockValidatorTest {
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
 
-        Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null);
-
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, null, codeStore);
-
-        BlockValidator blockValidator = new BlockValidator(blockExecutor);
-
-        Assert.assertTrue(blockValidator.isValid(genesis, null));
-        Assert.assertTrue(blockValidator.isValid(block, genesis));
+        exception.expect(NullPointerException.class);
+        new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.ONE);
     }
 
     @Test
