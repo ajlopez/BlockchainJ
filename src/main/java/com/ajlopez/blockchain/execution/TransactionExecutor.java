@@ -51,15 +51,18 @@ public class TransactionExecutor {
             return null;
 
         boolean isContractCreation = transaction.isContractCreation();
+        boolean isRichTransaction = transaction.isRichTransaction();
 
         ExecutionContext context = this.executionContext.createChildExecutionContext();
 
         Address receiver = transaction.getReceiver();
         byte[] data = transaction.getData();
-        byte[] code = isContractCreation ? data : context.getCode(receiver);
+        byte[] code = isContractCreation ? data : (isRichTransaction ? transaction.getData() : context.getCode(receiver));
 
         if (isContractCreation)
             receiver = transaction.getNewContractAddress();
+        else if (isRichTransaction)
+            receiver = sender;
 
         context.transfer(transaction.getSender(), receiver, transaction.getValue());
 
