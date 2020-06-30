@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.utils.ByteUtils;
  */
 public class Address extends AbstractBytesValue {
     public static final int ADDRESS_BYTES = 20;
+    public static final Address ADDRESS_RICH_TRANSACTION = new Address(new byte[] { 0x01, 0x00, 0x00, 0x00, 0x01 });
 
     public static final Address ZERO = new Address(new byte[0]);
 

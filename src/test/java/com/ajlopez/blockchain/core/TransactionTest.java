@@ -17,22 +17,48 @@ public class TransactionTest {
         Address receiver = FactoryHelper.createRandomAddress();
         Coin value = Coin.ONE;
 
-        Transaction tx = new Transaction(sender, receiver, value, 42, null, 6000000, Coin.ZERO);
+        Transaction transaction = new Transaction(sender, receiver, value, 42, null, 6000000, Coin.ZERO);
 
-        Assert.assertEquals(sender, tx.getSender());
-        Assert.assertEquals(receiver, tx.getReceiver());
-        Assert.assertEquals(value, tx.getValue());
-        Assert.assertEquals(42, tx.getNonce());
+        Assert.assertEquals(sender, transaction.getSender());
+        Assert.assertEquals(receiver, transaction.getReceiver());
+        Assert.assertEquals(value, transaction.getValue());
+        Assert.assertEquals(42, transaction.getNonce());
 
-        Assert.assertNotNull(tx.getHash());
+        Assert.assertNotNull(transaction.getHash());
 
-        Assert.assertNull(tx.getData());
+        Assert.assertNull(transaction.getData());
 
-        Assert.assertEquals(6000000, tx.getGas());
-        Assert.assertEquals(Coin.ZERO, tx.getGasPrice());
+        Assert.assertEquals(6000000, transaction.getGas());
+        Assert.assertEquals(Coin.ZERO, transaction.getGasPrice());
 
-        Assert.assertFalse(tx.isContractCreation());
-        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), tx.getGasCost());
+        Assert.assertFalse(transaction.isContractCreation());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), transaction.getGasCost());
+        Assert.assertFalse(transaction.isRichTransaction());
+    }
+
+    @Test
+    public void createRichTransaction() {
+        Address sender = FactoryHelper.createRandomAddress();
+        Address receiver = Address.ADDRESS_RICH_TRANSACTION;
+        Coin value = Coin.ONE;
+
+        Transaction transaction = new Transaction(sender, receiver, value, 42, null, 6000000, Coin.ZERO);
+
+        Assert.assertEquals(sender, transaction.getSender());
+        Assert.assertEquals(receiver, transaction.getReceiver());
+        Assert.assertEquals(value, transaction.getValue());
+        Assert.assertEquals(42, transaction.getNonce());
+
+        Assert.assertNotNull(transaction.getHash());
+
+        Assert.assertNull(transaction.getData());
+
+        Assert.assertEquals(6000000, transaction.getGas());
+        Assert.assertEquals(Coin.ZERO, transaction.getGasPrice());
+
+        Assert.assertFalse(transaction.isContractCreation());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), transaction.getGasCost());
+        Assert.assertTrue(transaction.isRichTransaction());
     }
 
     @Test
@@ -40,22 +66,22 @@ public class TransactionTest {
         Address sender = FactoryHelper.createRandomAddress();
         Address receiver = FactoryHelper.createRandomAddress();
 
-        Transaction tx = new Transaction(sender, receiver, null, 42, null, 6000000, Coin.ZERO);
+        Transaction transaction = new Transaction(sender, receiver, null, 42, null, 6000000, Coin.ZERO);
 
-        Assert.assertEquals(sender, tx.getSender());
-        Assert.assertEquals(receiver, tx.getReceiver());
-        Assert.assertEquals(Coin.ZERO, tx.getValue());
-        Assert.assertEquals(42, tx.getNonce());
+        Assert.assertEquals(sender, transaction.getSender());
+        Assert.assertEquals(receiver, transaction.getReceiver());
+        Assert.assertEquals(Coin.ZERO, transaction.getValue());
+        Assert.assertEquals(42, transaction.getNonce());
 
-        Assert.assertNotNull(tx.getHash());
+        Assert.assertNotNull(transaction.getHash());
 
-        Assert.assertNull(tx.getData());
+        Assert.assertNull(transaction.getData());
 
-        Assert.assertEquals(6000000, tx.getGas());
-        Assert.assertEquals(Coin.ZERO, tx.getGasPrice());
+        Assert.assertEquals(6000000, transaction.getGas());
+        Assert.assertEquals(Coin.ZERO, transaction.getGasPrice());
 
-        Assert.assertFalse(tx.isContractCreation());
-        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), tx.getGasCost());
+        Assert.assertFalse(transaction.isContractCreation());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), transaction.getGasCost());
     }
 
     @Test
@@ -109,6 +135,7 @@ public class TransactionTest {
 
         Assert.assertTrue(transaction.isContractCreation());
         Assert.assertEquals(FeeSchedule.TRANSFER.getValue() + FeeSchedule.CREATION.getValue(), transaction.getGasCost());
+        Assert.assertFalse(transaction.isRichTransaction());
     }
 
     @Test

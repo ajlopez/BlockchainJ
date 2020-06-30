@@ -100,6 +100,10 @@ public class Transaction {
         return this.receiver == null;
     }
 
+    public boolean isRichTransaction() {
+        return Address.ADDRESS_RICH_TRANSACTION.equals(this.receiver);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null)
