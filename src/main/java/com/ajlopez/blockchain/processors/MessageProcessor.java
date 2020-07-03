@@ -119,20 +119,16 @@ public class MessageProcessor {
     private void processTransactionMessage(TransactionMessage message, Peer sender) {
         List<Transaction> processed = this.transactionProcessor.processTransaction(message.getTransaction());
 
-        if (this.outputProcessor == null)
+        if (this.outputProcessor == null || processed.isEmpty())
             return;
-
-        int nprocessed = 0;
 
         for (Transaction transaction: processed) {
             Message outputMessage = new TransactionMessage(transaction);
 
-            if (nprocessed == 0 && sender != null)
+            if (sender != null)
                 this.outputProcessor.postMessage(outputMessage, Collections.singletonList(sender.getId()));
             else
                 this.outputProcessor.postMessage(outputMessage);
-
-            nprocessed++;
         }
     }
 
