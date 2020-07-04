@@ -74,6 +74,19 @@ public class BlockChain implements BlockProvider {
         }
     }
 
+    public Difficulty getBestBlockTotalDifficulty() throws IOException {
+        this.lock.readLock().lock();
+
+        try {
+            if (!initialized)
+                initialize();
+
+            return this.bestTotalDifficulty;
+        } finally {
+            this.lock.readLock().unlock();
+        }
+    }
+
     public boolean connectBlock(Block block) throws IOException {
         this.lock.writeLock().lock();
 

@@ -3,10 +3,10 @@ package com.ajlopez.blockchain.net;
 import com.ajlopez.blockchain.core.types.BlockHash;
 
 public class Status {
-    private PeerId peerId;
-    private long networkNumber;
-    private long bestBlockNumber;
-    private BlockHash bestBlockHash;
+    private final PeerId peerId;
+    private final long networkNumber;
+    private final long bestBlockNumber;
+    private final BlockHash bestBlockHash;
 
     public Status(PeerId peerId, long networkNumber, long bestBlockNumber, BlockHash bestBlockHash) {
         this.peerId = peerId;

@@ -9,6 +9,7 @@ public class Difficulty extends NaturalValue {
     public static final Difficulty ZERO = new Difficulty(BigInteger.ZERO);
     public static final Difficulty ONE = new Difficulty(BigInteger.ONE);
     public static final Difficulty TWO = Difficulty.fromUnsignedLong(2);
+    public static final Difficulty THREE = Difficulty.fromUnsignedLong(3);
     public static final Difficulty TEN = new Difficulty(BigInteger.TEN);
 
     private static final BigInteger MAX = BigInteger.valueOf(2).pow(256);

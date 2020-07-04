@@ -26,6 +26,7 @@ public class BlockChainTest {
         BlockChain blockChain = new BlockChain(stores);
 
         Assert.assertNull(blockChain.getBestBlock());
+        Assert.assertNull(blockChain.getBestBlockTotalDifficulty());
         Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, blockChain.getBestBlockNumber());
     }
 
@@ -65,6 +66,7 @@ public class BlockChainTest {
         Assert.assertEquals(block.getHash(), blockChain.getBlockByNumber(block.getNumber()).getHash());
 
         Assert.assertEquals(0, blockChain.getBestBlockNumber());
+        Assert.assertEquals(Difficulty.ONE, blockChain.getBestBlockTotalDifficulty());
         Assert.assertEquals(0, stores.getBlocksInformationStore().getBestHeight());
     }
 
@@ -89,6 +91,8 @@ public class BlockChainTest {
         Assert.assertEquals(block.getHash(), blockChain.getBlockByHash(block.getHash()).getHash());
         Assert.assertEquals(block.getHash(), blockChain.getBlockByNumber(block.getNumber()).getHash());
         Assert.assertEquals(1, stores.getBlocksInformationStore().getBestHeight());
+
+        Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockTotalDifficulty());
     }
 
     @Test
@@ -108,6 +112,8 @@ public class BlockChainTest {
         Assert.assertNotNull(blockChain.getBestBlock());
         Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
         Assert.assertEquals(1, stores.getBlocksInformationStore().getBestHeight());
+
+        Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockTotalDifficulty());
     }
 
     @Test
@@ -126,6 +132,8 @@ public class BlockChainTest {
 
         Assert.assertNotNull(blockChain.getBestBlock());
         Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
+
+        Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockTotalDifficulty());
     }
 
     @Test
@@ -181,6 +189,8 @@ public class BlockChainTest {
         Assert.assertEquals(block1b.getHash(), blockChain.getBlockByNumber(block1b.getNumber()).getHash());
         Assert.assertEquals(block2.getHash(), blockChain.getBlockByNumber(block2.getNumber()).getHash());
         Assert.assertEquals(2, stores.getBlocksInformationStore().getBestHeight());
+
+        Assert.assertEquals(Difficulty.THREE, blockChain.getBestBlockTotalDifficulty());
     }
 
     @Test
@@ -203,7 +213,7 @@ public class BlockChainTest {
         uncles.add(block1c.getHeader());
         Block block2b = new Block(2, block1.getHash(), uncles, transactions, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
-        Assert.assertEquals(Difficulty.fromUnsignedLong(3), block2b.getCummulativeDifficulty());
+        Assert.assertEquals(Difficulty.THREE, block2b.getCummulativeDifficulty());
 
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block1));
@@ -221,5 +231,7 @@ public class BlockChainTest {
 
         Assert.assertNull(blockChain.getBlockByNumber(3));
         Assert.assertEquals(2, stores.getBlocksInformationStore().getBestHeight());
+
+        Assert.assertEquals(Difficulty.fromUnsignedLong(5), blockChain.getBestBlockTotalDifficulty());
     }
 }
