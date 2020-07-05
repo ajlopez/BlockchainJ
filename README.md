@@ -127,6 +127,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Towards the first release of Turbo-geth](https://ledgerwatch.github.io/turbo_geth_release.html)
 - [Analysis of EIP-1559](https://insights.deribit.com/market-research/analysis-of-eip-1559/)
 - [Analysis of EIP-2593 (Escalator)](https://insights.deribit.com/market-research/analysis-of-eip-2593-escalator/)
+- [Binary Trie Format](https://ethresear.ch/t/binary-trie-format/7621)
+- [A World Without (block) Limits!](https://medium.com/@MicahZoltu/a-world-without-block-limits-f3ecc926cd68)
 
 ## To Do
 
