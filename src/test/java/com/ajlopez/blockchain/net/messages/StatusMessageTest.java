@@ -16,7 +16,7 @@ public class StatusMessageTest {
         PeerId nodeid = FactoryHelper.createRandomPeerId();
         BlockHash blockHash = FactoryHelper.createRandomBlockHash();
 
-        StatusMessage message = new StatusMessage(new Status(nodeid, 2, 3, blockHash));
+        StatusMessage message = new StatusMessage(new Status(nodeid, 2, 3, blockHash, null));
 
         Assert.assertEquals(nodeid, message.getStatus().getPeerId());
         Assert.assertEquals(2, message.getStatus().getNetworkNumber());

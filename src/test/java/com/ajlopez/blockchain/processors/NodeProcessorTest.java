@@ -288,7 +288,7 @@ public class NodeProcessorTest {
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash());
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash(), null);
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -329,7 +329,7 @@ public class NodeProcessorTest {
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash());
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash(), null);
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -404,7 +404,7 @@ public class NodeProcessorTest {
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash());
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,blockChain1.getBestBlockNumber(), blockChain1.getBestBlock().getHash(), null);
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -451,7 +451,7 @@ public class NodeProcessorTest {
         nodeProcessor2.connectTo(nodeProcessor1);
         nodeProcessor2.connectTo(nodeProcessor3);
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,9, FactoryHelper.createRandomBlockHash());
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,9, FactoryHelper.createRandomBlockHash(), null);
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);
@@ -497,7 +497,7 @@ public class NodeProcessorTest {
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
 
-        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,9, FactoryHelper.createRandomBlockHash());
+        Status status = new Status(nodeProcessor1.getPeer().getId(), 42,9, FactoryHelper.createRandomBlockHash(), null);
         StatusMessage statusMessage = new StatusMessage(status);
 
         nodeProcessor2.postMessage(nodeProcessor1.getPeer(), statusMessage);

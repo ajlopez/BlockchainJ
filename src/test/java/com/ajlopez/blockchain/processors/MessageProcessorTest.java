@@ -234,7 +234,7 @@ public class MessageProcessorTest {
 
         processor.processMessage(getStatusMessage, sender);
 
-        Message statusMessage = new StatusMessage(new Status(receiver.getId(), 42, block.getNumber(), block.getHash()));
+        Message statusMessage = new StatusMessage(new Status(receiver.getId(), 42, block.getNumber(), block.getHash(), null));
         expectedMessage(channel, receiver, statusMessage);
     }
 
@@ -323,7 +323,7 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(receiver, channel);
 
-        Message message = new StatusMessage(new Status(receiver.getId(), 1, 10, FactoryHelper.createRandomBlockHash()));
+        Message message = new StatusMessage(new Status(receiver.getId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
 
         processor.processMessage(message, receiver);
 
@@ -362,7 +362,7 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(secondPeer, channel);
 
-        Message message = new StatusMessage(new Status(secondPeer.getId(), 1, 10, FactoryHelper.createRandomBlockHash()));
+        Message message = new StatusMessage(new Status(secondPeer.getId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
 
         processor.processMessage(message, secondPeer);
         processor.processMessage(message, secondPeer);
@@ -403,8 +403,8 @@ public class MessageProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         outputProcessor.connectToPeer(secondPeer, channel);
 
-        Message message1 = new StatusMessage(new Status(firstPeer.getId(), 1, 5, FactoryHelper.createRandomBlockHash()));
-        Message message2 = new StatusMessage(new Status(secondPeer.getId(), 1, 10, FactoryHelper.createRandomBlockHash()));
+        Message message1 = new StatusMessage(new Status(firstPeer.getId(), 1, 5, FactoryHelper.createRandomBlockHash(), null));
+        Message message2 = new StatusMessage(new Status(secondPeer.getId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
 
         processor.processMessage(message1, firstPeer);
         processor.processMessage(message2, secondPeer);

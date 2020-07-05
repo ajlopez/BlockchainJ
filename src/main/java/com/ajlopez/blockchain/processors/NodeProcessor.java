@@ -117,7 +117,7 @@ public class NodeProcessor implements PeerNode {
     public Status getStatus() throws IOException {
         Block bestBlock = this.blockProcessor.getBestBlock();
 
-        return new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash());
+        return new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash(), null);
     }
 
     // TODO review: only exposed for beam sync tests

@@ -38,7 +38,7 @@ public class SendProcessorTest {
         SimpleMessageChannel channel = new SimpleMessageChannel();
         BlockHash blockHash = FactoryHelper.createRandomBlockHash();
 
-        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, blockHash));
+        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, blockHash, null));
         Assert.assertFalse(processor.postMessage(peer, message));
         Assert.assertTrue(channel.getPeerMessages().isEmpty());
     }
@@ -47,7 +47,7 @@ public class SendProcessorTest {
     public void postMessageWhenNoPeerIsConnected() {
         SendProcessor processor = new SendProcessor(FactoryHelper.createRandomPeer());
 
-        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash()));
+        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
         Assert.assertEquals(0, processor.postMessage(message));
     }
 
@@ -60,7 +60,7 @@ public class SendProcessorTest {
 
         processor.connectToPeer(peer, channel);
 
-        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash()));
+        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
         Assert.assertTrue(processor.postMessage(peer, message));
 
         MessageProcessorTest.expectedMessage(channel, sender, message);
@@ -78,7 +78,7 @@ public class SendProcessorTest {
         processor.connectToPeer(peer1, channel1);
         processor.connectToPeer(peer2, channel2);
 
-        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash()));
+        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
 
         Assert.assertEquals(2, processor.postMessage(message));
 
@@ -98,7 +98,7 @@ public class SendProcessorTest {
         processor.connectToPeer(peer1, channel1);
         processor.connectToPeer(peer2, channel2);
 
-        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash()));
+        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
 
         Assert.assertEquals(1, processor.postMessage(message, Collections.singletonList(peer2.getId())));
 
@@ -116,7 +116,7 @@ public class SendProcessorTest {
 
         processor.connectToPeer(peer, channel);
 
-        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash()));
+        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
         Assert.assertFalse(processor.postMessage(peer2, message));
         Assert.assertTrue(channel.getPeerMessages().isEmpty());
     }
