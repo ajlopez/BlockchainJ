@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.bc.BlockValidator;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Difficulty;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -85,6 +86,10 @@ public class BlockProcessor {
 
     public long getBestBlockNumber() throws IOException {
         return this.blockChain.getBestBlockNumber();
+    }
+
+    public Difficulty getBestBlockTotalDifficulty() throws IOException {
+        return this.blockChain.getBestBlockTotalDifficulty();
     }
 
     public Block getBlockByHash(BlockHash hash) throws IOException {

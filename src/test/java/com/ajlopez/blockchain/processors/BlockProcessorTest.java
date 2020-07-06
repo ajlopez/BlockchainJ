@@ -217,6 +217,7 @@ public class BlockProcessorTest {
 
         Assert.assertNotNull(processor.getBestBlock());
         Assert.assertEquals(2, processor.getBestBlockNumber());
+        Assert.assertEquals(Difficulty.THREE, processor.getBestBlockTotalDifficulty());
     }
 
     @Test
@@ -241,6 +242,7 @@ public class BlockProcessorTest {
 
         Assert.assertNotNull(processor.getBestBlock());
         Assert.assertEquals(2, processor.getBestBlockNumber());
+        Assert.assertEquals(Difficulty.THREE, processor.getBestBlockTotalDifficulty());
 
         Assert.assertTrue(transactionPool.getTransactions().isEmpty());
     }
