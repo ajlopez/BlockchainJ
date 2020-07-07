@@ -54,6 +54,7 @@ public class NodeProcessorTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(blockChain.getBestBlockNumber(), result.getBestBlockNumber());
         Assert.assertEquals(blockChain.getBestBlock().getHash(), result.getBestBlockHash());
+        Assert.assertEquals(blockChain.getBestBlockTotalDifficulty(), result.getBestTotalDifficulty());
         Assert.assertEquals(networkConfiguration.getNetworkNumber(), result.getNetworkNumber());
         Assert.assertEquals(peer.getId(), result.getPeerId());
     }
@@ -76,6 +77,7 @@ public class NodeProcessorTest {
         Block result = nodeProcessor.getBlockChain().getBestBlock();
 
         Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
         Assert.assertEquals(block.getHash(), result.getHash());
     }
 
@@ -239,9 +241,7 @@ public class NodeProcessorTest {
     @Test
     public void processTwoBlockMessagesUsingTwoNodesConnectedByPipes() throws InterruptedException, IOException {
         KeyValueStores keyValueStores1 = new MemoryKeyValueStores();
-        Stores stores1 = new Stores(keyValueStores1);
         KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
-        Stores stores2 = new Stores(keyValueStores2);
 
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores1);
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
