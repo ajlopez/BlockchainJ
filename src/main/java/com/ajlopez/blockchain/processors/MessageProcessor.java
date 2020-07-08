@@ -81,7 +81,7 @@ public class MessageProcessor {
 
     private void processGetStatusMessage(Peer sender) throws IOException {
         Block bestBlock = this.blockProcessor.getBestBlock();
-        Status status = new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash(), null);
+        Status status = new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash(), this.blockProcessor.getBestBlockTotalDifficulty());
         StatusMessage statusMessage = new StatusMessage(status);
 
         this.outputProcessor.postMessage(sender, statusMessage);

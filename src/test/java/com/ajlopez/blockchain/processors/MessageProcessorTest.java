@@ -234,7 +234,7 @@ public class MessageProcessorTest {
 
         processor.processMessage(getStatusMessage, sender);
 
-        Message statusMessage = new StatusMessage(new Status(receiver.getId(), 42, block.getNumber(), block.getHash(), null));
+        Message statusMessage = new StatusMessage(new Status(receiver.getId(), 42, block.getNumber(), block.getHash(), Difficulty.ONE));
         expectedMessage(channel, receiver, statusMessage);
     }
 
