@@ -200,7 +200,7 @@ public class FactoryHelper {
     public static BlockChain createBlockChain(Stores stores, int size, int ntransactions) throws IOException {
         Address senderAddress = FactoryHelper.createRandomAddress();
 
-        return createBlockChainWithAccount(stores, senderAddress, 1000000, size, ntransactions);
+        return createBlockChainWithAccount(stores, senderAddress, 1000000L * size * ntransactions, size, ntransactions);
     }
 
     public static BlockChain createBlockChainWithAccount(Stores stores, Address senderAddress, long balance, int size, int ntransactions) throws IOException {
@@ -299,12 +299,12 @@ public class FactoryHelper {
         Address coinbase = createRandomAddress();
         List<Block> blocks = new ArrayList<>();
 
-        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         blocks.add(block);
 
         for (int k = 0; k < nblocks; k++) {
-            block = new Block(block.getNumber() + 1, block.getHash(), null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+            block = new Block(block.getNumber() + 1, block.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
             blocks.add(block);
         }
 
