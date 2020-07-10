@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
+import com.ajlopez.blockchain.merkle.MerkleTree;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
@@ -63,7 +64,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(true, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
+        NodeRunner runner = new NodeRunner(false, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -71,7 +72,7 @@ public class NodeRunnerTest {
 
         runner.start();
 
-        Block block = new Block(1, blockChain.getBestBlock().getHash(), null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, blockChain.getBestBlock().getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message = new BlockMessage(block);
 

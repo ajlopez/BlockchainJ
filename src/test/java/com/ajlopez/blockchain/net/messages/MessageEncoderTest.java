@@ -134,7 +134,7 @@ public class MessageEncoderTest {
     @Test
     public void encodeAndDecodeStatusMessage() {
         PeerId nodeId = FactoryHelper.createRandomPeerId();
-        Message message = new StatusMessage(new Status(nodeId, 2, 3, FactoryHelper.createRandomBlockHash(), null));
+        Message message = new StatusMessage(new Status(nodeId, 2, 3, FactoryHelper.createRandomBlockHash(), Difficulty.ONE));
 
         byte[] bytes = MessageEncoder.encode(message);
 

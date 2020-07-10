@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
+import com.ajlopez.blockchain.merkle.MerkleTree;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.processors.NodeProcessor;
@@ -48,7 +49,7 @@ public class TcpPeerClientServerTest {
         client.connect();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, blockChain1.getBestBlock().getHash(), null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, blockChain1.getBestBlock().getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message message = new BlockMessage(block);
 
         nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);

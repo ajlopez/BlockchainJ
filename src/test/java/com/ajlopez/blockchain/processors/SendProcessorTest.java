@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.Message;
@@ -60,7 +61,7 @@ public class SendProcessorTest {
 
         processor.connectToPeer(peer, channel);
 
-        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
+        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), Difficulty.ONE));
         Assert.assertTrue(processor.postMessage(peer, message));
 
         MessageProcessorTest.expectedMessage(channel, sender, message);
@@ -78,7 +79,7 @@ public class SendProcessorTest {
         processor.connectToPeer(peer1, channel1);
         processor.connectToPeer(peer2, channel2);
 
-        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
+        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), Difficulty.ONE));
 
         Assert.assertEquals(2, processor.postMessage(message));
 
@@ -98,7 +99,7 @@ public class SendProcessorTest {
         processor.connectToPeer(peer1, channel1);
         processor.connectToPeer(peer2, channel2);
 
-        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), null));
+        Message message = new StatusMessage(new Status(FactoryHelper.createRandomPeerId(), 1, 10, FactoryHelper.createRandomBlockHash(), Difficulty.ONE));
 
         Assert.assertEquals(1, processor.postMessage(message, Collections.singletonList(peer2.getId())));
 

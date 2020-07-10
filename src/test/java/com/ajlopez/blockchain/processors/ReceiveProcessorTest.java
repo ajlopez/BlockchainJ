@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
+import com.ajlopez.blockchain.merkle.MerkleTree;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.messages.TransactionMessage;
@@ -56,8 +57,8 @@ public class ReceiveProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block1 = new Block(1, genesis.getHash(), null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -92,8 +93,8 @@ public class ReceiveProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
-        Block block1 = new Block(1, genesis.getHash(), null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
