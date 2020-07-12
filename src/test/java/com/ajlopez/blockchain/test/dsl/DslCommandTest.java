@@ -339,7 +339,7 @@ public class DslCommandTest {
 
         command.execute(world);
 
-        Block result = world.getBlockChain().getBestBlock();
+        Block result = world.getBlockChain().getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(1, result.getNumber());
@@ -362,7 +362,7 @@ public class DslCommandTest {
 
         command.execute(world);
 
-        Block result = world.getBlockChain().getBestBlock();
+        Block result = world.getBlockChain().getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(1, result.getNumber());

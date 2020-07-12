@@ -134,7 +134,7 @@ public class FactoryHelper {
     }
 
     public static void extendBlockChainWithBlocks(BlockChain blockChain, int nblocks, int ntransactions) throws IOException {
-        Block block = blockChain.getBestBlock();
+        Block block = blockChain.getBestBlockInformation().getBlock();
         Address coinbase = FactoryHelper.createRandomAddress();
 
         for (int k = 0; k < nblocks; k++) {
@@ -145,7 +145,7 @@ public class FactoryHelper {
     }
 
     public static void extendBlockChainWithBlocks(AccountStoreProvider accountStoreProvider, BlockChain blockChain, int nblocks, int ntransactions, Address sender, long nonce) throws IOException {
-        extendBlockChainWithBlocksFromBlock(accountStoreProvider, blockChain, blockChain.getBestBlock(), nblocks, ntransactions, sender, nonce);
+        extendBlockChainWithBlocksFromBlock(accountStoreProvider, blockChain, blockChain.getBestBlockInformation().getBlock(), nblocks, ntransactions, sender, nonce);
     }
 
     public static void extendBlockChainWithBlocksFromBlock(AccountStoreProvider accountStoreProvider, BlockChain blockChain, Block fromBlock, int nblocks, int ntransactions, Address sender, long nonce) throws IOException {

@@ -1,5 +1,8 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.BlockInformation;
+import com.ajlopez.blockchain.bc.ExtendedBlockInformation;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
@@ -80,8 +83,8 @@ public class MessageProcessor {
     }
 
     private void processGetStatusMessage(Peer sender) throws IOException {
-        Block bestBlock = this.blockProcessor.getBestBlock();
-        Status status = new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash(), this.blockProcessor.getBestBlockTotalDifficulty());
+        ExtendedBlockInformation bestBlockInformation = this.blockProcessor.getBestBlockInformation();
+        Status status = new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlockInformation.getBlockNumber(), bestBlockInformation.getBlockHash(), bestBlockInformation.getTotalDifficulty());
         StatusMessage statusMessage = new StatusMessage(status);
 
         this.outputProcessor.postMessage(sender, statusMessage);
@@ -140,7 +143,8 @@ public class MessageProcessor {
 
         this.peerProcessor.registerBestBlockNumber(senderId, message.getStatus().getNetworkNumber(), message.getStatus().getBestBlockNumber());
 
-        long fromNumber = this.blockProcessor.getBestBlockNumber();
+        ExtendedBlockInformation bestBlockInformation = this.blockProcessor.getBestBlockInformation();
+        long fromNumber = bestBlockInformation == null ? BlockChain.NO_BEST_BLOCK_NUMBER : bestBlockInformation.getBlockNumber();
 
         long toNumber = Math.min(fromNumber + 10, this.peerProcessor.getPeerBestBlockNumber(senderId));
 

@@ -25,9 +25,7 @@ public class BlockChainTest {
         Stores stores = new MemoryStores();
         BlockChain blockChain = new BlockChain(stores);
 
-        Assert.assertNull(blockChain.getBestBlock());
-        Assert.assertNull(blockChain.getBestBlockTotalDifficulty());
-        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, blockChain.getBestBlockNumber());
+        Assert.assertNull(blockChain.getBestBlockInformation());
     }
 
     @Test
@@ -59,14 +57,14 @@ public class BlockChainTest {
 
         Assert.assertTrue(blockChain.connectBlock(block));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(block.getHash(), blockChain.getBestBlockInformation().getBlockHash());
 
         Assert.assertEquals(block.getHash(), blockChain.getBlockByHash(block.getHash()).getHash());
         Assert.assertEquals(block.getHash(), blockChain.getBlockByNumber(block.getNumber()).getHash());
 
-        Assert.assertEquals(0, blockChain.getBestBlockNumber());
-        Assert.assertEquals(Difficulty.ONE, blockChain.getBestBlockTotalDifficulty());
+        Assert.assertEquals(0, blockChain.getBestBlockInformation().getBlockNumber());
+        Assert.assertEquals(Difficulty.ONE, blockChain.getBestBlockInformation().getTotalDifficulty());
         Assert.assertEquals(0, stores.getBlocksInformationStore().getBestHeight());
     }
 
@@ -83,8 +81,8 @@ public class BlockChainTest {
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(block.getHash(), blockChain.getBestBlockInformation().getBlockHash());
 
         Assert.assertEquals(genesis.getHash(), blockChain.getBlockByHash(genesis.getHash()).getHash());
         Assert.assertEquals(genesis.getHash(), blockChain.getBlockByNumber(genesis.getNumber()).getHash());
@@ -92,7 +90,7 @@ public class BlockChainTest {
         Assert.assertEquals(block.getHash(), blockChain.getBlockByNumber(block.getNumber()).getHash());
         Assert.assertEquals(1, stores.getBlocksInformationStore().getBestHeight());
 
-        Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockTotalDifficulty());
+        Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockInformation().getTotalDifficulty());
     }
 
     @Test
@@ -109,11 +107,11 @@ public class BlockChainTest {
         Assert.assertTrue(blockChain.connectBlock(block));
         Assert.assertTrue(blockChain.connectBlock(block));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(block.getHash(), blockChain.getBestBlockInformation().getBlockHash());
         Assert.assertEquals(1, stores.getBlocksInformationStore().getBestHeight());
 
-        Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockTotalDifficulty());
+        Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockInformation().getTotalDifficulty());
     }
 
     @Test
@@ -130,10 +128,10 @@ public class BlockChainTest {
         Assert.assertTrue(blockChain.connectBlock(block));
         Assert.assertTrue(blockChain.connectBlock(genesis));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(block.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(block.getHash(), blockChain.getBestBlockInformation().getBlockHash());
 
-        Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockTotalDifficulty());
+        Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockInformation().getTotalDifficulty());
     }
 
     @Test
@@ -149,8 +147,8 @@ public class BlockChainTest {
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertFalse(blockChain.connectBlock(block));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(genesis.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(genesis.getHash(), blockChain.getBestBlockInformation().getBlockHash());
         Assert.assertNull(blockChain.getBlockByNumber(block.getNumber()));
     }
 
@@ -169,18 +167,18 @@ public class BlockChainTest {
         Assert.assertTrue(blockChain.connectBlock(genesis));
         Assert.assertTrue(blockChain.connectBlock(block1));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(block1.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(block1.getHash(), blockChain.getBestBlockInformation().getBlockHash());
 
         Assert.assertTrue(blockChain.connectBlock(block1b));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(block1.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(block1.getHash(), blockChain.getBestBlockInformation().getBlockHash());
 
         Assert.assertTrue(blockChain.connectBlock(block2));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(block2.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(block2.getHash(), blockChain.getBestBlockInformation().getBlockHash());
 
         Assert.assertEquals(block1.getHash(), blockChain.getBlockByHash(block1.getHash()).getHash());
         Assert.assertEquals(block1b.getHash(), blockChain.getBlockByHash(block1b.getHash()).getHash());
@@ -190,7 +188,7 @@ public class BlockChainTest {
         Assert.assertEquals(block2.getHash(), blockChain.getBlockByNumber(block2.getNumber()).getHash());
         Assert.assertEquals(2, stores.getBlocksInformationStore().getBestHeight());
 
-        Assert.assertEquals(Difficulty.THREE, blockChain.getBestBlockTotalDifficulty());
+        Assert.assertEquals(Difficulty.THREE, blockChain.getBestBlockInformation().getTotalDifficulty());
     }
 
     @Test
@@ -220,18 +218,18 @@ public class BlockChainTest {
         Assert.assertTrue(blockChain.connectBlock(block2));
         Assert.assertTrue(blockChain.connectBlock(block3));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(block3.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(block3.getHash(), blockChain.getBestBlockInformation().getBlockHash());
 
         Assert.assertTrue(blockChain.connectBlock(block2b));
 
-        Assert.assertNotNull(blockChain.getBestBlock());
-        Assert.assertEquals(2, blockChain.getBestBlock().getNumber());
-        Assert.assertEquals(block2b.getHash(), blockChain.getBestBlock().getHash());
+        Assert.assertNotNull(blockChain.getBestBlockInformation());
+        Assert.assertEquals(2, blockChain.getBestBlockInformation().getBlockNumber());
+        Assert.assertEquals(block2b.getHash(), blockChain.getBestBlockInformation().getBlockHash());
 
         Assert.assertNull(blockChain.getBlockByNumber(3));
         Assert.assertEquals(2, stores.getBlocksInformationStore().getBestHeight());
 
-        Assert.assertEquals(Difficulty.fromUnsignedLong(5), blockChain.getBestBlockTotalDifficulty());
+        Assert.assertEquals(Difficulty.fromUnsignedLong(5), blockChain.getBestBlockInformation().getTotalDifficulty());
     }
 }

@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.BlockValidator;
+import com.ajlopez.blockchain.bc.ExtendedBlockInformation;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
@@ -115,9 +116,9 @@ public class NodeProcessor implements PeerNode {
     }
 
     public Status getStatus() throws IOException {
-        Block bestBlock = this.blockProcessor.getBestBlock();
+        ExtendedBlockInformation bestBlockinformation = this.blockProcessor.getBestBlockInformation();
 
-        return new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlock.getNumber(), bestBlock.getHash(), this.blockProcessor.getBestBlockTotalDifficulty());
+        return new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlockinformation.getBlockNumber(), bestBlockinformation.getBlockHash(), bestBlockinformation.getTotalDifficulty());
     }
 
     // TODO review: only exposed for beam sync tests

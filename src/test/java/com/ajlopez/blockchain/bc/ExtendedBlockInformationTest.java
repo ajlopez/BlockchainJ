@@ -17,7 +17,7 @@ public class ExtendedBlockInformationTest {
         Block block = new Block(1, FactoryHelper.createRandomBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.ONE);
 
         ExtendedBlockInformation extendedBlockInformation = new ExtendedBlockInformation(block, Difficulty.ONE.TEN);
-        
+
         Assert.assertEquals(block.getNumber(), extendedBlockInformation.getBlockNumber());
         Assert.assertEquals(block.getHash(), extendedBlockInformation.getBlockHash());
         Assert.assertEquals(Difficulty.TEN, extendedBlockInformation.getTotalDifficulty());

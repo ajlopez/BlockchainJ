@@ -27,7 +27,7 @@ public class BlockProcessorTest {
     public void noBestBlock() throws IOException {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
 
-        Assert.assertNull(processor.getBestBlock());
+        Assert.assertNull(processor.getBestBlockInformation());
     }
 
     @Test
@@ -79,8 +79,8 @@ public class BlockProcessorTest {
         Assert.assertEquals(1, processedBlocks.size());
         Assert.assertEquals(block, processedBlocks.get(0));
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(block.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
         Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
@@ -102,7 +102,7 @@ public class BlockProcessorTest {
         Assert.assertNotNull(processedBlocks);
         Assert.assertTrue(processedBlocks.isEmpty());
 
-        Assert.assertNull(processor.getBestBlock());
+        Assert.assertNull(processor.getBestBlockInformation());
     }
 
     @Test
@@ -121,8 +121,8 @@ public class BlockProcessorTest {
         Assert.assertEquals(1, processedBlocks.size());
         Assert.assertEquals(block, processedBlocks.get(0));
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(block.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
         Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
@@ -149,8 +149,8 @@ public class BlockProcessorTest {
         Assert.assertEquals(1, processedBlocks.size());
         Assert.assertEquals(block, processedBlocks.get(0));
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(block.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
         Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
@@ -178,8 +178,8 @@ public class BlockProcessorTest {
         Assert.assertEquals(1, processedBlocks.size());
         Assert.assertEquals(block, processedBlocks.get(0));
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(block.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(block.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         Assert.assertEquals(block.getHash(), processor.getBlockByHash(block.getHash()).getHash());
         Assert.assertEquals(block.getHash(), processor.getBlockByNumber(block.getNumber()).getHash());
@@ -200,7 +200,7 @@ public class BlockProcessorTest {
         Assert.assertNotNull(connectedBlocks);
         Assert.assertTrue(connectedBlocks.isEmpty());
 
-        Assert.assertNull(processor.getBestBlock());
+        Assert.assertNull(processor.getBestBlockInformation());
     }
 
     @Test
@@ -208,16 +208,16 @@ public class BlockProcessorTest {
         Stores stores = new MemoryStores();
         BlockChain blockChain = FactoryHelper.createBlockChain(stores, 2, 4);
 
-        Assert.assertEquals(2, blockChain.getBestBlockNumber());
+        Assert.assertEquals(2, blockChain.getBestBlockInformation().getBlockNumber());
 
         BlockProcessor processor = new BlockProcessor(new BlockChain(new MemoryStores()), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(stores.getAccountTrieStore())), new TransactionPool());
 
         for (int k = 0; k <= 2; k++)
             processor.processBlock(blockChain.getBlockByNumber(k));
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(2, processor.getBestBlockNumber());
-        Assert.assertEquals(Difficulty.THREE, processor.getBestBlockTotalDifficulty());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(2, processor.getBestBlockInformation().getBlockNumber());
+        Assert.assertEquals(Difficulty.THREE, processor.getBestBlockInformation().getTotalDifficulty());
     }
 
     @Test
@@ -226,7 +226,7 @@ public class BlockProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         BlockChain blockChain = FactoryHelper.createBlockChain(stores,2, 4);
 
-        Assert.assertEquals(2, blockChain.getBestBlockNumber());
+        Assert.assertEquals(2, blockChain.getBestBlockInformation().getBlockNumber());
 
         BlockProcessor processor = new BlockProcessor(new BlockChain(new MemoryStores()), new OrphanBlocks(), FactoryHelper.createBlockValidator(new AccountStoreProvider(stores.getAccountTrieStore())), transactionPool);
 
@@ -240,9 +240,9 @@ public class BlockProcessorTest {
         for (int k = 0; k <= 2; k++)
             processor.processBlock(blockChain.getBlockByNumber(k));
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(2, processor.getBestBlockNumber());
-        Assert.assertEquals(Difficulty.THREE, processor.getBestBlockTotalDifficulty());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(2, processor.getBestBlockInformation().getBlockNumber());
+        Assert.assertEquals(Difficulty.THREE, processor.getBestBlockInformation().getTotalDifficulty());
 
         Assert.assertTrue(transactionPool.getTransactions().isEmpty());
     }
@@ -259,7 +259,7 @@ public class BlockProcessorTest {
         Assert.assertNotNull(connectedBlocks);
         Assert.assertTrue(connectedBlocks.isEmpty());
 
-        Assert.assertNull(processor.getBestBlock());
+        Assert.assertNull(processor.getBestBlockInformation());
 
         BlockHash hash = processor.getUnknownAncestorHash(block.getHash());
 
@@ -300,7 +300,7 @@ public class BlockProcessorTest {
         processor.onNewBestBlock(consumer);
         processor.processBlock(block);
 
-        Assert.assertNull(processor.getBestBlock());
+        Assert.assertNull(processor.getBestBlockInformation());
         Assert.assertNull(consumer.getBlock());
     }
 
@@ -315,7 +315,7 @@ public class BlockProcessorTest {
         processor.onNewBlock(consumer);
         processor.processBlock(block);
 
-        Assert.assertNull(processor.getBestBlock());
+        Assert.assertNull(processor.getBestBlockInformation());
         Assert.assertNull(consumer.getBlock());
     }
 
@@ -332,15 +332,15 @@ public class BlockProcessorTest {
         processor.processBlock(genesis);
         processor.processBlock(block1);
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertNotNull(processor.getBestBlock().getHash());
-        Assert.assertEquals(block1.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertNotNull(processor.getBestBlockInformation().getBlockHash());
+        Assert.assertEquals(block1.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         processor.processBlock(block3);
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(block1.getNumber(), processor.getBestBlock().getNumber());
-        Assert.assertEquals(block1.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(block1.getNumber(), processor.getBestBlockInformation().getBlockNumber());
+        Assert.assertEquals(block1.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         BlockConsumer consumer = new BlockConsumer();
         BlocksConsumer consumer2 = new BlocksConsumer();
@@ -350,8 +350,8 @@ public class BlockProcessorTest {
 
         processor.processBlock(block2);
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(block3.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(block3.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         Assert.assertNotNull(consumer.getBlock());
         Assert.assertEquals(block3.getHash(), consumer.getBlock().getHash());
@@ -381,15 +381,15 @@ public class BlockProcessorTest {
         processor.processBlock(genesis);
         processor.processBlock(block1);
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertNotNull(processor.getBestBlock().getHash());
-        Assert.assertEquals(block1.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertNotNull(processor.getBestBlockInformation().getBlockHash());
+        Assert.assertEquals(block1.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         processor.processBlock(block3);
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(block1.getNumber(), processor.getBestBlock().getNumber());
-        Assert.assertEquals(block1.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(block1.getNumber(), processor.getBestBlockInformation().getBlockNumber());
+        Assert.assertEquals(block1.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         BlockConsumer consumer = new BlockConsumer();
 
@@ -397,8 +397,8 @@ public class BlockProcessorTest {
 
         processor.processBlock(block2);
 
-        Assert.assertNotNull(processor.getBestBlock());
-        Assert.assertEquals(block3.getHash(), processor.getBestBlock().getHash());
+        Assert.assertNotNull(processor.getBestBlockInformation());
+        Assert.assertEquals(block3.getHash(), processor.getBestBlockInformation().getBlockHash());
 
         Assert.assertEquals(genesis.getHash(), processor.getBlockByHash(genesis.getHash()).getHash());
         Assert.assertEquals(block1.getHash(), processor.getBlockByHash(block1.getHash()).getHash());

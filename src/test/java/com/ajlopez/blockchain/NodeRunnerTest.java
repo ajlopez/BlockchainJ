@@ -48,7 +48,7 @@ public class NodeRunnerTest {
 
         runner.stop();
 
-        Block bestBlock = new BlockChain(stores).getBestBlock();
+        Block bestBlock = new BlockChain(stores).getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertTrue(bestBlock.getNumber() > 0);
@@ -72,7 +72,7 @@ public class NodeRunnerTest {
 
         runner.start();
 
-        Block block = new Block(1, blockChain.getBestBlock().getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, blockChain.getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
 
         Message message = new BlockMessage(block);
 
@@ -86,7 +86,7 @@ public class NodeRunnerTest {
 
         runner.stop();
 
-        Block bestBlock = new BlockChain(stores).getBestBlock();
+        Block bestBlock = new BlockChain(stores).getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertEquals(1, bestBlock.getNumber());
@@ -97,10 +97,8 @@ public class NodeRunnerTest {
     public void connectTwoNodeRunners() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain1 = FactoryHelper.createBlockChainWithGenesis(stores);
         KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
         Stores stores2 = new Stores(keyValueStores2);
-        BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis(stores2);
 
         Semaphore semaphore = new Semaphore(0, true);
 
@@ -121,7 +119,7 @@ public class NodeRunnerTest {
         runner2.stop();
         runner1.stop();
 
-        Block bestBlock = new BlockChain(stores2).getBestBlock();
+        Block bestBlock = new BlockChain(stores2).getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertTrue(bestBlock.getNumber() > 0);

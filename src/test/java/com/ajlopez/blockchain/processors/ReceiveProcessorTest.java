@@ -46,7 +46,7 @@ public class ReceiveProcessorTest {
 
         processor.stop();
 
-        Block result = blockProcessor.getBestBlock();
+        Block result = blockProcessor.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getHash(), result.getHash());
@@ -82,7 +82,7 @@ public class ReceiveProcessorTest {
 
         processor.stop();
 
-        Block result = blockProcessor.getBestBlock();
+        Block result = blockProcessor.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block1.getHash(), result.getHash());
@@ -118,7 +118,7 @@ public class ReceiveProcessorTest {
 
         processor.stop();
 
-        Block result = blockProcessor.getBestBlock();
+        Block result = blockProcessor.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block1.getHash(), result.getHash());
@@ -152,7 +152,7 @@ public class ReceiveProcessorTest {
 
         processor.stop();
 
-        Block result = blockProcessor.getBestBlock();
+        Block result = blockProcessor.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getHash(), result.getHash());

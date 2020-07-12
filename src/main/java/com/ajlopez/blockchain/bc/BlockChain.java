@@ -17,8 +17,7 @@ import java.util.function.Consumer;
 public class BlockChain implements BlockProvider {
     public static final long NO_BEST_BLOCK_NUMBER = -1;
 
-    private Block bestBlock;
-    private Difficulty bestTotalDifficulty;
+    private ExtendedBlockInformation bestBlockInformation;
 
     private final BlockStore blockStore;
     private final BlocksInformationStore blockInformationStore;
@@ -38,50 +37,22 @@ public class BlockChain implements BlockProvider {
         if (bestHeight >= 0) {
             BlocksInformation blocksInformation = this.blockInformationStore.get(bestHeight);
             BlockInformation blockInformation = blocksInformation.getBlockOnChain();
-            this.bestBlock = this.blockStore.getBlock(blockInformation.getBlockHash());
-            this.bestTotalDifficulty = blockInformation.getTotalDifficulty();
+
+            Block bestBlock = this.blockStore.getBlock(blockInformation.getBlockHash());
+            this.bestBlockInformation = new ExtendedBlockInformation(bestBlock, blockInformation.getTotalDifficulty());
         }
 
         initialized = true;
     }
 
-    public Block getBestBlock() throws IOException {
+    public ExtendedBlockInformation getBestBlockInformation() throws IOException {
         this.lock.readLock().lock();
 
         try {
             if (!initialized)
                 initialize();
 
-            return this.bestBlock;
-        } finally {
-            this.lock.readLock().unlock();
-        }
-    }
-
-    public long getBestBlockNumber() throws IOException {
-        this.lock.readLock().lock();
-
-        try {
-            if (!initialized)
-                initialize();
-
-            if (this.bestBlock == null)
-                return NO_BEST_BLOCK_NUMBER;
-
-            return this.bestBlock.getNumber();
-        } finally {
-            this.lock.readLock().unlock();
-        }
-    }
-
-    public Difficulty getBestBlockTotalDifficulty() throws IOException {
-        this.lock.readLock().lock();
-
-        try {
-            if (!initialized)
-                initialize();
-
-            return this.bestTotalDifficulty;
+            return this.bestBlockInformation;
         } finally {
             this.lock.readLock().unlock();
         }
@@ -109,7 +80,7 @@ public class BlockChain implements BlockProvider {
 
             Difficulty totalDifficulty = parentTotalDifficulty.add(block.getCummulativeDifficulty());
 
-            boolean isBetterBlock = this.isBetterBlock(block, totalDifficulty);
+            boolean isBetterBlock = this.isBetterBlock(totalDifficulty);
 
             this.saveBlock(block, totalDifficulty, isBetterBlock);
 
@@ -123,11 +94,11 @@ public class BlockChain implements BlockProvider {
         }
     }
 
-    private boolean isBetterBlock(Block block, Difficulty totalDifficulty) {
-        if (this.bestBlock == null)
+    private boolean isBetterBlock(Difficulty totalDifficulty) {
+        if (this.bestBlockInformation == null)
             return true;
 
-        return totalDifficulty.compareTo(this.bestTotalDifficulty) > 0;
+        return totalDifficulty.compareTo(this.bestBlockInformation.getTotalDifficulty()) > 0;
     }
 
     @Override
@@ -208,8 +179,7 @@ public class BlockChain implements BlockProvider {
     }
 
     private void saveBestBlock(Block block, Difficulty totalDifficulty) throws IOException {
-        this.bestBlock = block;
-        this.bestTotalDifficulty = totalDifficulty;
+        this.bestBlockInformation = new ExtendedBlockInformation(block, totalDifficulty);
 
         while (block.getNumber() > 0 && !this.getBlockByNumber(block.getNumber() - 1).getHash().equals(block.getParentHash())) {
             block = this.blockStore.getBlock(block.getParentHash());
@@ -218,7 +188,7 @@ public class BlockChain implements BlockProvider {
             this.blockInformationStore.put(block.getNumber(), blocksInformation);
         }
 
-        long n = this.bestBlock.getNumber() + 1;
+        long n = this.bestBlockInformation.getBlockNumber() + 1;
 
         for (BlocksInformation blocksInformation = this.blockInformationStore.get(n); blocksInformation != null; blocksInformation = this.blockInformationStore.get(n)) {
             blocksInformation.noBlockOnChain();
@@ -226,6 +196,6 @@ public class BlockChain implements BlockProvider {
             n++;
         }
 
-        this.blockInformationStore.putBestHeight(this.bestBlock.getNumber());
+        this.blockInformationStore.putBestHeight(this.bestBlockInformation.getBlockNumber());
     }
 }

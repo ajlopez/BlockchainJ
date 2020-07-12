@@ -33,7 +33,7 @@ public class BlocksProviderTest {
 
         Assert.assertNotNull(block);
         Assert.assertEquals(10, block.getNumber());
-        Assert.assertEquals(blockChain.getBestBlock().getHash(), block.getHash());
+        Assert.assertEquals(blockChain.getBestBlockInformation().getBlockHash(), block.getHash());
     }
 
     @Test

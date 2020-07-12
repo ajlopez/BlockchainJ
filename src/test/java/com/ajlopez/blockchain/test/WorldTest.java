@@ -188,7 +188,7 @@ public class WorldTest {
         BlockChain blockChain = world.getBlockChain();
 
         Assert.assertNotNull(blockChain);
-        Assert.assertArrayEquals(BlockEncoder.encode(blockChain.getBestBlock()), BlockEncoder.encode(result));
+        Assert.assertArrayEquals(BlockEncoder.encode(blockChain.getBestBlockInformation().getBlock()), BlockEncoder.encode(result));
     }
 
     @Test
@@ -197,9 +197,9 @@ public class WorldTest {
         BlockChain blockChain = world.getBlockChain();
 
         Assert.assertNotNull(blockChain);
-        Assert.assertEquals(0, blockChain.getBestBlockNumber());
+        Assert.assertEquals(0, blockChain.getBestBlockInformation().getBlockNumber());
 
-        Block block = blockChain.getBestBlock();
+        Block block = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(block);
         Assert.assertEquals(0, block.getNumber());
@@ -218,9 +218,9 @@ public class WorldTest {
         BlockChain blockChain = world.getBlockChain();
 
         Assert.assertNotNull(blockChain);
-        Assert.assertEquals(0, blockChain.getBestBlockNumber());
+        Assert.assertEquals(0, blockChain.getBestBlockInformation().getBlockNumber());
 
-        Block block = blockChain.getBestBlock();
+        Block block = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(block);
         Assert.assertEquals(0, block.getNumber());

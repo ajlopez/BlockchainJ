@@ -2,10 +2,10 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockFork;
 import com.ajlopez.blockchain.bc.BlockValidator;
+import com.ajlopez.blockchain.bc.ExtendedBlockInformation;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Difficulty;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +52,8 @@ public class BlockProcessor {
         if (!this.blockValidator.isValid(block, parent))
             return emptyList;
 
-        Block initialBestBlock = this.getBestBlock();
+        ExtendedBlockInformation bestBlockInformation = this.getBestBlockInformation();
+        Block initialBestBlock = bestBlockInformation != null ? bestBlockInformation.getBlock() : null;
 
         if (!blockChain.connectBlock(block)) {
             orphanBlocks.addToOrphans(block);
@@ -67,7 +68,7 @@ public class BlockProcessor {
 
         connectedBlocks.addAll(connectDescendants(block));
 
-        Block newBestBlock = this.getBestBlock();
+        Block newBestBlock = this.getBestBlockInformation().getBlock();
 
         if (initialBestBlock != null && newBestBlock.getHash().equals(initialBestBlock.getHash()))
             return connectedBlocks;
@@ -80,16 +81,8 @@ public class BlockProcessor {
         return connectedBlocks;
     }
 
-    public Block getBestBlock() throws IOException {
-        return this.blockChain.getBestBlock();
-    }
-
-    public long getBestBlockNumber() throws IOException {
-        return this.blockChain.getBestBlockNumber();
-    }
-
-    public Difficulty getBestBlockTotalDifficulty() throws IOException {
-        return this.blockChain.getBestBlockTotalDifficulty();
+    public ExtendedBlockInformation getBestBlockInformation() throws IOException {
+        return this.blockChain.getBestBlockInformation();
     }
 
     public Block getBlockByHash(BlockHash hash) throws IOException {

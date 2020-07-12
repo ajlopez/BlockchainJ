@@ -41,7 +41,7 @@ public class MessageProcessorTest {
 
         processor.processMessage(message, null);
 
-        Block result = blockProcessor.getBestBlock();
+        Block result = blockProcessor.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getHash(), result.getHash());
@@ -64,7 +64,7 @@ public class MessageProcessorTest {
 
         processor.processMessage(message, null);
 
-        Block result = blockProcessor.getBestBlock();
+        Block result = blockProcessor.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getHash(), result.getHash());
@@ -84,7 +84,7 @@ public class MessageProcessorTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1, blockChain.getBestBlock().getHash(), null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block1 = new Block(1, blockChain.getBestBlockInformation().getBlockHash(), null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Block block2 = new Block(2, block1.getHash(), null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message message = new BlockMessage(block2);
 
@@ -92,7 +92,7 @@ public class MessageProcessorTest {
 
         processor.processMessage(message, sender);
 
-        Block result = blockProcessor.getBestBlock();
+        Block result = blockProcessor.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(0, result.getNumber());
@@ -124,7 +124,7 @@ public class MessageProcessorTest {
 
         processor.processMessage(message, peer1);
 
-        Block result = blockProcessor.getBestBlock();
+        Block result = blockProcessor.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getHash(), result.getHash());

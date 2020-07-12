@@ -267,7 +267,7 @@ public class AccountsProcessorTest {
 
             transactionExecutor.executeTransactions(transactions, null);
 
-            Block parent = blockChain.getBestBlock();
+            Block parent = blockChain.getBestBlockInformation().getBlock();
             Address coinbase = FactoryHelper.createRandomAddress();
 
             accountStore.save();

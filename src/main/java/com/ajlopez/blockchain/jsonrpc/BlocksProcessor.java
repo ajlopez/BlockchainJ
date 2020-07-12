@@ -35,7 +35,7 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
     }
 
     private JsonRpcResponse getBestBlockNumber(JsonRpcRequest request) throws IOException {
-        return JsonRpcResponse.createResponse(request, this.blockChain.getBestBlockNumber());
+        return JsonRpcResponse.createResponse(request, this.blockChain.getBestBlockInformation().getBlockNumber());
     }
 
     private JsonRpcResponse getBlockByNumber(JsonRpcRequest request) throws IOException {
@@ -45,7 +45,7 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         if ("earliest".equals(blockId))
             block = this.blockChain.getBlockByNumber(0);
         else if ("latest".equals(blockId))
-            block = this.blockChain.getBestBlock();
+            block = this.blockChain.getBestBlockInformation().getBlock();
         else if (blockId.startsWith("0x"))
             block = this.blockChain.getBlockByNumber(Long.parseLong(blockId.substring(2), 16));
         else

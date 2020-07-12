@@ -49,7 +49,7 @@ public class TcpPeerClientServerTest {
         client.connect();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, blockChain1.getBestBlock().getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1, blockChain1.getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
         Message message = new BlockMessage(block);
 
         nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);
@@ -60,13 +60,13 @@ public class TcpPeerClientServerTest {
 
         server.stop();
 
-        Block bestBlock1 = new BlockChain(stores).getBestBlock();
+        Block bestBlock1 = new BlockChain(stores).getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock1);
         Assert.assertEquals(block.getNumber(), bestBlock1.getNumber());
         Assert.assertEquals(block.getHash(), bestBlock1.getHash());
 
-        Block bestBlock2 = new BlockChain(stores2).getBestBlock();
+        Block bestBlock2 = new BlockChain(stores2).getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock2);
         Assert.assertEquals(block.getNumber(), bestBlock2.getNumber());
@@ -80,9 +80,9 @@ public class TcpPeerClientServerTest {
         BlockChain blockChain1 = FactoryHelper.createBlockChainWithGenesis(stores);
         FactoryHelper.extendBlockChainWithBlocks(blockChain1, 10);
 
-        Assert.assertEquals(10, blockChain1.getBestBlockNumber());
+        Assert.assertEquals(10, blockChain1.getBestBlockInformation().getBlockNumber());
 
-        Block block = blockChain1.getBestBlock();
+        Block block = blockChain1.getBestBlockInformation().getBlock();
 
         NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
         KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
@@ -109,13 +109,13 @@ public class TcpPeerClientServerTest {
 
         server.stop();
 
-        Block bestBlock1 = new BlockChain(stores).getBestBlock();
+        Block bestBlock1 = new BlockChain(stores).getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock1);
         Assert.assertEquals(block.getNumber(), bestBlock1.getNumber());
         Assert.assertEquals(block.getHash(), bestBlock1.getHash());
 
-        Block bestBlock2 = new BlockChain(stores2).getBestBlock();
+        Block bestBlock2 = new BlockChain(stores2).getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock2);
         Assert.assertEquals(block.getNumber(), bestBlock2.getNumber());
@@ -135,9 +135,9 @@ public class TcpPeerClientServerTest {
         BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis(stores2);
         FactoryHelper.extendBlockChainWithBlocks(blockChain2, 10);
 
-        Assert.assertEquals(10, blockChain2.getBestBlockNumber());
+        Assert.assertEquals(10, blockChain2.getBestBlockInformation().getBlockNumber());
 
-        Block block = blockChain2.getBestBlock();
+        Block block = blockChain2.getBestBlockInformation().getBlock();
 
         NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
 
@@ -160,13 +160,13 @@ public class TcpPeerClientServerTest {
 
         server.stop();
 
-        Block bestBlock1 = new BlockChain(stores).getBestBlock();
+        Block bestBlock1 = new BlockChain(stores).getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock1);
         Assert.assertEquals(block.getNumber(), bestBlock1.getNumber());
         Assert.assertEquals(block.getHash(), bestBlock1.getHash());
 
-        Block bestBlock2 = new BlockChain(stores2).getBestBlock();
+        Block bestBlock2 = new BlockChain(stores2).getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock2);
         Assert.assertEquals(block.getNumber(), bestBlock2.getNumber());

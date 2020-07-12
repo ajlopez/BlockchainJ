@@ -17,7 +17,7 @@ public class BlocksProvider {
 
     public Block getBlock(String blockId) throws JsonRpcException, IOException {
         if ("latest".equals(blockId))
-            return blockChain.getBestBlock();
+            return blockChain.getBestBlockInformation().getBlock();
         if ("earliest".equals(blockId))
             return blockChain.getBlockByNumber(0);
         if ("pending".equals(blockId))

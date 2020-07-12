@@ -26,7 +26,7 @@ public class BlockForkTest {
 
         FactoryHelper.extendBlockChainWithBlocks(accountStoreProvider, blockChain, 3, 0, null, 0);
 
-        Block firstBestBlock = blockChain.getBestBlock();
+        Block firstBestBlock = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(firstBestBlock);
         Assert.assertEquals(3, firstBestBlock.getNumber());
@@ -38,7 +38,7 @@ public class BlockForkTest {
 
         FactoryHelper.extendBlockChainWithBlocksFromBlock(accountStoreProvider, blockChain, blockChain.getBlockByNumber(0), 5, 0, null, 0);
 
-        Block secondBestBlock = blockChain.getBestBlock();
+        Block secondBestBlock = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(secondBestBlock);
         Assert.assertEquals(5, secondBestBlock.getNumber());
@@ -72,7 +72,7 @@ public class BlockForkTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
         BlockChain blockChain = FactoryHelper.createBlockChainWithAccount(stores, senderAddress, 1000000, 10, 10);
 
-        Block firstBestBlock = blockChain.getBestBlock();
+        Block firstBestBlock = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(firstBestBlock);
         Assert.assertEquals(10, firstBestBlock.getNumber());
@@ -88,7 +88,7 @@ public class BlockForkTest {
 
         FactoryHelper.extendBlockChainWithBlocksFromBlock(accountStoreProvider, blockChain, blockChain.getBlockByNumber(0), 15, 10, senderAddress, 0);
 
-        Block secondBestBlock = blockChain.getBestBlock();
+        Block secondBestBlock = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(secondBestBlock);
         Assert.assertEquals(15, secondBestBlock.getNumber());
@@ -126,7 +126,7 @@ public class BlockForkTest {
 
         FactoryHelper.extendBlockChainWithBlocks(accountStoreProvider, blockChain, 3, 0, null, 0);
 
-        Block bestBlock = blockChain.getBestBlock();
+        Block bestBlock = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertEquals(3, bestBlock.getNumber());

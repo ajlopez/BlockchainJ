@@ -44,7 +44,7 @@ public class MinerProcessor {
     }
 
     public Block process() throws IOException {
-        Block bestBlock = this.blockChain.getBestBlock();
+        Block bestBlock = this.blockChain.getBestBlockInformation().getBlock();
 
         Block newBlock = this.mineBlock(bestBlock);
 
