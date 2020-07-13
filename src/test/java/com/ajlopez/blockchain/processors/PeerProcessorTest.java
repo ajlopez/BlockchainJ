@@ -1,7 +1,11 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.net.PeerId;
+import com.ajlopez.blockchain.net.Status;
+import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,60 +15,38 @@ import org.junit.Test;
  */
 public class PeerProcessorTest {
     @Test
-    public void noBestBlockNumber() {
-        PeerProcessor processor = new PeerProcessor(1);
-
-        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getBestBlockNumber());
-    }
-
-    @Test
     public void noBestBlockNumberInNewPeer() {
         PeerProcessor processor = new PeerProcessor(1);
-        Hash peerId = FactoryHelper.createRandomHash();
+        PeerId peerId = FactoryHelper.createRandomPeerId();
 
-        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(peerId));
+        Assert.assertNull(processor.getStatus(peerId));
     }
 
     @Test
     public void registerPeerBestBlockNumber() {
         PeerProcessor processor = new PeerProcessor(1);
-        Hash peerId = FactoryHelper.createRandomHash();
         long bestBlockNumber = 100;
+        PeerId peerId = FactoryHelper.createRandomPeerId();
+        Status status = new Status(peerId, 1, bestBlockNumber, FactoryHelper.createRandomBlockHash(), Difficulty.ONE);
 
-        processor.registerBestBlockNumber(peerId, 1, bestBlockNumber);
+        processor.registerStatus(status);
 
-        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(FactoryHelper.createRandomHash()));
-        Assert.assertEquals(bestBlockNumber, processor.getPeerBestBlockNumber(peerId));
-        Assert.assertEquals(bestBlockNumber, processor.getBestBlockNumber());
+        Status result = processor.getStatus(peerId);
+
+        Assert.assertNotNull(result);
+        Assert.assertSame(status, result);
     }
 
     @Test
     public void registerPeerBestBlockNumberFromAnotherNetworkNumber() {
         PeerProcessor processor = new PeerProcessor(1);
-        Hash peerId = FactoryHelper.createRandomHash();
+        PeerId peerId = FactoryHelper.createRandomPeerId();
         long bestBlockNumber = 100;
 
-        processor.registerBestBlockNumber(peerId, 2, bestBlockNumber);
+        Status status = new Status(peerId, 2, bestBlockNumber, FactoryHelper.createRandomBlockHash(), Difficulty.ONE);
 
-        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(FactoryHelper.createRandomHash()));
-        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(peerId));
-        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getBestBlockNumber());
-    }
+        processor.registerStatus(status);
 
-    @Test
-    public void registerTwoPeersBestBlockNumber() {
-        PeerProcessor processor = new PeerProcessor(1);
-        Hash peerId1 = FactoryHelper.createRandomHash();
-        long bestBlockNumber1 = 100;
-        Hash peerId2 = FactoryHelper.createRandomHash();
-        long bestBlockNumber2 = 50;
-
-        processor.registerBestBlockNumber(peerId1, 1, bestBlockNumber1);
-        processor.registerBestBlockNumber(peerId2, 1, bestBlockNumber2);
-
-        Assert.assertEquals(BlockChain.NO_BEST_BLOCK_NUMBER, processor.getPeerBestBlockNumber(FactoryHelper.createRandomHash()));
-        Assert.assertEquals(bestBlockNumber1, processor.getPeerBestBlockNumber(peerId1));
-        Assert.assertEquals(bestBlockNumber2, processor.getPeerBestBlockNumber(peerId2));
-        Assert.assertEquals(bestBlockNumber1, processor.getBestBlockNumber());
+        Assert.assertNull(processor.getStatus(peerId));
     }
 }

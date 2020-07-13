@@ -312,7 +312,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processStatusMessageAndStartSync() throws IOException {
+    public void processStatusMessageAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor(1);
         SendProcessor outputProcessor = new SendProcessor(FactoryHelper.createRandomPeer());
@@ -327,8 +327,7 @@ public class MessageProcessorTest {
 
         processor.processMessage(message, receiver);
 
-        Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
-        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(receiver.getId()));
+        Assert.assertEquals(10, peerProcessor.getStatus(receiver.getId()).getBestBlockNumber());
 
         Assert.assertEquals(11, channel.getPeerMessages().size());
 
@@ -350,7 +349,7 @@ public class MessageProcessorTest {
     }
 
     @Test
-    public void processStatusMessageTwiceWithSameHeightAndStartSync() throws IOException {
+    public void processStatusMessageTwiceWithSameHeightAndStartSync() {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         PeerProcessor peerProcessor = new PeerProcessor(1);
         Peer firstPeer = FactoryHelper.createRandomPeer();
@@ -367,8 +366,7 @@ public class MessageProcessorTest {
         processor.processMessage(message, secondPeer);
         processor.processMessage(message, secondPeer);
 
-        Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
-        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(secondPeer.getId()));
+        Assert.assertEquals(10, peerProcessor.getStatus(secondPeer.getId()).getBestBlockNumber());
 
         Assert.assertEquals(22, channel.getPeerMessages().size());
 
@@ -409,8 +407,7 @@ public class MessageProcessorTest {
         processor.processMessage(message1, firstPeer);
         processor.processMessage(message2, secondPeer);
 
-        Assert.assertEquals(10, peerProcessor.getBestBlockNumber());
-        Assert.assertEquals(10, peerProcessor.getPeerBestBlockNumber(secondPeer.getId()));
+        Assert.assertEquals(10, peerProcessor.getStatus(secondPeer.getId()).getBestBlockNumber());
 
         Assert.assertEquals(11, channel.getPeerMessages().size());
 

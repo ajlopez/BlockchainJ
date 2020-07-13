@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.*;
@@ -139,14 +140,21 @@ public class MessageProcessor {
         if (message.getStatus().getNetworkNumber() != this.peerProcessor.getNetworkNumber())
             return;
 
-        Hash senderId = sender.getId();
+        PeerId senderId = sender.getId();
 
-        this.peerProcessor.registerBestBlockNumber(senderId, message.getStatus().getNetworkNumber(), message.getStatus().getBestBlockNumber());
+        if (!senderId.equals(message.getStatus().getPeerId()))
+            return;
+
+        this.peerProcessor.registerStatus(message.getStatus());
 
         ExtendedBlockInformation bestBlockInformation = this.blockProcessor.getBestBlockInformation();
+
+        if (bestBlockInformation != null && bestBlockInformation.getTotalDifficulty().compareTo(message.getStatus().getBestTotalDifficulty()) >= 0)
+            return;
+
         long fromNumber = bestBlockInformation == null ? BlockChain.NO_BEST_BLOCK_NUMBER : bestBlockInformation.getBlockNumber();
 
-        long toNumber = Math.min(fromNumber + 10, this.peerProcessor.getPeerBestBlockNumber(senderId));
+        long toNumber = Math.min(fromNumber + 10, this.peerProcessor.getStatus(senderId).getBestBlockNumber());
 
         for (long number = fromNumber + 1; number <= toNumber; number++)
             outputProcessor.postMessage(sender, new GetBlockByNumberMessage(number));

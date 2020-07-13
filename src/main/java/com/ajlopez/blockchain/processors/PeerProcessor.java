@@ -1,7 +1,8 @@
 package com.ajlopez.blockchain.processors;
 
-import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.net.PeerId;
+import com.ajlopez.blockchain.net.Status;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +12,7 @@ import java.util.Map;
  */
 public class PeerProcessor {
     private final long networkNumber;
-    private final Map<Hash, Long> bestBlocks = new HashMap<>();
-    private long bestBlockNumber = BlockChain.NO_BEST_BLOCK_NUMBER;
+    private final Map<PeerId, Status> statuses = new HashMap<>();
 
     public PeerProcessor(long networkNumber) {
         this.networkNumber = networkNumber;
@@ -20,24 +20,14 @@ public class PeerProcessor {
 
     public long getNetworkNumber() { return this.networkNumber; }
 
-    public long getBestBlockNumber() {
-        return this.bestBlockNumber;
+    public Status getStatus(PeerId peerId) {
+        return statuses.get(peerId);
     }
 
-    public long getPeerBestBlockNumber(Hash peerId) {
-        if (!bestBlocks.containsKey(peerId))
-            return BlockChain.NO_BEST_BLOCK_NUMBER;
-
-        return bestBlocks.get(peerId);
-    }
-
-    public void registerBestBlockNumber(Hash peerId, long peerNetworkNumber, long bestBlockNumber) {
-        if (peerNetworkNumber != this.networkNumber)
+    public void registerStatus(Status status) {
+        if (status.getNetworkNumber() != this.networkNumber)
             return;
 
-        bestBlocks.put(peerId, bestBlockNumber);
-
-        if (this.bestBlockNumber == BlockChain.NO_BEST_BLOCK_NUMBER || this.bestBlockNumber < bestBlockNumber)
-            this.bestBlockNumber = bestBlockNumber;
+        statuses.put(status.getPeerId(), status);
     }
 }
