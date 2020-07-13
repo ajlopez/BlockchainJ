@@ -131,6 +131,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [A World Without (block) Limits!](https://medium.com/@MicahZoltu/a-world-without-block-limits-f3ecc926cd68)
 - [ReGenesis Explained](https://medium.com/@mandrigin/regenesis-explained-97540f457807)
 - [Encrypted Blockchain Databases](https://eprint.iacr.org/2020/827.pdf)
+- [Simpler Ethereum sync: Major/minor state snapshots, blockchain files, receipt files](https://ethresear.ch/t/simpler-ethereum-sync-major-minor-state-snapshots-blockchain-files-receipt-files/7672)
 
 ## To Do
 
