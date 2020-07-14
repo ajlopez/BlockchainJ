@@ -1,11 +1,8 @@
 package com.ajlopez.blockchain.processors;
 
-import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.types.Difficulty;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
-import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;

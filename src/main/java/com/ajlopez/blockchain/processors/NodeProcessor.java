@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.BlockMessage;
@@ -117,6 +118,9 @@ public class NodeProcessor implements PeerNode {
 
     public Status getStatus() throws IOException {
         ExtendedBlockInformation bestBlockinformation = this.blockProcessor.getBestBlockInformation();
+
+        if (bestBlockinformation == null)
+            return new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), BlockChain.NO_BEST_BLOCK_NUMBER, null, Difficulty.ONE);
 
         return new Status(this.peer.getId(), this.networkConfiguration.getNetworkNumber(), bestBlockinformation.getBlockNumber(), bestBlockinformation.getBlockHash(), bestBlockinformation.getTotalDifficulty());
     }

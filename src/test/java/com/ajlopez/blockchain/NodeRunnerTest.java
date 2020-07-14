@@ -97,6 +97,7 @@ public class NodeRunnerTest {
     public void connectTwoNodeRunners() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
+        FactoryHelper.createBlockChainWithGenesis(stores);
         KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
         Stores stores2 = new Stores(keyValueStores2);
 
