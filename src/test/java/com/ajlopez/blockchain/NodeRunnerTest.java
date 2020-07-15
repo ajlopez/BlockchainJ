@@ -30,7 +30,7 @@ public class NodeRunnerTest {
     public void mineBlockUsingOneRunner() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
+        FactoryHelper.createBlockChainWithGenesis(stores);
 
         Semaphore semaphore = new Semaphore(0, true);
 

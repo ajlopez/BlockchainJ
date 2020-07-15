@@ -140,10 +140,10 @@ public class MessageProcessor {
         if (message.getStatus().getNetworkNumber() != this.peerProcessor.getNetworkNumber())
             return;
 
-        PeerId senderId = sender.getId();
-
-        if (!senderId.equals(message.getStatus().getPeerId()))
-            return;
+        // TODO Review
+        // PeerId senderId = sender.getId();
+        //if (!senderId.equals(message.getStatus().getPeerId()))
+        //    return;
 
         this.peerProcessor.registerStatus(message.getStatus());
 
@@ -154,7 +154,7 @@ public class MessageProcessor {
 
         long fromNumber = bestBlockInformation == null ? BlockChain.NO_BEST_BLOCK_NUMBER : bestBlockInformation.getBlockNumber();
 
-        long toNumber = Math.min(fromNumber + 10, this.peerProcessor.getStatus(senderId).getBestBlockNumber());
+        long toNumber = Math.min(fromNumber + 10, message.g.getBestBlockNumber());
 
         for (long number = fromNumber + 1; number <= toNumber; number++)
             outputProcessor.postMessage(sender, new GetBlockByNumberMessage(number));
