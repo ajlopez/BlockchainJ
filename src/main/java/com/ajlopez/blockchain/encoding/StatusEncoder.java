@@ -13,7 +13,7 @@ public class StatusEncoder {
     public static byte[] encode(Status status) {
         byte[] rlpNodeId = RLPEncoder.encodePeerId(status.getPeerId());
         byte[] rlpNetworkNumber = RLPEncoder.encodeUnsignedLong(status.getNetworkNumber());
-        byte[] rlpBestBlockNumber = RLPEncoder.encodeUnsignedLong(status.getBestBlockNumber());
+        byte[] rlpBestBlockNumber = RLPEncoder.encodeLong(status.getBestBlockNumber());
         byte[] rlpBestBlockHash = RLPEncoder.encodeBlockHash(status.getBestBlockHash());
         byte[] rlpBestTotalDifficulty = RLPEncoder.encodeDifficulty(status.getBestTotalDifficulty());
 
@@ -26,7 +26,7 @@ public class StatusEncoder {
 
         PeerId nodeid = RLPEncoder.decodePeerId(bytes[0]);
         long networkNumber = RLPEncoder.decodeUnsignedLong(bytes[1]);
-        long bestBlockNumber = RLPEncoder.decodeUnsignedLong(bytes[2]);
+        long bestBlockNumber = RLPEncoder.decodeLong(bytes[2]);
         BlockHash bestBlockHash = RLPEncoder.decodeBlockHash(bytes[3]);
         Difficulty bestTotalDifficulty = RLPEncoder.decodeDifficulty(bytes[4]);
 

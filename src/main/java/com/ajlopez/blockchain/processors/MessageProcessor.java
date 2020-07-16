@@ -154,7 +154,7 @@ public class MessageProcessor {
 
         long fromNumber = bestBlockInformation == null ? BlockChain.NO_BEST_BLOCK_NUMBER : bestBlockInformation.getBlockNumber();
 
-        long toNumber = Math.min(fromNumber + 10, message.g.getBestBlockNumber());
+        long toNumber = Math.min(fromNumber + 10, message.getStatus().getBestBlockNumber());
 
         for (long number = fromNumber + 1; number <= toNumber; number++)
             outputProcessor.postMessage(sender, new GetBlockByNumberMessage(number));

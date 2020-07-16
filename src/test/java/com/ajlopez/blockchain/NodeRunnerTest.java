@@ -109,7 +109,8 @@ public class NodeRunnerTest {
         NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), keyValueStores2);
 
         runner2.onNewBlock(blk -> {
-            semaphore.release();
+            if (blk.getNumber() > 0)
+                semaphore.release();
         });
 
         runner1.start();

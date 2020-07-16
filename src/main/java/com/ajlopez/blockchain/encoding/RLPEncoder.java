@@ -94,11 +94,19 @@ public class RLPEncoder {
     }
 
     public static byte[] encodeBlockHash(BlockHash blockHash) {
+        if (blockHash == null)
+            return RLP.encode(ByteUtils.EMPTY_BYTE_ARRAY);
+
         return RLP.encode(blockHash.getBytes());
     }
 
     public static BlockHash decodeBlockHash(byte[] data) {
-        return new BlockHash(RLP.decode(data));
+        byte[] bytes = RLP.decode(data);
+
+        if (bytes.length == 0)
+            return null;
+
+        return new BlockHash(bytes);
     }
 
     public static byte[] encodeHash(Hash hash) {
