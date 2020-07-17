@@ -63,8 +63,11 @@ public class PeerConnection implements PeerNode {
             while (!this.stopped) {
                 Pair<Peer, Message> peerMessage = queue.poll();
 
-                if (peerMessage != null)
-                    this.messageOutputStream.writeMessage(peerMessage.getKey(), peerMessage.getValue());
+                if (peerMessage != null) {
+                    // TODO stopped if cannot write the message
+                    if (!this.messageOutputStream.writeMessage(peerMessage.getKey(), peerMessage.getValue()))
+                        stopped = true;
+                }
                 else
                     Thread.sleep(100);
             }
@@ -72,7 +75,7 @@ public class PeerConnection implements PeerNode {
             this.messageOutputStream.close();
         }
         catch (Exception ex) {
-            this.stopped = true;
+            // TODO review, exception if message cannot be encoded
         }
     }
 

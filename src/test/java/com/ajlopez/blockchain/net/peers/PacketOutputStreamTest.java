@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain.net.peers;
 
-import com.ajlopez.blockchain.net.peers.PacketOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,7 +16,7 @@ public class PacketOutputStreamTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PacketOutputStream messageOutputStream = new PacketOutputStream(outputStream);
 
-        messageOutputStream.writePacket(new Packet(Protocols.BLOCKCHAIN, (short)1, bytes));
+        Assert.assertTrue(messageOutputStream.writePacket(new Packet(Protocols.BLOCKCHAIN, (short)1, bytes)));
 
         outputStream.close();
 

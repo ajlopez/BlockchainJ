@@ -17,12 +17,12 @@ public class MessageOutputStream {
         this.packetOutputStream = packetOutputStream;
     }
 
-    public void writeMessage(Peer sender, Message message) {
+    public boolean writeMessage(Peer sender, Message message) {
         byte[] bytes = MessageEncoder.encode(message);
 
         // TODO sign packet using sender keys
 
-        this.packetOutputStream.writePacket(new Packet(Protocols.BLOCKCHAIN, network, bytes));
+        return this.packetOutputStream.writePacket(new Packet(Protocols.BLOCKCHAIN, network, bytes));
     }
 
     public void close() throws IOException {

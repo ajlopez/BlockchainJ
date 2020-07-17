@@ -19,7 +19,7 @@ public class MessageEncoder {
     }
 
     public static byte[] encode(Message message) {
-        byte[] payload = message.getPayload();
+        byte[] payload = message.getMessagePayload();
 
         if (payload == null) {
             byte[] bytes = new byte[1];
