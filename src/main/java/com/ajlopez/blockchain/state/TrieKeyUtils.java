@@ -1,7 +1,5 @@
 package com.ajlopez.blockchain.state;
 
-import java.util.Arrays;
-
 /**
  * Created by ajlopez on 18/01/2020.
  */

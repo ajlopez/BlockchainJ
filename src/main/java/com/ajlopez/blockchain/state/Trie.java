@@ -459,6 +459,12 @@ public class Trie {
         if (value == null && nodes == null && hashes == null)
             return null;
 
+        if (value != null) {
+            byte[] newvalue = new byte[value.length];
+            System.arraycopy(value, 0, newvalue, 0, value.length);
+            value = newvalue;
+        }
+
         Trie trie = new Trie(nodes, hashes, value, sharedKey, sharedKeyLength, store);
 
         if (!tryCoalesce || !trie.canCoalesce())
