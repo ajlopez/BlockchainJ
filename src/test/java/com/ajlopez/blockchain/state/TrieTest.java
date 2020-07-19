@@ -356,6 +356,22 @@ public class TrieTest {
     }
 
     @Test
+    public void putAndGetKeyValueAfterChangeSuppliedKey() throws IOException {
+        byte[] key = new byte[] { (byte)0xab, (byte)0xcd };
+        byte[] key2 = new byte[] { (byte)0xab, (byte)0xcd };
+        byte[] value = new byte[] { 0x01, 0x02, 0x03 };
+
+        Trie trie = new Trie();
+        trie = trie.put(key, value);
+
+        key[0] = 0x0a;
+
+        Assert.assertNotNull(trie);
+        Assert.assertArrayEquals(value, trie.get(key2));
+        Assert.assertEquals(1, trie.nodesSize());
+    }
+
+    @Test
     public void putAndGetTwoKeyValue() throws IOException {
         byte[] key1 = new byte[] { (byte)0xab, (byte)0xcd };
         byte[] value1 = new byte[] { 0x01, 0x02, 0x03 };
