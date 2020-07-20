@@ -18,9 +18,9 @@ import java.io.IOException;
 public class WorldStateCopierTest {
     @Test
     public void copyOneAccount() throws IOException {
-        KeyValueStore keyValueStore = new HashMapStore();
-        TrieStore trieStore = new TrieStore(keyValueStore);
-        AccountStore accountStore = new AccountStore(trieStore.retrieve(Trie.EMPTY_TRIE_HASH));
+        KeyValueStores sourceKeyValueStores = new MemoryKeyValueStores();
+        Stores sourceStores = new Stores(sourceKeyValueStores);
+        AccountStore accountStore = sourceStores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
 
         Address address = FactoryHelper.createRandomAddress();
         Account account = new Account(Coin.TEN, 42, 0, null, null);
@@ -30,16 +30,17 @@ public class WorldStateCopierTest {
 
         Hash rootHash = accountStore.getRootHash();
 
-        KeyValueStore targetKeyValueStore = new HashMapStore();
-        TrieStore targetTrieStore = new TrieStore(targetKeyValueStore);
+        KeyValueStores targetKeyValueStores = new MemoryKeyValueStores();
+        Stores targetStores = new Stores(targetKeyValueStores);
 
-        WorldStateCopier worldStateCopier = new WorldStateCopier(trieStore, targetTrieStore, rootHash);
+        WorldStateCopier worldStateCopier = new WorldStateCopier(sourceStores, targetStores, rootHash);
 
         worldStateCopier.process();
 
-        Assert.assertTrue(targetTrieStore.exists(rootHash));
+        TrieStore targetAccountTrieStore = targetStores.getAccountTrieStore();
+        Assert.assertTrue(targetAccountTrieStore.exists(rootHash));
 
-        AccountStore targetAccountStore = new AccountStore(targetTrieStore.retrieve(rootHash));
+        AccountStore targetAccountStore = targetStores.getAccountStoreProvider().retrieve(rootHash);
 
         Account result = targetAccountStore.getAccount(address);
 

@@ -11,13 +11,17 @@ import java.util.Queue;
  * Created by ajlopez on 19/07/2020.
  */
 public class WorldStateCopier {
-    private final TrieStore source;
-    private final TrieStore target;
+    private final Stores sourceStores;
+    private final Stores targetStores;
+    private final TrieStore sourceAccountTrieStore;
+    private final TrieStore targetAccountTrieStore;
     private final Queue<Hash> hashes = new LinkedList<>();
 
-    public WorldStateCopier(TrieStore source, TrieStore target, Hash rootHash) {
-        this.source = source;
-        this.target = target;
+    public WorldStateCopier(Stores sourceStores, Stores targetStores, Hash rootHash) {
+        this.sourceStores = sourceStores;
+        this.targetStores = targetStores;
+        this.sourceAccountTrieStore = sourceStores.getAccountTrieStore();
+        this.targetAccountTrieStore = targetStores.getAccountTrieStore();
         this.hashes.add(rootHash);
     }
 
@@ -27,10 +31,10 @@ public class WorldStateCopier {
     }
 
     private void processHash(Hash hash) throws IOException {
-        Trie trie = this.source.retrieve(hash);
+        Trie trie = this.sourceAccountTrieStore.retrieve(hash);
 
-        if (!this.target.exists(hash))
-            this.target.save(trie);
+        if (!this.targetAccountTrieStore.exists(hash))
+            this.targetAccountTrieStore.save(trie);
 
         Hash[] subhashes = trie.getSubHashes();
 
