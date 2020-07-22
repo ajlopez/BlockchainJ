@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.state.Trie;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -15,19 +16,19 @@ public class WorldStateCopier {
     private final Stores targetStores;
     private final TrieStore sourceAccountTrieStore;
     private final TrieStore targetAccountTrieStore;
-    private final Queue<Hash> hashes = new LinkedList<>();
+    private final Queue<KeyInformation> hashes = new LinkedList<>();
 
     public WorldStateCopier(Stores sourceStores, Stores targetStores, Hash rootHash) {
         this.sourceStores = sourceStores;
         this.targetStores = targetStores;
         this.sourceAccountTrieStore = sourceStores.getAccountTrieStore();
         this.targetAccountTrieStore = targetStores.getAccountTrieStore();
-        this.hashes.add(rootHash);
+        this.hashes.add(new KeyInformation(KeyValueStoreType.ACCOUNTS, rootHash));
     }
 
     public void process() throws IOException {
         while (!this.hashes.isEmpty())
-            processHash(this.hashes.poll());
+            processHash(this.hashes.poll().getHash());
     }
 
     private void processHash(Hash hash) throws IOException {
@@ -40,6 +41,6 @@ public class WorldStateCopier {
 
         for (int k = 0; k < subhashes.length; k++)
             if (subhashes[k] != null)
-                this.hashes.add(subhashes[k]);
+                this.hashes.add(new KeyInformation(KeyValueStoreType.ACCOUNTS, subhashes[k]));
     }
 }
