@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.TrieStorage;
 import org.junit.Assert;
 import org.junit.Test;
@@ -52,6 +53,48 @@ public class WorldStateCopierTest {
         Assert.assertNotNull(result);
 
         Assert.assertArrayEquals(AccountEncoder.encode(account), AccountEncoder.encode(result));
+    }
+
+    @Test
+    public void copyOneAccountWithCode() throws IOException {
+        byte[] code = FactoryHelper.createRandomBytes(100);
+        Hash codeHash = HashUtils.calculateHash(code);
+
+        KeyValueStores sourceKeyValueStores = new MemoryKeyValueStores();
+        Stores sourceStores = new Stores(sourceKeyValueStores);
+        AccountStore accountStore = sourceStores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
+        sourceStores.getCodeStore().putCode(codeHash, code);
+
+        Address address = FactoryHelper.createRandomAddress();
+        Account account = new Account(Coin.TEN, 42, code.length, codeHash, null);
+
+        accountStore.putAccount(address, account);
+        accountStore.save();
+
+        Hash rootHash = accountStore.getRootHash();
+
+        KeyValueStores targetKeyValueStores = new MemoryKeyValueStores();
+        Stores targetStores = new Stores(targetKeyValueStores);
+
+        WorldStateCopier worldStateCopier = new WorldStateCopier(sourceStores, targetStores, rootHash);
+
+        worldStateCopier.process();
+
+        TrieStore targetAccountTrieStore = targetStores.getAccountTrieStore();
+        Assert.assertTrue(targetAccountTrieStore.exists(rootHash));
+
+        AccountStore targetAccountStore = targetStores.getAccountStoreProvider().retrieve(rootHash);
+
+        Account result = targetAccountStore.getAccount(address);
+
+        Assert.assertNotNull(result);
+
+        Assert.assertArrayEquals(AccountEncoder.encode(account), AccountEncoder.encode(result));
+
+        byte[] result2 = targetStores.getCodeStore().getCode(codeHash);
+
+        Assert.assertNotNull(result2);
+        Assert.assertArrayEquals(code, result2);
     }
 
     @Test
