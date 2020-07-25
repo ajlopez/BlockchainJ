@@ -97,6 +97,7 @@ public class WorldStateCopierTest {
         Assert.assertArrayEquals(code, result2);
     }
 
+    
     @Test
     public void copyOneHundredAccounts() throws IOException {
         Random random = new Random();
