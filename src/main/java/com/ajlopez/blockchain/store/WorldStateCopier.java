@@ -4,7 +4,6 @@ import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -66,7 +65,10 @@ public class WorldStateCopier {
 
         Account account = AccountEncoder.decode(value);
 
-        this.hashes.add(new KeyInformation(KeyValueStoreType.STORAGE, account.getStorageHash()));
+        Hash storageHash = account.getStorageHash();
+
+        if (storageHash != null)
+            this.hashes.add(new KeyInformation(KeyValueStoreType.STORAGE, storageHash));
 
         Hash codeHash = account.getCodeHash();
 
