@@ -47,10 +47,14 @@ public class WorldStateCopier {
     }
 
     private void processAccountNodeHash(Hash hash) throws IOException {
-        Trie trie = this.sourceAccountTrieStore.retrieve(hash);
+        Trie trie;
 
-        if (!this.targetAccountTrieStore.exists(hash))
+        if (this.targetAccountTrieStore.exists(hash))
+            trie = this.targetAccountTrieStore.retrieve(hash);
+        else {
+            trie = this.sourceAccountTrieStore.retrieve(hash);
             this.targetAccountTrieStore.save(trie);
+        }
 
         Hash[] subhashes = trie.getSubHashes();
 
