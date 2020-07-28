@@ -81,10 +81,14 @@ public class WorldStateCopier {
     }
 
     private void processStorageNodeHash(Hash hash) throws IOException {
-        Trie trie = this.sourceStorageTrieStore.retrieve(hash);
+        Trie trie;
 
-        if (!this.targetStorageTrieStore.exists(hash))
+        if (this.targetStorageTrieStore.exists(hash))
+            trie = this.targetStorageTrieStore.retrieve(hash);
+        else {
+            trie = this.sourceStorageTrieStore.retrieve(hash);
             this.targetStorageTrieStore.save(trie);
+        }
 
         Hash[] subhashes = trie.getSubHashes();
 
