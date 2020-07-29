@@ -47,20 +47,7 @@ public class WorldStateCopier {
     }
 
     private void processAccountNodeHash(Hash hash) throws IOException {
-        Trie trie;
-
-        if (this.targetAccountTrieStore.exists(hash))
-            trie = this.targetAccountTrieStore.retrieve(hash);
-        else {
-            trie = this.sourceAccountTrieStore.retrieve(hash);
-            this.targetAccountTrieStore.save(trie);
-        }
-
-        Hash[] subhashes = trie.getSubHashes();
-
-        for (int k = 0; k < subhashes.length; k++)
-            if (subhashes[k] != null)
-                this.hashes.add(new KeyInformation(KeyValueStoreType.ACCOUNTS, subhashes[k]));
+        Trie trie = processNode(hash, this.sourceAccountTrieStore, this.targetAccountTrieStore, KeyValueStoreType.ACCOUNTS);
 
         byte[] value = trie.getValue();
 
@@ -81,20 +68,26 @@ public class WorldStateCopier {
     }
 
     private void processStorageNodeHash(Hash hash) throws IOException {
+        processNode(hash, this.sourceStorageTrieStore, this.targetStorageTrieStore, KeyValueStoreType.STORAGE);
+    }
+
+    private Trie processNode(Hash hash, TrieStore sourceStore, TrieStore targetStore, KeyValueStoreType keyValueStoreType) throws IOException {
         Trie trie;
 
-        if (this.targetStorageTrieStore.exists(hash))
-            trie = this.targetStorageTrieStore.retrieve(hash);
+        if (targetStore.exists(hash))
+            trie = targetStore.retrieve(hash);
         else {
-            trie = this.sourceStorageTrieStore.retrieve(hash);
-            this.targetStorageTrieStore.save(trie);
+            trie = sourceStore.retrieve(hash);
+            targetStore.save(trie);
         }
 
         Hash[] subhashes = trie.getSubHashes();
 
         for (int k = 0; k < subhashes.length; k++)
             if (subhashes[k] != null)
-                this.hashes.add(new KeyInformation(KeyValueStoreType.STORAGE, subhashes[k]));
+                this.hashes.add(new KeyInformation(keyValueStoreType, subhashes[k]));
+
+        return trie;
     }
 
     private void processCodeHash(Hash hash) throws IOException {
