@@ -15,6 +15,7 @@ import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.vms.eth.BlockData;
+import com.ajlopez.blockchain.vms.eth.ExecutionResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,13 +71,29 @@ public class MinerProcessor {
         BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, parent.getDifficulty());
 
         List<Transaction> transactions = this.transactionPool.getTransactions();
-        List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
+        List<Transaction> executedTransactions = new ArrayList<>();
+        List<TransactionReceipt> executedTransactionReceipts = new ArrayList<>();
+
+        // TODO take into account block gas limit
+        for (Transaction transaction : transactions) {
+            ExecutionResult executionResult = transactionExecutor.executeTransaction(transaction, blockData);
+
+            if (executionResult == null)
+                continue;
+
+            executedTransactions.add(transaction);
+
+            TransactionReceipt transactionReceipt = new TransactionReceipt(executionResult.getGasUsed(), executionResult.wasSuccesful(), executionResult.getLogs());
+
+            executedTransactionReceipts.add(transactionReceipt);
+        }
+
+        executionContext.commit();
 
         // TODO use uncles
-        Block block = new Block(parent, null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty());
+        Block block = new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty());
         BlockHeader blockHeader = block.getHeader();
         byte[] encodedHeader = BlockHeaderEncoder.encode(blockHeader);
-        byte[] encodedNonce = new byte[Long.BYTES];
 
         DataWord target = null;
 
@@ -98,7 +115,7 @@ public class MinerProcessor {
                 break;
         }
 
-        return new Block(BlockHeaderEncoder.decode(encodedHeader), null, transactions);
+        return new Block(BlockHeaderEncoder.decode(encodedHeader), null, executedTransactions);
     }
 
     public void start() {
