@@ -92,22 +92,20 @@ public class MinerProcessor {
 
         // TODO use uncles
         Block block = new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty());
+
+        if (block.getDifficulty().compareTo(Difficulty.ONE) <= 0)
+            return block;
+
         BlockHeader blockHeader = block.getHeader();
         byte[] encodedHeader = BlockHeaderEncoder.encode(blockHeader);
 
-        DataWord target = null;
-
-        if (block.getDifficulty().compareTo(Difficulty.ONE) > 0)
-            target = block.getDifficulty().toTarget();
+        DataWord target = block.getDifficulty().toTarget();
 
         // TODO improve exit
         while (true) {
             int nbit = random.nextInt(Long.BYTES * 8);
             int nbyte = nbit / 8;
             encodedHeader[encodedHeader.length - Long.BYTES + nbyte] ^= 1 << (nbit % 8);
-
-            if (target == null)
-                break;
 
             Hash hash = HashUtils.calculateHash(encodedHeader);
 
