@@ -93,6 +93,10 @@ public class MinerProcessor {
         // TODO use uncles
         Block block = new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty());
 
+        return calculateProofOfWork(block);
+    }
+
+    private Block calculateProofOfWork(Block block) {
         if (block.getDifficulty().compareTo(Difficulty.ONE) <= 0)
             return block;
 
@@ -113,7 +117,8 @@ public class MinerProcessor {
                 break;
         }
 
-        return new Block(BlockHeaderEncoder.decode(encodedHeader), null, executedTransactions);
+        // TODO use uncles
+        return new Block(BlockHeaderEncoder.decode(encodedHeader), null, block.getTransactions());
     }
 
     public void start() {
