@@ -59,6 +59,12 @@ public class MinerProcessor {
     }
 
     public Block mineBlock(Block parent) throws IOException {
+        Block block = buildNewBlock(parent);
+
+        return calculateProofOfWork(block);
+    }
+
+    private Block buildNewBlock(Block parent) throws IOException {
         Hash parentStateRootHash = parent.getHeader().getStateRootHash();
         AccountStore accountStore = this.stores.getAccountStoreProvider().retrieve(parentStateRootHash);
         ExecutionContext executionContext = new TopExecutionContext(accountStore, this.stores.getTrieStorageProvider(), this.stores.getCodeStore());
@@ -91,9 +97,7 @@ public class MinerProcessor {
         executionContext.commit();
 
         // TODO use uncles
-        Block block = new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty());
-
-        return calculateProofOfWork(block);
+        return new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty());
     }
 
     private Block calculateProofOfWork(Block block) {
