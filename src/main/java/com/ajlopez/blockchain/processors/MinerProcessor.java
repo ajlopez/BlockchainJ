@@ -137,7 +137,7 @@ public class MinerProcessor {
         while (!this.stopped) {
             try {
                 this.process();
-                // TOD sleep period by configuration
+                // TODO sleep period by configuration
                 Thread.sleep(1000);
             } catch (Exception e) {
                 e.printStackTrace();

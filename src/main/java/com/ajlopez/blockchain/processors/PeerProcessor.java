@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain.processors;
 
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 

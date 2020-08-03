@@ -3,10 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ajlopez on 16/12/2017.
@@ -34,7 +31,7 @@ public class OrphanBlocks {
         List<Block> children = this.orphansByParent.get(block.getHash());
 
         if (children == null)
-            return new ArrayList<>();
+            return Collections.emptyList();
 
         return children;
     }
@@ -44,6 +41,9 @@ public class OrphanBlocks {
 
         List<Block> siblings = this.orphansByParent.get(block.getParentHash());
 
+        if (siblings == null)
+            return;
+        
         siblings.remove(block);
 
         if (siblings.isEmpty())
