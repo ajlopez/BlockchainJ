@@ -43,7 +43,7 @@ public class OrphanBlocks {
 
         if (siblings == null)
             return;
-        
+
         siblings.remove(block);
 
         if (siblings.isEmpty())

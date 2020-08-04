@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class TransactionPool {
     private final Set<Transaction> transactions = new HashSet<>();
+    private final Map<Address, Set<Transaction>> transactionsBySender = new HashMap<>();
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     public List<Transaction> addTransaction(Transaction transaction) {
@@ -20,8 +21,22 @@ public class TransactionPool {
         this.lock.writeLock().lock();
 
         try {
-            if (!this.transactions.add(transaction))
+            if (this.transactions.contains(transaction))
                 return Collections.emptyList();
+
+            this.transactions.add(transaction);
+
+            Address sender = transaction.getSender();
+            Set<Transaction> senderTransactions;
+
+            if (!this.transactionsBySender.containsKey(sender)) {
+                senderTransactions = new HashSet<>();
+                this.transactionsBySender.put(sender, senderTransactions);
+            }
+            else
+                senderTransactions = this.transactionsBySender.get(sender);
+
+            senderTransactions.add(transaction);
         }
         finally {
             this.lock.writeLock().unlock();
@@ -37,7 +52,11 @@ public class TransactionPool {
         this.lock.writeLock().lock();
 
         try {
+            if (!this.transactions.contains(transaction))
+                return;
+
             this.transactions.remove(transaction);
+            this.transactionsBySender.get(transaction.getSender()).remove(transaction);
         }
         finally {
             this.lock.writeLock().unlock();
@@ -65,9 +84,12 @@ public class TransactionPool {
         this.lock.readLock().lock();
 
         try {
-            for (Transaction transaction : this.transactions)
-                if (transaction.getSender().equals(sender))
-                    list.add(transaction);
+            Set<Transaction> senderTransactions = this.transactionsBySender.get(sender);
+
+            if (senderTransactions == null)
+                return Collections.emptyList();
+
+            list.addAll(senderTransactions);
         }
         finally {
             this.lock.readLock().unlock();
@@ -91,8 +113,13 @@ public class TransactionPool {
         this.lock.readLock().lock();
 
         try {
-            for (Transaction transaction : this.transactions)
-                if (transaction.getSender().equals(sender) && transaction.getNonce() >= firstNonce)
+            Set<Transaction> senderTransactions = this.transactionsBySender.get(sender);
+
+            if (senderTransactions == null)
+                return Collections.emptyList();
+
+            for (Transaction transaction : senderTransactions)
+                if (transaction.getNonce() >= firstNonce)
                     list.add(transaction);
         }
         finally {
