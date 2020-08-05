@@ -130,13 +130,20 @@ public class TransactionPool {
 
         List<Transaction> result = new ArrayList<>();
         long expectedNonce = firstNonce;
+        long lastNonce = -1;
 
         for (Transaction transaction : list) {
-            if (transaction.getNonce() > expectedNonce)
+            if (transaction.getNonce() == lastNonce) {
+                result.add(transaction);
+                continue;
+            }
+
+            if (transaction.getNonce() != expectedNonce)
                 break;
 
             result.add(transaction);
 
+            lastNonce = expectedNonce;
             expectedNonce = transaction.getNonce() + 1;
         }
 
