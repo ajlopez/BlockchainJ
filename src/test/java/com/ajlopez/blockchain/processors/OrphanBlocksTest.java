@@ -5,7 +5,6 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.merkle.MerkleTree;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 

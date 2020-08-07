@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.store;
 
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;

@@ -22,7 +22,9 @@ public class StatusEncoder {
 
     public static Status decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
-        // TODO check number of slices
+
+        if (bytes.length != 5)
+            throw new IllegalArgumentException("Invalid status encoding");
 
         PeerId nodeid = RLPEncoder.decodePeerId(bytes[0]);
         long networkNumber = RLPEncoder.decodeUnsignedLong(bytes[1]);
