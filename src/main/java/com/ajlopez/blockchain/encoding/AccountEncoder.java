@@ -11,6 +11,7 @@ public class AccountEncoder {
     private AccountEncoder() { }
 
     public static byte[] encode(Account account) {
+        // TODO improve encoding empty or semi-empty account
         byte[] rlpBalance = RLPEncoder.encodeCoin(account.getBalance());
         byte[] rlpNonce = RLPEncoder.encodeUnsignedLong(account.getNonce());
 
@@ -25,8 +26,11 @@ public class AccountEncoder {
     }
 
     public static Account decode(byte[] encoded) {
-        // TODO check the number of parts
         byte[][] bytes = RLP.decodeList(encoded);
+
+        // TODO check other possible counts
+        if (bytes.length > 5)
+            throw new IllegalArgumentException("Invalid account encoding");
 
         Coin balance = RLPEncoder.decodeCoin(bytes[0]);
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[1]);

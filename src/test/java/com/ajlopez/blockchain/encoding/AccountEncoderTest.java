@@ -6,12 +6,18 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Created by ajlopez on 19/11/2017.
  */
 public class AccountEncoderTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void encodeDecodeAccountWithZeroBalanceAndZeroNonce() {
         Account account = new Account();
@@ -100,5 +106,20 @@ public class AccountEncoderTest {
         Assert.assertEquals(0, result.getCodeLength());
         Assert.assertNull(result.getCodeHash());
         Assert.assertNull(result.getStorageHash());
+    }
+
+    @Test
+    public void decodeInvalidEncodedAccount() {
+        byte[] bytes1 = FactoryHelper.createRandomBytes(42);
+        byte[] bytes2 = FactoryHelper.createRandomBytes(42);
+        byte[] bytes3 = FactoryHelper.createRandomBytes(42);
+        byte[] bytes4 = FactoryHelper.createRandomBytes(42);
+        byte[] bytes5 = FactoryHelper.createRandomBytes(42);
+        byte[] bytes6 = FactoryHelper.createRandomBytes(42);
+        byte[] encoded = RLP.encodeList(RLP.encode(bytes1), RLP.encode(bytes2), RLP.encode(bytes3), RLP.encode(bytes4), RLP.encode(bytes5), RLP.encode(bytes6));
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid account encoding");
+        AccountEncoder.decode(encoded);
     }
 }
