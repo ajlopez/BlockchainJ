@@ -20,6 +20,9 @@ public class BlockInformationEncoder {
     public static BlockInformation decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
 
+        if (bytes.length != 2)
+            throw new IllegalArgumentException("Invalid block information encoding");
+
         BlockHash blockHash = RLPEncoder.decodeBlockHash(bytes[0]);
         Difficulty totalDifficulty = RLPEncoder.decodeDifficulty(bytes[1]);
 
