@@ -132,6 +132,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [ReGenesis Explained](https://medium.com/@mandrigin/regenesis-explained-97540f457807)
 - [Encrypted Blockchain Databases](https://eprint.iacr.org/2020/827.pdf)
 - [Simpler Ethereum sync: Major/minor state snapshots, blockchain files, receipt files](https://ethresear.ch/t/simpler-ethereum-sync-major-minor-state-snapshots-blockchain-files-receipt-files/7672)
+- [TurboGeth Staged Sync](https://github.com/ledgerwatch/turbo-geth/tree/master/eth/stagedsync)
 
 ## To Do
 
