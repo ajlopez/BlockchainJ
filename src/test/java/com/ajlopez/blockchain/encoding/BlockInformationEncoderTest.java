@@ -36,7 +36,7 @@ public class BlockInformationEncoderTest {
     }
 
     @Test
-    public void decodeInvalidEncodedAccount() {
+    public void decodeInvalidEncodedBlockInformation() {
         byte[] bytes = FactoryHelper.createRandomBytes(42);
         byte[] encoded = RLP.encodeList(RLP.encode(bytes));
 

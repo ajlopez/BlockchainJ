@@ -30,6 +30,9 @@ public class BlocksInformationEncoder {
     public static BlocksInformation decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
 
+        if (bytes.length != 2)
+            throw new IllegalArgumentException("Invalid blocks information encoding");
+
         long position = RLPEncoder.decodeLong(bytes[0]);
 
         byte[][] rlpInfos = RLP.decodeList(bytes[1]);

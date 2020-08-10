@@ -108,6 +108,7 @@ public class RLP {
         int length;
         int offset = 1;
 
+        // TODO Check b0 >= LIST_PREFIX
         if (b0 > BASE_LIST_PREFIX) {
             offset = b0 - BASE_LIST_PREFIX + 1;
             length = bytesToLength(encoded, 1, b0 - BASE_LIST_PREFIX);
