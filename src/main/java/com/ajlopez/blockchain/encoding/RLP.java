@@ -105,10 +105,13 @@ public class RLP {
 
     public static byte[][] decodeList(byte[] encoded) {
         int b0 = encoded[0] & 0xff;
+
+        if (b0 < LIST_PREFIX)
+            throw new IllegalArgumentException("Invalid encoded list");
+
         int length;
         int offset = 1;
 
-        // TODO Check b0 >= LIST_PREFIX
         if (b0 > BASE_LIST_PREFIX) {
             offset = b0 - BASE_LIST_PREFIX + 1;
             length = bytesToLength(encoded, 1, b0 - BASE_LIST_PREFIX);

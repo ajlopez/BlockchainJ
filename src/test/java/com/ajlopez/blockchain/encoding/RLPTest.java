@@ -1,12 +1,18 @@
 package com.ajlopez.blockchain.encoding;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Created by ajlopez on 12/08/2017.
  */
 public class RLPTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void encodeSingleByte() {
         byte[] result = RLP.encode(new byte[] { 0x01 });
@@ -479,5 +485,13 @@ public class RLPTest {
         Assert.assertArrayEquals(element2, result[1]);
 
         Assert.assertEquals(2 + element1.length + element2.length, encoded.length);
+    }
+
+    @Test
+    public void decodeInvalidList() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid encoded list");
+
+        RLP.decodeList(new byte[1]);
     }
 }
