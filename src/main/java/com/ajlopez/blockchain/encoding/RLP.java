@@ -48,6 +48,9 @@ public class RLP {
     public static byte[] decode(byte[] bytes) {
         int b0 = bytes[0] & 0xff;
 
+        if (b0 >= LIST_PREFIX)
+            throw new IllegalArgumentException("Invalid encoded item");
+
         if (bytes.length == 1)
             if (b0 == EMPTY_MARK)
                 return ByteUtils.EMPTY_BYTE_ARRAY;

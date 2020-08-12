@@ -494,4 +494,14 @@ public class RLPTest {
 
         RLP.decodeList(new byte[1]);
     }
+
+    @Test
+    public void decodeInvalidItem() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid encoded item");
+
+        byte[] encoded = RLP.encodeList();
+
+        RLP.decode(encoded);
+    }
 }
