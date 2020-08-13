@@ -16,7 +16,10 @@ public class AccountEncoder {
         byte[] rlpNonce = RLPEncoder.encodeUnsignedLong(account.getNonce());
 
         if (account.getCodeLength() == 0 && account.getCodeHash() == null && account.getStorageHash() == null)
-            return RLP.encodeList(rlpBalance, rlpNonce);
+            if (account.getNonce() == 0)
+                return RLP.encodeList(rlpBalance);
+            else
+                return RLP.encodeList(rlpBalance, rlpNonce);
 
         byte[] rlpCodeLength = RLPEncoder.encodeUnsignedLong(account.getCodeLength());
         byte[] rlpCodeHash = RLPEncoder.encodeHash(account.getCodeHash());
@@ -33,6 +36,10 @@ public class AccountEncoder {
             throw new IllegalArgumentException("Invalid account encoding");
 
         Coin balance = RLPEncoder.decodeCoin(bytes[0]);
+
+        if (bytes.length == 1)
+            return new Account(balance, 0, 0, null, null);
+
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[1]);
 
         if (bytes.length == 2)
