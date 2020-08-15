@@ -23,6 +23,7 @@ public class AccountEncoder {
 
         byte[] rlpCodeLength = RLPEncoder.encodeUnsignedLong(account.getCodeLength());
         byte[] rlpCodeHash = RLPEncoder.encodeHash(account.getCodeHash());
+
         byte[] rlpStorageHash = RLPEncoder.encodeHash(account.getStorageHash());
 
         return RLP.encodeList(rlpBalance, rlpNonce, rlpCodeLength, rlpCodeHash, rlpStorageHash);

@@ -465,6 +465,7 @@ public class ChildExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
+        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
     }
 
     @Test

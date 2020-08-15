@@ -166,7 +166,7 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
 
         this.setCode(codeHash, code);
 
-        accountState.setCodeHash(codeHash);
+        accountState.setCodeData(code.length, codeHash);
     }
 
     public void setCode(Hash hash, byte[] code) {

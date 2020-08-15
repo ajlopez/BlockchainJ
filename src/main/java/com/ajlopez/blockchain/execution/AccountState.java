@@ -11,20 +11,21 @@ import com.ajlopez.blockchain.state.Trie;
 public class AccountState {
     private Coin balance;
     private long nonce;
+    private long codeLength;
     private Hash codeHash;
     private Hash storageHash;
 
     private boolean changed;
 
     public static AccountState fromAccount(Account account) {
-        return new AccountState(account.getBalance(), account.getNonce(), account.getCodeHash(), account.getStorageHash());
+        return new AccountState(account.getBalance(), account.getNonce(), account.getCodeLength(), account.getCodeHash(), account.getStorageHash());
     }
 
     public AccountState() {
-        this(Coin.ZERO, 0, null, null);
+        this(Coin.ZERO, 0, 0, null, null);
     }
 
-    public AccountState(Coin balance, long nonce, Hash codeHash, Hash storageHash) {
+    public AccountState(Coin balance, long nonce, long codeLength, Hash codeHash, Hash storageHash) {
         if (balance == null)
             balance = Coin.ZERO;
 
@@ -33,6 +34,7 @@ public class AccountState {
 
         this.balance = balance;
         this.nonce = nonce;
+        this.codeLength = codeLength;
         this.codeHash = codeHash;
         this.storageHash = normalizeStorageHash(storageHash);
     }
@@ -68,21 +70,24 @@ public class AccountState {
         this.changed = true;
     }
 
+    public long getCodeLength() { return this.codeLength; }
+
     public Hash getCodeHash() {
         return this.codeHash;
     }
 
-    public void setCodeHash(Hash codeHash) {
-        if (this.codeHash == null && codeHash == null)
+    public void setCodeData(long codeLength, Hash codeHash) {
+        if (this.codeHash == null && codeHash == null && this.codeLength == 0 && codeLength == 0)
             return;
 
-        if (this.codeHash != null && this.codeHash.equals(codeHash))
+        if (this.codeHash != null && this.codeHash.equals(codeHash) && this.codeLength == codeLength)
             return;
 
         if (this.codeHash != null)
             throw new UnsupportedOperationException("Cannot change code hash");
 
         this.codeHash = codeHash;
+        this.codeLength = codeLength;
         this.changed = true;
     }
 
@@ -106,7 +111,7 @@ public class AccountState {
     }
 
     public Account toAccount() {
-        return new Account(this.balance, this.nonce, 0, this.codeHash, this.storageHash);
+        return new Account(this.balance, this.nonce, this.codeLength, this.codeHash, this.storageHash);
     }
 
     public boolean wasChanged() {
@@ -114,7 +119,7 @@ public class AccountState {
     }
 
     public AccountState cloneState() {
-        AccountState clonedState = new AccountState(this.balance, this.nonce, this.codeHash, this.storageHash);
+        AccountState clonedState = new AccountState(this.balance, this.nonce, this.codeLength, this.codeHash, this.storageHash);
 
         clonedState.changed = this.changed;
 
