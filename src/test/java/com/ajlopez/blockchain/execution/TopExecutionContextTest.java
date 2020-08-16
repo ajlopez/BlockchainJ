@@ -437,6 +437,7 @@ public class TopExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
+        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
     }
 
     @Test
@@ -455,11 +456,13 @@ public class TopExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
+        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
 
         executionContext.commit();
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
+        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
 
         Assert.assertArrayEquals(code, codeStore.getCode(executionContext.getCodeHash(address)));
     }
@@ -480,9 +483,11 @@ public class TopExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
+        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
 
         executionContext.rollback();
 
         Assert.assertNull(executionContext.getCodeHash(address));
+        Assert.assertEquals(0, executionContext.getAccountState(address).getCodeLength());
     }
 }
