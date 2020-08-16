@@ -21,6 +21,8 @@ public interface ExecutionContext extends CodeProvider {
 
     Hash getCodeHash(Address address) throws IOException;
 
+    long getCodeLength(Address address) throws IOException;
+
     void commit() throws IOException;
 
     void rollback();

@@ -52,6 +52,9 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
     public Hash getCodeHash(Address address) throws IOException { return this.getAccountState(address).getCodeHash(); }
 
     @Override
+    public long getCodeLength(Address address) throws IOException { return this.getAccountState(address).getCodeLength(); }
+
+    @Override
     public void commit() throws IOException {
         for (Hash hash : this.newCodes)
             this.updateCode(hash, this.codes.get(hash));

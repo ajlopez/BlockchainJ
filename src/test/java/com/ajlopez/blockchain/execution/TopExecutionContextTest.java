@@ -437,7 +437,7 @@ public class TopExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
-        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
+        Assert.assertEquals(code.length, executionContext.getCodeLength(address));
     }
 
     @Test
@@ -456,13 +456,13 @@ public class TopExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
-        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
+        Assert.assertEquals(code.length, executionContext.getCodeLength(address));
 
         executionContext.commit();
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
-        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
+        Assert.assertEquals(code.length, executionContext.getCodeLength(address));
 
         Assert.assertArrayEquals(code, codeStore.getCode(executionContext.getCodeHash(address)));
     }
@@ -483,11 +483,11 @@ public class TopExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
-        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
+        Assert.assertEquals(code.length, executionContext.getCodeLength(address));
 
         executionContext.rollback();
 
         Assert.assertNull(executionContext.getCodeHash(address));
-        Assert.assertEquals(0, executionContext.getAccountState(address).getCodeLength());
+        Assert.assertEquals(0, executionContext.getCodeLength(address));
     }
 }

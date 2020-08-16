@@ -465,7 +465,7 @@ public class ChildExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
-        Assert.assertEquals(code.length, executionContext.getAccountState(address).getCodeLength());
+        Assert.assertEquals(code.length, executionContext.getCodeLength(address));
     }
 
     @Test
@@ -484,6 +484,7 @@ public class ChildExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
+        Assert.assertEquals(code.length, executionContext.getCodeLength(address));
 
         executionContext.commit();
 
@@ -492,6 +493,7 @@ public class ChildExecutionContextTest {
 
         Assert.assertNotNull(parentExecutionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, parentExecutionContext.getCode(address));
+        Assert.assertEquals(code.length, executionContext.getCodeLength(address));
     }
 
     @Test
@@ -510,10 +512,12 @@ public class ChildExecutionContextTest {
 
         Assert.assertNotNull(executionContext.getCodeHash(address));
         Assert.assertArrayEquals(code, executionContext.getCode(address));
+        Assert.assertEquals(code.length, executionContext.getCodeLength(address));
 
         executionContext.rollback();
 
         Assert.assertNull(executionContext.getCodeHash(address));
         Assert.assertNull(parentExecutionContext.getCodeHash(address));
+        Assert.assertEquals(0, executionContext.getCodeLength(address));
     }
 }
