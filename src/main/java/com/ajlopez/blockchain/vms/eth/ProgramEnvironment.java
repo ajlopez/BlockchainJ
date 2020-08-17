@@ -25,6 +25,8 @@ public class ProgramEnvironment {
 
     public byte[] getCode(Address address) throws IOException { return this.codeProvider.getCode(address); }
 
+    public long getCodeLength(Address address)  throws IOException { return this.codeProvider.getCodeLength(address); }
+
     public Address getOrigin() { return this.messageData.getOrigin(); }
 
     public Address getCaller() { return this.messageData.getCaller(); }

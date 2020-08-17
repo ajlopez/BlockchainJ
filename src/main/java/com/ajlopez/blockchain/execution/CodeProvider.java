@@ -9,4 +9,6 @@ import java.io.IOException;
  */
 public interface CodeProvider {
     byte[] getCode(Address address) throws IOException;
+
+    long getCodeLength(Address address) throws IOException;
 }
