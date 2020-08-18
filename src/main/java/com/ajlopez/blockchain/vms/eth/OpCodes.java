@@ -50,6 +50,9 @@ public class OpCodes {
     public static final byte GASPRICE = 0x3a;
     public static final byte EXTCODESIZE = 0x3b;
     public static final byte EXTCODECOPY = 0x3c;
+    // TODO returndatasize 0x3d
+    // TODO returndatacopy 0x3e
+    public static final byte EXTCODEHASH = 0x3f;
 
     public static final byte COINBASE = 0x41;
     public static final byte TIMESTAMP = 0x42;

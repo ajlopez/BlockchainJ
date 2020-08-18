@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.vms.eth;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Difficulty;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.CodeProvider;
 
 import java.io.IOException;
@@ -26,6 +27,8 @@ public class ProgramEnvironment {
     public byte[] getCode(Address address) throws IOException { return this.codeProvider.getCode(address); }
 
     public long getCodeLength(Address address)  throws IOException { return this.codeProvider.getCodeLength(address); }
+
+    public Hash getCodeHash(Address address)  throws IOException { return this.codeProvider.getCodeHash(address); }
 
     public Address getOrigin() { return this.messageData.getOrigin(); }
 

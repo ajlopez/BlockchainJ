@@ -10,6 +10,7 @@ import com.ajlopez.blockchain.store.CodeStore;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
+import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -1358,6 +1359,38 @@ public class VirtualMachineTest {
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
         Assert.assertEquals(DataWord.fromUnsignedInteger(100), stack.pop());
+    }
+
+    @Test
+    public void executeExtCodeHashOperationForAccountWithCode() throws IOException {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        byte[] code = FactoryHelper.createRandomBytes(100);
+        Hash codeHash = HashUtils.calculateHash(code);
+        codeStore.putCode(codeHash, code);
+        Account account = new Account(Coin.ZERO, 0, code.length, codeHash, null);
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+        accountStore.putAccount(address, account);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+
+        byte bytecode[] = new byte[1 + 20 + 2];
+        bytecode[0] = OpCodes.PUSH20;
+        System.arraycopy(address.getBytes(), 0, bytecode, 1, Address.ADDRESS_BYTES);
+        bytecode[21] = OpCodes.EXTCODEHASH;
+        bytecode[22] = OpCodes.STOP;
+
+        virtualMachine.execute(bytecode);
+
+        // TODO Check gas cost
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromBytes(codeHash.getBytes()), stack.pop());
     }
 
     @Test
