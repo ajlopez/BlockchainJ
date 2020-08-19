@@ -136,6 +136,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [EIP-1052: EXTCODEHASH opcode](https://eips.ethereum.org/EIPS/eip-1052)
 - [What is the EXTCODEHASH?](https://soliditydeveloper.com/extcodehash)
 - [Ethereum Virtual Machine Opcodes](https://ethervm.io/)
+- [Ethereum Classic Simplicity](https://etherplan.com/2020/08/19/ethereum-classic-simplicity/12470/)
 
 ## To Do
 
