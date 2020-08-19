@@ -422,7 +422,9 @@ public class VirtualMachine {
                 case OpCodes.EXTCODEHASH:
                     Hash codeHash = this.programEnvironment.getCodeHash(stack.pop().toAddress());
 
-                    // TODO case null hash
+                    if (codeHash == null)
+                        codeHash = Hash.EMPTY_BYTES_HASH;
+
                     this.stack.push(DataWord.fromBytes(codeHash.getBytes()));
 
                     break;

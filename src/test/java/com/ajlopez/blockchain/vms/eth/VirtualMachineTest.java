@@ -1394,6 +1394,35 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeExtCodeHashOperationForAccountWithoutCode() throws IOException {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        Account account = new Account(Coin.ZERO, 0, 0, null, null);
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+        accountStore.putAccount(address, account);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+
+        byte bytecode[] = new byte[1 + 20 + 2];
+        bytecode[0] = OpCodes.PUSH20;
+        System.arraycopy(address.getBytes(), 0, bytecode, 1, Address.ADDRESS_BYTES);
+        bytecode[21] = OpCodes.EXTCODEHASH;
+        bytecode[22] = OpCodes.STOP;
+
+        virtualMachine.execute(bytecode);
+
+        // TODO Check gas cost
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals("0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470", stack.pop().toNormalizedString());
+    }
+
+    @Test
     public void executeExtCodeCopyOperationForUnknownAccount() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(new Trie());

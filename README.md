@@ -133,6 +133,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Encrypted Blockchain Databases](https://eprint.iacr.org/2020/827.pdf)
 - [Simpler Ethereum sync: Major/minor state snapshots, blockchain files, receipt files](https://ethresear.ch/t/simpler-ethereum-sync-major-minor-state-snapshots-blockchain-files-receipt-files/7672)
 - [TurboGeth Staged Sync](https://github.com/ledgerwatch/turbo-geth/tree/master/eth/stagedsync)
+- [EIP-1052: EXTCODEHASH opcode](https://eips.ethereum.org/EIPS/eip-1052)
+- [What is the EXTCODEHASH?](https://soliditydeveloper.com/extcodehash)
+- [Ethereum Virtual Machine Opcodes](https://ethervm.io/)
 
 ## To Do
 
