@@ -1318,9 +1318,9 @@ public class VirtualMachineTest {
 
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
 
-        virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x28, OpCodes.EXTCODESIZE, OpCodes.STOP });
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x28, OpCodes.EXTCODESIZE, OpCodes.STOP });
 
-        // TODO Check gas cost
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.EXTCODESIZE.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1350,9 +1350,9 @@ public class VirtualMachineTest {
         bytecode[21] = OpCodes.EXTCODESIZE;
         bytecode[22] = OpCodes.STOP;
 
-        virtualMachine.execute(bytecode);
+        ExecutionResult executionResult = virtualMachine.execute(bytecode);
 
-        // TODO Check gas cost
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.EXTCODESIZE.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1447,7 +1447,6 @@ public class VirtualMachineTest {
         byte[] expected = new byte[48];
         Assert.assertArrayEquals(expected, memory.getBytes(0, 48));
     }
-
 
     @Test
     public void executeExtCodeCopyOperationForAccountWithCode() throws IOException {

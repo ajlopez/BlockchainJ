@@ -76,6 +76,7 @@ public class VirtualMachine {
         opCodeFees[OpCodes.SSTORE] = FeeSchedule.SSET;
 
         opCodeFees[OpCodes.GASPRICE] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.EXTCODESIZE] = FeeSchedule.EXTCODESIZE;
 
         opCodeFees[OpCodes.GAS] = FeeSchedule.BASE;
 

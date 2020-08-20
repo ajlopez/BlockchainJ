@@ -18,6 +18,7 @@ public enum FeeSchedule {
     TRANSFER(21000),
     DATAZERO(4),
     DATANONZERO(68),
+    EXTCODESIZE(700),
     CREATION(32000);
 
     private long value;
