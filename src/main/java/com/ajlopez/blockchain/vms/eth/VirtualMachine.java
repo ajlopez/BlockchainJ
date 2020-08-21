@@ -77,6 +77,7 @@ public class VirtualMachine {
 
         opCodeFees[OpCodes.GASPRICE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.EXTCODESIZE] = FeeSchedule.EXTCODESIZE;
+        opCodeFees[OpCodes.EXTCODEHASH] = FeeSchedule.EXTCODEHASH;
 
         opCodeFees[OpCodes.GAS] = FeeSchedule.BASE;
 

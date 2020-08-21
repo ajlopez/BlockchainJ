@@ -19,6 +19,7 @@ public enum FeeSchedule {
     DATAZERO(4),
     DATANONZERO(68),
     EXTCODESIZE(700),
+    EXTCODEHASH(400),
     CREATION(32000);
 
     private long value;

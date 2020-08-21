@@ -1382,9 +1382,9 @@ public class VirtualMachineTest {
         bytecode[21] = OpCodes.EXTCODEHASH;
         bytecode[22] = OpCodes.STOP;
 
-        virtualMachine.execute(bytecode);
+        ExecutionResult executionResult = virtualMachine.execute(bytecode);
 
-        // TODO Check gas cost
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.EXTCODEHASH.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
@@ -1411,9 +1411,9 @@ public class VirtualMachineTest {
         bytecode[21] = OpCodes.EXTCODEHASH;
         bytecode[22] = OpCodes.STOP;
 
-        virtualMachine.execute(bytecode);
+        ExecutionResult executionResult = virtualMachine.execute(bytecode);
 
-        // TODO Check gas cost
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.EXTCODEHASH.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
 
