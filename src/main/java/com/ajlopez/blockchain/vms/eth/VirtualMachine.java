@@ -73,7 +73,6 @@ public class VirtualMachine {
         opCodeFees[OpCodes.MSTORE8] = FeeSchedule.VERYLOW;
         opCodeFees[OpCodes.MSIZE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.SLOAD] = FeeSchedule.SLOAD;
-        opCodeFees[OpCodes.SSTORE] = FeeSchedule.SSET;
 
         opCodeFees[OpCodes.GASPRICE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.EXTCODESIZE] = FeeSchedule.EXTCODESIZE;
@@ -492,6 +491,20 @@ public class VirtualMachine {
 
                     word1 = this.stack.pop();
                     word2 = this.stack.pop();
+
+                    DataWord originalValue = this.storage.getValue(word1);
+
+                    long gasCost;
+
+                    if (originalValue.isZero())
+                        gasCost = FeeSchedule.SSET.getValue();
+                    else
+                        gasCost = FeeSchedule.SRESET.getValue();
+
+                    gasUsed += gasCost;
+
+                    // TODO Throw exception is gas is exhausted
+                    // TODO Refund logic
 
                     this.storage.setValue(word1, word2);
 

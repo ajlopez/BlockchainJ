@@ -446,7 +446,6 @@ public class VirtualMachineTest {
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
 
-        // TODO other SSTORE cases for gas cost
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getStack();
@@ -455,6 +454,24 @@ public class VirtualMachineTest {
         Assert.assertTrue(stack.isEmpty());
 
         Assert.assertEquals(DataWord.fromUnsignedInteger(42), storage.getValue(DataWord.ONE));
+    }
+
+    @Test
+    public void executeStorageStoreTwice() throws IOException {
+        Storage storage = new MapStorage();
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), storage);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE, OpCodes.PUSH1, 0x10, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
+
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 4 + FeeSchedule.SSET.getValue() + FeeSchedule.SRESET.getValue(), executionResult.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Assert.assertEquals(DataWord.fromUnsignedInteger(16), storage.getValue(DataWord.ONE));
     }
 
     @Test
