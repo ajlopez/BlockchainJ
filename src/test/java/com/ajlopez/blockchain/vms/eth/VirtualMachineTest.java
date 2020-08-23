@@ -457,6 +457,28 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeStorageStoreWithoutEnoughGas() throws IOException {
+        Storage storage = new MapStorage();
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue() / 2), storage);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
+
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof VirtualMachineException);
+        Assert.assertEquals("Insufficient gas", executionResult.getException().getMessage());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue() / 2, executionResult.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertTrue(stack.isEmpty());
+
+        Assert.assertEquals(DataWord.ZERO, storage.getValue(DataWord.ONE));
+    }
+
+    @Test
     public void executeStorageStoreTwice() throws IOException {
         Storage storage = new MapStorage();
 
@@ -1831,6 +1853,12 @@ public class VirtualMachineTest {
 
     private static ProgramEnvironment createProgramEnvironment() {
         return createProgramEnvironment((CodeProvider)null);
+    }
+
+    private static ProgramEnvironment createProgramEnvironment(long gas) {
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, gas, Coin.ZERO, null, false);
+
+        return new ProgramEnvironment(messageData, null, null);
     }
 
     private static ProgramEnvironment createProgramEnvironment(CodeProvider codeProvider) {

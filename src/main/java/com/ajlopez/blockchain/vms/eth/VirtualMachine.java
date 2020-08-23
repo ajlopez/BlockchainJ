@@ -501,9 +501,11 @@ public class VirtualMachine {
                     else
                         gasCost = FeeSchedule.SRESET.getValue();
 
+                    if (gasUsed + gasCost > this.programEnvironment.getGas())
+                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Insufficient gas"));
+
                     gasUsed += gasCost;
 
-                    // TODO Throw exception is gas is exhausted
                     // TODO Refund logic
 
                     this.storage.setValue(word1, word2);
