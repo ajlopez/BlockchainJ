@@ -135,6 +135,33 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeAddWithoutEnoughGas() throws IOException {
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(FeeSchedule.VERYLOW.getValue() * 2), null);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
+
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertNotNull(executionResult.getException());
+        Assert.assertTrue(executionResult.getException() instanceof VirtualMachineException);
+        Assert.assertEquals("Insufficient gas", executionResult.getException().getMessage());
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertFalse(stack.isEmpty());
+        Assert.assertEquals(2, stack.size());
+
+        DataWord result = stack.pop();
+        Assert.assertNotNull(result);
+        Assert.assertEquals(DataWord.TWO, result);
+
+        DataWord result2 = stack.pop();
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(DataWord.ONE, result2);
+    }
+
+    @Test
     public void executeAddOperations() throws IOException {
         executeBinaryOp(0, 0, OpCodes.ADD, 0, FeeSchedule.VERYLOW.getValue());
         executeBinaryOp(1, 2, OpCodes.ADD, 3, FeeSchedule.VERYLOW.getValue());
