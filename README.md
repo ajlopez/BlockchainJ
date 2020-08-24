@@ -137,6 +137,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [What is the EXTCODEHASH?](https://soliditydeveloper.com/extcodehash)
 - [Ethereum Virtual Machine Opcodes](https://ethervm.io/)
 - [Ethereum Classic Simplicity](https://etherplan.com/2020/08/19/ethereum-classic-simplicity/12470/)
+- [evmone is a C++ implementation of the Ethereum Virtual Machine (EVM)](https://github.com/ethereum/evmone)
+- [EVM384 – Can we do Fast Crypto in EVM?](https://notes.ethereum.org/@axic/evm384)
+
 
 ## To Do
 
