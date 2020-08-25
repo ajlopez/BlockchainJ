@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Difficulty;
 
 /**
@@ -12,12 +11,14 @@ public class BlockData {
     private final long timestamp;
     private final Address coinbase;
     private final Difficulty difficulty;
+    private final long gasLimit;
 
-    public BlockData(long number, long timestamp, Address coinbase, Difficulty difficulty) {
+    public BlockData(long number, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit) {
         this.number = number;
         this.timestamp = timestamp;
         this.coinbase = coinbase;
         this.difficulty = difficulty;
+        this.gasLimit = gasLimit;
     }
 
     public long getNumber() { return this.number; }
@@ -27,4 +28,6 @@ public class BlockData {
     public Address getCoinbase() { return this.coinbase; }
 
     public Difficulty getDifficulty() { return this.difficulty; }
+
+    public long getGasLimit() { return this.gasLimit; }
 }

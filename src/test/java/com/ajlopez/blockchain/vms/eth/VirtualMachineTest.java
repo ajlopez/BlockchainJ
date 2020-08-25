@@ -1341,7 +1341,7 @@ public class VirtualMachineTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.ONE;
 
-        BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty);
+        BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty, 0);
 
         ProgramEnvironment programEnvironment = createProgramEnvironment(blockData);
 

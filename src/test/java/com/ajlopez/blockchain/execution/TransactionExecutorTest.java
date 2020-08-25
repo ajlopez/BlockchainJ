@@ -70,7 +70,7 @@ public class TransactionExecutorTest {
         Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, null, 60000, Coin.ONE);
 
         Address coinbase = FactoryHelper.createRandomAddress();
-        BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE);
+        BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE, 0);
 
         List<TransactionReceipt> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 
@@ -109,7 +109,7 @@ public class TransactionExecutorTest {
         Transaction transaction = new Transaction(senderAddress, receiverAddress, Coin.fromUnsignedLong(100), 0, data, 60000, Coin.ONE);
 
         Address coinbase = FactoryHelper.createRandomAddress();
-        BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE);
+        BlockData blockData = new BlockData(1,2,coinbase, Difficulty.ONE, 0);
 
         List<TransactionReceipt> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 
@@ -519,7 +519,7 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
-        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE);
+        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE, 0);
 
         List<TransactionReceipt> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 
@@ -574,7 +574,7 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
-        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE);
+        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE, 0);
 
         return executor.executeTransaction(transaction, blockData);
     }
@@ -591,7 +591,7 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
-        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE);
+        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE, 0);
 
         return executor.executeTransaction(transaction, blockData);
     }
@@ -606,7 +606,7 @@ public class TransactionExecutorTest {
 
         TransactionExecutor executor = new TransactionExecutor(new TopExecutionContext(accountStore, trieStorageProvider, codeStore));
 
-        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE);
+        BlockData blockData = new BlockData(1,2, coinbase, Difficulty.ONE, 0);
 
         List<TransactionReceipt> result = executor.executeTransactions(Collections.singletonList(transaction), blockData);
 

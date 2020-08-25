@@ -70,7 +70,7 @@ public class BlockValidatorTest {
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
         // TODO use difficulty instead of a constant
-        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE);
+        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE, 0);
 
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
@@ -142,7 +142,7 @@ public class BlockValidatorTest {
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
         // TODO use difficulty instead of a constant
-        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE);
+        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE, 0);
 
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
