@@ -26,6 +26,9 @@ public class BlockHeader {
     private final Difficulty difficulty;
     private final long nonce;
 
+    // TODO add current block gas limit
+    // TODO add gas used
+
     private BlockHash hash;
 
     public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, Hash receiptsRootHash, int unclesCount, Hash unclesRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long nonce) {

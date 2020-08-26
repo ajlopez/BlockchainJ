@@ -25,7 +25,7 @@ public class BlockDataTest {
         Assert.assertEquals(difficulty, blockData.getDifficulty());
         Assert.assertEquals(0L, blockData.getGasLimit());
     }
-    
+
     @Test
     public void simpleCreationWithGasLimit() {
         long number = 1;

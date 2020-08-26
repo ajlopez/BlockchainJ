@@ -34,14 +34,16 @@ public class MinerProcessor {
     private final List<Consumer<Block>> minedBlockConsumers = new ArrayList<>();
     private final Stores stores;
     private final Address coinbase;
+    private final long gasLimit;
 
     private boolean stopped = false;
 
-    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, Stores stores, Address coinbase) {
+    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, Stores stores, Address coinbase, long gasLimit) {
         this.blockChain = blockChain;
         this.transactionPool = transactionPool;
         this.stores = stores;
         this.coinbase = coinbase;
+        this.gasLimit = gasLimit;
     }
 
     public Block process() throws IOException {
@@ -74,7 +76,7 @@ public class MinerProcessor {
         long timestamp = System.currentTimeMillis();
 
         // TODO adjust difficulty
-        BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, parent.getDifficulty(), 0);
+        BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, parent.getDifficulty(), this.gasLimit);
 
         List<Transaction> transactions = this.transactionPool.getTransactions();
         List<Transaction> executedTransactions = new ArrayList<>();
