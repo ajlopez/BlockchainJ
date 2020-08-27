@@ -40,6 +40,8 @@ public class ProgramEnvironment {
 
     public Difficulty getDifficulty() { return this.blockData.getDifficulty(); }
 
+    public long getGasLimit() { return this.blockData.getGasLimit(); }
+
     public long getTimestamp() { return this.blockData.getTimestamp(); }
 
     public Address getCoinbase() { return this.blockData.getCoinbase(); }
