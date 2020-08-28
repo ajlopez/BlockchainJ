@@ -143,6 +143,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [EIP-1283: Net gas metering for SSTORE without dirty maps](https://eips.ethereum.org/EIPS/eip-1283)
 - [Gas cost increases for state access opcodes](https://notes.ethereum.org/@vbuterin/BkrNbeAfD)
 - [Parsing JSON is a Minefield](http://seriot.ch/parsing_json.php)
+- [Simple Subroutines for the EVM](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2315.md)
+- [Ethereum Cat Herders Update #23](https://medium.com/ethereum-cat-herders/ethereum-cat-herders-update-23-a161b6115eed)
 
 ## To Do
 
