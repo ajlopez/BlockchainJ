@@ -55,6 +55,7 @@ public class VirtualMachine {
 
         opCodeFees[OpCodes.COINBASE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.DIFFICULTY] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.GASLIMIT] = FeeSchedule.BASE;
         opCodeFees[OpCodes.TIMESTAMP] = FeeSchedule.BASE;
         opCodeFees[OpCodes.NUMBER] = FeeSchedule.BASE;
 
@@ -447,6 +448,11 @@ public class VirtualMachine {
 
                 case OpCodes.DIFFICULTY:
                     this.stack.push(this.programEnvironment.getDifficulty().toDataWord());
+
+                    break;
+
+                case OpCodes.GASLIMIT:
+                    this.stack.push(DataWord.fromUnsignedLong(this.programEnvironment.getGasLimit()));
 
                     break;
 

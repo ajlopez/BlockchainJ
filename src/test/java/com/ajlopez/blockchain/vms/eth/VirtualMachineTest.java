@@ -1362,6 +1362,30 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeGasLimit() throws IOException {
+        long number = 1;
+        long timestamp = 2;
+        Address coinbase = FactoryHelper.createRandomAddress();
+        Difficulty difficulty = Difficulty.ONE;
+
+        BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty, 12_000_000L);
+
+        ProgramEnvironment programEnvironment = createProgramEnvironment(blockData);
+
+        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.GASLIMIT });
+
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedLong(12_000_000L), stack.pop());
+    }
+
+    @Test
     public void executeCodeSizeOperation() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
 
