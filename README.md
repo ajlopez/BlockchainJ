@@ -142,6 +142,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [EIP-1087: Net gas metering for SSTORE operations](https://eips.ethereum.org/EIPS/eip-1087)
 - [EIP-1283: Net gas metering for SSTORE without dirty maps](https://eips.ethereum.org/EIPS/eip-1283)
 - [Gas cost increases for state access opcodes](https://notes.ethereum.org/@vbuterin/BkrNbeAfD)
+- [Parsing JSON is a Minefield](http://seriot.ch/parsing_json.php)
 
 ## To Do
 
