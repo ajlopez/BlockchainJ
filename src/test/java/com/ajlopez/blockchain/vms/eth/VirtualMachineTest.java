@@ -2,7 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.*;
-import com.ajlopez.blockchain.execution.CodeProvider;
+import com.ajlopez.blockchain.execution.AccountProvider;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -1903,7 +1903,7 @@ public class VirtualMachineTest {
     }
 
     private static ProgramEnvironment createProgramEnvironment() {
-        return createProgramEnvironment((CodeProvider)null);
+        return createProgramEnvironment((AccountProvider)null);
     }
 
     private static ProgramEnvironment createProgramEnvironment(long gas) {
@@ -1912,7 +1912,7 @@ public class VirtualMachineTest {
         return new ProgramEnvironment(messageData, null, null);
     }
 
-    private static ProgramEnvironment createProgramEnvironment(CodeProvider codeProvider) {
+    private static ProgramEnvironment createProgramEnvironment(AccountProvider codeProvider) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
         return new ProgramEnvironment(messageData, null, codeProvider);

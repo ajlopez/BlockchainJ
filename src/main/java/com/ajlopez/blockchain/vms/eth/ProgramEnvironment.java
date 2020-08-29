@@ -4,7 +4,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.execution.CodeProvider;
+import com.ajlopez.blockchain.execution.AccountProvider;
 
 import java.io.IOException;
 
@@ -14,9 +14,9 @@ import java.io.IOException;
 public class ProgramEnvironment {
     private final MessageData messageData;
     private final BlockData blockData;
-    private final CodeProvider codeProvider;
+    private final AccountProvider codeProvider;
 
-    public ProgramEnvironment(MessageData messageData, BlockData blockData, CodeProvider codeProvider) {
+    public ProgramEnvironment(MessageData messageData, BlockData blockData, AccountProvider codeProvider) {
         this.messageData = messageData;
         this.blockData = blockData;
         this.codeProvider = codeProvider;
