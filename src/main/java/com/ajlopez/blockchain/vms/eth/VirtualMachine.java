@@ -23,6 +23,7 @@ public class VirtualMachine {
 
     static {
         opCodeFees[OpCodes.ADDRESS] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.BALANCE] = FeeSchedule.BALANCE;
         opCodeFees[OpCodes.ORIGIN] = FeeSchedule.BASE;
         opCodeFees[OpCodes.CALLER] = FeeSchedule.BASE;
         opCodeFees[OpCodes.CALLVALUE] = FeeSchedule.BASE;
@@ -336,6 +337,11 @@ public class VirtualMachine {
 
                 case OpCodes.ADDRESS:
                     this.stack.push(DataWord.fromAddress(this.programEnvironment.getAddress()));
+
+                    break;
+
+                case OpCodes.BALANCE:
+                    this.stack.push(DataWord.fromCoin(this.programEnvironment.getBalance(stack.pop().toAddress())));
 
                     break;
 

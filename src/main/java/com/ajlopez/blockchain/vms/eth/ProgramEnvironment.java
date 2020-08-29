@@ -14,21 +14,23 @@ import java.io.IOException;
 public class ProgramEnvironment {
     private final MessageData messageData;
     private final BlockData blockData;
-    private final AccountProvider codeProvider;
+    private final AccountProvider accountProvider;
 
-    public ProgramEnvironment(MessageData messageData, BlockData blockData, AccountProvider codeProvider) {
+    public ProgramEnvironment(MessageData messageData, BlockData blockData, AccountProvider accountProvider) {
         this.messageData = messageData;
         this.blockData = blockData;
-        this.codeProvider = codeProvider;
+        this.accountProvider = accountProvider;
     }
 
     public Address getAddress() { return this.messageData.getAddress(); }
 
-    public byte[] getCode(Address address) throws IOException { return this.codeProvider.getCode(address); }
+    public Coin getBalance(Address address) throws IOException { return this.accountProvider.getBalance(address); }
 
-    public long getCodeLength(Address address)  throws IOException { return this.codeProvider.getCodeLength(address); }
+    public byte[] getCode(Address address) throws IOException { return this.accountProvider.getCode(address); }
 
-    public Hash getCodeHash(Address address)  throws IOException { return this.codeProvider.getCodeHash(address); }
+    public long getCodeLength(Address address)  throws IOException { return this.accountProvider.getCodeLength(address); }
+
+    public Hash getCodeHash(Address address)  throws IOException { return this.accountProvider.getCodeHash(address); }
 
     public Address getOrigin() { return this.messageData.getOrigin(); }
 

@@ -1401,6 +1401,58 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeBalanceOperationForAccountWithBalance() throws IOException {
+        Account account = new Account(Coin.TEN, 0, 0, null, null);
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+        accountStore.putAccount(address, account);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+
+        byte bytecode[] = new byte[22];
+        bytecode[0] = OpCodes.PUSH20;
+        System.arraycopy(address.getBytes(), 0, bytecode, 1, Address.ADDRESS_BYTES);
+        bytecode[21] = OpCodes.BALANCE;
+
+        ExecutionResult executionResult = virtualMachine.execute(bytecode);
+
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.BALANCE.getValue(), executionResult.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(10), stack.pop());
+    }
+
+    @Test
+    public void executeBalanceOperationForUnknownAccount() throws IOException {
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+
+        byte bytecode[] = new byte[22];
+        bytecode[0] = OpCodes.PUSH20;
+        System.arraycopy(address.getBytes(), 0, bytecode, 1, Address.ADDRESS_BYTES);
+        bytecode[21] = OpCodes.BALANCE;
+
+        ExecutionResult executionResult = virtualMachine.execute(bytecode);
+
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.BALANCE.getValue(), executionResult.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.ZERO, stack.pop());
+    }
+    
+    @Test
     public void executeExtCodeSizeOperationForUnknownAccount() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         AccountStore accountStore = new AccountStore(new Trie());
@@ -1912,10 +1964,10 @@ public class VirtualMachineTest {
         return new ProgramEnvironment(messageData, null, null);
     }
 
-    private static ProgramEnvironment createProgramEnvironment(AccountProvider codeProvider) {
+    private static ProgramEnvironment createProgramEnvironment(AccountProvider accountProvider) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, null, codeProvider);
+        return new ProgramEnvironment(messageData, null, accountProvider);
     }
 
     private static ProgramEnvironment createProgramEnvironment(BlockData blockData) {

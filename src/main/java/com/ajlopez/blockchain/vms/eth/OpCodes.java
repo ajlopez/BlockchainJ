@@ -38,6 +38,7 @@ public class OpCodes {
     public static final byte SAR = 0x1d;
 
     public static final byte ADDRESS = 0x30;
+    public static final byte BALANCE = 0x31;
 
     public static final byte ORIGIN = 0x32;
     public static final byte CALLER = 0x33;
