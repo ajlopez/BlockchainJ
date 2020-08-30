@@ -567,9 +567,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.BEGINSUB:
-                    // TODO raise exception
-
-                    break;
+                    return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid subroutine entry"));
 
                 case OpCodes.RETURNSUB:
                     // TODO check return stack not empty

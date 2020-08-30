@@ -1816,6 +1816,20 @@ public class VirtualMachineTest {
         Assert.assertTrue(virtualMachine.getDataStack().isEmpty());
     }
 
+    @Test
+    public void errorOnWalkIntoSubroutine() throws IOException {
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.BEGINSUB, OpCodes.RETURNSUB, OpCodes.STOP  });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid subroutine entry", executionResult.getException().getMessage());
+        Assert.assertEquals(100_000L, executionResult.getGasUsed());
+    }
+
     private static void executeUnaryOp(byte opcode, int expected, int operand, long expectedGasUsed) throws IOException {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
