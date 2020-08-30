@@ -37,7 +37,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(0, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -56,7 +56,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -83,7 +83,7 @@ public class VirtualMachineTest {
 
             Assert.assertEquals(FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-            Stack<DataWord> stack = virtualMachine.getStack();
+            Stack<DataWord> stack = virtualMachine.getDataStack();
 
             Assert.assertNotNull(stack);
             Assert.assertFalse(stack.isEmpty());
@@ -104,7 +104,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -123,7 +123,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -146,7 +146,7 @@ public class VirtualMachineTest {
         Assert.assertEquals("Insufficient gas", executionResult.getException().getMessage());
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -178,7 +178,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -295,7 +295,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -324,7 +324,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -344,7 +344,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -379,7 +379,7 @@ public class VirtualMachineTest {
 
             Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * (values.length + 1), executionResult.getGasUsed());
 
-            Stack<DataWord> stack = virtualMachine.getStack();
+            Stack<DataWord> stack = virtualMachine.getDataStack();
 
             Assert.assertNotNull(stack);
             Assert.assertFalse(stack.isEmpty());
@@ -414,7 +414,7 @@ public class VirtualMachineTest {
 
             Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * (values.length + 1), executionResult.getGasUsed());
 
-            Stack<DataWord> stack = virtualMachine.getStack();
+            Stack<DataWord> stack = virtualMachine.getDataStack();
 
             Assert.assertNotNull(stack);
             Assert.assertFalse(stack.isEmpty());
@@ -433,7 +433,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -457,7 +457,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.SLOAD.getValue() + FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -475,7 +475,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -497,7 +497,7 @@ public class VirtualMachineTest {
         Assert.assertEquals("Insufficient gas", executionResult.getException().getMessage());
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue() / 2, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -515,7 +515,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 4 + FeeSchedule.SSET.getValue() + FeeSchedule.SRESET.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -546,7 +546,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -564,7 +564,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(5 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -584,7 +584,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -605,7 +605,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(3 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -623,7 +623,7 @@ public class VirtualMachineTest {
 
         // TODO check gas uses
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -649,7 +649,7 @@ public class VirtualMachineTest {
 
         // TODO check gas used
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -677,7 +677,7 @@ public class VirtualMachineTest {
 
         // TODO check gas used
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -706,7 +706,7 @@ public class VirtualMachineTest {
 
         // TODO check gas used
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -736,7 +736,7 @@ public class VirtualMachineTest {
 
         // TODO check gas used
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -924,7 +924,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -947,7 +947,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(4, stack.size());
@@ -970,7 +970,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -990,7 +990,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1010,7 +1010,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1033,7 +1033,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1057,7 +1057,7 @@ public class VirtualMachineTest {
 
         // TODO check gas uses
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -1090,7 +1090,7 @@ public class VirtualMachineTest {
 
         // TODO check gas uses
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -1123,7 +1123,7 @@ public class VirtualMachineTest {
 
         // TODO check gas uses
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -1160,7 +1160,7 @@ public class VirtualMachineTest {
 
         // TODO check gas uses
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -1210,7 +1210,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(5 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -1250,7 +1250,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(5 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -1281,7 +1281,7 @@ public class VirtualMachineTest {
 
         // TODO check gas uses
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -1319,7 +1319,7 @@ public class VirtualMachineTest {
 
         // TODO check gas uses
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -1351,7 +1351,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.BASE.getValue() * 4, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(4, stack.size());
@@ -1378,7 +1378,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1393,7 +1393,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1420,7 +1420,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.BALANCE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1445,13 +1445,13 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.BALANCE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
         Assert.assertEquals(DataWord.ZERO, stack.pop());
     }
-    
+
     @Test
     public void executeExtCodeSizeOperationForUnknownAccount() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
@@ -1464,7 +1464,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.EXTCODESIZE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1496,7 +1496,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.EXTCODESIZE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1528,7 +1528,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.EXTCODEHASH.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1557,7 +1557,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() + FeeSchedule.EXTCODEHASH.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1576,7 +1576,7 @@ public class VirtualMachineTest {
 
         // TODO Check gas cost
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.empty());
@@ -1621,7 +1621,7 @@ public class VirtualMachineTest {
 
         // TODO Check gas cost
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.empty());
@@ -1642,7 +1642,7 @@ public class VirtualMachineTest {
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.STOP, OpCodes.PUSH1, 0x01 });
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertTrue(stack.isEmpty());
@@ -1658,7 +1658,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -1673,7 +1673,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.MID.getValue() + 2 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -1728,7 +1728,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.HIGH.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertFalse(stack.isEmpty());
@@ -1802,6 +1802,20 @@ public class VirtualMachineTest {
         Assert.assertEquals("Insufficient gas", executionResult.getException().getMessage());
     }
 
+    @Test
+    public void executeSimpleSubroutine() throws IOException {
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMPSUB, OpCodes.STOP, OpCodes.BEGINSUB, OpCodes.RETURNSUB  });
+
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() +  FeeSchedule.LOW.getValue() + FeeSchedule.HIGH.getValue(), executionResult.getGasUsed());
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+        Assert.assertTrue(virtualMachine.getDataStack().isEmpty());
+    }
+
     private static void executeUnaryOp(byte opcode, int expected, int operand, long expectedGasUsed) throws IOException {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
@@ -1817,7 +1831,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(expectedGasUsed, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1839,7 +1853,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(expectedGasUsed, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1864,7 +1878,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(expectedGasUsed + 2 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1890,7 +1904,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(expectedGasUsed + 2 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1918,7 +1932,7 @@ public class VirtualMachineTest {
 
         Assert.assertEquals(expectedGasUsed + FeeSchedule.VERYLOW.getValue() * 3, executionResult.getGasUsed());
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());
@@ -1947,7 +1961,7 @@ public class VirtualMachineTest {
 
         // TODO check gas used
 
-        Stack<DataWord> stack = virtualMachine.getStack();
+        Stack<DataWord> stack = virtualMachine.getDataStack();
 
         Assert.assertNotNull(stack);
         Assert.assertEquals(1, stack.size());

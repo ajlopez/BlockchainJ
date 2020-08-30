@@ -74,6 +74,10 @@ public class OpCodes {
     public static final byte GAS = 0x5a;
     public static final byte JUMPDEST = 0x5b;
 
+    public static final byte BEGINSUB = 0x5c;
+    public static final byte RETURNSUB = 0x5d;
+    public static final byte JUMPSUB = 0x5e;
+
     public static final byte PUSH1 = 0x60;
     public static final byte PUSH2 = 0x61;
     public static final byte PUSH3 = 0x62;
