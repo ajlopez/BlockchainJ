@@ -570,7 +570,9 @@ public class VirtualMachine {
                     return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid subroutine entry"));
 
                 case OpCodes.RETURNSUB:
-                    // TODO check return stack not empty
+                    if (this.returnStack.isEmpty())
+                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid retsub"));
+
                     // TODO check return stack is valid
 
                     pc = this.returnStack.pop();
