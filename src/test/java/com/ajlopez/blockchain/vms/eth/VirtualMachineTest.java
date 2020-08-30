@@ -1671,7 +1671,7 @@ public class VirtualMachineTest {
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMP, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
 
-        Assert.assertEquals(FeeSchedule.MID.getValue() + 2 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
+        Assert.assertEquals(FeeSchedule.JUMPDEST.getValue() + FeeSchedule.MID.getValue() + 2 * FeeSchedule.VERYLOW.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getDataStack();
 
@@ -1726,7 +1726,7 @@ public class VirtualMachineTest {
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
 
-        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.HIGH.getValue(), executionResult.getGasUsed());
+        Assert.assertEquals(FeeSchedule.JUMPDEST.getValue() + FeeSchedule.VERYLOW.getValue() * 3 + FeeSchedule.HIGH.getValue(), executionResult.getGasUsed());
 
         Stack<DataWord> stack = virtualMachine.getDataStack();
 
@@ -1810,6 +1810,20 @@ public class VirtualMachineTest {
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMPSUB, OpCodes.STOP, OpCodes.BEGINSUB, OpCodes.RETURNSUB  });
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() +  FeeSchedule.LOW.getValue() + FeeSchedule.HIGH.getValue(), executionResult.getGasUsed());
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+        Assert.assertTrue(virtualMachine.getDataStack().isEmpty());
+    }
+
+    @Test
+    public void executeSubroutineAtTheEndOfCode() throws IOException {
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x05, OpCodes.JUMP, OpCodes.BEGINSUB, OpCodes.RETURNSUB, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x03, OpCodes.JUMPSUB });
+
+        Assert.assertEquals(FeeSchedule.JUMPDEST.getValue() +  FeeSchedule.VERYLOW.getValue() * 2 +  FeeSchedule.MID.getValue() + FeeSchedule.LOW.getValue() + FeeSchedule.HIGH.getValue(), executionResult.getGasUsed());
 
         Assert.assertNotNull(executionResult);
         Assert.assertTrue(executionResult.wasSuccesful());

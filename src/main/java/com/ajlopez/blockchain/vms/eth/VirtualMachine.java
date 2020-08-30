@@ -4,7 +4,6 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.ByteUtils;
-import jdk.internal.org.objectweb.asm.Opcodes;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,6 +67,7 @@ public class VirtualMachine {
         opCodeFees[OpCodes.ADDMOD] = FeeSchedule.MID;
         opCodeFees[OpCodes.MULMOD] = FeeSchedule.MID;
         opCodeFees[OpCodes.JUMP] = FeeSchedule.MID;
+        opCodeFees[OpCodes.JUMPDEST] = FeeSchedule.JUMPDEST;
 
         opCodeFees[OpCodes.JUMPI] = FeeSchedule.HIGH;
 

@@ -5,6 +5,7 @@ package com.ajlopez.blockchain.vms.eth;
  */
 public enum FeeSchedule {
     ZERO(0),
+    JUMPDEST(1),
     BASE(2),
     VERYLOW(3),
     LOW(5),
