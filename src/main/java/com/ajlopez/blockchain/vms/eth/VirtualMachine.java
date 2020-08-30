@@ -583,9 +583,15 @@ public class VirtualMachine {
                     this.returnStack.push(pc);
 
                     // TODO check stack top is a valid program counter
-                    // TODO check destination is a BEGINSUB
+                    word = this.dataStack.pop();
 
-                    pc = this.dataStack.pop().asUnsignedInteger();
+                    if (!word.isUnsignedInteger())
+                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid subroutine jump"));
+
+                    pc = word.asUnsignedInteger();
+
+                    if (pc >= bytecodes.length || bytecodes[pc] != OpCodes.BEGINSUB)
+                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid subroutine jump"));
 
                     break;
 

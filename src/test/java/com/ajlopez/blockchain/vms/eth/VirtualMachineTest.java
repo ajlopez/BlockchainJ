@@ -1858,6 +1858,48 @@ public class VirtualMachineTest {
         Assert.assertEquals(100_000L, executionResult.getGasUsed());
     }
 
+    @Test
+    public void errorOnInvalidSubroutineJump() throws IOException {
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH9, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c, OpCodes.JUMPSUB });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid subroutine jump", executionResult.getException().getMessage());
+        Assert.assertEquals(100_000L, executionResult.getGasUsed());
+    }
+
+    @Test
+    public void errorOnInvalidSubroutineJumpWithoutBeginSub() throws IOException {
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMPSUB, OpCodes.STOP, OpCodes.RETURNSUB });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid subroutine jump", executionResult.getException().getMessage());
+        Assert.assertEquals(100_000L, executionResult.getGasUsed());
+    }
+
+    @Test
+    public void errorOnInvalidSubroutineJumpBeyondCode() throws IOException {
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+
+        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x10, OpCodes.JUMPSUB, OpCodes.STOP, OpCodes.RETURNSUB });
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
+        Assert.assertEquals("Invalid subroutine jump", executionResult.getException().getMessage());
+        Assert.assertEquals(100_000L, executionResult.getGasUsed());
+    }
+
     private static void executeUnaryOp(byte opcode, int expected, int operand, long expectedGasUsed) throws IOException {
         byte[] boperand = ByteUtils.normalizedBytes(ByteUtils.unsignedIntegerToBytes(operand));
 
