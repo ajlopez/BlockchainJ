@@ -1817,6 +1817,36 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeTwoLevelsOfSubroutines() throws IOException {
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+
+        byte[] bytecodes = new byte[] {
+            OpCodes.PUSH9, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c,
+            OpCodes.JUMPSUB,
+            OpCodes.STOP,
+            OpCodes.BEGINSUB,
+            OpCodes.PUSH1, 0x11,
+            OpCodes.JUMPSUB,
+            OpCodes.RETURNSUB,
+            OpCodes.BEGINSUB,
+            OpCodes.RETURNSUB
+        };
+
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
+
+        Assert.assertEquals(
+                FeeSchedule.VERYLOW.getValue() * 2 +
+                FeeSchedule.LOW.getValue() * 2 +
+                FeeSchedule.HIGH.getValue() * 2,
+                executionResult.getGasUsed());
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+        Assert.assertTrue(virtualMachine.getDataStack().isEmpty());
+    }
+
+    @Test
     public void executeSubroutineAtTheEndOfCode() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
