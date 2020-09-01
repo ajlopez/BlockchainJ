@@ -1807,13 +1807,46 @@ public class VirtualMachineTest {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
 
-        ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMPSUB, OpCodes.STOP, OpCodes.BEGINSUB, OpCodes.RETURNSUB  });
+        byte[] bytecodes = new byte[] {
+                OpCodes.PUSH1, 0x04,
+                OpCodes.JUMPSUB,
+                OpCodes.STOP,
+                OpCodes.BEGINSUB,
+                OpCodes.RETURNSUB
+        };
+
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
         Assert.assertEquals(FeeSchedule.VERYLOW.getValue() +  FeeSchedule.LOW.getValue() + FeeSchedule.HIGH.getValue(), executionResult.getGasUsed());
 
         Assert.assertNotNull(executionResult);
         Assert.assertTrue(executionResult.wasSuccesful());
         Assert.assertTrue(virtualMachine.getDataStack().isEmpty());
+    }
+
+    @Test
+    public void executeSimpleSubroutineWithStackOperation() throws IOException {
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+
+        byte[] bytecodes = new byte[] {
+                OpCodes.PUSH1, 0x04,
+                OpCodes.JUMPSUB,
+                OpCodes.STOP,
+                OpCodes.BEGINSUB,
+                OpCodes.PUSH1, 0x2a,
+                OpCodes.RETURNSUB
+        };
+
+        ExecutionResult executionResult = virtualMachine.execute(bytecodes);
+
+        Assert.assertEquals(FeeSchedule.VERYLOW.getValue() * 2 +  FeeSchedule.LOW.getValue() + FeeSchedule.HIGH.getValue(), executionResult.getGasUsed());
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+        Assert.assertFalse(virtualMachine.getDataStack().isEmpty());
+        Assert.assertEquals(1, virtualMachine.getDataStack().size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), virtualMachine.getDataStack().pop());
     }
 
     @Test
