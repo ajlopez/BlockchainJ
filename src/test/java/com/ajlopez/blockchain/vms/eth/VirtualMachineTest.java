@@ -1428,6 +1428,30 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeSelfBalanceOperationForAccountWithBalance() throws IOException {
+        Account account = new Account(Coin.TEN, 0, 0, null, null);
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address address = FactoryHelper.createRandomAddress();
+        accountStore.putAccount(address, account);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
+
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(address, executionContext), null);
+
+        byte bytecode[] = new byte[] { OpCodes.SELFBALANCE };
+
+        ExecutionResult executionResult = virtualMachine.execute(bytecode);
+
+        Assert.assertEquals(FeeSchedule.LOW.getValue(), executionResult.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getDataStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(10), stack.pop());
+    }
+
+    @Test
     public void executeBalanceOperationForUnknownAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
@@ -2127,6 +2151,12 @@ public class VirtualMachineTest {
 
     private static ProgramEnvironment createProgramEnvironment(AccountProvider accountProvider) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
+
+        return new ProgramEnvironment(messageData, null, accountProvider);
+    }
+
+    private static ProgramEnvironment createProgramEnvironment(Address receiver, AccountProvider accountProvider) {
+        MessageData messageData = new MessageData(receiver, null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
         return new ProgramEnvironment(messageData, null, accountProvider);
     }

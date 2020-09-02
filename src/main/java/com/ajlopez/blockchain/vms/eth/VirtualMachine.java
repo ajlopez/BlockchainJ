@@ -58,6 +58,7 @@ public class VirtualMachine {
         opCodeFees[OpCodes.COINBASE] = FeeSchedule.BASE;
         opCodeFees[OpCodes.DIFFICULTY] = FeeSchedule.BASE;
         opCodeFees[OpCodes.GASLIMIT] = FeeSchedule.BASE;
+        opCodeFees[OpCodes.SELFBALANCE] = FeeSchedule.LOW;
         opCodeFees[OpCodes.TIMESTAMP] = FeeSchedule.BASE;
         opCodeFees[OpCodes.NUMBER] = FeeSchedule.BASE;
 
@@ -347,7 +348,12 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.BALANCE:
-                    this.dataStack.push(DataWord.fromCoin(this.programEnvironment.getBalance(dataStack.pop().toAddress())));
+                    this.dataStack.push(DataWord.fromCoin(this.programEnvironment.getBalance(this.dataStack.pop().toAddress())));
+
+                    break;
+
+                case OpCodes.SELFBALANCE:
+                    this.dataStack.push(DataWord.fromCoin(this.programEnvironment.getBalance(this.programEnvironment.getAddress())));
 
                     break;
 
