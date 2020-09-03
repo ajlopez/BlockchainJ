@@ -916,7 +916,7 @@ public class VirtualMachineTest {
         Coin gasPrice = Coin.fromUnsignedLong(42L);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, gasPrice, null, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -939,7 +939,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(address, origin, caller, Coin.ONE, 100000, null, null, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -962,7 +962,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -982,7 +982,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1002,7 +1002,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1025,7 +1025,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1045,7 +1045,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1078,7 +1078,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1111,7 +1111,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1152,7 +1152,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1192,7 +1192,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1232,7 +1232,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1270,7 +1270,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1311,7 +1311,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
         VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
 
@@ -1815,7 +1815,7 @@ public class VirtualMachineTest {
     @Test
     public void executeWithInsufficientGasRaiseException() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 0, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.ADDRESS });
 
@@ -1829,7 +1829,7 @@ public class VirtualMachineTest {
     @Test
     public void executeSimpleSubroutine() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         byte[] bytecodes = new byte[] {
                 OpCodes.PUSH1, 0x04,
@@ -1851,7 +1851,7 @@ public class VirtualMachineTest {
     @Test
     public void executeSimpleSubroutineWithStackOperation() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         byte[] bytecodes = new byte[] {
                 OpCodes.PUSH1, 0x04,
@@ -1876,7 +1876,7 @@ public class VirtualMachineTest {
     @Test
     public void executeTwoLevelsOfSubroutines() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         byte[] bytecodes = new byte[] {
             OpCodes.PUSH9, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c,
@@ -1906,7 +1906,7 @@ public class VirtualMachineTest {
     @Test
     public void executeSubroutineAtTheEndOfCode() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x05, OpCodes.JUMP, OpCodes.BEGINSUB, OpCodes.RETURNSUB, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x03, OpCodes.JUMPSUB });
 
@@ -1920,7 +1920,7 @@ public class VirtualMachineTest {
     @Test
     public void errorOnWalkIntoSubroutine() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.BEGINSUB, OpCodes.RETURNSUB, OpCodes.STOP  });
 
@@ -1934,7 +1934,7 @@ public class VirtualMachineTest {
     @Test
     public void errorOnShallowReturnStack() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.RETURNSUB });
 
@@ -1948,7 +1948,7 @@ public class VirtualMachineTest {
     @Test
     public void errorOnInvalidSubroutineJump() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH9, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c, OpCodes.JUMPSUB });
 
@@ -1962,7 +1962,7 @@ public class VirtualMachineTest {
     @Test
     public void errorOnInvalidSubroutineJumpWithoutBeginSub() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMPSUB, OpCodes.STOP, OpCodes.RETURNSUB });
 
@@ -1976,7 +1976,7 @@ public class VirtualMachineTest {
     @Test
     public void errorOnInvalidSubroutineJumpBeyondCode() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x10, OpCodes.JUMPSUB, OpCodes.STOP, OpCodes.RETURNSUB });
 
@@ -2146,30 +2146,30 @@ public class VirtualMachineTest {
     private static ProgramEnvironment createProgramEnvironment(long gas) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, gas, Coin.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, null, null);
+        return new ProgramEnvironment(messageData, null, null, 0);
     }
 
     private static ProgramEnvironment createProgramEnvironment(AccountProvider accountProvider) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, null, accountProvider);
+        return new ProgramEnvironment(messageData, null, accountProvider, 0);
     }
 
     private static ProgramEnvironment createProgramEnvironment(Address receiver, AccountProvider accountProvider) {
         MessageData messageData = new MessageData(receiver, null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, null, accountProvider);
+        return new ProgramEnvironment(messageData, null, accountProvider, 0);
     }
 
     private static ProgramEnvironment createProgramEnvironment(BlockData blockData) {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, blockData, null);
+        return new ProgramEnvironment(messageData, blockData, null, 0);
     }
 
     private static ProgramEnvironment createReadOnlyProgramEnvironment() {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, true);
 
-        return new ProgramEnvironment(messageData, null, null);
+        return new ProgramEnvironment(messageData, null, null, 0);
     }
 }

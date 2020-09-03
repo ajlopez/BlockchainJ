@@ -15,11 +15,13 @@ public class ProgramEnvironment {
     private final MessageData messageData;
     private final BlockData blockData;
     private final AccountProvider accountProvider;
+    private final int chainId;
 
-    public ProgramEnvironment(MessageData messageData, BlockData blockData, AccountProvider accountProvider) {
+    public ProgramEnvironment(MessageData messageData, BlockData blockData, AccountProvider accountProvider, int chainId) {
         this.messageData = messageData;
         this.blockData = blockData;
         this.accountProvider = accountProvider;
+        this.chainId = chainId;
     }
 
     public Address getAddress() { return this.messageData.getAddress(); }
@@ -55,4 +57,6 @@ public class ProgramEnvironment {
     public Coin getGasPrice() { return this.messageData.getGasPrice(); }
 
     public boolean isReadOnly() { return this.messageData.isReadOnly(); }
+
+    public int getChainId() { return this.chainId; }
 }

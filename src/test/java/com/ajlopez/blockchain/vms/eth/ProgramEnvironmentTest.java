@@ -25,7 +25,7 @@ public class ProgramEnvironmentTest {
 
         BlockData blockData = new BlockData(number, timestamp, coinbase, Difficulty.TWO, 12_000_000L);
 
-        ProgramEnvironment environment = new ProgramEnvironment(messageData, blockData, null);
+        ProgramEnvironment environment = new ProgramEnvironment(messageData, blockData, null, 42);
 
         Assert.assertEquals(address, environment.getAddress());
         Assert.assertEquals(origin, environment.getOrigin());
@@ -36,5 +36,6 @@ public class ProgramEnvironmentTest {
         Assert.assertEquals(timestamp, environment.getTimestamp());
         Assert.assertEquals(Difficulty.TWO, environment.getDifficulty());
         Assert.assertEquals(12_000_000L, environment.getGasLimit());
+        Assert.assertEquals(42, environment.getChainId());
     }
 }
