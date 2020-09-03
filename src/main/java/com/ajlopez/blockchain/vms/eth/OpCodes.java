@@ -61,7 +61,7 @@ public class OpCodes {
     public static final byte DIFFICULTY = 0x44;
     public static final byte GASLIMIT = 0x45;
 
-    public static final byte SELFBALANCE = 0x46;
+    public static final byte SELFBALANCE = 0x47;
 
     public static final byte POP = 0x50;
     public static final byte MLOAD = 0x51;
