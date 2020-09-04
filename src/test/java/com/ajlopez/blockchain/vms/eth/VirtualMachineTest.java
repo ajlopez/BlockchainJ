@@ -1452,6 +1452,23 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeChainId() throws IOException {
+        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+
+        byte bytecode[] = new byte[] { OpCodes.CHAINID };
+
+        ExecutionResult executionResult = virtualMachine.execute(bytecode);
+
+        Assert.assertEquals(FeeSchedule.BASE.getValue(), executionResult.getGasUsed());
+
+        Stack<DataWord> stack = virtualMachine.getDataStack();
+
+        Assert.assertNotNull(stack);
+        Assert.assertEquals(1, stack.size());
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), stack.pop());
+    }
+
+    @Test
     public void executeBalanceOperationForUnknownAccount() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
@@ -2152,13 +2169,13 @@ public class VirtualMachineTest {
     private static ProgramEnvironment createProgramEnvironment(AccountProvider accountProvider) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, null, accountProvider, 0);
+        return new ProgramEnvironment(messageData, null, accountProvider, 42);
     }
 
     private static ProgramEnvironment createProgramEnvironment(Address receiver, AccountProvider accountProvider) {
         MessageData messageData = new MessageData(receiver, null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, null, accountProvider, 0);
+        return new ProgramEnvironment(messageData, null, accountProvider, 42);
     }
 
     private static ProgramEnvironment createProgramEnvironment(BlockData blockData) {
