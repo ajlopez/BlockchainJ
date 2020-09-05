@@ -1,7 +1,7 @@
 package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.store.KeyValueStore;
 
@@ -21,7 +21,7 @@ public class BlockStore {
         this.keyValueStore.setValue(block.getHash().getBytes(), BlockEncoder.encode(block));
     }
 
-    public Block getBlock(Hash hash) throws IOException {
+    public Block getBlock(BlockHash hash) throws IOException {
         byte[] encoded = this.keyValueStore.getValue(hash.getBytes());
 
         if (encoded == null)
@@ -30,7 +30,7 @@ public class BlockStore {
         return BlockEncoder.decode(encoded);
     }
 
-    public boolean containsBlock(Hash hash) throws IOException {
+    public boolean containsBlock(BlockHash hash) throws IOException {
         return this.keyValueStore.getValue(hash.getBytes()) != null;
     }
 }

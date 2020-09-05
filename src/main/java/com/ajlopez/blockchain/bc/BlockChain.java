@@ -1,15 +1,12 @@
 package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.Stores;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Consumer;
 
 /**
  * Created by ajlopez on 15/08/2017.
@@ -102,20 +99,20 @@ public class BlockChain implements BlockProvider {
     }
 
     @Override
-    public Block getBlockByHash(Hash hash) throws IOException {
+    public Block getBlockByHash(BlockHash blockHash) throws IOException {
         this.lock.readLock().lock();
 
         try {
             if (!initialized)
                 initialize();
 
-            return this.blockStore.getBlock(hash);
+            return this.blockStore.getBlock(blockHash);
         } finally {
             this.lock.readLock().unlock();
         }
     }
 
-    public boolean isChainedBlock(Hash hash) throws IOException {
+    public boolean isChainedBlock(BlockHash hash) throws IOException {
         this.lock.readLock().lock();
 
         try {

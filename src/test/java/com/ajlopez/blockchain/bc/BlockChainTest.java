@@ -33,7 +33,7 @@ public class BlockChainTest {
         Stores stores = new MemoryStores();
         BlockChain blockChain = new BlockChain(stores);
 
-        Assert.assertNull(blockChain.getBlockByHash(FactoryHelper.createRandomHash()));
+        Assert.assertNull(blockChain.getBlockByHash(FactoryHelper.createRandomBlockHash()));
     }
 
     @Test
