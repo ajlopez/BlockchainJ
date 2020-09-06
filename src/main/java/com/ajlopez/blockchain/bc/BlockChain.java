@@ -151,6 +151,16 @@ public class BlockChain implements BlockProvider {
         }
     }
 
+    @Override
+    public BlockInformation getBlockInformation(long number, BlockHash blockHash) throws IOException {
+        BlocksInformation blocksInformation = this.blockInformationStore.get(number);
+
+        if (blocksInformation == null)
+            return null;
+
+        return blocksInformation.getBlockInformation(blockHash);
+    }
+
     private boolean isOrphan(Block block) throws IOException {
         if (block.getNumber() == 0)
             return false;

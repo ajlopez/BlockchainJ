@@ -82,9 +82,7 @@ public class BlocksInformationTest {
 
         BlocksInformation blocksInformation = new BlocksInformation();
 
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Block not found");
-        blocksInformation.getBlockInformation(blockHash);
+        Assert.assertNull(blocksInformation.getBlockInformation(blockHash));
     }
 
     @Test

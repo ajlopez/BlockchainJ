@@ -37,6 +37,14 @@ public class BlockChainTest {
     }
 
     @Test
+    public void noBlockInformationUsingHighNumber() throws IOException {
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
+
+        Assert.assertNull(blockChain.getBlockInformation(1000L, FactoryHelper.createRandomBlockHash()));
+    }
+
+    @Test
     public void noBlockByNumber() throws IOException {
         Stores stores = new MemoryStores();
         BlockChain blockChain = new BlockChain(stores);
@@ -91,6 +99,52 @@ public class BlockChainTest {
         Assert.assertEquals(1, stores.getBlocksInformationStore().getBestHeight());
 
         Assert.assertEquals(Difficulty.TWO, blockChain.getBestBlockInformation().getTotalDifficulty());
+    }
+
+    @Test
+    public void noBlockInformationWithNonexistantHash() throws IOException {
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
+
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block genesis = new Block(0, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+
+        Assert.assertTrue(blockChain.connectBlock(genesis));
+        Assert.assertTrue(blockChain.connectBlock(block));
+
+        Assert.assertNull(blockChain.getBlockInformation(1L, FactoryHelper.createRandomBlockHash()));
+    }
+
+    @Test
+    public void getBlockInformation() throws IOException {
+        Stores stores = new MemoryStores();
+        BlockChain blockChain = new BlockChain(stores);
+
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block genesis = new Block(0, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE);
+        Block block = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block blockb = new Block(1, genesis.getHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.TWO);
+
+        Assert.assertTrue(blockChain.connectBlock(genesis));
+        Assert.assertTrue(blockChain.connectBlock(block));
+        Assert.assertTrue(blockChain.connectBlock(blockb));
+
+        Assert.assertNull(blockChain.getBlockInformation(1L, FactoryHelper.createRandomBlockHash()));
+
+        BlockInformation result1 = blockChain.getBlockInformation(1, block.getHash());
+
+        Assert.assertNotNull(result1);
+        Assert.assertEquals(block.getHash(), result1.getBlockHash());
+        Assert.assertEquals(Difficulty.TWO, result1.getTotalDifficulty());
+
+        BlockInformation result2 = blockChain.getBlockInformation(1, blockb.getHash());
+
+        Assert.assertNotNull(result2);
+        Assert.assertEquals(blockb.getHash(), result2.getBlockHash());
+        Assert.assertEquals(Difficulty.THREE, result2.getTotalDifficulty());
     }
 
     @Test
