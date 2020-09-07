@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.jsonrpc.encoders;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.json.JsonBuilder;
 import com.ajlopez.blockchain.json.JsonNullValue;
 import com.ajlopez.blockchain.json.JsonObjectBuilder;
@@ -15,7 +16,7 @@ import java.util.List;
 public class BlockJsonEncoder {
     private BlockJsonEncoder() {}
 
-    public static JsonValue encode(Block block) {
+    public static JsonValue encode(Block block, Difficulty totalDifficulty) {
         if (block == null)
             return JsonNullValue.getInstance();
 
@@ -38,6 +39,8 @@ public class BlockJsonEncoder {
                 .value(block.getTimestamp())
                 .name("difficulty")
                 .value(block.getDifficulty())
+                .name("totalDifficulty")
+                .value(totalDifficulty)
                 .name("uncles")
                 .array()
                 .end();

@@ -151,8 +151,7 @@ The world state keeps the account states. Each account has a balance and smart c
 ## To Do
 
 - Signed transactions
-- Block JSON serialization
-- Total difficulty in block JSON serialization
+- Complete Block JSON serialization
 - Numeric values in hexadecimal in JSON serialization
 - Transaction receipts
 - Log emit

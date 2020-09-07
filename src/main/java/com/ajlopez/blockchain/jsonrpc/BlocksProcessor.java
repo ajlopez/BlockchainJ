@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.BlockInformation;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.json.JsonValue;
@@ -51,7 +52,14 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         else
             block = this.blockChain.getBlockByNumber(Long.parseLong(blockId));
 
-        JsonValue json = BlockJsonEncoder.encode(block);
+        JsonValue json;
+
+        if (block != null) {
+            BlockInformation blockInformation = this.blockChain.getBlockInformation(block.getNumber(), block.getHash());
+            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty());
+        }
+        else
+            json = BlockJsonEncoder.encode(null, null);
 
         return JsonRpcResponse.createResponse(request, json);
     }
@@ -59,8 +67,15 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
     private JsonRpcResponse getBlockByHash(JsonRpcRequest request) throws IOException {
         BlockHash hash = new BlockHash(HexUtils.hexStringToBytes(request.getParams().get(0).getValue().toString()));
         Block block = this.blockChain.getBlockByHash(hash);
+        JsonValue json;
 
-        JsonValue json = BlockJsonEncoder.encode(block);
+        if (block != null) {
+            BlockInformation blockInformation = this.blockChain.getBlockInformation(block.getNumber(), block.getHash());
+
+            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty());
+        }
+        else
+            json = BlockJsonEncoder.encode(null, null);
 
         return JsonRpcResponse.createResponse(request, json);
     }

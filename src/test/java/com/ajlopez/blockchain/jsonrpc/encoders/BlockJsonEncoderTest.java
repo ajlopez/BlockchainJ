@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.jsonrpc.encoders;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.json.JsonArrayValue;
 import com.ajlopez.blockchain.json.JsonObjectValue;
 import com.ajlopez.blockchain.json.JsonValue;
@@ -21,7 +22,7 @@ public class BlockJsonEncoderTest {
     public void encodeBlockWithoutTransactions() throws IOException {
         Block block = FactoryHelper.createBlockChain(1).getBlockByNumber(1);
 
-        JsonValue result = BlockJsonEncoder.encode(block);
+        JsonValue result = BlockJsonEncoder.encode(block, Difficulty.TWO);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(JsonValueType.OBJECT, result.getType());
@@ -35,6 +36,7 @@ public class BlockJsonEncoderTest {
         Assert.assertTrue(oresult.hasProperty("nonce"));
         Assert.assertTrue(oresult.hasProperty("stateRoot"));
         Assert.assertTrue(oresult.hasProperty("difficulty"));
+        Assert.assertTrue(oresult.hasProperty("totalDifficulty"));
         Assert.assertTrue(oresult.hasProperty("transactionRoot"));
         Assert.assertTrue(oresult.hasProperty("uncles"));
         Assert.assertTrue(oresult.hasProperty("transactions"));
@@ -48,6 +50,7 @@ public class BlockJsonEncoderTest {
         Assert.assertEquals(block.getStateRootHash().toString(), oresult.getProperty("stateRoot").getValue());
         Assert.assertEquals(block.getTransactionsRootHash().toString(), oresult.getProperty("transactionRoot").getValue());
         Assert.assertEquals(block.getDifficulty().toString(), oresult.getProperty("difficulty").getValue());
+        Assert.assertEquals(Difficulty.TWO.toString(), oresult.getProperty("totalDifficulty").getValue());
         Assert.assertEquals(block.getTimestamp() + "", oresult.getProperty("timestamp").getValue());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("uncles").getType());
         Assert.assertEquals(0, ((JsonArrayValue)oresult.getProperty("uncles")).size());
@@ -61,7 +64,7 @@ public class BlockJsonEncoderTest {
 
         Assert.assertEquals(10, block.getTransactions().size());
 
-        JsonValue result = BlockJsonEncoder.encode(block);
+        JsonValue result = BlockJsonEncoder.encode(block, Difficulty.TWO);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(JsonValueType.OBJECT, result.getType());
@@ -75,6 +78,7 @@ public class BlockJsonEncoderTest {
         Assert.assertTrue(oresult.hasProperty("nonce"));
         Assert.assertTrue(oresult.hasProperty("stateRoot"));
         Assert.assertTrue(oresult.hasProperty("difficulty"));
+        Assert.assertTrue(oresult.hasProperty("totalDifficulty"));
         Assert.assertTrue(oresult.hasProperty("transactionRoot"));
         Assert.assertTrue(oresult.hasProperty("uncles"));
         Assert.assertTrue(oresult.hasProperty("transactions"));
@@ -88,6 +92,7 @@ public class BlockJsonEncoderTest {
         Assert.assertEquals(block.getStateRootHash().toString(), oresult.getProperty("stateRoot").getValue());
         Assert.assertEquals(block.getTransactionsRootHash().toString(), oresult.getProperty("transactionRoot").getValue());
         Assert.assertEquals(block.getDifficulty().toString(), oresult.getProperty("difficulty").getValue());
+        Assert.assertEquals(Difficulty.TWO.toString(), oresult.getProperty("totalDifficulty").getValue());
         Assert.assertEquals(block.getTimestamp() + "", oresult.getProperty("timestamp").getValue());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("uncles").getType());
         Assert.assertEquals(0, ((JsonArrayValue)oresult.getProperty("uncles")).size());
