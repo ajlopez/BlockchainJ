@@ -20,7 +20,7 @@ public class BlockHeaderTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.fromUnsignedLong(42);
 
-        BlockHeader header = new BlockHeader(1L, hash, 42, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 0);
+        BlockHeader header = new BlockHeader(1L, hash, 42, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 12_000_000L, 0);
 
         Assert.assertEquals(1L, header.getNumber());
         Assert.assertEquals(hash, header.getParentHash());
@@ -28,6 +28,7 @@ public class BlockHeaderTest {
         Assert.assertEquals(transactionsHash, header.getTransactionsRootHash());
         Assert.assertNotNull(header.getHash());
         Assert.assertEquals(Difficulty.fromUnsignedLong(42), header.getDifficulty());
+        Assert.assertEquals(12_000_000L, header.getGasLimit());
         Assert.assertEquals(0, header.getNonce());
     }
 
@@ -39,7 +40,7 @@ public class BlockHeaderTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.fromUnsignedLong(42);
 
-        BlockHeader header = new BlockHeader(1L, hash, 42, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 42);
+        BlockHeader header = new BlockHeader(1L, hash, 42, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 0, 42);
 
         Assert.assertEquals(1L, header.getNumber());
         Assert.assertEquals(hash, header.getParentHash());
@@ -59,7 +60,7 @@ public class BlockHeaderTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.fromUnsignedLong(42);
 
-        BlockHeader header = new BlockHeader(1L, hash, 42, transactionsHash, receiptsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 42);
+        BlockHeader header = new BlockHeader(1L, hash, 42, transactionsHash, receiptsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 0, 42);
 
         Assert.assertEquals(1L, header.getNumber());
         Assert.assertEquals(hash, header.getParentHash());
@@ -81,10 +82,10 @@ public class BlockHeaderTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.fromUnsignedLong(42);
 
-        BlockHeader header = new BlockHeader(1L, hash, 0, transactionsHash, receiptsHash, 0, null, stateRootHash, 1L, coinbase, difficulty, 0);
-        BlockHeader header2 = new BlockHeader(1L, hash, 0, transactionsHash, receiptsHash, 0, null, stateRootHash, 1L, coinbase, difficulty, 0);
-        BlockHeader header3 = new BlockHeader(1L, hash, 0, transactionsHash, receiptsHash, 0, null, stateRootHash, 2L, coinbase, difficulty, 0);
-        BlockHeader header4 = new BlockHeader(1L, hash, 0, transactionsHash, receiptsHash2, 0, null, stateRootHash, 2L, coinbase, difficulty, 0);
+        BlockHeader header = new BlockHeader(1L, hash, 0, transactionsHash, receiptsHash, 0, null, stateRootHash, 1L, coinbase, difficulty, 0, 0);
+        BlockHeader header2 = new BlockHeader(1L, hash, 0, transactionsHash, receiptsHash, 0, null, stateRootHash, 1L, coinbase, difficulty, 0, 0);
+        BlockHeader header3 = new BlockHeader(1L, hash, 0, transactionsHash, receiptsHash, 0, null, stateRootHash, 2L, coinbase, difficulty, 0, 0);
+        BlockHeader header4 = new BlockHeader(1L, hash, 0, transactionsHash, receiptsHash2, 0, null, stateRootHash, 2L, coinbase, difficulty, 0, 0);
 
         Assert.assertTrue(header.equals(header2));
         Assert.assertTrue(header2.equals(header));
@@ -104,8 +105,8 @@ public class BlockHeaderTest {
 
     @Test
     public void twoDifferentHeadersHaveDifferentHashes() {
-        BlockHeader header1 = new BlockHeader(1L, FactoryHelper.createRandomBlockHash(), 0, FactoryHelper.createRandomHash(), null, 0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.fromUnsignedLong(42), 0);
-        BlockHeader header2 = new BlockHeader(2L, FactoryHelper.createRandomBlockHash(), 0, FactoryHelper.createRandomHash(), null, 0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.fromUnsignedLong(42), 0);
+        BlockHeader header1 = new BlockHeader(1L, FactoryHelper.createRandomBlockHash(), 0, FactoryHelper.createRandomHash(), null, 0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.fromUnsignedLong(42), 0, 0);
+        BlockHeader header2 = new BlockHeader(2L, FactoryHelper.createRandomBlockHash(), 0, FactoryHelper.createRandomHash(), null, 0, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.fromUnsignedLong(42), 0, 0);
 
         Assert.assertNotEquals(header1.getHash(), header2.getHash());
     }
@@ -116,6 +117,6 @@ public class BlockHeaderTest {
         Hash transactionsHash = FactoryHelper.createRandomHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
 
-        new BlockHeader(-1L, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null, 0);
+        new BlockHeader(-1L, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null, 0, 0);
     }
 }

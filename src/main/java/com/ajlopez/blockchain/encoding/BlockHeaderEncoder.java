@@ -15,6 +15,7 @@ import java.util.List;
 public class BlockHeaderEncoder {
     private BlockHeaderEncoder() {}
 
+    // TODO process gas limit
     public static byte[] encode(BlockHeader blockHeader) {
         byte[] rlpNumber = RLPEncoder.encodeUnsignedLong(blockHeader.getNumber());
         byte[] rlpParentHash = RLPEncoder.encodeBlockHash(blockHeader.getParentHash());
@@ -32,6 +33,7 @@ public class BlockHeaderEncoder {
         return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsCount, rlpTransactionsHash, rlpReceiptsHash, rlpUnclesCount, rlpUnclesHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty, rlpNonce);
     }
 
+    // TODO process gas limit
     public static BlockHeader decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
 
@@ -51,7 +53,7 @@ public class BlockHeaderEncoder {
         Difficulty difficulty = RLPEncoder.decodeDifficulty(bytes[10]);
         long nonce = RLPEncoder.decodeLong(bytes[11]);
 
-        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, receiptsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, nonce);
+        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, receiptsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, 0, nonce);
     }
 
     public static byte[] encode(List<BlockHeader> blockHeaders) {
