@@ -146,12 +146,11 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Simple Subroutines for the EVM](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2315.md)
 - [Ethereum Cat Herders Update #23](https://medium.com/ethereum-cat-herders/ethereum-cat-herders-update-23-a161b6115eed)
 - [Ethereum Wiki](https://eth.wiki/en/fundamentals/design-rationale)
-
+- [Understanding Ethereum by studying the source code](https://gisli.hamstur.is/2020/08/understanding-ethereum-by-studying-the-source-code/)
 
 ## To Do
 
 - Signed transactions
-- Complete Block JSON serialization
 - Numeric values in hexadecimal in JSON serialization
 - Transaction receipts
 - Log emit
