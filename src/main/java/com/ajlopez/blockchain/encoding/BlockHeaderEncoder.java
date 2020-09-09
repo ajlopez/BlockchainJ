@@ -15,7 +15,6 @@ import java.util.List;
 public class BlockHeaderEncoder {
     private BlockHeaderEncoder() {}
 
-    // TODO process gas limit
     public static byte[] encode(BlockHeader blockHeader) {
         byte[] rlpNumber = RLPEncoder.encodeUnsignedLong(blockHeader.getNumber());
         byte[] rlpParentHash = RLPEncoder.encodeBlockHash(blockHeader.getParentHash());
@@ -28,16 +27,17 @@ public class BlockHeaderEncoder {
         byte[] rlpTimestamp = RLPEncoder.encodeUnsignedLong(blockHeader.getTimestamp());
         byte[] rlpCoinbase = RLPEncoder.encodeAddress(blockHeader.getCoinbase());
         byte[] rlpDifficulty = RLPEncoder.encodeDifficulty(blockHeader.getDifficulty());
+        byte[] rlpGasLimit = RLPEncoder.encodeUnsignedLong(blockHeader.getGasLimit());
         byte[] rlpNonce = RLPEncoder.encodeNonce(blockHeader.getNonce());
 
-        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsCount, rlpTransactionsHash, rlpReceiptsHash, rlpUnclesCount, rlpUnclesHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty, rlpNonce);
+        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsCount, rlpTransactionsHash, rlpReceiptsHash, rlpUnclesCount, rlpUnclesHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty, rlpGasLimit, rlpNonce);
     }
 
     // TODO process gas limit
     public static BlockHeader decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
 
-        if (bytes.length != 12)
+        if (bytes.length != 13)
             throw new IllegalArgumentException("Invalid block header encoding");
 
         long number = RLPEncoder.decodeUnsignedLong(bytes[0]);
@@ -51,9 +51,10 @@ public class BlockHeaderEncoder {
         long timestamp = RLPEncoder.decodeUnsignedLong(bytes[8]);
         Address coinbase = RLPEncoder.decodeAddress(bytes[9]);
         Difficulty difficulty = RLPEncoder.decodeDifficulty(bytes[10]);
-        long nonce = RLPEncoder.decodeLong(bytes[11]);
+        long gasLimit = RLPEncoder.decodeUnsignedLong(bytes[11]);
+        long nonce = RLPEncoder.decodeLong(bytes[12]);
 
-        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, receiptsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, 0, nonce);
+        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, receiptsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, gasLimit, nonce);
     }
 
     public static byte[] encode(List<BlockHeader> blockHeaders) {
