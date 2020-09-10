@@ -32,7 +32,7 @@ public class MinerProcessorTest {
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 0);
 
         BlockHash hash = FactoryHelper.createRandomBlockHash();
-        Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.TEN);
+        Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.TEN, 0);
 
         Block block = processor.mineBlock(parent);
 
@@ -67,7 +67,7 @@ public class MinerProcessorTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
 
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 0);
@@ -129,7 +129,7 @@ public class MinerProcessorTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
 
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 0);
 
@@ -196,7 +196,7 @@ public class MinerProcessorTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block parent = new Block(41L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block parent = new Block(41L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
 
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 0);
 

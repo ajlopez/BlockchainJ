@@ -18,7 +18,7 @@ public class BlockMessageTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
 
         BlockMessage message = new BlockMessage(block);
 

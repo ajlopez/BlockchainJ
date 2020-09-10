@@ -181,12 +181,12 @@ public class FactoryHelper {
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, null);
 
-        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
     }
 
     public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions) {
         // TODO consider calculate receipts root if there is any transaction
-        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, MerkleTree.EMPTY_MERKLE_TREE_HASH, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, MerkleTree.EMPTY_MERKLE_TREE_HASH, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L);
     }
 
     public static BlockChain createBlockChain(int size) throws IOException {
@@ -299,12 +299,12 @@ public class FactoryHelper {
         Address coinbase = createRandomAddress();
         List<Block> blocks = new ArrayList<>();
 
-        Block block = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+        Block block = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L);
 
         blocks.add(block);
 
         for (int k = 0; k < nblocks; k++) {
-            block = new Block(block.getNumber() + 1, block.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE);
+            block = new Block(block.getNumber() + 1, block.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
             blocks.add(block);
         }
 
@@ -318,7 +318,7 @@ public class FactoryHelper {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.fromUnsignedLong(42);
 
-        return new BlockHeader(blockNumber, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 0, 0);
+        return new BlockHeader(blockNumber, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 12_000_000L, 0);
     }
 
     public static Bloom createRandomBloom(int npositives) {

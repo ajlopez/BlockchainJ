@@ -14,7 +14,7 @@ import org.junit.Test;
 public class ExtendedBlockInformationTest {
     @Test
     public void simpleCreate() {
-        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.ONE);
+        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.ONE, 0);
 
         ExtendedBlockInformation extendedBlockInformation = new ExtendedBlockInformation(block, Difficulty.ONE.TEN);
 

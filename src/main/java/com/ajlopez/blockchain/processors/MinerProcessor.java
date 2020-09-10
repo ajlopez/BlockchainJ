@@ -99,7 +99,7 @@ public class MinerProcessor {
         executionContext.commit();
 
         // TODO use uncles
-        return new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty());
+        return new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), 0);
     }
 
     private Block calculateProofOfWork(Block block) {

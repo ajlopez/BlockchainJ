@@ -37,6 +37,8 @@ public class BlockJsonEncoder {
                 .value(block.getStateRootHash())
                 .name("timestamp")
                 .value(block.getTimestamp())
+                .name("gasLimit")
+                .value(block.getGasLimit())
                 .name("difficulty")
                 .value(block.getDifficulty())
                 .name("totalDifficulty")

@@ -38,6 +38,7 @@ public class BlockJsonEncoderTest {
         Assert.assertTrue(oresult.hasProperty("difficulty"));
         Assert.assertTrue(oresult.hasProperty("totalDifficulty"));
         Assert.assertTrue(oresult.hasProperty("transactionRoot"));
+        Assert.assertTrue(oresult.hasProperty("gasLimit"));
         Assert.assertTrue(oresult.hasProperty("uncles"));
         Assert.assertTrue(oresult.hasProperty("transactions"));
         Assert.assertTrue(oresult.hasProperty("timestamp"));
@@ -52,6 +53,7 @@ public class BlockJsonEncoderTest {
         Assert.assertEquals(block.getDifficulty().toString(), oresult.getProperty("difficulty").getValue());
         Assert.assertEquals(Difficulty.TWO.toString(), oresult.getProperty("totalDifficulty").getValue());
         Assert.assertEquals(block.getTimestamp() + "", oresult.getProperty("timestamp").getValue());
+        Assert.assertEquals(block.getGasLimit() + "", oresult.getProperty("gasLimit").getValue());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("uncles").getType());
         Assert.assertEquals(0, ((JsonArrayValue)oresult.getProperty("uncles")).size());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("transactions").getType());
@@ -78,6 +80,7 @@ public class BlockJsonEncoderTest {
         Assert.assertTrue(oresult.hasProperty("nonce"));
         Assert.assertTrue(oresult.hasProperty("stateRoot"));
         Assert.assertTrue(oresult.hasProperty("difficulty"));
+        Assert.assertTrue(oresult.hasProperty("gasLimit"));
         Assert.assertTrue(oresult.hasProperty("totalDifficulty"));
         Assert.assertTrue(oresult.hasProperty("transactionRoot"));
         Assert.assertTrue(oresult.hasProperty("uncles"));
@@ -94,6 +97,7 @@ public class BlockJsonEncoderTest {
         Assert.assertEquals(block.getDifficulty().toString(), oresult.getProperty("difficulty").getValue());
         Assert.assertEquals(Difficulty.TWO.toString(), oresult.getProperty("totalDifficulty").getValue());
         Assert.assertEquals(block.getTimestamp() + "", oresult.getProperty("timestamp").getValue());
+        Assert.assertEquals(block.getGasLimit() + "", oresult.getProperty("gasLimit").getValue());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("uncles").getType());
         Assert.assertEquals(0, ((JsonArrayValue)oresult.getProperty("uncles")).size());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("transactions").getType());
