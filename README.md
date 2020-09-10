@@ -148,6 +148,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Ethereum Wiki](https://eth.wiki/en/fundamentals/design-rationale)
 - [Understanding Ethereum by studying the source code](https://gisli.hamstur.is/2020/08/understanding-ethereum-by-studying-the-source-code/)
 - [Everything You Ever Wanted to Know About Events and Logs on Ethereum](https://medium.com/linum-labs/everything-you-ever-wanted-to-know-about-events-and-logs-on-ethereum-fec84ea7d0a5)
+- [Demystifying libp2p Gossipsub: A Scalable and Extensible p2p Gossip Protocol by Raúl Kripalani](https://www.youtube.com/watch?v=BUc4xta7Mfk)
 
 ## To Do
 
