@@ -149,6 +149,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Understanding Ethereum by studying the source code](https://gisli.hamstur.is/2020/08/understanding-ethereum-by-studying-the-source-code/)
 - [Everything You Ever Wanted to Know About Events and Logs on Ethereum](https://medium.com/linum-labs/everything-you-ever-wanted-to-know-about-events-and-logs-on-ethereum-fec84ea7d0a5)
 - [Demystifying libp2p Gossipsub: A Scalable and Extensible p2p Gossip Protocol by Raúl Kripalani](https://www.youtube.com/watch?v=BUc4xta7Mfk)
+- [Broken Metre: Attacking Resource Metering in EVM](https://arxiv.org/pdf/1909.07220.pdf)
+- [EIP-2929: Gas cost increases for state access opcodes](https://eips.ethereum.org/EIPS/eip-2929)
+- [Ethereum scalability issues exposed as high gas fees stall DeFi boom](https://cointelegraph.com/news/ethereum-scalability-issues-exposed-as-high-gas-fees-stall-defi-boom)
 
 ## To Do
 
