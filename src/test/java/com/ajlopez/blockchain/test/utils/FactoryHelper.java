@@ -318,7 +318,7 @@ public class FactoryHelper {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.fromUnsignedLong(42);
 
-        return new BlockHeader(blockNumber, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 12_000_000L, 0);
+        return new BlockHeader(blockNumber, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 12_000_000L, 0, 0);
     }
 
     public static Bloom createRandomBloom(int npositives) {

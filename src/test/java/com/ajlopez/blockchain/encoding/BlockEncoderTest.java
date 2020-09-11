@@ -201,7 +201,7 @@ public class BlockEncoderTest {
         Hash transactionsHash = FactoryHelper.createRandomHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
-        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 0, 0);
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 0, 0, 0);
 
         byte[] encodedHeader = BlockHeaderEncoder.encode(header);
         byte[] bytes = FactoryHelper.createRandomBytes(42);

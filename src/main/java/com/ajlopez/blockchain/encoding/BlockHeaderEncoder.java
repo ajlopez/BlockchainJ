@@ -54,7 +54,7 @@ public class BlockHeaderEncoder {
         long gasLimit = RLPEncoder.decodeUnsignedLong(bytes[11]);
         long nonce = RLPEncoder.decodeLong(bytes[12]);
 
-        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, receiptsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, gasLimit, nonce);
+        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, receiptsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, gasLimit, 0, nonce);
     }
 
     public static byte[] encode(List<BlockHeader> blockHeaders) {

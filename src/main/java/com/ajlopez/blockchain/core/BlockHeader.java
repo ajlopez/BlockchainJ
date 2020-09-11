@@ -25,13 +25,12 @@ public class BlockHeader {
     private final Address coinbase;
     private final Difficulty difficulty;
     private final long gasLimit;
+    private final long gasUsed;
     private final long nonce;
-
-    // TODO add gas used
 
     private BlockHash hash;
 
-    public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, Hash receiptsRootHash, int unclesCount, Hash unclesRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long nonce) {
+    public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, Hash receiptsRootHash, int unclesCount, Hash unclesRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, long nonce) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
@@ -47,6 +46,7 @@ public class BlockHeader {
         this.coinbase = coinbase;
         this.difficulty = difficulty;
         this.gasLimit = gasLimit;
+        this.gasUsed = gasUsed;
         this.nonce = nonce;
     }
 
@@ -61,6 +61,8 @@ public class BlockHeader {
     public Difficulty getDifficulty() { return this.difficulty; }
 
     public long getGasLimit() { return this.gasLimit; }
+
+    public long getGasUsed() { return this.gasUsed; }
 
     public BlockHash getHash() {
         if (this.hash == null)
