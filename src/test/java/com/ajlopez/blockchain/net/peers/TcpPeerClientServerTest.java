@@ -49,7 +49,7 @@ public class TcpPeerClientServerTest {
         client.connect();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, blockChain1.getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
+        Block block = new Block(1, blockChain1.getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
         Message message = new BlockMessage(block);
 
         nodeProcessor1.postMessage(FactoryHelper.createRandomPeer(), message);

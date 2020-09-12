@@ -19,7 +19,7 @@ public class MessageEncoderTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
+        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
 
         BlockMessage message = new BlockMessage(block);
 
@@ -41,7 +41,7 @@ public class MessageEncoderTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
+        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
 
         BlockMessage message = new BlockMessage(block);
 

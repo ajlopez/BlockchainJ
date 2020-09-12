@@ -26,7 +26,7 @@ public class ReceiveProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
+        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
         Message message = new BlockMessage(block);
 
         MessageProcessor messageProcessor = FactoryHelper.createMessageProcessor(blockProcessor);
@@ -57,8 +57,8 @@ public class ReceiveProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0);
-        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
+        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0);
+        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -93,8 +93,8 @@ public class ReceiveProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0);
-        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
+        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0);
+        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -129,7 +129,7 @@ public class ReceiveProcessorTest {
         BlockProcessor blockProcessor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0);
+        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
 
         Message message = new BlockMessage(block);
 
