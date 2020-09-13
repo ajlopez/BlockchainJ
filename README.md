@@ -152,6 +152,10 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Broken Metre: Attacking Resource Metering in EVM](https://arxiv.org/pdf/1909.07220.pdf)
 - [EIP-2929: Gas cost increases for state access opcodes](https://eips.ethereum.org/EIPS/eip-2929)
 - [Ethereum scalability issues exposed as high gas fees stall DeFi boom](https://cointelegraph.com/news/ethereum-scalability-issues-exposed-as-high-gas-fees-stall-defi-boom)
+- [Introduction to Nethermind Discovery Protocol](https://medium.com/nethermind-eth/introduction-to-nethermind-discovery-protocol-4bb17ea31d1f)
+- [Gas cost for calling precompiles](https://gist.github.com/holiman/7153e088af8941379cf21c0e4610d51f)
+- [EIP-2972: Wrapped Legacy Transactions](https://eips.ethereum.org/EIPS/eip-2972)
+
 
 ## To Do
 
