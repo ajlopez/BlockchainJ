@@ -29,7 +29,7 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(42, parentHash, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(42, parentHash, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000L);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -43,6 +43,11 @@ public class BlockEncoderTest {
 
         Assert.assertNotNull(result.getUncles());
         Assert.assertTrue(result.getUncles().isEmpty());
+
+        Assert.assertEquals(block.getGasLimit(), result.getGasLimit());
+        Assert.assertEquals(block.getGasUsed(), result.getGasUsed());
+
+        Assert.assertEquals(block.getHash(), result.getHash());
     }
 
     @Test

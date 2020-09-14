@@ -82,6 +82,8 @@ public class MinerProcessor {
         List<Transaction> executedTransactions = new ArrayList<>();
         List<TransactionReceipt> executedTransactionReceipts = new ArrayList<>();
 
+        long gasUsed = 0L;
+
         // TODO take into account block gas limit
         for (Transaction transaction : transactions) {
             ExecutionResult executionResult = transactionExecutor.executeTransaction(transaction, blockData);
@@ -94,12 +96,14 @@ public class MinerProcessor {
             TransactionReceipt transactionReceipt = new TransactionReceipt(executionResult.getGasUsed(), executionResult.wasSuccesful(), executionResult.getLogs());
 
             executedTransactionReceipts.add(transactionReceipt);
+            gasUsed += transactionReceipt.getGasUsed();
         }
 
         executionContext.commit();
 
         // TODO use uncles
-        return new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), 0, 0);
+        // TODO any adjust in gas limit?
+        return new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), parent.getGasLimit(), gasUsed);
     }
 
     private Block calculateProofOfWork(Block block) {

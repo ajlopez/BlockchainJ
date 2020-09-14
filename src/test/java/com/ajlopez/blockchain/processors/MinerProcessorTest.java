@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.merkle.MerkleTree;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.vms.eth.FeeSchedule;
 import com.ajlopez.blockchain.vms.eth.OpCodes;
 import com.ajlopez.blockchain.vms.eth.TrieStorage;
 import org.junit.Assert;
@@ -32,13 +33,15 @@ public class MinerProcessorTest {
         MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 0);
 
         BlockHash hash = FactoryHelper.createRandomBlockHash();
-        Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.TEN, 0, 0);
+        Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.TEN, 12_000_000L, 0);
 
         Block block = processor.mineBlock(parent);
 
         Assert.assertNotNull(block);
         Assert.assertEquals(2, block.getNumber());
         Assert.assertEquals(parent.getHash(), block.getParentHash());
+        Assert.assertEquals(parent.getGasLimit(), block.getGasLimit());
+        Assert.assertEquals(0L, block.getGasUsed());
 
         List<Transaction> txs = block.getTransactions();
 
@@ -78,6 +81,8 @@ public class MinerProcessorTest {
         Assert.assertEquals(2, block.getNumber());
         Assert.assertEquals(parent.getHash(), block.getParentHash());
         Assert.assertEquals(coinbase, block.getCoinbase());
+        Assert.assertEquals(parent.getGasLimit(), block.getGasLimit());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), block.getGasUsed());
 
         List<Transaction> txs = block.getTransactions();
 
@@ -262,6 +267,8 @@ public class MinerProcessorTest {
         Assert.assertNotNull(block);
         Assert.assertEquals(1, block.getNumber());
         Assert.assertEquals(blockChain.getBlockByNumber(0).getHash(), block.getParentHash());
+        Assert.assertEquals(blockChain.getBestBlockInformation().getBlock().getGasLimit(), block.getGasLimit());
+        Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), block.getGasUsed());
 
         List<Transaction> txs = block.getTransactions();
 
