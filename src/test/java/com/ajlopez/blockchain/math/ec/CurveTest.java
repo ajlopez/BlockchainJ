@@ -11,8 +11,8 @@ public class CurveTest {
     public void createCurve() {
         Curve curve = new Curve(2, 6, 7);
 
-        Assert.assertEquals(2, curve.getA());
-        Assert.assertEquals(6, curve.getB());
+        Assert.assertEquals(2, curve.getA().toLong());
+        Assert.assertEquals(6, curve.getB().toLong());
         Assert.assertEquals(7, curve.getP());
     }
 

@@ -14,7 +14,7 @@ public class PointTest {
         Point point = new Point(curve, 1, 3);
 
         Assert.assertSame(curve, point.getCurve());
-        Assert.assertEquals(1, point.getX());
-        Assert.assertEquals(3, point.getY());
+        Assert.assertEquals(1, point.getX().toLong());
+        Assert.assertEquals(3, point.getY().toLong());
     }
 }
