@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.math.ec;
 
+import java.math.BigInteger;
+
 /**
  * Created by ajlopez on 15/09/2020.
  */
@@ -8,7 +10,7 @@ public class Point {
     private final FieldElement x;
     private final FieldElement y;
 
-    public Point(Curve curve, long x, long y) {
+    public Point(Curve curve, BigInteger x, BigInteger y) {
         this.curve = curve;
         this.x = new FieldElement(curve.getP(), x);
         this.y = new FieldElement(curve.getP(), y);
