@@ -18,6 +18,13 @@ public class FieldElement {
         return new FieldElement(this.prime, this.value.add(element.value).mod(this.prime));
     }
 
+    public FieldElement negate() {
+        if (this.value.signum() == 0)
+            return this;
+
+        return new FieldElement(this.prime, this.prime.subtract(this.value));
+    }
+
     public FieldElement multiply(FieldElement element) {
         return new FieldElement(this.prime, this.value.multiply(element.value).mod(this.prime));
     }
