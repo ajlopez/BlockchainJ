@@ -29,6 +29,14 @@ public class FieldElement {
         return new FieldElement(this.prime, this.value.multiply(element.value).mod(this.prime));
     }
 
+    // TODO zero case
+    // TODO improve cache
+    public FieldElement inverse() {
+        BigInteger newvalue = this.value.modPow(this.prime.subtract(BigInteger.valueOf(2)), this.prime);
+
+        return new FieldElement(this.prime, newvalue);
+    }
+
     public boolean isZero() {
         return this.value.signum() == 0;
     }

@@ -31,4 +31,16 @@ public class FieldElementTest {
         Assert.assertEquals(BigInteger.valueOf(4), result.toBigInteger());
         Assert.assertFalse(result.isZero());
     }
+
+    @Test
+    public void inverseElement() {
+        FieldElement three = new FieldElement(BigInteger.valueOf(7), BigInteger.valueOf(3));
+
+        FieldElement result = three.inverse();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.valueOf(5), result.toBigInteger());
+        Assert.assertFalse(result.isZero());
+        Assert.assertEquals(BigInteger.ONE, result.multiply(three).toBigInteger());
+    }
 }
