@@ -18,6 +18,7 @@ public class FieldElementTest {
         Assert.assertNotNull(result);
         Assert.assertSame(zero, result);
         Assert.assertEquals(BigInteger.ZERO, result.toBigInteger());
+        Assert.assertTrue(result.isZero());
     }
 
     @Test
@@ -28,5 +29,6 @@ public class FieldElementTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.valueOf(4), result.toBigInteger());
+        Assert.assertFalse(result.isZero());
     }
 }

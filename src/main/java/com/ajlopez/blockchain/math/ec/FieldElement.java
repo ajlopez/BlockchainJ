@@ -29,6 +29,10 @@ public class FieldElement {
         return new FieldElement(this.prime, this.value.multiply(element.value).mod(this.prime));
     }
 
+    public boolean isZero() {
+        return this.value.signum() == 0;
+    }
+
     public BigInteger toBigInteger() {
         return this.value;
     }

@@ -21,7 +21,7 @@ public class PointTest {
 
         Assert.assertFalse(point.isInfinite());
     }
-    
+
     @Test
     public void createInfinitePoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
