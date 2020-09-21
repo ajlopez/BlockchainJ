@@ -11,6 +11,7 @@ public class Point {
     private final FieldElement y;
     private final boolean isInfinite;
 
+    // TODO Unify constructors
     public Point(Curve curve, BigInteger x, BigInteger y) {
         this.curve = curve;
 
@@ -26,6 +27,21 @@ public class Point {
         }
     }
 
+    public Point(Curve curve, FieldElement x, FieldElement y) {
+        this.curve = curve;
+
+        if (x == null && y == null) {
+            this.x = null;
+            this.y = null;
+            this.isInfinite = true;
+        }
+        else {
+            this.x = x;
+            this.y = y;
+            this.isInfinite = false;
+        }
+    }
+
     public Curve getCurve() { return this.curve; }
 
     public FieldElement getX() { return this.x; }
@@ -33,4 +49,11 @@ public class Point {
     public FieldElement getY() { return this.y; }
 
     public boolean isInfinite() { return this.isInfinite; }
+
+    public Point negate() {
+        if (this.isInfinite)
+            return this;
+
+        return new Point(this.curve, this.x, this.y.negate());
+    }
 }

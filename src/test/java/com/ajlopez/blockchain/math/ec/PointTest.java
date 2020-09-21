@@ -23,10 +23,46 @@ public class PointTest {
     }
 
     @Test
+    public void negatePoint() {
+        Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
+
+        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3)).negate();
+
+        Assert.assertSame(curve, point.getCurve());
+        Assert.assertEquals(BigInteger.ONE, point.getX().toBigInteger());
+        Assert.assertEquals(BigInteger.valueOf(4), point.getY().toBigInteger());
+
+        Assert.assertFalse(point.isInfinite());
+    }
+
+    @Test
+    public void negateInfinitePoint() {
+        Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
+
+        Point point = new Point(curve, (BigInteger) null, (BigInteger) null).negate();
+
+        Assert.assertSame(curve, point.getCurve());
+
+        Assert.assertTrue(point.isInfinite());
+    }
+
+    @Test
     public void createInfinitePoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 
-        Point point = new Point(curve, null, null);
+        Point point = new Point(curve, (BigInteger)null, (BigInteger)null);
+
+        Assert.assertSame(curve, point.getCurve());
+        Assert.assertNull(point.getX());
+        Assert.assertNull(point.getY());
+        Assert.assertTrue(point.isInfinite());
+    }
+
+    @Test
+    public void createInfinitePointUsingFieldElements() {
+        Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
+
+        Point point = new Point(curve, (FieldElement) null, (FieldElement) null);
 
         Assert.assertSame(curve, point.getCurve());
         Assert.assertNull(point.getX());
