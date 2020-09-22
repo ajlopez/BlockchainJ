@@ -1,5 +1,7 @@
 package com.ajlopez.blockchain.math.ec;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.math.BigInteger;
 
 /**
@@ -55,5 +57,16 @@ public class Point {
             return this;
 
         return new Point(this.curve, this.x, this.y.negate());
+    }
+
+    public Point add(Point point) {
+        if (this.isInfinite)
+            return point;
+
+        if (point.isInfinite())
+            return this;
+
+        // TODO implement other cases
+        throw new NotImplementedException();
     }
 }

@@ -69,4 +69,30 @@ public class PointTest {
         Assert.assertNull(point.getY());
         Assert.assertTrue(point.isInfinite());
     }
+
+    @Test
+    public void addInfinitePointToPoint() {
+        Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
+
+        Point infinite = new Point(curve, (FieldElement) null, (FieldElement) null);
+        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3));
+
+        Point result = infinite.add(point);
+
+        Assert.assertNotNull(result);
+        Assert.assertSame(point, result);
+    }
+
+    @Test
+    public void addPointToInfinitePoint() {
+        Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
+
+        Point infinite = new Point(curve, (FieldElement) null, (FieldElement) null);
+        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3));
+
+        Point result = point.add(infinite);
+
+        Assert.assertNotNull(result);
+        Assert.assertSame(point, result);
+    }
 }
