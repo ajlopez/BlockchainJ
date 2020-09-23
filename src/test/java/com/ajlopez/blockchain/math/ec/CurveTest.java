@@ -27,6 +27,14 @@ public class CurveTest {
     }
 
     @Test
+    public void infinitePpintInCurve() {
+        Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
+        Point point = new Point(curve, (BigInteger) null, (BigInteger) null);
+
+        Assert.assertTrue(curve.inCurve(point));
+    }
+
+    @Test
     public void pointNotInCurve() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
         Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(2));
