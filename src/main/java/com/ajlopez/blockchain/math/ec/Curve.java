@@ -25,7 +25,7 @@ public class Curve {
     public boolean inCurve(Point point) {
         if (point.isInfinite())
             return true;
-        
+
         FieldElement y = point.getY();
         FieldElement x = point.getX();
 
