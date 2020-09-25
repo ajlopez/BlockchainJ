@@ -66,6 +66,9 @@ public class Point {
         if (point.isInfinite())
             return this;
 
+        if (this.y.isZero() && point.getY().isZero())
+            return new Point(this.curve, (FieldElement)null, (FieldElement)null);
+
         // TODO implement other cases
         throw new NotImplementedException();
     }

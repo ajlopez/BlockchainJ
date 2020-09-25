@@ -95,4 +95,16 @@ public class PointTest {
         Assert.assertNotNull(result);
         Assert.assertSame(point, result);
     }
+
+    @Test
+    public void addPointWithZeroYToItselfGivingInfinitePoint() {
+        Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
+
+        Point point = new Point(curve, BigInteger.valueOf(2), BigInteger.ZERO);
+
+        Point result = point.add(point);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isInfinite());
+    }
 }
