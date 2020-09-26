@@ -36,6 +36,20 @@ public class PointTest {
     }
 
     @Test
+    public void addPointToNegatedPoint() {
+        Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
+
+        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3));
+        Point negated = point.negate();
+
+        Point result = point.add(negated);
+
+        Assert.assertNotNull(result);
+        Assert.assertSame(curve, result.getCurve());
+        Assert.assertTrue(result.isInfinite());
+    }
+
+    @Test
     public void negateInfinitePoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 

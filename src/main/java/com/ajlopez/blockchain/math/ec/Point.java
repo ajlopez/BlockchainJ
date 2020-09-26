@@ -66,7 +66,9 @@ public class Point {
         if (point.isInfinite())
             return this;
 
-        if (this.y.isZero() && point.getY().isZero())
+        FieldElement dY = this.y.add(point.getY());
+
+        if (dY.isZero())
             return new Point(this.curve, (FieldElement)null, (FieldElement)null);
 
         // TODO implement other cases

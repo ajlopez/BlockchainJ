@@ -27,7 +27,7 @@ public class CurveTest {
     }
 
     @Test
-    public void infinitePpintInCurve() {
+    public void infinitePointInCurve() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
         Point point = new Point(curve, (BigInteger) null, (BigInteger) null);
 
