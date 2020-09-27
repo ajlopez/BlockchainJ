@@ -121,4 +121,24 @@ public class PointTest {
         Assert.assertNotNull(result);
         Assert.assertTrue(result.isInfinite());
     }
+
+    @Test
+    public void addTwoPoints() {
+        Curve curve = new Curve(BigInteger.ZERO, BigInteger.valueOf(7), BigInteger.valueOf(37));
+
+        Point point1 = new Point(curve, BigInteger.valueOf(6), BigInteger.ONE);
+        Point point2 = new Point(curve, BigInteger.valueOf(8), BigInteger.ONE);
+
+        Assert.assertTrue(curve.inCurve(point1));
+        Assert.assertTrue(curve.inCurve(point2));
+
+        Point result = point1.add(point2);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(curve.inCurve(result));
+        Assert.assertFalse(result.isInfinite());
+        Assert.assertEquals(BigInteger.valueOf(23), result.getX().toBigInteger());
+        Assert.assertEquals(BigInteger.valueOf(36), result.getY().toBigInteger());
+    }
 }
+

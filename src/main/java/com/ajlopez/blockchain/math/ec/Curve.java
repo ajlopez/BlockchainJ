@@ -31,7 +31,7 @@ public class Curve {
 
         y = y.multiply(y);
 
-        FieldElement right = x.multiply(x).add(this.a.multiply(x)).add(this.b);
+        FieldElement right = x.multiply(x).multiply(x).add(this.a.multiply(x)).add(this.b);
 
         // TODO Maybe implement FieldElement.equals
         return y.toBigInteger().equals(right.toBigInteger());

@@ -66,12 +66,20 @@ public class Point {
         if (point.isInfinite())
             return this;
 
-        FieldElement dY = this.y.add(point.getY());
+        FieldElement minusX2 = point.x.negate();
+        FieldElement dX = this.x.add(minusX2);
 
-        if (dY.isZero())
+        if (dX.isZero())
+            // TODO dY is zero
             return new Point(this.curve, (FieldElement)null, (FieldElement)null);
 
-        // TODO implement other cases
-        throw new NotImplementedException();
+        FieldElement dY = this.y.add(point.y.negate());
+        FieldElement s = dY.multiply(dX.inverse());
+        FieldElement minusX1 = this.x.negate();
+        FieldElement x3 = s.multiply(s).add(minusX1).add(minusX2);
+        FieldElement y3 = s.multiply(this.x.add(minusX2)).add(this.y.negate());
+
+        return new Point(this.curve, x3, y3);
     }
 }
+
