@@ -140,5 +140,22 @@ public class PointTest {
         Assert.assertEquals(BigInteger.valueOf(23), result.getX().toBigInteger());
         Assert.assertEquals(BigInteger.valueOf(36), result.getY().toBigInteger());
     }
+
+    @Test
+    public void addTheSamePoint() {
+        Curve curve = new Curve(BigInteger.ZERO, BigInteger.valueOf(7), BigInteger.valueOf(37));
+
+        Point point = new Point(curve, BigInteger.valueOf(6), BigInteger.ONE);
+
+        Assert.assertTrue(curve.inCurve(point));
+
+        Point result = point.add(point);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(curve.inCurve(result));
+        Assert.assertFalse(result.isInfinite());
+        Assert.assertEquals(BigInteger.valueOf(18), result.getX().toBigInteger());
+        Assert.assertEquals(BigInteger.valueOf(17), result.getY().toBigInteger());
+    }
 }
 
