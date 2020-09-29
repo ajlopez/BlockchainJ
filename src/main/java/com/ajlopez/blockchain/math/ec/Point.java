@@ -71,20 +71,8 @@ public class Point {
         FieldElement dY = this.y.add(point.y.negate());
 
         if (dX.isZero())
-            if (dY.isZero() && !this.y.isZero()) {
-                FieldElement g = this.x.multiply(this.x).multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(3)));
-
-                g = g.add(this.curve.getA());
-                g = g.multiply(this.y.multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(2))).inverse());
-
-                FieldElement x3 = g.multiply(g);
-
-                x3 = x3.add(this.x.multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(2))).negate());
-
-                FieldElement y3 = g.multiply(this.x.add(x3.negate())).add(this.y.negate());
-
-                return new Point(this.curve, x3, y3);
-            }
+            if (dY.isZero() && !this.y.isZero())
+                return twice();
             else
                 return new Point(this.curve, (FieldElement)null, (FieldElement)null);
 
@@ -92,6 +80,21 @@ public class Point {
         FieldElement minusX1 = this.x.negate();
         FieldElement x3 = s.multiply(s).add(minusX1).add(minusX2);
         FieldElement y3 = s.multiply(this.x.add(minusX2)).add(this.y.negate());
+
+        return new Point(this.curve, x3, y3);
+    }
+
+    public Point twice() {
+        FieldElement g = this.x.multiply(this.x).multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(3)));
+
+        g = g.add(this.curve.getA());
+        g = g.multiply(this.y.multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(2))).inverse());
+
+        FieldElement x3 = g.multiply(g);
+
+        x3 = x3.add(this.x.multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(2))).negate());
+
+        FieldElement y3 = g.multiply(this.x.add(x3.negate())).add(this.y.negate());
 
         return new Point(this.curve, x3, y3);
     }
