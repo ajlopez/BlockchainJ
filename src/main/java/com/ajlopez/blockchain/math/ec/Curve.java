@@ -9,11 +9,13 @@ public class Curve {
     private final FieldElement a;
     private final FieldElement b;
     private final BigInteger p;
+    private final Point infinite;
 
     public Curve(BigInteger a, BigInteger b, BigInteger p) {
         this.a = new FieldElement(p, a);
         this.b = new FieldElement(p, b);
         this.p = p;
+        this.infinite = new Point(this, (FieldElement) null, (FieldElement) null);
     }
 
     public FieldElement getA() { return this.a; }
@@ -21,6 +23,8 @@ public class Curve {
     public FieldElement getB() { return this.b; }
 
     public BigInteger getP() { return this.p; }
+
+    public Point getInfinite() { return this.infinite; }
 
     public boolean inCurve(Point point) {
         if (point.isInfinite())

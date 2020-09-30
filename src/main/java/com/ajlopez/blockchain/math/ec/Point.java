@@ -1,7 +1,5 @@
 package com.ajlopez.blockchain.math.ec;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.math.BigInteger;
 
 /**
@@ -74,7 +72,7 @@ public class Point {
             if (dY.isZero() && !this.y.isZero())
                 return twice();
             else
-                return new Point(this.curve, (FieldElement)null, (FieldElement)null);
+                return this.curve.getInfinite();
 
         FieldElement s = dY.multiply(dX.inverse());
         FieldElement minusX1 = this.x.negate();

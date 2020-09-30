@@ -19,6 +19,17 @@ public class CurveTest {
     }
 
     @Test
+    public void getInfinitePoint() {
+        Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
+
+        Point result = curve.getInfinite();
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isInfinite());
+        Assert.assertTrue(curve.inCurve(result));
+    }
+
+    @Test
     public void pointInCurve() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
         Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3));
