@@ -156,6 +156,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Gas cost for calling precompiles](https://gist.github.com/holiman/7153e088af8941379cf21c0e4610d51f)
 - [EIP-2972: Wrapped Legacy Transactions](https://eips.ethereum.org/EIPS/eip-2972)
 - [Finite field arithmetic](https://en.wikipedia.org/wiki/Finite_field_arithmetic)
+- [State of block header sync in light clients](https://ethresear.ch/t/state-of-block-header-sync-in-light-clients/8047/6)
 
 ## To Do
 
