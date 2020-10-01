@@ -86,7 +86,7 @@ public class Point {
         FieldElement g = this.x.multiply(this.x).multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(3)));
 
         g = g.add(this.curve.getA());
-        g = g.multiply(this.y.multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(2))).inverse());
+        g = g.multiply(this.y.twice().inverse());
 
         FieldElement x3 = g.multiply(g);
 
