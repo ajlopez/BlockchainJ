@@ -18,6 +18,10 @@ public class FieldElement {
         return new FieldElement(this.prime, this.value.add(element.value).mod(this.prime));
     }
 
+    public FieldElement subtract(FieldElement element) {
+        return this.add(element.negate());
+    }
+
     public FieldElement twice() {
         return new FieldElement(this.prime, this.value.shiftLeft(1).mod(this.prime));
     }

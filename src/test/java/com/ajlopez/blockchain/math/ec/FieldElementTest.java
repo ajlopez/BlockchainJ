@@ -30,6 +30,20 @@ public class FieldElementTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(BigInteger.valueOf(4), result.toBigInteger());
         Assert.assertFalse(result.isZero());
+
+        Assert.assertTrue(three.add(result).isZero());
+    }
+
+    @Test
+    public void subtractElement() {
+        FieldElement three = new FieldElement(BigInteger.valueOf(7), BigInteger.valueOf(3));
+        FieldElement two = new FieldElement(BigInteger.valueOf(7), BigInteger.valueOf(2));
+
+        FieldElement result = three.subtract(two);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.valueOf(1), result.toBigInteger());
+        Assert.assertFalse(result.isZero());
     }
 
     @Test
