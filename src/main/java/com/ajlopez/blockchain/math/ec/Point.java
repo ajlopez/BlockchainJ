@@ -66,7 +66,7 @@ public class Point {
 
         FieldElement minusX2 = point.x.negate();
         FieldElement dX = this.x.add(minusX2);
-        FieldElement dY = this.y.add(point.y.negate());
+        FieldElement dY = this.y.subtract(point.y);
 
         if (dX.isZero())
             if (dY.isZero() && !this.y.isZero())
@@ -75,9 +75,8 @@ public class Point {
                 return this.curve.getInfinite();
 
         FieldElement s = dY.multiply(dX.inverse());
-        FieldElement minusX1 = this.x.negate();
-        FieldElement x3 = s.multiply(s).add(minusX1).add(minusX2);
-        FieldElement y3 = s.multiply(this.x.add(minusX2)).add(this.y.negate());
+        FieldElement x3 = s.multiply(s).subtract(this.x).add(minusX2);
+        FieldElement y3 = s.multiply(this.x.add(minusX2)).subtract(this.y);
 
         return new Point(this.curve, x3, y3);
     }
@@ -90,9 +89,9 @@ public class Point {
 
         FieldElement x3 = g.multiply(g);
 
-        x3 = x3.add(this.x.multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(2))).negate());
+        x3 = x3.subtract(this.x.multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(2))));
 
-        FieldElement y3 = g.multiply(this.x.add(x3.negate())).add(this.y.negate());
+        FieldElement y3 = g.multiply(this.x.add(x3.negate())).subtract(this.y);
 
         return new Point(this.curve, x3, y3);
     }
