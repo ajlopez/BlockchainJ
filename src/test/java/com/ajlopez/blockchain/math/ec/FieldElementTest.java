@@ -57,4 +57,17 @@ public class FieldElementTest {
         Assert.assertFalse(result.isZero());
         Assert.assertEquals(BigInteger.ONE, result.multiply(three).toBigInteger());
     }
+
+    @Test
+    public void divideElement() {
+        FieldElement three = new FieldElement(BigInteger.valueOf(7), BigInteger.valueOf(3));
+        FieldElement five = new FieldElement(BigInteger.valueOf(7), BigInteger.valueOf(5));
+
+        FieldElement result = three.divide(five);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BigInteger.valueOf(2), result.toBigInteger());
+        Assert.assertFalse(result.isZero());
+        Assert.assertEquals(BigInteger.ONE, three.divide(three).toBigInteger());
+    }
 }

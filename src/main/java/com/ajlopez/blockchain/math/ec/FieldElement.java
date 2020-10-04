@@ -37,6 +37,10 @@ public class FieldElement {
         return new FieldElement(this.prime, this.value.multiply(element.value).mod(this.prime));
     }
 
+    public FieldElement divide(FieldElement element) {
+        return this.multiply(element.inverse());
+    }
+
     // TODO zero case
     // TODO improve cache
     public FieldElement inverse() {
