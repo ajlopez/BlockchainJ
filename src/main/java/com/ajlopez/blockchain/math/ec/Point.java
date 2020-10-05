@@ -74,7 +74,7 @@ public class Point {
             else
                 return this.curve.getInfinite();
 
-        FieldElement s = dY.multiply(dX.inverse());
+        FieldElement s = dY.divide(dX);
         FieldElement x3 = s.multiply(s).subtract(this.x).add(minusX2);
         FieldElement y3 = s.multiply(this.x.add(minusX2)).subtract(this.y);
 
@@ -85,7 +85,7 @@ public class Point {
         FieldElement g = this.x.multiply(this.x).multiply(new FieldElement(this.curve.getP(), BigInteger.valueOf(3)));
 
         g = g.add(this.curve.getA());
-        g = g.multiply(this.y.twice().inverse());
+        g = g.divide(this.y.twice());
 
         FieldElement x3 = g.multiply(g);
 
