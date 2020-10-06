@@ -44,6 +44,9 @@ public class FieldElement {
     // TODO zero case
     // TODO improve cache
     public FieldElement inverse() {
+        if (this.isZero())
+            throw new ArithmeticException("Zero has no inverse");
+
         BigInteger newvalue = this.value.modPow(this.prime.subtract(BigInteger.valueOf(2)), this.prime);
 
         return new FieldElement(this.prime, newvalue);

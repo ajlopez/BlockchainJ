@@ -1,7 +1,9 @@
 package com.ajlopez.blockchain.math.ec;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigInteger;
 
@@ -9,6 +11,10 @@ import java.math.BigInteger;
  * Created by ajlopez on 18/09/2020.
  */
 public class FieldElementTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void negateZero() {
         FieldElement zero = new FieldElement(BigInteger.valueOf(7), BigInteger.ZERO);
@@ -56,6 +62,15 @@ public class FieldElementTest {
         Assert.assertEquals(BigInteger.valueOf(5), result.toBigInteger());
         Assert.assertFalse(result.isZero());
         Assert.assertEquals(BigInteger.ONE, result.multiply(three).toBigInteger());
+    }
+
+    @Test
+    public void inverseZeroElement() {
+        FieldElement zero = new FieldElement(BigInteger.valueOf(7), BigInteger.valueOf(0));
+
+        exception.expect(ArithmeticException.class);
+        exception.expectMessage("Zero has no inverse");
+        zero.inverse();
     }
 
     @Test
