@@ -41,7 +41,6 @@ public class FieldElement {
         return this.multiply(element.inverse());
     }
 
-    // TODO zero case
     // TODO improve cache
     public FieldElement inverse() {
         if (this.isZero())

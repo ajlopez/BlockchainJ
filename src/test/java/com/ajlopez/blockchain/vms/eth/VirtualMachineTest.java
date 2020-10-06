@@ -25,10 +25,6 @@ import java.util.Stack;
  * Created by ajlopez on 10/12/2018.
  */
 public class VirtualMachineTest {
-    // https://www.infoq.com/news/2009/07/junit-4.7-rules
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     @Test
     public void executeEmptyCode() throws IOException {
         VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
