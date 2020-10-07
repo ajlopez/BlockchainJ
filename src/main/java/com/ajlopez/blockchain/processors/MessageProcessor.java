@@ -1,14 +1,11 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
-import com.ajlopez.blockchain.bc.BlockInformation;
 import com.ajlopez.blockchain.bc.ExtendedBlockInformation;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
-import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.net.PeerId;
 import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.*;

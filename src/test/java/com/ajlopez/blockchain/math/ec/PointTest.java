@@ -13,7 +13,7 @@ public class PointTest {
     public void createPoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 
-        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3));
+        Point point = Point.fromBigIntegers(curve, BigInteger.ONE, BigInteger.valueOf(3));
 
         Assert.assertSame(curve, point.getCurve());
         Assert.assertEquals(BigInteger.ONE, point.getX().toBigInteger());
@@ -26,7 +26,7 @@ public class PointTest {
     public void negatePoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 
-        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3)).negate();
+        Point point = Point.fromBigIntegers(curve, BigInteger.ONE, BigInteger.valueOf(3)).negate();
 
         Assert.assertSame(curve, point.getCurve());
         Assert.assertEquals(BigInteger.ONE, point.getX().toBigInteger());
@@ -39,7 +39,7 @@ public class PointTest {
     public void addPointToNegatedPoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 
-        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3));
+        Point point = Point.fromBigIntegers(curve, BigInteger.ONE, BigInteger.valueOf(3));
         Point negated = point.negate();
 
         Point result = point.add(negated);
@@ -53,7 +53,7 @@ public class PointTest {
     public void negateInfinitePoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 
-        Point point = new Point(curve, (BigInteger) null, (BigInteger) null).negate();
+        Point point = curve.getInfinite().negate();
 
         Assert.assertSame(curve, point.getCurve());
 
@@ -64,7 +64,7 @@ public class PointTest {
     public void createInfinitePoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 
-        Point point = new Point(curve, (BigInteger)null, (BigInteger)null);
+        Point point = new Point(curve, null, null);
 
         Assert.assertSame(curve, point.getCurve());
         Assert.assertNull(point.getX());
@@ -88,8 +88,8 @@ public class PointTest {
     public void addInfinitePointToPoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 
-        Point infinite = new Point(curve, (FieldElement) null, (FieldElement) null);
-        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3));
+        Point infinite = new Point(curve,null,null);
+        Point point = Point.fromBigIntegers(curve, BigInteger.ONE, BigInteger.valueOf(3));
 
         Point result = infinite.add(point);
 
@@ -101,8 +101,8 @@ public class PointTest {
     public void addPointToInfinitePoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 
-        Point infinite = new Point(curve, (FieldElement) null, (FieldElement) null);
-        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3));
+        Point infinite = curve.getInfinite();
+        Point point = Point.fromBigIntegers(curve, BigInteger.ONE, BigInteger.valueOf(3));
 
         Point result = point.add(infinite);
 
@@ -114,7 +114,7 @@ public class PointTest {
     public void addPointWithZeroYToItselfGivingInfinitePoint() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
 
-        Point point = new Point(curve, BigInteger.valueOf(2), BigInteger.ZERO);
+        Point point = Point.fromBigIntegers(curve, BigInteger.valueOf(2), BigInteger.ZERO);
 
         Point result = point.add(point);
 
@@ -126,8 +126,8 @@ public class PointTest {
     public void addTwoPoints() {
         Curve curve = new Curve(BigInteger.ZERO, BigInteger.valueOf(7), BigInteger.valueOf(37));
 
-        Point point1 = new Point(curve, BigInteger.valueOf(6), BigInteger.ONE);
-        Point point2 = new Point(curve, BigInteger.valueOf(8), BigInteger.ONE);
+        Point point1 = Point.fromBigIntegers(curve, BigInteger.valueOf(6), BigInteger.ONE);
+        Point point2 = Point.fromBigIntegers(curve, BigInteger.valueOf(8), BigInteger.ONE);
 
         Assert.assertTrue(curve.inCurve(point1));
         Assert.assertTrue(curve.inCurve(point2));
@@ -145,7 +145,7 @@ public class PointTest {
     public void addTheSamePoint() {
         Curve curve = new Curve(BigInteger.ZERO, BigInteger.valueOf(7), BigInteger.valueOf(37));
 
-        Point point = new Point(curve, BigInteger.valueOf(6), BigInteger.ONE);
+        Point point = Point.fromBigIntegers(curve, BigInteger.valueOf(6), BigInteger.ONE);
 
         Assert.assertTrue(curve.inCurve(point));
 
@@ -157,12 +157,12 @@ public class PointTest {
         Assert.assertEquals(BigInteger.valueOf(18), result.getX().toBigInteger());
         Assert.assertEquals(BigInteger.valueOf(17), result.getY().toBigInteger());
     }
-
+        
     @Test
     public void twicePoint() {
         Curve curve = new Curve(BigInteger.ZERO, BigInteger.valueOf(7), BigInteger.valueOf(37));
 
-        Point point = new Point(curve, BigInteger.valueOf(6), BigInteger.ONE);
+        Point point = Point.fromBigIntegers(curve, BigInteger.valueOf(6), BigInteger.ONE);
 
         Assert.assertTrue(curve.inCurve(point));
 

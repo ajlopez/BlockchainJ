@@ -13,9 +13,7 @@ import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.List;

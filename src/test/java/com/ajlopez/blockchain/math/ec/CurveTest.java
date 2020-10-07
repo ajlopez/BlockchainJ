@@ -32,7 +32,7 @@ public class CurveTest {
     @Test
     public void pointInCurve() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
-        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(3));
+        Point point = Point.fromBigIntegers(curve, BigInteger.ONE, BigInteger.valueOf(3));
 
         Assert.assertTrue(curve.inCurve(point));
     }
@@ -40,7 +40,7 @@ public class CurveTest {
     @Test
     public void infinitePointInCurve() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
-        Point point = new Point(curve, (BigInteger) null, (BigInteger) null);
+        Point point = curve.getInfinite();
 
         Assert.assertTrue(curve.inCurve(point));
     }
@@ -48,7 +48,7 @@ public class CurveTest {
     @Test
     public void pointNotInCurve() {
         Curve curve = new Curve(BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(7));
-        Point point = new Point(curve, BigInteger.ONE, BigInteger.valueOf(2));
+        Point point = Point.fromBigIntegers(curve, BigInteger.ONE, BigInteger.valueOf(2));
 
         Assert.assertFalse(curve.inCurve(point));
     }

@@ -11,20 +11,11 @@ public class Point {
     private final FieldElement y;
     private final boolean isInfinite;
 
-    // TODO Unify constructors
-    public Point(Curve curve, BigInteger x, BigInteger y) {
-        this.curve = curve;
-
-        if (x == null && y == null) {
-            this.x = null;
-            this.y = null;
-            this.isInfinite = true;
-        }
-        else {
-            this.x = new FieldElement(curve.getP(), x);
-            this.y = new FieldElement(curve.getP(), y);
-            this.isInfinite = false;
-        }
+    public static Point fromBigIntegers(Curve curve, BigInteger x, BigInteger y) {
+        if (x == null && y == null)
+            return new Point(curve, null, null);
+        else
+            return new Point(curve, new FieldElement(curve.getP(), x), new FieldElement(curve.getP(), y));
     }
 
     public Point(Curve curve, FieldElement x, FieldElement y) {
