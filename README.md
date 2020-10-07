@@ -158,6 +158,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Finite field arithmetic](https://en.wikipedia.org/wiki/Finite_field_arithmetic)
 - [State of block header sync in light clients](https://ethresear.ch/t/state-of-block-header-sync-in-light-clients/8047/)
 - [EIP-3014: Create `eth_symbol` method for JSON-RPC ](https://eips.ethereum.org/EIPS/eip-3014)
+- [Structure of a binary state tree — part 1](https://medium.com/@gballet/structure-of-a-binary-state-tree-part-1-48c587836d2f)
 
 ## To Do
 
