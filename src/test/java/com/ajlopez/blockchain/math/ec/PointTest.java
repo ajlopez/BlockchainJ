@@ -157,7 +157,7 @@ public class PointTest {
         Assert.assertEquals(BigInteger.valueOf(18), result.getX().toBigInteger());
         Assert.assertEquals(BigInteger.valueOf(17), result.getY().toBigInteger());
     }
-        
+
     @Test
     public void twicePoint() {
         Curve curve = new Curve(BigInteger.ZERO, BigInteger.valueOf(7), BigInteger.valueOf(37));

@@ -12,7 +12,6 @@ import com.ajlopez.blockchain.utils.HexUtils;
 public class TransactionJsonEncoder {
     private TransactionJsonEncoder() {}
 
-    // TODO support not include nonce
     public static JsonValue encode(Transaction transaction, boolean includeHash, boolean includeNonce) {
         if (transaction == null)
             return JsonNullValue.getInstance();
