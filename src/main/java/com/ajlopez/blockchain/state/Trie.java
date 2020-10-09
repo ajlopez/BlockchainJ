@@ -217,9 +217,7 @@ public class Trie {
         if (this.saved)
             return;
 
-        // TODO review
-        if (this.store != null)
-            this.store.save(this);
+        this.store.save(this);
 
         this.saved = true;
 

@@ -400,7 +400,7 @@ public class TransactionExecutorTest {
     @Test
     public void executeTransactionCreatingContract() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
         Address sender = FactoryHelper.createRandomAddress();
 
         byte[] code = new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x00, OpCodes.RETURN };
@@ -510,7 +510,7 @@ public class TransactionExecutorTest {
     private static Storage executeTransactionInvokingCode(byte[] code, Address coinbase, Address senderAddress, Address receiverAddress) throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
 
         FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
         FactoryHelper.createAccountWithCode(accountStore, codeStore, receiverAddress, code);
@@ -566,7 +566,7 @@ public class TransactionExecutorTest {
     private static ExecutionResult executeOneRichTransactionInvokingCode(byte[] code, Address coinbase, Address senderAddress) throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
 
         FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
 
@@ -582,7 +582,7 @@ public class TransactionExecutorTest {
     private static ExecutionResult executeOneTransactionInvokingCode(byte[] code, Address coinbase, Address senderAddress, Address receiverAddress) throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
 
         FactoryHelper.createAccountWithBalance(accountStore, senderAddress, 1000000);
         FactoryHelper.createAccountWithCode(accountStore, codeStore, receiverAddress, code);

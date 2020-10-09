@@ -116,7 +116,7 @@ public class TopExecutionContextTest {
     @Test
     public void getStorageFromNewAccountAndSetKeyValue() throws IOException {
         Address address = FactoryHelper.createRandomAddress();
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(trieStore);
@@ -203,7 +203,7 @@ public class TopExecutionContextTest {
 
     @Test
     public void getBalanceFromAccountAndCommitDoesNotChangeStore() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
         Account account = new Account(Coin.TEN, 42, 0, null, null);
         Address address = FactoryHelper.createRandomAddress();
 
@@ -230,7 +230,7 @@ public class TopExecutionContextTest {
 
     @Test
     public void getZeroBalanceFromAccountAndCommitDoesNotChangeStore() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
         Address address = FactoryHelper.createRandomAddress();
 
         Hash originalHash = accountStore.getRootHash();
@@ -273,7 +273,7 @@ public class TopExecutionContextTest {
 
     @Test
     public void incrementAccountNonceAndCommit() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
         Address address = FactoryHelper.createRandomAddress();
 
         Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
@@ -313,7 +313,7 @@ public class TopExecutionContextTest {
 
     @Test
     public void getNonceFromNewAccountAndCommit() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
         Address address = FactoryHelper.createRandomAddress();
 
         Hash originalHash = accountStore.getRootHash();
@@ -363,7 +363,7 @@ public class TopExecutionContextTest {
 
     @Test
     public void transferToAccountAndCommit() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
@@ -442,7 +442,7 @@ public class TopExecutionContextTest {
 
     @Test
     public void setCodeAndCommit() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie());
+        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
         CodeStore codeStore = new CodeStore(new HashMapStore());
 
         Address address = FactoryHelper.createRandomAddress();
