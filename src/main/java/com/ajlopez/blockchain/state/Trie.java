@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.state;
 
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.TrieStore;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
@@ -28,7 +29,9 @@ public class Trie {
     private Hash hash;
     private boolean saved;
 
-    public Trie() {}
+    public Trie() {
+        this(new TrieStore(new HashMapStore()));
+    }
 
     public Trie(TrieStore store) {
         this(null, null, null, null, 0, store);

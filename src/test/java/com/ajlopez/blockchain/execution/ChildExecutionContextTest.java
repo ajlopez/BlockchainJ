@@ -133,7 +133,7 @@ public class ChildExecutionContextTest {
 
     @Test
     public void incrementAccountNonceAndCommitTwoLevels() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
+        AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
         Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
@@ -155,7 +155,7 @@ public class ChildExecutionContextTest {
 
     @Test
     public void incrementNonceAccountAndRollback() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
+        AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
         Account account = new Account(Coin.fromUnsignedLong(1000), 41, 0, null, null);
