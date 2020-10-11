@@ -179,7 +179,7 @@ public class ChildExecutionContextTest {
 
     @Test
     public void getNonceFromNewAccountAndCommit() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
+        AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
 
         Hash originalHash = accountStore.getRootHash();
@@ -271,7 +271,7 @@ public class ChildExecutionContextTest {
 
     @Test
     public void transferToAccountAndCommitTwoLevels() throws IOException {
-        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
+        AccountStore accountStore = new AccountStore(new Trie());
         Address senderAddress = FactoryHelper.createRandomAddress();
         Address receiverAddress = FactoryHelper.createRandomAddress();
 
@@ -361,7 +361,7 @@ public class ChildExecutionContextTest {
     @Test
     public void getStorageFromNewAccountAndSetKeyValue() throws IOException {
         Address address = FactoryHelper.createRandomAddress();
-        AccountStore accountStore = new AccountStore(new Trie(new TrieStore(new HashMapStore())));
+        AccountStore accountStore = new AccountStore(new Trie());
         KeyValueStore keyValueStore = new HashMapStore();
         TrieStore trieStore = new TrieStore(keyValueStore);
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(trieStore);
