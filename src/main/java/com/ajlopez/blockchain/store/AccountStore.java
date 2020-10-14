@@ -29,6 +29,7 @@ public class AccountStore {
     }
 
     public void putAccount(Address address, Account account) throws IOException {
+        // TODO avoid put empty account
         byte[] key = address.getBytes();
         byte[] value = AccountEncoder.encode(account);
 

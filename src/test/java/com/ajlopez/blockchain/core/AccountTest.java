@@ -19,6 +19,7 @@ public class AccountTest {
         Assert.assertEquals(0, account.getNonce());
         Assert.assertNull(account.getCodeHash());
         Assert.assertNull(account.getStorageHash());
+        Assert.assertTrue(account.isEmpty());
     }
 
     @Test
@@ -28,6 +29,7 @@ public class AccountTest {
         Assert.assertEquals(Coin.ZERO, account.getBalance());
         Assert.assertEquals(42, account.getNonce());
         Assert.assertNull(account.getCodeHash());
+        Assert.assertFalse(account.isEmpty());
     }
 
     @Test
@@ -40,6 +42,7 @@ public class AccountTest {
         Assert.assertEquals(42, account.getNonce());
         Assert.assertEquals(code.length, account.getCodeLength());
         Assert.assertEquals(codeHash, account.getCodeHash());
+        Assert.assertFalse(account.isEmpty());
     }
 
     @Test
@@ -50,6 +53,7 @@ public class AccountTest {
         Assert.assertEquals(Coin.ZERO, account.getBalance());
         Assert.assertEquals(42, account.getNonce());
         Assert.assertEquals(storageHash, account.getStorageHash());
+        Assert.assertFalse(account.isEmpty());
     }
 
     @Test(expected = IllegalStateException.class)

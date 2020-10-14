@@ -12,6 +12,7 @@ public class Account {
     private final long codeLength;
     private final Hash codeHash;
     private final Hash storageHash;
+    private final boolean isEmpty;
 
     public Account() {
         this(Coin.ZERO, 0, 0, null, null);
@@ -29,6 +30,16 @@ public class Account {
         this.codeLength = codeLength;
         this.codeHash = codeHash;
         this.storageHash = storageHash;
+
+        this.isEmpty = this.balance.isZero() &&
+                this.nonce == 0 &&
+                this.codeLength == 0 &&
+                this.getCodeHash() == null &&
+                this.getStorageHash() == null;
+    }
+
+    public boolean isEmpty() {
+        return this.isEmpty;
     }
 
     public Coin getBalance() {
