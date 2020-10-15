@@ -44,7 +44,7 @@ public class TopExecutionContextTest {
     @Test
     public void getNullCodeFromAccountWithoutCode() throws IOException {
         AccountStore accountStore = new AccountStore(new Trie());
-        Account account = new Account();
+        Account account = new Account(Coin.TEN, 0, 0, null, null);
         Address address = FactoryHelper.createRandomAddress();
         accountStore.putAccount(address, account);
 

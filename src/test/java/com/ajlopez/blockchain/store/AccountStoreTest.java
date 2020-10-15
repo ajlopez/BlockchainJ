@@ -6,7 +6,9 @@ import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.state.Trie;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 
@@ -14,6 +16,10 @@ import java.io.IOException;
  * Created by ajlopez on 26/11/2018.
  */
 public class AccountStoreTest {
+    // https://www.infoq.com/news/2009/07/junit-4.7-rules
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void getUnknownAccount() throws IOException {
         AccountStore store = new AccountStore(new Trie());
@@ -41,5 +47,17 @@ public class AccountStoreTest {
         Assert.assertEquals(42, result.getNonce());
 
         Assert.assertArrayEquals(AccountEncoder.encode(account), AccountEncoder.encode(result));
+    }
+
+    @Test
+    public void cannotPutAnEmptyAccount() throws IOException {
+        AccountStore store = new AccountStore(new Trie());
+        Account account = new Account();
+        Address address = new Address(new byte[] { 0x01, 0x02 });
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Empty account");
+
+        store.putAccount(address, account);
     }
 }
