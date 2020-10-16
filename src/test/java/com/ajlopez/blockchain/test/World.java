@@ -101,7 +101,9 @@ public class World {
     public void setAccount(String name, Account account) throws IOException {
         Address address = FactoryHelper.createRandomAddress();
         this.accounts.put(name, address);
-        this.accountStore.putAccount(address, account);
+
+        if (!account.isEmpty())
+            this.accountStore.putAccount(address, account);
     }
 
     public void setCode(Hash codeHash, byte[] code) throws IOException {

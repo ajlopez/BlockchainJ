@@ -1573,7 +1573,7 @@ public class VirtualMachineTest {
     @Test
     public void executeExtCodeHashOperationForAccountWithoutCode() throws IOException {
         CodeStore codeStore = new CodeStore(new HashMapStore());
-        Account account = new Account(Coin.ZERO, 0, 0, null, null);
+        Account account = new Account(Coin.TEN, 0, 0, null, null);
         AccountStore accountStore = new AccountStore(new Trie());
         Address address = FactoryHelper.createRandomAddress();
         accountStore.putAccount(address, account);

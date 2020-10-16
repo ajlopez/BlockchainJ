@@ -162,7 +162,7 @@ public class WorldStateCopierTest {
 
         for (int k = 0; k < 100; k++) {
             Address address = FactoryHelper.createRandomAddress();
-            Account account = new Account(Coin.fromUnsignedLong(random.nextInt(1000)), random.nextInt(1000), 0, null, null);
+            Account account = new Account(Coin.fromUnsignedLong(random.nextInt(1000) + 1), random.nextInt(1000), 0, null, null);
 
             addresses.add(address);
             accounts.add(account);

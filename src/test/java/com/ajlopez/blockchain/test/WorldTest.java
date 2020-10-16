@@ -35,7 +35,7 @@ public class WorldTest {
     @Test
     public void setAndGetAccount() throws IOException {
         World world = new World();
-        Account account = new Account();
+        Account account = new Account(Coin.TEN, 0, 0, null, null);
 
         world.setAccount("acc1", account);
 
@@ -48,7 +48,7 @@ public class WorldTest {
     @Test
     public void getAccountAddress() throws IOException {
         World world = new World();
-        Account account = new Account();
+        Account account = new Account(Coin.TEN, 0, 0, null, null);
 
         world.setAccount("acc1", account);
 
