@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.BlockHeaderEncoder;
+import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
 
 import java.util.Arrays;
@@ -26,11 +27,12 @@ public class BlockHeader {
     private final Difficulty difficulty;
     private final long gasLimit;
     private final long gasUsed;
+    private final byte[] extraData;
     private final long nonce;
 
     private BlockHash hash;
 
-    public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, Hash receiptsRootHash, int unclesCount, Hash unclesRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, long nonce) {
+    public BlockHeader(long number, BlockHash parentHash, int transactionsCount, Hash transactionsRootHash, Hash receiptsRootHash, int unclesCount, Hash unclesRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, byte[] extraData, long nonce) {
         if (number < 0)
             throw new IllegalStateException("Negative number in block header");
 
@@ -47,6 +49,7 @@ public class BlockHeader {
         this.difficulty = difficulty;
         this.gasLimit = gasLimit;
         this.gasUsed = gasUsed;
+        this.extraData = ByteUtils.normalizeBytesToNull(extraData);
         this.nonce = nonce;
     }
 
@@ -88,6 +91,8 @@ public class BlockHeader {
     public Hash getStateRootHash() {
         return this.stateRootHash;
     }
+
+    public byte[] getExtraData() { return this.extraData; }
 
     public long getNonce() { return this.nonce; }
 
