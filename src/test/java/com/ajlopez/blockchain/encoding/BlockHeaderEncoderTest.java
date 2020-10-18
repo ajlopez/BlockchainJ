@@ -75,6 +75,38 @@ public class BlockHeaderEncoderTest {
         Assert.assertEquals(header.getDifficulty(), result.getDifficulty());
         Assert.assertEquals(header.getGasLimit(), result.getGasLimit());
         Assert.assertEquals(header.getGasUsed(), result.getGasUsed());
+        Assert.assertNull(result.getExtraData());
+        Assert.assertEquals(header.getNonce(), result.getNonce());
+    }
+
+    @Test
+    public void encodeDecodeBlockHeaderWithNonceAndExtraData() {
+        byte[] extraData = FactoryHelper.createRandomBytes(20);
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Hash transactionsHash = FactoryHelper.createRandomHash();
+        Hash stateRootHash = FactoryHelper.createRandomHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, extraData, 100);
+
+        byte[] encoded = BlockHeaderEncoder.encode(header);
+
+        Assert.assertNotNull(encoded);
+
+        BlockHeader result = BlockHeaderEncoder.decode(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(42, result.getNumber());
+        Assert.assertEquals(hash, result.getParentHash());
+        Assert.assertEquals(header.getHash(), result.getHash());
+        Assert.assertEquals(header.getTransactionsCount(), result.getTransactionsCount());
+        Assert.assertEquals(header.getTransactionsRootHash(), result.getTransactionsRootHash());
+        Assert.assertEquals(header.getCoinbase(), result.getCoinbase());
+        Assert.assertEquals(header.getDifficulty(), result.getDifficulty());
+        Assert.assertEquals(header.getGasLimit(), result.getGasLimit());
+        Assert.assertEquals(header.getGasUsed(), result.getGasUsed());
+        Assert.assertNotNull(result.getExtraData());
+        Assert.assertArrayEquals(extraData, result.getExtraData());
         Assert.assertEquals(header.getNonce(), result.getNonce());
     }
 

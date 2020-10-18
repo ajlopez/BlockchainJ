@@ -49,6 +49,7 @@ public class BlockHeader {
         this.difficulty = difficulty;
         this.gasLimit = gasLimit;
         this.gasUsed = gasUsed;
+        // TODO max length 32 bytes
         this.extraData = ByteUtils.normalizeBytesToNull(extraData);
         this.nonce = nonce;
     }

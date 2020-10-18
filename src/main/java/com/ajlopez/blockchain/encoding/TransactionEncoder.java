@@ -45,6 +45,7 @@ public class TransactionEncoder {
         Address receiver = RLPEncoder.decodeAddress(bytes[1]);
         Coin value = RLPEncoder.decodeCoin(bytes[2]);
         long nonce = RLPEncoder.decodeUnsignedLong(bytes[3]);
+        // TODO review if normalize is needed here
         byte[] data = ByteUtils.normalizeBytesToNull(RLP.decode(bytes[4]));
         long gas = RLPEncoder.decodeUnsignedLong(bytes[5]);
         Coin gasPrice = RLPEncoder.decodeCoin(bytes[6]);

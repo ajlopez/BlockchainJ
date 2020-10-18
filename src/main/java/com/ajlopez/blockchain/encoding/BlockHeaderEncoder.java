@@ -29,16 +29,16 @@ public class BlockHeaderEncoder {
         byte[] rlpDifficulty = RLPEncoder.encodeDifficulty(blockHeader.getDifficulty());
         byte[] rlpGasLimit = RLPEncoder.encodeUnsignedLong(blockHeader.getGasLimit());
         byte[] rlpGasUsed = RLPEncoder.encodeUnsignedLong(blockHeader.getGasUsed());
+        byte[] rlpExtraData = RLP.encode(blockHeader.getExtraData());
         byte[] rlpNonce = RLPEncoder.encodeNonce(blockHeader.getNonce());
 
-        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsCount, rlpTransactionsHash, rlpReceiptsHash, rlpUnclesCount, rlpUnclesHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty, rlpGasLimit, rlpGasUsed, rlpNonce);
+        return RLP.encodeList(rlpNumber, rlpParentHash, rlpTransactionsCount, rlpTransactionsHash, rlpReceiptsHash, rlpUnclesCount, rlpUnclesHash, rlpStateRootHash, rlpTimestamp, rlpCoinbase, rlpDifficulty, rlpGasLimit, rlpGasUsed, rlpExtraData, rlpNonce);
     }
 
-    // TODO process gas limit
     public static BlockHeader decode(byte[] encoded) {
         byte[][] bytes = RLP.decodeList(encoded);
 
-        if (bytes.length != 14)
+        if (bytes.length != 15)
             throw new IllegalArgumentException("Invalid block header encoding");
 
         long number = RLPEncoder.decodeUnsignedLong(bytes[0]);
@@ -54,9 +54,10 @@ public class BlockHeaderEncoder {
         Difficulty difficulty = RLPEncoder.decodeDifficulty(bytes[10]);
         long gasLimit = RLPEncoder.decodeUnsignedLong(bytes[11]);
         long gasUsed = RLPEncoder.decodeUnsignedLong(bytes[12]);
-        long nonce = RLPEncoder.decodeLong(bytes[13]);
+        byte[] extraData = RLP.decode(bytes[13]);
+        long nonce = RLPEncoder.decodeLong(bytes[14]);
 
-        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, receiptsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, null, nonce);
+        return new BlockHeader(number, parentHash, transactionsCount, transactionsHash, receiptsHash, unclesCount, unclesHash, stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, extraData, nonce);
     }
 
     public static byte[] encode(List<BlockHeader> blockHeaders) {
