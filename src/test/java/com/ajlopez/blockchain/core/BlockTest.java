@@ -22,15 +22,18 @@ public class BlockTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void createWithNumberAndParentHash() {
+    public void createWithNumberAndParentHashAndGasDataAndExtraData() {
+        byte[] extraData = FactoryHelper.createRandomBytes(20);
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000L);
+        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000L, extraData);
 
         Assert.assertEquals(1L, block.getNumber());
         Assert.assertEquals(hash, block.getParentHash());
         Assert.assertNotNull(block.getHash());
+
+        Assert.assertArrayEquals(extraData, block.getExtraData());
 
         Assert.assertNotNull(block.getUncles());
         Assert.assertTrue(block.getUncles().isEmpty());
@@ -49,7 +52,7 @@ public class BlockTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<Transaction> transactions = block.getTransactions();
 
@@ -64,7 +67,7 @@ public class BlockTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<Transaction> transactions = block.getTransactions();
 
@@ -83,7 +86,7 @@ public class BlockTest {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
-        Block block = new Block(1L, hash, null, transactions, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1L, hash, null, transactions, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Assert.assertNotNull(block.getTransactions());
         Assert.assertFalse(block.getTransactions().isEmpty());
@@ -103,7 +106,7 @@ public class BlockTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1L, hash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<BlockHeader> uncles = block.getUncles();
 
@@ -125,7 +128,7 @@ public class BlockTest {
         uncles.add(uncle1);
         uncles.add(uncle2);
 
-        Block block = new Block(2L, hash, uncles, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(2L, hash, uncles, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<BlockHeader> result = block.getUncles();
 
@@ -157,7 +160,7 @@ public class BlockTest {
         uncles.add(uncle1);
         uncles.add(uncle2);
 
-        Block block = new Block(2L, hash, uncles, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(2L, hash, uncles, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<BlockHeader> result = block.getUncles();
 
@@ -182,8 +185,8 @@ public class BlockTest {
     public void blockWithDifferentParentHashesHaveDifferentHashes() {
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1L, FactoryHelper.createRandomBlockHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
-        Block block2 = new Block(1L, FactoryHelper.createRandomBlockHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block1 = new Block(1L, FactoryHelper.createRandomBlockHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
+        Block block2 = new Block(1L, FactoryHelper.createRandomBlockHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -193,8 +196,8 @@ public class BlockTest {
         BlockHash parentHash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1L, parentHash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
-        Block block2 = new Block(2L, parentHash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block1 = new Block(1L, parentHash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
+        Block block2 = new Block(2L, parentHash, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
     }
@@ -214,8 +217,8 @@ public class BlockTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1L, hash, null, txs1, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
-        Block block2 = new Block(1L, hash, null, txs2, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block1 = new Block(1L, hash, null, txs1, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
+        Block block2 = new Block(1L, hash, null, txs2, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Assert.assertNotEquals(block1.getHash(), block2.getHash());
 
@@ -233,7 +236,7 @@ public class BlockTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, null, txs, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1L, hash, null, txs, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Assert.assertEquals(1, block.getTransactionsCount());
 
@@ -259,7 +262,7 @@ public class BlockTest {
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1L, hash, null, txs, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1L, hash, null, txs, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Assert.assertEquals(2, block.getTransactionsCount());
 

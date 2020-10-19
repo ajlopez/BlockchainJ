@@ -70,7 +70,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -94,7 +94,7 @@ public class BlockProcessorTest {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
-        Block block0 = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block0 = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
         Block block = new Block(block0.getHeader(), null, transactions);
 
         List<Block> processedBlocks = processor.processBlock(block);
@@ -112,7 +112,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor(blockChain, transactionPool);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -140,7 +140,7 @@ public class BlockProcessorTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -169,7 +169,7 @@ public class BlockProcessorTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<Block> processedBlocks = processor.processBlock(block);
 
@@ -193,7 +193,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<Block> connectedBlocks = processor.processBlock(block);
 
@@ -252,7 +252,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         List<Block> connectedBlocks = processor.processBlock(block);
 
@@ -272,7 +272,7 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1, FactoryHelper.createRandomBlockHash(), null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         BlockHash hash = processor.getUnknownAncestorHash(block.getHash());
 
@@ -295,7 +295,7 @@ public class BlockProcessorTest {
         BlockConsumer consumer = new BlockConsumer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         processor.onNewBestBlock(consumer);
         processor.processBlock(block);
@@ -310,7 +310,7 @@ public class BlockProcessorTest {
         BlockConsumer consumer = new BlockConsumer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         processor.onNewBlock(consumer);
         processor.processBlock(block);
@@ -324,10 +324,10 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0);
-        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
-        Block block2 = new Block(2, block1.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
-        Block block3 = new Block(3, block2.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block genesis = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0, null);
+        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
+        Block block2 = new Block(2, block1.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
+        Block block3 = new Block(3, block2.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         processor.processBlock(genesis);
         processor.processBlock(block1);
@@ -373,10 +373,10 @@ public class BlockProcessorTest {
         BlockProcessor processor = FactoryHelper.createBlockProcessor();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0);
-        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
-        Block block2 = new Block(2, block1.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
-        Block block3 = new Block(3, block2.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block genesis = new Block(0, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0, null);
+        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
+        Block block2 = new Block(2, block1.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
+        Block block3 = new Block(3, block2.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         processor.processBlock(genesis);
         processor.processBlock(block1);

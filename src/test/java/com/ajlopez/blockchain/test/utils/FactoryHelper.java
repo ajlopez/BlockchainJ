@@ -181,12 +181,12 @@ public class FactoryHelper {
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, null);
 
-        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
     }
 
     public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions) {
         // TODO consider calculate receipts root if there is any transaction
-        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, MerkleTree.EMPTY_MERKLE_TREE_HASH, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000);
+        return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, MerkleTree.EMPTY_MERKLE_TREE_HASH, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000, null);
     }
 
     public static BlockChain createBlockChain(int size) throws IOException {
@@ -299,12 +299,12 @@ public class FactoryHelper {
         Address coinbase = createRandomAddress();
         List<Block> blocks = new ArrayList<>();
 
-        Block block = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000);
+        Block block = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000, null);
 
         blocks.add(block);
 
         for (int k = 0; k < nblocks; k++) {
-            block = new Block(block.getNumber() + 1, block.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+            block = new Block(block.getNumber() + 1, block.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
             blocks.add(block);
         }
 

@@ -68,7 +68,7 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, blockChain.getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1, blockChain.getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
         Message message = new BlockMessage(block);
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
@@ -117,7 +117,7 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Message message = new BlockMessage(block);
 
@@ -140,8 +140,8 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0);
-        Block block2 = new Block(2, block1.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block1 = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0, null);
+        Block block2 = new Block(2, block1.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Message message1 = new BlockMessage(block1);
         Message message2 = new BlockMessage(block2);
@@ -187,8 +187,8 @@ public class NodeProcessorTest {
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0);
-        Block block2 = new Block(2, block1.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block1 = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0, null);
+        Block block2 = new Block(2, block1.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Message message1 = new BlockMessage(block1);
         Message message2 = new BlockMessage(block2);
@@ -215,8 +215,8 @@ public class NodeProcessorTest {
         nodeProcessor1.connectTo(nodeProcessor2);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0);
-        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0, null);
+        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);
@@ -248,8 +248,8 @@ public class NodeProcessorTest {
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0);
-        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block genesis = new Block(0, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0, null);
+        Block block1 = new Block(1, genesis.getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         Message message0 = new BlockMessage(genesis);
         Message message1 = new BlockMessage(block1);

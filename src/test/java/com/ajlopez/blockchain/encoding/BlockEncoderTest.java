@@ -25,11 +25,12 @@ public class BlockEncoderTest {
 
     @Test
     public void encodeDecodeBlock() {
+        byte[] extraData = FactoryHelper.createRandomBytes(20);
         BlockHash parentHash = FactoryHelper.createRandomBlockHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(42, parentHash, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000L);
+        Block block = new Block(42, parentHash, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000L, extraData);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -48,6 +49,8 @@ public class BlockEncoderTest {
         Assert.assertEquals(block.getGasUsed(), result.getGasUsed());
 
         Assert.assertEquals(block.getHash(), result.getHash());
+
+        Assert.assertArrayEquals(extraData, result.getExtraData());
     }
 
     @Test
@@ -57,7 +60,7 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(42, parentHash, receiptsRootHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(42, parentHash, receiptsRootHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -85,7 +88,7 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(42, parentHash, null, txs, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(42, parentHash, null, txs, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -118,7 +121,7 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(42, parentHash, null, txs, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(42, parentHash, null, txs, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -161,7 +164,7 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block = new Block(42, parentHash, uncles, null, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block = new Block(42, parentHash, uncles, null, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         byte[] encoded = BlockEncoder.encode(block);
 
@@ -188,8 +191,8 @@ public class BlockEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        Block block1 = new Block(42, parentHash, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
-        Block block2 = new Block(0, null, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0);
+        Block block1 = new Block(42, parentHash, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
+        Block block2 = new Block(0, null, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null);
 
         byte[] encoded1 = BlockEncoder.encode(block1);
         byte[] encoded2 = BlockEncoder.encode(block2);
