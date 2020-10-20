@@ -22,6 +22,7 @@ public enum FeeSchedule {
     EXTCODESIZE(700),
     EXTCODEHASH(400),
     BALANCE(400),
+    CODEDEPOSIT(200),
     CREATION(32000);
 
     private long value;

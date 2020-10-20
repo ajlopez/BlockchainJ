@@ -403,9 +403,21 @@ public class TransactionExecutorTest {
         AccountStore accountStore = new AccountStore(new Trie());
         Address sender = FactoryHelper.createRandomAddress();
 
-        byte[] code = new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x00, OpCodes.RETURN };
+        byte[] code = new byte[] {
+            OpCodes.PUSH1, 0x01,
+            OpCodes.PUSH1, 0x00,
+            OpCodes.RETURN
+        };
 
-        executeTransactionCreatingContract(sender, code, accountStore, codeStore);
+        long expectedGasUsed =
+            FeeSchedule.VERYLOW.getValue() * 2 +
+            FeeSchedule.TRANSFER.getValue() +
+            FeeSchedule.CREATION.getValue() +
+            FeeSchedule.DATANONZERO.getValue() * 4 +
+            FeeSchedule.DATAZERO.getValue() +
+            FeeSchedule.CODEDEPOSIT.getValue() * 1;
+
+        executeTransactionCreatingContract(sender, code, expectedGasUsed, accountStore, codeStore);
 
         Address newContractAddress = HashUtils.calculateNewAddress(sender, 0);
 
@@ -596,7 +608,7 @@ public class TransactionExecutorTest {
         return executor.executeTransaction(transaction, blockData);
     }
 
-    private static void executeTransactionCreatingContract(Address senderAddress, byte[] code, AccountStore accountStore, CodeStore codeStore) throws IOException {
+    private static void executeTransactionCreatingContract(Address senderAddress, byte[] code, long expectedGasUsed, AccountStore accountStore, CodeStore codeStore) throws IOException {
         Address coinbase = FactoryHelper.createRandomAddress();
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(new TrieStore(new HashMapStore()));
 
@@ -617,6 +629,7 @@ public class TransactionExecutorTest {
         long gasUsed = result.get(0).getGasUsed();
 
         Assert.assertTrue(gasUsed > FeeSchedule.TRANSFER.getValue() + FeeSchedule.CREATION.getValue());
+        Assert.assertEquals(expectedGasUsed, gasUsed);
 
         Coin coinbaseBalance = accountStore.getAccount(coinbase).getBalance();
         Assert.assertNotNull(coinbaseBalance);

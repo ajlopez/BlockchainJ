@@ -97,10 +97,16 @@ public class TransactionExecutor {
         VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
         ExecutionResult executionResult = vm.execute(code);
+        // TODO test if gas is enough
         executionResult.addGasUsed(transactionGas);
 
-        if (executionResult.wasSuccesful() && isContractCreation)
-            context.setCode(receiver, executionResult.getReturnedData());
+        if (executionResult.wasSuccesful() && isContractCreation) {
+            byte[] newCode = executionResult.getReturnedData();
+
+            // TODO test if gas is enough
+            executionResult.addGasUsed(newCode.length * FeeSchedule.CODEDEPOSIT.getValue());
+            context.setCode(receiver, newCode);
+        }
 
         return executionResult;
     }
