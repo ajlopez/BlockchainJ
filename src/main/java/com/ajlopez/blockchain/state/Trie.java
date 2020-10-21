@@ -113,6 +113,10 @@ public class Trie {
         return this.get(key, 0);
     }
 
+    public boolean hasValue() {
+        return this.value != null;
+    }
+
     public byte[] getValue() {
         if (this.value == null)
             return null;
@@ -360,7 +364,7 @@ public class Trie {
         return node.getHash();
     }
 
-    private Trie getSubNode(int k) throws IOException {
+    public Trie getSubNode(int k) throws IOException {
         if (this.nodes != null && this.nodes[k] != null)
             return this.nodes[k];
 
