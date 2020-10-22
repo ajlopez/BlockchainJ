@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.tools;
 
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.state.TrieNodeCounterVisitor;
 
 import java.io.IOException;
 import java.util.Random;
@@ -45,7 +46,11 @@ public class TrieMemoryPerformance {
         }
 
         collectedData.creationTime = System.currentTimeMillis() - millis;
-        collectedData.trieSize = trie.nodesSize();
+
+        TrieNodeCounterVisitor visitor = new TrieNodeCounterVisitor();
+        visitor.process(trie);
+
+        collectedData.trieSize = visitor.getNodeCounter();
 
         collectedData.megaBytesAfter = (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
 

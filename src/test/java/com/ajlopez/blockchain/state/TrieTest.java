@@ -24,7 +24,7 @@ public class TrieTest {
         Trie trie = new Trie();
 
         Assert.assertNull(trie.get(new byte[] { 0x01, 0x02 }));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
         Assert.assertNull(trie.getValue());
     }
 
@@ -323,7 +323,7 @@ public class TrieTest {
         Trie trie = new Trie();
 
         Assert.assertNull(trie.get(new byte[0]));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
     }
 
     @Test
@@ -336,7 +336,7 @@ public class TrieTest {
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value, trie.get(key));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
     }
 
     @Test
@@ -352,7 +352,7 @@ public class TrieTest {
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(expected, trie.get(key));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
     }
 
     @Test
@@ -368,7 +368,7 @@ public class TrieTest {
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value, trie.get(key2));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
     }
 
     @Test
@@ -386,7 +386,7 @@ public class TrieTest {
         Assert.assertArrayEquals(value1, trie.get(key1));
         Assert.assertArrayEquals(value2, trie.get(key2));
 
-        Assert.assertEquals(3, trie.nodesSize());
+        Assert.assertEquals(3, getNodeSize(trie));
     }
 
     @Test
@@ -399,7 +399,7 @@ public class TrieTest {
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value, trie.get(key));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
     }
 
     @Test
@@ -411,7 +411,7 @@ public class TrieTest {
         trie = trie.put(key, value).delete(key);
         Assert.assertNotNull(trie);
         Assert.assertNull(trie.get(key));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
         Assert.assertEquals((new Trie()).getHash(), trie.getHash());
     }
 
@@ -462,7 +462,7 @@ public class TrieTest {
         Assert.assertNotNull(trie);
         Assert.assertNull(trie.get(key1));
         Assert.assertNull(trie.get(key2));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
         Assert.assertEquals((new Trie()).getHash(), trie.getHash());
     }
 
@@ -482,7 +482,7 @@ public class TrieTest {
         Assert.assertNotNull(trie);
         Assert.assertNull(trie.get(key1));
         Assert.assertNull(trie.get(key2));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
         Assert.assertEquals((new Trie()).getHash(), trie.getHash());
     }
 
@@ -525,7 +525,7 @@ public class TrieTest {
         Assert.assertArrayEquals(value1, trie.get(key1));
         Assert.assertArrayEquals(value2, trie.get(key2));
         Assert.assertNull(trie.get(key3));
-        Assert.assertEquals(3, trie.nodesSize());
+        Assert.assertEquals(3, getNodeSize(trie));
     }
 
     @Test
@@ -542,7 +542,7 @@ public class TrieTest {
         Assert.assertArrayEquals(value1, trie.get(key1));
         Assert.assertArrayEquals(value2, trie.get(key2));
         Assert.assertNull(trie.get(key3));
-        Assert.assertEquals(2, trie.nodesSize());
+        Assert.assertEquals(2, getNodeSize(trie));
     }
 
     @Test
@@ -555,6 +555,14 @@ public class TrieTest {
 
         Assert.assertNotNull(trie);
         Assert.assertArrayEquals(value2, trie.get(key1));
-        Assert.assertEquals(1, trie.nodesSize());
+        Assert.assertEquals(1, getNodeSize(trie));
+    }
+
+    private static int getNodeSize(Trie trie) throws IOException {
+        TrieNodeCounterVisitor visitor = new TrieNodeCounterVisitor();
+
+        visitor.process(trie);
+
+        return visitor.getNodeCounter();
     }
 }

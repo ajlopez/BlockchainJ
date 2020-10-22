@@ -46,18 +46,6 @@ public class Trie {
         this.store = store;
     }
 
-    // TODO remove or visibility for testing
-    public int nodesSize() {
-        int count = 1;
-
-        if (this.nodes != null)
-            for (Trie node : this.nodes)
-                if (node != null)
-                    count += node.nodesSize();
-
-        return count;
-    }
-
     public Hash[] getSubHashes() {
         if (this.hashes == null)
             this.hashes = new Hash[Trie.ARITY];
