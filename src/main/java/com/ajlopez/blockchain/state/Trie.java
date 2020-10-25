@@ -227,21 +227,6 @@ public class Trie {
         }
     }
 
-    // TODO used only in test to copy genesis state
-    public void saveToStore(TrieStore store) throws IOException {
-        store.save(this);
-
-        if (this.nodes == null)
-            return;
-
-        for (int k = 0; k < ARITY; k++) {
-            Trie node = this.nodes[k];
-
-            if (node != null)
-                node.saveToStore(store);
-        }
-    }
-
     public static Trie fromEncoded(byte[] bytes, TrieStore store) {
         byte flags = bytes[0];
 

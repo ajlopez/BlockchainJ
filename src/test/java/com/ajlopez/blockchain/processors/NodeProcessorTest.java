@@ -14,6 +14,7 @@ import com.ajlopez.blockchain.net.Status;
 import com.ajlopez.blockchain.net.messages.*;
 import com.ajlopez.blockchain.net.peers.PeerConnection;
 import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.state.TrieHashCopierVisitor;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.test.utils.NodesHelper;
@@ -319,7 +320,9 @@ public class NodeProcessorTest {
         Assert.assertNotNull(stores1.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash()));
 
         Trie genesisTrie = stores1.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash());
-        genesisTrie.saveToStore(stores2.getAccountTrieStore());
+        genesisTrie.save();
+        TrieHashCopierVisitor visitor = new TrieHashCopierVisitor(stores1.getAccountTrieStore(), stores2.getAccountTrieStore());
+        visitor.process(genesisTrie.getHash());
 
         Assert.assertNotNull(stores2.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash()));
 
