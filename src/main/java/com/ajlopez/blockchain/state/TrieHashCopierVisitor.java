@@ -17,6 +17,9 @@ public class TrieHashCopierVisitor extends TrieHashVisitor {
 
     @Override
     public void processNode(Trie trie) throws IOException {
+        if (this.targetTrieStore.exists(trie.getHash()))
+            return;
+
         this.targetTrieStore.save(trie);
     }
 }
