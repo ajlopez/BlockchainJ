@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.TransactionReceipt;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Difficulty;
@@ -265,7 +266,11 @@ public class AccountsProcessorTest {
             TransactionExecutor transactionExecutor = new TransactionExecutor(new TopExecutionContext(accountStore, null, null));
             List<Transaction> transactions = Collections.singletonList(transaction);
 
-            transactionExecutor.executeTransactions(transactions, null);
+            List<TransactionReceipt> receipts = transactionExecutor.executeTransactions(transactions, null);
+
+            Assert.assertNotNull(receipts);
+            Assert.assertEquals(1, receipts.size());
+            Assert.assertTrue(receipts.get(0).getSuccess());
 
             Block parent = blockChain.getBestBlockInformation().getBlock();
             Address coinbase = FactoryHelper.createRandomAddress();
