@@ -62,10 +62,10 @@ public class BlockChain implements BlockProvider {
             if (!initialized)
                 initialize();
 
-            if (isOrphan(block))
+            if (this.isOrphan(block))
                 return false;
 
-            if (this.blockStore.containsBlock(block.getHash()))
+            if (this.isChainedBlock(block.getHash()))
                 return true;
 
             Difficulty parentTotalDifficulty;
