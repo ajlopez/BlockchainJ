@@ -68,12 +68,7 @@ public class BlockChain implements BlockProvider {
             if (this.isChainedBlock(block.getHash()))
                 return true;
 
-            Difficulty parentTotalDifficulty;
-
-            if (block.getNumber() == 0)
-                parentTotalDifficulty = Difficulty.ZERO;
-            else
-                parentTotalDifficulty = this.blockInformationStore.get(block.getNumber() - 1).getBlockInformation(block.getParentHash()).getTotalDifficulty();
+            Difficulty parentTotalDifficulty = this.getParentTotalDifficulty(block);
 
             Difficulty totalDifficulty = parentTotalDifficulty.add(block.getCummulativeDifficulty());
 
@@ -89,6 +84,13 @@ public class BlockChain implements BlockProvider {
         finally {
             this.lock.writeLock().unlock();
         }
+    }
+
+    private Difficulty getParentTotalDifficulty(Block block) throws IOException {
+        if (block.getNumber() == 0)
+            return Difficulty.ZERO;
+        else
+            return this.blockInformationStore.get(block.getNumber() - 1).getBlockInformation(block.getParentHash()).getTotalDifficulty();
     }
 
     private boolean isBetterBlock(Difficulty totalDifficulty) {
