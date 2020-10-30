@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.store.KeyValueResolver;
 import com.ajlopez.blockchain.store.KeyValueStoreType;
 import com.ajlopez.blockchain.utils.ByteArrayWrapper;
@@ -19,6 +21,9 @@ public class KeyValueProcessor implements KeyValueResolver {
     public void resolving(KeyValueStoreType storeType, byte[] key, byte[] value) {
         if (isKeyHashValueStore(storeType))
             validateKeyHashValue(key, value);
+
+        if (storeType == KeyValueStoreType.BLOCKS)
+            validateKeyHashBlockValue(key, value);
 
         synchronized (this.lock) {
             if (!this.toResolve.containsKey(storeType))
@@ -55,6 +60,14 @@ public class KeyValueProcessor implements KeyValueResolver {
 
     private static void validateKeyHashValue(byte[] key, byte[] value) {
         Hash hash = HashUtils.calculateHash(value);
+
+        if (!Arrays.equals(hash.getBytes(), key))
+            throw new IllegalArgumentException("Invalid value for key");
+    }
+
+    private static void validateKeyHashBlockValue(byte[] key, byte[] value) {
+        Block block = BlockEncoder.decode(value);
+        Hash hash = block.getHash();
 
         if (!Arrays.equals(hash.getBytes(), key))
             throw new IllegalArgumentException("Invalid value for key");

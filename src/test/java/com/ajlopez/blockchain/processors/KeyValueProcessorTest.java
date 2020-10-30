@@ -1,5 +1,8 @@
 package com.ajlopez.blockchain.processors;
 
+import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.store.KeyValueStoreType;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
@@ -7,7 +10,9 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import sun.security.smartcardio.SunPCSC;
 
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -27,7 +32,7 @@ public class KeyValueProcessorTest {
         KeyValueProcessor keyValueProcessor = new KeyValueProcessor();
         CompletableFuture<byte[]> future = new CompletableFuture<>();
 
-        keyValueProcessor.resolve(KeyValueStoreType.BLOCKS, key, future);
+        keyValueProcessor.resolve(KeyValueStoreType.BLOCKS_INFORMATION, key, future);
 
         new Thread(() -> {
             try {
@@ -36,7 +41,7 @@ public class KeyValueProcessorTest {
                 e.printStackTrace();
             }
 
-            keyValueProcessor.resolving(KeyValueStoreType.BLOCKS, key, value);
+            keyValueProcessor.resolving(KeyValueStoreType.BLOCKS_INFORMATION, key, value);
         }).start();
 
         byte[] result = future.get();
@@ -47,15 +52,15 @@ public class KeyValueProcessorTest {
 
     @Test
     public void resolveValueTwice() throws ExecutionException, InterruptedException {
-        byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
+        byte[] key = HashUtils.calculateHash(value).getBytes();
 
         KeyValueProcessor keyValueProcessor = new KeyValueProcessor();
         CompletableFuture<byte[]> future = new CompletableFuture<>();
         CompletableFuture<byte[]> future2 = new CompletableFuture<>();
 
-        keyValueProcessor.resolve(KeyValueStoreType.BLOCKS, key, future);
-        keyValueProcessor.resolve(KeyValueStoreType.BLOCKS, key, future2);
+        keyValueProcessor.resolve(KeyValueStoreType.ACCOUNTS, key, future);
+        keyValueProcessor.resolve(KeyValueStoreType.ACCOUNTS, key, future2);
 
         new Thread(() -> {
             try {
@@ -64,7 +69,7 @@ public class KeyValueProcessorTest {
                 e.printStackTrace();
             }
 
-            keyValueProcessor.resolving(KeyValueStoreType.BLOCKS, key, value);
+            keyValueProcessor.resolving(KeyValueStoreType.ACCOUNTS, key, value);
         }).start();
 
         byte[] result = future.get();
@@ -105,7 +110,7 @@ public class KeyValueProcessorTest {
     }
 
     @Test
-    public void resolveValueUsingAnInvalidKeyHash() throws ExecutionException, InterruptedException {
+    public void resolveValueUsingAnInvalidKeyHash() {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 
@@ -117,12 +122,28 @@ public class KeyValueProcessorTest {
     }
 
     @Test
+    public void resolveValueUsingAnInvalidKeyHashForBlock() throws IOException {
+        BlockChain blockChain = FactoryHelper.createBlockChain(2);
+        Block block1 = blockChain.getBlockByNumber(1);
+        Block block2 = blockChain.getBlockByNumber(2);
+
+        byte[] key = block1.getHash().getBytes();
+        byte[] value = BlockEncoder.encode(block2);
+
+        KeyValueProcessor keyValueProcessor = new KeyValueProcessor();
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid value for key");
+        keyValueProcessor.resolving(KeyValueStoreType.BLOCKS, key, value);
+    }
+
+    @Test
     public void resolveUnexpectedKey() {
         byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
 
         KeyValueProcessor keyValueProcessor = new KeyValueProcessor();
 
-        keyValueProcessor.resolving(KeyValueStoreType.BLOCKS, key, value);
+        keyValueProcessor.resolving(KeyValueStoreType.BLOCKS_INFORMATION, key, value);
     }
 }
