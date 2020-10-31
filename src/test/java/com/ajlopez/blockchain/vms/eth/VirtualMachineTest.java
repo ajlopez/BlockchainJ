@@ -1838,6 +1838,52 @@ public class VirtualMachineTest {
     }
 
     @Test
+    public void executeCallReturningSender() throws IOException {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+
+        byte[] calleeCode = new byte[]{
+                OpCodes.CALLER,
+                OpCodes.PUSH1, 0,
+                OpCodes.MSTORE,
+                OpCodes.PUSH1, 32,
+                OpCodes.PUSH1, 0,
+                OpCodes.RETURN
+        };
+
+        Hash calleeCodeHash = HashUtils.calculateHash(calleeCode);
+        codeStore.putCode(calleeCodeHash, calleeCode);
+
+        AccountStore accountStore = new AccountStore(new Trie());
+        Account calleeAccount = new Account(Coin.TEN, 0, calleeCode.length, calleeCodeHash, null);
+        Address callee = FactoryHelper.createRandomAddress();
+        accountStore.putAccount(callee, calleeAccount);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+        Address sender = FactoryHelper.createRandomAddress();
+
+        MessageData messageData = new MessageData(sender, null, null, Coin.ZERO, 0, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
+
+        byte[] code = new byte[]{
+                OpCodes.PUSH1, 0x20,    // Out Data Size
+                OpCodes.PUSH1, 0x00,    // Out Data Offset
+                OpCodes.PUSH1, 0x00,    // In Data Size
+                OpCodes.PUSH1, 0x00,    // In Data Offset
+                OpCodes.PUSH1, 0x00,    // Value
+                // Callee Address
+                OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                OpCodes.PUSH2, 0x10, 0x00   // Gas
+        };
+
+        System.arraycopy(callee.getBytes(), 0, code, code.length - 3 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
+
+        ExecutionResult executionResult = virtualMachine.execute(code);
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+    }
+
+    @Test
     public void executeSimpleSubroutine() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);

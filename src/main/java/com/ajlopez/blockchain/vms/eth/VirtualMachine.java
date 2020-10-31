@@ -20,6 +20,7 @@ public class VirtualMachine {
     private final Storage storage;
     private final Memory memory = new Memory();
     private final Stack<DataWord> dataStack = new Stack<>();
+    // TODO return stack max size
     private final Stack<Integer> returnStack = new Stack<>();
 
     static {

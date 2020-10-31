@@ -377,20 +377,26 @@ public class NodeProcessorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(accountTrieStore);
         TrieStorageProvider trieStorageProvider = new TrieStorageProvider(storageTrieStore);
 
-        BlockExecutor blockExecutor = new BlockExecutor(accountStoreProvider, trieStorageProvider, codeStore);
-        Block bestBlock = blockChain1.getBestBlockInformation().getBlock();
+        BlockExecutor blockExecutor = new BlockExecutor(
+                accountStoreProvider, trieStorageProvider, codeStore);
+        Block bestBlock = blockChain1
+                .getBestBlockInformation().getBlock();
 
         nodeProcessor1.startMessagingProcess();
         nodeProcessor2.startMessagingProcess();
 
-        BlockExecutionResult result = blockExecutor.executeBlock(bestBlock, blockChain1.getBlockByNumber(bestBlock.getNumber() - 1).getStateRootHash());
+        BlockExecutionResult result = blockExecutor.executeBlock(
+                bestBlock,
+                blockChain1.getBlockByNumber(bestBlock.getNumber() - 1)
+                        .getStateRootHash());
 
         nodeProcessor2.stopMessagingProcess();
         nodeProcessor1.stopMessagingProcess();
 
         Assert.assertNotNull(result);
         Assert.assertNotNull(result.getStateRootHash());
-        Assert.assertEquals(bestBlock.getStateRootHash(), result.getStateRootHash());
+        Assert.assertEquals(bestBlock.getStateRootHash(),
+                result.getStateRootHash());
     }
 
     @Test
