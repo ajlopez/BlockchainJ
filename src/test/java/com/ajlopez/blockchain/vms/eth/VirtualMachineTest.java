@@ -1859,9 +1859,9 @@ public class VirtualMachineTest {
         accountStore.putAccount(callee, calleeAccount);
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
-        Address sender = FactoryHelper.createRandomAddress();
+        Address caller = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(sender, null, null, Coin.ZERO, 0, Coin.ZERO, null, false);
+        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
 
         byte[] code = new byte[]{
@@ -1872,15 +1872,21 @@ public class VirtualMachineTest {
                 OpCodes.PUSH1, 0x00,    // Value
                 // Callee Address
                 OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                OpCodes.PUSH2, 0x10, 0x00   // Gas
+                OpCodes.PUSH2, 0x40, 0x00,   // Gas
+                OpCodes.CALL
         };
 
-        System.arraycopy(callee.getBytes(), 0, code, code.length - 3 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
+        System.arraycopy(callee.getBytes(), 0, code, code.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
         ExecutionResult executionResult = virtualMachine.execute(code);
 
+        // TODO check gas used
+
         Assert.assertNotNull(executionResult);
         Assert.assertTrue(executionResult.wasSuccesful());
+
+        // TODO check if it is an address
+        Assert.assertEquals(caller, virtualMachine.getMemory().getValue(0).toAddress());
     }
 
     @Test

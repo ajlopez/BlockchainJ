@@ -102,6 +102,10 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return ByteUtils.bytesToUnsignedInteger(this.bytes, DataWord.DATAWORD_BYTES - Integer.BYTES);
     }
 
+    public long asUnsignedLong() {
+        return ByteUtils.bytesToUnsignedInteger(this.bytes, DataWord.DATAWORD_BYTES - Long.BYTES);
+    }
+
     // From : http://stackoverflow.com/a/24023466/459349
     public DataWord add(DataWord word) {
         byte[] newbytes = new byte[DATAWORD_BYTES];

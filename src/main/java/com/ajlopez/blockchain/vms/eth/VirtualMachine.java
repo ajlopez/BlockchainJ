@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.ByteUtils;
@@ -548,8 +549,7 @@ public class VirtualMachine {
 
                     try {
                         pc = getNewPc(bytecodes, word);
-                    }
-                    catch (VirtualMachineException ex) {
+                    } catch (VirtualMachineException ex) {
                         return ExecutionResult.ErrorException(this.programEnvironment.getGas(), ex);
                     }
 
@@ -566,8 +566,7 @@ public class VirtualMachine {
 
                     try {
                         pc = getNewPc(bytecodes, word1);
-                    }
-                    catch (VirtualMachineException ex) {
+                    } catch (VirtualMachineException ex) {
                         return ExecutionResult.ErrorException(this.programEnvironment.getGas(), ex);
                     }
 
@@ -729,6 +728,38 @@ public class VirtualMachine {
                     logs.add(log);
 
                     break;
+
+                case OpCodes.CALL:
+                    // improve stack use
+
+                    // TODO check gas as long
+                    long gas = this.dataStack.pop().asUnsignedLong();
+                    // TODO check is address
+                    Address callee = this.dataStack.pop().toAddress();
+                    Coin newValue = Coin.fromBytes(this.dataStack.pop().getBytes());
+
+                    // TODO check they are an integer
+                    int inputDataOffset = this.dataStack.pop().asUnsignedInteger();
+                    int inputDataSize = this.dataStack.pop().asUnsignedInteger();
+                    int outputDataOffset = this.dataStack.pop().asUnsignedInteger();
+                    int outputDataSize = this.dataStack.pop().asUnsignedInteger();
+
+                    ProgramEnvironment newProgramEnvironment = programEnvironment.createSubenvironment(
+                            callee,
+                            newValue,
+                            gas,
+                            null
+                    );
+
+                    byte[] newCode = programEnvironment.getCode(callee);
+
+                    VirtualMachine newVirtualMachine = new VirtualMachine(newProgramEnvironment, null);
+
+                    ExecutionResult executionResult = newVirtualMachine.execute(newCode);
+
+                    this.memory.setBytes(outputDataOffset, executionResult.getReturnedData(), 0, outputDataSize);
+
+                    continue;
 
                 case OpCodes.RETURN:
                     offset = this.dataStack.pop().asUnsignedInteger();

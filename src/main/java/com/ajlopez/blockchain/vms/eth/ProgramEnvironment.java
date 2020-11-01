@@ -24,6 +24,26 @@ public class ProgramEnvironment {
         this.chainId = chainId;
     }
 
+    public ProgramEnvironment createSubenvironment(Address callee, Coin newValue, long newGas, byte[] newData) {
+        MessageData newMessageData = new MessageData(
+            callee,
+            this.getOrigin(),
+            this.getAddress(),
+            newValue,
+            newGas,
+            this.getGasPrice(),
+            newData,
+            this.isReadOnly()
+        );
+
+        return new ProgramEnvironment(
+            newMessageData,
+            this.blockData,
+            this.accountProvider,
+            this.chainId
+        );
+    }
+
     public Address getAddress() { return this.messageData.getAddress(); }
 
     public Coin getBalance(Address address) throws IOException { return this.accountProvider.getBalance(address); }
