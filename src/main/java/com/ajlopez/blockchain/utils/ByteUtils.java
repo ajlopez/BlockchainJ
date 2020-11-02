@@ -66,8 +66,10 @@ public class ByteUtils {
         return normalizedBytes(unsignedLongToBytes(value));
     }
 
-    public static long bytesToUnsignedLong(byte[] bytes) {
-        long result = bytesToLong(bytes, 0);
+    public static long bytesToUnsignedLong(byte[] bytes) { return bytesToUnsignedLong(bytes, 0); }
+
+    public static long bytesToUnsignedLong(byte[] bytes, int offset) {
+        long result = bytesToLong(bytes, offset);
 
         if (result < 0)
             throw new IllegalArgumentException("Invalid negative value");

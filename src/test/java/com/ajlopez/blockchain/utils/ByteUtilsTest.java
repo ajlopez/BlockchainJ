@@ -449,6 +449,9 @@ public class ByteUtilsTest {
         Assert.assertEquals(1, ByteUtils.bytesToUnsignedLong(new byte[] { 0x01 }));
         Assert.assertEquals(256, ByteUtils.bytesToUnsignedLong(new byte[] { 0x01, 0x00 }));
         Assert.assertEquals(Long.MAX_VALUE, ByteUtils.bytesToUnsignedLong(new byte[] { (byte)0x7f, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff }));
+
+        Assert.assertEquals(0, ByteUtils.bytesToUnsignedLong(new byte[] { 0x01, 0x00 }, 1));
+        Assert.assertEquals(256 * 2 + 3, ByteUtils.bytesToUnsignedLong(new byte[] { 0x01, 0x02, 0x03 }, 1));
     }
 
     @Test

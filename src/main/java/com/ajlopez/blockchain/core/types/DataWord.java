@@ -103,7 +103,7 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
     }
 
     public long asUnsignedLong() {
-        return ByteUtils.bytesToUnsignedInteger(this.bytes, DataWord.DATAWORD_BYTES - Long.BYTES);
+        return ByteUtils.bytesToUnsignedLong(this.bytes, DataWord.DATAWORD_BYTES - Long.BYTES);
     }
 
     // From : http://stackoverflow.com/a/24023466/459349
