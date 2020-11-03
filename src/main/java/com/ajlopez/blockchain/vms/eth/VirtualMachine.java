@@ -744,11 +744,13 @@ public class VirtualMachine {
                     int outputDataOffset = this.dataStack.pop().asUnsignedInteger();
                     int outputDataSize = this.dataStack.pop().asUnsignedInteger();
 
+                    byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
+
                     ProgramEnvironment newProgramEnvironment = programEnvironment.createSubenvironment(
                             callee,
                             newValue,
                             gas,
-                            null
+                            inputData
                     );
 
                     byte[] newCode = programEnvironment.getCode(callee);
