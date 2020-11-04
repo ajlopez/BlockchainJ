@@ -162,6 +162,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [What is a light client and why you should care?](https://www.parity.io/what-is-a-light-client/)
 - [Establishing peer-to-peer connections with Jami](https://jami.net/establishing-peer-to-peer-connections-with-jami/)
 - [Authenticated Dictionaries with Cross-Incremental Proof (Dis)aggregation](https://eprint.iacr.org/2020/1239.pdf)
+- [Reducing Round Complexity of Byzantine Broadcast](https://eprint.iacr.org/2020/1352.pdf)
 
 ## To Do
 
