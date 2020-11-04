@@ -5,9 +5,7 @@ import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.execution.AccountProvider;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.CodeStore;
-import com.ajlopez.blockchain.store.HashMapStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.utils.HashUtils;
@@ -1837,116 +1835,6 @@ public class VirtualMachineTest {
         Assert.assertEquals("Insufficient gas", executionResult.getException().getMessage());
     }
 
-    @Test
-    public void executeCallReturningSender() throws IOException {
-        CodeStore codeStore = new CodeStore(new HashMapStore());
-
-        byte[] calleeCode = new byte[]{
-                OpCodes.CALLER,
-                OpCodes.PUSH1, 0,
-                OpCodes.MSTORE,
-                OpCodes.PUSH1, 32,
-                OpCodes.PUSH1, 0,
-                OpCodes.RETURN
-        };
-
-        Hash calleeCodeHash = HashUtils.calculateHash(calleeCode);
-        codeStore.putCode(calleeCodeHash, calleeCode);
-
-        AccountStore accountStore = new AccountStore(new Trie());
-        Account calleeAccount = new Account(Coin.TEN, 0, calleeCode.length, calleeCodeHash, null);
-        Address callee = FactoryHelper.createRandomAddress();
-        accountStore.putAccount(callee, calleeAccount);
-
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
-        Address caller = FactoryHelper.createRandomAddress();
-
-        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
-
-        byte[] code = new byte[]{
-                OpCodes.PUSH1, 0x20,    // Out Data Size
-                OpCodes.PUSH1, 0x00,    // Out Data Offset
-                OpCodes.PUSH1, 0x00,    // In Data Size
-                OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
-                // Callee Address
-                OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                OpCodes.PUSH2, 0x40, 0x00,   // Gas
-                OpCodes.CALL
-        };
-
-        System.arraycopy(callee.getBytes(), 0, code, code.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
-
-        ExecutionResult executionResult = virtualMachine.execute(code);
-
-        // TODO check gas used
-
-        Assert.assertNotNull(executionResult);
-        Assert.assertTrue(executionResult.wasSuccesful());
-
-        // TODO check if it is an address
-        Assert.assertEquals(caller, virtualMachine.getMemory().getValue(0).toAddress());
-    }
-
-
-    @Test
-    public void executeCallIncrementingInputData() throws IOException {
-        CodeStore codeStore = new CodeStore(new HashMapStore());
-
-        byte[] calleeCode = new byte[]{
-                OpCodes.PUSH1, 0,
-                OpCodes.CALLDATALOAD,
-                OpCodes.PUSH1, 1,
-                OpCodes.ADD,
-                OpCodes.PUSH1, 0,
-                OpCodes.MSTORE,
-                OpCodes.PUSH1, 32,
-                OpCodes.PUSH1, 0,
-                OpCodes.RETURN
-        };
-
-        Hash calleeCodeHash = HashUtils.calculateHash(calleeCode);
-        codeStore.putCode(calleeCodeHash, calleeCode);
-
-        AccountStore accountStore = new AccountStore(new Trie());
-        Account calleeAccount = new Account(Coin.TEN, 0, calleeCode.length, calleeCodeHash, null);
-        Address callee = FactoryHelper.createRandomAddress();
-        accountStore.putAccount(callee, calleeAccount);
-
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
-        Address caller = FactoryHelper.createRandomAddress();
-
-        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
-
-        byte[] code = new byte[]{
-                OpCodes.PUSH1, 0x29,    // 41
-                OpCodes.PUSH1, 0x00,    // Memory offset
-                OpCodes.MSTORE,         // Save in  memory
-
-                OpCodes.PUSH1, 0x20,    // Out Data Size
-                OpCodes.PUSH1, 0x00,    // Out Data Offset
-                OpCodes.PUSH1, 0x20,    // In Data Size
-                OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
-                // Callee Address
-                OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                OpCodes.PUSH2, 0x40, 0x00,   // Gas
-                OpCodes.CALL
-        };
-
-        System.arraycopy(callee.getBytes(), 0, code, code.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
-
-        ExecutionResult executionResult = virtualMachine.execute(code);
-
-        // TODO check gas used
-
-        Assert.assertNotNull(executionResult);
-        Assert.assertTrue(executionResult.wasSuccesful());
-
-        Assert.assertEquals(DataWord.fromUnsignedInteger(42), virtualMachine.getMemory().getValue(0));
-    }
 
     @Test
     public void executeSimpleSubroutine() throws IOException {
@@ -2293,5 +2181,14 @@ public class VirtualMachineTest {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, true);
 
         return new ProgramEnvironment(messageData, null, null, 0);
+    }
+
+    private static Address createAccountWithBalance(AccountStore accountStore, long balance) throws IOException {
+        Account account = new Account(Coin.fromUnsignedLong(balance), 0, 0, null, null);
+        Address address = FactoryHelper.createRandomAddress();
+
+        accountStore.putAccount(address, account);
+
+        return address;
     }
 }
