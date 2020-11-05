@@ -761,6 +761,8 @@ public class VirtualMachine {
 
                     this.memory.setBytes(outputDataOffset, executionResult.getReturnedData(), 0, outputDataSize);
 
+                    this.dataStack.push(DataWord.ONE);
+
                     continue;
 
                 case OpCodes.RETURN:

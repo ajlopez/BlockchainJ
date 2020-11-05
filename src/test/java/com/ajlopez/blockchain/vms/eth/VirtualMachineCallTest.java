@@ -71,6 +71,9 @@ public class VirtualMachineCallTest {
 
         // TODO check if it is an address
         Assert.assertEquals(caller, virtualMachine.getMemory().getValue(0).toAddress());
+
+        Assert.assertEquals(1, virtualMachine.getDataStack().size());
+        Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
     }
 
     @Test
@@ -126,6 +129,9 @@ public class VirtualMachineCallTest {
         Assert.assertTrue(executionResult.wasSuccesful());
 
         Assert.assertEquals(DataWord.fromUnsignedInteger(42), virtualMachine.getMemory().getValue(0));
+
+        Assert.assertEquals(1, virtualMachine.getDataStack().size());
+        Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
     }
 
     private static Address createAccountWithCode(AccountStore accountStore, CodeStore codeStore, byte[] code) throws IOException {
