@@ -759,9 +759,13 @@ public class VirtualMachine {
 
                     ExecutionResult executionResult = newVirtualMachine.execute(newCode);
 
-                    this.memory.setBytes(outputDataOffset, executionResult.getReturnedData(), 0, outputDataSize);
-
-                    this.dataStack.push(DataWord.ONE);
+                    if (executionResult.wasSuccesful()) {
+                        this.memory.setBytes(outputDataOffset, executionResult.getReturnedData(), 0, outputDataSize);
+                        this.dataStack.push(DataWord.ONE);
+                    }
+                    else
+                        // TODO process revert message
+                        this.dataStack.push(DataWord.ZERO);
 
                     continue;
 
