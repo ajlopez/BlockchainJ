@@ -184,6 +184,130 @@ public class VirtualMachineCallTest {
         Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
     }
 
+    @Test
+    public void executeCallThatReturnsTooMuchData() throws IOException {
+        Stores stores = new Stores(new MemoryKeyValueStores());
+        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
+        CodeStore codeStore = stores.getCodeStore();
+
+        byte[] calleeCode = new byte[]{
+                OpCodes.PUSH1, 0,
+                OpCodes.CALLDATALOAD,
+                OpCodes.PUSH1, 1,
+                OpCodes.ADD,
+                OpCodes.PUSH1, 0,
+                OpCodes.MSTORE,
+                OpCodes.PUSH1, 2,
+                OpCodes.PUSH1, 32,
+                OpCodes.MSTORE,
+                OpCodes.PUSH1, 64,
+                OpCodes.PUSH1, 0,
+                OpCodes.RETURN
+        };
+
+        Address callee = createAccountWithCode(accountStore, codeStore, calleeCode);
+
+        byte[] callerCode = new byte[]{
+                OpCodes.PUSH1, 0x29,    // 41
+                OpCodes.PUSH1, 0x00,    // Memory offset
+                OpCodes.MSTORE,         // Save in  memory
+
+                OpCodes.PUSH1, 0x20,    // Out Data Size
+                OpCodes.PUSH1, 0x00,    // Out Data Offset
+                OpCodes.PUSH1, 0x20,    // In Data Size
+                OpCodes.PUSH1, 0x00,    // In Data Offset
+                OpCodes.PUSH1, 0x00,    // Value
+                // Callee Address
+                OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                OpCodes.PUSH2, 0x40, 0x00,   // Gas
+                OpCodes.CALL
+        };
+
+        System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
+
+        Address caller = createAccountWithCode(accountStore, codeStore, callerCode);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
+
+        ExecutionResult executionResult = virtualMachine.execute(callerCode);
+
+        // TODO check gas used
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), virtualMachine.getMemory().getValue(0));
+        Assert.assertEquals(DataWord.ZERO, virtualMachine.getMemory().getValue(32));
+
+        Assert.assertEquals(1, virtualMachine.getDataStack().size());
+        Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
+    }
+
+
+    @Test
+    public void executeCallThatReturnsLessDataThanExpected() throws IOException {
+        Stores stores = new Stores(new MemoryKeyValueStores());
+        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
+        CodeStore codeStore = stores.getCodeStore();
+
+        byte[] calleeCode = new byte[]{
+                OpCodes.PUSH1, 0,
+                OpCodes.CALLDATALOAD,
+                OpCodes.PUSH1, 1,
+                OpCodes.ADD,
+                OpCodes.PUSH1, 0,
+                OpCodes.MSTORE,
+                OpCodes.PUSH1, 16,
+                OpCodes.PUSH1, 0,
+                OpCodes.RETURN
+        };
+
+        Address callee = createAccountWithCode(accountStore, codeStore, calleeCode);
+
+        byte[] callerCode = new byte[]{
+                OpCodes.PUSH1, 1,
+                OpCodes.PUSH1, 0,
+                OpCodes.MSTORE,
+                OpCodes.PUSH1, 0x29,    // 41
+                OpCodes.PUSH1, 0x00,    // Memory offset
+                OpCodes.MSTORE,         // Save in  memory
+
+                OpCodes.PUSH1, 0x20,    // Out Data Size
+                OpCodes.PUSH1, 0x00,    // Out Data Offset
+                OpCodes.PUSH1, 0x20,    // In Data Size
+                OpCodes.PUSH1, 0x00,    // In Data Offset
+                OpCodes.PUSH1, 0x00,    // Value
+                // Callee Address
+                OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                OpCodes.PUSH2, 0x40, 0x00,   // Gas
+                OpCodes.CALL
+        };
+
+        System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
+
+        Address caller = createAccountWithCode(accountStore, codeStore, callerCode);
+
+        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+
+        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
+
+        ExecutionResult executionResult = virtualMachine.execute(callerCode);
+
+        // TODO check gas used
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+
+        Assert.assertEquals(DataWord.ZERO, virtualMachine.getMemory().getValue(0));
+
+        Assert.assertEquals(1, virtualMachine.getDataStack().size());
+        Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
+    }
+
     private static Address createAccountWithCode(AccountStore accountStore, CodeStore codeStore, byte[] code) throws IOException {
         Hash codeHash = HashUtils.calculateHash(code);
         codeStore.putCode(codeHash, code);

@@ -41,13 +41,16 @@ public class Memory {
     public void setBytes(int address, byte[] bytes, int offset, int length) {
         ensureSize(address + length);
 
-        if (bytes.length <= offset)
-            return;
-
         int nchunk = address / CHUNK_SIZE;
         int choffset = address % CHUNK_SIZE;
         int tocopy = Math.min(bytes.length - offset, length);
         int tofill = length > bytes.length - offset ? length - (bytes.length - offset) : 0;
+
+        if (tocopy <= 0) {
+            tocopy = 0;
+            tofill = length;
+        }
+
         int copied = 0;
 
         while (copied < tocopy) {

@@ -765,6 +765,7 @@ public class VirtualMachine {
                     }
                     else
                         // TODO process revert message
+                        // TODO raise internal exception
                         this.dataStack.push(DataWord.ZERO);
 
                     continue;

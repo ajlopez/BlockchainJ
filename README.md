@@ -163,6 +163,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Establishing peer-to-peer connections with Jami](https://jami.net/establishing-peer-to-peer-connections-with-jami/)
 - [Authenticated Dictionaries with Cross-Incremental Proof (Dis)aggregation](https://eprint.iacr.org/2020/1239.pdf)
 - [Reducing Round Complexity of Byzantine Broadcast](https://eprint.iacr.org/2020/1352.pdf)
+- [The Ethereum Virtual Machine](https://fullstacks.org/materials/ethereumbook/14_evm.html)
 
 ## To Do
 
