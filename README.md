@@ -164,6 +164,11 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Authenticated Dictionaries with Cross-Incremental Proof (Dis)aggregation](https://eprint.iacr.org/2020/1239.pdf)
 - [Reducing Round Complexity of Byzantine Broadcast](https://eprint.iacr.org/2020/1352.pdf)
 - [The Ethereum Virtual Machine](https://fullstacks.org/materials/ethereumbook/14_evm.html)
+- [Geth snap sync results (only state) against 3 serving nodes](https://twitter.com/peter_szilagyi/status/1323488829769175040)
+- [EIP-3091: Block Explorer API Routes](https://github.com/ethereum/EIPs/pull/3091)
+- [Optimal chunking size for code merklization](https://ethresear.ch/t/optimal-chunking-size-for-code-merklization/8185)
+- [A Tale of Two Pricing Schemes](https://medium.com/@MicahZoltu/a-tale-of-two-pricing-schemes-dc9c8717906)
+- [Why Proof of Stake (Nov 2020)](https://vitalik.ca/general/2020/11/06/pos2020.html)
 
 ## To Do
 
