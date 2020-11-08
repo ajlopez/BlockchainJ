@@ -5,6 +5,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -24,10 +25,6 @@ import java.io.IOException;
 public class VirtualMachineCallTest {
     @Test
     public void executeCallReturningSender() throws IOException {
-        Stores stores = new Stores(new MemoryKeyValueStores());
-        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
-        CodeStore codeStore = stores.getCodeStore();
-
         byte[] calleeCode = new byte[]{
                 OpCodes.CALLER,
                 OpCodes.PUSH1, 0,
@@ -37,7 +34,7 @@ public class VirtualMachineCallTest {
                 OpCodes.RETURN
         };
 
-        Address callee = createAccountWithCode(accountStore, codeStore, calleeCode);
+        Address callee = FactoryHelper.createRandomAddress();
 
         byte[] callerCode = new byte[]{
                 OpCodes.PUSH1, 0x20,    // Out Data Size
@@ -53,9 +50,9 @@ public class VirtualMachineCallTest {
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
-        Address caller = createAccountWithCode(accountStore, codeStore, callerCode);
+        Address caller = FactoryHelper.createRandomAddress();
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
 
         MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
@@ -78,17 +75,13 @@ public class VirtualMachineCallTest {
 
     @Test
     public void executeCallThatReverts() throws IOException {
-        Stores stores = new Stores(new MemoryKeyValueStores());
-        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
-        CodeStore codeStore = stores.getCodeStore();
-
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.PUSH1, 0,
                 OpCodes.REVERT
         };
 
-        Address callee = createAccountWithCode(accountStore, codeStore, calleeCode);
+        Address callee = FactoryHelper.createRandomAddress();
 
         byte[] callerCode = new byte[]{
                 OpCodes.PUSH1, 0x20,    // Out Data Size
@@ -104,9 +97,9 @@ public class VirtualMachineCallTest {
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
-        Address caller = createAccountWithCode(accountStore, codeStore, callerCode);
+        Address caller = FactoryHelper.createRandomAddress();
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
 
         MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
@@ -128,10 +121,6 @@ public class VirtualMachineCallTest {
 
     @Test
     public void executeCallIncrementingInputData() throws IOException {
-        Stores stores = new Stores(new MemoryKeyValueStores());
-        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
-        CodeStore codeStore = stores.getCodeStore();
-
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.CALLDATALOAD,
@@ -144,7 +133,7 @@ public class VirtualMachineCallTest {
                 OpCodes.RETURN
         };
 
-        Address callee = createAccountWithCode(accountStore, codeStore, calleeCode);
+        Address callee = FactoryHelper.createRandomAddress();
 
         byte[] callerCode = new byte[]{
                 OpCodes.PUSH1, 0x29,    // 41
@@ -164,9 +153,9 @@ public class VirtualMachineCallTest {
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
-        Address caller = createAccountWithCode(accountStore, codeStore, callerCode);
+        Address caller = FactoryHelper.createRandomAddress();
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
 
         MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
@@ -186,10 +175,6 @@ public class VirtualMachineCallTest {
 
     @Test
     public void executeCallThatReturnsTooMuchData() throws IOException {
-        Stores stores = new Stores(new MemoryKeyValueStores());
-        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
-        CodeStore codeStore = stores.getCodeStore();
-
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.CALLDATALOAD,
@@ -205,7 +190,7 @@ public class VirtualMachineCallTest {
                 OpCodes.RETURN
         };
 
-        Address callee = createAccountWithCode(accountStore, codeStore, calleeCode);
+        Address callee = FactoryHelper.createRandomAddress();
 
         byte[] callerCode = new byte[]{
                 OpCodes.PUSH1, 0x29,    // 41
@@ -225,9 +210,9 @@ public class VirtualMachineCallTest {
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
-        Address caller = createAccountWithCode(accountStore, codeStore, callerCode);
+        Address caller = FactoryHelper.createRandomAddress();
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
 
         MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
@@ -249,10 +234,6 @@ public class VirtualMachineCallTest {
 
     @Test
     public void executeCallThatReturnsLessDataThanExpected() throws IOException {
-        Stores stores = new Stores(new MemoryKeyValueStores());
-        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
-        CodeStore codeStore = stores.getCodeStore();
-
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.CALLDATALOAD,
@@ -265,7 +246,7 @@ public class VirtualMachineCallTest {
                 OpCodes.RETURN
         };
 
-        Address callee = createAccountWithCode(accountStore, codeStore, calleeCode);
+        Address callee = FactoryHelper.createRandomAddress();
 
         byte[] callerCode = new byte[]{
                 OpCodes.PUSH1, 1,
@@ -288,9 +269,9 @@ public class VirtualMachineCallTest {
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
-        Address caller = createAccountWithCode(accountStore, codeStore, callerCode);
+        Address caller = FactoryHelper.createRandomAddress();
 
-        TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
+        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
 
         MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
@@ -308,15 +289,22 @@ public class VirtualMachineCallTest {
         Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
     }
 
-    private static Address createAccountWithCode(AccountStore accountStore, CodeStore codeStore, byte[] code) throws IOException {
+    private static ExecutionContext createExecutionContext(Address caller, byte[] callerCode, Address callee, byte[] calleeCode) throws IOException {
+        Stores stores = new Stores(new MemoryKeyValueStores());
+        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
+        CodeStore codeStore = stores.getCodeStore();
+
+        createAccountWithCode(callee, calleeCode, accountStore, codeStore);
+        createAccountWithCode(caller, callerCode, accountStore, codeStore);
+
+        return new TopExecutionContext(accountStore, null, codeStore);
+    }
+
+    private static void createAccountWithCode(Address address, byte[] code, AccountStore accountStore, CodeStore codeStore) throws IOException {
         Hash codeHash = HashUtils.calculateHash(code);
         codeStore.putCode(codeHash, code);
 
         Account account = new Account(Coin.ZERO, 0, code.length, codeHash, null);
-        Address address = FactoryHelper.createRandomAddress();
-
         accountStore.putAccount(address, account);
-
-        return address;
     }
 }
