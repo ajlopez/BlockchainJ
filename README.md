@@ -169,6 +169,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Optimal chunking size for code merklization](https://ethresear.ch/t/optimal-chunking-size-for-code-merklization/8185)
 - [A Tale of Two Pricing Schemes](https://medium.com/@MicahZoltu/a-tale-of-two-pricing-schemes-dc9c8717906)
 - [Why Proof of Stake (Nov 2020)](https://vitalik.ca/general/2020/11/06/pos2020.html)
+- [Towards formal semantics of the beacon chain’s pyspec]
 
 ## To Do
 
