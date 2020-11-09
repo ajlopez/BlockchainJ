@@ -79,4 +79,8 @@ public class ProgramEnvironment {
     public boolean isReadOnly() { return this.messageData.isReadOnly(); }
 
     public int getChainId() { return this.chainId; }
+
+    public Storage getAccountStorage(Address address) throws IOException {
+        return this.accountProvider.getAccountStorage(address);
+    }
 }

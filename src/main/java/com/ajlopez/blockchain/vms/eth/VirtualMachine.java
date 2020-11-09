@@ -755,7 +755,7 @@ public class VirtualMachine {
 
                     byte[] newCode = programEnvironment.getCode(callee);
 
-                    VirtualMachine newVirtualMachine = new VirtualMachine(newProgramEnvironment, null);
+                    VirtualMachine newVirtualMachine = new VirtualMachine(newProgramEnvironment, programEnvironment.getAccountStorage(callee));
 
                     ExecutionResult executionResult = newVirtualMachine.execute(newCode);
 

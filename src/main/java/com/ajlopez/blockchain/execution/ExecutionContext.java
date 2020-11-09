@@ -18,8 +18,6 @@ public interface ExecutionContext extends AccountProvider {
 
     void rollback();
 
-    Storage getAccountStorage(Address address) throws IOException;
-
     void setCode(Address address, byte[] code) throws IOException;
 
     ExecutionContext createChildExecutionContext();
