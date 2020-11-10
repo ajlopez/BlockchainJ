@@ -755,18 +755,21 @@ public class VirtualMachine {
 
                     byte[] newCode = programEnvironment.getCode(callee);
 
-                    VirtualMachine newVirtualMachine = new VirtualMachine(newProgramEnvironment, programEnvironment.getAccountStorage(callee));
+                    VirtualMachine newVirtualMachine = new VirtualMachine(newProgramEnvironment, newProgramEnvironment.getAccountStorage(callee));
 
                     ExecutionResult executionResult = newVirtualMachine.execute(newCode);
 
                     if (executionResult.wasSuccesful()) {
+                        newProgramEnvironment.commit();
                         this.memory.setBytes(outputDataOffset, executionResult.getReturnedData(), 0, outputDataSize);
                         this.dataStack.push(DataWord.ONE);
                     }
-                    else
+                    else {
+                        newProgramEnvironment.rollback();
                         // TODO process revert message
                         // TODO raise internal exception
                         this.dataStack.push(DataWord.ZERO);
+                    }
 
                     continue;
 

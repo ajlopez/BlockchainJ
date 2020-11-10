@@ -276,7 +276,7 @@ public class VirtualMachineCallTest {
         Assert.assertEquals(DataWord.ZERO, executionContext.getAccountStorage(caller).getValue(DataWord.ZERO));
 
         Assert.assertEquals(1, virtualMachine.getDataStack().size());
-        Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
+        Assert.assertEquals(DataWord.ZERO, virtualMachine.getDataStack().pop());
     }
 
     @Test

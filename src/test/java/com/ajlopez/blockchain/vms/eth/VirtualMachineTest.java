@@ -2,7 +2,7 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.types.*;
-import com.ajlopez.blockchain.execution.AccountProvider;
+import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
@@ -2150,7 +2150,7 @@ public class VirtualMachineTest {
     }
 
     private static ProgramEnvironment createProgramEnvironment() {
-        return createProgramEnvironment((AccountProvider)null);
+        return createProgramEnvironment((ExecutionContext)null);
     }
 
     private static ProgramEnvironment createProgramEnvironment(long gas) {
@@ -2159,16 +2159,16 @@ public class VirtualMachineTest {
         return new ProgramEnvironment(messageData, null, null, 0);
     }
 
-    private static ProgramEnvironment createProgramEnvironment(AccountProvider accountProvider) {
+    private static ProgramEnvironment createProgramEnvironment(ExecutionContext executionContext) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, null, accountProvider, 42);
+        return new ProgramEnvironment(messageData, null, executionContext, 42);
     }
 
-    private static ProgramEnvironment createProgramEnvironment(Address receiver, AccountProvider accountProvider) {
+    private static ProgramEnvironment createProgramEnvironment(Address receiver, ExecutionContext executionContext) {
         MessageData messageData = new MessageData(receiver, null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
 
-        return new ProgramEnvironment(messageData, null, accountProvider, 42);
+        return new ProgramEnvironment(messageData, null, executionContext, 42);
     }
 
     private static ProgramEnvironment createProgramEnvironment(BlockData blockData) {

@@ -4,7 +4,9 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.execution.AccountProvider;
+import com.ajlopez.blockchain.execution.AbstractExecutionContext;
+import com.ajlopez.blockchain.execution.ChildExecutionContext;
+import com.ajlopez.blockchain.execution.ExecutionContext;
 
 import java.io.IOException;
 
@@ -14,13 +16,13 @@ import java.io.IOException;
 public class ProgramEnvironment {
     private final MessageData messageData;
     private final BlockData blockData;
-    private final AccountProvider accountProvider;
+    private final ExecutionContext executionContext;
     private final int chainId;
 
-    public ProgramEnvironment(MessageData messageData, BlockData blockData, AccountProvider accountProvider, int chainId) {
+    public ProgramEnvironment(MessageData messageData, BlockData blockData, ExecutionContext executionContext, int chainId) {
         this.messageData = messageData;
         this.blockData = blockData;
-        this.accountProvider = accountProvider;
+        this.executionContext = executionContext;
         this.chainId = chainId;
     }
 
@@ -39,20 +41,21 @@ public class ProgramEnvironment {
         return new ProgramEnvironment(
             newMessageData,
             this.blockData,
-            this.accountProvider,
+            // TODO avoid cast
+            new ChildExecutionContext((AbstractExecutionContext)this.executionContext),
             this.chainId
         );
     }
 
     public Address getAddress() { return this.messageData.getAddress(); }
 
-    public Coin getBalance(Address address) throws IOException { return this.accountProvider.getBalance(address); }
+    public Coin getBalance(Address address) throws IOException { return this.executionContext.getBalance(address); }
 
-    public byte[] getCode(Address address) throws IOException { return this.accountProvider.getCode(address); }
+    public byte[] getCode(Address address) throws IOException { return this.executionContext.getCode(address); }
 
-    public long getCodeLength(Address address)  throws IOException { return this.accountProvider.getCodeLength(address); }
+    public long getCodeLength(Address address)  throws IOException { return this.executionContext.getCodeLength(address); }
 
-    public Hash getCodeHash(Address address)  throws IOException { return this.accountProvider.getCodeHash(address); }
+    public Hash getCodeHash(Address address)  throws IOException { return this.executionContext.getCodeHash(address); }
 
     public Address getOrigin() { return this.messageData.getOrigin(); }
 
@@ -81,6 +84,16 @@ public class ProgramEnvironment {
     public int getChainId() { return this.chainId; }
 
     public Storage getAccountStorage(Address address) throws IOException {
-        return this.accountProvider.getAccountStorage(address);
+        return this.executionContext.getAccountStorage(address);
+    }
+
+    // TODO redesign/review
+    public void commit() throws IOException {
+        this.executionContext.commit();
+    }
+
+    // TODO redesign/review
+    public void rollback() {
+        this.executionContext.rollback();
     }
 }
