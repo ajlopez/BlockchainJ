@@ -26,7 +26,7 @@ public class ProgramEnvironment {
         this.chainId = chainId;
     }
 
-    public ProgramEnvironment createSubenvironment(Address callee, Coin newValue, long newGas, byte[] newData) {
+    public ProgramEnvironment createChildEnvironment(Address callee, Coin newValue, long newGas, byte[] newData) {
         MessageData newMessageData = new MessageData(
             callee,
             this.getOrigin(),
@@ -41,8 +41,7 @@ public class ProgramEnvironment {
         return new ProgramEnvironment(
             newMessageData,
             this.blockData,
-            // TODO avoid cast
-            new ChildExecutionContext((AbstractExecutionContext)this.executionContext),
+            this.executionContext.createChildExecutionContext(),
             this.chainId
         );
     }

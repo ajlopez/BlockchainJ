@@ -746,7 +746,7 @@ public class VirtualMachine {
 
                     byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
 
-                    ProgramEnvironment newProgramEnvironment = programEnvironment.createSubenvironment(
+                    ProgramEnvironment newProgramEnvironment = programEnvironment.createChildEnvironment(
                             callee,
                             newValue,
                             gas,
