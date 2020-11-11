@@ -170,6 +170,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [A Tale of Two Pricing Schemes](https://medium.com/@MicahZoltu/a-tale-of-two-pricing-schemes-dc9c8717906)
 - [Why Proof of Stake (Nov 2020)](https://vitalik.ca/general/2020/11/06/pos2020.html)
 - [Towards formal semantics of the beacon chain’s pyspec]
+- [Talk: Vac, Waku v2 and Ethereum Messaging](https://vac.dev/waku-v2-ethereum-messaging)
+- [Oskar Thoren | Vac, Waku v2 and Ethereum Messaging](https://www.youtube.com/watch?v=lUDy1MoeYnI&feature=emb_logo)
 
 ## To Do
 
@@ -180,7 +182,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - Update transaction pool with new block information
 - Shared path in trie
 - Review incoming message processing (queue(s)?)
-- Create/Call opcodes in virtual machine
+- Create/Call opcodes in virtual machine (WIP)
 
 ## License
 
