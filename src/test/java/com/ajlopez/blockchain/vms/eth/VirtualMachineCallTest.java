@@ -74,6 +74,56 @@ public class VirtualMachineCallTest {
     }
 
     @Test
+    public void executeCallReturningReceiver() throws IOException {
+        byte[] calleeCode = new byte[]{
+                OpCodes.ADDRESS,
+                OpCodes.PUSH1, 0,
+                OpCodes.MSTORE,
+                OpCodes.PUSH1, 32,
+                OpCodes.PUSH1, 0,
+                OpCodes.RETURN
+        };
+
+        Address callee = FactoryHelper.createRandomAddress();
+
+        byte[] callerCode = new byte[]{
+                OpCodes.PUSH1, 0x20,    // Out Data Size
+                OpCodes.PUSH1, 0x00,    // Out Data Offset
+                OpCodes.PUSH1, 0x00,    // In Data Size
+                OpCodes.PUSH1, 0x00,    // In Data Offset
+                OpCodes.PUSH1, 0x00,    // Value
+                // Callee Address
+                OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                OpCodes.PUSH2, 0x40, 0x00,   // Gas
+                OpCodes.CALL
+        };
+
+        System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
+
+        Address caller = FactoryHelper.createRandomAddress();
+
+        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
+
+        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
+
+        System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
+
+        ExecutionResult executionResult = virtualMachine.execute(callerCode);
+
+        // TODO check gas used
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+
+        // TODO check if it is an address
+        Assert.assertEquals(callee, virtualMachine.getMemory().getValue(0).toAddress());
+
+        Assert.assertEquals(1, virtualMachine.getDataStack().size());
+        Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
+    }
+
+    @Test
     public void executeCallThatReverts() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
