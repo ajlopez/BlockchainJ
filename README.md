@@ -172,6 +172,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Towards formal semantics of the beacon chain’s pyspec]
 - [Talk: Vac, Waku v2 and Ethereum Messaging](https://vac.dev/waku-v2-ethereum-messaging)
 - [Oskar Thoren | Vac, Waku v2 and Ethereum Messaging](https://www.youtube.com/watch?v=lUDy1MoeYnI&feature=emb_logo)
+- [EVM Istanbul storage pricing](https://medium.com/@agusx1211/evm-istambul-storage-pricing-5befaac32403)
+- [A more gas-efficient upgradeable proxy by not using storage](https://forum.openzeppelin.com/t/a-more-gas-efficient-upgradeable-proxy-by-not-using-storage/4111)
 
 ## To Do
 
