@@ -4,10 +4,10 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -18,7 +18,7 @@ public class StreamProcessorTest {
     @Test
     public void processStreamInOneChunk() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        InputStream stream = new ByteInputStream(data, data.length);
+        InputStream stream = new ByteArrayInputStream(data);
         ChunkStore chunkStore = new ChunkStore(new HashMapStore());
 
         StreamProcessor streamProcessor = new StreamProcessor(chunkStore);
@@ -42,7 +42,7 @@ public class StreamProcessorTest {
         System.arraycopy(data, 0, data1, 0, 64);
         System.arraycopy(data, 64, data2, 0, 64);
 
-        InputStream stream = new ByteInputStream(data, data.length);
+        InputStream stream = new ByteArrayInputStream(data);
         ChunkStore chunkStore = new ChunkStore(new HashMapStore());
 
         StreamProcessor streamProcessor = new StreamProcessor(chunkStore);
