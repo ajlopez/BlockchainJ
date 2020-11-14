@@ -26,11 +26,11 @@ public class ProgramEnvironment {
         this.chainId = chainId;
     }
 
-    public ProgramEnvironment createChildEnvironment(Address callee, Coin newValue, long newGas, byte[] newData) {
+    public ProgramEnvironment createChildEnvironment(Address caller, Address callee, Coin newValue, long newGas, byte[] newData) {
         MessageData newMessageData = new MessageData(
             callee,
             this.getOrigin(),
-            this.getAddress(),
+            caller,
             newValue,
             newGas,
             this.getGasPrice(),

@@ -20,11 +20,11 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * Created by ajlopez on 04/11/2020.
+ * Created by ajlopez on 14/11/2020.
  */
-public class VirtualMachineCallTest {
+public class VirtualMachineDelegateCallTest {
     @Test
-    public void executeCallReturningCaller() throws IOException {
+    public void executeDelegateCallReturningOriginalSender() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.CALLER,
                 OpCodes.PUSH1, 0,
@@ -41,11 +41,10 @@ public class VirtualMachineCallTest {
                 OpCodes.PUSH1, 0x00,    // Out Data Offset
                 OpCodes.PUSH1, 0x00,    // In Data Size
                 OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
                 // Callee Address
                 OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 OpCodes.PUSH2, 0x40, 0x00,   // Gas
-                OpCodes.CALL
+                OpCodes.DELEGATECALL
         };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
@@ -56,59 +55,7 @@ public class VirtualMachineCallTest {
 
         Address sender = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(caller, null, sender, Coin.ZERO, 5000000, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
-
-        System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
-
-        ExecutionResult executionResult = virtualMachine.execute(callerCode);
-
-        // TODO check gas used
-
-        Assert.assertNotNull(executionResult);
-        Assert.assertTrue(executionResult.wasSuccesful());
-
-        // TODO check if it is an address
-        Assert.assertEquals(caller, virtualMachine.getMemory().getValue(0).toAddress());
-
-        Assert.assertEquals(1, virtualMachine.getDataStack().size());
-        Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
-    }
-
-    @Test
-    public void executeCallReturningOriginalSender() throws IOException {
-        byte[] calleeCode = new byte[]{
-                OpCodes.ORIGIN,
-                OpCodes.PUSH1, 0,
-                OpCodes.MSTORE,
-                OpCodes.PUSH1, 32,
-                OpCodes.PUSH1, 0,
-                OpCodes.RETURN
-        };
-
-        Address callee = FactoryHelper.createRandomAddress();
-
-        byte[] callerCode = new byte[]{
-                OpCodes.PUSH1, 0x20,    // Out Data Size
-                OpCodes.PUSH1, 0x00,    // Out Data Offset
-                OpCodes.PUSH1, 0x00,    // In Data Size
-                OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
-                // Callee Address
-                OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                OpCodes.PUSH2, 0x40, 0x00,   // Gas
-                OpCodes.CALL
-        };
-
-        System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
-
-        Address caller = FactoryHelper.createRandomAddress();
-
-        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
-
-        Address sender = FactoryHelper.createRandomAddress();
-
-        MessageData messageData = new MessageData(caller, sender, sender, Coin.ZERO, 5000000, Coin.ZERO, null, false);
+        MessageData messageData = new MessageData(sender, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
@@ -128,7 +75,7 @@ public class VirtualMachineCallTest {
     }
 
     @Test
-    public void executeCallReturningReceiver() throws IOException {
+    public void executeDelegateCallReturningReceiver() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.ADDRESS,
                 OpCodes.PUSH1, 0,
@@ -145,11 +92,10 @@ public class VirtualMachineCallTest {
                 OpCodes.PUSH1, 0x00,    // Out Data Offset
                 OpCodes.PUSH1, 0x00,    // In Data Size
                 OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
                 // Callee Address
                 OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 OpCodes.PUSH2, 0x40, 0x00,   // Gas
-                OpCodes.CALL
+                OpCodes.DELEGATECALL
         };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
@@ -178,7 +124,7 @@ public class VirtualMachineCallTest {
     }
 
     @Test
-    public void executeCallThatReverts() throws IOException {
+    public void executeDelegateCallThatReverts() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.PUSH1, 0,
@@ -192,11 +138,10 @@ public class VirtualMachineCallTest {
                 OpCodes.PUSH1, 0x00,    // Out Data Offset
                 OpCodes.PUSH1, 0x00,    // In Data Size
                 OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
                 // Callee Address
                 OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 OpCodes.PUSH2, 0x40, 0x00,   // Gas
-                OpCodes.CALL
+                OpCodes.DELEGATECALL
         };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
@@ -224,7 +169,7 @@ public class VirtualMachineCallTest {
     }
 
     @Test
-    public void executeCallIncrementingInputData() throws IOException {
+    public void executeDelegateCallIncrementingInputData() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.CALLDATALOAD,
@@ -248,11 +193,10 @@ public class VirtualMachineCallTest {
                 OpCodes.PUSH1, 0x00,    // Out Data Offset
                 OpCodes.PUSH1, 0x20,    // In Data Size
                 OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
                 // Callee Address
                 OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 OpCodes.PUSH2, 0x40, 0x00,   // Gas
-                OpCodes.CALL
+                OpCodes.DELEGATECALL
         };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
@@ -278,7 +222,7 @@ public class VirtualMachineCallTest {
     }
 
     @Test
-    public void executeCallSavingInputDataIntoStorage() throws IOException {
+    public void executeDelegateCallSavingInputDataIntoStorage() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.CALLDATALOAD,
@@ -300,11 +244,10 @@ public class VirtualMachineCallTest {
                 OpCodes.PUSH1, 0x00,    // Out Data Offset
                 OpCodes.PUSH1, 0x20,    // In Data Size
                 OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
                 // Callee Address
                 OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 OpCodes.PUSH2, 0x60, 0x00,   // Gas
-                OpCodes.CALL
+                OpCodes.DELEGATECALL
         };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
@@ -331,7 +274,7 @@ public class VirtualMachineCallTest {
     }
 
     @Test
-    public void executeCallSavingInputDataIntoStorageAndRevert() throws IOException {
+    public void executeDelegateCallSavingInputDataIntoStorageAndRevert() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.CALLDATALOAD,
@@ -353,11 +296,10 @@ public class VirtualMachineCallTest {
                 OpCodes.PUSH1, 0x00,    // Out Data Offset
                 OpCodes.PUSH1, 0x20,    // In Data Size
                 OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
                 // Callee Address
                 OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 OpCodes.PUSH2, 0x60, 0x00,   // Gas
-                OpCodes.CALL
+                OpCodes.DELEGATECALL
         };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
@@ -384,7 +326,7 @@ public class VirtualMachineCallTest {
     }
 
     @Test
-    public void executeCallThatReturnsTooMuchData() throws IOException {
+    public void executeDelegateCallThatReturnsTooMuchData() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.CALLDATALOAD,
@@ -411,11 +353,10 @@ public class VirtualMachineCallTest {
                 OpCodes.PUSH1, 0x00,    // Out Data Offset
                 OpCodes.PUSH1, 0x20,    // In Data Size
                 OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
                 // Callee Address
                 OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 OpCodes.PUSH2, 0x40, 0x00,   // Gas
-                OpCodes.CALL
+                OpCodes.DELEGATECALL
         };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
@@ -442,7 +383,7 @@ public class VirtualMachineCallTest {
     }
 
     @Test
-    public void executeCallThatReturnsLessDataThanExpected() throws IOException {
+    public void executeDelegateCallThatReturnsLessDataThanExpected() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.PUSH1, 0,
                 OpCodes.CALLDATALOAD,
@@ -469,11 +410,10 @@ public class VirtualMachineCallTest {
                 OpCodes.PUSH1, 0x00,    // Out Data Offset
                 OpCodes.PUSH1, 0x20,    // In Data Size
                 OpCodes.PUSH1, 0x00,    // In Data Offset
-                OpCodes.PUSH1, 0x00,    // Value
                 // Callee Address
                 OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 OpCodes.PUSH2, 0x40, 0x00,   // Gas
-                OpCodes.CALL
+                OpCodes.DELEGATECALL
         };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
