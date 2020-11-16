@@ -774,6 +774,52 @@ public class VirtualMachine {
 
                     continue;
 
+                case OpCodes.DELEGATECALL:
+                    // improve stack use
+
+                    // TODO check gas as long
+                    gas = this.dataStack.pop().asUnsignedLong();
+                    // TODO check is address
+                    callee = this.dataStack.pop().toAddress();
+
+                    // TODO check they are an integer
+                    inputDataOffset = this.dataStack.pop().asUnsignedInteger();
+                    inputDataSize = this.dataStack.pop().asUnsignedInteger();
+                    outputDataOffset = this.dataStack.pop().asUnsignedInteger();
+                    outputDataSize = this.dataStack.pop().asUnsignedInteger();
+
+                    inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
+
+                    newProgramEnvironment = programEnvironment.createChildEnvironment(
+                            this.programEnvironment.getCaller(),
+                            this.programEnvironment.getAddress(),
+                            Coin.ZERO,
+                            gas,
+                            inputData
+                    );
+
+                    newCode = programEnvironment.getCode(callee);
+
+                    newVirtualMachine = new VirtualMachine(newProgramEnvironment, newProgramEnvironment.getAccountStorage(callee));
+
+                    executionResult = newVirtualMachine.execute(newCode);
+
+                    if (executionResult.wasSuccesful()) {
+                        newProgramEnvironment.commit();
+                        this.memory.setBytes(outputDataOffset, executionResult.getReturnedData(), 0, outputDataSize);
+                        // TODO review behavior
+                        this.dataStack.push(DataWord.ONE);
+                    }
+                    else {
+                        newProgramEnvironment.rollback();
+                        // TODO process revert message
+                        // TODO raise internal exception
+                        // TODO review behavior
+                        this.dataStack.push(DataWord.ZERO);
+                    }
+
+                    continue;
+
                 case OpCodes.RETURN:
                     offset = this.dataStack.pop().asUnsignedInteger();
                     length = this.dataStack.pop().asUnsignedInteger();
