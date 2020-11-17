@@ -24,7 +24,7 @@ import java.io.IOException;
  */
 public class VirtualMachineDelegateCallTest {
     @Test
-    public void executeDelegateCallReturningOriginalSender() throws IOException {
+    public void executeDelegateCallReturningCaller() throws IOException {
         byte[] calleeCode = new byte[]{
                 OpCodes.CALLER,
                 OpCodes.PUSH1, 0,
@@ -50,16 +50,52 @@ public class VirtualMachineDelegateCallTest {
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
         Address caller = FactoryHelper.createRandomAddress();
-
-        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
-
         Address sender = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(sender, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
+        VirtualMachine virtualMachine = createVirtualMachine(sender, caller, callerCode, callee, calleeCode);
+        ExecutionResult executionResult = virtualMachine.execute(callerCode);
+
+        // TODO check gas used
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertTrue(executionResult.wasSuccesful());
+
+        // TODO check if it is an address
+        Assert.assertEquals(sender, virtualMachine.getMemory().getValue(0).toAddress());
+
+        Assert.assertEquals(1, virtualMachine.getDataStack().size());
+        Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
+    }
+    @Test
+    public void executeDelegateCallReturningOriginalSender() throws IOException {
+        byte[] calleeCode = new byte[]{
+                OpCodes.ORIGIN,
+                OpCodes.PUSH1, 0,
+                OpCodes.MSTORE,
+                OpCodes.PUSH1, 32,
+                OpCodes.PUSH1, 0,
+                OpCodes.RETURN
+        };
+
+        Address callee = FactoryHelper.createRandomAddress();
+
+        byte[] callerCode = new byte[]{
+                OpCodes.PUSH1, 0x20,    // Out Data Size
+                OpCodes.PUSH1, 0x00,    // Out Data Offset
+                OpCodes.PUSH1, 0x00,    // In Data Size
+                OpCodes.PUSH1, 0x00,    // In Data Offset
+                // Callee Address
+                OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                OpCodes.PUSH2, 0x40, 0x00,   // Gas
+                OpCodes.DELEGATECALL
+        };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
+        Address caller = FactoryHelper.createRandomAddress();
+        Address sender = FactoryHelper.createRandomAddress();
+
+        VirtualMachine virtualMachine = createVirtualMachine(sender, caller, callerCode, callee, calleeCode);
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
 
         // TODO check gas used
@@ -104,7 +140,9 @@ public class VirtualMachineDelegateCallTest {
 
         ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
 
-        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
+        Address sender = FactoryHelper.createRandomAddress();
+
+        MessageData messageData = new MessageData(caller, sender, sender, Coin.ZERO, 5000000, Coin.ZERO, null, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
@@ -117,7 +155,7 @@ public class VirtualMachineDelegateCallTest {
         Assert.assertTrue(executionResult.wasSuccesful());
 
         // TODO check if it is an address
-        Assert.assertEquals(callee, virtualMachine.getMemory().getValue(0).toAddress());
+        Assert.assertEquals(caller, virtualMachine.getMemory().getValue(0).toAddress());
 
         Assert.assertEquals(1, virtualMachine.getDataStack().size());
         Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
@@ -436,6 +474,13 @@ public class VirtualMachineDelegateCallTest {
 
         Assert.assertEquals(1, virtualMachine.getDataStack().size());
         Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
+    }
+
+    private static VirtualMachine createVirtualMachine(Address sender, Address caller, byte[] callerCode, Address callee, byte[] calleeCode) throws IOException {
+        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
+        MessageData messageData = new MessageData(caller, sender, sender, Coin.ZERO, 5000000, Coin.ZERO, null, false);
+
+        return new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
     }
 
     private static ExecutionContext createExecutionContext(Address caller, byte[] callerCode, Address callee, byte[] calleeCode) throws IOException {
