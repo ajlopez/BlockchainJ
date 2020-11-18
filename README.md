@@ -175,6 +175,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [EVM Istanbul storage pricing](https://medium.com/@agusx1211/evm-istambul-storage-pricing-5befaac32403)
 - [A more gas-efficient upgradeable proxy by not using storage](https://forum.openzeppelin.com/t/a-more-gas-efficient-upgradeable-proxy-by-not-using-storage/4111)
 - [Delegatecall return values solidity 5.0](https://ethereum.stackexchange.com/questions/73455/delegatecall-return-values-solidity-5-0)
+- [Instant Cross-L2 Transfers are Now on Testnet!](https://medium.com/connext/instant-cross-l2-transfers-are-now-on-testnet-2f1295530c22)
 
 ## To Do
 
