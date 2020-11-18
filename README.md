@@ -174,6 +174,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Oskar Thoren | Vac, Waku v2 and Ethereum Messaging](https://www.youtube.com/watch?v=lUDy1MoeYnI&feature=emb_logo)
 - [EVM Istanbul storage pricing](https://medium.com/@agusx1211/evm-istambul-storage-pricing-5befaac32403)
 - [A more gas-efficient upgradeable proxy by not using storage](https://forum.openzeppelin.com/t/a-more-gas-efficient-upgradeable-proxy-by-not-using-storage/4111)
+- [Delegatecall return values solidity 5.0](https://ethereum.stackexchange.com/questions/73455/delegatecall-return-values-solidity-5-0)
 
 ## To Do
 
