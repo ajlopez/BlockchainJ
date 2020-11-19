@@ -137,16 +137,10 @@ public class VirtualMachineDelegateCallTest {
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
         Address caller = FactoryHelper.createRandomAddress();
-
-        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
-
         Address sender = FactoryHelper.createRandomAddress();
-
-        MessageData messageData = new MessageData(caller, sender, sender, Coin.ZERO, 5000000, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
-
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
+        VirtualMachine virtualMachine = createVirtualMachine(sender, caller, callerCode, callee, calleeCode);
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
 
         // TODO check gas used
@@ -185,14 +179,10 @@ public class VirtualMachineDelegateCallTest {
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
         Address caller = FactoryHelper.createRandomAddress();
-
-        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
-
-        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
-
+        Address sender = FactoryHelper.createRandomAddress();
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
+        VirtualMachine virtualMachine = createVirtualMachine(sender, caller, callerCode, callee, calleeCode);
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
 
         // TODO check gas used
@@ -238,14 +228,10 @@ public class VirtualMachineDelegateCallTest {
         };
 
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
-
         Address caller = FactoryHelper.createRandomAddress();
+        Address sender = FactoryHelper.createRandomAddress();
 
-        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
-
-        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
-
+        VirtualMachine virtualMachine = createVirtualMachine(sender, caller, callerCode, callee, calleeCode);
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
 
         // TODO check gas used
@@ -400,12 +386,9 @@ public class VirtualMachineDelegateCallTest {
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
         Address caller = FactoryHelper.createRandomAddress();
+        Address sender = FactoryHelper.createRandomAddress();
 
-        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
-
-        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
-
+        VirtualMachine virtualMachine = createVirtualMachine(sender, caller, callerCode, callee, calleeCode);
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
 
         // TODO check gas used
@@ -457,12 +440,9 @@ public class VirtualMachineDelegateCallTest {
         System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 4 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
 
         Address caller = FactoryHelper.createRandomAddress();
+        Address sender = FactoryHelper.createRandomAddress();
 
-        ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
-
-        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
-
+        VirtualMachine virtualMachine = createVirtualMachine(sender, caller, callerCode, callee, calleeCode);
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
 
         // TODO check gas used
