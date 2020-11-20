@@ -92,7 +92,7 @@ public class TransactionExecutor {
         long transactionGas = transaction.getGasCost();
 
         Storage storage = context.getAccountStorage(receiver);
-        MessageData messageData = new MessageData(receiver, sender, sender, transaction.getValue(), transaction.getGas() - transactionGas, transaction.getGasPrice(), transaction.getData(), false);
+        MessageData messageData = new MessageData(receiver, sender, sender, transaction.getValue(), transaction.getGas() - transactionGas, transaction.getGasPrice(), transaction.getData(), 0, 0, false);
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, blockData, null, 0);
         VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 

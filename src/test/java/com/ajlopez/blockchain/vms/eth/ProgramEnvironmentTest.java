@@ -17,7 +17,7 @@ public class ProgramEnvironmentTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(address, origin, caller, Coin.ONE, 0, null, null, false);
+        MessageData messageData = new MessageData(address, origin, caller, Coin.ONE, 0, null, null, 0, 0, false);
 
         long number = 1;
         long timestamp = 2;

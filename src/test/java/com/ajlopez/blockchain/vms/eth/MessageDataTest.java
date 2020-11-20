@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.vms.eth;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,7 +21,7 @@ public class MessageDataTest {
 
         byte[] data = FactoryHelper.createRandomBytes(10);
 
-        MessageData messageData = new MessageData(address, origin, caller, value, gas, gasPrice, data, false);
+        MessageData messageData = new MessageData(address, origin, caller, value, gas, gasPrice, data, 0, 0, false);
 
         Assert.assertEquals(address, messageData.getAddress());
         Assert.assertEquals(origin, messageData.getOrigin());
@@ -45,7 +44,7 @@ public class MessageDataTest {
 
         byte[] data = FactoryHelper.createRandomBytes(10);
 
-        MessageData messageData = new MessageData(address, origin, caller, value, gas, gasPrice, data, true);
+        MessageData messageData = new MessageData(address, origin, caller, value, gas, gasPrice, data, 0, 0, true);
 
         Assert.assertEquals(address, messageData.getAddress());
         Assert.assertEquals(origin, messageData.getOrigin());

@@ -906,7 +906,7 @@ public class VirtualMachineTest {
     @Test
     public void executeGasPriceOperations() throws IOException {
         Coin gasPrice = Coin.fromUnsignedLong(42L);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, gasPrice, null, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, gasPrice, null, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -929,7 +929,7 @@ public class VirtualMachineTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(address, origin, caller, Coin.ONE, 100000, null, null, false);
+        MessageData messageData = new MessageData(address, origin, caller, Coin.ONE, 100000, null, null, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -952,7 +952,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataSize() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -972,7 +972,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataLoad() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -992,7 +992,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataLoadWithAdditionalBytes() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1015,7 +1015,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataLoadBeyondData() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1035,7 +1035,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataCopy() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1068,7 +1068,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataCopyWithPartialData() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1101,7 +1101,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataCopyBeyondData() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1142,7 +1142,7 @@ public class VirtualMachineTest {
         code[6] = OpCodes.CODECOPY;
         code[7] = OpCodes.STOP;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1182,7 +1182,7 @@ public class VirtualMachineTest {
         code[8] = 0x00;
         code[9] = OpCodes.RETURN;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1222,7 +1222,7 @@ public class VirtualMachineTest {
         code[8] = 0x00;
         code[9] = OpCodes.REVERT;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1260,7 +1260,7 @@ public class VirtualMachineTest {
         code[6] = OpCodes.CODECOPY;
         code[7] = OpCodes.STOP;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1301,7 +1301,7 @@ public class VirtualMachineTest {
         code[6] = OpCodes.CODECOPY;
         code[7] = OpCodes.STOP;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null, 0);
 
@@ -1823,7 +1823,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeWithInsufficientGasRaiseException() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 0, Coin.ZERO, null, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 0, Coin.ZERO, null, 0, 0, false);
         VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null, 0), null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.ADDRESS });
@@ -1992,31 +1992,31 @@ public class VirtualMachineTest {
     }
 
     private static ProgramEnvironment createProgramEnvironment(long gas) {
-        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, gas, Coin.ZERO, null, false);
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, gas, Coin.ZERO, null, 0, 0, false);
 
         return new ProgramEnvironment(messageData, null, null, 0);
     }
 
     private static ProgramEnvironment createProgramEnvironment(ExecutionContext executionContext) {
-        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
 
         return new ProgramEnvironment(messageData, null, executionContext, 42);
     }
 
     private static ProgramEnvironment createProgramEnvironment(Address receiver, ExecutionContext executionContext) {
-        MessageData messageData = new MessageData(receiver, null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
+        MessageData messageData = new MessageData(receiver, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
 
         return new ProgramEnvironment(messageData, null, executionContext, 42);
     }
 
     private static ProgramEnvironment createProgramEnvironment(BlockData blockData) {
-        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, false);
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
 
         return new ProgramEnvironment(messageData, blockData, null, 0);
     }
 
     private static ProgramEnvironment createReadOnlyProgramEnvironment() {
-        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, true);
+        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, true);
 
         return new ProgramEnvironment(messageData, null, null, 0);
     }

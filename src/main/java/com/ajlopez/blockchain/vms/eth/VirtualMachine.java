@@ -730,44 +730,20 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.CALL:
-                    // improve stack use
-
-                    // TODO check gas as long
-                    long gas = this.dataStack.pop().asUnsignedLong();
-                    // TODO check is address
-                    Address callee = this.dataStack.pop().toAddress();
-                    Coin newValue = Coin.fromBytes(this.dataStack.pop().getBytes());
-
-                    // TODO check they are an integer
-                    int inputDataOffset = this.dataStack.pop().asUnsignedInteger();
-                    int inputDataSize = this.dataStack.pop().asUnsignedInteger();
-                    int outputDataOffset = this.dataStack.pop().asUnsignedInteger();
-                    int outputDataSize = this.dataStack.pop().asUnsignedInteger();
-
-                    byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
-
-                    ProgramEnvironment newProgramEnvironment = programEnvironment.createChildEnvironment(
-                            this.programEnvironment.getAddress(),
-                            callee,
-                            newValue,
-                            gas,
-                            inputData
-                    );
-
-                    byte[] newCode = programEnvironment.getCode(callee);
-
-                    VirtualMachine newVirtualMachine = new VirtualMachine(newProgramEnvironment, newProgramEnvironment.getAccountStorage(callee));
+                    VirtualMachine newVirtualMachine = this.createVirtualMachineForCall(false);
+                    byte[] newCode = programEnvironment.getCode(newVirtualMachine.programEnvironment.getAddress());
 
                     ExecutionResult executionResult = newVirtualMachine.execute(newCode);
 
+                    // TODO review implementation design
                     if (executionResult.wasSuccesful()) {
-                        newProgramEnvironment.commit();
-                        this.memory.setBytes(outputDataOffset, executionResult.getReturnedData(), 0, outputDataSize);
+                        newVirtualMachine.programEnvironment.commit();
+                        this.memory.setBytes(newVirtualMachine.programEnvironment.getOutputDataOffset(), executionResult.getReturnedData(), 0, newVirtualMachine.programEnvironment.getOutputDataSize());
                         this.dataStack.push(DataWord.ONE);
                     }
                     else {
-                        newProgramEnvironment.rollback();
-                        // TODO process revert message
+                        newVirtualMachine.programEnvironment.rollback();
+                        // TODO process revert messagenew
                         // TODO raise internal exception
                         this.dataStack.push(DataWord.ZERO);
                     }
@@ -778,24 +754,26 @@ public class VirtualMachine {
                     // improve stack use
 
                     // TODO check gas as long
-                    gas = this.dataStack.pop().asUnsignedLong();
+                    long gas = this.dataStack.pop().asUnsignedLong();
                     // TODO check is address
-                    callee = this.dataStack.pop().toAddress();
+                    Address callee = this.dataStack.pop().toAddress();
 
                     // TODO check they are an integer
-                    inputDataOffset = this.dataStack.pop().asUnsignedInteger();
-                    inputDataSize = this.dataStack.pop().asUnsignedInteger();
-                    outputDataOffset = this.dataStack.pop().asUnsignedInteger();
-                    outputDataSize = this.dataStack.pop().asUnsignedInteger();
+                    int inputDataOffset = this.dataStack.pop().asUnsignedInteger();
+                    int inputDataSize = this.dataStack.pop().asUnsignedInteger();
+                    int outputDataOffset = this.dataStack.pop().asUnsignedInteger();
+                    int outputDataSize = this.dataStack.pop().asUnsignedInteger();
 
-                    inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
+                    byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
 
-                    newProgramEnvironment = programEnvironment.createChildEnvironment(
+                    ProgramEnvironment newProgramEnvironment = programEnvironment.createChildEnvironment(
                             this.programEnvironment.getCaller(),
                             this.programEnvironment.getAddress(),
                             Coin.ZERO,
                             gas,
-                            inputData
+                            inputData,
+                            outputDataOffset,
+                            outputDataSize
                     );
 
                     newCode = programEnvironment.getCode(callee);
@@ -864,5 +842,41 @@ public class VirtualMachine {
 
     public Memory getMemory() {
         return this.memory;
+    }
+
+    private VirtualMachine createVirtualMachineForCall(boolean isDelegateCall) throws IOException {
+        // improve stack use
+
+        // TODO check gas as long
+        long gas = this.dataStack.pop().asUnsignedLong();
+        // TODO check is address
+        Address callee = this.dataStack.pop().toAddress();
+
+        Coin newValue = Coin.ZERO;
+
+        if (!isDelegateCall)
+            newValue = Coin.fromBytes(this.dataStack.pop().getBytes());
+
+        // TODO check they are an integer
+        int inputDataOffset = this.dataStack.pop().asUnsignedInteger();
+        int inputDataSize = this.dataStack.pop().asUnsignedInteger();
+        int outputDataOffset = this.dataStack.pop().asUnsignedInteger();
+        int outputDataSize = this.dataStack.pop().asUnsignedInteger();
+
+        byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
+
+        ProgramEnvironment newProgramEnvironment = programEnvironment.createChildEnvironment(
+                this.programEnvironment.getAddress(),
+                callee,
+                newValue,
+                gas,
+                inputData,
+                outputDataOffset,
+                outputDataSize
+        );
+
+        byte[] newCode = programEnvironment.getCode(callee);
+
+        return new VirtualMachine(newProgramEnvironment, newProgramEnvironment.getAccountStorage(callee));
     }
 }

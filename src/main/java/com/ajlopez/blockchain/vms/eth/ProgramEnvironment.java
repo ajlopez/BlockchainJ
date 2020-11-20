@@ -4,8 +4,6 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
-import com.ajlopez.blockchain.execution.AbstractExecutionContext;
-import com.ajlopez.blockchain.execution.ChildExecutionContext;
 import com.ajlopez.blockchain.execution.ExecutionContext;
 
 import java.io.IOException;
@@ -26,7 +24,7 @@ public class ProgramEnvironment {
         this.chainId = chainId;
     }
 
-    public ProgramEnvironment createChildEnvironment(Address caller, Address callee, Coin newValue, long newGas, byte[] newData) {
+    public ProgramEnvironment createChildEnvironment(Address caller, Address callee, Coin newValue, long newGas, byte[] newData, int outputDataOffset, int outputDataSize) {
         MessageData newMessageData = new MessageData(
             callee,
             this.getOrigin(),
@@ -35,6 +33,8 @@ public class ProgramEnvironment {
             newGas,
             this.getGasPrice(),
             newData,
+            outputDataOffset,
+            outputDataSize,
             this.isReadOnly()
         );
 
@@ -84,6 +84,16 @@ public class ProgramEnvironment {
 
     public Storage getAccountStorage(Address address) throws IOException {
         return this.executionContext.getAccountStorage(address);
+    }
+
+    // TODO review design of this data
+    public int getOutputDataOffset() {
+        return this.messageData.getOutputDataOffset();
+    }
+
+    // TODO review design of this data
+    public int getOutputDataSize() {
+        return this.messageData.getOutputDataSize();
     }
 
     // TODO redesign/review
