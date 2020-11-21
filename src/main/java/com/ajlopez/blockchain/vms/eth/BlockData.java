@@ -12,13 +12,15 @@ public class BlockData {
     private final Address coinbase;
     private final Difficulty difficulty;
     private final long gasLimit;
+    private final int chainId;
 
-    public BlockData(long number, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit) {
+    public BlockData(long number, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, int chainId) {
         this.number = number;
         this.timestamp = timestamp;
         this.coinbase = coinbase;
         this.difficulty = difficulty;
         this.gasLimit = gasLimit;
+        this.chainId = chainId;
     }
 
     public long getNumber() { return this.number; }
@@ -30,4 +32,6 @@ public class BlockData {
     public Difficulty getDifficulty() { return this.difficulty; }
 
     public long getGasLimit() { return this.gasLimit; }
+
+    public int getChainId() { return this.chainId; }
 }

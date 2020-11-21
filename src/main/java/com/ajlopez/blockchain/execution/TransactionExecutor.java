@@ -93,7 +93,7 @@ public class TransactionExecutor {
 
         Storage storage = context.getAccountStorage(receiver);
         MessageData messageData = new MessageData(receiver, sender, sender, transaction.getValue(), transaction.getGas() - transactionGas, transaction.getGasPrice(), transaction.getData(), 0, 0, false);
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, blockData, null, 0);
+        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, blockData, null);
         VirtualMachine vm = new VirtualMachine(programEnvironment, storage);
 
         ExecutionResult executionResult = vm.execute(code);

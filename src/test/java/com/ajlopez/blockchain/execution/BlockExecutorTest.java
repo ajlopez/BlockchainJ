@@ -118,7 +118,7 @@ public class BlockExecutorTest {
 
         Block block = new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.TWO, 0, 0, null);
 
-        BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty(), 0);
+        BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty(), 0, 0);
         transactionExecutor.executeTransactions(transactions, blockData);
 
         BlockExecutor blockExecutor = builder.buildBlockExecutor();

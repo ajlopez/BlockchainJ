@@ -293,7 +293,7 @@ public class VirtualMachineCallTest {
         Address sender = FactoryHelper.createRandomAddress();
 
         MessageData messageData = new MessageData(caller, sender, sender, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext), null);
 
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
 
@@ -348,7 +348,7 @@ public class VirtualMachineCallTest {
         Address sender = FactoryHelper.createRandomAddress();
 
         MessageData messageData = new MessageData(caller, sender, sender, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
+        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext), null);
 
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
 
@@ -477,7 +477,7 @@ public class VirtualMachineCallTest {
         ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
         MessageData messageData = new MessageData(caller, sender, sender, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
 
-        return new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext, 0), null);
+        return new VirtualMachine(new ProgramEnvironment(messageData, null, executionContext), null);
     }
 
     private static ExecutionContext createExecutionContext(Address caller, byte[] callerCode, Address callee, byte[] calleeCode) throws IOException {

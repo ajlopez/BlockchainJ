@@ -17,7 +17,7 @@ public class BlockDataTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.ONE;
 
-        BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty, 0);
+        BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty, 0, 0);
 
         Assert.assertEquals(number, blockData.getNumber());
         Assert.assertEquals(timestamp, blockData.getTimestamp());
@@ -33,7 +33,7 @@ public class BlockDataTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         Difficulty difficulty = Difficulty.ONE;
 
-        BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty, 12_000_000L);
+        BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty, 12_000_000L, 0);
 
         Assert.assertEquals(number, blockData.getNumber());
         Assert.assertEquals(timestamp, blockData.getTimestamp());

@@ -15,13 +15,11 @@ public class ProgramEnvironment {
     private final MessageData messageData;
     private final BlockData blockData;
     private final ExecutionContext executionContext;
-    private final int chainId;
 
-    public ProgramEnvironment(MessageData messageData, BlockData blockData, ExecutionContext executionContext, int chainId) {
+    public ProgramEnvironment(MessageData messageData, BlockData blockData, ExecutionContext executionContext) {
         this.messageData = messageData;
         this.blockData = blockData;
         this.executionContext = executionContext;
-        this.chainId = chainId;
     }
 
     public ProgramEnvironment createChildEnvironment(Address caller, Address callee, Coin newValue, long newGas, byte[] newData, int outputDataOffset, int outputDataSize) {
@@ -41,8 +39,7 @@ public class ProgramEnvironment {
         return new ProgramEnvironment(
             newMessageData,
             this.blockData,
-            this.executionContext.createChildExecutionContext(),
-            this.chainId
+            this.executionContext.createChildExecutionContext()
         );
     }
 
@@ -80,7 +77,7 @@ public class ProgramEnvironment {
 
     public boolean isReadOnly() { return this.messageData.isReadOnly(); }
 
-    public int getChainId() { return this.chainId; }
+    public int getChainId() { return this.blockData.getChainId(); }
 
     public Storage getAccountStorage(Address address) throws IOException {
         return this.executionContext.getAccountStorage(address);

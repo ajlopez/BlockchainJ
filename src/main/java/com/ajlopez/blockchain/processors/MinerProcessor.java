@@ -76,7 +76,7 @@ public class MinerProcessor {
         long timestamp = System.currentTimeMillis();
 
         // TODO adjust difficulty
-        BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, parent.getDifficulty(), this.gasLimit);
+        BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, parent.getDifficulty(), this.gasLimit, 0);
 
         List<Transaction> transactions = this.transactionPool.getTransactions();
         List<Transaction> executedTransactions = new ArrayList<>();

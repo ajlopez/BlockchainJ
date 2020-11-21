@@ -32,7 +32,8 @@ public class BlockExecutor {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, this.trieStorageProvider, this.codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty(), 0);
+        // TODO get gas limit from block, get chain id from block, add chainid to block header
+        BlockData blockData = new BlockData(block.getNumber(), block.getTimestamp(), block.getCoinbase(), block.getDifficulty(), 0, 0);
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(block.getTransactions(), blockData);
 
         return new BlockExecutionResult(accountStore.getRootHash(), transactionReceipts);

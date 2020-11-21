@@ -23,9 +23,9 @@ public class ProgramEnvironmentTest {
         long timestamp = 2;
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockData blockData = new BlockData(number, timestamp, coinbase, Difficulty.TWO, 12_000_000L);
+        BlockData blockData = new BlockData(number, timestamp, coinbase, Difficulty.TWO, 12_000_000L, 42);
 
-        ProgramEnvironment environment = new ProgramEnvironment(messageData, blockData, null, 42);
+        ProgramEnvironment environment = new ProgramEnvironment(messageData, blockData, null);
 
         Assert.assertEquals(address, environment.getAddress());
         Assert.assertEquals(origin, environment.getOrigin());
