@@ -27,7 +27,7 @@ public class Block {
     }
 
     public Block(long number, BlockHash parentHash, List<BlockHeader> uncles, List<Transaction> transactions, Hash receiptsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, byte[] extraData) {
-        this(new BlockHeader(number, parentHash, transactions == null ? 0 : transactions.size(), calculateTransactionsRootHash(transactions), receiptsRootHash, uncles == null ? 0 : uncles.size(), calculateUnclesRootHash(uncles), stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, extraData, 0), uncles, transactions);
+        this(new BlockHeader(number, parentHash, transactions == null ? 0 : transactions.size(), calculateTransactionsRootHash(transactions), receiptsRootHash, uncles == null ? 0 : uncles.size(), calculateUnclesRootHash(uncles), stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, extraData, 0, 0), uncles, transactions);
     }
 
     public Block(BlockHeader header, List<BlockHeader> uncles, List<Transaction> transactions)

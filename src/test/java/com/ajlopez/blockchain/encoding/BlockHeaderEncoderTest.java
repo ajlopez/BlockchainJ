@@ -29,7 +29,7 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, null, 0);
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, null, 0, 0);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -57,7 +57,7 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, null, 100);
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, null, 0, 100);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -80,6 +80,36 @@ public class BlockHeaderEncoderTest {
     }
 
     @Test
+    public void encodeDecodeBlockHeaderWithNonceAndChainId() {
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Hash transactionsHash = FactoryHelper.createRandomHash();
+        Hash stateRootHash = FactoryHelper.createRandomHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, null, 144, 100);
+
+        byte[] encoded = BlockHeaderEncoder.encode(header);
+
+        Assert.assertNotNull(encoded);
+
+        BlockHeader result = BlockHeaderEncoder.decode(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(42, result.getNumber());
+        Assert.assertEquals(hash, result.getParentHash());
+        Assert.assertEquals(header.getHash(), result.getHash());
+        Assert.assertEquals(header.getTransactionsCount(), result.getTransactionsCount());
+        Assert.assertEquals(header.getTransactionsRootHash(), result.getTransactionsRootHash());
+        Assert.assertEquals(header.getCoinbase(), result.getCoinbase());
+        Assert.assertEquals(header.getDifficulty(), result.getDifficulty());
+        Assert.assertEquals(header.getGasLimit(), result.getGasLimit());
+        Assert.assertEquals(header.getGasUsed(), result.getGasUsed());
+        Assert.assertNull(result.getExtraData());
+        Assert.assertEquals(header.getChainId(), result.getChainId());
+        Assert.assertEquals(header.getNonce(), result.getNonce());
+    }
+
+    @Test
     public void encodeDecodeBlockHeaderWithNonceAndExtraData() {
         byte[] extraData = FactoryHelper.createRandomBytes(20);
         BlockHash hash = FactoryHelper.createRandomBlockHash();
@@ -87,7 +117,7 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, extraData, 100);
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, extraData, 0, 100);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -118,7 +148,7 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, receiptsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 10_000_000L, 10_000_000L, null, 100);
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, receiptsHash, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 10_000_000L, 10_000_000L, null, 0, 100);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
@@ -147,8 +177,8 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header1 = new BlockHeader(42, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 10_000_000L, 8_000_000L, null, 0);
-        BlockHeader header2 = new BlockHeader(100, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(100), 12_000_000L, 10_000_000L, null, 0);
+        BlockHeader header1 = new BlockHeader(42, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 10_000_000L, 8_000_000L, null, 0, 0);
+        BlockHeader header2 = new BlockHeader(100, hash, 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(100), 12_000_000L, 10_000_000L, null, 0, 0);
 
         List<BlockHeader> headers = new ArrayList<>();
         headers.add(header1);
