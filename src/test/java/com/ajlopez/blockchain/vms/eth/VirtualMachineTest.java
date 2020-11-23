@@ -23,7 +23,7 @@ import java.util.Stack;
 public class VirtualMachineTest {
     @Test
     public void executeEmptyCode() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[0]);
 
@@ -42,7 +42,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executePushOneByte() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01});
 
@@ -69,7 +69,7 @@ public class VirtualMachineTest {
             opcodes[0] = (byte) (OpCodes.PUSH1 + k);
             System.arraycopy(value, 0, opcodes, 1, k + 1);
 
-            VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+            VirtualMachine virtualMachine = createVirtualMachine();
 
             ExecutionResult executionResult = virtualMachine.execute(opcodes);
 
@@ -90,7 +90,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeProgramCounter() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[]{OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PC });
 
@@ -109,7 +109,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAdd() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
 
@@ -128,7 +128,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAddWithoutEnoughGas() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(FeeSchedule.VERYLOW.getValue() * 2), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
 
@@ -163,7 +163,8 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAddWithOverflow() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
+
         byte[] bytecodes = HexUtils.hexStringToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600101");
 
         ExecutionResult executionResult = virtualMachine.execute(bytecodes);
@@ -281,7 +282,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSub() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.SUB });
 
@@ -309,7 +310,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeSubWithUnderflow() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
         byte[] bytecodes = HexUtils.hexStringToBytes("6001600003");
 
         ExecutionResult executionResult = virtualMachine.execute(bytecodes);
@@ -330,7 +331,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeDupTopOfStack() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.DUP1 });
 
@@ -349,7 +350,7 @@ public class VirtualMachineTest {
     @Test
     public void executeDups() throws IOException {
         for (int k = 0; k < 16; k++) {
-            VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+            VirtualMachine virtualMachine = createVirtualMachine();
 
             byte[][] values = new byte[k + 1][];
 
@@ -384,7 +385,7 @@ public class VirtualMachineTest {
     @Test
     public void executeSwaps() throws IOException {
         for (int k = 0; k < 16; k++) {
-            VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+            VirtualMachine virtualMachine = createVirtualMachine();
 
             byte[][] values = new byte[k + 2][];
 
@@ -419,7 +420,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executePop() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.POP });
 
@@ -443,7 +444,7 @@ public class VirtualMachineTest {
 
         storage.setValue(DataWord.ONE, DataWord.fromUnsignedInteger(42));
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), storage);
+        VirtualMachine virtualMachine = createVirtualMachine(storage);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.SLOAD });
 
@@ -461,7 +462,7 @@ public class VirtualMachineTest {
     public void executeStorageStore() throws IOException {
         Storage storage = new MapStorage();
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), storage);
+        VirtualMachine virtualMachine = createVirtualMachine(storage);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
 
@@ -479,7 +480,8 @@ public class VirtualMachineTest {
     public void executeStorageStoreWithoutEnoughGas() throws IOException {
         Storage storage = new MapStorage();
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue() / 2), storage);
+        //VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue() / 2), storage);
+        VirtualMachine virtualMachine = createVirtualMachine(FeeSchedule.VERYLOW.getValue() * 2 + FeeSchedule.SSET.getValue() / 2, storage);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
 
@@ -501,7 +503,7 @@ public class VirtualMachineTest {
     public void executeStorageStoreTwice() throws IOException {
         Storage storage = new MapStorage();
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), storage);
+        VirtualMachine virtualMachine = createVirtualMachine(storage);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE, OpCodes.PUSH1, 0x10, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
 
@@ -519,7 +521,7 @@ public class VirtualMachineTest {
     public void cannotExecuteStorageStoreIfMessageIsReadOnly() throws IOException {
         Storage storage = new MapStorage();
 
-        VirtualMachine virtualMachine = new VirtualMachine(createReadOnlyProgramEnvironment(), storage);
+        VirtualMachine virtualMachine = createVirtualMachine(storage);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
 
@@ -532,7 +534,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMemoryStore() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE });
 
@@ -550,7 +552,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMemoryStoreAndMemoryLoad() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.MLOAD });
 
@@ -570,7 +572,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMemoryStoreAndMemorySize() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE, OpCodes.MSIZE });
 
@@ -591,7 +593,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeMemoryStoreByte() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.MSTORE8 });
 
@@ -609,7 +611,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeLog0() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG0 });
 
@@ -635,7 +637,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeLog1() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG1 });
 
@@ -663,7 +665,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeLog2() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG2 });
 
@@ -692,7 +694,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeLog3() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG3 });
 
@@ -722,7 +724,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeLog4() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH6, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, OpCodes.PUSH1, 0x0, OpCodes.MSTORE, OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x03, OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x1c, OpCodes.LOG4 });
 
@@ -908,9 +910,7 @@ public class VirtualMachineTest {
         Coin gasPrice = Coin.fromUnsignedLong(42L);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, gasPrice, null, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.GASPRICE });
 
@@ -931,9 +931,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(address, origin, caller, Coin.ONE, 100000, null, null, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.ADDRESS, OpCodes.ORIGIN, OpCodes.CALLER, OpCodes.CALLVALUE });
 
@@ -954,9 +952,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.CALLDATASIZE });
 
@@ -974,9 +970,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x02, OpCodes.CALLDATALOAD });
 
@@ -994,9 +988,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x20, OpCodes.CALLDATALOAD });
 
@@ -1017,9 +1009,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x70, OpCodes.CALLDATALOAD });
 
@@ -1037,9 +1027,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         virtualMachine.execute(new byte[] {
                 OpCodes.PUSH1, 0x10,
@@ -1070,9 +1058,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         virtualMachine.execute(new byte[] {
                 OpCodes.PUSH1, 0x10,
@@ -1103,9 +1089,7 @@ public class VirtualMachineTest {
         byte[] data = FactoryHelper.createRandomBytes(42);
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         virtualMachine.execute(new byte[] {
                 OpCodes.PUSH1, 0x10,
@@ -1144,9 +1128,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         virtualMachine.execute(code);
 
@@ -1184,9 +1166,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(code);
 
@@ -1224,9 +1204,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(code);
 
@@ -1262,9 +1240,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult result = virtualMachine.execute(code);
 
@@ -1303,9 +1279,7 @@ public class VirtualMachineTest {
 
         MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
-        ProgramEnvironment programEnvironment = new ProgramEnvironment(messageData, null, null);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         virtualMachine.execute(code);
 
@@ -1335,9 +1309,7 @@ public class VirtualMachineTest {
 
         BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty, 0, 0);
 
-        ProgramEnvironment programEnvironment = createProgramEnvironment(blockData);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = createVirtualMachine(blockData);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.COINBASE, OpCodes.TIMESTAMP, OpCodes.NUMBER, OpCodes.DIFFICULTY });
 
@@ -1362,9 +1334,7 @@ public class VirtualMachineTest {
 
         BlockData blockData = new BlockData(number, timestamp, coinbase, difficulty, 12_000_000L, 0);
 
-        ProgramEnvironment programEnvironment = createProgramEnvironment(blockData);
-
-        VirtualMachine virtualMachine = new VirtualMachine(programEnvironment, null);
+        VirtualMachine virtualMachine = createVirtualMachine(blockData);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.GASLIMIT });
 
@@ -1379,7 +1349,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeCodeSizeOperation() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.CODESIZE, OpCodes.STOP });
 
@@ -1401,7 +1371,7 @@ public class VirtualMachineTest {
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
 
         byte bytecode[] = new byte[22];
         bytecode[0] = OpCodes.PUSH20;
@@ -1428,7 +1398,7 @@ public class VirtualMachineTest {
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(address, executionContext), null);
+        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
 
         byte bytecode[] = new byte[] { OpCodes.SELFBALANCE };
 
@@ -1445,7 +1415,8 @@ public class VirtualMachineTest {
 
     @Test
     public void executeChainId() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        BlockData blockData = new BlockData(0, 0, null, null, 0, 42);
+        VirtualMachine virtualMachine = createVirtualMachine(blockData);
 
         byte bytecode[] = new byte[] { OpCodes.CHAINID };
 
@@ -1467,7 +1438,7 @@ public class VirtualMachineTest {
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
 
         byte bytecode[] = new byte[22];
         bytecode[0] = OpCodes.PUSH20;
@@ -1491,7 +1462,7 @@ public class VirtualMachineTest {
         AccountStore accountStore = new AccountStore(new Trie());
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x28, OpCodes.EXTCODESIZE, OpCodes.STOP });
 
@@ -1517,7 +1488,7 @@ public class VirtualMachineTest {
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
 
         byte bytecode[] = new byte[1 + 20 + 2];
         bytecode[0] = OpCodes.PUSH20;
@@ -1549,7 +1520,7 @@ public class VirtualMachineTest {
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
 
         byte bytecode[] = new byte[1 + 20 + 2];
         bytecode[0] = OpCodes.PUSH20;
@@ -1578,7 +1549,7 @@ public class VirtualMachineTest {
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
 
         byte bytecode[] = new byte[1 + 20 + 2];
         bytecode[0] = OpCodes.PUSH20;
@@ -1603,7 +1574,7 @@ public class VirtualMachineTest {
         AccountStore accountStore = new AccountStore(new Trie());
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
 
         virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x20, OpCodes.PUSH1, 0x02, OpCodes.PUSH1, 0x10, OpCodes.PUSH1, 0x28, OpCodes.EXTCODECOPY, OpCodes.STOP });
 
@@ -1636,7 +1607,7 @@ public class VirtualMachineTest {
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(executionContext), null);
+        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
 
         byte bytecode[] = new byte[6 + 1 + 20 + 2];
         bytecode[0] = OpCodes.PUSH1;
@@ -1671,7 +1642,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeStopOperation() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.STOP, OpCodes.PUSH1, 0x01 });
 
@@ -1685,7 +1656,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeGasOperation() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.GAS });
 
@@ -1700,7 +1671,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeJumpOperation() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMP, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
 
@@ -1716,7 +1687,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeJumpWithoutJumpDestRaiseException() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
 
@@ -1729,7 +1700,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeJumpWithNot32BitsIntegerTargetRaiseException() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH5, 0x01, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
 
@@ -1742,7 +1713,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeJumpWithTwoLarge32BitsIntegerTargetRaiseException() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, (byte)0xff, OpCodes.JUMP, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
 
@@ -1755,7 +1726,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeConditionalJumpOperation() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x2a });
 
@@ -1771,7 +1742,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeConditionalJumpWithoutJumpDestRaiseException() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x06, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
 
@@ -1784,7 +1755,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeConditionalJumpWithNot32BitsIntegerTargetRaiseException() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH5, 0x01, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
 
@@ -1797,7 +1768,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeConditionalJumpWithTwoLarge32BitsIntegerTargetRaiseException() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 1, OpCodes.PUSH1, (byte)0xff, OpCodes.JUMPI, OpCodes.STOP, OpCodes.PUSH1, 0x2a });
 
@@ -1810,7 +1781,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeInvalidOpCodeRaiseException() throws IOException {
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { (byte)0xfe });
 
@@ -1824,7 +1795,7 @@ public class VirtualMachineTest {
     @Test
     public void executeWithInsufficientGasRaiseException() throws IOException {
         MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 0, Coin.ZERO, null, 0, 0, false);
-        VirtualMachine virtualMachine = new VirtualMachine(new ProgramEnvironment(messageData, null, null), null);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.ADDRESS });
 
@@ -1844,7 +1815,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand, 0, bytecodes, 1, boperand.length);
         bytecodes[boperand.length + 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
@@ -1866,7 +1837,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand, 0, bytecodes, 1, boperand.length);
         bytecodes[boperand.length + 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
@@ -1891,7 +1862,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand2, 0, bytecodes, 2 + boperand1.length, boperand2.length);
         bytecodes[bytecodes.length - 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
@@ -1917,7 +1888,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand2, 0, bytecodes, 2 + boperand1.length, boperand2.length);
         bytecodes[bytecodes.length - 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
@@ -1945,7 +1916,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand3, 0, bytecodes, 3 + boperand1.length + boperand2.length, boperand3.length);
         bytecodes[bytecodes.length - 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(bytecodes);
 
@@ -1974,7 +1945,7 @@ public class VirtualMachineTest {
         System.arraycopy(boperand3, 0, bytecodes, 3 + boperand1.length + boperand2.length, boperand3.length);
         bytecodes[bytecodes.length - 1] = opcode;
 
-        VirtualMachine virtualMachine = new VirtualMachine(createProgramEnvironment(), null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         virtualMachine.execute(bytecodes);
 
@@ -1986,42 +1957,45 @@ public class VirtualMachineTest {
         Assert.assertEquals(1, stack.size());
         Assert.assertEquals(DataWord.fromHexadecimalString(expected), stack.pop());
     }
-
-    private static ProgramEnvironment createProgramEnvironment() {
-        return createProgramEnvironment((ExecutionContext)null);
+    
+    private static VirtualMachine createVirtualMachine() {
+        return createVirtualMachine(100000);        
+    }
+    
+    private static VirtualMachine createVirtualMachine(long gas) {
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, gas, Coin.ZERO, null, 0, 0, false);
+        
+        return createVirtualMachine(messageData, null, null);
     }
 
-    private static ProgramEnvironment createProgramEnvironment(long gas) {
+    private static VirtualMachine createVirtualMachine(BlockData blockData) {
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
+
+        return new VirtualMachine(blockData, messageData, null, null);
+    }
+
+    private static VirtualMachine createVirtualMachine(Storage storage) {
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
+
+        return new VirtualMachine(null, messageData, null, storage);
+    }
+
+    private static VirtualMachine createVirtualMachine(long gas, Storage storage) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, gas, Coin.ZERO, null, 0, 0, false);
 
-        return new ProgramEnvironment(messageData, null, null);
+        return createVirtualMachine(messageData, null, storage);
     }
 
-    private static ProgramEnvironment createProgramEnvironment(ExecutionContext executionContext) {
+    private static VirtualMachine createVirtualMachine(ExecutionContext executionContext) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
-        BlockData blockData = new BlockData(0, 0, Address.ZERO, Difficulty.ONE, 10_000_000L, 42);
 
-        return new ProgramEnvironment(messageData, blockData, executionContext);
+        return createVirtualMachine(messageData, executionContext, null);
     }
 
-    private static ProgramEnvironment createProgramEnvironment(Address receiver, ExecutionContext executionContext) {
-        MessageData messageData = new MessageData(receiver, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
-
-        return new ProgramEnvironment(messageData, null, executionContext);
+    private static VirtualMachine createVirtualMachine(MessageData messageData, ExecutionContext executionContext, Storage storage) {
+        return new VirtualMachine(null, messageData, executionContext, storage);
     }
-
-    private static ProgramEnvironment createProgramEnvironment(BlockData blockData) {
-        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
-
-        return new ProgramEnvironment(messageData, blockData, null);
-    }
-
-    private static ProgramEnvironment createReadOnlyProgramEnvironment() {
-        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, true);
-
-        return new ProgramEnvironment(messageData, null, null);
-    }
-
+    
     private static Address createAccountWithBalance(AccountStore accountStore, long balance) throws IOException {
         Account account = new Account(Coin.fromUnsignedLong(balance), 0, 0, null, null);
         Address address = FactoryHelper.createRandomAddress();

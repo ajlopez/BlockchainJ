@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.execution.ExecutionContext;
 import com.ajlopez.blockchain.utils.ByteUtils;
 
 import java.io.IOException;
@@ -17,10 +18,14 @@ import java.util.Stack;
 public class VirtualMachine {
     private final static FeeSchedule[] opCodeFees = new FeeSchedule[256];
 
-    private final ProgramEnvironment programEnvironment;
+    private final BlockData blockData;
+    private final MessageData messageData;
+    private final ExecutionContext executionContext;
     private final Storage storage;
+
     private final Memory memory = new Memory();
     private final Stack<DataWord> dataStack = new Stack<>();
+
     // TODO return stack max size
     private final Stack<Integer> returnStack = new Stack<>();
 
@@ -104,8 +109,10 @@ public class VirtualMachine {
             opCodeFees[(OpCodes.SWAP1 & 0xff) + k] = FeeSchedule.VERYLOW;
     }
 
-    public VirtualMachine(ProgramEnvironment programEnvironment, Storage storage) {
-        this.programEnvironment = programEnvironment;
+    public VirtualMachine(BlockData blockData, MessageData messageData, ExecutionContext executionContext, Storage storage) {
+        this.blockData = blockData;
+        this.messageData = messageData;
+        this.executionContext = executionContext;
         this.storage = storage;
     }
 
@@ -122,8 +129,8 @@ public class VirtualMachine {
             if (fee != null) {
                 long gasCost = fee.getValue();
 
-                if (gasUsed + gasCost > this.programEnvironment.getGas())
-                    return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Insufficient gas"));
+                if (gasUsed + gasCost > this.messageData.getGas())
+                    return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Insufficient gas"));
 
                 gasUsed += gasCost;
             }
@@ -346,42 +353,42 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.ADDRESS:
-                    this.dataStack.push(DataWord.fromAddress(this.programEnvironment.getAddress()));
+                    this.dataStack.push(DataWord.fromAddress(this.messageData.getAddress()));
 
                     break;
 
                 case OpCodes.BALANCE:
-                    this.dataStack.push(DataWord.fromCoin(this.programEnvironment.getBalance(this.dataStack.pop().toAddress())));
+                    this.dataStack.push(DataWord.fromCoin(this.executionContext.getBalance(this.dataStack.pop().toAddress())));
 
                     break;
 
                 case OpCodes.CHAINID:
-                    this.dataStack.push(DataWord.fromUnsignedInteger(this.programEnvironment.getChainId()));
+                    this.dataStack.push(DataWord.fromUnsignedInteger(this.blockData.getChainId()));
 
                     break;
 
                 case OpCodes.SELFBALANCE:
-                    this.dataStack.push(DataWord.fromCoin(this.programEnvironment.getBalance(this.programEnvironment.getAddress())));
+                    this.dataStack.push(DataWord.fromCoin(this.executionContext.getBalance(this.messageData.getAddress())));
 
                     break;
 
                 case OpCodes.ORIGIN:
-                    this.dataStack.push(DataWord.fromAddress(this.programEnvironment.getOrigin()));
+                    this.dataStack.push(DataWord.fromAddress(this.messageData.getOrigin()));
 
                     break;
 
                 case OpCodes.CALLER:
-                    this.dataStack.push(DataWord.fromAddress(this.programEnvironment.getCaller()));
+                    this.dataStack.push(DataWord.fromAddress(this.messageData.getCaller()));
 
                     break;
 
                 case OpCodes.CALLVALUE:
-                    this.dataStack.push(DataWord.fromCoin(this.programEnvironment.getValue()));
+                    this.dataStack.push(DataWord.fromCoin(this.messageData.getValue()));
 
                     break;
 
                 case OpCodes.CALLDATALOAD:
-                    byte[] data = this.programEnvironment.getData();
+                    byte[] data = this.messageData.getData();
                     int offset = this.dataStack.pop().asUnsignedInteger();
 
                     if (offset >= data.length)
@@ -392,12 +399,12 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.CALLDATASIZE:
-                    this.dataStack.push(DataWord.fromUnsignedInteger(this.programEnvironment.getData().length));
+                    this.dataStack.push(DataWord.fromUnsignedInteger(this.messageData.getData().length));
 
                     break;
 
                 case OpCodes.CALLDATACOPY:
-                    data = this.programEnvironment.getData();
+                    data = this.messageData.getData();
                     int targetOffset = this.dataStack.pop().asUnsignedInteger();
                     int sourceOffset = this.dataStack.pop().asUnsignedInteger();
                     int length = this.dataStack.pop().asUnsignedInteger();
@@ -421,19 +428,19 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.GASPRICE:
-                    this.dataStack.push(DataWord.fromCoin(this.programEnvironment.getGasPrice()));
+                    this.dataStack.push(DataWord.fromCoin(this.messageData.getGasPrice()));
 
                     break;
 
                 case OpCodes.EXTCODESIZE:
-                    long codeLength = this.programEnvironment.getCodeLength(dataStack.pop().toAddress());
+                    long codeLength = this.executionContext.getCodeLength(dataStack.pop().toAddress());
                     this.dataStack.push(DataWord.fromUnsignedLong(codeLength));
 
                     break;
 
                 case OpCodes.EXTCODECOPY:
                     Address address = this.dataStack.pop().toAddress();
-                    byte[] contractCode = this.programEnvironment.getCode(address);
+                    byte[] contractCode = this.executionContext.getCode(address);
 
                     // TODO check integer ranges
                     int to = this.dataStack.pop().asUnsignedInteger();
@@ -448,7 +455,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.EXTCODEHASH:
-                    Hash codeHash = this.programEnvironment.getCodeHash(dataStack.pop().toAddress());
+                    Hash codeHash = this.executionContext.getCodeHash(dataStack.pop().toAddress());
 
                     if (codeHash == null)
                         codeHash = Hash.EMPTY_BYTES_HASH;
@@ -458,27 +465,28 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.COINBASE:
-                    this.dataStack.push(DataWord.fromAddress(this.programEnvironment.getCoinbase()));
+                    this.dataStack.push(DataWord.fromAddress(this.blockData.getCoinbase()));
 
                     break;
 
                 case OpCodes.TIMESTAMP:
-                    this.dataStack.push(DataWord.fromUnsignedLong(this.programEnvironment.getTimestamp()));
+                    this.dataStack.push(DataWord.fromUnsignedLong(this.blockData.getTimestamp()));
 
                     break;
 
                 case OpCodes.NUMBER:
-                    this.dataStack.push(DataWord.fromUnsignedLong(this.programEnvironment.getNumber()));
+                    this.dataStack.push(DataWord.fromUnsignedLong(this.blockData.getNumber()));
 
                     break;
 
                 case OpCodes.DIFFICULTY:
-                    this.dataStack.push(this.programEnvironment.getDifficulty().toDataWord());
+                    this.dataStack.push(this.blockData.getDifficulty().toDataWord());
 
                     break;
 
+                // TODO review behavior: message gas limit or block gas limit?
                 case OpCodes.GASLIMIT:
-                    this.dataStack.push(DataWord.fromUnsignedLong(this.programEnvironment.getGasLimit()));
+                    this.dataStack.push(DataWord.fromUnsignedLong(this.blockData.getGasLimit()));
 
                     break;
 
@@ -518,8 +526,8 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.SSTORE:
-                    if (this.programEnvironment.isReadOnly())
-                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Read-only message"));
+                    if (this.messageData.isReadOnly())
+                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Read-only message"));
 
                     word1 = this.dataStack.pop();
                     word2 = this.dataStack.pop();
@@ -533,8 +541,9 @@ public class VirtualMachine {
                     else
                         gasCost = FeeSchedule.SRESET.getValue();
 
-                    if (gasUsed + gasCost > this.programEnvironment.getGas())
-                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Insufficient gas"));
+                    // TODO use internal variable instead of this.messageData.getGas() each time
+                    if (gasUsed + gasCost > this.messageData.getGas())
+                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Insufficient gas"));
 
                     gasUsed += gasCost;
 
@@ -550,7 +559,7 @@ public class VirtualMachine {
                     try {
                         pc = getNewPc(bytecodes, word);
                     } catch (VirtualMachineException ex) {
-                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), ex);
+                        return ExecutionResult.ErrorException(this.messageData.getGas(), ex);
                     }
 
                     // TODO check JUMPDEST
@@ -567,7 +576,7 @@ public class VirtualMachine {
                     try {
                         pc = getNewPc(bytecodes, word1);
                     } catch (VirtualMachineException ex) {
-                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), ex);
+                        return ExecutionResult.ErrorException(this.messageData.getGas(), ex);
                     }
 
                     // TODO check JUMPDEST
@@ -579,11 +588,11 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.BEGINSUB:
-                    return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid subroutine entry"));
+                    return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid subroutine entry"));
 
                 case OpCodes.RETURNSUB:
                     if (this.returnStack.isEmpty())
-                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid retsub"));
+                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid retsub"));
 
                     // TODO check return stack is valid
 
@@ -598,12 +607,12 @@ public class VirtualMachine {
                     word = this.dataStack.pop();
 
                     if (!word.isUnsignedInteger())
-                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid subroutine jump"));
+                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid subroutine jump"));
 
                     pc = word.asUnsignedInteger();
 
                     if (pc >= bytecodes.length || bytecodes[pc] != OpCodes.BEGINSUB)
-                        return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid subroutine jump"));
+                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid subroutine jump"));
 
                     break;
 
@@ -618,7 +627,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.GAS:
-                    this.dataStack.push(DataWord.fromUnsignedLong(this.programEnvironment.getGas() - gasUsed));
+                    this.dataStack.push(DataWord.fromUnsignedLong(this.messageData.getGas() - gasUsed));
 
                     break;
 
@@ -723,7 +732,7 @@ public class VirtualMachine {
                     for (int k = 0; k < bytecode - OpCodes.LOG0; k++)
                         topics.add(this.dataStack.pop());
 
-                    Log log = new Log(this.programEnvironment.getAddress(), bytes, topics);
+                    Log log = new Log(this.messageData.getAddress(), bytes, topics);
 
                     logs.add(log);
 
@@ -731,18 +740,20 @@ public class VirtualMachine {
 
                 case OpCodes.CALL:
                     VirtualMachine newVirtualMachine = this.createVirtualMachineForCall(false);
-                    byte[] newCode = programEnvironment.getCode(newVirtualMachine.programEnvironment.getAddress());
+                    byte[] newCode = this.executionContext.getCode(newVirtualMachine.messageData.getAddress());
 
                     ExecutionResult executionResult = newVirtualMachine.execute(newCode);
 
                     // TODO review implementation design
                     if (executionResult.wasSuccesful()) {
-                        newVirtualMachine.programEnvironment.commit();
-                        this.memory.setBytes(newVirtualMachine.programEnvironment.getOutputDataOffset(), executionResult.getReturnedData(), 0, newVirtualMachine.programEnvironment.getOutputDataSize());
+                        // TODO review if commit goes inside virtual machine code
+                        newVirtualMachine.executionContext.commit();
+                        this.memory.setBytes(newVirtualMachine.messageData.getOutputDataOffset(), executionResult.getReturnedData(), 0, newVirtualMachine.messageData.getOutputDataSize());
                         this.dataStack.push(DataWord.ONE);
                     }
                     else {
-                        newVirtualMachine.programEnvironment.rollback();
+                        // TODO review if commit goes inside virtual machine code
+                        newVirtualMachine.executionContext.rollback();
                         // TODO process revert messagenew
                         // TODO raise internal exception
                         this.dataStack.push(DataWord.ZERO);
@@ -766,30 +777,39 @@ public class VirtualMachine {
 
                     byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
 
-                    ProgramEnvironment newProgramEnvironment = programEnvironment.createChildEnvironment(
-                            this.programEnvironment.getCaller(),
-                            this.programEnvironment.getAddress(),
+                    MessageData newMessageData = new MessageData(
+                            callee,
+                            this.messageData.getOrigin(),
+                            this.messageData.getAddress(),
                             Coin.ZERO,
                             gas,
+                            this.messageData.getGasPrice(),
                             inputData,
                             outputDataOffset,
-                            outputDataSize
+                            outputDataSize,
+                            this.messageData.isReadOnly()
                     );
 
-                    newCode = programEnvironment.getCode(callee);
+                    newCode = this.executionContext.getCode(callee);
 
-                    newVirtualMachine = new VirtualMachine(newProgramEnvironment, newProgramEnvironment.getAccountStorage(callee));
+                    newVirtualMachine = new VirtualMachine(
+                            this.blockData,
+                            newMessageData,
+                            this.executionContext.createChildExecutionContext(),
+                            this.executionContext.getAccountStorage(callee));
 
                     executionResult = newVirtualMachine.execute(newCode);
 
                     if (executionResult.wasSuccesful()) {
-                        newProgramEnvironment.commit();
+                        // TODO review design, commit in virtual machine before return?
+                        newVirtualMachine.executionContext.commit();
                         this.memory.setBytes(outputDataOffset, executionResult.getReturnedData(), 0, outputDataSize);
                         // TODO review behavior
                         this.dataStack.push(DataWord.ONE);
                     }
                     else {
-                        newProgramEnvironment.rollback();
+                        // TODO review design, rollback in virtual machine before return?
+                        newVirtualMachine.executionContext.rollback();
                         // TODO process revert message
                         // TODO raise internal exception
                         // TODO review behavior
@@ -815,7 +835,7 @@ public class VirtualMachine {
                     return ExecutionResult.ErrorReverted(gasUsed, returnedData);
 
                 default:
-                    return ExecutionResult.ErrorException(this.programEnvironment.getGas(), new VirtualMachineException("Invalid opcode"));
+                    return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid opcode"));
             }
         }
 
@@ -865,18 +885,25 @@ public class VirtualMachine {
 
         byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
 
-        ProgramEnvironment newProgramEnvironment = programEnvironment.createChildEnvironment(
-                this.programEnvironment.getAddress(),
+        MessageData newMessageData = new MessageData(
                 callee,
+                this.messageData.getOrigin(),
+                this.messageData.getAddress(),
                 newValue,
                 gas,
+                this.messageData.getGasPrice(),
                 inputData,
                 outputDataOffset,
-                outputDataSize
+                outputDataSize,
+                this.messageData.isReadOnly()
         );
 
-        byte[] newCode = programEnvironment.getCode(callee);
+        byte[] newCode = this.executionContext.getCode(callee);
 
-        return new VirtualMachine(newProgramEnvironment, newProgramEnvironment.getAccountStorage(callee));
+        return new VirtualMachine(
+                this.blockData,
+                newMessageData,
+                this.executionContext.createChildExecutionContext(),
+                this.executionContext.getAccountStorage(callee));
     }
 }
