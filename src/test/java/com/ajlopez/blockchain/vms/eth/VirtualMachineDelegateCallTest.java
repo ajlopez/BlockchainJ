@@ -290,8 +290,8 @@ public class VirtualMachineDelegateCallTest {
         Assert.assertNotNull(executionResult);
         Assert.assertTrue(executionResult.wasSuccesful());
 
-        Assert.assertEquals(DataWord.fromUnsignedInteger(42), executionContext.getAccountStorage(callee).getValue(DataWord.ZERO));
-        Assert.assertEquals(DataWord.ZERO, executionContext.getAccountStorage(caller).getValue(DataWord.ZERO));
+        Assert.assertEquals(DataWord.fromUnsignedInteger(42), executionContext.getAccountStorage(caller).getValue(DataWord.ZERO));
+        Assert.assertEquals(DataWord.ZERO, executionContext.getAccountStorage(callee).getValue(DataWord.ZERO));
 
         Assert.assertEquals(1, virtualMachine.getDataStack().size());
         Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());

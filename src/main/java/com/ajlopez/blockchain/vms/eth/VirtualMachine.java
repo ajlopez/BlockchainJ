@@ -778,9 +778,9 @@ public class VirtualMachine {
                     byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
 
                     MessageData newMessageData = new MessageData(
-                            callee,
-                            this.messageData.getOrigin(),
                             this.messageData.getAddress(),
+                            this.messageData.getOrigin(),
+                            this.messageData.getCaller(),
                             Coin.ZERO,
                             gas,
                             this.messageData.getGasPrice(),
@@ -792,11 +792,14 @@ public class VirtualMachine {
 
                     newCode = this.executionContext.getCode(callee);
 
+                    ExecutionContext newExecutionContext = this.executionContext.createChildExecutionContext();
+                    Storage newStorage = newExecutionContext.getAccountStorage(this.messageData.getAddress());
+
                     newVirtualMachine = new VirtualMachine(
                             this.blockData,
                             newMessageData,
-                            this.executionContext.createChildExecutionContext(),
-                            this.executionContext.getAccountStorage(callee));
+                            newExecutionContext,
+                            newStorage);
 
                     executionResult = newVirtualMachine.execute(newCode);
 
@@ -900,10 +903,14 @@ public class VirtualMachine {
 
         byte[] newCode = this.executionContext.getCode(callee);
 
+        ExecutionContext newExecutionContext = this.executionContext.createChildExecutionContext();
+        Storage newStorage = newExecutionContext.getAccountStorage(callee);
+
         return new VirtualMachine(
                 this.blockData,
                 newMessageData,
-                this.executionContext.createChildExecutionContext(),
-                this.executionContext.getAccountStorage(callee));
+                newExecutionContext,
+                newStorage
+        );
     }
 }

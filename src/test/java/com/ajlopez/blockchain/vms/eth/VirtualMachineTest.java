@@ -128,7 +128,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeAddWithoutEnoughGas() throws IOException {
-        VirtualMachine virtualMachine = createVirtualMachine();
+        VirtualMachine virtualMachine = createVirtualMachine(FeeSchedule.VERYLOW.getValue() * 2);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x01, OpCodes.PUSH1, 0x02, OpCodes.ADD });
 
@@ -520,8 +520,9 @@ public class VirtualMachineTest {
     @Test
     public void cannotExecuteStorageStoreIfMessageIsReadOnly() throws IOException {
         Storage storage = new MapStorage();
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, true);
 
-        VirtualMachine virtualMachine = createVirtualMachine(storage);
+        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, storage);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x2a, OpCodes.PUSH1, 0x01, OpCodes.SSTORE });
 
@@ -1398,7 +1399,7 @@ public class VirtualMachineTest {
 
         TopExecutionContext executionContext = new TopExecutionContext(accountStore, null, null);
 
-        VirtualMachine virtualMachine = createVirtualMachine(executionContext);
+        VirtualMachine virtualMachine = createVirtualMachine(address, executionContext);
 
         byte bytecode[] = new byte[] { OpCodes.SELFBALANCE };
 
@@ -1988,6 +1989,12 @@ public class VirtualMachineTest {
 
     private static VirtualMachine createVirtualMachine(ExecutionContext executionContext) {
         MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
+
+        return createVirtualMachine(messageData, executionContext, null);
+    }
+
+    private static VirtualMachine createVirtualMachine(Address address, ExecutionContext executionContext) {
+        MessageData messageData = new MessageData(address, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
 
         return createVirtualMachine(messageData, executionContext, null);
     }
