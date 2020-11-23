@@ -18,16 +18,16 @@ public class Block {
     private final List<BlockHeader> uncles;
     private final List<Transaction> transactions;
 
-    public Block(Block parent, List<BlockHeader> uncles, List<Transaction> transactions, Hash receiptsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, byte[] extraData) {
-        this(parent.getNumber() + 1, parent.getHash(), uncles, transactions, receiptsRootHash, stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, extraData);
+    public Block(Block parent, List<BlockHeader> uncles, List<Transaction> transactions, Hash receiptsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, byte[] extraData, int chainId) {
+        this(parent.getNumber() + 1, parent.getHash(), uncles, transactions, receiptsRootHash, stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, extraData, chainId);
     }
 
-    public Block(long number, BlockHash parentHash, Hash receiptsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, byte[] extraData) {
-        this(number, parentHash, Collections.emptyList(), Collections.emptyList(), receiptsRootHash, stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, extraData);
+    public Block(long number, BlockHash parentHash, Hash receiptsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, byte[] extraData, int chainId) {
+        this(number, parentHash, Collections.emptyList(), Collections.emptyList(), receiptsRootHash, stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, extraData, chainId);
     }
 
-    public Block(long number, BlockHash parentHash, List<BlockHeader> uncles, List<Transaction> transactions, Hash receiptsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, byte[] extraData) {
-        this(new BlockHeader(number, parentHash, transactions == null ? 0 : transactions.size(), calculateTransactionsRootHash(transactions), receiptsRootHash, uncles == null ? 0 : uncles.size(), calculateUnclesRootHash(uncles), stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, extraData, 0, 0), uncles, transactions);
+    public Block(long number, BlockHash parentHash, List<BlockHeader> uncles, List<Transaction> transactions, Hash receiptsRootHash, Hash stateRootHash, long timestamp, Address coinbase, Difficulty difficulty, long gasLimit, long gasUsed, byte[] extraData, int chainId) {
+        this(new BlockHeader(number, parentHash, transactions == null ? 0 : transactions.size(), calculateTransactionsRootHash(transactions), receiptsRootHash, uncles == null ? 0 : uncles.size(), calculateUnclesRootHash(uncles), stateRootHash, timestamp, coinbase, difficulty, gasLimit, gasUsed, extraData, chainId, 0), uncles, transactions);
     }
 
     public Block(BlockHeader header, List<BlockHeader> uncles, List<Transaction> transactions)
@@ -92,6 +92,8 @@ public class Block {
     public long getGasUsed() { return this.header.getGasUsed(); }
 
     public byte[] getExtraData() { return this.header.getExtraData(); }
+
+    public int getChainId() { return this.header.getChainId(); }
 
     public Difficulty getCummulativeDifficulty() {
         Difficulty result = this.getDifficulty();

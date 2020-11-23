@@ -104,7 +104,7 @@ public class MinerProcessor {
         // TODO use uncles
         // TODO any adjust in gas limit?
         // TODO use extraData
-        return new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), parent.getGasLimit(), gasUsed, null);
+        return new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), parent.getGasLimit(), gasUsed, null, 0);
     }
 
     private Block calculateProofOfWork(Block block) {
