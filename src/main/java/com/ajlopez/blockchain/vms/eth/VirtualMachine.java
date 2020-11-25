@@ -762,60 +762,23 @@ public class VirtualMachine {
                     continue;
 
                 case OpCodes.DELEGATECALL:
-                    // improve stack use
-
-                    // TODO check gas as long
-                    long gas = this.dataStack.pop().asUnsignedLong();
-                    // TODO check is address
-                    Address callee = this.dataStack.pop().toAddress();
-
-                    // TODO check they are an integer
-                    int inputDataOffset = this.dataStack.pop().asUnsignedInteger();
-                    int inputDataSize = this.dataStack.pop().asUnsignedInteger();
-                    int outputDataOffset = this.dataStack.pop().asUnsignedInteger();
-                    int outputDataSize = this.dataStack.pop().asUnsignedInteger();
-
-                    byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
-
-                    MessageData newMessageData = new MessageData(
-                            this.messageData.getAddress(),
-                            this.messageData.getOrigin(),
-                            this.messageData.getCaller(),
-                            callee, Coin.ZERO,
-                            gas,
-                            this.messageData.getGasPrice(),
-                            inputData,
-                            outputDataOffset,
-                            outputDataSize,
-                            this.messageData.isReadOnly()
-                    );
-
-                    newCode = this.executionContext.getCode(newMessageData.getCodeAddress());
-
-                    ExecutionContext newExecutionContext = this.executionContext.createChildExecutionContext();
-                    Storage newStorage = newExecutionContext.getAccountStorage(this.messageData.getAddress());
-
-                    newVirtualMachine = new VirtualMachine(
-                            this.blockData,
-                            newMessageData,
-                            newExecutionContext,
-                            newStorage);
+                    newVirtualMachine = this.createVirtualMachineForCall(true);
+                    newCode = this.executionContext.getCode(newVirtualMachine.messageData.getCodeAddress());
 
                     executionResult = newVirtualMachine.execute(newCode);
 
+                    // TODO review implementation design
                     if (executionResult.wasSuccesful()) {
-                        // TODO review design, commit in virtual machine before return?
+                        // TODO review if commit goes inside virtual machine code
                         newVirtualMachine.executionContext.commit();
-                        this.memory.setBytes(outputDataOffset, executionResult.getReturnedData(), 0, outputDataSize);
-                        // TODO review behavior
+                        this.memory.setBytes(newVirtualMachine.messageData.getOutputDataOffset(), executionResult.getReturnedData(), 0, newVirtualMachine.messageData.getOutputDataSize());
                         this.dataStack.push(DataWord.ONE);
                     }
                     else {
-                        // TODO review design, rollback in virtual machine before return?
+                        // TODO review if commit goes inside virtual machine code
                         newVirtualMachine.executionContext.rollback();
-                        // TODO process revert message
+                        // TODO process revert messagenew
                         // TODO raise internal exception
-                        // TODO review behavior
                         this.dataStack.push(DataWord.ZERO);
                     }
 
@@ -889,7 +852,7 @@ public class VirtualMachine {
 
         MessageData newMessageData = new MessageData(
                 isDelegateCall
-                    ? this.messageData.getCaller()
+                    ? this.messageData.getAddress()
                     : callee,
                 this.messageData.getOrigin(),
                 isDelegateCall
@@ -905,10 +868,8 @@ public class VirtualMachine {
                 this.messageData.isReadOnly()
         );
 
-        byte[] newCode = this.executionContext.getCode(callee);
-
         ExecutionContext newExecutionContext = this.executionContext.createChildExecutionContext();
-        Storage newStorage = newExecutionContext.getAccountStorage(callee);
+        Storage newStorage = newExecutionContext.getAccountStorage(newMessageData.getAddress());
 
         return new VirtualMachine(
                 this.blockData,
