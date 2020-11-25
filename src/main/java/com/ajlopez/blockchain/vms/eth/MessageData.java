@@ -10,6 +10,7 @@ public class MessageData {
     private final Address address;
     private final Address origin;
     private final Address caller;
+    private final Address codeAddress;
     private final Coin value;
     private final long gas;
     private final Coin gasPrice;
@@ -18,10 +19,11 @@ public class MessageData {
     private final int outputDataOffset;
     private final int outputDataSize;
 
-    public MessageData(Address address, Address origin, Address caller, Coin value, long gas, Coin gasPrice, byte[] data, int outputDataOffset, int outputDataSize, boolean readOnly) {
+    public MessageData(Address address, Address origin, Address caller, Address codeAddress, Coin value, long gas, Coin gasPrice, byte[] data, int outputDataOffset, int outputDataSize, boolean readOnly) {
         this.address = address;
         this.origin = origin;
         this.caller = caller;
+        this.codeAddress = codeAddress;
         this.value = value;
         this.gas = gas;
         this.gasPrice = gasPrice;
@@ -36,6 +38,8 @@ public class MessageData {
     public Address getOrigin() { return this.origin; }
 
     public Address getCaller() { return this.caller; }
+
+    public Address getCodeAddress() { return this.codeAddress; }
 
     public Coin getValue() { return this.value; }
 

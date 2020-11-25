@@ -280,7 +280,7 @@ public class VirtualMachineDelegateCallTest {
 
         ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
 
-        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(caller, null, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, executionContext, null);
 
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
@@ -332,7 +332,7 @@ public class VirtualMachineDelegateCallTest {
 
         ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
 
-        MessageData messageData = new MessageData(caller, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(caller, null, null, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, executionContext, null);
 
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
@@ -458,7 +458,7 @@ public class VirtualMachineDelegateCallTest {
 
     private static VirtualMachine createVirtualMachine(Address sender, Address caller, byte[] callerCode, Address callee, byte[] calleeCode) throws IOException {
         ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
-        MessageData messageData = new MessageData(caller, sender, sender, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(caller, sender, sender, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
 
         return new VirtualMachine(null, messageData, executionContext, null);
     }

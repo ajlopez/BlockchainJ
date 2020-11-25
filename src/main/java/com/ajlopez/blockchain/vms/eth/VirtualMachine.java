@@ -781,7 +781,7 @@ public class VirtualMachine {
                             this.messageData.getAddress(),
                             this.messageData.getOrigin(),
                             this.messageData.getCaller(),
-                            Coin.ZERO,
+                            callee, Coin.ZERO,
                             gas,
                             this.messageData.getGasPrice(),
                             inputData,
@@ -790,7 +790,7 @@ public class VirtualMachine {
                             this.messageData.isReadOnly()
                     );
 
-                    newCode = this.executionContext.getCode(callee);
+                    newCode = this.executionContext.getCode(newMessageData.getCodeAddress());
 
                     ExecutionContext newExecutionContext = this.executionContext.createChildExecutionContext();
                     Storage newStorage = newExecutionContext.getAccountStorage(this.messageData.getAddress());
@@ -875,10 +875,9 @@ public class VirtualMachine {
         // TODO check is address
         Address callee = this.dataStack.pop().toAddress();
 
-        Coin newValue = Coin.ZERO;
-
-        if (!isDelegateCall)
-            newValue = Coin.fromBytes(this.dataStack.pop().getBytes());
+        Coin newValue = isDelegateCall
+                ? Coin.ZERO
+                : Coin.fromBytes(this.dataStack.pop().getBytes());
 
         // TODO check they are an integer
         int inputDataOffset = this.dataStack.pop().asUnsignedInteger();
@@ -889,9 +888,14 @@ public class VirtualMachine {
         byte[] inputData = this.memory.getBytes(inputDataOffset, inputDataSize);
 
         MessageData newMessageData = new MessageData(
-                callee,
+                isDelegateCall
+                    ? this.messageData.getCaller()
+                    : callee,
                 this.messageData.getOrigin(),
-                this.messageData.getAddress(),
+                isDelegateCall
+                    ? this.messageData.getCaller()
+                    : this.messageData.getAddress(),
+                callee,
                 newValue,
                 gas,
                 this.messageData.getGasPrice(),

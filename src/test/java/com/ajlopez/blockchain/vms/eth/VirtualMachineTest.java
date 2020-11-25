@@ -520,7 +520,7 @@ public class VirtualMachineTest {
     @Test
     public void cannotExecuteStorageStoreIfMessageIsReadOnly() throws IOException {
         Storage storage = new MapStorage();
-        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, true);
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, true);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, storage);
 
@@ -909,7 +909,7 @@ public class VirtualMachineTest {
     @Test
     public void executeGasPriceOperations() throws IOException {
         Coin gasPrice = Coin.fromUnsignedLong(42L);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, gasPrice, null, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, gasPrice, null, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -930,7 +930,7 @@ public class VirtualMachineTest {
         Address origin = FactoryHelper.createRandomAddress();
         Address caller = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(address, origin, caller, Coin.ONE, 100000, null, null, 0, 0, false);
+        MessageData messageData = new MessageData(address, origin, caller, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -951,7 +951,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataSize() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -969,7 +969,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataLoad() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -987,7 +987,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataLoadWithAdditionalBytes() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1008,7 +1008,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataLoadBeyondData() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1026,7 +1026,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataCopy() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1057,7 +1057,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataCopyWithPartialData() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1088,7 +1088,7 @@ public class VirtualMachineTest {
     @Test
     public void executeCallDataCopyBeyondData() throws IOException {
         byte[] data = FactoryHelper.createRandomBytes(42);
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, data, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1127,7 +1127,7 @@ public class VirtualMachineTest {
         code[6] = OpCodes.CODECOPY;
         code[7] = OpCodes.STOP;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1165,7 +1165,7 @@ public class VirtualMachineTest {
         code[8] = 0x00;
         code[9] = OpCodes.RETURN;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1203,7 +1203,7 @@ public class VirtualMachineTest {
         code[8] = 0x00;
         code[9] = OpCodes.REVERT;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1239,7 +1239,7 @@ public class VirtualMachineTest {
         code[6] = OpCodes.CODECOPY;
         code[7] = OpCodes.STOP;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1278,7 +1278,7 @@ public class VirtualMachineTest {
         code[6] = OpCodes.CODECOPY;
         code[7] = OpCodes.STOP;
 
-        MessageData messageData = new MessageData(null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ONE, 100000, null, null, 0, 0, false);
 
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
@@ -1795,7 +1795,7 @@ public class VirtualMachineTest {
 
     @Test
     public void executeWithInsufficientGasRaiseException() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, Coin.ZERO, 0, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 0, Coin.ZERO, null, 0, 0, false);
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.ADDRESS });
@@ -1964,37 +1964,37 @@ public class VirtualMachineTest {
     }
     
     private static VirtualMachine createVirtualMachine(long gas) {
-        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, gas, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, null, Coin.ZERO, gas, Coin.ZERO, null, 0, 0, false);
         
         return createVirtualMachine(messageData, null, null);
     }
 
     private static VirtualMachine createVirtualMachine(BlockData blockData) {
-        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
 
         return new VirtualMachine(blockData, messageData, null, null);
     }
 
     private static VirtualMachine createVirtualMachine(Storage storage) {
-        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
 
         return new VirtualMachine(null, messageData, null, storage);
     }
 
     private static VirtualMachine createVirtualMachine(long gas, Storage storage) {
-        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, gas, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, null, Coin.ZERO, gas, Coin.ZERO, null, 0, 0, false);
 
         return createVirtualMachine(messageData, null, storage);
     }
 
     private static VirtualMachine createVirtualMachine(ExecutionContext executionContext) {
-        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(FactoryHelper.createRandomAddress(), null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
 
         return createVirtualMachine(messageData, executionContext, null);
     }
 
     private static VirtualMachine createVirtualMachine(Address address, ExecutionContext executionContext) {
-        MessageData messageData = new MessageData(address, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(address, null, null, null, Coin.ZERO, 100000, Coin.ZERO, null, 0, 0, false);
 
         return createVirtualMachine(messageData, executionContext, null);
     }
