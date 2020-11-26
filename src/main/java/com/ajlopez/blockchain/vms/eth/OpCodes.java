@@ -159,5 +159,6 @@ public class OpCodes {
     public static final byte DELEGATECALL = (byte)0xf4;
 
     public static final byte RETURN = (byte)0xf3;
+    public static final byte STATICCALL = (byte)0xfa;
     public static final byte REVERT = (byte)0xfd;
 }

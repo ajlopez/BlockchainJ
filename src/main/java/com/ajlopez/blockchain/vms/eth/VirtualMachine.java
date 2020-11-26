@@ -739,7 +739,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.CALL:
-                    VirtualMachine newVirtualMachine = this.createVirtualMachineForCall(false);
+                    VirtualMachine newVirtualMachine = this.createVirtualMachineForCall(false, this.messageData.isReadOnly());
                     byte[] newCode = this.executionContext.getCode(newVirtualMachine.messageData.getAddress());
 
                     ExecutionResult executionResult = newVirtualMachine.execute(newCode);
@@ -762,7 +762,7 @@ public class VirtualMachine {
                     continue;
 
                 case OpCodes.DELEGATECALL:
-                    newVirtualMachine = this.createVirtualMachineForCall(true);
+                    newVirtualMachine = this.createVirtualMachineForCall(true, this.messageData.isReadOnly());
                     newCode = this.executionContext.getCode(newVirtualMachine.messageData.getCodeAddress());
 
                     executionResult = newVirtualMachine.execute(newCode);
@@ -791,6 +791,29 @@ public class VirtualMachine {
                     byte[] returnedData = this.memory.getBytes(offset, length);
 
                     return ExecutionResult.OkWithData(gasUsed, returnedData, logs);
+
+                case OpCodes.STATICCALL:
+                    newVirtualMachine = this.createVirtualMachineForCall(false, true);
+                    newCode = this.executionContext.getCode(newVirtualMachine.messageData.getAddress());
+
+                    executionResult = newVirtualMachine.execute(newCode);
+
+                    // TODO review implementation design
+                    if (executionResult.wasSuccesful()) {
+                        // TODO review if commit goes inside virtual machine code
+                        newVirtualMachine.executionContext.commit();
+                        this.memory.setBytes(newVirtualMachine.messageData.getOutputDataOffset(), executionResult.getReturnedData(), 0, newVirtualMachine.messageData.getOutputDataSize());
+                        this.dataStack.push(DataWord.ONE);
+                    }
+                    else {
+                        // TODO review if commit goes inside virtual machine code
+                        newVirtualMachine.executionContext.rollback();
+                        // TODO process revert messagenew
+                        // TODO raise internal exception
+                        this.dataStack.push(DataWord.ZERO);
+                    }
+
+                    continue;
 
                 case OpCodes.REVERT:
                     offset = this.dataStack.pop().asUnsignedInteger();
@@ -830,7 +853,7 @@ public class VirtualMachine {
         return this.memory;
     }
 
-    private VirtualMachine createVirtualMachineForCall(boolean isDelegateCall) throws IOException {
+    private VirtualMachine createVirtualMachineForCall(boolean isDelegateCall, boolean isReadOnly) throws IOException {
         // improve stack use
 
         // TODO check gas as long
@@ -865,7 +888,7 @@ public class VirtualMachine {
                 inputData,
                 outputDataOffset,
                 outputDataSize,
-                this.messageData.isReadOnly()
+                isReadOnly
         );
 
         ExecutionContext newExecutionContext = this.executionContext.createChildExecutionContext();
