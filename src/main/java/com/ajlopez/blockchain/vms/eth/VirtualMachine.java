@@ -746,24 +746,7 @@ public class VirtualMachine {
 
                 case OpCodes.DELEGATECALL:
                     newVirtualMachine = this.createVirtualMachineForCall(true, this.messageData.isReadOnly());
-                    byte[] newCode = this.executionContext.getCode(newVirtualMachine.messageData.getCodeAddress());
-
-                    ExecutionResult executionResult = newVirtualMachine.execute(newCode);
-
-                    // TODO review implementation design
-                    if (executionResult.wasSuccesful()) {
-                        // TODO review if commit goes inside virtual machine code
-                        newVirtualMachine.executionContext.commit();
-                        this.memory.setBytes(newVirtualMachine.messageData.getOutputDataOffset(), executionResult.getReturnedData(), 0, newVirtualMachine.messageData.getOutputDataSize());
-                        this.dataStack.push(DataWord.ONE);
-                    }
-                    else {
-                        // TODO review if commit goes inside virtual machine code
-                        newVirtualMachine.executionContext.rollback();
-                        // TODO process revert messagenew
-                        // TODO raise internal exception
-                        this.dataStack.push(DataWord.ZERO);
-                    }
+                    executeCall(newVirtualMachine);
 
                     continue;
 
@@ -777,24 +760,7 @@ public class VirtualMachine {
 
                 case OpCodes.STATICCALL:
                     newVirtualMachine = this.createVirtualMachineForCall(false, true);
-                    newCode = this.executionContext.getCode(newVirtualMachine.messageData.getAddress());
-
-                    executionResult = newVirtualMachine.execute(newCode);
-
-                    // TODO review implementation design
-                    if (executionResult.wasSuccesful()) {
-                        // TODO review if commit goes inside virtual machine code
-                        newVirtualMachine.executionContext.commit();
-                        this.memory.setBytes(newVirtualMachine.messageData.getOutputDataOffset(), executionResult.getReturnedData(), 0, newVirtualMachine.messageData.getOutputDataSize());
-                        this.dataStack.push(DataWord.ONE);
-                    }
-                    else {
-                        // TODO review if commit goes inside virtual machine code
-                        newVirtualMachine.executionContext.rollback();
-                        // TODO process revert messagenew
-                        // TODO raise internal exception
-                        this.dataStack.push(DataWord.ZERO);
-                    }
+                    executeCall(newVirtualMachine);
 
                     continue;
 
@@ -815,7 +781,7 @@ public class VirtualMachine {
     }
 
     private void executeCall(VirtualMachine newVirtualMachine) throws IOException {
-        byte[] newCode = this.executionContext.getCode(newVirtualMachine.messageData.getAddress());
+        byte[] newCode = this.executionContext.getCode(newVirtualMachine.messageData.getCodeAddress());
 
         ExecutionResult executionResult = newVirtualMachine.execute(newCode);
 
