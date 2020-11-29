@@ -70,13 +70,10 @@ public class TransactionExecutor {
 
         if (!ByteUtils.isNullOrEmpty(code))
             executionResult = executeCode(transaction, blockData, sender, isContractCreation, context, receiver, code);
-        else
+        else {
             executionResult = ExecutionResult.OkWithoutData(transaction.getGasCost(), null);
-
-        if (executionResult.wasSuccesful())
             context.commit();
-        else
-            context.rollback();
+        }
 
         if (!gasPrice.isZero()) {
             Coin gasPayment = gasPrice.multiply(executionResult.getGasUsed());
@@ -105,7 +102,10 @@ public class TransactionExecutor {
 
             // TODO test if gas is enough
             executionResult.addGasUsed(newCode.length * FeeSchedule.CODEDEPOSIT.getValue());
+
+            // TODO improve, set code inside transaction execution?
             context.setCode(receiver, newCode);
+            context.commit();
         }
 
         return executionResult;

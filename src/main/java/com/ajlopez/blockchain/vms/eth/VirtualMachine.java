@@ -117,6 +117,17 @@ public class VirtualMachine {
     }
 
     public ExecutionResult execute(byte[] bytecodes) throws IOException {
+        ExecutionResult executionResult = this.internalExecute(bytecodes);
+
+        if (executionResult.wasSuccesful())
+            this.executionContext.commit();
+        else
+            this.executionContext.rollback();
+
+        return executionResult;
+    }
+
+    private ExecutionResult internalExecute(byte[] bytecodes) throws IOException {
         long gasUsed = 0;
         List<Log> logs = new ArrayList<>();
         int l = bytecodes.length;
@@ -787,14 +798,10 @@ public class VirtualMachine {
 
         // TODO review implementation design
         if (executionResult.wasSuccesful()) {
-            // TODO review if commit goes inside virtual machine code
-            newVirtualMachine.executionContext.commit();
             this.memory.setBytes(newVirtualMachine.messageData.getOutputDataOffset(), executionResult.getReturnedData(), 0, newVirtualMachine.messageData.getOutputDataSize());
             this.dataStack.push(DataWord.ONE);
         }
         else {
-            // TODO review if commit goes inside virtual machine code
-            newVirtualMachine.executionContext.rollback();
             // TODO process revert messagenew
             // TODO raise internal exception
             this.dataStack.push(DataWord.ZERO);
