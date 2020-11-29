@@ -92,10 +92,9 @@ public class TransactionExecutor {
         long transactionGas = transaction.getGasCost();
 
         Storage storage = context.getAccountStorage(receiver);
-        MessageData messageData = new MessageData(receiver, sender, sender, null, transaction.getValue(), transaction.getGas() - transactionGas, transaction.getGasPrice(), transaction.getData(), 0, 0, false);
+        MessageData messageData = new MessageData(receiver, sender, sender, receiver, transaction.getValue(), transaction.getGas() - transactionGas, transaction.getGasPrice(), transaction.getData(), 0, 0, false);
 
-        // TODO use execution context
-        VirtualMachine vm = new VirtualMachine(blockData, messageData, null, storage);
+        VirtualMachine vm = new VirtualMachine(blockData, messageData, context, storage);
 
         ExecutionResult executionResult = vm.execute(code);
         // TODO test if gas is enough
