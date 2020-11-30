@@ -292,7 +292,7 @@ public class VirtualMachineCallTest {
 
         Address sender = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(caller, sender, sender, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(caller, sender, sender, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false, false);
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, executionContext, null);
 
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
@@ -347,7 +347,7 @@ public class VirtualMachineCallTest {
 
         Address sender = FactoryHelper.createRandomAddress();
 
-        MessageData messageData = new MessageData(caller, sender, sender, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(caller, sender, sender, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false, false);
         VirtualMachine virtualMachine = new VirtualMachine(null, messageData, executionContext, null);
 
         ExecutionResult executionResult = virtualMachine.execute(callerCode);
@@ -475,7 +475,7 @@ public class VirtualMachineCallTest {
 
     private static VirtualMachine createVirtualMachine(Address sender, Address caller, byte[] callerCode, Address callee, byte[] calleeCode) throws IOException {
         ExecutionContext executionContext = createExecutionContext(caller, callerCode, callee, calleeCode);
-        MessageData messageData = new MessageData(caller, sender, sender, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false);
+        MessageData messageData = new MessageData(caller, sender, sender, null, Coin.ZERO, 5000000, Coin.ZERO, null, 0, 0, false, false);
 
         return new VirtualMachine(null, messageData, executionContext, null);
     }

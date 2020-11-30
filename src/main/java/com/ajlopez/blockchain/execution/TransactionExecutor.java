@@ -89,24 +89,13 @@ public class TransactionExecutor {
         long transactionGas = transaction.getGasCost();
 
         Storage storage = context.getAccountStorage(receiver);
-        MessageData messageData = new MessageData(receiver, sender, sender, receiver, transaction.getValue(), transaction.getGas() - transactionGas, transaction.getGasPrice(), transaction.getData(), 0, 0, false);
+        MessageData messageData = new MessageData(receiver, sender, sender, receiver, transaction.getValue(), transaction.getGas() - transactionGas, transaction.getGasPrice(), transaction.getData(), 0, 0, isContractCreation, false);
 
         VirtualMachine vm = new VirtualMachine(blockData, messageData, context, storage);
 
         ExecutionResult executionResult = vm.execute(code);
         // TODO test if gas is enough
         executionResult.addGasUsed(transactionGas);
-
-        if (executionResult.wasSuccesful() && isContractCreation) {
-            byte[] newCode = executionResult.getReturnedData();
-
-            // TODO test if gas is enough
-            executionResult.addGasUsed(newCode.length * FeeSchedule.CODEDEPOSIT.getValue());
-
-            // TODO improve, set code inside transaction execution?
-            context.setCode(receiver, newCode);
-            context.commit();
-        }
 
         return executionResult;
     }

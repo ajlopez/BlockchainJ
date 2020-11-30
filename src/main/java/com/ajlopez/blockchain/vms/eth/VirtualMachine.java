@@ -119,8 +119,18 @@ public class VirtualMachine {
     public ExecutionResult execute(byte[] bytecodes) throws IOException {
         ExecutionResult executionResult = this.internalExecute(bytecodes);
 
-        if (executionResult.wasSuccesful())
+        if (executionResult.wasSuccesful()) {
+            if (this.messageData.isContractCreation()) {
+                byte[] newCode = executionResult.getReturnedData();
+
+                // TODO test if gas is enough
+                executionResult.addGasUsed(newCode.length * FeeSchedule.CODEDEPOSIT.getValue());
+
+                this.executionContext.setCode(this.messageData.getAddress(), newCode);
+            }
+
             this.executionContext.commit();
+        }
         else
             this.executionContext.rollback();
 
@@ -865,7 +875,7 @@ public class VirtualMachine {
                 inputData,
                 outputDataOffset,
                 outputDataSize,
-                isReadOnly
+                false, isReadOnly
         );
 
         ExecutionContext newExecutionContext = this.executionContext.createChildExecutionContext();

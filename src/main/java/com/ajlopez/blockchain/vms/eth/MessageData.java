@@ -16,10 +16,11 @@ public class MessageData {
     private final Coin gasPrice;
     private final byte[] data;
     private final boolean readOnly;
+    private final boolean isContractCreation;
     private final int outputDataOffset;
     private final int outputDataSize;
 
-    public MessageData(Address address, Address origin, Address caller, Address codeAddress, Coin value, long gas, Coin gasPrice, byte[] data, int outputDataOffset, int outputDataSize, boolean readOnly) {
+    public MessageData(Address address, Address origin, Address caller, Address codeAddress, Coin value, long gas, Coin gasPrice, byte[] data, int outputDataOffset, int outputDataSize, boolean isContractCreation, boolean readOnly) {
         this.address = address;
         this.origin = origin;
         this.caller = caller;
@@ -30,6 +31,7 @@ public class MessageData {
         this.data = data;
         this.outputDataOffset = outputDataOffset;
         this.outputDataSize = outputDataSize;
+        this.isContractCreation = isContractCreation;
         this.readOnly = readOnly;
     }
 
@@ -56,6 +58,8 @@ public class MessageData {
     public int getOutputDataSize() {
         return this.outputDataSize;
     }
+
+    public boolean isContractCreation() { return this.isContractCreation; }
 
     public boolean isReadOnly() { return this.readOnly; }
 }

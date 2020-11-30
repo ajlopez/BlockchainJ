@@ -21,7 +21,7 @@ public class MessageDataTest {
 
         byte[] data = FactoryHelper.createRandomBytes(10);
 
-        MessageData messageData = new MessageData(address, origin, caller, null, value, gas, gasPrice, data, 0, 0, false);
+        MessageData messageData = new MessageData(address, origin, caller, null, value, gas, gasPrice, data, 0, 0, false, false);
 
         Assert.assertEquals(address, messageData.getAddress());
         Assert.assertEquals(origin, messageData.getOrigin());
@@ -44,7 +44,7 @@ public class MessageDataTest {
 
         byte[] data = FactoryHelper.createRandomBytes(10);
 
-        MessageData messageData = new MessageData(address, origin, caller, null, value, gas, gasPrice, data, 0, 0, true);
+        MessageData messageData = new MessageData(address, origin, caller, null, value, gas, gasPrice, data, 0, 0, false, true);
 
         Assert.assertEquals(address, messageData.getAddress());
         Assert.assertEquals(origin, messageData.getOrigin());
