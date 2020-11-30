@@ -176,6 +176,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [A more gas-efficient upgradeable proxy by not using storage](https://forum.openzeppelin.com/t/a-more-gas-efficient-upgradeable-proxy-by-not-using-storage/4111)
 - [Delegatecall return values solidity 5.0](https://ethereum.stackexchange.com/questions/73455/delegatecall-return-values-solidity-5-0)
 - [Instant Cross-L2 Transfers are Now on Testnet!](https://medium.com/connext/instant-cross-l2-transfers-are-now-on-testnet-2f1295530c22)
+- [Blockchain reward sharing - a comparative systematization from first principles](https://iohk.io/en/blog/posts/2020/11/30/blockchain-reward-sharing-a-comparative-systematization-from-first-principles/)
 
 ## To Do
 
