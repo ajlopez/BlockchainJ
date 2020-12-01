@@ -89,11 +89,15 @@ public class TransactionExecutor {
         long transactionGas = transaction.getGasCost();
 
         Storage storage = context.getAccountStorage(receiver);
+
+        // TODO review if subtract transaction gas is needed or not
+        // TODO see also the addGasUsed line some lines below
         MessageData messageData = new MessageData(receiver, sender, sender, receiver, transaction.getValue(), transaction.getGas() - transactionGas, transaction.getGasPrice(), transaction.getData(), 0, 0, isContractCreation, false);
 
         VirtualMachine vm = new VirtualMachine(blockData, messageData, context, storage);
 
         ExecutionResult executionResult = vm.execute(code);
+
         // TODO test if gas is enough
         executionResult.addGasUsed(transactionGas);
 
