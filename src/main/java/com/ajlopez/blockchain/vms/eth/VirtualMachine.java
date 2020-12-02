@@ -29,6 +29,9 @@ public class VirtualMachine {
     // TODO return stack max size
     private final Stack<Integer> returnStack = new Stack<>();
 
+    // TODO use gas available instead of original gas available
+    private final long gas;
+
     static {
         opCodeFees[OpCodes.ADDRESS] = FeeSchedule.BASE;
         opCodeFees[OpCodes.BALANCE] = FeeSchedule.BALANCE;
@@ -114,25 +117,29 @@ public class VirtualMachine {
         this.messageData = messageData;
         this.executionContext = executionContext;
         this.storage = storage;
+
+        this.gas = messageData == null ? 0 : messageData.getGas();
     }
 
     public ExecutionResult execute(byte[] bytecodes) throws IOException {
         ExecutionResult executionResult = this.internalExecute(bytecodes);
 
-        if (executionResult.wasSuccesful()) {
-            if (this.messageData.isContractCreation()) {
-                byte[] newCode = executionResult.getReturnedData();
+        // TODO improve tests to avoid check null
+        if (this.executionContext != null)
+            if (executionResult.wasSuccesful() && this.messageData != null) {
+                if (this.messageData.isContractCreation()) {
+                    byte[] newCode = executionResult.getReturnedData();
 
-                // TODO test if gas is enough
-                executionResult.addGasUsed(newCode.length * FeeSchedule.CODEDEPOSIT.getValue());
+                    // TODO test if gas is enough
+                    executionResult.addGasUsed(newCode.length * FeeSchedule.CODEDEPOSIT.getValue());
 
-                this.executionContext.setCode(this.messageData.getAddress(), newCode);
+                    this.executionContext.setCode(this.messageData.getAddress(), newCode);
+                }
+
+                this.executionContext.commit();
             }
-
-            this.executionContext.commit();
-        }
-        else
-            this.executionContext.rollback();
+            else
+                this.executionContext.rollback();
 
         return executionResult;
     }
@@ -150,8 +157,8 @@ public class VirtualMachine {
             if (fee != null) {
                 long gasCost = fee.getValue();
 
-                if (gasUsed + gasCost > this.messageData.getGas())
-                    return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Insufficient gas"));
+                if (gasUsed + gasCost > this.gas)
+                    return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Insufficient gas"));
 
                 gasUsed += gasCost;
             }
@@ -548,7 +555,7 @@ public class VirtualMachine {
 
                 case OpCodes.SSTORE:
                     if (this.messageData.isReadOnly())
-                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Read-only message"));
+                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Read-only message"));
 
                     word1 = this.dataStack.pop();
                     word2 = this.dataStack.pop();
@@ -562,9 +569,8 @@ public class VirtualMachine {
                     else
                         gasCost = FeeSchedule.SRESET.getValue();
 
-                    // TODO use internal variable instead of this.messageData.getGas() each time
-                    if (gasUsed + gasCost > this.messageData.getGas())
-                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Insufficient gas"));
+                    if (gasUsed + gasCost > this.gas)
+                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Insufficient gas"));
 
                     gasUsed += gasCost;
 
@@ -580,7 +586,7 @@ public class VirtualMachine {
                     try {
                         pc = getNewPc(bytecodes, word);
                     } catch (VirtualMachineException ex) {
-                        return ExecutionResult.ErrorException(this.messageData.getGas(), ex);
+                        return ExecutionResult.ErrorException(this.gas, ex);
                     }
 
                     // TODO check JUMPDEST
@@ -597,7 +603,7 @@ public class VirtualMachine {
                     try {
                         pc = getNewPc(bytecodes, word1);
                     } catch (VirtualMachineException ex) {
-                        return ExecutionResult.ErrorException(this.messageData.getGas(), ex);
+                        return ExecutionResult.ErrorException(this.gas, ex);
                     }
 
                     // TODO check JUMPDEST
@@ -609,11 +615,11 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.BEGINSUB:
-                    return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid subroutine entry"));
+                    return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid subroutine entry"));
 
                 case OpCodes.RETURNSUB:
                     if (this.returnStack.isEmpty())
-                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid retsub"));
+                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid retsub"));
 
                     // TODO check return stack is valid
 
@@ -628,12 +634,12 @@ public class VirtualMachine {
                     word = this.dataStack.pop();
 
                     if (!word.isUnsignedInteger())
-                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid subroutine jump"));
+                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid subroutine jump"));
 
                     pc = word.asUnsignedInteger();
 
                     if (pc >= bytecodes.length || bytecodes[pc] != OpCodes.BEGINSUB)
-                        return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid subroutine jump"));
+                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid subroutine jump"));
 
                     break;
 
@@ -648,7 +654,7 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.GAS:
-                    this.dataStack.push(DataWord.fromUnsignedLong(this.messageData.getGas() - gasUsed));
+                    this.dataStack.push(DataWord.fromUnsignedLong(this.gas - gasUsed));
 
                     break;
 
@@ -794,7 +800,7 @@ public class VirtualMachine {
                     return ExecutionResult.ErrorReverted(gasUsed, returnedData);
 
                 default:
-                    return ExecutionResult.ErrorException(this.messageData.getGas(), new VirtualMachineException("Invalid opcode"));
+                    return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid opcode"));
             }
         }
 
