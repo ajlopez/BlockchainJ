@@ -178,6 +178,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Instant Cross-L2 Transfers are Now on Testnet!](https://medium.com/connext/instant-cross-l2-transfers-are-now-on-testnet-2f1295530c22)
 - [Blockchain reward sharing - a comparative systematization from first principles](https://iohk.io/en/blog/posts/2020/11/30/blockchain-reward-sharing-a-comparative-systematization-from-first-principles/)
 - [Working with Strings in Solidity](https://blog.aventus.io/working-with-strings-in-solidity-473bcc59dc04)
+- [Creating a blockchain with less than 100 code lines](https://medium.com/dataseries/creating-a-blockchain-with-less-100-code-lines-7168849d687d)
 
 ## To Do
 
