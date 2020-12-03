@@ -158,7 +158,7 @@ public class VirtualMachine {
                 long gasCost = fee.getValue();
 
                 if (gasUsed + gasCost > this.gas)
-                    return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Insufficient gas"));
+                    return createErrorResult("Insufficient gas");
 
                 gasUsed += gasCost;
             }
@@ -555,7 +555,7 @@ public class VirtualMachine {
 
                 case OpCodes.SSTORE:
                     if (this.messageData.isReadOnly())
-                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Read-only message"));
+                        return createErrorResult("Read-only message");
 
                     word1 = this.dataStack.pop();
                     word2 = this.dataStack.pop();
@@ -570,7 +570,7 @@ public class VirtualMachine {
                         gasCost = FeeSchedule.SRESET.getValue();
 
                     if (gasUsed + gasCost > this.gas)
-                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Insufficient gas"));
+                        return createErrorResult("Insufficient gas");
 
                     gasUsed += gasCost;
 
@@ -586,7 +586,7 @@ public class VirtualMachine {
                     try {
                         pc = getNewPc(bytecodes, word);
                     } catch (VirtualMachineException ex) {
-                        return ExecutionResult.ErrorException(this.gas, ex);
+                        return createErrorResult(ex);
                     }
 
                     // TODO check JUMPDEST
@@ -603,7 +603,7 @@ public class VirtualMachine {
                     try {
                         pc = getNewPc(bytecodes, word1);
                     } catch (VirtualMachineException ex) {
-                        return ExecutionResult.ErrorException(this.gas, ex);
+                        return createErrorResult(ex);
                     }
 
                     // TODO check JUMPDEST
@@ -615,11 +615,11 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.BEGINSUB:
-                    return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid subroutine entry"));
+                    return createErrorResult("Invalid subroutine entry");
 
                 case OpCodes.RETURNSUB:
                     if (this.returnStack.isEmpty())
-                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid retsub"));
+                        return createErrorResult("Invalid retsub");
 
                     // TODO check return stack is valid
 
@@ -634,12 +634,12 @@ public class VirtualMachine {
                     word = this.dataStack.pop();
 
                     if (!word.isUnsignedInteger())
-                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid subroutine jump"));
+                        return createErrorResult("Invalid subroutine jump");
 
                     pc = word.asUnsignedInteger();
 
                     if (pc >= bytecodes.length || bytecodes[pc] != OpCodes.BEGINSUB)
-                        return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid subroutine jump"));
+                        return createErrorResult("Invalid subroutine jump");
 
                     break;
 
@@ -800,7 +800,7 @@ public class VirtualMachine {
                     return ExecutionResult.ErrorReverted(gasUsed, returnedData);
 
                 default:
-                    return ExecutionResult.ErrorException(this.gas, new VirtualMachineException("Invalid opcode"));
+                    return createErrorResult("Invalid opcode");
             }
         }
 
@@ -893,5 +893,13 @@ public class VirtualMachine {
                 newExecutionContext,
                 newStorage
         );
+    }
+
+    private ExecutionResult createErrorResult(String message) {
+        return createErrorResult(new VirtualMachineException(message));
+    }
+
+    private ExecutionResult createErrorResult(VirtualMachineException exception) {
+        return ExecutionResult.ErrorException(this.gas, exception);
     }
 }
