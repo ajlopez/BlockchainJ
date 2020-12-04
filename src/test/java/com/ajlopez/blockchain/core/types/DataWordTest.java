@@ -295,6 +295,17 @@ public class DataWordTest {
     }
 
     @Test
+    public void isUnsignedLong() {
+        Assert.assertTrue(DataWord.fromHexadecimalString("00").isUnsignedLong());
+        Assert.assertTrue(DataWord.fromHexadecimalString("0100").isUnsignedLong());
+        Assert.assertTrue(DataWord.fromHexadecimalString("7fffffffffffffff").isUnsignedLong());
+
+        Assert.assertFalse(DataWord.fromHexadecimalString("ffffffffffffffff").isUnsignedLong());
+        Assert.assertFalse(DataWord.fromHexadecimalString("8000000000000000").isUnsignedLong());
+        Assert.assertFalse(DataWord.fromHexadecimalString("010000000000000000").isUnsignedLong());
+    }
+
+    @Test
     public void isZero() {
         Assert.assertTrue(DataWord.fromHexadecimalString("00").isZero());
 

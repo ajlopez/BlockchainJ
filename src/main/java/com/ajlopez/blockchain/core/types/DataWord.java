@@ -265,6 +265,17 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
         return true;
     }
 
+    public boolean isUnsignedLong() {
+        for (int k = 0; k < DATAWORD_BYTES - Long.BYTES; k++)
+            if (this.bytes[k] != 0)
+                return false;
+
+        if ((this.bytes[DATAWORD_BYTES - Long.BYTES] & 0x80) != 0)
+            return false;
+
+        return true;
+    }
+
     public boolean isZero() {
         int nbytes = this.bytes.length;
 
