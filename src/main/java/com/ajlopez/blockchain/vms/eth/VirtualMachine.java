@@ -766,14 +766,24 @@ public class VirtualMachine {
                     break;
 
                 case OpCodes.CALL:
-                    VirtualMachine newVirtualMachine = this.createVirtualMachineForCall(false, this.messageData.isReadOnly());
-                    executeCall(newVirtualMachine);
+                    try {
+                        VirtualMachine newVirtualMachine = this.createVirtualMachineForCall(false, this.messageData.isReadOnly());
+                        executeCall(newVirtualMachine);
+                    }
+                    catch (VirtualMachineException ex) {
+                        return createErrorResult(ex);
+                    }
 
                     continue;
 
                 case OpCodes.DELEGATECALL:
-                    newVirtualMachine = this.createVirtualMachineForCall(true, this.messageData.isReadOnly());
-                    executeCall(newVirtualMachine);
+                    try {
+                        VirtualMachine newVirtualMachine = this.createVirtualMachineForCall(true, this.messageData.isReadOnly());
+                        executeCall(newVirtualMachine);
+                    }
+                    catch (VirtualMachineException ex) {
+                        return createErrorResult(ex);
+                    }
 
                     continue;
 
@@ -786,8 +796,13 @@ public class VirtualMachine {
                     return ExecutionResult.OkWithData(gasUsed, returnedData, logs);
 
                 case OpCodes.STATICCALL:
-                    newVirtualMachine = this.createVirtualMachineForCall(false, true);
-                    executeCall(newVirtualMachine);
+                    try {
+                        VirtualMachine newVirtualMachine = this.createVirtualMachineForCall(false, true);
+                        executeCall(newVirtualMachine);
+                    }
+                    catch (VirtualMachineException ex) {
+                        return createErrorResult(ex);
+                    }
 
                     continue;
 
@@ -846,11 +861,16 @@ public class VirtualMachine {
         return this.memory;
     }
 
-    private VirtualMachine createVirtualMachineForCall(boolean isDelegateCall, boolean isReadOnly) throws IOException {
+    private VirtualMachine createVirtualMachineForCall(boolean isDelegateCall, boolean isReadOnly) throws IOException, VirtualMachineException {
         // improve stack use
 
+        DataWord word = this.dataStack.pop();
+
         // TODO check gas as long
-        long gas = this.dataStack.pop().asUnsignedLong();
+        if (!word.isUnsignedLong())
+            throw new VirtualMachineException("Invalid gas");
+
+        long gas = word.asUnsignedLong();
         // TODO check is address
         Address callee = this.dataStack.pop().toAddress();
 

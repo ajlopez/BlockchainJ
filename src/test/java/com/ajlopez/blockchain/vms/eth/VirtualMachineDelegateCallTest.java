@@ -66,6 +66,48 @@ public class VirtualMachineDelegateCallTest {
         Assert.assertEquals(1, virtualMachine.getDataStack().size());
         Assert.assertEquals(DataWord.ONE, virtualMachine.getDataStack().pop());
     }
+
+
+    @Test
+    public void executeDelegateCallWithInvalidGas() throws IOException {
+        byte[] calleeCode = new byte[]{
+                OpCodes.CALLER,
+                OpCodes.PUSH1, 0,
+                OpCodes.MSTORE,
+                OpCodes.PUSH1, 32,
+                OpCodes.PUSH1, 0,
+                OpCodes.RETURN
+        };
+
+        Address callee = FactoryHelper.createRandomAddress();
+
+        byte[] callerCode = new byte[]{
+                OpCodes.PUSH1, 0x20,    // Out Data Size
+                OpCodes.PUSH1, 0x00,    // Out Data Offset
+                OpCodes.PUSH1, 0x00,    // In Data Size
+                OpCodes.PUSH1, 0x00,    // In Data Offset
+                // Callee Address
+                OpCodes.PUSH20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                OpCodes.PUSH9, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,   // invalid gas
+                OpCodes.DELEGATECALL
+        };
+
+        System.arraycopy(callee.getBytes(), 0, callerCode, callerCode.length - 11 - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
+
+        Address caller = FactoryHelper.createRandomAddress();
+        Address sender = FactoryHelper.createRandomAddress();
+
+        VirtualMachine virtualMachine = createVirtualMachine(sender, caller, callerCode, callee, calleeCode);
+        ExecutionResult executionResult = virtualMachine.execute(callerCode);
+
+        // TODO check gas used
+
+        Assert.assertNotNull(executionResult);
+        Assert.assertFalse(executionResult.wasSuccesful());
+        Assert.assertTrue(executionResult.getException() instanceof VirtualMachineException);
+        Assert.assertEquals("Invalid gas", executionResult.getException().getMessage());
+    }
+
     @Test
     public void executeDelegateCallReturningOriginalSender() throws IOException {
         byte[] calleeCode = new byte[]{
