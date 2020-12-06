@@ -13,8 +13,7 @@ import java.io.IOException;
 public class VirtualMachineSubroutinesTest {
     @Test
     public void executeSimpleSubroutine() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
-        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         byte[] bytecodes = new byte[] {
                 OpCodes.PUSH1, 0x04,
@@ -35,8 +34,7 @@ public class VirtualMachineSubroutinesTest {
 
     @Test
     public void executeSimpleSubroutineWithStackOperation() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
-        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         byte[] bytecodes = new byte[] {
                 OpCodes.PUSH1, 0x04,
@@ -60,8 +58,7 @@ public class VirtualMachineSubroutinesTest {
 
     @Test
     public void executeTwoLevelsOfSubroutines() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
-        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         byte[] bytecodes = new byte[] {
                 OpCodes.PUSH9, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c,
@@ -90,8 +87,7 @@ public class VirtualMachineSubroutinesTest {
 
     @Test
     public void executeSubroutineAtTheEndOfCode() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
-        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x05, OpCodes.JUMP, OpCodes.BEGINSUB, OpCodes.RETURNSUB, OpCodes.JUMPDEST, OpCodes.PUSH1, 0x03, OpCodes.JUMPSUB });
 
@@ -104,8 +100,7 @@ public class VirtualMachineSubroutinesTest {
 
     @Test
     public void errorOnWalkIntoSubroutine() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
-        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.BEGINSUB, OpCodes.RETURNSUB, OpCodes.STOP  });
 
@@ -118,8 +113,7 @@ public class VirtualMachineSubroutinesTest {
 
     @Test
     public void errorOnShallowReturnStack() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
-        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.RETURNSUB });
 
@@ -132,8 +126,7 @@ public class VirtualMachineSubroutinesTest {
 
     @Test
     public void errorOnInvalidSubroutineJump() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
-        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH9, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c, OpCodes.JUMPSUB });
 
@@ -146,8 +139,7 @@ public class VirtualMachineSubroutinesTest {
 
     @Test
     public void errorOnInvalidSubroutineJumpWithoutBeginSub() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
-        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x04, OpCodes.JUMPSUB, OpCodes.STOP, OpCodes.RETURNSUB });
 
@@ -160,8 +152,7 @@ public class VirtualMachineSubroutinesTest {
 
     @Test
     public void errorOnInvalidSubroutineJumpBeyondCode() throws IOException {
-        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
-        VirtualMachine virtualMachine = new VirtualMachine(null, messageData, null, null);
+        VirtualMachine virtualMachine = createVirtualMachine();
 
         ExecutionResult executionResult = virtualMachine.execute(new byte[] { OpCodes.PUSH1, 0x10, OpCodes.JUMPSUB, OpCodes.STOP, OpCodes.RETURNSUB });
 
@@ -170,5 +161,10 @@ public class VirtualMachineSubroutinesTest {
         Assert.assertTrue(executionResult.getException() instanceof  VirtualMachineException);
         Assert.assertEquals("Invalid subroutine jump", executionResult.getException().getMessage());
         Assert.assertEquals(100_000L, executionResult.getGasUsed());
+    }
+
+    private static VirtualMachine createVirtualMachine() {
+        MessageData messageData = new MessageData(null, null, null, null, Coin.ZERO, 100_000L, Coin.ZERO, null, 0, 0, false, false);
+        return new VirtualMachine(null, messageData, null, null);
     }
 }
