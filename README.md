@@ -13,6 +13,16 @@ This blockchain implementation has:
 
 The world state keeps the account states. Each account has a balance and smart contract storage.
 
+## Posts
+
+- [Building a Blockchain: Introduction](https://angeljavalopez.medium.com/building-a-blockchain-introduction-e4193fd7f174)
+- [Building a Blockchain: Main Entities](https://angeljavalopez.medium.com/building-a-blockchain-main-entities-8dd4c94c48e0)
+- [Building a Blockchain: Serialization](https://angeljavalopez.medium.com/building-a-blockchain-serialization-4561c686767a)
+- [Building a Blockchain: Key Value Stores](https://angeljavalopez.medium.com/building-a-blockchain-key-value-stores-5103f1052dc4)
+- [Building a Blockchain: Subroutines in the Virtual Machine](https://angeljavalopez.medium.com/bui%C3%B1ding-a-blockchain-subroutines-in-the-virtual-machine-a79cc2dbf0e5)
+- [Building a Blockchain: Towards Beam Synchronization](https://angeljavalopez.medium.com/building-a-blockchain-towards-beam-synchronization-de4eb30466e8)
+- [Building a Blockchain: Executing Smart Contracts](https://angeljavalopez.medium.com/building-a-blockchain-executing-smart-contracts-ad06c8ec037)
+
 ## References
 
 - [SpongyCastle](https://rtyley.github.io/spongycastle)
