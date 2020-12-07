@@ -36,6 +36,20 @@ public class DslParserTest {
     }
 
     @Test
+    public void parseDslCommandUsingMultipleLines() throws IOException {
+        DslParser parser = new DslParser(new BufferedReader(new StringReader("  account  \r\nacc1   10000   \r\n end ")));
+        DslCommand dslCommand = parser.parse();
+
+        Assert.assertNotNull(dslCommand);
+        Assert.assertEquals("account", dslCommand.getVerb());
+        Assert.assertEquals(2, dslCommand.getArguments().size());
+        Assert.assertEquals("acc1", dslCommand.getArguments().get(0));
+        Assert.assertEquals("10000", dslCommand.getArguments().get(1));
+        
+        Assert.assertNull(parser.parse());
+    }
+
+    @Test
     public void parseDslCommandSkippingComment() throws IOException {
         DslParser parser = new DslParser(new BufferedReader(new StringReader("  account  \t acc1   10000   # a comment")));
         DslCommand dslCommand = parser.parse();

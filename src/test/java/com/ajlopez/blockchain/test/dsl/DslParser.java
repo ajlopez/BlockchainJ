@@ -17,7 +17,7 @@ public class DslParser {
     }
 
     public DslCommand parse() throws IOException {
-        String line = readLine();
+        String line = this.readLine();
 
         if (line == null)
             return null;
@@ -30,7 +30,30 @@ public class DslParser {
         while (tokenizer.hasMoreTokens())
             arguments.add(tokenizer.nextToken());
 
+        if (arguments.size() == 0) {
+            String subline;
+
+            for (subline = this.readSubline(); subline != null; subline = this.readSubline()) {
+                StringTokenizer subtokenizer = new StringTokenizer(subline);
+
+                while (subtokenizer.hasMoreTokens())
+                    arguments.add(subtokenizer.nextToken());
+            }
+        }
+
         return new DslCommand(verb, arguments);
+    }
+
+    private String readSubline() throws IOException {
+        String line = this.readLine();
+
+        if (line == null)
+            return null;
+
+        if ("end".equals(line.trim().toLowerCase()))
+            return null;
+
+        return line;
     }
 
     private String readLine() throws IOException {
