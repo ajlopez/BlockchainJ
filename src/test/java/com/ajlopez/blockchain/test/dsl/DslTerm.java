@@ -15,6 +15,11 @@ public class DslTerm {
     }
 
     public Object evaluate(World world) throws IOException {
-        return world.getAccount(this.term);
+        Object result = world.getAccount(this.term);
+
+        if (result != null)
+            return result;
+
+        return world.getBlock(this.term);
     }
 }
