@@ -15,6 +15,9 @@ public class DslTerm {
     }
 
     public Object evaluate(World world) throws IOException {
+        if (this.term.equals("blockchain"))
+            return world.getBlockChain();
+
         Object result = world.getAccount(this.term);
 
         if (result != null)

@@ -45,4 +45,16 @@ public class DslTermTest {
         Assert.assertTrue(result instanceof Block);
         Assert.assertArrayEquals(BlockEncoder.encode(block), BlockEncoder.encode((Block)result));
     }
+
+    @Test
+    public void evaluateBlockchain() throws IOException {
+        World world = new World();
+
+        DslTerm dslTerm = new DslTerm("blockchain");
+
+        Object result = dslTerm.evaluate(world);
+
+        Assert.assertNotNull(result);
+        Assert.assertSame(world.getBlockChain(), result);
+    }
 }
