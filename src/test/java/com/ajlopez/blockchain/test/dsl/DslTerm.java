@@ -7,13 +7,14 @@ import java.io.IOException;
 /**
  * Created by ajlopez on 08/12/2020.
  */
-public class DslTerm {
+public class DslTerm implements DslExpression {
     private final String term;
 
     public DslTerm(String term) {
         this.term = term;
     }
 
+    @Override
     public Object evaluate(World world) throws IOException {
         if (this.term.equals("blockchain"))
             return world.getBlockChain();
