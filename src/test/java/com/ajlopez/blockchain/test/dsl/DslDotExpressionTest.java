@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.test.dsl;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
@@ -59,5 +60,20 @@ public class DslDotExpressionTest {
         Assert.assertNotNull(result);
         Assert.assertTrue(result instanceof Long);
         Assert.assertEquals(1L, result);
+    }
+
+    @Test
+    public void evaluateBlockHash() throws IOException {
+        World world = new World();
+        Block block = FactoryHelper.createBlock(world.getBlock("genesis"), FactoryHelper.createRandomAddress(), 0);
+        world.setBlock("b1", block);
+
+        DslDotExpression dslDotExpression = new DslDotExpression(new DslTerm("b1"), "hash");
+
+        Object result = dslDotExpression.evaluate(world);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof BlockHash);
+        Assert.assertEquals(block.getHash(), result);
     }
 }

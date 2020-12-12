@@ -31,6 +31,9 @@ public class DslDotExpression implements DslExpression {
         if ("number".equals(this.name))
             return ((Block)leftValue).getNumber();
 
+        if ("hash".equals(this.name))
+            return ((Block)leftValue).getHash();
+
         // TODO exception case?
         return null;
     }
