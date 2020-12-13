@@ -76,4 +76,18 @@ public class DslDotExpressionTest {
         Assert.assertTrue(result instanceof BlockHash);
         Assert.assertEquals(block.getHash(), result);
     }
+
+    @Test
+    public void evaluateBestBlock() throws IOException {
+        World world = new World();
+        Block genesis = world.getBlock("genesis");
+
+        DslDotExpression dslDotExpression = new DslDotExpression(new DslTerm("blockchain"), "bestBlock");
+
+        Object result = dslDotExpression.evaluate(world);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Block);
+        Assert.assertEquals(genesis.getHash(), ((Block) result).getHash());
+    }
 }

@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test.dsl;
 
+import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.test.World;
@@ -33,6 +34,9 @@ public class DslDotExpression implements DslExpression {
 
         if ("hash".equals(this.name))
             return ((Block)leftValue).getHash();
+
+        if ("bestBlock".equals(this.name))
+            return ((BlockChain)leftValue).getBestBlockInformation().getBlock();
 
         // TODO exception case?
         return null;
