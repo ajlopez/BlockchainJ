@@ -2,9 +2,11 @@ package com.ajlopez.blockchain.test.dsl;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
+import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -44,6 +46,21 @@ public class DslTermTest {
         Assert.assertNotNull(result);
         Assert.assertTrue(result instanceof Block);
         Assert.assertArrayEquals(BlockEncoder.encode(block), BlockEncoder.encode((Block)result));
+    }
+
+    @Test
+    public void evaluateTransaction() throws IOException {
+        World world = new World();
+        Transaction transaction = FactoryHelper.createTransaction(1000);
+        world.setTransaction("tx1", transaction);
+
+        DslTerm dslTerm = new DslTerm("tx1");
+
+        Object result = dslTerm.evaluate(world);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Transaction);
+        Assert.assertArrayEquals(TransactionEncoder.encode(transaction), TransactionEncoder.encode((Transaction)result));
     }
 
     @Test

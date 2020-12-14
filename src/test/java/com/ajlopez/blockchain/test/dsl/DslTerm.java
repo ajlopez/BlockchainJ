@@ -24,6 +24,11 @@ public class DslTerm implements DslExpression {
         if (result != null)
             return result;
 
+        result = world.getTransaction(this.term);
+
+        if (result != null)
+            return result;
+
         return world.getBlock(this.term);
     }
 }
