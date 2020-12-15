@@ -64,6 +64,19 @@ public class DslTermTest {
     }
 
     @Test
+    public void evaluateInteger() throws IOException {
+        World world = new World();
+
+        DslTerm dslTerm = new DslTerm("42");
+
+        Object result = dslTerm.evaluate(world);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Integer);
+        Assert.assertEquals(42, result);
+    }
+
+    @Test
     public void evaluateBlockchain() throws IOException {
         World world = new World();
 

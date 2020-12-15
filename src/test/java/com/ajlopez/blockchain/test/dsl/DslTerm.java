@@ -16,6 +16,9 @@ public class DslTerm implements DslExpression {
 
     @Override
     public Object evaluate(World world) throws IOException {
+        if (Character.isDigit(this.term.charAt(0)))
+            return Integer.parseInt(this.term);
+
         if (this.term.equals("blockchain"))
             return world.getBlockChain();
 
