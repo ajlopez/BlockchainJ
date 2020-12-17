@@ -30,6 +30,18 @@ public class DslComparison implements DslExpression {
         if ("!=".equals(this.operator))
             return compare != 0;
 
+        if ("<".equals(this.operator))
+            return compare < 0;
+
+        if ("<=".equals(this.operator))
+            return compare <= 0;
+
+        if (">".equals(this.operator))
+            return compare > 0;
+
+        if (">=".equals(this.operator))
+            return compare >= 0;
+
         // TODO unknown operator
         return null;
     }
