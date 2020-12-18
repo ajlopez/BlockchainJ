@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.test.dsl;
 
+import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.test.World;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,6 +20,19 @@ public class DslComparisonTest {
 
         Assert.assertEquals(Boolean.TRUE, new DslComparison(one, "==", one).evaluate(world));
         Assert.assertEquals(Boolean.FALSE, new DslComparison(one, "==", two).evaluate(world));
+    }
+
+    @Test
+    public void equalIntegerToLongComparison() throws IOException {
+        World world = new World();
+        Block block = FactoryHelper.createBlock(world.getBlock("genesis"), FactoryHelper.createRandomAddress(), 0);
+        world.setBlock("b1", block);
+
+        DslExpression expression = new DslDotExpression(new DslTerm("b1"), "number");
+        DslExpression one = new DslTerm("1");
+
+        Assert.assertEquals(Boolean.TRUE, new DslComparison(expression, "==", one).evaluate(world));
+        Assert.assertEquals(Boolean.TRUE, new DslComparison(one, "==", expression).evaluate(world));
     }
 
     @Test

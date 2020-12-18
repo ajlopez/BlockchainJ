@@ -22,6 +22,11 @@ public class DslComparison implements DslExpression {
         Object leftValue = this.leftExpression.evaluate(world);
         Object rightValue = this.rightExpression.evaluate(world);
 
+        if (leftValue instanceof Long && rightValue instanceof Integer)
+            rightValue = ((Integer)rightValue).longValue();
+        else if (leftValue instanceof Integer && rightValue instanceof Long)
+            leftValue = ((Integer)leftValue).longValue();
+
         int compare = ((Comparable)leftValue).compareTo(rightValue);
 
         if ("==".equals(this.operator))
