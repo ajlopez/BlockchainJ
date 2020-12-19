@@ -1,7 +1,6 @@
 package com.ajlopez.blockchain.test.dsl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -11,9 +10,21 @@ import java.util.StringTokenizer;
  */
 public class DslParser {
     private final BufferedReader reader;
+    public static DslParser fromResource(String resourceName) throws FileNotFoundException {
+        ClassLoader classLoader = DslParser.class.getClassLoader();
+        File file = new File(classLoader.getResource(resourceName).getFile());
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        DslParser parser = new DslParser(reader);
+
+        return parser;
+    }
 
     public DslParser(BufferedReader reader) {
         this.reader = reader;
+    }
+
+    public DslParser(String text) {
+        this(new BufferedReader(new StringReader(text)));
     }
 
     public DslCommand parse() throws IOException {
@@ -57,16 +68,19 @@ public class DslParser {
     }
 
     private String readLine() throws IOException {
-        String line = this.reader.readLine();
+        while (true) {
+            String line = this.reader.readLine();
 
-        if (line == null)
-            return null;
+            if (line == null)
+                return null;
 
-        int p = line.indexOf('#');
+            int p = line.indexOf('#');
 
-        if (p >= 0)
-            line = line.substring(0, p - 1);
+            if (p >= 0)
+                line = line.substring(0, p - 1);
 
-        return line;
+            if (line.length() > 0)
+                return line;
+        }
     }
 }
