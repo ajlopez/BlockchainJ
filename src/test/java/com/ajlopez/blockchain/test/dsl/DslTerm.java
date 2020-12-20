@@ -19,6 +19,12 @@ public class DslTerm implements DslExpression {
         if (Character.isDigit(this.term.charAt(0)))
             return Integer.parseInt(this.term);
 
+        if ("true".equals(this.term))
+            return true;
+
+        if ("false".equals(this.term))
+            return false;
+
         if (this.term.equals("blockchain"))
             return world.getBlockChain();
 

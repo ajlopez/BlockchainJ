@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class DslFilesTest {
     @Test
-    public void runAccounts01Resource() throws IOException {
+    public void runAccounts01Resource() throws IOException, DslException {
         DslParser parser = DslParser.fromResource("dsl/accounts01.txt");
         World world = new World();
         WorldDslProcessor processor = new WorldDslProcessor(world);

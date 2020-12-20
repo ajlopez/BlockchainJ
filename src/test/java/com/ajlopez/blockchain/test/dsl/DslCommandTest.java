@@ -65,7 +65,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeAccountCommand() throws IOException {
+    public void executeAccountCommand() throws IOException, DslException {
         String verb = "account";
         List<String> arguments = new ArrayList<>();
         arguments.add("acc1");
@@ -85,7 +85,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeAccountCommandWithCode() throws IOException {
+    public void executeAccountCommandWithCode() throws IOException, DslException {
         String verb = "account";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=acc1");
@@ -113,7 +113,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeAccountCommandUsingNamedArguments() throws IOException {
+    public void executeAccountCommandUsingNamedArguments() throws IOException, DslException {
         String verb = "account";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=acc1");
@@ -133,7 +133,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeAccountCommandUsingNamedArgumentsAndDefaultArguments() throws IOException {
+    public void executeAccountCommandUsingNamedArgumentsAndDefaultArguments() throws IOException, DslException {
         String verb = "account";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=acc1");
@@ -152,7 +152,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeAccountCommandUsingOnlyName() throws IOException {
+    public void executeAccountCommandUsingOnlyName() throws IOException, DslException {
         String verb = "account";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=acc1");
@@ -172,7 +172,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeTransactionCommand() throws IOException {
+    public void executeTransactionCommand() throws IOException, DslException {
         String verb = "transaction";
         Address from = FactoryHelper.createRandomAddress();
         Address to = FactoryHelper.createRandomAddress();
@@ -199,7 +199,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeTransactionCommandUsingNamedArguments() throws IOException {
+    public void executeTransactionCommandUsingNamedArguments() throws IOException, DslException {
         String verb = "transaction";
         Address from = FactoryHelper.createRandomAddress();
         Address to = FactoryHelper.createRandomAddress();
@@ -226,7 +226,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommand() throws IOException {
+    public void executeBlockCommand() throws IOException, DslException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("blk1");
@@ -247,7 +247,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommandWithTransactions() throws IOException {
+    public void executeBlockCommandWithTransactions() throws IOException, DslException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("blk1");
@@ -277,7 +277,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommandUsingDefaultParent() throws IOException {
+    public void executeBlockCommandUsingDefaultParent() throws IOException, DslException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("blk1");
@@ -295,7 +295,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommandUsingNamedArguments() throws IOException {
+    public void executeBlockCommandUsingNamedArguments() throws IOException, DslException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=blk1");
@@ -314,7 +314,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeBlockCommandUsingNamedArgumentsWithTransactions() throws IOException {
+    public void executeBlockCommandUsingNamedArgumentsWithTransactions() throws IOException, DslException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();
         arguments.add("name=blk1");
@@ -344,7 +344,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeConnectBlock() throws IOException {
+    public void executeConnectBlock() throws IOException, DslException {
         World world = new World();
         Block genesis = world.getBlock("genesis");
         Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
@@ -367,7 +367,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void executeConnectBlockUsingNamedArgument() throws IOException {
+    public void executeConnectBlockUsingNamedArgument() throws IOException, DslException {
         World world = new World();
         Block genesis = world.getBlock("genesis");
         Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
@@ -390,7 +390,7 @@ public class DslCommandTest {
     }
 
     @Test
-    public void unknownVerb() throws IOException {
+    public void unknownVerb() throws IOException, DslException {
         World world = new World();
 
         String verb = "foo";
@@ -401,6 +401,32 @@ public class DslCommandTest {
 
         exception.expect(UnsupportedOperationException.class);
         exception.expectMessage("unknown verb 'foo'");
+        command.execute(world);
+    }
+
+    @Test
+    public void executeAssertCommandWithTrueConstant() throws IOException, DslException {
+        String verb = "assert";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("true");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        command.execute(world);
+    }
+
+    @Test
+    public void executeAssertCommandWithFalseConstant() throws IOException, DslException {
+        String verb = "assert";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("false");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        exception.expect(DslException.class);
+        exception.expectMessage("unsatisfied assertion 'false'");
         command.execute(world);
     }
 }

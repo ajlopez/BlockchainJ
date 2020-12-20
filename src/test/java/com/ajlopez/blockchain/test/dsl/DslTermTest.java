@@ -64,6 +64,32 @@ public class DslTermTest {
     }
 
     @Test
+    public void evaluateBooleanTrue() throws IOException {
+        World world = new World();
+
+        DslTerm dslTerm = new DslTerm("true");
+
+        Object result = dslTerm.evaluate(world);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Boolean);
+        Assert.assertEquals(true, result);
+    }
+
+    @Test
+    public void evaluateBooleanFalse() throws IOException {
+        World world = new World();
+
+        DslTerm dslTerm = new DslTerm("false");
+
+        Object result = dslTerm.evaluate(world);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Boolean);
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
     public void evaluateInteger() throws IOException {
         World world = new World();
 

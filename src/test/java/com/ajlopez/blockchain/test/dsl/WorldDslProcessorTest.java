@@ -23,7 +23,7 @@ public class WorldDslProcessorTest {
     }
 
     @Test
-    public void processAccountNewCommand() throws IOException {
+    public void processAccountNewCommand() throws IOException, DslException {
         World world = new World();
 
         WorldDslProcessor processor = new WorldDslProcessor(world);

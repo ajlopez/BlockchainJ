@@ -18,7 +18,7 @@ public class WorldDslProcessor {
         return this.world;
     }
 
-    public void processCommands(DslParser parser) throws IOException {
+    public void processCommands(DslParser parser) throws IOException, DslException {
         for (DslCommand cmd = parser.parse(); cmd != null; cmd = parser.parse())
             cmd.execute(this.world);
     }

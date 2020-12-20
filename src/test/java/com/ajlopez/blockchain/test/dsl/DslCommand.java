@@ -50,7 +50,7 @@ public class DslCommand {
 
     public Map<String, String> getNamedArguments() { return this.namedArguments; }
 
-    public void execute(World world) throws IOException {
+    public void execute(World world) throws IOException, DslException {
         if ("account".equals(this.verb))
             executeAccount(world);
         else if ("block".equals(this.verb))
@@ -59,6 +59,8 @@ public class DslCommand {
             executeTransaction(world);
         else if ("connect".equals(this.verb))
             executeConnect(world);
+        else if ("assert".equals(this.verb))
+            executeAssert(world);
         else
             throw new UnsupportedOperationException(String.format("unknown verb '%s'", this.verb));
     }
@@ -67,6 +69,13 @@ public class DslCommand {
         String name = this.getName(0, "name");
         Block block = world.getBlock(name);
         world.getBlockChain().connectBlock(block);
+    }
+
+    private void executeAssert(World world) throws IOException, DslException {
+        DslExpression expression = new DslTerm(this.arguments.get(0));
+
+        if (Boolean.FALSE.equals(expression.evaluate(world)))
+            throw new DslException(String.format("unsatisfied assertion '%s'", this.arguments.get(0)));
     }
 
     private void executeTransaction(World world) {
