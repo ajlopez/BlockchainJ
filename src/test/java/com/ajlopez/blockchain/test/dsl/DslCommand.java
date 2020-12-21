@@ -29,7 +29,7 @@ public class DslCommand {
         for (String argument : arguments) {
             int p = argument.indexOf('=');
 
-            if (p > 0) {
+            if (p > 0 && p < argument.length() - 1) {
                 String key = argument.substring(0, p);
                 String value = argument.substring(p + 1);
 
@@ -72,10 +72,15 @@ public class DslCommand {
     }
 
     private void executeAssert(World world) throws IOException, DslException {
-        DslExpression expression = new DslTerm(this.arguments.get(0));
+        DslExpression expression;
+
+        if (this.arguments.size() == 1)
+            expression = new DslTerm(this.arguments.get(0));
+        else
+            expression = new DslComparison(new DslTerm(this.arguments.get(0)), this.arguments.get(1), new DslTerm(this.arguments.get(2)));
 
         if (Boolean.FALSE.equals(expression.evaluate(world)))
-            throw new DslException(String.format("unsatisfied assertion '%s'", this.arguments.get(0)));
+            throw new DslException(String.format("unsatisfied assertion '%s'", this.argumentsToString()));
     }
 
     private void executeTransaction(World world) {
@@ -170,6 +175,18 @@ public class DslCommand {
             return 0L;
 
         return Long.parseLong(value);
+    }
+
+    private String argumentsToString() {
+        String result = "";
+
+        for (String argument : this.arguments)
+            if (result.length() > 0)
+                result += " " + argument;
+            else
+                result = argument;
+
+        return result;
     }
 }
 

@@ -429,4 +429,34 @@ public class DslCommandTest {
         exception.expectMessage("unsatisfied assertion 'false'");
         command.execute(world);
     }
+
+    @Test
+    public void executeAssertCommandWithTrueComparison() throws IOException, DslException {
+        String verb = "assert";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("1");
+        arguments.add("==");
+        arguments.add("1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        command.execute(world);
+    }
+
+    @Test
+    public void executeAssertCommandWithFalseComparison() throws IOException, DslException {
+        String verb = "assert";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("1");
+        arguments.add("!=");
+        arguments.add("1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        exception.expect(DslException.class);
+        exception.expectMessage("unsatisfied assertion '1 != 1'");
+        command.execute(world);
+    }
 }
