@@ -445,6 +445,38 @@ public class DslCommandTest {
     }
 
     @Test
+    public void executeAssertCommandWithTrueComparisonUsingLeftDotExpression() throws IOException, DslException {
+        String verb = "assert";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("b1.number");
+        arguments.add("==");
+        arguments.add("1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+        Block block = FactoryHelper.createBlock(world.getBlock("genesis"), FactoryHelper.createRandomAddress(), 0);
+        world.setBlock("b1", block);
+
+        command.execute(world);
+    }
+
+    @Test
+    public void executeAssertCommandWithTrueComparisonUsingRightDotExpression() throws IOException, DslException {
+        String verb = "assert";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("1");
+        arguments.add("==");
+        arguments.add("b1.number");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+        Block block = FactoryHelper.createBlock(world.getBlock("genesis"), FactoryHelper.createRandomAddress(), 0);
+        world.setBlock("b1", block);
+
+        command.execute(world);
+    }
+
+    @Test
     public void executeAssertCommandWithFalseComparison() throws IOException, DslException {
         String verb = "assert";
         List<String> arguments = new ArrayList<>();

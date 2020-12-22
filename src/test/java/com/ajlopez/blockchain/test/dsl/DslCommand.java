@@ -75,9 +75,9 @@ public class DslCommand {
         DslExpression expression;
 
         if (this.arguments.size() == 1)
-            expression = new DslTerm(this.arguments.get(0));
+            expression = toDslExpression(this.arguments.get(0));
         else
-            expression = new DslComparison(new DslTerm(this.arguments.get(0)), this.arguments.get(1), new DslTerm(this.arguments.get(2)));
+            expression = new DslComparison(toDslExpression(this.arguments.get(0)), this.arguments.get(1), toDslExpression(this.arguments.get(2)));
 
         if (Boolean.FALSE.equals(expression.evaluate(world)))
             throw new DslException(String.format("unsatisfied assertion '%s'", this.argumentsToString()));
@@ -187,6 +187,15 @@ public class DslCommand {
                 result = argument;
 
         return result;
+    }
+
+    private static DslExpression toDslExpression(String text) {
+        int p = text.lastIndexOf('.');
+
+        if (p > 0)
+            return new DslDotExpression(toDslExpression(text.substring(0, p)), text.substring(p + 1));
+
+        return new DslTerm(text);
     }
 }
 
