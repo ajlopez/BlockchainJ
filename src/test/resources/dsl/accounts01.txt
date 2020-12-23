@@ -4,3 +4,8 @@ account
     balance=1000
 end
 
+assert acc1.balance == 1000
+assert 1000 == acc1.balance
+
+assert acc1.nonce == 0
+assert 0 == acc1.nonce

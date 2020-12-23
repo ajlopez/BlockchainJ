@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test.dsl;
 
+import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.World;
 
 import java.io.IOException;
@@ -26,6 +27,10 @@ public class DslComparison implements DslExpression {
             rightValue = ((Integer)rightValue).longValue();
         else if (leftValue instanceof Integer && rightValue instanceof Long)
             leftValue = ((Integer)leftValue).longValue();
+        else if (leftValue instanceof Coin && rightValue instanceof Integer)
+            rightValue = Coin.fromUnsignedLong((Integer) rightValue);
+        else if (leftValue instanceof Integer && rightValue instanceof Coin)
+            leftValue = Coin.fromUnsignedLong((Integer) leftValue);
 
         int compare = ((Comparable)leftValue).compareTo(rightValue);
 
