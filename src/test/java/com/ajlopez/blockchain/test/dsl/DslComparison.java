@@ -23,14 +23,8 @@ public class DslComparison implements DslExpression {
         Object leftValue = this.leftExpression.evaluate(world);
         Object rightValue = this.rightExpression.evaluate(world);
 
-        if (leftValue instanceof Long && rightValue instanceof Integer)
-            rightValue = ((Integer)rightValue).longValue();
-        else if (leftValue instanceof Integer && rightValue instanceof Long)
-            leftValue = ((Integer)leftValue).longValue();
-        else if (leftValue instanceof Coin && rightValue instanceof Integer)
-            rightValue = Coin.fromUnsignedLong((Integer) rightValue);
-        else if (leftValue instanceof Integer && rightValue instanceof Coin)
-            leftValue = Coin.fromUnsignedLong((Integer) leftValue);
+        leftValue = adjustSecondValue(rightValue, leftValue);
+        rightValue = adjustSecondValue(leftValue, rightValue);
 
         int compare = ((Comparable)leftValue).compareTo(rightValue);
 
@@ -54,5 +48,15 @@ public class DslComparison implements DslExpression {
 
         // TODO unknown operator
         return null;
+    }
+
+    private static Object adjustSecondValue(Object firstValue, Object secondValue) {
+        if (firstValue instanceof Long && secondValue instanceof Integer)
+            return ((Integer)secondValue).longValue();
+
+        if (firstValue instanceof Coin && secondValue instanceof Integer)
+            return Coin.fromUnsignedLong((Integer) secondValue);
+
+        return secondValue;
     }
 }
