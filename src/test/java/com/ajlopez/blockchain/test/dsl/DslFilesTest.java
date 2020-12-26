@@ -29,4 +29,15 @@ public class DslFilesTest {
 
         Assert.assertNotNull(world.getBlock("b1"));
     }
+
+    @Test
+    public void runBlockchain01Resource() throws IOException, DslException {
+        DslParser parser = DslParser.fromResource("dsl/blockchain01.txt");
+        World world = new World();
+        WorldDslProcessor processor = new WorldDslProcessor(world);
+        processor.processCommands(parser);
+
+        Assert.assertNotNull(world.getBlock("b1"));
+        Assert.assertEquals(1, world.getBlockChain().getBestBlockInformation().getBlockNumber());
+    }
 }

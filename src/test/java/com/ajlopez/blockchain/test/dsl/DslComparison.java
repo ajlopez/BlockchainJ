@@ -26,13 +26,13 @@ public class DslComparison implements DslExpression {
         leftValue = adjustSecondValue(rightValue, leftValue);
         rightValue = adjustSecondValue(leftValue, rightValue);
 
-        int compare = ((Comparable)leftValue).compareTo(rightValue);
-
         if ("==".equals(this.operator))
-            return compare == 0;
+            return leftValue.equals(rightValue);
 
         if ("!=".equals(this.operator))
-            return compare != 0;
+            return !leftValue.equals(rightValue);
+
+        int compare = ((Comparable)leftValue).compareTo(rightValue);
 
         if ("<".equals(this.operator))
             return compare < 0;

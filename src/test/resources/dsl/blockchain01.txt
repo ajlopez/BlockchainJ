@@ -1,0 +1,13 @@
+
+block
+    name=b1
+    parent=genesis
+end
+
+connect b1
+
+assert blockchain.bestBlock.number == b1.number
+assert b1.number == blockchain.bestBlock.number
+assert blockchain.bestBlock.hash == b1.hash
+assert b1.hash == blockchain.bestBlock.hash
+
