@@ -1,0 +1,24 @@
+
+account
+    name=acc1
+    balance=1000
+end
+
+account
+    name=acc2
+    balance=100
+end
+
+transaction
+    name=tx1
+    from=acc1
+    to=acc2
+    value=500
+    nonce=42
+end
+
+assert tx1.value == 500
+assert 500 == tx1.value
+assert tx1.nonce == 42
+assert 42 == tx1.nonce
+

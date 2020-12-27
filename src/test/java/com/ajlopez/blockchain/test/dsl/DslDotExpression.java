@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.test.dsl;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.test.World;
 
 import java.io.IOException;
@@ -27,7 +28,13 @@ public class DslDotExpression implements DslExpression {
             return ((Account)leftValue).getBalance();
 
         if ("nonce".equals(this.name))
-            return ((Account)leftValue).getNonce();
+            if (leftValue instanceof Transaction)
+                return ((Transaction)leftValue).getNonce();
+            else
+                return ((Account)leftValue).getNonce();
+
+        if ("value".equals(this.name))
+            return ((Transaction)leftValue).getValue();
 
         if ("number".equals(this.name))
             return ((Block)leftValue).getNumber();
