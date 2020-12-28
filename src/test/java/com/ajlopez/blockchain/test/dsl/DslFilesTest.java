@@ -31,6 +31,16 @@ public class DslFilesTest {
     }
 
     @Test
+    public void runTransactions02Resource() throws IOException, DslException {
+        DslParser parser = DslParser.fromResource("dsl/transactions02.txt");
+        World world = new World();
+        WorldDslProcessor processor = new WorldDslProcessor(world);
+        processor.processCommands(parser);
+
+        Assert.assertNotNull(world.getTransaction("tx1"));
+    }
+
+    @Test
     public void runBlocks01Resource() throws IOException, DslException {
         DslParser parser = DslParser.fromResource("dsl/blocks01.txt");
         World world = new World();

@@ -1,0 +1,29 @@
+
+account
+    name=acc1
+    balance=1000
+end
+
+account
+    name=acc2
+    balance=100
+end
+
+transaction
+    name=tx1
+    from=acc1
+    to=acc2
+    value=500
+    nonce=0
+end
+
+block
+    name=b1
+    transactions=tx1
+    parent=genesis
+end
+
+connect b1
+
+assert acc1.balance = 500
+assert acc2.balance = 600
