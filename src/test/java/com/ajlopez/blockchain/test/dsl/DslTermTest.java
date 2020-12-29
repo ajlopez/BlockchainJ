@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.test.dsl;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
@@ -29,8 +30,8 @@ public class DslTermTest {
         Object result = dslTerm.evaluate(world);
 
         Assert.assertNotNull(result);
-        Assert.assertTrue(result instanceof Account);
-        Assert.assertArrayEquals(AccountEncoder.encode(account), AccountEncoder.encode((Account)result));
+        Assert.assertFalse(!(result instanceof Address));
+        Assert.assertEquals(world.getAccountAddress("acc1"), result);
     }
 
     @Test

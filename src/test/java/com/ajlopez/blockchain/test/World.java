@@ -94,6 +94,10 @@ public class World {
         return this.accountStore.getAccount(this.accounts.get(name));
     }
 
+    public Account getAccount(Address address) throws IOException {
+        return this.accountStore.getAccount(address);
+    }
+
     public Address getAccountAddress(String name) {
         return this.accounts.get(name);
     }

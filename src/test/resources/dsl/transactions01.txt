@@ -22,3 +22,8 @@ assert 500 == tx1.value
 assert tx1.nonce == 42
 assert 42 == tx1.nonce
 
+assert acc1 == tx1.from
+assert acc2 == tx2.to
+
+
+

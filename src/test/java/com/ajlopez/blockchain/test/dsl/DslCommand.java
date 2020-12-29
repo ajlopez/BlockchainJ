@@ -85,8 +85,8 @@ public class DslCommand {
 
     private void executeTransaction(World world) {
         String name = this.getName(0, "name");
-        Address from = new Address(HexUtils.hexStringToBytes(this.getName(1, "from")));
-        Address to = new Address(HexUtils.hexStringToBytes(this.getName(2, "to")));
+        Address from = world.getAccountAddress(this.getName(1, "from"));
+        Address to = world.getAccountAddress(this.getName(2, "to"));
         Coin value = this.getCoin(3, "value");
         long nonce = this.getLongInteger(4, "nonce");
 

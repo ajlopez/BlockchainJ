@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.test.World;
 
 import java.io.IOException;
@@ -25,16 +26,22 @@ public class DslDotExpression implements DslExpression {
         Object leftValue = this.expression.evaluate(world);
 
         if ("balance".equals(this.name))
-            return ((Account)leftValue).getBalance();
+            return world.getAccount((Address)leftValue).getBalance();
 
         if ("nonce".equals(this.name))
             if (leftValue instanceof Transaction)
                 return ((Transaction)leftValue).getNonce();
             else
-                return ((Account)leftValue).getNonce();
+                return world.getAccount((Address)leftValue).getNonce();
 
         if ("value".equals(this.name))
             return ((Transaction)leftValue).getValue();
+
+        if ("from".equals(this.name))
+            return ((Transaction)leftValue).getSender();
+
+        if ("to".equals(this.name))
+            return ((Transaction)leftValue).getReceiver();
 
         if ("number".equals(this.name))
             return ((Block)leftValue).getNumber();

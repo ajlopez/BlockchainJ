@@ -28,7 +28,7 @@ public class DslTerm implements DslExpression {
         if (this.term.equals("blockchain"))
             return world.getBlockChain();
 
-        Object result = world.getAccount(this.term);
+        Object result = world.getAccountAddress(this.term);
 
         if (result != null)
             return result;
