@@ -85,8 +85,8 @@ public class DslCommand {
 
     private void executeTransaction(World world) {
         String name = this.getName(0, "name");
-        Address from = world.getAccountAddress(this.getName(1, "from"));
-        Address to = world.getAccountAddress(this.getName(2, "to"));
+        Address from = this.getAddress(world, 1, "from");
+        Address to = this.getAddress(world, 2, "to");
         Coin value = this.getCoin(3, "value");
         long nonce = this.getLongInteger(4, "nonce");
 
@@ -135,6 +135,15 @@ public class DslCommand {
             return this.arguments.get(position);
 
         return this.namedArguments.get(name);
+    }
+
+    private Address getAddress(World world, int position, String name) {
+        String argument = this.getName(position, name);
+
+        if (argument.startsWith("0x")  || argument.startsWith("0X"))
+            return new Address(HexUtils.hexStringToBytes(argument));
+
+        return world.getAccountAddress(argument);
     }
 
     private List<String> getNames(int position, String name) {
