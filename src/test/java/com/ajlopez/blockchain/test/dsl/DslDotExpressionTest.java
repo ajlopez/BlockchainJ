@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.test.dsl;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
+import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.World;
@@ -59,6 +60,21 @@ public class DslDotExpressionTest {
         Assert.assertNotNull(result);
         Assert.assertTrue(result instanceof Coin);
         Assert.assertEquals(Coin.fromUnsignedLong(1000), result);
+    }
+
+    @Test
+    public void evaluateTransactionSender() throws IOException {
+        World world = new World();
+        Transaction transaction = FactoryHelper.createTransaction(1000);
+        world.setTransaction("tx1", transaction);
+
+        DslDotExpression dslDotExpression = new DslDotExpression(new DslTerm("tx1"), "from");
+
+        Object result = dslDotExpression.evaluate(world);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Address);
+        Assert.assertEquals(transaction.getSender(), result);
     }
 
     @Test
