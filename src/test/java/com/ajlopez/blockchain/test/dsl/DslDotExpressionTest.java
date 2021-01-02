@@ -78,6 +78,21 @@ public class DslDotExpressionTest {
     }
 
     @Test
+    public void evaluateTransactionReceiver() throws IOException {
+        World world = new World();
+        Transaction transaction = FactoryHelper.createTransaction(1000);
+        world.setTransaction("tx1", transaction);
+
+        DslDotExpression dslDotExpression = new DslDotExpression(new DslTerm("tx1"), "to");
+
+        Object result = dslDotExpression.evaluate(world);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Address);
+        Assert.assertEquals(transaction.getReceiver(), result);
+    }
+
+    @Test
     public void evaluateBlockNumber() throws IOException {
         World world = new World();
         Block block = FactoryHelper.createBlock(world.getBlock("genesis"), FactoryHelper.createRandomAddress(), 0);
