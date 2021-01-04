@@ -10,6 +10,7 @@ import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
+import com.ajlopez.blockchain.processors.BlockProcessor;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -204,6 +205,14 @@ public class WorldTest {
         Assert.assertNotNull(block);
         Assert.assertEquals(0, block.getNumber());
         Assert.assertEquals(Trie.EMPTY_TRIE_HASH, block.getStateRootHash());
+    }
+
+    @Test
+    public void getBlockProcessor() throws IOException {
+        World world = new World();
+        BlockProcessor blockProcessor = world.getBlockProcessor();
+
+        Assert.assertNotNull(blockProcessor);
     }
 
     @Test

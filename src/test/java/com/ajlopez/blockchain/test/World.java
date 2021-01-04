@@ -6,6 +6,9 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.processors.BlockProcessor;
+import com.ajlopez.blockchain.processors.OrphanBlocks;
+import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -29,6 +32,7 @@ public class World {
     private final Map<String, Transaction> transactions = new HashMap<>();
 
     private BlockChain blockChain;
+    private BlockProcessor blockProcessor;
 
     public World() throws IOException {
         this.accountStore = new AccountStore(this.stores.getAccountTrieStore().retrieve(Trie.EMPTY_TRIE_HASH));
@@ -123,6 +127,13 @@ public class World {
             this.blockChain = FactoryHelper.createBlockChainWithGenesis(this.stores, this.accountStore);
 
         return this.blockChain;
+    }
+
+    public BlockProcessor getBlockProcessor() throws IOException {
+        if (this.blockProcessor == null)
+            this.blockProcessor = new BlockProcessor(this.getBlockChain(), new OrphanBlocks(), null, new TransactionPool());
+
+        return this.blockProcessor;
     }
 }
 
