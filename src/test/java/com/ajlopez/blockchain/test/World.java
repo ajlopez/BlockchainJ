@@ -11,6 +11,7 @@ import com.ajlopez.blockchain.processors.OrphanBlocks;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
+import com.ajlopez.blockchain.test.simples.SimpleBlockValidator;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 
 import java.io.IOException;
@@ -131,7 +132,7 @@ public class World {
 
     public BlockProcessor getBlockProcessor() throws IOException {
         if (this.blockProcessor == null)
-            this.blockProcessor = new BlockProcessor(this.getBlockChain(), new OrphanBlocks(), null, new TransactionPool());
+            this.blockProcessor = new BlockProcessor(this.getBlockChain(), new OrphanBlocks(), new SimpleBlockValidator(), new TransactionPool());
 
         return this.blockProcessor;
     }
