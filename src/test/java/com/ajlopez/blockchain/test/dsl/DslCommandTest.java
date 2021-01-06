@@ -367,6 +367,29 @@ public class DslCommandTest {
     }
 
     @Test
+    public void executeProcessBlock() throws IOException, DslException {
+        World world = new World();
+        Block genesis = world.getBlock("genesis");
+        Block block = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+
+        world.setBlock("blk1", block);
+
+        String verb = "process";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("blk1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+
+        command.execute(world);
+
+        Block result = world.getBlockChain().getBestBlockInformation().getBlock();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
+        Assert.assertEquals(block.getHash(), result.getHash());
+    }
+
+    @Test
     public void executeConnectBlockUsingNamedArgument() throws IOException, DslException {
         World world = new World();
         Block genesis = world.getBlock("genesis");

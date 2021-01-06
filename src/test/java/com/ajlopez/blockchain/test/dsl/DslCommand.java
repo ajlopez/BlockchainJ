@@ -59,10 +59,18 @@ public class DslCommand {
             executeTransaction(world);
         else if ("connect".equals(this.verb))
             executeConnect(world);
+        else if ("process".equals(this.verb))
+            executeProcess(world);
         else if ("assert".equals(this.verb))
             executeAssert(world);
         else
             throw new UnsupportedOperationException(String.format("unknown verb '%s'", this.verb));
+    }
+
+    private void executeProcess(World world) throws IOException {
+        String name = this.getName(0, "name");
+        Block block = world.getBlock(name);
+        world.getBlockProcessor().processBlock(block);
     }
 
     private void executeConnect(World world) throws IOException {
