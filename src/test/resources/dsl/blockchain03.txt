@@ -9,8 +9,8 @@ block
     parent=b1
 end
 
-connect b2
-connect b1
+process b2
+process b1
 
 assert blockchain.bestBlock.number == b2.number
 assert b2.number == blockchain.bestBlock.number
