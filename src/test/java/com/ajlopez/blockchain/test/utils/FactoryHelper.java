@@ -189,6 +189,11 @@ public class FactoryHelper {
         return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, MerkleTree.EMPTY_MERKLE_TREE_HASH, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000, null, 0);
     }
 
+    public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions, List<BlockHeader> uncles) {
+        // TODO consider calculate receipts root if there is any transaction
+        return new Block(parent.getNumber() + 1, parent.getHash(), uncles, transactions, MerkleTree.EMPTY_MERKLE_TREE_HASH, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000, null, 0);
+    }
+
     public static BlockChain createBlockChain(int size) throws IOException {
         return createBlockChain(size, 0);
     }

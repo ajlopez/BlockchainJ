@@ -1,0 +1,36 @@
+
+block
+    name=b1
+    parent=genesis
+end
+
+block
+    name=b1b
+    parent=genesis
+end
+
+block
+    name=b1c
+    parent=genesis
+end
+
+block
+    name=b2
+    parent=b1
+end
+
+block
+    name=b2plus
+    uncles=b1b,b1c
+    parent=b1
+end
+
+connect b1
+connect b2
+connect b2plus
+
+assert blockchain.bestBlock.number == b2plus.number
+assert b2plus.number == blockchain.bestBlock.number
+assert blockchain.bestBlock.hash == b2plus.hash
+assert b2plus.hash == blockchain.bestBlock.hash
+

@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.test.dsl;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
@@ -111,10 +112,17 @@ public class DslCommand {
             parentName = "genesis";
 
         List<String> transactionNames = this.getNames(2, "transactions");
+        List<String> uncleNames = this.getNames(3, "uncles");
 
         Block parent = world.getBlock(parentName);
         List<Transaction> transactions = world.getTransactions(transactionNames);
-        Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), transactions);
+        List<Block> uncleBlocks = world.getBlocks(uncleNames);
+        List<BlockHeader> uncles = new ArrayList<>();
+
+        for (Block uncleBlock : uncleBlocks)
+            uncles.add(uncleBlock.getHeader());
+
+        Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), transactions, uncles);
 
         world.setBlock(name, block);
     }
