@@ -163,7 +163,7 @@ public class FactoryHelper {
     public static Block createBlock(Block parent, Address coinbase, int ntransactions) {
         List<Transaction> transactions = createTransactions(ntransactions);
 
-        return createBlock(parent, coinbase, transactions);
+        return createBlockWithTransactions(parent, coinbase, transactions);
     }
 
     public static Block createBlock(AccountStoreProvider accountStoreProvider, Block parent, Address coinbase, int ntransactions, Address sender, long nonce) throws IOException {
@@ -184,9 +184,13 @@ public class FactoryHelper {
         return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
     }
 
-    public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions) {
+    public static Block createBlockWithTransactions(Block parent, Address coinbase, List<Transaction> transactions) {
         // TODO consider calculate receipts root if there is any transaction
         return new Block(parent.getNumber() + 1, parent.getHash(), null, transactions, MerkleTree.EMPTY_MERKLE_TREE_HASH, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000, null, 0);
+    }
+
+    public static Block createBlockWithUncles(Block parent, Address coinbase, List<BlockHeader> uncles) {
+        return new Block(parent.getNumber() + 1, parent.getHash(), uncles, null, MerkleTree.EMPTY_MERKLE_TREE_HASH, parent.getStateRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 12_000_000L, 10_000_000, null, 0);
     }
 
     public static Block createBlock(Block parent, Address coinbase, List<Transaction> transactions, List<BlockHeader> uncles) {

@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.execution.BlockExecutionResult;
 import com.ajlopez.blockchain.execution.BlockExecutor;
@@ -25,6 +26,9 @@ public class BlockValidator {
             return false;
 
         // TODO validate uncles
+        for (BlockHeader uncle : block.getUncles())
+            if (uncle.getNumber() >= block.getNumber())
+                return false;
 
         return true;
     }

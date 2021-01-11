@@ -1,9 +1,6 @@
 package com.ajlopez.blockchain.bc;
 
-import com.ajlopez.blockchain.core.Account;
-import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.core.TransactionReceipt;
+import com.ajlopez.blockchain.core.*;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Difficulty;
@@ -83,6 +80,40 @@ public class BlockValidatorTest {
 
         Assert.assertTrue(blockValidator.isValid(genesis, null));
         Assert.assertTrue(blockValidator.isValid(block, genesis));
+    }
+
+    @Test
+    public void validBlockWithUncle() throws IOException {
+        List<BlockHeader> uncles = new ArrayList<>();
+
+        Block genesis = GenesisGenerator.generateGenesis();
+        Block block1 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block uncle1 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+
+        uncles.add(uncle1.getHeader());
+
+        Block block = FactoryHelper.createBlockWithUncles(block1, FactoryHelper.createRandomAddress(), uncles);
+
+        BlockValidator blockValidator = new BlockValidator(null);
+
+        Assert.assertTrue(blockValidator.isValid(block));
+    }
+
+    @Test
+    public void invalidBlockWithUncleSameNumber() throws IOException {
+        List<BlockHeader> uncles = new ArrayList<>();
+
+        Block genesis = GenesisGenerator.generateGenesis();
+        Block block1 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block uncle1 = FactoryHelper.createBlock(block1, FactoryHelper.createRandomAddress(), 0);
+
+        uncles.add(uncle1.getHeader());
+
+        Block block = FactoryHelper.createBlockWithUncles(block1, FactoryHelper.createRandomAddress(), uncles);
+
+        BlockValidator blockValidator = new BlockValidator(null);
+
+        Assert.assertFalse(blockValidator.isValid(block));
     }
 
     @Test
