@@ -7,6 +7,8 @@ import com.ajlopez.blockchain.execution.BlockExecutionResult;
 import com.ajlopez.blockchain.execution.BlockExecutor;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by ajlopez on 01/06/2019.
@@ -25,10 +27,20 @@ public class BlockValidator {
         if (!Block.calculateTransactionsRootHash(block.getTransactions()).equals(block.getTransactionsRootHash()))
             return false;
 
+        Set<Hash> uncleHashes = new HashSet<>();
+
         // TODO validate uncles
-        for (BlockHeader uncle : block.getUncles())
+        for (BlockHeader uncle : block.getUncles()) {
             if (uncle.getNumber() >= block.getNumber())
                 return false;
+
+            Hash uncleHash = uncle.getHash();
+
+            if (uncleHashes.contains(uncleHash))
+                return false;
+
+            uncleHashes.add(uncleHash);
+        }
 
         return true;
     }

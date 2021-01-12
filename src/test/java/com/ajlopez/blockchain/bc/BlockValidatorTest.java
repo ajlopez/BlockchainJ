@@ -117,6 +117,24 @@ public class BlockValidatorTest {
     }
 
     @Test
+    public void invalidBlockWithRepeatedUncles() throws IOException {
+        List<BlockHeader> uncles = new ArrayList<>();
+
+        Block genesis = GenesisGenerator.generateGenesis();
+        Block block1 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block uncle1 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+
+        uncles.add(uncle1.getHeader());
+        uncles.add(uncle1.getHeader());
+
+        Block block = FactoryHelper.createBlockWithUncles(block1, FactoryHelper.createRandomAddress(), uncles);
+
+        BlockValidator blockValidator = new BlockValidator(null);
+
+        Assert.assertFalse(blockValidator.isValid(block));
+    }
+
+    @Test
     public void invalidBlockWithInvalidTransactionsRoot() {
         Transaction transaction = FactoryHelper.createTransaction(1000);
         Transaction transaction2 = FactoryHelper.createTransaction(2000);
