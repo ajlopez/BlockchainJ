@@ -14,6 +14,9 @@ import java.util.Set;
  * Created by ajlopez on 01/06/2019.
  */
 public class BlockValidator {
+    // TODO review the number
+    private static final int MAX_NO_UNCLES = 2;
+
     private final BlockExecutor blockExecutor;
 
     public BlockValidator(BlockExecutor blockExecutor) {
@@ -25,6 +28,9 @@ public class BlockValidator {
             return false;
 
         if (!Block.calculateTransactionsRootHash(block.getTransactions()).equals(block.getTransactionsRootHash()))
+            return false;
+
+        if (block.getUnclesCount() > MAX_NO_UNCLES)
             return false;
 
         Set<Hash> uncleHashes = new HashSet<>();

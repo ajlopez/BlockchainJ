@@ -135,6 +135,27 @@ public class BlockValidatorTest {
     }
 
     @Test
+    public void invalidBlockWithTooManyUncles() throws IOException {
+        List<BlockHeader> uncles = new ArrayList<>();
+
+        Block genesis = GenesisGenerator.generateGenesis();
+        Block block1 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block uncle1a = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block uncle1b = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block uncle1c = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+
+        uncles.add(uncle1a.getHeader());
+        uncles.add(uncle1b.getHeader());
+        uncles.add(uncle1c.getHeader());
+
+        Block block = FactoryHelper.createBlockWithUncles(block1, FactoryHelper.createRandomAddress(), uncles);
+
+        BlockValidator blockValidator = new BlockValidator(null);
+
+        Assert.assertFalse(blockValidator.isValid(block));
+    }
+
+    @Test
     public void invalidBlockWithInvalidTransactionsRoot() {
         Transaction transaction = FactoryHelper.createTransaction(1000);
         Transaction transaction2 = FactoryHelper.createTransaction(2000);
