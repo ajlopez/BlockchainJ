@@ -30,12 +30,15 @@ public class BlockValidator {
         if (!Block.calculateTransactionsRootHash(block.getTransactions()).equals(block.getTransactionsRootHash()))
             return false;
 
+        return unclesAreValid(block);
+    }
+
+    private static boolean unclesAreValid(Block block) {
         if (block.getUnclesCount() > MAX_NO_UNCLES)
             return false;
 
         Set<Hash> uncleHashes = new HashSet<>();
 
-        // TODO validate uncles
         for (BlockHeader uncle : block.getUncles()) {
             if (uncle.getNumber() >= block.getNumber())
                 return false;
