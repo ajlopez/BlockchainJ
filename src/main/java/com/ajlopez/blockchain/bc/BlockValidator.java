@@ -30,6 +30,9 @@ public class BlockValidator {
         if (!Block.calculateTransactionsRootHash(block.getTransactions()).equals(block.getTransactionsRootHash()))
             return false;
 
+        if (!Block.calculateUnclesRootHash(block.getUncles()).equals(block.getUnclesRootHash()))
+            return false;
+
         return unclesAreValid(block);
     }
 

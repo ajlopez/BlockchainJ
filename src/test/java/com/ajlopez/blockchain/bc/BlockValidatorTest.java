@@ -83,7 +83,7 @@ public class BlockValidatorTest {
     }
 
     @Test
-    public void validBlockWithUncle() throws IOException {
+    public void validBlockWithUncle() {
         List<BlockHeader> uncles = new ArrayList<>();
 
         Block genesis = GenesisGenerator.generateGenesis();
@@ -100,7 +100,7 @@ public class BlockValidatorTest {
     }
 
     @Test
-    public void invalidBlockWithUncleSameNumber() throws IOException {
+    public void invalidBlockWithUncleSameNumber() {
         List<BlockHeader> uncles = new ArrayList<>();
 
         Block genesis = GenesisGenerator.generateGenesis();
@@ -117,7 +117,7 @@ public class BlockValidatorTest {
     }
 
     @Test
-    public void invalidBlockWithRepeatedUncles() throws IOException {
+    public void invalidBlockWithRepeatedUncles() {
         List<BlockHeader> uncles = new ArrayList<>();
 
         Block genesis = GenesisGenerator.generateGenesis();
@@ -135,7 +135,7 @@ public class BlockValidatorTest {
     }
 
     @Test
-    public void invalidBlockWithTooManyUncles() throws IOException {
+    public void invalidBlockWithTooManyUncles() {
         List<BlockHeader> uncles = new ArrayList<>();
 
         Block genesis = GenesisGenerator.generateGenesis();
@@ -153,6 +153,27 @@ public class BlockValidatorTest {
         BlockValidator blockValidator = new BlockValidator(null);
 
         Assert.assertFalse(blockValidator.isValid(block));
+    }
+
+    @Test
+    public void invalidBlockWithInvalidUnclesRoot() {
+        List<BlockHeader> uncles = new ArrayList<>();
+
+        Block genesis = GenesisGenerator.generateGenesis();
+        Block block1 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block uncle1a = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block uncle1b = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+
+        uncles.add(uncle1a.getHeader());
+        uncles.add(uncle1b.getHeader());
+
+        Block block = new Block(2, block1.getHash(), null, null, null, FactoryHelper.createRandomHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), null, 0, 0, null, 0);
+        Block badblock = new Block(block.getHeader(), uncles, null);
+
+        BlockValidator blockValidator = new BlockValidator(null);
+
+        Assert.assertTrue(blockValidator.isValid(block));
+        Assert.assertFalse(blockValidator.isValid(badblock));
     }
 
     @Test
