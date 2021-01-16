@@ -14,6 +14,7 @@ import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.simples.SimpleMessageChannel;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.utils.HashUtils;
 import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
@@ -481,17 +482,17 @@ public class MessageProcessorTest {
 
     @Test
     public void processStoredKeyValueMessage() throws ExecutionException, InterruptedException {
-        byte[] key = FactoryHelper.createRandomBytes(32);
         byte[] value = FactoryHelper.createRandomBytes(42);
+        byte[] key = HashUtils.calculateHash(value).getBytes();
 
         KeyValueProcessor keyValueProcessor = new KeyValueProcessor();
 
         MessageProcessor processor = new MessageProcessor(null, null, null, null, null, null, null, null, keyValueProcessor);
 
         CompletableFuture<byte[]> completableFuture = new CompletableFuture<>();
-        keyValueProcessor.resolve(KeyValueStoreType.BLOCKS, key, completableFuture);
+        keyValueProcessor.resolve(KeyValueStoreType.ACCOUNTS, key, completableFuture);
 
-        StoredKeyValueMessage message = new StoredKeyValueMessage(KeyValueStoreType.BLOCKS, key, value);
+        StoredKeyValueMessage message = new StoredKeyValueMessage(KeyValueStoreType.ACCOUNTS, key, value);
 
         processor.processMessage(message, null);
 
