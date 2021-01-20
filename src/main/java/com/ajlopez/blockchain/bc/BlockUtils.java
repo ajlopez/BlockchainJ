@@ -2,7 +2,9 @@ package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
+import com.ajlopez.blockchain.core.types.BlockHash;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,8 +16,15 @@ public class BlockUtils {
 
     }
 
-    public static Set<BlockHeader> getAncestorsHeaders(Block block, int depth, BlockStore blockStore) {
+    public static Set<BlockHeader> getAncestorsHeaders(Block block, int depth, BlockStore blockStore) throws IOException {
         Set<BlockHeader> ancestors = new HashSet<>();
+        BlockHash parentHash = block.getParentHash();
+
+        for (int k = 0; k < depth; k++) {
+            Block parent = blockStore.getBlock(parentHash);
+            ancestors.add(parent.getHeader());
+            parentHash = parent.getParentHash();
+        }
 
         return ancestors;
     }
