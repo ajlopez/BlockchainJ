@@ -27,6 +27,24 @@ public class BlockUtilsTest {
     }
 
     @Test
+    public void getFiveAncestorsSet() throws IOException {
+        Stores stores = new MemoryStores();
+        BlockStore blockStore = stores.getBlockStore();
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
+        FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
+
+        Block block10 = blockChain.getBlockByNumber(10);
+
+        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(block10, 5, blockStore);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(5, result.size());
+
+        for (int k = 5; k < 10; k++)
+            Assert.assertTrue(result.contains(blockChain.getBlockByNumber(k).getHeader()));
+    }
+
+    @Test
     public void getTenAncestorsSet() throws IOException {
         Stores stores = new MemoryStores();
         BlockStore blockStore = stores.getBlockStore();
@@ -36,6 +54,24 @@ public class BlockUtilsTest {
         Block block10 = blockChain.getBlockByNumber(10);
 
         Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(block10, 10, blockStore);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(10, result.size());
+
+        for (int k = 0; k < 10; k++)
+            Assert.assertTrue(result.contains(blockChain.getBlockByNumber(k).getHeader()));
+    }
+
+    @Test
+    public void getTooMuchAncestorsSet() throws IOException {
+        Stores stores = new MemoryStores();
+        BlockStore blockStore = stores.getBlockStore();
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
+        FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
+
+        Block block10 = blockChain.getBlockByNumber(10);
+
+        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(block10, 20, blockStore);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(10, result.size());

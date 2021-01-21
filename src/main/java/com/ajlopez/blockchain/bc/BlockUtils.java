@@ -23,6 +23,10 @@ public class BlockUtils {
         for (int k = 0; k < depth; k++) {
             Block parent = blockStore.getBlock(parentHash);
             ancestors.add(parent.getHeader());
+
+            if (parent.getNumber() == 0)
+                break;
+
             parentHash = parent.getParentHash();
         }
 
