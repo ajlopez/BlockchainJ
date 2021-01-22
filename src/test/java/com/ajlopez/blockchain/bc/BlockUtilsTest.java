@@ -45,6 +45,21 @@ public class BlockUtilsTest {
     }
 
     @Test
+    public void getEmptyAncestorUnclesSet() throws IOException {
+        Stores stores = new MemoryStores();
+        BlockStore blockStore = stores.getBlockStore();
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
+        FactoryHelper.extendBlockChainWithBlocks(blockChain, 10);
+
+        Block block10 = blockChain.getBlockByNumber(10);
+
+        Set<BlockHeader> result = BlockUtils.getAncestorUncles(block10, 5, blockStore);
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+    }
+
+    @Test
     public void getTenAncestorsSet() throws IOException {
         Stores stores = new MemoryStores();
         BlockStore blockStore = stores.getBlockStore();

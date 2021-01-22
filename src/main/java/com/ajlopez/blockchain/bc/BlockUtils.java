@@ -32,4 +32,10 @@ public class BlockUtils {
 
         return ancestors;
     }
+
+    public static Set<BlockHeader> getAncestorUncles(Block block, int depth, BlockStore blockStore) throws IOException {
+        Set<BlockHeader> uncles = new HashSet<>();
+
+        return uncles;
+    }
 }
