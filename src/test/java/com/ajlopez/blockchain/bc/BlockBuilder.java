@@ -11,10 +11,17 @@ import java.util.List;
  */
 public class BlockBuilder {
     private long number;
+    private Block parent;
     private List<BlockHeader> uncles;
 
     public BlockBuilder number(long number) {
         this.number = number;
+
+        return this;
+    }
+
+    public BlockBuilder parent(Block parent) {
+        this.parent = parent;
 
         return this;
     }
@@ -26,6 +33,9 @@ public class BlockBuilder {
     }
 
     public Block build() {
+        if (this.parent != null)
+            return new Block(FactoryHelper.createBlockHeader(this.parent), this.uncles, null);
+
         return new Block(FactoryHelper.createBlockHeader(this.number), this.uncles, null);
     }
 }

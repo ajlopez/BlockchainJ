@@ -23,6 +23,19 @@ public class BlockBuilderTest {
     }
 
     @Test
+    public void createBlockWithParent() {
+        Block parent = new BlockBuilder().number(41).build();
+
+        BlockBuilder blockBuilder = new BlockBuilder();
+
+        Block result = blockBuilder.parent(parent).build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(42, result.getNumber());
+        Assert.assertEquals(parent.getHash(), result.getParentHash());
+    }
+
+    @Test
     public void createBlockWithUncles() {
         List<BlockHeader> uncles = new ArrayList<>();
 
