@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
+import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 public class BlockBuilder {
     private long number;
     private Block parent;
+    private BlockHash parentHash;
     private List<BlockHeader> uncles;
 
     public BlockBuilder number(long number) {
@@ -26,6 +28,12 @@ public class BlockBuilder {
         return this;
     }
 
+    public BlockBuilder parentHash(BlockHash parentHash) {
+        this.parentHash = parentHash;
+
+        return this;
+    }
+
     public BlockBuilder uncles(List<BlockHeader> uncles) {
         this.uncles = uncles;
 
@@ -33,6 +41,9 @@ public class BlockBuilder {
     }
 
     public Block build() {
+        if (this.parentHash != null)
+            return new Block(FactoryHelper.createBlockHeader(this.parentHash, this.number), this.uncles, null);
+
         if (this.parent != null)
             return new Block(FactoryHelper.createBlockHeader(this.parent), this.uncles, null);
 

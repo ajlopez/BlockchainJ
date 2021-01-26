@@ -2,6 +2,8 @@ package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
+import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,6 +35,19 @@ public class BlockBuilderTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(42, result.getNumber());
         Assert.assertEquals(parent.getHash(), result.getParentHash());
+    }
+
+    @Test
+    public void createBlockWithParentHash() {
+        BlockHash parentHash = FactoryHelper.createRandomBlockHash();
+
+        BlockBuilder blockBuilder = new BlockBuilder();
+
+        Block result = blockBuilder.parentHash(parentHash).number(42).build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(42, result.getNumber());
+        Assert.assertEquals(parentHash, result.getParentHash());
     }
 
     @Test
