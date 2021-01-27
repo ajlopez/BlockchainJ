@@ -321,7 +321,7 @@ public class FactoryHelper {
     }
 
     public static BlockHeader createBlockHeader(long blockNumber) {
-        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        BlockHash hash = blockNumber == 0 ? BlockHash.EMPTY_BLOCK_HASH : FactoryHelper.createRandomBlockHash();
         Hash transactionsHash = FactoryHelper.createRandomHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();

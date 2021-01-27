@@ -25,6 +25,17 @@ public class BlockBuilderTest {
     }
 
     @Test
+    public void createGenesisBlockWithNumberZero() {
+        BlockBuilder blockBuilder = new BlockBuilder();
+
+        Block result = blockBuilder.number(0).build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(0, result.getNumber());
+        Assert.assertEquals(BlockHash.EMPTY_BLOCK_HASH, result.getParentHash());
+    }
+
+    @Test
     public void createBlockWithParent() {
         Block parent = new BlockBuilder().number(41).build();
 
