@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -53,10 +55,41 @@ public class BlockUtilsTest {
 
         Block block10 = blockChain.getBlockByNumber(10);
 
-        Set<BlockHeader> result = BlockUtils.getAncestorUncles(block10, 5, blockStore);
+        Set<BlockHeader> result = BlockUtils.getAncestorsUncles(block10, 5, blockStore);
 
         Assert.assertNotNull(result);
         Assert.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void getAncestorUnclesSet() throws IOException {
+        Stores stores = new MemoryStores();
+        BlockStore blockStore = stores.getBlockStore();
+
+        Block genesis = new BlockBuilder().number(0).build();
+        Block block1 = new BlockBuilder().parent(genesis).build();
+        Block uncle1 = new BlockBuilder().parent(genesis).build();
+        Block uncle2 = new BlockBuilder().parent(genesis).build();
+
+        List<BlockHeader> uncles = new ArrayList<>();
+        uncles.add(uncle1.getHeader());
+        uncles.add(uncle2.getHeader());
+
+        Block block2 = new BlockBuilder().parent(block1).uncles(uncles).build();
+        Block block3 = new BlockBuilder().parent(block2).build();
+
+        blockStore.saveBlock(genesis);
+        blockStore.saveBlock(block1);
+        blockStore.saveBlock(block2);
+        blockStore.saveBlock(block3);
+
+        Set<BlockHeader> result = BlockUtils.getAncestorsUncles(block3, 3, blockStore);
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(2, result.size());
+        Assert.assertTrue(result.contains(uncle1.getHeader()));
+        Assert.assertTrue(result.contains(uncle2.getHeader()));
     }
 
     @Test
