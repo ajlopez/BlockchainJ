@@ -2,7 +2,6 @@ package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
-import com.ajlopez.blockchain.store.HashMapStore;
 import com.ajlopez.blockchain.store.MemoryStores;
 import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;

@@ -113,7 +113,7 @@ public class Block {
     public static Hash calculateTransactionsRootHash(List<Transaction> transactions) {
         MerkleTreeBuilder merkleTreeBuilder = new MerkleTreeBuilder();
 
-        if (transactions == null)
+        if (transactions == null || transactions.isEmpty())
             return merkleTreeBuilder.build().getHash();
 
         for (Transaction transaction : transactions)
@@ -125,7 +125,7 @@ public class Block {
     public static Hash calculateUnclesRootHash(List<BlockHeader> uncles) {
         MerkleTreeBuilder merkleTreeBuilder = new MerkleTreeBuilder();
 
-        if (uncles == null)
+        if (uncles == null || uncles.isEmpty())
             return merkleTreeBuilder.build().getHash();
 
         for (BlockHeader uncle : uncles)
