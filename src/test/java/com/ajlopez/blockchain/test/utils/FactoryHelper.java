@@ -339,6 +339,19 @@ public class FactoryHelper {
         return new BlockHeader(parent.getNumber() + 1, parent.getHash(), 0, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 12_000_000L, 0, null, 0, 0);
     }
 
+    public static BlockHeader createBlockHeader(Block parent, List<Transaction> transactions, List<BlockHeader> uncles) {
+        Hash transactionsHash = Block.calculateTransactionsRootHash(transactions);
+        Hash unclesHash = Block.calculateUnclesRootHash(uncles);
+        int ntransactions = transactions == null ? 0 : transactions.size();
+        int nuncles = uncles == null ? 0 : uncles.size();
+
+        Hash stateRootHash = FactoryHelper.createRandomHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+        Difficulty difficulty = Difficulty.fromUnsignedLong(42);
+
+        return new BlockHeader(parent.getNumber() + 1, parent.getHash(), ntransactions, transactionsHash, null, nuncles, unclesHash, stateRootHash, System.currentTimeMillis() / 1000, coinbase, difficulty, 12_000_000L, 0, null, 0, 0);
+    }
+
     public static BlockHeader createBlockHeader(BlockHash parentHash, long number) {
         Hash transactionsHash = FactoryHelper.createRandomHash();
         Hash stateRootHash = FactoryHelper.createRandomHash();
