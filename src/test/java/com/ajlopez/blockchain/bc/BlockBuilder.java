@@ -47,6 +47,6 @@ public class BlockBuilder {
         if (this.parent != null)
             return new Block(FactoryHelper.createBlockHeader(this.parent, null, this.uncles), this.uncles, null);
 
-        return new Block(FactoryHelper.createBlockHeader(this.number), this.uncles, null);
+        return new Block(FactoryHelper.createBlockHeader(this.number, null, this.uncles), this.uncles, null);
     }
 }
