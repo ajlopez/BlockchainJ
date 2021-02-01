@@ -42,7 +42,7 @@ public class BlockBuilder {
 
     public Block build() {
         if (this.parentHash != null)
-            return new Block(FactoryHelper.createBlockHeader(this.parentHash, this.number), this.uncles, null);
+            return new Block(FactoryHelper.createBlockHeader(this.parentHash, this.number, null, this.uncles), this.uncles, null);
 
         if (this.parent != null)
             return new Block(FactoryHelper.createBlockHeader(this.parent, null, this.uncles), this.uncles, null);
