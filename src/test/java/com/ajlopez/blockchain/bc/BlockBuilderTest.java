@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.bc;
 
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.BlockHash;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
@@ -22,6 +23,24 @@ public class BlockBuilderTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(42, result.getNumber());
+    }
+
+    @Test
+    public void createBlockWithNumberAndTransactions() {
+        List<Transaction> transactions = FactoryHelper.createTransactions(2);
+
+        BlockBuilder blockBuilder = new BlockBuilder();
+
+        Block result = blockBuilder
+                .number(42)
+                .transactions(transactions)
+                .build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(42, result.getNumber());
+        Assert.assertNotNull(result.getTransactions());
+        Assert.assertEquals(transactions.size(), result.getTransactions().size());
+        Assert.assertEquals(transactions.size(), result.getTransactionsCount());
     }
 
     @Test
