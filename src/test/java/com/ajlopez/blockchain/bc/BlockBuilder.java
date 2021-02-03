@@ -53,7 +53,7 @@ public class BlockBuilder {
             return new Block(FactoryHelper.createBlockHeader(this.parentHash, this.number, null, this.uncles), this.uncles, null);
 
         if (this.parent != null)
-            return new Block(FactoryHelper.createBlockHeader(this.parent, null, this.uncles), this.uncles, null);
+            return new Block(FactoryHelper.createBlockHeader(this.parent, this.transactions, this.uncles), this.uncles, this.transactions);
 
         return new Block(FactoryHelper.createBlockHeader(this.number, this.transactions, this.uncles), this.uncles, this.transactions);
     }

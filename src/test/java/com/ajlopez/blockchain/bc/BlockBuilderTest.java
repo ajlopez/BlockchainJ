@@ -41,6 +41,7 @@ public class BlockBuilderTest {
         Assert.assertNotNull(result.getTransactions());
         Assert.assertEquals(transactions.size(), result.getTransactions().size());
         Assert.assertEquals(transactions.size(), result.getTransactionsCount());
+        Assert.assertEquals(transactions.get(0), result.getTransactions().get(0));
     }
 
     @Test
@@ -65,6 +66,28 @@ public class BlockBuilderTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(42, result.getNumber());
         Assert.assertEquals(parent.getHash(), result.getParentHash());
+    }
+
+    @Test
+    public void createBlockWithParentAndTransactions() {
+        List<Transaction> transactions = FactoryHelper.createTransactions(2);
+
+        Block parent = new BlockBuilder().number(41).build();
+
+        BlockBuilder blockBuilder = new BlockBuilder();
+
+        Block result = blockBuilder
+                .parent(parent)
+                .transactions(transactions)
+                .build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(42, result.getNumber());
+        Assert.assertEquals(parent.getHash(), result.getParentHash());
+        Assert.assertNotNull(result.getTransactions());
+        Assert.assertEquals(transactions.size(), result.getTransactions().size());
+        Assert.assertEquals(transactions.size(), result.getTransactionsCount());
+        Assert.assertEquals(transactions.get(0), result.getTransactions().get(0));
     }
 
     @Test
