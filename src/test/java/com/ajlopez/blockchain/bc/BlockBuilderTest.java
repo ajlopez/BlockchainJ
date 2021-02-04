@@ -104,6 +104,29 @@ public class BlockBuilderTest {
     }
 
     @Test
+    public void createBlockWithParentHashAndTransactions() {
+        List<Transaction> transactions = FactoryHelper.createTransactions(2);
+
+        BlockHash parentHash = FactoryHelper.createRandomBlockHash();
+
+        BlockBuilder blockBuilder = new BlockBuilder();
+
+        Block result = blockBuilder
+                .parentHash(parentHash)
+                .transactions(transactions)
+                .number(42)
+                .build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(42, result.getNumber());
+        Assert.assertEquals(parentHash, result.getParentHash());
+        Assert.assertNotNull(result.getTransactions());
+        Assert.assertEquals(transactions.size(), result.getTransactions().size());
+        Assert.assertEquals(transactions.size(), result.getTransactionsCount());
+        Assert.assertEquals(transactions.get(0), result.getTransactions().get(0));
+    }
+
+    @Test
     public void createBlockWithUncles() {
         List<BlockHeader> uncles = new ArrayList<>();
 

@@ -50,7 +50,7 @@ public class BlockBuilder {
 
     public Block build() {
         if (this.parentHash != null)
-            return new Block(FactoryHelper.createBlockHeader(this.parentHash, this.number, null, this.uncles), this.uncles, null);
+            return new Block(FactoryHelper.createBlockHeader(this.parentHash, this.number, this.transactions, this.uncles), this.uncles, this.transactions);
 
         if (this.parent != null)
             return new Block(FactoryHelper.createBlockHeader(this.parent, this.transactions, this.uncles), this.uncles, this.transactions);
