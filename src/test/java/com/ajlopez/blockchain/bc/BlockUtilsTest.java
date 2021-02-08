@@ -67,12 +67,13 @@ public class BlockUtilsTest {
 
         Block genesis = new BlockBuilder().number(0).build();
         Block block1 = new BlockBuilder().parent(genesis).build();
-        Block uncle1 = new BlockBuilder().parent(genesis).build();
-        Block uncle2 = new BlockBuilder().parent(genesis).build();
+
+        BlockHeader uncle1 = new BlockBuilder().parent(genesis).buildHeader();
+        BlockHeader uncle2 = new BlockBuilder().parent(genesis).buildHeader();
 
         List<BlockHeader> uncles = new ArrayList<>();
-        uncles.add(uncle1.getHeader());
-        uncles.add(uncle2.getHeader());
+        uncles.add(uncle1);
+        uncles.add(uncle2);
 
         Block block2 = new BlockBuilder().parent(block1).uncles(uncles).build();
         Block block3 = new BlockBuilder().parent(block2).build();
