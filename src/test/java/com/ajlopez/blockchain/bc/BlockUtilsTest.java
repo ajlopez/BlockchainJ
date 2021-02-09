@@ -68,8 +68,9 @@ public class BlockUtilsTest {
         Block genesis = new BlockBuilder().number(0).build();
         Block block1 = new BlockBuilder().parent(genesis).build();
 
-        BlockHeader uncle1 = new BlockBuilder().parent(genesis).buildHeader();
-        BlockHeader uncle2 = new BlockBuilder().parent(genesis).buildHeader();
+        BlockBuilder unclesBuilder =  new BlockBuilder().parent(genesis);
+        BlockHeader uncle1 = unclesBuilder.buildHeader();
+        BlockHeader uncle2 = unclesBuilder.buildHeader();
 
         List<BlockHeader> uncles = new ArrayList<>();
         uncles.add(uncle1);
@@ -88,8 +89,8 @@ public class BlockUtilsTest {
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(2, result.size());
-        Assert.assertTrue(result.contains(uncle1.getHeader()));
-        Assert.assertTrue(result.contains(uncle2.getHeader()));
+        Assert.assertTrue(result.contains(uncle1));
+        Assert.assertTrue(result.contains(uncle2));
     }
 
     @Test
