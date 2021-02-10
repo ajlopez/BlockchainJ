@@ -94,6 +94,43 @@ public class BlockUtilsTest {
     }
 
     @Test
+    public void getAncestorsAllHeadersSet() throws IOException {
+        Stores stores = new MemoryStores();
+        BlockStore blockStore = stores.getBlockStore();
+
+        Block genesis = new BlockBuilder().number(0).build();
+        Block block1 = new BlockBuilder().parent(genesis).build();
+
+        BlockBuilder unclesBuilder =  new BlockBuilder().parent(genesis);
+        BlockHeader uncle1 = unclesBuilder.buildHeader();
+        BlockHeader uncle2 = unclesBuilder.buildHeader();
+
+        List<BlockHeader> uncles = new ArrayList<>();
+        uncles.add(uncle1);
+        uncles.add(uncle2);
+
+        Block block2 = new BlockBuilder().parent(block1).uncles(uncles).build();
+        Block block3 = new BlockBuilder().parent(block2).build();
+
+        blockStore.saveBlock(genesis);
+        blockStore.saveBlock(block1);
+        blockStore.saveBlock(block2);
+        blockStore.saveBlock(block3);
+
+        Set<BlockHeader> result = BlockUtils.getAncestorsAllHeaders(block3, 3, blockStore);
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+
+        Assert.assertEquals(5, result.size());
+        Assert.assertTrue(result.contains(uncle1));
+        Assert.assertTrue(result.contains(uncle2));
+        Assert.assertTrue(result.contains(genesis.getHeader()));
+        Assert.assertTrue(result.contains(block1.getHeader()));
+        Assert.assertTrue(result.contains(block2.getHeader()));
+    }
+
+    @Test
     public void getTenAncestorsSet() throws IOException {
         Stores stores = new MemoryStores();
         BlockStore blockStore = stores.getBlockStore();
