@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.test;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.BlockStore;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
@@ -38,6 +39,10 @@ public class World {
     public World() throws IOException {
         this.accountStore = new AccountStore(this.stores.getAccountTrieStore().retrieve(Trie.EMPTY_TRIE_HASH));
         this.codeStore = this.stores.getCodeStore();
+    }
+
+    public BlockStore getBlockStore() {
+        return this.stores.getBlockStore();
     }
 
     public Transaction getTransaction(String name) {
