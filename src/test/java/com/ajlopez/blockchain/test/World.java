@@ -2,6 +2,8 @@ package com.ajlopez.blockchain.test;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.BlockStore;
+import com.ajlopez.blockchain.bc.BlocksInformation;
+import com.ajlopez.blockchain.bc.BlocksInformationStore;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
@@ -43,6 +45,10 @@ public class World {
 
     public BlockStore getBlockStore() {
         return this.stores.getBlockStore();
+    }
+
+    public BlocksInformationStore getBlocksInformationStore() {
+        return this.stores.getBlocksInformationStore();
     }
 
     public Transaction getTransaction(String name) {

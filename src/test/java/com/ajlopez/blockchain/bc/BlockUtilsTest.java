@@ -164,6 +164,40 @@ public class BlockUtilsTest {
     }
 
     @Test
+    public void getPreviousAllHeadersSetUsingDslFile() throws IOException, DslException {
+        DslParser parser = DslParser.fromResource("dsl/blockchain06.txt");
+        World world = new World();
+        WorldDslProcessor processor = new WorldDslProcessor(world);
+        processor.processCommands(parser);
+
+        BlockStore blockStore = world.getBlockStore();
+        BlocksInformationStore blocksInformationStore = world.getBlocksInformationStore();
+
+        Block genesis = world.getBlock("genesis");
+        Block block1 = world.getBlock("b1");
+        Block block1b = world.getBlock("b1b");
+        Block block1c = world.getBlock("b1c");
+        Block block1d = world.getBlock("b1d");
+        Block block2 = world.getBlock("b2");
+        Block block2plus = world.getBlock("b2plus");
+        Block block3plus = world.getBlock("b3plus");
+
+        Set<BlockHeader> result = BlockUtils.getPreviousAllHeaders(block3plus, 3, blockStore, blocksInformationStore);
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+
+        Assert.assertEquals(7, result.size());
+        Assert.assertTrue(result.contains(block2plus.getHeader()));
+        Assert.assertTrue(result.contains(block1.getHeader()));
+        Assert.assertTrue(result.contains(genesis.getHeader()));
+        Assert.assertTrue(result.contains(block1b.getHeader()));
+        Assert.assertTrue(result.contains(block1c.getHeader()));
+        Assert.assertTrue(result.contains(block1d.getHeader()));
+        Assert.assertTrue(result.contains(block2.getHeader()));
+    }
+
+    @Test
     public void getTenAncestorsSet() throws IOException {
         Stores stores = new MemoryStores();
         BlockStore blockStore = stores.getBlockStore();

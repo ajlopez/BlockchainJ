@@ -51,6 +51,25 @@ public class BlockUtils {
         return headers;
     }
 
+    public static Set<BlockHeader> getPreviousAllHeaders(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
+        Set<BlockHeader> headers = new HashSet<>();
+        BlockHash parentHash = block.getParentHash();
+
+        for (int k = 0; k < depth; k++) {
+            long height = block.getNumber() - k - 1;
+            BlocksInformation blocksInformation = blocksInformationStore.get(block.getNumber() - k - 1);
+
+            for (BlockInformation bi : blocksInformation.getBlockInformationList()) {
+                Block b = blockStore.getBlock(bi.getBlockHash());
+
+                headers.add(b.getHeader());
+                headers.addAll(b.getUncles());
+            }
+        }
+
+        return headers;
+    }
+
     public static Set<Block> getAncestorsBlocks(Block block, int depth, BlockStore blockStore) throws IOException {
         Set<Block> ancestors = new HashSet<>();
         BlockHash parentHash = block.getParentHash();
