@@ -53,10 +53,8 @@ public class BlockUtils {
 
     public static Set<BlockHeader> getPreviousAllHeaders(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
         Set<BlockHeader> headers = new HashSet<>();
-        BlockHash parentHash = block.getParentHash();
 
         for (int k = 0; k < depth; k++) {
-            long height = block.getNumber() - k - 1;
             BlocksInformation blocksInformation = blocksInformationStore.get(block.getNumber() - k - 1);
 
             for (BlockInformation bi : blocksInformation.getBlockInformationList()) {
@@ -68,6 +66,16 @@ public class BlockUtils {
         }
 
         return headers;
+    }
+
+    // TODO only include headers with parent in the blockchain at depth >= block - depth - 1
+    public static Set<BlockHeader> getCandidateUncles(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
+        Set<BlockHeader> candidateUncles = getPreviousAllHeaders(block, depth, blockStore, blocksInformationStore);
+        Set<BlockHeader> ancestorsHeaders = getAncestorsAllHeaders(block, depth, blockStore);
+
+        candidateUncles.removeAll(ancestorsHeaders);
+
+        return candidateUncles;
     }
 
     public static Set<Block> getAncestorsBlocks(Block block, int depth, BlockStore blockStore) throws IOException {
