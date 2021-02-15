@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.core.types.BlockHash;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by ajlopez on 19/01/2021.
@@ -68,14 +69,24 @@ public class BlockUtils {
         return headers;
     }
 
-    // TODO only include headers with parent in the blockchain at depth >= block - depth - 1
+    // TODO test discarding candidate uncles with parent not in blockchain
     public static Set<BlockHeader> getCandidateUncles(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
         Set<BlockHeader> candidateUncles = getPreviousAllHeaders(block, depth, blockStore, blocksInformationStore);
-        Set<BlockHeader> ancestorsHeaders = getAncestorsAllHeaders(block, depth, blockStore);
+        Set<BlockHeader> ancestorsHeaders = getAncestorsAllHeaders(block, depth + 1, blockStore);
 
         candidateUncles.removeAll(ancestorsHeaders);
 
-        return candidateUncles;
+        Set<BlockHash> ancestorsHashes = ancestorsHeaders
+                .stream()
+                .map(bh -> bh.getHash())
+                .collect(Collectors.toSet());
+
+        Set<BlockHeader> uncles = candidateUncles
+                .stream()
+                .filter(u -> ancestorsHashes.contains(u.getParentHash()))
+                .collect(Collectors.toSet());
+
+        return uncles;
     }
 
     public static Set<Block> getAncestorsBlocks(Block block, int depth, BlockStore blockStore) throws IOException {
