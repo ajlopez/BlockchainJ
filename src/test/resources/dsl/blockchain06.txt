@@ -26,14 +26,21 @@ block
 end
 
 block
+    name=b2b
+    parent=b1b
+end
+
+block
     name=b2plus
     uncles=b1b,b1c
     parent=b1
 end
 
-process b2
-process b2plus
 process b1
+process b1b
+process b2
+process b2b
+process b2plus
 
 assert blockchain.bestBlock.number == b2plus.number
 assert b2plus.number == blockchain.bestBlock.number

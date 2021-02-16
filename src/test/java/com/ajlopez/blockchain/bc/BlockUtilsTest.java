@@ -207,13 +207,8 @@ public class BlockUtilsTest {
         BlockStore blockStore = world.getBlockStore();
         BlocksInformationStore blocksInformationStore = world.getBlocksInformationStore();
 
-        Block genesis = world.getBlock("genesis");
-        Block block1 = world.getBlock("b1");
-        Block block1b = world.getBlock("b1b");
-        Block block1c = world.getBlock("b1c");
         Block block1d = world.getBlock("b1d");
         Block block2 = world.getBlock("b2");
-        Block block2plus = world.getBlock("b2plus");
         Block block3plus = world.getBlock("b3plus");
 
         Set<BlockHeader> result = BlockUtils.getCandidateUncles(block3plus, 3, blockStore, blocksInformationStore);

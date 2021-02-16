@@ -72,9 +72,10 @@ public class BlockUtils {
     // TODO test discarding candidate uncles with parent not in blockchain
     public static Set<BlockHeader> getCandidateUncles(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
         Set<BlockHeader> candidateUncles = getPreviousAllHeaders(block, depth, blockStore, blocksInformationStore);
-        Set<BlockHeader> ancestorsHeaders = getAncestorsAllHeaders(block, depth + 1, blockStore);
+        Set<BlockHeader> ancestorsAllHeaders = getAncestorsAllHeaders(block, depth + 1, blockStore);
+        Set<BlockHeader> ancestorsHeaders = getAncestorsHeaders(block, depth + 1, blockStore);
 
-        candidateUncles.removeAll(ancestorsHeaders);
+        candidateUncles.removeAll(ancestorsAllHeaders);
 
         Set<BlockHash> ancestorsHashes = ancestorsHeaders
                 .stream()
