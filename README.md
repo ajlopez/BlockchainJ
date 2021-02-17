@@ -192,6 +192,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Transaction Fee Mechanism Design for the Ethereum Blockchain: An Economic Analysis of EIP-1559](http://timroughgarden.org/papers/eip1559.pdf)
 - [The Burden of Proof(s): Code Merkleization](https://blog.ethereum.org/2020/11/30/the-1x-files-code-merkleization/)
 - [List of EVM features potentially worth removing](https://hackmd.io/@HWeNw8hNRimMm2m2GH56Cw/evm_feature_removing)
+- [Ethereum JSON RPC Hex Encoding](https://eth.wiki/json-rpc/API#hex-value-encoding)
 
 ## To Do
 
