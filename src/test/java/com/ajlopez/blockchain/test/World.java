@@ -6,6 +6,7 @@ import com.ajlopez.blockchain.bc.BlocksInformation;
 import com.ajlopez.blockchain.bc.BlocksInformationStore;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Hash;
@@ -33,6 +34,7 @@ public class World {
 
     private final Map<String, Address> accounts = new HashMap<>();
     private final Map<String, Block> blocks = new HashMap<>();
+    private final Map<String, BlockHeader> blockHeaders = new HashMap<>();
     private final Map<String, Transaction> transactions = new HashMap<>();
 
     private BlockChain blockChain;
@@ -70,6 +72,19 @@ public class World {
 
     public void setTransaction(String name, Transaction transaction) {
         this.transactions.put(name, transaction);
+    }
+
+    public BlockHeader getBlockHeader(String name) throws IOException {
+        BlockHeader blockHeader = this.blockHeaders.get(name);
+
+        if (blockHeader != null)
+            return blockHeader;
+
+        return blockHeader;
+    }
+
+    public void setBlockHeader(String name, BlockHeader blockHeader) {
+        this.blockHeaders.put(name, blockHeader);
     }
 
     public Block getBlock(String name) throws IOException {

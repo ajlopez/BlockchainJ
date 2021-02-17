@@ -3,12 +3,14 @@ package com.ajlopez.blockchain.test;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.encoding.AccountEncoder;
 import com.ajlopez.blockchain.encoding.BlockEncoder;
+import com.ajlopez.blockchain.encoding.BlockHeaderEncoder;
 import com.ajlopez.blockchain.encoding.TransactionEncoder;
 import com.ajlopez.blockchain.processors.BlockProcessor;
 import com.ajlopez.blockchain.state.Trie;
@@ -128,7 +130,6 @@ public class WorldTest {
         Assert.assertNull(world.getBlock("blk1"));
     }
 
-
     @Test
     public void getUnknownBlocks() throws IOException {
         World world = new World();
@@ -175,6 +176,26 @@ public class WorldTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(block1, result.get(0));
         Assert.assertEquals(block2, result.get(1));
+    }
+
+    @Test
+    public void getUnknownBlockHeader() throws IOException {
+        World world = new World();
+
+        Assert.assertNull(world.getBlockHeader("h1"));
+    }
+
+    @Test
+    public void setAndGetBlockHeader() throws IOException {
+        World world = new World();
+        BlockHeader blockHeader = FactoryHelper.createBlockHeader(1);
+
+        world.setBlockHeader("h1", blockHeader);
+
+        BlockHeader result = world.getBlockHeader("h1");
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(BlockHeaderEncoder.encode(blockHeader), BlockHeaderEncoder.encode(result));
     }
 
     @Test
