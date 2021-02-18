@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.test.dsl;
 
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
@@ -244,6 +245,25 @@ public class DslCommandTest {
         Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
         Assert.assertNotNull(result.getTransactions());
         Assert.assertTrue(result.getTransactions().isEmpty());
+    }
+
+    @Test
+    public void executeBlockHeaderCommand() throws IOException, DslException {
+        String verb = "header";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("blk1");
+        arguments.add("genesis");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+
+        command.execute(world);
+
+        BlockHeader result = world.getBlockHeader("blk1");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(1, result.getNumber());
+        Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
     }
 
     @Test

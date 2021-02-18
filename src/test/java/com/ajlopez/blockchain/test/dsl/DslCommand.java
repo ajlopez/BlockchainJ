@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test.dsl;
 
+import com.ajlopez.blockchain.bc.BlockBuilder;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
@@ -56,6 +57,8 @@ public class DslCommand {
             executeAccount(world);
         else if ("block".equals(this.verb))
             executeBlock(world);
+        else if ("header".equals(this.verb))
+            executeBlockHeader(world);
         else if ("transaction".equals(this.verb))
             executeTransaction(world);
         else if ("connect".equals(this.verb))
@@ -125,6 +128,24 @@ public class DslCommand {
         Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), transactions, uncles);
 
         world.setBlock(name, block);
+    }
+
+    private void executeBlockHeader(World world) throws IOException {
+        String name = this.getName(0, "name");
+        String parentName = this.getName(1, "parent");
+
+        if (parentName == null)
+            parentName = "genesis";
+
+        // TODO parent could be a header
+        Block parent = world.getBlock(parentName);
+
+        // TODO process uncles
+
+        BlockHeader blockHeader = new BlockBuilder()
+                .parent(parent).buildHeader();
+
+        world.setBlockHeader(name, blockHeader);
     }
 
     private void executeAccount(World world) throws IOException {
