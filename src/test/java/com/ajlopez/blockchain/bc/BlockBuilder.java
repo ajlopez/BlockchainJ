@@ -17,6 +17,7 @@ import java.util.List;
 public class BlockBuilder {
     private long number;
     private Block parent;
+    private BlockHeader parentHeader;
     private BlockHash parentHash;
     private List<Transaction> transactions;
     private List<BlockHeader> uncles;
@@ -29,6 +30,12 @@ public class BlockBuilder {
 
     public BlockBuilder parent(Block parent) {
         this.parent = parent;
+
+        return this;
+    }
+
+    public BlockBuilder parentHeader(BlockHeader parentHeader) {
+        this.parentHeader = parentHeader;
 
         return this;
     }
@@ -62,6 +69,10 @@ public class BlockBuilder {
         if (this.parent != null) {
             parentHashToUse = this.parent.getHash();
             numberToUse = this.parent.getNumber() + 1;
+        }
+        else if (this.parentHeader != null) {
+            parentHashToUse = this.parentHeader.getHash();
+            numberToUse = this.parentHeader.getNumber() + 1;
         }
         else {
             numberToUse = this.number;

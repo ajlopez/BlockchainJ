@@ -69,6 +69,19 @@ public class BlockBuilderTest {
     }
 
     @Test
+    public void createBlockWithParentHeader() {
+        BlockHeader parentHeader = new BlockBuilder().number(41).buildHeader();
+
+        BlockBuilder blockBuilder = new BlockBuilder();
+
+        Block result = blockBuilder.parentHeader(parentHeader).build();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(42, result.getNumber());
+        Assert.assertEquals(parentHeader.getHash(), result.getParentHash());
+    }
+
+    @Test
     public void createBlockWithParentAndTransactions() {
         List<Transaction> transactions = FactoryHelper.createTransactions(2);
 
