@@ -137,13 +137,21 @@ public class DslCommand {
         if (parentName == null)
             parentName = "genesis";
 
+        // TODO process uncles
+
+        BlockHeader blockHeader;
+
         // TODO parent could be a header
         Block parent = world.getBlock(parentName);
 
-        // TODO process uncles
-
-        BlockHeader blockHeader = new BlockBuilder()
-                .parent(parent).buildHeader();
+        if (parent != null)
+            blockHeader = new BlockBuilder()
+                .parent(parent)
+                .buildHeader();
+        else
+            blockHeader = new BlockBuilder()
+                    .parentHeader(world.getBlockHeader(parentName))
+                    .buildHeader();
 
         world.setBlockHeader(name, blockHeader);
     }

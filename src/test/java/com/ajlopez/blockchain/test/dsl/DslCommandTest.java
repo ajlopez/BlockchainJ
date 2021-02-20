@@ -1,5 +1,6 @@
 package com.ajlopez.blockchain.test.dsl;
 
+import com.ajlopez.blockchain.bc.BlockBuilder;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
@@ -264,6 +265,28 @@ public class DslCommandTest {
         Assert.assertNotNull(result);
         Assert.assertEquals(1, result.getNumber());
         Assert.assertEquals(world.getBlock("genesis").getHash(), result.getParentHash());
+    }
+
+    @Test
+    public void executeBlockHeaderCommandUsingAHeaderAsParent() throws IOException, DslException {
+        BlockHeader h1 = new BlockBuilder().number(1).buildHeader();
+
+        String verb = "header";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("h2");
+        arguments.add("h1");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+        world.setBlockHeader("h1", h1);
+
+        command.execute(world);
+
+        BlockHeader result = world.getBlockHeader("h2");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.getNumber());
+        Assert.assertEquals(h1.getHash(), result.getParentHash());
     }
 
     @Test
