@@ -193,6 +193,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [The Burden of Proof(s): Code Merkleization](https://blog.ethereum.org/2020/11/30/the-1x-files-code-merkleization/)
 - [List of EVM features potentially worth removing](https://hackmd.io/@HWeNw8hNRimMm2m2GH56Cw/evm_feature_removing)
 - [Ethereum JSON RPC Hex Encoding](https://eth.wiki/json-rpc/API#hex-value-encoding)
+- [Why it's so important to go stateless](https://dankradfeist.de/ethereum/2021/02/14/why-stateless.html)
+- [Verkle trie for Eth1 state](https://notes.ethereum.org/@ZuSZK8r2TgO7eFShwj4hVg/H1XE_w30w)
+- [Ethereum State Scale Management Proposals (Part 1)](https://trusple.network/2021021511313.html)
 
 ## To Do
 
