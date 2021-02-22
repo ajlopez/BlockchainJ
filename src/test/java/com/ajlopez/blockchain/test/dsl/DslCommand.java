@@ -137,7 +137,13 @@ public class DslCommand {
         if (parentName == null)
             parentName = "genesis";
 
-        // TODO process uncles
+        List<String> uncleNames = this.getNames(2, "uncles");
+
+        List<Block> uncleBlocks = world.getBlocks(uncleNames);
+        List<BlockHeader> uncles = new ArrayList<>();
+
+        for (Block uncleBlock : uncleBlocks)
+            uncles.add(uncleBlock.getHeader());
 
         BlockHeader blockHeader;
 
@@ -147,11 +153,13 @@ public class DslCommand {
         if (parent != null)
             blockHeader = new BlockBuilder()
                 .parent(parent)
+                .uncles(uncles)
                 .buildHeader();
         else
             blockHeader = new BlockBuilder()
-                    .parentHeader(world.getBlockHeader(parentName))
-                    .buildHeader();
+                .parentHeader(world.getBlockHeader(parentName))
+                .uncles(uncles)
+                .buildHeader();
 
         world.setBlockHeader(name, blockHeader);
     }
