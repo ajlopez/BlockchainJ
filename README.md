@@ -196,6 +196,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Why it's so important to go stateless](https://dankradfeist.de/ethereum/2021/02/14/why-stateless.html)
 - [Verkle trie for Eth1 state](https://notes.ethereum.org/@ZuSZK8r2TgO7eFShwj4hVg/H1XE_w30w)
 - [Ethereum State Scale Management Proposals (Part 1)](https://trusple.network/2021021511313.html)
+- [Can we do Fast Crypto in EVM?](https://notes.ethereum.org/@axic/evm384)
 
 ## To Do
 
