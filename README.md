@@ -197,6 +197,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Verkle trie for Eth1 state](https://notes.ethereum.org/@ZuSZK8r2TgO7eFShwj4hVg/H1XE_w30w)
 - [Ethereum State Scale Management Proposals (Part 1)](https://trusple.network/2021021511313.html)
 - [Can we do Fast Crypto in EVM?](https://notes.ethereum.org/@axic/evm384)
+- [EIP Draft: Replace alt_bn128 Precompiles With EVM Bytecode](https://notes.ethereum.org/@poemm/Pre-EIP-deprecate-alt_bn128)
+- [EIP Draft: EVM384 and Friends](https://notes.ethereum.org/@poemm/eip_draft_evm_modular_arithmetic_extensions)
 
 ## To Do
 
