@@ -114,6 +114,19 @@ public class World {
         return result;
     }
 
+    public List<BlockHeader> getBlockHeaders(List<String> names) throws IOException {
+        List<BlockHeader> result = new ArrayList<>();
+
+        for (String name : names) {
+            Block block = this.getBlock(name);
+
+            if (block != null)
+                result.add(block.getHeader());
+        }
+
+        return result;
+    }
+
     public void setBlock(String name, Block block) {
         this.blocks.put(name, block);
     }

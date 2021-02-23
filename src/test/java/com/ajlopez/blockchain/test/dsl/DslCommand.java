@@ -119,11 +119,7 @@ public class DslCommand {
 
         Block parent = world.getBlock(parentName);
         List<Transaction> transactions = world.getTransactions(transactionNames);
-        List<Block> uncleBlocks = world.getBlocks(uncleNames);
-        List<BlockHeader> uncles = new ArrayList<>();
-
-        for (Block uncleBlock : uncleBlocks)
-            uncles.add(uncleBlock.getHeader());
+        List<BlockHeader> uncles = world.getBlockHeaders(uncleNames);
 
         Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), transactions, uncles);
 
@@ -139,11 +135,8 @@ public class DslCommand {
 
         List<String> uncleNames = this.getNames(2, "uncles");
 
-        List<Block> uncleBlocks = world.getBlocks(uncleNames);
-        List<BlockHeader> uncles = new ArrayList<>();
-
-        for (Block uncleBlock : uncleBlocks)
-            uncles.add(uncleBlock.getHeader());
+        // TODO uncles could be headers
+        List<BlockHeader> uncles = world.getBlockHeaders(uncleNames);
 
         BlockHeader blockHeader;
 
