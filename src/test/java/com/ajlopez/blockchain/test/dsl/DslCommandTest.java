@@ -318,6 +318,34 @@ public class DslCommandTest {
     }
 
     @Test
+    public void executeBlockHeaderCommandWithUnclesFromBlocksAndHeaders() throws IOException, DslException {
+        BlockHeader h1 = new BlockBuilder().number(1).buildHeader();
+        Block b1a = new BlockBuilder().number(1).build();
+        Block b1b = new BlockBuilder().number(1).build();
+
+        String verb = "header";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("h2");
+        arguments.add("h1");
+        arguments.add("b1a,h1b");
+
+        DslCommand command = new DslCommand(verb, arguments);
+        World world = new World();
+        world.setBlockHeader("h1", h1);
+        world.setBlock("b1a", b1a);
+        world.setBlockHeader("h1b", b1b.getHeader());
+
+        command.execute(world);
+
+        BlockHeader result = world.getBlockHeader("h2");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.getNumber());
+        Assert.assertEquals(h1.getHash(), result.getParentHash());
+        Assert.assertEquals(2, result.getUnclesCount());
+    }
+
+    @Test
     public void executeBlockCommandWithTransactions() throws IOException, DslException {
         String verb = "block";
         List<String> arguments = new ArrayList<>();

@@ -120,8 +120,15 @@ public class World {
         for (String name : names) {
             Block block = this.getBlock(name);
 
-            if (block != null)
+            if (block != null) {
                 result.add(block.getHeader());
+                continue;
+            }
+
+            BlockHeader blockHeader = this.getBlockHeader(name);
+
+            if (blockHeader != null)
+                result.add(blockHeader);
         }
 
         return result;
