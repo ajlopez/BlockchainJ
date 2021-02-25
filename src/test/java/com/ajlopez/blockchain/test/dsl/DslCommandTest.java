@@ -476,6 +476,39 @@ public class DslCommandTest {
     }
 
     @Test
+    public void executeBlockCommandUsingNamedArgumentsWithUnclesFromBlocksAndHeaders() throws IOException, DslException {
+        World world = new World();
+        Block genesis = world.getBlock("genesis");
+        Block block1 = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        Block block1b = FactoryHelper.createBlock(genesis, FactoryHelper.createRandomAddress(), 0);
+        BlockHeader uncle1c = new BlockBuilder().parent(genesis).buildHeader();
+
+        world.setBlock("blk1", block1);
+        world.setBlock("blk1b", block1b);
+        world.setBlockHeader("u1c", uncle1c);
+
+        String verb = "block";
+        List<String> arguments = new ArrayList<>();
+        arguments.add("name=blk2");
+        arguments.add("parent=blk1");
+        arguments.add("uncles=blk1b,u1c");
+
+        DslCommand command = new DslCommand(verb, arguments);
+
+        command.execute(world);
+
+        Block result = world.getBlock("blk2");
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.getNumber());
+        Assert.assertEquals(world.getBlock("blk1").getHash(), result.getParentHash());
+        Assert.assertNotNull(result.getUncles());
+        Assert.assertEquals(2, result.getUncles().size());
+        Assert.assertEquals(block1b.getHash(), result.getUncles().get(0).getHash());
+        Assert.assertEquals(uncle1c.getHash(), result.getUncles().get(1).getHash());
+    }
+
+    @Test
     public void executeConnectBlock() throws IOException, DslException {
         World world = new World();
         Block genesis = world.getBlock("genesis");
