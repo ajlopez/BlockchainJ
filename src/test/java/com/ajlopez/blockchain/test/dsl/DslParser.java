@@ -10,6 +10,8 @@ import java.util.StringTokenizer;
  */
 public class DslParser {
     private final BufferedReader reader;
+    private final DslCommandFactory commandFactory = new DslCommandFactory();
+
     public static DslParser fromResource(String resourceName) throws FileNotFoundException {
         ClassLoader classLoader = DslParser.class.getClassLoader();
         File file = new File(classLoader.getResource(resourceName).getFile());
@@ -52,7 +54,7 @@ public class DslParser {
             }
         }
 
-        return new DslCommand(verb, arguments);
+        return this.commandFactory.createCommand(verb, arguments);
     }
 
     private String readSubline() throws IOException {
