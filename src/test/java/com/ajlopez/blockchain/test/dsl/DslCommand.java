@@ -25,6 +25,10 @@ public class DslCommand {
     private final List<String> arguments = new ArrayList<>();
     private final Map<String, String> namedArguments = new HashMap<>();
 
+    public static DslCommand createCommand(String verb, List<String> arguments) {
+        return new DslCommand(verb, arguments);
+    }
+
     public DslCommand(String verb, List<String> arguments) {
         this.verb = verb;
 
