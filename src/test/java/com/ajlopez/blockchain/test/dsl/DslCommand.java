@@ -9,6 +9,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.World;
+import com.ajlopez.blockchain.test.dsl.commands.DslAccountCommand;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
@@ -26,6 +27,9 @@ public class DslCommand {
     private final Map<String, String> namedArguments = new HashMap<>();
 
     public static DslCommand createCommand(String verb, List<String> arguments) {
+        if ("account".equals(verb))
+            return new DslAccountCommand(arguments);
+
         return new DslCommand(verb, arguments);
     }
 
@@ -57,9 +61,7 @@ public class DslCommand {
     public Map<String, String> getNamedArguments() { return this.namedArguments; }
 
     public void execute(World world) throws IOException, DslException {
-        if ("account".equals(this.verb))
-            executeAccount(world);
-        else if ("block".equals(this.verb))
+        if ("block".equals(this.verb))
             executeBlock(world);
         else if ("header".equals(this.verb))
             executeBlockHeader(world);
@@ -180,7 +182,7 @@ public class DslCommand {
         world.setAccount(name, account);
     }
 
-    private String getName(int position, String name) {
+    public String getName(int position, String name) {
         if (position >= 0 && this.arguments.size() > position)
             return this.arguments.get(position);
 
@@ -212,7 +214,7 @@ public class DslCommand {
         return result;
     }
 
-    private Coin getCoin(int position, String name) {
+    public Coin getCoin(int position, String name) {
         if (position >= 0 && this.arguments.size() > position)
             return new Coin(new BigInteger(this.arguments.get(position)));
 
@@ -224,7 +226,7 @@ public class DslCommand {
         return new Coin(new BigInteger(value));
     }
 
-    private long getLongInteger(int position, String name) {
+    public long getLongInteger(int position, String name) {
         if (position >= 0 && this.arguments.size() > position)
             return Long.parseLong(this.arguments.get(position));
 

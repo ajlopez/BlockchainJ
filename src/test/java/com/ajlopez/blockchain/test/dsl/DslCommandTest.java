@@ -74,7 +74,7 @@ public class DslCommandTest {
         arguments.add("1000000");
         arguments.add("42");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -95,7 +95,7 @@ public class DslCommandTest {
         arguments.add("nonce=42");
         arguments.add("code=01020304");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -122,7 +122,7 @@ public class DslCommandTest {
         arguments.add("balance=1000000");
         arguments.add("nonce=42");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -141,7 +141,7 @@ public class DslCommandTest {
         arguments.add("name=acc1");
         arguments.add("balance=1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -159,7 +159,7 @@ public class DslCommandTest {
         List<String> arguments = new ArrayList<>();
         arguments.add("name=acc1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
