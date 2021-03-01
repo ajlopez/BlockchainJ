@@ -1,17 +1,15 @@
 package com.ajlopez.blockchain.test.dsl;
 
 import com.ajlopez.blockchain.bc.BlockBuilder;
-import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.dsl.commands.DslAccountCommand;
+import com.ajlopez.blockchain.test.dsl.commands.DslBlockCommand;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
-import com.ajlopez.blockchain.utils.HashUtils;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.io.IOException;
@@ -29,6 +27,9 @@ public class DslCommand {
     public static DslCommand createCommand(String verb, List<String> arguments) {
         if ("account".equals(verb))
             return new DslAccountCommand(arguments);
+
+        if ("block".equals(verb))
+            return new DslBlockCommand(arguments);
 
         return new DslCommand(verb, arguments);
     }
@@ -61,9 +62,7 @@ public class DslCommand {
     public Map<String, String> getNamedArguments() { return this.namedArguments; }
 
     public void execute(World world) throws IOException, DslException {
-        if ("block".equals(this.verb))
-            executeBlock(world);
-        else if ("header".equals(this.verb))
+        if ("header".equals(this.verb))
             executeBlockHeader(world);
         else if ("transaction".equals(this.verb))
             executeTransaction(world);
@@ -113,25 +112,6 @@ public class DslCommand {
         world.setTransaction(name, transaction);
     }
 
-    private void executeBlock(World world) throws IOException {
-        String name = this.getName(0, "name");
-        String parentName = this.getName(1, "parent");
-
-        if (parentName == null)
-            parentName = "genesis";
-
-        List<String> transactionNames = this.getNames(2, "transactions");
-        List<String> uncleNames = this.getNames(3, "uncles");
-
-        Block parent = world.getBlock(parentName);
-        List<Transaction> transactions = world.getTransactions(transactionNames);
-        List<BlockHeader> uncles = world.getBlockHeaders(uncleNames);
-
-        Block block = FactoryHelper.createBlock(parent, FactoryHelper.createRandomAddress(), transactions, uncles);
-
-        world.setBlock(name, block);
-    }
-
     private void executeBlockHeader(World world) throws IOException {
         String name = this.getName(0, "name");
         String parentName = this.getName(1, "parent");
@@ -163,25 +143,6 @@ public class DslCommand {
         world.setBlockHeader(name, blockHeader);
     }
 
-    private void executeAccount(World world) throws IOException {
-        String name = this.getName(0, "name");
-        Coin balance = this.getCoin(1, "balance");
-        long nonce = this.getLongInteger(2, "nonce");
-        String bytecodes = this.getName(3, "code");
-        Hash codeHash = null;
-        byte[] code = null;
-
-        if (bytecodes != null) {
-            code = HexUtils.hexStringToBytes(bytecodes);
-            codeHash = HashUtils.calculateHash(code);
-            world.setCode(codeHash, code);
-        }
-
-        Account account = new Account(balance, nonce, code != null ? code.length : 0, codeHash, null);
-
-        world.setAccount(name, account);
-    }
-
     public String getName(int position, String name) {
         if (position >= 0 && this.arguments.size() > position)
             return this.arguments.get(position);
@@ -198,7 +159,7 @@ public class DslCommand {
         return world.getAccountAddress(argument);
     }
 
-    private List<String> getNames(int position, String name) {
+    public List<String> getNames(int position, String name) {
         String text = this.getName(position, name);
 
         if (text == null)

@@ -234,7 +234,7 @@ public class DslCommandTest {
         arguments.add("blk1");
         arguments.add("genesis");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -356,7 +356,7 @@ public class DslCommandTest {
         Transaction transaction1 = FactoryHelper.createTransaction(1000);
         Transaction transaction2 = FactoryHelper.createTransaction(2000);
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         world.setTransaction("tx1", transaction1);
@@ -381,7 +381,7 @@ public class DslCommandTest {
         List<String> arguments = new ArrayList<>();
         arguments.add("blk1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -400,7 +400,7 @@ public class DslCommandTest {
         arguments.add("name=blk1");
         arguments.add("parent=genesis");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -423,7 +423,7 @@ public class DslCommandTest {
         Transaction transaction1 = FactoryHelper.createTransaction(1000);
         Transaction transaction2 = FactoryHelper.createTransaction(2000);
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         world.setTransaction("tx1", transaction1);
@@ -460,7 +460,7 @@ public class DslCommandTest {
         arguments.add("parent=blk1");
         arguments.add("uncles=blk1b,blk1c");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
 
         command.execute(world);
 
@@ -493,7 +493,7 @@ public class DslCommandTest {
         arguments.add("parent=blk1");
         arguments.add("uncles=blk1b,u1c");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
 
         command.execute(world);
 
