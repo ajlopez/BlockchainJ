@@ -3,13 +3,12 @@ package com.ajlopez.blockchain.test.dsl;
 import com.ajlopez.blockchain.bc.BlockBuilder;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
-import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.dsl.commands.DslAccountCommand;
 import com.ajlopez.blockchain.test.dsl.commands.DslBlockCommand;
-import com.ajlopez.blockchain.test.utils.FactoryHelper;
+import com.ajlopez.blockchain.test.dsl.commands.DslTransactionCommand;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.io.IOException;
@@ -30,6 +29,9 @@ public class DslCommand {
 
         if ("block".equals(verb))
             return new DslBlockCommand(arguments);
+
+        if ("transaction".equals(verb))
+            return new DslTransactionCommand(arguments);
 
         return new DslCommand(verb, arguments);
     }
@@ -64,8 +66,6 @@ public class DslCommand {
     public void execute(World world) throws IOException, DslException {
         if ("header".equals(this.verb))
             executeBlockHeader(world);
-        else if ("transaction".equals(this.verb))
-            executeTransaction(world);
         else if ("connect".equals(this.verb))
             executeConnect(world);
         else if ("process".equals(this.verb))
@@ -98,18 +98,6 @@ public class DslCommand {
 
         if (Boolean.FALSE.equals(expression.evaluate(world)))
             throw new DslException(String.format("unsatisfied assertion '%s'", this.argumentsToString()));
-    }
-
-    private void executeTransaction(World world) {
-        String name = this.getName(0, "name");
-        Address from = this.getAddress(world, 1, "from");
-        Address to = this.getAddress(world, 2, "to");
-        Coin value = this.getCoin(3, "value");
-        long nonce = this.getLongInteger(4, "nonce");
-
-        Transaction transaction = new Transaction(from, to, value, nonce, null, 6000000, Coin.ZERO);
-
-        world.setTransaction(name, transaction);
     }
 
     private void executeBlockHeader(World world) throws IOException {
@@ -150,7 +138,7 @@ public class DslCommand {
         return this.namedArguments.get(name);
     }
 
-    private Address getAddress(World world, int position, String name) {
+    public Address getAddress(World world, int position, String name) {
         String argument = this.getName(position, name);
 
         if (argument.startsWith("0x")  || argument.startsWith("0X"))

@@ -186,7 +186,7 @@ public class DslCommandTest {
         arguments.add("10000");
         arguments.add("1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -213,7 +213,7 @@ public class DslCommandTest {
         arguments.add("value=10000");
         arguments.add("nonce=1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
