@@ -255,7 +255,7 @@ public class DslCommandTest {
         arguments.add("blk1");
         arguments.add("genesis");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -276,7 +276,7 @@ public class DslCommandTest {
         arguments.add("h2");
         arguments.add("h1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
         world.setBlockHeader("h1", h1);
 
@@ -301,7 +301,7 @@ public class DslCommandTest {
         arguments.add("h1");
         arguments.add("b1a,b1b");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
         world.setBlockHeader("h1", h1);
         world.setBlock("b1a", b1a);
@@ -329,7 +329,7 @@ public class DslCommandTest {
         arguments.add("h1");
         arguments.add("b1a,h1b");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
         world.setBlockHeader("h1", h1);
         world.setBlock("b1a", b1a);

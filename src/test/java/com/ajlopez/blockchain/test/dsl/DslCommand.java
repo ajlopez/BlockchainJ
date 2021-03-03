@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.dsl.commands.DslAccountCommand;
 import com.ajlopez.blockchain.test.dsl.commands.DslBlockCommand;
+import com.ajlopez.blockchain.test.dsl.commands.DslBlockHeaderCommand;
 import com.ajlopez.blockchain.test.dsl.commands.DslTransactionCommand;
 import com.ajlopez.blockchain.utils.HexUtils;
 
@@ -32,6 +33,9 @@ public class DslCommand {
 
         if ("transaction".equals(verb))
             return new DslTransactionCommand(arguments);
+
+        if ("header".equals(verb))
+            return new DslBlockHeaderCommand(arguments);
 
         return new DslCommand(verb, arguments);
     }
@@ -64,9 +68,7 @@ public class DslCommand {
     public Map<String, String> getNamedArguments() { return this.namedArguments; }
 
     public void execute(World world) throws IOException, DslException {
-        if ("header".equals(this.verb))
-            executeBlockHeader(world);
-        else if ("connect".equals(this.verb))
+        if ("connect".equals(this.verb))
             executeConnect(world);
         else if ("process".equals(this.verb))
             executeProcess(world);
@@ -98,37 +100,6 @@ public class DslCommand {
 
         if (Boolean.FALSE.equals(expression.evaluate(world)))
             throw new DslException(String.format("unsatisfied assertion '%s'", this.argumentsToString()));
-    }
-
-    private void executeBlockHeader(World world) throws IOException {
-        String name = this.getName(0, "name");
-        String parentName = this.getName(1, "parent");
-
-        if (parentName == null)
-            parentName = "genesis";
-
-        List<String> uncleNames = this.getNames(2, "uncles");
-
-        // TODO uncles could be headers
-        List<BlockHeader> uncles = world.getBlockHeaders(uncleNames);
-
-        BlockHeader blockHeader;
-
-        // TODO parent could be a header
-        Block parent = world.getBlock(parentName);
-
-        if (parent != null)
-            blockHeader = new BlockBuilder()
-                .parent(parent)
-                .uncles(uncles)
-                .buildHeader();
-        else
-            blockHeader = new BlockBuilder()
-                .parentHeader(world.getBlockHeader(parentName))
-                .uncles(uncles)
-                .buildHeader();
-
-        world.setBlockHeader(name, blockHeader);
     }
 
     public String getName(int position, String name) {
