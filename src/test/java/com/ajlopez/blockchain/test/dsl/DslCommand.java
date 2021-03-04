@@ -6,10 +6,7 @@ import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.World;
-import com.ajlopez.blockchain.test.dsl.commands.DslAccountCommand;
-import com.ajlopez.blockchain.test.dsl.commands.DslBlockCommand;
-import com.ajlopez.blockchain.test.dsl.commands.DslBlockHeaderCommand;
-import com.ajlopez.blockchain.test.dsl.commands.DslTransactionCommand;
+import com.ajlopez.blockchain.test.dsl.commands.*;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.io.IOException;
@@ -36,6 +33,9 @@ public class DslCommand {
 
         if ("header".equals(verb))
             return new DslBlockHeaderCommand(arguments);
+
+        if ("connect".equals(verb))
+            return new DslConnectCommand(arguments);
 
         return new DslCommand(verb, arguments);
     }
@@ -68,9 +68,7 @@ public class DslCommand {
     public Map<String, String> getNamedArguments() { return this.namedArguments; }
 
     public void execute(World world) throws IOException, DslException {
-        if ("connect".equals(this.verb))
-            executeConnect(world);
-        else if ("process".equals(this.verb))
+        if ("process".equals(this.verb))
             executeProcess(world);
         else if ("assert".equals(this.verb))
             executeAssert(world);
@@ -82,12 +80,6 @@ public class DslCommand {
         String name = this.getName(0, "name");
         Block block = world.getBlock(name);
         world.getBlockProcessor().processBlock(block);
-    }
-
-    private void executeConnect(World world) throws IOException {
-        String name = this.getName(0, "name");
-        Block block = world.getBlock(name);
-        world.getBlockChain().connectBlock(block);
     }
 
     private void executeAssert(World world) throws IOException, DslException {

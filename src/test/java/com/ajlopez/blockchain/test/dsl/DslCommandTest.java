@@ -520,7 +520,7 @@ public class DslCommandTest {
         List<String> arguments = new ArrayList<>();
         arguments.add("blk1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
 
         command.execute(world);
 
@@ -566,7 +566,7 @@ public class DslCommandTest {
         List<String> arguments = new ArrayList<>();
         arguments.add("name=blk1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
 
         command.execute(world);
 
