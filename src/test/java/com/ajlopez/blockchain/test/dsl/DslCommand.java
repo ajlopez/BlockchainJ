@@ -37,6 +37,9 @@ public class DslCommand {
         if ("connect".equals(verb))
             return new DslConnectCommand(arguments);
 
+        if ("process".equals(verb))
+            return new DslProcessCommand(arguments);
+
         return new DslCommand(verb, arguments);
     }
 
@@ -68,18 +71,10 @@ public class DslCommand {
     public Map<String, String> getNamedArguments() { return this.namedArguments; }
 
     public void execute(World world) throws IOException, DslException {
-        if ("process".equals(this.verb))
-            executeProcess(world);
-        else if ("assert".equals(this.verb))
+        if ("assert".equals(this.verb))
             executeAssert(world);
         else
             throw new UnsupportedOperationException(String.format("unknown verb '%s'", this.verb));
-    }
-
-    private void executeProcess(World world) throws IOException {
-        String name = this.getName(0, "name");
-        Block block = world.getBlock(name);
-        world.getBlockProcessor().processBlock(block);
     }
 
     private void executeAssert(World world) throws IOException, DslException {
