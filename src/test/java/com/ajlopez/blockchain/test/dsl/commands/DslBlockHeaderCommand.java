@@ -3,9 +3,6 @@ package com.ajlopez.blockchain.test.dsl.commands;
 import com.ajlopez.blockchain.bc.BlockBuilder;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
-import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.dsl.DslCommand;
 

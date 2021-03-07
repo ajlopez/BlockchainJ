@@ -1,11 +1,8 @@
 package com.ajlopez.blockchain.test.dsl.commands;
 
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.BlockHeader;
-import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.test.World;
 import com.ajlopez.blockchain.test.dsl.DslCommand;
-import com.ajlopez.blockchain.test.utils.FactoryHelper;
 
 import java.io.IOException;
 import java.util.List;
