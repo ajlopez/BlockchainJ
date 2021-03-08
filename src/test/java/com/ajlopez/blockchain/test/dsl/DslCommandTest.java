@@ -35,7 +35,7 @@ public class DslCommandTest {
         arguments.add("acc1");
         arguments.add("1000000");
 
-        DslCommand command = new DslCommand("account", arguments);
+        DslCommand command = DslCommand.createCommand("account", arguments);
 
         Assert.assertEquals(verb, command.getVerb());
         Assert.assertEquals(2, command.getArguments().size());
@@ -53,7 +53,7 @@ public class DslCommandTest {
         arguments.add("acc1");
         arguments.add("balance=1000000");
 
-        DslCommand command = new DslCommand("account", arguments);
+        DslCommand command = DslCommand.createCommand("account", arguments);
 
         Assert.assertEquals(verb, command.getVerb());
         Assert.assertEquals(1, command.getArguments().size());
@@ -585,11 +585,10 @@ public class DslCommandTest {
         List<String> arguments = new ArrayList<>();
         arguments.add("bar");
 
-        DslCommand command = new DslCommand(verb, arguments);
-
         exception.expect(UnsupportedOperationException.class);
         exception.expectMessage("unknown verb 'foo'");
-        command.execute(world);
+
+        DslCommand.createCommand(verb, arguments);
     }
 
     @Test
@@ -598,7 +597,7 @@ public class DslCommandTest {
         List<String> arguments = new ArrayList<>();
         arguments.add("true");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -610,7 +609,7 @@ public class DslCommandTest {
         List<String> arguments = new ArrayList<>();
         arguments.add("false");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         exception.expect(DslException.class);
@@ -626,7 +625,7 @@ public class DslCommandTest {
         arguments.add("==");
         arguments.add("1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         command.execute(world);
@@ -640,7 +639,7 @@ public class DslCommandTest {
         arguments.add("==");
         arguments.add("1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
         Block block = FactoryHelper.createBlock(world.getBlock("genesis"), FactoryHelper.createRandomAddress(), 0);
         world.setBlock("b1", block);
@@ -656,7 +655,7 @@ public class DslCommandTest {
         arguments.add("==");
         arguments.add("b1.number");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
         Block block = FactoryHelper.createBlock(world.getBlock("genesis"), FactoryHelper.createRandomAddress(), 0);
         world.setBlock("b1", block);
@@ -672,7 +671,7 @@ public class DslCommandTest {
         arguments.add("!=");
         arguments.add("1");
 
-        DslCommand command = new DslCommand(verb, arguments);
+        DslCommand command = DslCommand.createCommand(verb, arguments);
         World world = new World();
 
         exception.expect(DslException.class);
