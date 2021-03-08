@@ -24,6 +24,9 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
 
     @Override
     public void transfer(Address senderAddress, Address receiverAddress, Coin amount) throws IOException {
+        if (amount.isZero())
+            return;
+
         AccountState sender = this.getAccountState(senderAddress);
         AccountState receiver = this.getAccountState(receiverAddress);
 

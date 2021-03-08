@@ -64,7 +64,8 @@ public class TransactionExecutor {
         else if (isRichTransaction)
             receiver = sender;
 
-        context.transfer(transaction.getSender(), receiver, transaction.getValue());
+        if (!transaction.getValue().isZero())
+            context.transfer(transaction.getSender(), receiver, transaction.getValue());
 
         ExecutionResult executionResult;
 
