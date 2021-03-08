@@ -4,9 +4,12 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.TransactionReceipt;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
+import com.ajlopez.blockchain.core.types.DataWord;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.utils.ByteUtils;
 import com.ajlopez.blockchain.vms.eth.*;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +89,29 @@ public class TransactionExecutor {
         return executionResult;
     }
 
+    private static boolean isShortDeploy(byte[] code) {
+        return code.length == DataWord.DATAWORD_BYTES && ByteUtils.areZero(code, 0, DataWord.DATAWORD_BYTES - Address.ADDRESS_BYTES);
+    }
+
+    private ExecutionResult executeShortDeploy(ExecutionContext executionContext, Address address, byte[] code, Transaction transaction) throws IOException {
+        byte[] addressBytes = new byte[Address.ADDRESS_BYTES];
+
+        System.arraycopy(code, DataWord.DATAWORD_BYTES - Address.ADDRESS_BYTES, addressBytes, 0, Address.ADDRESS_BYTES);
+
+        Address originalContract = new Address(addressBytes);
+        long codeLength = executionContext.getCodeLength(originalContract);
+        Hash codeHash = executionContext.getCodeHash(originalContract);
+
+        executionContext.setCodeData(address, codeLength, codeHash);
+
+        // TODO review gas cost
+        return ExecutionResult.OkWithoutData(transaction.getGasCost(), null);
+    }
+
     private ExecutionResult executeCode(Transaction transaction, BlockData blockData, Address sender, boolean isContractCreation, ExecutionContext context, Address receiver, byte[] code) throws IOException {
+        if (isShortDeploy(code))
+            return executeShortDeploy(executionContext, receiver, code, transaction);
+
         long transactionGas = transaction.getGasCost();
 
         Storage storage = context.getAccountStorage(receiver);

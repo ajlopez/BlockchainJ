@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.execution;
 
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
+import com.ajlopez.blockchain.core.types.Hash;
 import com.ajlopez.blockchain.vms.eth.Storage;
 
 import java.io.IOException;
@@ -19,6 +20,8 @@ public interface ExecutionContext extends AccountProvider {
     void rollback();
 
     void setCode(Address address, byte[] code) throws IOException;
+
+    void setCodeData(Address address, long codeLength, Hash codeHash) throws IOException;
 
     ExecutionContext createChildExecutionContext();
 }

@@ -175,6 +175,13 @@ public abstract class AbstractExecutionContext implements ExecutionContext {
         accountState.setCodeData(code.length, codeHash);
     }
 
+    @Override
+    public void setCodeData(Address address, long codeLength, Hash codeHash) throws IOException {
+        AccountState accountState = this.getAccountState(address);
+
+        accountState.setCodeData(codeLength, codeHash);
+    }
+
     public void setCode(Hash hash, byte[] code) {
         this.codes.put(hash, code);
         this.newCodes.add(hash);

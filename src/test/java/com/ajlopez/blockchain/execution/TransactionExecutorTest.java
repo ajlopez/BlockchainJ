@@ -3,10 +3,7 @@ package com.ajlopez.blockchain.execution;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.TransactionReceipt;
-import com.ajlopez.blockchain.core.types.Address;
-import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.DataWord;
-import com.ajlopez.blockchain.core.types.Difficulty;
+import com.ajlopez.blockchain.core.types.*;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.CodeStore;
@@ -431,6 +428,43 @@ public class TransactionExecutorTest {
         Assert.assertNotNull(newcode);
         Assert.assertEquals(1, newcode.length);
         Assert.assertEquals(0, newcode[0]);
+    }
+
+    @Test
+    public void executeTransactionCreatingContractUsingShortDeploy() throws IOException {
+        CodeStore codeStore = new CodeStore(new HashMapStore());
+        AccountStore accountStore = new AccountStore(new Trie());
+        Address sender = FactoryHelper.createRandomAddress();
+        Address originalContractAddress = FactoryHelper.createRandomAddress();
+        Hash codeHash = FactoryHelper.createRandomHash();
+        long codeLength = 42;
+        Account originalContractAccount = new Account(Coin.ZERO, 0, codeLength, codeHash, null);
+
+        accountStore.putAccount(originalContractAddress, originalContractAccount);
+
+        byte[] code = new byte[DataWord.DATAWORD_BYTES];
+
+        System.arraycopy(originalContractAddress.getBytes(), 0, code, DataWord.DATAWORD_BYTES - Address.ADDRESS_BYTES, Address.ADDRESS_BYTES);
+
+        long expectedGasUsed =
+                        FeeSchedule.TRANSFER.getValue() +
+                        FeeSchedule.CREATION.getValue();
+
+        for (int k = 0; k < code.length; k++)
+            if (code[k] == 0)
+                expectedGasUsed += FeeSchedule.DATAZERO.getValue();
+            else
+                expectedGasUsed += FeeSchedule.DATANONZERO.getValue();
+
+        executeTransactionCreatingContract(sender, code, expectedGasUsed, accountStore, codeStore);
+
+        Address newContractAddress = HashUtils.calculateNewAddress(sender, 0);
+
+        Account contractAccount = accountStore.getAccount(newContractAddress);
+
+        Assert.assertNotNull(contractAccount);
+        Assert.assertNotNull(contractAccount.getCodeHash());
+        Assert.assertTrue(contractAccount.getCodeLength() > 0);
     }
 
     @Test
