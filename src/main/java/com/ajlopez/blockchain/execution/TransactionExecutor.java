@@ -53,6 +53,9 @@ public class TransactionExecutor {
         if (senderBalance.compareTo(transaction.getValue().add(gasLimitToPay)) < 0)
             return null;
 
+        if (!gasLimitToPay.isZero())
+            this.executionContext.transfer(sender, blockData.getCoinbase(), gasLimitToPay);
+
         boolean isContractCreation = transaction.isContractCreation();
         boolean isRichTransaction = transaction.isRichTransaction();
 
@@ -81,7 +84,10 @@ public class TransactionExecutor {
 
         if (!gasPrice.isZero()) {
             Coin gasPayment = gasPrice.multiply(executionResult.getGasUsed());
-            this.executionContext.transfer(sender, blockData.getCoinbase(), gasPayment);
+            Coin gasReimbursement = gasLimitToPay.subtract(gasPayment);
+
+            if (!gasReimbursement.isZero())
+                this.executionContext.transfer(blockData.getCoinbase(), sender, gasReimbursement);
         }
 
         this.executionContext.incrementNonce(transaction.getSender());
