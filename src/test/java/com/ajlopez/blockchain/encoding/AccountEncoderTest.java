@@ -19,21 +19,12 @@ public class AccountEncoderTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void encodeDecodeAccountWithZeroBalanceAndZeroNonce() {
+    public void cannotEncodeEmptyAccount() {
         Account account = new Account();
 
-        byte[] encoded = AccountEncoder.encode(account);
-
-        Assert.assertNotNull(encoded);
-
-        Account result = AccountEncoder.decode(encoded);
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(Coin.ZERO, result.getBalance());
-        Assert.assertEquals(0, result.getNonce());
-        Assert.assertEquals(0, result.getCodeLength());
-        Assert.assertNull(result.getCodeHash());
-        Assert.assertNull(result.getStorageHash());
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Account is empty");
+        AccountEncoder.encode(account);
     }
 
     @Test
