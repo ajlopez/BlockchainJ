@@ -199,6 +199,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Can we do Fast Crypto in EVM?](https://notes.ethereum.org/@axic/evm384)
 - [EIP Draft: Replace alt_bn128 Precompiles With EVM Bytecode](https://notes.ethereum.org/@poemm/Pre-EIP-deprecate-alt_bn128)
 - [EIP Draft: EVM384 and Friends](https://notes.ethereum.org/@poemm/eip_draft_evm_modular_arithmetic_extensions)
+- [Can a contract fetch the global block gas limit?](https://ethereum.stackexchange.com/questions/11261/can-a-contract-fetch-the-global-block-gas-limit)
 
 ## To Do
 
