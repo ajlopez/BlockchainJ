@@ -512,7 +512,6 @@ public class VirtualMachine {
 
                     break;
 
-                // TODO review behavior: message gas limit or block gas limit?
                 case OpCodes.GASLIMIT:
                     this.dataStack.push(DataWord.fromUnsignedLong(this.blockData.getGasLimit()));
 
