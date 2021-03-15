@@ -56,10 +56,10 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
 
         if (block != null) {
             BlockInformation blockInformation = this.blockChain.getBlockInformation(block.getNumber(), block.getHash());
-            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty());
+            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty(), false);
         }
         else
-            json = BlockJsonEncoder.encode(null, null);
+            json = BlockJsonEncoder.encode(null, null, false);
 
         return JsonRpcResponse.createResponse(request, json);
     }
@@ -72,10 +72,10 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         if (block != null) {
             BlockInformation blockInformation = this.blockChain.getBlockInformation(block.getNumber(), block.getHash());
 
-            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty());
+            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty(), false);
         }
         else
-            json = BlockJsonEncoder.encode(null, null);
+            json = BlockJsonEncoder.encode(null, null, false);
 
         return JsonRpcResponse.createResponse(request, json);
     }

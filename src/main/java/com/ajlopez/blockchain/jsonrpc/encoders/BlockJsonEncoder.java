@@ -17,7 +17,8 @@ import java.util.List;
 public class BlockJsonEncoder {
     private BlockJsonEncoder() {}
 
-    public static JsonValue encode(Block block, Difficulty totalDifficulty) {
+    // TODO serialize complete transaction
+    public static JsonValue encode(Block block, Difficulty totalDifficulty, boolean fullTransactions) {
         if (block == null)
             return JsonNullValue.getInstance();
 
@@ -50,7 +51,10 @@ public class BlockJsonEncoder {
         builder = builder.name("transactions").array();
 
         for (Transaction tx: transactions)
-            builder = builder.value(tx.getHash());
+            if (fullTransactions)
+                builder = builder.value(TransactionJsonEncoder.encode(tx, true, true));
+            else
+                builder = builder.value(tx.getHash());
 
         builder = builder.end();
 
