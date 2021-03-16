@@ -39,6 +39,14 @@ public class JsonArrayBuilder extends JsonBuilder {
     }
 
     @Override
+    public JsonBuilder value(JsonValue value) {
+        super.value(value);
+        elements.add(super.build());
+
+        return this;
+    }
+
+    @Override
     public JsonBuilder value(Object value) {
         return this.value(value.toString());
     }
