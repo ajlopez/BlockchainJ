@@ -181,6 +181,7 @@ public class BlocksProcessorTest {
         Assert.assertEquals(10, ((JsonArrayValue)jovalue.getProperty("transactions")).size());
 
         for (int k = 0; k < 10; k++)
+            Assert.assertEquals(block.getTransactions().get(k).getHash().toString(), ((JsonArrayValue)jovalue.getProperty("transactions")).getValue(k).getValue());
     }
 
     @Test
