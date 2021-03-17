@@ -17,7 +17,6 @@ import java.util.List;
 public class BlockJsonEncoder {
     private BlockJsonEncoder() {}
 
-    // TODO serialize complete transaction
     public static JsonValue encode(Block block, Difficulty totalDifficulty, boolean fullTransactions) {
         if (block == null)
             return JsonNullValue.getInstance();
