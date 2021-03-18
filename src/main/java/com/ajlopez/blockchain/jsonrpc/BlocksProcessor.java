@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.BlockInformation;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.BlockHash;
+import com.ajlopez.blockchain.json.JsonBooleanValue;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.jsonrpc.encoders.BlockJsonEncoder;
 import com.ajlopez.blockchain.utils.HexUtils;
@@ -29,7 +30,7 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         if (request.check("eth_getBlockByNumber", 1, 2))
             return this.getBlockByNumber(request);
 
-        if (request.check("eth_getBlockByHash", 1))
+        if (request.check("eth_getBlockByHash", 1, 2))
             return this.getBlockByHash(request);
 
         return super.processRequest(request);
@@ -66,13 +67,18 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
 
     private JsonRpcResponse getBlockByHash(JsonRpcRequest request) throws IOException {
         BlockHash hash = new BlockHash(HexUtils.hexStringToBytes(request.getParams().get(0).getValue().toString()));
+        boolean completeTransactions = false;
+
+        if (request.getParams().size() > 1)
+            completeTransactions = (Boolean)(request.getParams().get(1)).getValue();
+
         Block block = this.blockChain.getBlockByHash(hash);
         JsonValue json;
 
         if (block != null) {
             BlockInformation blockInformation = this.blockChain.getBlockInformation(block.getNumber(), block.getHash());
 
-            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty(), false);
+            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty(), completeTransactions);
         }
         else
             json = BlockJsonEncoder.encode(null, null, false);
