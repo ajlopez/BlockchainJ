@@ -67,10 +67,10 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
 
     private JsonRpcResponse getBlockByHash(JsonRpcRequest request) throws IOException {
         BlockHash hash = new BlockHash(HexUtils.hexStringToBytes(request.getParams().get(0).getValue().toString()));
-        boolean completeTransactions = false;
+        boolean fullTransactions = false;
 
         if (request.getParams().size() > 1)
-            completeTransactions = (Boolean)(request.getParams().get(1)).getValue();
+            fullTransactions = (Boolean)(request.getParams().get(1)).getValue();
 
         Block block = this.blockChain.getBlockByHash(hash);
         JsonValue json;
@@ -78,7 +78,7 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         if (block != null) {
             BlockInformation blockInformation = this.blockChain.getBlockInformation(block.getNumber(), block.getHash());
 
-            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty(), completeTransactions);
+            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty(), fullTransactions);
         }
         else
             json = BlockJsonEncoder.encode(null, null, false);

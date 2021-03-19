@@ -185,6 +185,41 @@ public class BlocksProcessorTest {
     }
 
     @Test
+    public void getBlockByNumberUsingBlockchainWithTenBlocksWithTransactions() throws JsonRpcException, IOException {
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
+        FactoryHelper.extendBlockChainWithBlocks(blockChain, 9);
+        Block topBlock = FactoryHelper.createBlock(blockChain.getBlockByNumber(9), FactoryHelper.createRandomAddress(), 10);
+        Assert.assertEquals(10, topBlock.getTransactionsCount());
+
+        Assert.assertTrue(blockChain.connectBlock(topBlock));
+
+        Block block = blockChain.getBlockByNumber(10);
+
+        List<JsonValue> params = new ArrayList<>();
+        params.add(new JsonStringValue("10"));
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getBlockByNumber", params);
+
+        BlocksProcessor processor = new BlocksProcessor(blockChain);
+
+        JsonRpcResponse response = processor.processRequest(request);
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals(request.getId(), response.getId());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
+        Assert.assertEquals(JsonValueType.OBJECT, response.getResult().getType());
+
+        JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
+
+        Assert.assertTrue(jovalue.hasProperty("number"));
+        Assert.assertEquals("10", jovalue.getProperty("number").getValue());
+        Assert.assertEquals(block.getHash().toString(), jovalue.getProperty("hash").getValue());
+        Assert.assertEquals(10, ((JsonArrayValue)jovalue.getProperty("transactions")).size());
+
+        for (int k = 0; k < 10; k++)
+            Assert.assertEquals(block.getTransactions().get(k).getHash().toString(), ((JsonArrayValue)jovalue.getProperty("transactions")).getValue(k).getValue());
+    }
+
+    @Test
     public void getBlockByHashUsingBlockchainWithTenBlocksWithFullTransactions() throws JsonRpcException, IOException {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis();
         FactoryHelper.extendBlockChainWithBlocks(blockChain, 9);
