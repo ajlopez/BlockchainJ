@@ -26,7 +26,6 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
         if (request.check("eth_blockNumber", 0))
             return this.getBestBlockNumber(request);
 
-        // TODO use the second argument
         if (request.check("eth_getBlockByNumber", 1, 2))
             return this.getBlockByNumber(request);
 
@@ -42,6 +41,11 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
 
     private JsonRpcResponse getBlockByNumber(JsonRpcRequest request) throws IOException {
         String blockId = request.getParams().get(0).getValue().toString();
+        boolean fullTransactions = false;
+
+        if (request.getParams().size() > 1)
+            fullTransactions = (Boolean)(request.getParams().get(1)).getValue();
+
         Block block;
 
         if ("earliest".equals(blockId))
@@ -57,7 +61,7 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
 
         if (block != null) {
             BlockInformation blockInformation = this.blockChain.getBlockInformation(block.getNumber(), block.getHash());
-            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty(), false);
+            json = BlockJsonEncoder.encode(block, blockInformation.getTotalDifficulty(), fullTransactions);
         }
         else
             json = BlockJsonEncoder.encode(null, null, false);
