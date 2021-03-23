@@ -22,6 +22,7 @@ public class RpcRunner {
         BlocksProvider blocksProvider = new BlocksProvider(blockChain);
         AccountsProvider accountsProvider = new AccountsProvider(blocksProvider, accountStoreProvider);
         TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, accountsProvider, transactionProcessor);
+        AccountsProcessor accountsProcessor = new AccountsProcessor(accountsProvider);
         NetworkProcessor networkProcessor = new NetworkProcessor(networkConfiguration);
 
         topProcessor.registerProcess("eth_blockNumber", blocksProcessor);
@@ -32,6 +33,9 @@ public class RpcRunner {
         topProcessor.registerProcess("eth_sendTransaction", transactionsProcessor);
 
         topProcessor.registerProcess("net_version", networkProcessor);
+
+        topProcessor.registerProcess("eth_getBalance", accountsProcessor);
+        topProcessor.registerProcess("eth_getTransactionCount", accountsProcessor);
 
         this.port = port;
         this.httpServer = new HttpServer(this.port, topProcessor);

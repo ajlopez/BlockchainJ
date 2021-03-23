@@ -44,26 +44,31 @@ public class HttpServer {
             while (!this.stopped) {
                 Socket clientSocket = serverSocket.accept();
 
+                try {
+                    // TODO review implementation
+                    byte[] data = new byte[1024 * 10];
+                    int ndata = clientSocket.getInputStream().read(data);
+                    InputStream inputStream = new ByteArrayInputStream(data, 0, ndata);
+                    Reader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                    OutputStream outputStream = clientSocket.getOutputStream();
+                    Writer writer = new PrintWriter(outputStream);
+                    HttpProcessor processor = new HttpProcessor(this.jsonRpcProcessor, reader, writer);
+
+                    processor.process();
+
+                    outputStream.flush();
+                    outputStream.close();
+                }
                 // TODO review implementation
-                byte[] data = new byte[1024 * 10];
-                int ndata = clientSocket.getInputStream().read(data);
-                InputStream inputStream = new ByteArrayInputStream(data, 0, ndata);
-                Reader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                OutputStream outputStream = clientSocket.getOutputStream();
-                Writer writer = new PrintWriter(outputStream);
-                HttpProcessor processor = new HttpProcessor(this.jsonRpcProcessor, reader, writer);
-
-                processor.process();
-
-                outputStream.flush();
-                outputStream.close();
-
-                clientSocket.close();
+                finally {
+                    clientSocket.close();
+                }
             }
         }
         catch (IOException | JsonLexerException | JsonParserException | JsonRpcException ex) {
             // TODO process exception
+            System.err.println(ex.getCause());
         }
     }
 }

@@ -10,9 +10,7 @@ import com.ajlopez.blockchain.jsonrpc.TransactionsProvider;
 import com.ajlopez.blockchain.jsonrpc.encoders.TransactionJsonEncoder;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.processors.TransactionProcessor;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
-import com.ajlopez.blockchain.store.HashMapStore;
-import com.ajlopez.blockchain.store.TrieStore;
+import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -192,6 +190,35 @@ public class RpcRunnerTest {
         Block block = blockChain.getBlockByNumber(1);
 
         String request = "POST /\r\n\r\n{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_getBlockByHash\", \"params\": [ \"" + block.getHash().toString() + "\" ] }";
+        writer.println(request);
+        writer.flush();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        String result = reader.readLine();
+
+        rpcRunner.stop();
+        socket.close();
+
+        Assert.assertNotNull(result);
+        // TODO improve test
+        Assert.assertEquals("HTTP/1.1 200 OK", result);
+    }
+
+    @Test
+    public void getBalance() throws IOException {
+        Stores stores = new MemoryStores();
+        AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
+        BlockChain blockChain = FactoryHelper.createBlockChain(10);
+
+        RpcRunner rpcRunner = new RpcRunner(6006, blockChain, accountStoreProvider, null, null, null);
+
+        rpcRunner.start();
+
+        Socket socket = new Socket("127.0.0.1", 6006);
+        PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
+        String request = "POST /\r\n\r\n{ \"id\": 1, \"jsonrpc\": \"2.0\", \"method\": \"eth_getBalance\", \"params\": [ \"" + FactoryHelper.createRandomAddress().toString() + "\" ] }";
         writer.println(request);
         writer.flush();
 
