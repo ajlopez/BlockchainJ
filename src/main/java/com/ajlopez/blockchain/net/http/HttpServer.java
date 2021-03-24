@@ -60,7 +60,7 @@ public class HttpServer {
                     outputStream.flush();
                     outputStream.close();
                 }
-                catch (IOException | JsonLexerException | JsonParserException | JsonRpcException ex) {
+                catch (IOException | JsonLexerException | JsonParserException ex) {
                     // TODO process exception
                     System.err.println(ex.getCause());
                 }

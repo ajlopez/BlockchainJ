@@ -26,7 +26,7 @@ public class HttpProcessor {
         this.writer = writer;
     }
 
-    public void process() throws JsonLexerException, JsonParserException, IOException, JsonRpcException {
+    public void process() throws JsonLexerException, JsonParserException, IOException {
         HttpRequestParser parser = new HttpRequestParser();
 
         HttpRequest request = parser.parse(this.reader);
@@ -60,17 +60,30 @@ public class HttpProcessor {
 
         JsonRpcRequest jsonrequest = new JsonRpcRequest(id, jsonrpc, method, params);
 
-        JsonRpcResponse jsonresponse = this.jsonRpcProcessor.processRequest(jsonrequest);
+        JsonRpcResponse jsonresponse;
+
+        try {
+            jsonresponse = this.jsonRpcProcessor.processRequest(jsonrequest);
+        }
+        catch (JsonRpcException ex) {
+            jsonresponse = JsonRpcResponse.createResponseWithError(jsonrequest, ex);
+        }
 
         JsonBuilder builder = new JsonBuilder();
-        JsonValue response = builder.object()
+        builder = builder.object()
                 .name("id")
                 .value(jsonresponse.getId())
                 .name("jsonrpc")
-                .value(jsonresponse.getJsonRpc())
-                .name("result")
-                .value(jsonresponse.getResult())
-                .build();
+                .value(jsonresponse.getJsonRpc());
+
+        if (jsonresponse.getError() != null)
+            builder = builder.name("error")
+                    .value(jsonresponse.getError());
+        else
+            builder = builder.name("result")
+                    .value(jsonresponse.getResult());
+
+        JsonValue response = builder.build();
 
         this.writer.write("HTTP/1.1 200 OK\r\n\r\n");
         JsonWriter jsonWriter = new JsonWriter(this.writer);

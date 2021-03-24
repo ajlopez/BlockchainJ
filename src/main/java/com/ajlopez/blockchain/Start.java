@@ -67,7 +67,7 @@ public class Start {
         if (rpc) {
             int rpcport = argsproc.getInteger("rpcport");
 
-            RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, null, transactionPool, transactionProcessor, networkConfiguration, wallet);
+            RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, stores.getAccountStoreProvider(), transactionPool, transactionProcessor, networkConfiguration, wallet);
 
             rpcrunner.start();
 
