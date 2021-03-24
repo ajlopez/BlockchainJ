@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.Wallet;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.jsonrpc.*;
 import com.ajlopez.blockchain.net.http.HttpServer;
@@ -15,14 +16,14 @@ public class RpcRunner {
     private final int port;
     private final HttpServer httpServer;
 
-    public RpcRunner(int port, BlockChain blockChain, AccountStoreProvider accountStoreProvider, TransactionPool transactionPool, TransactionProcessor transactionProcessor, NetworkConfiguration networkConfiguration) {
+    public RpcRunner(int port, BlockChain blockChain, AccountStoreProvider accountStoreProvider, TransactionPool transactionPool, TransactionProcessor transactionProcessor, NetworkConfiguration networkConfiguration, Wallet wallet) {
         TopProcessor topProcessor = new TopProcessor();
         BlocksProcessor blocksProcessor = new BlocksProcessor(blockChain);
         TransactionsProvider transactionsProvider = new TransactionsProvider(transactionPool);
         BlocksProvider blocksProvider = new BlocksProvider(blockChain);
         AccountsProvider accountsProvider = new AccountsProvider(blocksProvider, accountStoreProvider);
         TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, accountsProvider, transactionProcessor);
-        AccountsProcessor accountsProcessor = new AccountsProcessor(accountsProvider, null);
+        AccountsProcessor accountsProcessor = new AccountsProcessor(accountsProvider, wallet);
         NetworkProcessor networkProcessor = new NetworkProcessor(networkConfiguration);
 
         topProcessor.registerProcess("eth_blockNumber", blocksProcessor);
@@ -34,6 +35,7 @@ public class RpcRunner {
 
         topProcessor.registerProcess("net_version", networkProcessor);
 
+        topProcessor.registerProcess("eth_accounts", accountsProcessor);
         topProcessor.registerProcess("eth_getBalance", accountsProcessor);
         topProcessor.registerProcess("eth_getTransactionCount", accountsProcessor);
 

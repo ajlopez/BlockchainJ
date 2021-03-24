@@ -2,12 +2,18 @@ package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.GenesisGenerator;
+import com.ajlopez.blockchain.bc.Wallet;
+import com.ajlopez.blockchain.bc.WalletCreator;
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
+import com.ajlopez.blockchain.core.types.Coin;
+import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.processors.TransactionProcessor;
+import com.ajlopez.blockchain.state.Trie;
+import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.KeyValueStores;
 import com.ajlopez.blockchain.store.MemoryKeyValueStores;
 import com.ajlopez.blockchain.store.Stores;
@@ -23,12 +29,18 @@ public class Start {
     public static void main(String[] args) throws IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
+        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
+        WalletCreator walletCreator = new WalletCreator(accountStore);
+        DataWord oneMillion = DataWord.fromUnsignedLong(1_000_000L);
+        Coin balance = Coin.fromBytes(oneMillion.mul(oneMillion).mul(oneMillion).mul(DataWord.fromUnsignedInteger(100)).getBytes());
+        Wallet wallet = walletCreator.createWallet(10, balance);
+        accountStore.save();
         BlockChain blockChain = new BlockChain(stores);
         TransactionPool transactionPool = new TransactionPool();
         // TODO processor only uses pool?
         TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
 
-        Block genesis = GenesisGenerator.generateGenesis();
+        Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
         blockChain.connectBlock(genesis);
 
@@ -53,7 +65,7 @@ public class Start {
         if (rpc) {
             int rpcport = argsproc.getInteger("rpcport");
 
-            RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, null, transactionPool, transactionProcessor, networkConfiguration);
+            RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, null, transactionPool, transactionProcessor, networkConfiguration, wallet);
 
             rpcrunner.start();
 

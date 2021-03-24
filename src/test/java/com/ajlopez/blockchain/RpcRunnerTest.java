@@ -27,7 +27,7 @@ import java.net.Socket;
 public class RpcRunnerTest {
     @Test
     public void simpleRequest() throws IOException {
-        RpcRunner rpcRunner = new RpcRunner(6000, null, null, null, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6000, null, null, null, null, null, null);
 
         rpcRunner.start();
 
@@ -52,7 +52,7 @@ public class RpcRunnerTest {
     public void getBlockNumber() throws IOException {
         BlockChain blockChain = FactoryHelper.createBlockChain(10);
 
-        RpcRunner rpcRunner = new RpcRunner(6001, blockChain, null, null, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6001, blockChain, null, null, null, null, null);
 
         rpcRunner.start();
 
@@ -80,7 +80,7 @@ public class RpcRunnerTest {
     public void getNetworkVersion() throws IOException {
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)42);
 
-        RpcRunner rpcRunner = new RpcRunner(6002, null, null, null, null, networkConfiguration);
+        RpcRunner rpcRunner = new RpcRunner(6002, null, null, null, null, networkConfiguration, null);
 
         rpcRunner.start();
 
@@ -110,7 +110,7 @@ public class RpcRunnerTest {
         String hash = transactionHash.toString();
         TransactionPool transactionPool = new TransactionPool();
 
-        RpcRunner rpcRunner = new RpcRunner(6003, null, null, transactionPool, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6003, null, null, transactionPool, null, null, null);
 
         rpcRunner.start();
 
@@ -142,7 +142,7 @@ public class RpcRunnerTest {
         TransactionPool transactionPool = new TransactionPool();
         TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
 
-        RpcRunner rpcRunner = new RpcRunner(6004, blockChain, accountStoreProvider, transactionPool, transactionProcessor, null);
+        RpcRunner rpcRunner = new RpcRunner(6004, blockChain, accountStoreProvider, transactionPool, transactionProcessor, null, null);
 
         rpcRunner.start();
 
@@ -180,7 +180,7 @@ public class RpcRunnerTest {
     public void getBlockByHash() throws IOException {
         BlockChain blockChain = FactoryHelper.createBlockChain(10);
 
-        RpcRunner rpcRunner = new RpcRunner(6005, blockChain, null, null, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6005, blockChain, null, null, null, null, null);
 
         rpcRunner.start();
 
@@ -211,7 +211,7 @@ public class RpcRunnerTest {
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
         BlockChain blockChain = FactoryHelper.createBlockChain(10);
 
-        RpcRunner rpcRunner = new RpcRunner(6006, blockChain, accountStoreProvider, null, null, null);
+        RpcRunner rpcRunner = new RpcRunner(6006, blockChain, accountStoreProvider, null, null, null, null);
 
         rpcRunner.start();
 
