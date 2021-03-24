@@ -22,7 +22,7 @@ public class RpcRunner {
         BlocksProvider blocksProvider = new BlocksProvider(blockChain);
         AccountsProvider accountsProvider = new AccountsProvider(blocksProvider, accountStoreProvider);
         TransactionsProcessor transactionsProcessor = new TransactionsProcessor(transactionsProvider, accountsProvider, transactionProcessor);
-        AccountsProcessor accountsProcessor = new AccountsProcessor(accountsProvider);
+        AccountsProcessor accountsProcessor = new AccountsProcessor(accountsProvider, null);
         NetworkProcessor networkProcessor = new NetworkProcessor(networkConfiguration);
 
         topProcessor.registerProcess("eth_blockNumber", blocksProcessor);

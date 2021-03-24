@@ -1,16 +1,16 @@
 package com.ajlopez.blockchain.jsonrpc;
 
+import com.ajlopez.blockchain.bc.Wallet;
 import com.ajlopez.blockchain.core.Account;
-import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.Hash;
+import com.ajlopez.blockchain.json.JsonArrayValue;
+import com.ajlopez.blockchain.json.JsonStringValue;
 import com.ajlopez.blockchain.json.JsonValue;
-import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.AccountStoreProvider;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,9 +18,11 @@ import java.util.List;
  */
 public class AccountsProcessor extends AbstractJsonRpcProcessor {
     private final AccountsProvider accountsProvider;
+    private final Wallet wallet;
 
-    public AccountsProcessor(AccountsProvider accountsProvider) {
+    public AccountsProcessor(AccountsProvider accountsProvider, Wallet wallet) {
         this.accountsProvider = accountsProvider;
+        this.wallet = wallet;
     }
 
     @Override
@@ -31,7 +33,21 @@ public class AccountsProcessor extends AbstractJsonRpcProcessor {
         if (request.check("eth_getTransactionCount", 1, 2))
             return getTransactionCount(request);
 
+        if (request.check("eth_accounts", 0))
+            return getAccounts(request);
+
         return super.processRequest(request);
+    }
+
+    private JsonRpcResponse getAccounts(JsonRpcRequest request) {
+        List<JsonValue> addresses = new ArrayList<>();
+
+        for (Address address : this.wallet.getAddresses())
+            addresses.add(new JsonStringValue(address.toString()));
+
+        JsonArrayValue result = new JsonArrayValue(addresses);
+
+        return JsonRpcResponse.createResponse(request, result);
     }
 
     private JsonRpcResponse getBalance(JsonRpcRequest request) throws JsonRpcException, IOException {

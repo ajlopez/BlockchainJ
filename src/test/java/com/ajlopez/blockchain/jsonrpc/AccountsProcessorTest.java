@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.jsonrpc;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.Wallet;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
@@ -10,6 +11,7 @@ import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.execution.TopExecutionContext;
 import com.ajlopez.blockchain.execution.TransactionExecutor;
+import com.ajlopez.blockchain.json.JsonArrayValue;
 import com.ajlopez.blockchain.json.JsonStringValue;
 import com.ajlopez.blockchain.json.JsonValue;
 import com.ajlopez.blockchain.json.JsonValueType;
@@ -37,14 +39,42 @@ public class AccountsProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void unknownMethod() throws JsonRpcException, IOException {
+    public void getAccountsFromWallet() throws JsonRpcException, IOException {
+        Wallet wallet = new Wallet();
+
+        wallet.addAddress(FactoryHelper.createRandomAddress());
+        wallet.addAddress(FactoryHelper.createRandomAddress());
+
         List<JsonValue> params = new ArrayList<>();
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_accounts", params);
+
+        AccountsProcessor processor = new AccountsProcessor(null, wallet);
+
+        JsonRpcResponse response = processor.processRequest(request);
+
+        Assert.assertNotNull(response);
+
+        JsonValue result = response.getResult();
+
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof JsonArrayValue);
+
+        JsonArrayValue arrayResult = (JsonArrayValue)result;
+
+        Assert.assertEquals(2, arrayResult.size());
+        Assert.assertEquals(wallet.getAddresses().get(0).toString(), arrayResult.getValues().get(0).getValue().toString());
+        Assert.assertEquals(wallet.getAddresses().get(1).toString(), arrayResult.getValues().get(1).getValue().toString());
+    }
+
+    @Test
+    public void unknownMethod() throws JsonRpcException, IOException {
+        List<JsonValue> params = Collections.emptyList();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_foo", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null);
+        AccountsProcessor processor = new AccountsProcessor(null, null);
 
         exception.expect(JsonRpcException.class);
-        exception.expectMessage("Unknown method 'eth_foo'");
+        exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 0");
         processor.processRequest(request);
     }
 
@@ -53,7 +83,7 @@ public class AccountsProcessorTest {
         List<JsonValue> params = Collections.emptyList();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getBalance", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null);
+        AccountsProcessor processor = new AccountsProcessor(null, null);
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 0");
@@ -69,7 +99,7 @@ public class AccountsProcessorTest {
 
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getBalance", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null);
+        AccountsProcessor processor = new AccountsProcessor(null, null);
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 3");
@@ -113,7 +143,7 @@ public class AccountsProcessorTest {
         List<JsonValue> params = Collections.emptyList();
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null);
+        AccountsProcessor processor = new AccountsProcessor(null, null);
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 0");
@@ -129,7 +159,7 @@ public class AccountsProcessorTest {
 
         JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_getTransactionCount", params);
 
-        AccountsProcessor processor = new AccountsProcessor(null);
+        AccountsProcessor processor = new AccountsProcessor(null, null);
 
         exception.expect(JsonRpcException.class);
         exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 3");
@@ -286,6 +316,6 @@ public class AccountsProcessorTest {
         AccountStoreProvider accountStoreProvider = new AccountStoreProvider(stores.getAccountTrieStore());
         AccountsProvider accountsProvider = new AccountsProvider(blocksProvider, accountStoreProvider);
 
-        return new AccountsProcessor(accountsProvider);
+        return new AccountsProcessor(accountsProvider, null);
     }
 }
