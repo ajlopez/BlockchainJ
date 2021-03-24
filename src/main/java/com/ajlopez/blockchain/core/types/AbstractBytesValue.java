@@ -53,6 +53,6 @@ public abstract class AbstractBytesValue {
 
     @Override
     public String toString() {
-        return HexUtils.bytesToHexString(this.bytes, true);
+        return HexUtils.bytesToHexString(this.bytes, true, false);
     }
 }

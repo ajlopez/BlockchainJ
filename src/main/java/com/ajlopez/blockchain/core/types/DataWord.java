@@ -87,7 +87,7 @@ public class DataWord extends AbstractBytesValue implements Comparable<DataWord>
     }
 
     public String toNormalizedString() {
-        return HexUtils.bytesToHexString(this.toNormalizedBytes(), true);
+        return HexUtils.bytesToHexString(this.toNormalizedBytes(), true, false);
     }
 
     public Address toAddress() {

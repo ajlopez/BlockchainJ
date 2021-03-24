@@ -39,7 +39,7 @@ public class DataWordTest {
 
         DataWord dataWord = new DataWord(bytes);
 
-        String expected = HexUtils.bytesToHexString(bytes, true);
+        String expected = HexUtils.bytesToHexString(bytes, true, false);
         Assert.assertEquals(expected, dataWord.toString());
     }
 

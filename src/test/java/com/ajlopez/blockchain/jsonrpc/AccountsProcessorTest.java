@@ -74,7 +74,7 @@ public class AccountsProcessorTest {
         AccountsProcessor processor = new AccountsProcessor(null, null);
 
         exception.expect(JsonRpcException.class);
-        exception.expectMessage("Invalid number of parameters: expected 1 thru 2 found 0");
+        exception.expectMessage("Unknown method 'eth_foo'");
         processor.processRequest(request);
     }
 
@@ -274,6 +274,9 @@ public class AccountsProcessorTest {
         String value = (String)result.getValue();
 
         Assert.assertTrue(value.startsWith("0x"));
+
+        if (value.length() % 2 == 1)
+            value = "0x0" + value.substring(2);
 
         byte[] bytes = HexUtils.hexStringToBytes(value);
 

@@ -19,11 +19,20 @@ public class NetworkProcessor extends AbstractJsonRpcProcessor {
         if (request.check("net_version", 0))
             return getVersion(request);
 
+        if (request.check("eth_gasPrice", 0))
+            return getGasPrice(request);
+
         return super.processRequest(request);
     }
 
     private JsonRpcResponse getVersion(JsonRpcRequest request) throws JsonRpcException {
         int result = this.networkConfiguration.getNetworkNumber();
+
+        return JsonRpcResponse.createResponse(request, result);
+    }
+
+    private JsonRpcResponse getGasPrice(JsonRpcRequest request) throws JsonRpcException {
+        long result = 0;
 
         return JsonRpcResponse.createResponse(request, result);
     }

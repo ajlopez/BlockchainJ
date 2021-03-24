@@ -44,7 +44,7 @@ public class JsonConverterTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(JsonValueType.STRING, result.getType());
-        Assert.assertEquals(HexUtils.bytesToHexString(bytes, true), result.getValue());
+        Assert.assertEquals(HexUtils.bytesToHexString(bytes, true, false), result.getValue());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class JsonConverterTest {
 
         Assert.assertNotNull(result);
         Assert.assertEquals(JsonValueType.STRING, result.getType());
-        Assert.assertEquals(HexUtils.bytesToHexString(bytes, true), result.getValue());
+        Assert.assertEquals(HexUtils.bytesToHexString(bytes, true, false), result.getValue());
     }
 
     @Test

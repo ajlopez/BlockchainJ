@@ -32,7 +32,7 @@ public class HashTest {
 
         Hash hash = new Hash(bytes);
 
-        String expected = HexUtils.bytesToHexString(bytes, true);
+        String expected = HexUtils.bytesToHexString(bytes, true, false);
         Assert.assertEquals(expected, hash.toString());
     }
 

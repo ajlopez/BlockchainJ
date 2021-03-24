@@ -21,10 +21,40 @@ public class HexUtilsTest {
     public void convertBytesToHexStringWithPrefix() {
         byte[] bytes = new byte[] { 0x01, 0x23, 0x45, 0x67, (byte)0x89, (byte)0xab, (byte)0xcd, (byte)0xef };
 
-        String result = HexUtils.bytesToHexString(bytes, true);
+        String result = HexUtils.bytesToHexString(bytes, true, false);
 
         Assert.assertNotNull(result);
         Assert.assertEquals("0x0123456789abcdef", result);
+    }
+
+    @Test
+    public void convertBytesToHexStringWithoutPrefixWithoutLeadingZeroes() {
+        byte[] bytes = new byte[] { 0x01, 0x23, 0x45, 0x67, (byte)0x89, (byte)0xab, (byte)0xcd, (byte)0xef };
+
+        String result = HexUtils.bytesToHexString(bytes, false, true);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("123456789abcdef", result);
+    }
+
+    @Test
+    public void convertBytesToHexStringWithPrefixWithoutLeadingZeroes() {
+        byte[] bytes = new byte[] { 0x01, 0x23, 0x45, 0x67, (byte)0x89, (byte)0xab, (byte)0xcd, (byte)0xef };
+
+        String result = HexUtils.bytesToHexString(bytes, true, true);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0x123456789abcdef", result);
+    }
+
+    @Test
+    public void convertZeroBytesToHexStringWithPrefixWithoutLeadingZeroes() {
+        byte[] bytes = new byte[] { 0x00, 0x00 };
+
+        String result = HexUtils.bytesToHexString(bytes, true, true);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("0x0", result);
     }
 
     @Test

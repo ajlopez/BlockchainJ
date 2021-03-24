@@ -43,7 +43,7 @@ public class TransactionJsonEncoder {
         byte[] data = transaction.getData();
 
         if (data != null)
-            builder.name("data").value(HexUtils.bytesToHexString(data, true));
+            builder.name("data").value(HexUtils.bytesToHexString(data, true, false));
 
         return builder.build();
     }

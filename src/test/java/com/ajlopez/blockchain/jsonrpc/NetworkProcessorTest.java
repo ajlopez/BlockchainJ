@@ -45,4 +45,19 @@ public class NetworkProcessorTest {
         Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
         Assert.assertEquals("\"0x2a\"", response.getResult().toString());
     }
+
+    @Test
+    public void gasPrice() throws JsonRpcException, IOException {
+        List<JsonValue> params = new ArrayList<>();
+        JsonRpcRequest request =  new JsonRpcRequest("1", "2.0", "eth_gasPrice", params);
+
+        NetworkProcessor processor = new NetworkProcessor(new NetworkConfiguration((short)42));
+
+        JsonRpcResponse response = processor.processRequest(request);
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals(request.getId(), response.getId());
+        Assert.assertEquals(request.getJsonRpc(), response.getJsonRpc());
+        Assert.assertEquals("\"0x0\"", response.getResult().toString());
+    }
 }

@@ -10,25 +10,38 @@ public class HexUtils {
 
     // https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
     public static String bytesToHexString(byte[] bytes) {
-        return bytesToHexString(bytes, false);
+        return bytesToHexString(bytes, false, false);
     }
 
-    public static String bytesToHexString(byte[] bytes, boolean prefix) {
-        int offset = prefix ? 2 : 0;
-        char[] hexChars = new char[bytes.length * 2 + offset];
-
-        if (prefix) {
-            hexChars[0] = '0';
-            hexChars[1] = 'x';
-        }
+    public static String bytesToHexString(byte[] bytes, boolean prefix, boolean removeLeadingZeroes) {
+        // TODO simplify prefix
+        char[] hexChars = new char[bytes.length * 2];
 
         for (int j = 0; j < bytes.length; j++) {
             int v = bytes[j] & 0xff;
-            hexChars[j * 2 + offset] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1 + offset] = hexArray[v & 0x0F];
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
 
-        return new String(hexChars);
+        String result = new String(hexChars);
+
+        if (!removeLeadingZeroes)
+            if (prefix)
+                return "0x" + result;
+            else
+                return result;
+
+        for (int k = 0; k < result.length(); k++)
+            if (result.charAt(k) != '0')
+                if (prefix)
+                    return "0x" + result.substring(k);
+                else
+                    return result.substring(k);
+
+        if (prefix)
+            return "0x0";
+
+        return "0";
     }
 
     // https://stackoverflow.com/questions/140131/convert-a-string-representation-of-a-hex-dump-to-a-byte-array-using-java

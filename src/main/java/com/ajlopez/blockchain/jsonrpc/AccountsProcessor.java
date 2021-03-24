@@ -54,7 +54,7 @@ public class AccountsProcessor extends AbstractJsonRpcProcessor {
         Account account = getAccount(request);
 
         Coin balance = account.getBalance();
-        String result = HexUtils.bytesToHexString(balance.toBytes(), true);
+        String result = HexUtils.bytesToHexString(balance.toBytes(), true, false);
 
         return JsonRpcResponse.createResponse(request, result);
     }
