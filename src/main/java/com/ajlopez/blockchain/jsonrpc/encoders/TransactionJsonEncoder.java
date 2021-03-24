@@ -57,8 +57,9 @@ public class TransactionJsonEncoder {
         Address from = new Address(HexUtils.hexStringToBytes(ovalue.getProperty("from").getValue().toString()));
         Address to = ovalue.hasProperty("to") ? new Address(HexUtils.hexStringToBytes(ovalue.getProperty("to").getValue().toString())) : null;
         Coin value = ovalue.hasProperty("value") ? Coin.fromBytes(HexUtils.hexStringToBytes(ovalue.getProperty("value").getValue().toString())) : Coin.ZERO;
-        long nonce = ovalue.hasProperty("nonce") ? Long.parseLong(ovalue.getProperty("nonce").getValue().toString()) : 0L;
-        long gas = ovalue.hasProperty("gas") ? Long.parseLong(ovalue.getProperty("gas").getValue().toString()) : 0L;
+        long nonce = ovalue.hasProperty("nonce") ? Long.decode(ovalue.getProperty("nonce").getValue().toString()) : 0L;
+        long gas = ovalue.hasProperty("gas") ? Long.decode(ovalue.getProperty("gas").getValue().toString()) : 0L;
+        // TODO check odd number of digits
         Coin gasPrice = ovalue.hasProperty("gasPrice") ? Coin.fromBytes(HexUtils.hexStringToBytes(ovalue.getProperty("gasPrice").getValue().toString())) : Coin.ZERO;
 
         byte[] data = null;

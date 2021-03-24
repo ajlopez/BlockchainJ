@@ -66,6 +66,14 @@ public class HexUtilsTest {
     }
 
     @Test
+    public void convertHexadecimalStringWithOddQuantityOfDigitsToBytes() {
+        byte[] result = HexUtils.hexStringToBytes("f0102");
+
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(new byte[] { (byte)0x0f, 0x01, 0x02 }, result);
+    }
+
+    @Test
     public void convertHexadecimalStringToBytesUsingUppercaseHexadecimalDigits() {
         byte[] result = HexUtils.hexStringToBytes("FF0102");
 
