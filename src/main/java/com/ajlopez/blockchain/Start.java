@@ -29,12 +29,14 @@ public class Start {
     public static void main(String[] args) throws IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
+
         AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
         WalletCreator walletCreator = new WalletCreator(accountStore);
         DataWord oneMillion = DataWord.fromUnsignedLong(1_000_000L);
         Coin balance = Coin.fromBytes(oneMillion.mul(oneMillion).mul(oneMillion).mul(DataWord.fromUnsignedInteger(100)).getBytes());
         Wallet wallet = walletCreator.createWallet(10, balance);
         accountStore.save();
+
         BlockChain blockChain = new BlockChain(stores);
         TransactionPool transactionPool = new TransactionPool();
         // TODO processor only uses pool?
