@@ -34,6 +34,8 @@ public class RpcRunner {
         topProcessor.registerProcess("eth_sendTransaction", transactionsProcessor);
 
         topProcessor.registerProcess("net_version", networkProcessor);
+        // TODO review the implementation module for this method
+        topProcessor.registerProcess("eth_gasPrice", networkProcessor);
 
         topProcessor.registerProcess("eth_accounts", accountsProcessor);
         topProcessor.registerProcess("eth_getBalance", accountsProcessor);
