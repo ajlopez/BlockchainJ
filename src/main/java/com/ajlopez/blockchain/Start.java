@@ -27,7 +27,9 @@ public class Start {
         TransactionPool transactionPool = new TransactionPool();
         // TODO processor only uses pool?
         TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
+
         Block genesis = GenesisGenerator.generateGenesis();
+
         blockChain.connectBlock(genesis);
 
         ArgumentsProcessor argsproc = processArguments(args);

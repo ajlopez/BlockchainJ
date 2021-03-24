@@ -76,9 +76,6 @@ public class BlockFork {
         if (block1 == null && block2 == null)
             return true;
 
-        if (block1 != null && block2 != null && block1.getHash().equals(block2.getHash()))
-            return true;
-
-        return false;
+        return block1 != null && block2 != null && block1.getHash().equals(block2.getHash());
     }
 }

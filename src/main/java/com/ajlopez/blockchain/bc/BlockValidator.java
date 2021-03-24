@@ -68,9 +68,6 @@ public class BlockValidator {
         if (!blockExecutionResult.getStateRootHash().equals(block.getStateRootHash()))
             return false;
 
-        if (!blockExecutionResult.getTransactionReceiptsHash().equals(block.getReceiptsRootHash()))
-            return false;
-
-        return true;
+        return blockExecutionResult.getTransactionReceiptsHash().equals(block.getReceiptsRootHash());
     }
 }
