@@ -52,10 +52,8 @@ public class BlocksProcessor extends AbstractJsonRpcProcessor {
             block = this.blockChain.getBlockByNumber(0);
         else if ("latest".equals(blockId))
             block = this.blockChain.getBestBlockInformation().getBlock();
-        else if (blockId.startsWith("0x"))
-            block = this.blockChain.getBlockByNumber(Long.parseLong(blockId.substring(2), 16));
         else
-            block = this.blockChain.getBlockByNumber(Long.parseLong(blockId));
+            block = this.blockChain.getBlockByNumber(Long.decode(blockId));
 
         JsonValue json;
 

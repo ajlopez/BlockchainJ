@@ -28,10 +28,7 @@ public class BlocksProvider {
 
     private static long toLongNumber(String text) throws JsonRpcException {
         try {
-            if (text.startsWith("0x"))
-                return Long.parseLong(text.substring(2), 16);
-
-            return Long.parseLong(text);
+            return Long.decode(text);
         }
         catch (NumberFormatException ex) {
             throw new JsonRpcException("Invalid number format");
