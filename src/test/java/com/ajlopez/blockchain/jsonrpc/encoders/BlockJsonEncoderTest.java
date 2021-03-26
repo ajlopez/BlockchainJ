@@ -47,7 +47,7 @@ public class BlockJsonEncoderTest {
         Assert.assertTrue(oresult.hasProperty("timestamp"));
 
         Assert.assertEquals(block.getHash().toString(), oresult.getProperty("hash").getValue());
-        Assert.assertEquals(block.getNumber() + "", oresult.getProperty("number").getValue());
+        Assert.assertEquals("0x1", oresult.getProperty("number").getValue());
         Assert.assertEquals(block.getCoinbase().toString(), oresult.getProperty("miner").getValue());
         Assert.assertEquals(block.getParentHash().toString(), oresult.getProperty("parentHash").getValue());
         Assert.assertEquals("0", oresult.getProperty("nonce").getValue());
@@ -56,7 +56,7 @@ public class BlockJsonEncoderTest {
         Assert.assertEquals(block.getDifficulty().toString(), oresult.getProperty("difficulty").getValue());
         Assert.assertEquals(Difficulty.TWO.toString(), oresult.getProperty("totalDifficulty").getValue());
         Assert.assertEquals(block.getTimestamp() + "", oresult.getProperty("timestamp").getValue());
-        Assert.assertEquals(block.getGasLimit() + "", oresult.getProperty("gasLimit").getValue());
+        Assert.assertEquals("0x0", oresult.getProperty("gasLimit").getValue());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("uncles").getType());
         Assert.assertEquals(0, ((JsonArrayValue)oresult.getProperty("uncles")).size());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("transactions").getType());
@@ -91,7 +91,7 @@ public class BlockJsonEncoderTest {
         Assert.assertTrue(oresult.hasProperty("timestamp"));
 
         Assert.assertEquals(block.getHash().toString(), oresult.getProperty("hash").getValue());
-        Assert.assertEquals(block.getNumber() + "", oresult.getProperty("number").getValue());
+        Assert.assertEquals( "0x1", oresult.getProperty("number").getValue());
         Assert.assertEquals(block.getCoinbase().toString(), oresult.getProperty("miner").getValue());
         Assert.assertEquals(block.getParentHash().toString(), oresult.getProperty("parentHash").getValue());
         Assert.assertEquals("0", oresult.getProperty("nonce").getValue());
@@ -100,7 +100,7 @@ public class BlockJsonEncoderTest {
         Assert.assertEquals(block.getDifficulty().toString(), oresult.getProperty("difficulty").getValue());
         Assert.assertEquals(Difficulty.TWO.toString(), oresult.getProperty("totalDifficulty").getValue());
         Assert.assertEquals(block.getTimestamp() + "", oresult.getProperty("timestamp").getValue());
-        Assert.assertEquals(block.getGasLimit() + "", oresult.getProperty("gasLimit").getValue());
+        Assert.assertEquals("0x" + Long.toString(block.getGasLimit(), 16), oresult.getProperty("gasLimit").getValue());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("uncles").getType());
         Assert.assertEquals(0, ((JsonArrayValue)oresult.getProperty("uncles")).size());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("transactions").getType());
@@ -140,7 +140,7 @@ public class BlockJsonEncoderTest {
         Assert.assertTrue(oresult.hasProperty("timestamp"));
 
         Assert.assertEquals(block.getHash().toString(), oresult.getProperty("hash").getValue());
-        Assert.assertEquals(block.getNumber() + "", oresult.getProperty("number").getValue());
+        Assert.assertEquals("0x1", oresult.getProperty("number").getValue());
         Assert.assertEquals(block.getCoinbase().toString(), oresult.getProperty("miner").getValue());
         Assert.assertEquals(block.getParentHash().toString(), oresult.getProperty("parentHash").getValue());
         Assert.assertEquals("0", oresult.getProperty("nonce").getValue());
@@ -149,7 +149,7 @@ public class BlockJsonEncoderTest {
         Assert.assertEquals(block.getDifficulty().toString(), oresult.getProperty("difficulty").getValue());
         Assert.assertEquals(Difficulty.TWO.toString(), oresult.getProperty("totalDifficulty").getValue());
         Assert.assertEquals(block.getTimestamp() + "", oresult.getProperty("timestamp").getValue());
-        Assert.assertEquals(block.getGasLimit() + "", oresult.getProperty("gasLimit").getValue());
+        Assert.assertEquals("0x" + Long.toString(block.getGasLimit(), 16), oresult.getProperty("gasLimit").getValue());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("uncles").getType());
         Assert.assertEquals(0, ((JsonArrayValue)oresult.getProperty("uncles")).size());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("transactions").getType());
@@ -195,7 +195,7 @@ public class BlockJsonEncoderTest {
         Assert.assertTrue(oresult.hasProperty("timestamp"));
 
         Assert.assertEquals(block.getHash().toString(), oresult.getProperty("hash").getValue());
-        Assert.assertEquals(block.getNumber() + "", oresult.getProperty("number").getValue());
+        Assert.assertEquals("0x0", oresult.getProperty("number").getValue());
         Assert.assertEquals(block.getCoinbase().toString(), oresult.getProperty("miner").getValue());
         Assert.assertEquals(block.getParentHash().toString(), oresult.getProperty("parentHash").getValue());
         Assert.assertEquals("0", oresult.getProperty("nonce").getValue());
@@ -204,7 +204,7 @@ public class BlockJsonEncoderTest {
         Assert.assertEquals(block.getDifficulty().toString(), oresult.getProperty("difficulty").getValue());
         Assert.assertEquals(Difficulty.TWO.toString(), oresult.getProperty("totalDifficulty").getValue());
         Assert.assertEquals(block.getTimestamp() + "", oresult.getProperty("timestamp").getValue());
-        Assert.assertEquals(block.getGasLimit() + "", oresult.getProperty("gasLimit").getValue());
+        Assert.assertEquals("0x" + Long.toString(block.getGasLimit(), 16), oresult.getProperty("gasLimit").getValue());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("uncles").getType());
         Assert.assertEquals(2, ((JsonArrayValue)oresult.getProperty("uncles")).size());
         Assert.assertEquals(JsonValueType.ARRAY, oresult.getProperty("transactions").getType());

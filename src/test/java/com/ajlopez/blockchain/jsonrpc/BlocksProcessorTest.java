@@ -76,7 +76,7 @@ public class BlocksProcessorTest {
         JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
 
         Assert.assertTrue(jovalue.hasProperty("number"));
-        Assert.assertEquals("10", jovalue.getProperty("number").getValue());
+        Assert.assertEquals("0xa", jovalue.getProperty("number").getValue());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class BlocksProcessorTest {
         JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
 
         Assert.assertTrue(jovalue.hasProperty("number"));
-        Assert.assertEquals("10", jovalue.getProperty("number").getValue());
+        Assert.assertEquals("0xa", jovalue.getProperty("number").getValue());
     }
 
     @Test
@@ -142,7 +142,7 @@ public class BlocksProcessorTest {
         JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
 
         Assert.assertTrue(jovalue.hasProperty("number"));
-        Assert.assertEquals("3", jovalue.getProperty("number").getValue());
+        Assert.assertEquals("0x3", jovalue.getProperty("number").getValue());
         Assert.assertEquals(block.getHash().toString(), jovalue.getProperty("hash").getValue());
     }
 
@@ -168,7 +168,7 @@ public class BlocksProcessorTest {
         JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
 
         Assert.assertTrue(jovalue.hasProperty("number"));
-        Assert.assertEquals("10", jovalue.getProperty("number").getValue());
+        Assert.assertEquals("0xa", jovalue.getProperty("number").getValue());
         Assert.assertEquals(block.getHash().toString(), jovalue.getProperty("hash").getValue());
         Assert.assertEquals(10, ((JsonArrayValue)jovalue.getProperty("transactions")).size());
 
@@ -198,7 +198,7 @@ public class BlocksProcessorTest {
         JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
 
         Assert.assertTrue(jovalue.hasProperty("number"));
-        Assert.assertEquals("10", jovalue.getProperty("number").getValue());
+        Assert.assertEquals("0xa", jovalue.getProperty("number").getValue());
         Assert.assertEquals(block.getHash().toString(), jovalue.getProperty("hash").getValue());
         Assert.assertEquals(10, ((JsonArrayValue)jovalue.getProperty("transactions")).size());
 
@@ -229,7 +229,7 @@ public class BlocksProcessorTest {
         JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
 
         Assert.assertTrue(jovalue.hasProperty("number"));
-        Assert.assertEquals("10", jovalue.getProperty("number").getValue());
+        Assert.assertEquals("0xa", jovalue.getProperty("number").getValue());
         Assert.assertEquals(block.getHash().toString(), jovalue.getProperty("hash").getValue());
         Assert.assertEquals(10, ((JsonArrayValue)jovalue.getProperty("transactions")).size());
 
@@ -260,7 +260,7 @@ public class BlocksProcessorTest {
         JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
 
         Assert.assertTrue(jovalue.hasProperty("number"));
-        Assert.assertEquals("10", jovalue.getProperty("number").getValue());
+        Assert.assertEquals("0xa", jovalue.getProperty("number").getValue());
         Assert.assertEquals(block.getHash().toString(), jovalue.getProperty("hash").getValue());
         Assert.assertEquals(10, ((JsonArrayValue)jovalue.getProperty("transactions")).size());
 
@@ -306,7 +306,7 @@ public class BlocksProcessorTest {
         JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
 
         Assert.assertTrue(jovalue.hasProperty("number"));
-        Assert.assertEquals("10", jovalue.getProperty("number").getValue());
+        Assert.assertEquals("0xa", jovalue.getProperty("number").getValue());
     }
 
     @Test
@@ -329,7 +329,7 @@ public class BlocksProcessorTest {
         JsonObjectValue jovalue = (JsonObjectValue)response.getResult();
 
         Assert.assertTrue(jovalue.hasProperty("number"));
-        Assert.assertEquals("0", jovalue.getProperty("number").getValue());
+        Assert.assertEquals("0x0", jovalue.getProperty("number").getValue());
     }
 
     @Test
