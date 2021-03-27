@@ -96,4 +96,14 @@ public class HexUtilsTest {
         Assert.assertNotNull(result);
         Assert.assertArrayEquals(new byte[] { (byte)0xff, 0x01, 0x02 }, result);
     }
+
+    @Test
+    public void convertUnsignedLongToHexValue() {
+        Assert.assertEquals("0x0", HexUtils.unsignedLongToHexValue(0L));
+        Assert.assertEquals("0x1", HexUtils.unsignedLongToHexValue(1L));
+        Assert.assertEquals("0xa", HexUtils.unsignedLongToHexValue(10L));
+        Assert.assertEquals("0x2a", HexUtils.unsignedLongToHexValue(42L));
+        Assert.assertEquals("0xff", HexUtils.unsignedLongToHexValue(255L));
+        Assert.assertEquals("0x100", HexUtils.unsignedLongToHexValue(256L));
+    }
 }

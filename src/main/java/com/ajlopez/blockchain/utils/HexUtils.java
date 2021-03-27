@@ -62,4 +62,8 @@ public class HexUtils {
 
         return data;
     }
+
+    public static String unsignedLongToHexValue(long value) {
+        return "0x" + Long.toString(value, 16);
+    }
 }
