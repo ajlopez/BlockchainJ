@@ -63,4 +63,12 @@ public class NaturalValueTest {
 
         Assert.assertArrayEquals(bytes, new NaturalValue(new BigInteger(1, bytes)).toBytes());
     }
+
+    @Test
+    public void naturalValueToString() {
+        Assert.assertEquals("0x0", new NaturalValue(new BigInteger(1, new byte[] { 0x00, 0x00 })).toString());
+        Assert.assertEquals("0x1", new NaturalValue(new BigInteger(1, new byte[] { 0x01 })).toString());
+        Assert.assertEquals("0xff", new NaturalValue(new BigInteger(1, new byte[] { (byte)0xff })).toString());
+        Assert.assertEquals("0x100", new NaturalValue(new BigInteger(1, new byte[] { 0x01, 0x00 })).toString());
+    }
 }

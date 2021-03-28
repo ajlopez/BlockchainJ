@@ -59,7 +59,7 @@ public class NaturalValue {
 
     @Override
     public String toString() {
-        return HexUtils.bytesToHexString(this.toBytes(), true, false);
+        return HexUtils.bytesToHexString(this.toBytes(), true, true);
     }
 
     public DataWord toDataWord() {
