@@ -46,6 +46,7 @@ public class BlockTest {
         Assert.assertEquals(12_000_000L, block.getGasLimit());
         Assert.assertEquals(10_000_000, block.getGasUsed());
         Assert.assertEquals(42, block.getChainId());
+        Assert.assertEquals(0, block.getNonce());
     }
 
     @Test

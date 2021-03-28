@@ -95,6 +95,8 @@ public class Block {
 
     public int getChainId() { return this.header.getChainId(); }
 
+    public long getNonce() { return this.header.getNonce(); }
+
     public Difficulty getCummulativeDifficulty() {
         Difficulty result = this.getDifficulty();
 
