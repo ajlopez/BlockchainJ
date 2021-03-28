@@ -55,6 +55,40 @@ public class BlockEncoderTest {
     }
 
     @Test
+    public void encodeDecodeBlockUsingBlockHeader() {
+        byte[] extraData = FactoryHelper.createRandomBytes(20);
+        BlockHash parentHash = FactoryHelper.createRandomBlockHash();
+        Hash stateRootHash = FactoryHelper.createRandomHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        BlockHeader header = new BlockHeader(42, parentHash, 100, null, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 0, 0, extraData, 1, 42);
+
+        Block block = new Block(header, null, null);
+
+        byte[] encoded = BlockEncoder.encode(block);
+
+        Assert.assertNotNull(encoded);
+
+        Block result = BlockEncoder.decode(encoded);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(block.getNumber(), result.getNumber());
+        Assert.assertEquals(block.getParentHash(), result.getParentHash());
+
+        Assert.assertNotNull(result.getUncles());
+        Assert.assertTrue(result.getUncles().isEmpty());
+
+        Assert.assertEquals(block.getGasLimit(), result.getGasLimit());
+        Assert.assertEquals(block.getGasUsed(), result.getGasUsed());
+
+        Assert.assertEquals(block.getHash(), result.getHash());
+
+        Assert.assertArrayEquals(extraData, result.getExtraData());
+        Assert.assertEquals(1, result.getChainId());
+        Assert.assertEquals(42, result.getNonce());
+    }
+
+    @Test
     public void encodeDecodeBlockWithReceiptsRootHash() {
         BlockHash parentHash = FactoryHelper.createRandomBlockHash();
         Hash receiptsRootHash = FactoryHelper.createRandomHash();

@@ -29,7 +29,7 @@ public class BlockHeaderEncoderTest {
         Hash stateRootHash = FactoryHelper.createRandomHash();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, null, 0, 0);
+        BlockHeader header = new BlockHeader(42, hash, 100, transactionsHash, null, 0, null, stateRootHash, System.currentTimeMillis() / 1000, coinbase, Difficulty.fromUnsignedLong(42), 12_000_000L, 10_000_000L, null, 1, 42);
 
         byte[] encoded = BlockHeaderEncoder.encode(header);
 
