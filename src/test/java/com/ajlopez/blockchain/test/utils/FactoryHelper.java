@@ -297,11 +297,14 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor() {
-        return createNodeProcessor(new MemoryKeyValueStores());
+        KeyValueStores keyValueStores = new MemoryKeyValueStores();
+        BlockChain blockChain = new BlockChain(new Stores(keyValueStores));
+
+        return createNodeProcessor(keyValueStores, blockChain);
     }
 
-    public static NodeProcessor createNodeProcessor(KeyValueStores keyValueStores) {
-        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), keyValueStores, createRandomAddress(), new TransactionPool());
+    public static NodeProcessor createNodeProcessor(KeyValueStores keyValueStores, BlockChain blockChain) {
+        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), keyValueStores, createRandomAddress(), new TransactionPool(), blockChain);
     }
 
     public static List<Block> createBlocks(int nblocks) {

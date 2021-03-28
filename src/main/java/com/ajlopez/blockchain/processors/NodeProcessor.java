@@ -30,7 +30,6 @@ import java.util.function.Consumer;
 public class NodeProcessor implements PeerNode {
     private final NetworkConfiguration networkConfiguration;
     private final Peer peer;
-    private final BlockChain blockChain;
     private final ReceiveProcessor receiveProcessor;
     private final SendProcessor sendProcessor;
     private final KeyValueProcessor keyValueProcessor;
@@ -38,9 +37,8 @@ public class NodeProcessor implements PeerNode {
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, KeyValueStores keyValueStores, Address coinbase, TransactionPool transactionPool) {
+    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, KeyValueStores keyValueStores, Address coinbase, TransactionPool transactionPool, BlockChain blockChain) {
         Stores stores = new Stores(keyValueStores);
-        this.blockChain = new BlockChain(stores);
 
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
         TrieStorageProvider trieStorageProvider = stores.getTrieStorageProvider();
@@ -74,8 +72,6 @@ public class NodeProcessor implements PeerNode {
     public Peer getPeer() {
         return this.peer;
     }
-
-    public BlockChain getBlockChain() { return this.blockChain; }
 
     public void startMessagingProcess() {
         this.receiveProcessor.start();

@@ -31,13 +31,13 @@ public class NodeRunnerTest {
     public void mineBlockUsingOneRunner() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
-        FactoryHelper.createBlockChainWithGenesis(stores);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
 
         Semaphore semaphore = new Semaphore(0, true);
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool());
+        NodeRunner runner = new NodeRunner(true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool(), blockChain);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -65,7 +65,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(false, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool());
+        NodeRunner runner = new NodeRunner(false, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool(), blockChain);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -87,7 +87,7 @@ public class NodeRunnerTest {
 
         runner.stop();
 
-        Block bestBlock = new BlockChain(stores).getBestBlockInformation().getBlock();
+        Block bestBlock = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertEquals(1, bestBlock.getNumber());
@@ -106,8 +106,8 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner1 = new NodeRunner(true, 3001, null, coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool());
-        NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), keyValueStores2, new TransactionPool());
+        NodeRunner runner1 = new NodeRunner(true, 3001, null, coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool(), null);
+        NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), keyValueStores2, new TransactionPool(), null);
 
         runner2.onNewBlock(blk -> {
             if (blk.getNumber() > 0)

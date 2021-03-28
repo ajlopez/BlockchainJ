@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.bc.WalletCreator;
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
+import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
@@ -52,7 +53,7 @@ public class Start {
         List<String> peers = argsproc.getStringList("peers");
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        NodeRunner runner = new NodeRunner(isMiner, port, peers, coinbase, networkConfiguration, keyValueStores, transactionPool);
+        NodeRunner runner = new NodeRunner(isMiner, port, peers, coinbase, networkConfiguration, keyValueStores, transactionPool, blockChain);
         runner.onNewBlock(Start::printBlock);
 
         runner.start();
@@ -92,5 +93,8 @@ public class Start {
 
     public static void printBlock(Block block) {
         System.out.println(String.format("Connecting block %d %s", block.getNumber(), block.getHash()));
+
+        for (Transaction transaction: block.getTransactions())
+            System.out.println(String.format("With transaction%s", transaction.getHash()));
     }
 }

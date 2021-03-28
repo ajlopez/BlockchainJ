@@ -35,7 +35,7 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, new MemoryKeyValueStores(), coinbase, null);
+        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, new MemoryKeyValueStores(), coinbase, null, null);
 
         Assert.assertSame(peer, nodeProcessor.getPeer());
     }
@@ -49,7 +49,7 @@ public class NodeProcessorTest {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, keyValueStores, coinbase, null);
+        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, keyValueStores, coinbase, null, blockChain);
 
         Status result = nodeProcessor.getStatus();
 
@@ -66,7 +66,7 @@ public class NodeProcessorTest {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(1, blockChain.getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
@@ -76,7 +76,7 @@ public class NodeProcessorTest {
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
-        Block result = nodeProcessor.getBlockChain().getBestBlockInformation().getBlock();
+        Block result = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(1, result.getNumber());
@@ -87,8 +87,8 @@ public class NodeProcessorTest {
     public void mineBlock() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
-        FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
 
         Semaphore semaphore = new Semaphore(0, true);
 
@@ -104,7 +104,7 @@ public class NodeProcessorTest {
         nodeProcessor.stopMiningProcess();
         nodeProcessor.stopMessagingProcess();
 
-        Block block1 = nodeProcessor.getBlockChain().getBestBlockInformation().getBlock();
+        Block block1 = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(block1);
         Assert.assertEquals(1, block1.getNumber());
@@ -115,7 +115,7 @@ public class NodeProcessorTest {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
@@ -127,7 +127,7 @@ public class NodeProcessorTest {
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
-        Block result = nodeProcessor.getBlockChain().getBestBlockInformation().getBlock();
+        Block result = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block.getHash(), result.getHash());
@@ -138,7 +138,7 @@ public class NodeProcessorTest {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block1 = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0, null, 0);
@@ -152,7 +152,7 @@ public class NodeProcessorTest {
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
-        Block result = nodeProcessor.getBlockChain().getBestBlockInformation().getBlock();
+        Block result = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block2.getHash(), result.getHash());
@@ -162,8 +162,8 @@ public class NodeProcessorTest {
     public void processTenBlockMessages() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
-        FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
+        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
         List<Block> blocks = FactoryHelper.createBlocks(9);
 
         for (Block block: blocks) {
@@ -173,7 +173,7 @@ public class NodeProcessorTest {
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
-        Block result = nodeProcessor.getBlockChain().getBestBlockInformation().getBlock();
+        Block result = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(9, result.getNumber());
@@ -185,7 +185,7 @@ public class NodeProcessorTest {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block1 = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0, null, 0);
@@ -199,7 +199,7 @@ public class NodeProcessorTest {
 
         NodesHelper.runNodeProcessors(nodeProcessor);
 
-        Block result = nodeProcessor.getBlockChain().getBestBlockInformation().getBlock();
+        Block result = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(block2.getHash(), result.getHash());
@@ -209,9 +209,11 @@ public class NodeProcessorTest {
     public void processTwoBlockMessagesUsingTwoNodes() throws InterruptedException, IOException {
         KeyValueStores keyValueStores1 = new MemoryKeyValueStores();
         KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
+        BlockChain blockChain1 = new BlockChain(new Stores(keyValueStores1));
+        BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
 
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores1);
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores1, blockChain1);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -227,12 +229,12 @@ public class NodeProcessorTest {
 
         NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
 
-        Block result1 = nodeProcessor1.getBlockChain().getBestBlockInformation().getBlock();
+        Block result1 = blockChain1.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result1);
         Assert.assertEquals(block1.getHash(), result1.getHash());
 
-        Block result2 = nodeProcessor2.getBlockChain().getBestBlockInformation().getBlock();
+        Block result2 = blockChain2.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(block1.getHash(), result2.getHash());
@@ -242,9 +244,11 @@ public class NodeProcessorTest {
     public void processTwoBlockMessagesUsingTwoNodesConnectedByPipes() throws InterruptedException, IOException {
         KeyValueStores keyValueStores1 = new MemoryKeyValueStores();
         KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
+        BlockChain blockChain1 = new BlockChain(new Stores(keyValueStores1));
+        BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
 
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores1);
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores1, blockChain1);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
         Address coinbase = FactoryHelper.createRandomAddress();
@@ -262,12 +266,12 @@ public class NodeProcessorTest {
         NodesHelper.runNodeProcessors(nodeProcessor1, nodeProcessor2);
         connections.forEach(connection -> connection.stop());
 
-        Block result1 = nodeProcessor1.getBlockChain().getBestBlockInformation().getBlock();
+        Block result1 = blockChain1.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result1);
         Assert.assertEquals(block1.getHash(), result1.getHash());
 
-        Block result2 = nodeProcessor2.getBlockChain().getBestBlockInformation().getBlock();
+        Block result2 = blockChain2.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(block1.getHash(), result2.getHash());
@@ -281,9 +285,10 @@ public class NodeProcessorTest {
 
         BlockChain blockChain1 = FactoryHelper.createBlockChain(stores1, 300, 0);
         Block bestBlock = blockChain1.getBestBlockInformation().getBlock();
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores1);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores1, blockChain1);
 
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
+        BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
@@ -295,12 +300,12 @@ public class NodeProcessorTest {
 
         NodesHelper.runNodeProcessors(bestBlock, nodeProcessor1, nodeProcessor2);
 
-        Block result1 = nodeProcessor1.getBlockChain().getBestBlockInformation().getBlock();
+        Block result1 = blockChain1.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result1);
         Assert.assertEquals(bestBlock.getHash(), result1.getHash());
 
-        Block result2 = nodeProcessor2.getBlockChain().getBestBlockInformation().getBlock();
+        Block result2 = blockChain2.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(bestBlock.getHash(), result2.getHash());
@@ -312,7 +317,7 @@ public class NodeProcessorTest {
         Stores stores1 = new Stores(keyValueStores);
         BlockChain blockChain1 = FactoryHelper.createBlockChain(stores1,300, 10);
         Block bestBlock = blockChain1.getBestBlockInformation().getBlock();
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
 
         MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
         Stores stores2 = new Stores(keyValueStores2);
@@ -326,7 +331,8 @@ public class NodeProcessorTest {
 
         Assert.assertNotNull(stores2.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash()));
 
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
+        BlockChain blockChain2 = new BlockChain(stores2);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
@@ -338,12 +344,12 @@ public class NodeProcessorTest {
 
         NodesHelper.runNodeProcessors(blockChain1.getBestBlockInformation().getBlock(), nodeProcessor1, nodeProcessor2);
 
-        Block result1 =nodeProcessor1.getBlockChain().getBestBlockInformation().getBlock();
+        Block result1 = blockChain1.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result1);
         Assert.assertEquals(bestBlock.getHash(), result1.getHash());
 
-        Block result2 = nodeProcessor2.getBlockChain().getBestBlockInformation().getBlock();
+        Block result2 = blockChain2.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(bestBlock.getHash(), result2.getHash());
@@ -354,11 +360,12 @@ public class NodeProcessorTest {
         MemoryKeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain1 = FactoryHelper.createBlockChain(stores,300, 10);
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
 
         MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
 
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
+        BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
@@ -405,10 +412,11 @@ public class NodeProcessorTest {
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain1 = FactoryHelper.createBlockChain(stores,300, 0);
         Block bestBlock = blockChain1.getBestBlockInformation().getBlock();
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
 
         MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
+        BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
 
@@ -421,13 +429,13 @@ public class NodeProcessorTest {
         NodesHelper.runNodeProcessors(blockChain1.getBestBlockInformation().getBlock(), nodeProcessor1, nodeProcessor2);
         connections.forEach(connection -> connection.stop());
 
-        Block result1 = nodeProcessor1.getBlockChain().getBestBlockInformation().getBlock();
+        Block result1 = blockChain1.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result1);
         Assert.assertEquals(bestBlock.getNumber(), result1.getNumber());
         Assert.assertEquals(bestBlock.getHash(), result1.getHash());
 
-        Block result2 = nodeProcessor2.getBlockChain().getBestBlockInformation().getBlock();
+        Block result2 = blockChain2.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(bestBlock.getNumber(), result2.getNumber());
@@ -449,11 +457,13 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
         MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
+        BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
         MemoryKeyValueStores keyValueStores3 = new MemoryKeyValueStores();
-        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(keyValueStores3);
+        BlockChain blockChain3 = new BlockChain(new Stores(keyValueStores3));
+        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(keyValueStores3, blockChain3);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
@@ -466,17 +476,17 @@ public class NodeProcessorTest {
 
         NodesHelper.runNodeProcessors(blockChain1.getBestBlockInformation().getBlock(), nodeProcessor1, nodeProcessor2, nodeProcessor3);
 
-        Block result1 = nodeProcessor1.getBlockChain().getBestBlockInformation().getBlock();
+        Block result1 = blockChain1.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result1);
         Assert.assertEquals(bestBlock.getHash(), result1.getHash());
 
-        Block result2 = nodeProcessor2.getBlockChain().getBestBlockInformation().getBlock();
+        Block result2 = blockChain2.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(bestBlock.getHash(), result2.getHash());
 
-        Block result3 = nodeProcessor3.getBlockChain().getBestBlockInformation().getBlock();
+        Block result3 = blockChain3.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result3);
         Assert.assertEquals(bestBlock.getHash(), result3.getHash());
@@ -497,11 +507,13 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
         MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
+        BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
         MemoryKeyValueStores keyValueStores3 = new MemoryKeyValueStores();
-        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(keyValueStores3);
+        BlockChain blockChain3 = new BlockChain(new Stores(keyValueStores3));
+        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(keyValueStores3, blockChain3);
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
 
@@ -514,17 +526,17 @@ public class NodeProcessorTest {
         NodesHelper.runNodeProcessors(blockChain1.getBestBlockInformation().getBlock(), nodeProcessor1, nodeProcessor2, nodeProcessor3);
         connections.forEach(connection -> connection.stop());
 
-        Block result1 = nodeProcessor1.getBlockChain().getBestBlockInformation().getBlock();
+        Block result1 = blockChain1.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result1);
         Assert.assertEquals(bestBlock.getHash(), result1.getHash());
 
-        Block result2 = nodeProcessor2.getBlockChain().getBestBlockInformation().getBlock();
+        Block result2 = blockChain2.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result2);
         Assert.assertEquals(bestBlock.getHash(), result2.getHash());
 
-        Block result3 = nodeProcessor3.getBlockChain().getBestBlockInformation().getBlock();
+        Block result3 = blockChain3.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(result3);
         Assert.assertEquals(bestBlock.getHash(), result3.getHash());
@@ -535,7 +547,9 @@ public class NodeProcessorTest {
         Transaction transaction = FactoryHelper.createTransaction(100);
         Message message = new TransactionMessage(transaction);
 
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(new MemoryKeyValueStores());
+        KeyValueStores keyValueStores = new MemoryKeyValueStores();
+        BlockChain blockChain = new BlockChain(new Stores(keyValueStores));
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
 
