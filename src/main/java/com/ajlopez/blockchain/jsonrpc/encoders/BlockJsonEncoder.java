@@ -8,6 +8,7 @@ import com.ajlopez.blockchain.json.JsonBuilder;
 import com.ajlopez.blockchain.json.JsonNullValue;
 import com.ajlopez.blockchain.json.JsonObjectBuilder;
 import com.ajlopez.blockchain.json.JsonValue;
+import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.util.List;
 
@@ -25,11 +26,11 @@ public class BlockJsonEncoder {
                 .name("hash")
                 .value(block.getHash())
                 .name("number")
-                .value("0x" + Long.toString(block.getNumber(), 16))
+                .value(HexUtils.unsignedLongToHexValue(block.getNumber()))
                 .name("parentHash")
                 .value(block.getParentHash())
                 .name("nonce")
-                .value(0)
+                .value("0x0")
                 .name("miner")
                 .value(block.getCoinbase())
                 .name("transactionRoot")
@@ -37,9 +38,9 @@ public class BlockJsonEncoder {
                 .name("stateRoot")
                 .value(block.getStateRootHash())
                 .name("timestamp")
-                .value(block.getTimestamp())
+                .value(HexUtils.unsignedLongToHexValue(block.getTimestamp()))
                 .name("gasLimit")
-                .value("0x" + Long.toString(block.getGasLimit(), 16))
+                .value(HexUtils.unsignedLongToHexValue(block.getGasLimit()))
                 .name("difficulty")
                 .value(block.getDifficulty())
                 .name("totalDifficulty")
