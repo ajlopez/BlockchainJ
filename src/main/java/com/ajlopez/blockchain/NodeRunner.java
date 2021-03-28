@@ -7,6 +7,7 @@ import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.net.peers.TcpPeerServer;
 import com.ajlopez.blockchain.processors.NodeProcessor;
+import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.store.*;
 
 import java.io.IOException;
@@ -25,13 +26,13 @@ public class NodeRunner {
     private final NodeProcessor nodeProcessor;
     private final TcpPeerServer tcpPeerServer;
 
-    public NodeRunner(boolean miner, int port, List<String> peers, Address coinbase, NetworkConfiguration networkConfiguration, KeyValueStores keyValueStores) {
+    public NodeRunner(boolean miner, int port, List<String> peers, Address coinbase, NetworkConfiguration networkConfiguration, KeyValueStores keyValueStores, TransactionPool transactionPool) {
         this.miner = miner;
         this.port = port;
         this.peers = peers;
         this.network = networkConfiguration.getNetworkNumber();
 
-        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), keyValueStores, coinbase);
+        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), keyValueStores, coinbase, transactionPool);
         this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
     }
 

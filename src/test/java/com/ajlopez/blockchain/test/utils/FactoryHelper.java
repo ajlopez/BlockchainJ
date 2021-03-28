@@ -301,7 +301,7 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(KeyValueStores keyValueStores) {
-        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), keyValueStores, createRandomAddress());
+        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), keyValueStores, createRandomAddress(), new TransactionPool());
     }
 
     public static List<Block> createBlocks(int nblocks) {

@@ -10,6 +10,7 @@ import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
+import com.ajlopez.blockchain.processors.TransactionPool;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.KeyValueStores;
 import com.ajlopez.blockchain.store.MemoryKeyValueStores;
@@ -36,7 +37,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
+        NodeRunner runner = new NodeRunner(true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool());
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -64,7 +65,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(false, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores);
+        NodeRunner runner = new NodeRunner(false, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool());
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -105,8 +106,8 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner1 = new NodeRunner(true, 3001, null, coinbase, new NetworkConfiguration((short)42), keyValueStores);
-        NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), keyValueStores2);
+        NodeRunner runner1 = new NodeRunner(true, 3001, null, coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool());
+        NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), keyValueStores2, new TransactionPool());
 
         runner2.onNewBlock(blk -> {
             if (blk.getNumber() > 0)

@@ -11,7 +11,6 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.processors.TransactionPool;
-import com.ajlopez.blockchain.processors.TransactionProcessor;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.KeyValueStores;
@@ -39,8 +38,6 @@ public class Start {
 
         BlockChain blockChain = new BlockChain(stores);
         TransactionPool transactionPool = new TransactionPool();
-        // TODO processor only uses pool?
-        TransactionProcessor transactionProcessor = new TransactionProcessor(transactionPool);
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
@@ -55,7 +52,7 @@ public class Start {
         List<String> peers = argsproc.getStringList("peers");
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        NodeRunner runner = new NodeRunner(isMiner, port, peers, coinbase, networkConfiguration, keyValueStores);
+        NodeRunner runner = new NodeRunner(isMiner, port, peers, coinbase, networkConfiguration, keyValueStores, transactionPool);
         runner.onNewBlock(Start::printBlock);
 
         runner.start();
@@ -67,7 +64,7 @@ public class Start {
         if (rpc) {
             int rpcport = argsproc.getInteger("rpcport");
 
-            RpcRunner rpcrunner = new RpcRunner(rpcport, blockChain, stores.getAccountStoreProvider(), transactionPool, transactionProcessor, networkConfiguration, wallet);
+            RpcRunner rpcrunner = new RpcRunner(blockChain, rpcport, stores.getAccountStoreProvider(), transactionPool, networkConfiguration, wallet);
 
             rpcrunner.start();
 
