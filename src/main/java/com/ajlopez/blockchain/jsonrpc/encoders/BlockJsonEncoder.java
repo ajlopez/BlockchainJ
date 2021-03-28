@@ -41,6 +41,8 @@ public class BlockJsonEncoder {
                 .value(HexUtils.unsignedLongToHexValue(block.getTimestamp()))
                 .name("gasLimit")
                 .value(HexUtils.unsignedLongToHexValue(block.getGasLimit()))
+                .name("gasUsed")
+                .value(HexUtils.unsignedLongToHexValue(block.getGasUsed()))
                 .name("difficulty")
                 .value(block.getDifficulty())
                 .name("totalDifficulty")
