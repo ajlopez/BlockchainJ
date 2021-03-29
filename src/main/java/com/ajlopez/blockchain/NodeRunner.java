@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
@@ -27,13 +28,13 @@ public class NodeRunner {
     private final NodeProcessor nodeProcessor;
     private final TcpPeerServer tcpPeerServer;
 
-    public NodeRunner(boolean miner, int port, List<String> peers, Address coinbase, NetworkConfiguration networkConfiguration, KeyValueStores keyValueStores, TransactionPool transactionPool, BlockChain blockChain) {
+    public NodeRunner(boolean miner, int port, List<String> peers, Address coinbase, NetworkConfiguration networkConfiguration, ObjectContext objectContext) {
         this.miner = miner;
         this.port = port;
         this.peers = peers;
         this.network = networkConfiguration.getNetworkNumber();
 
-        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), keyValueStores, coinbase, transactionPool, blockChain);
+        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), objectContext.getKeyValueStores(), coinbase, objectContext.getTransactionPool(), objectContext.getBlockChain());
         this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
     }
 

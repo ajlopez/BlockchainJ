@@ -1,9 +1,6 @@
 package com.ajlopez.blockchain;
 
-import com.ajlopez.blockchain.bc.BlockChain;
-import com.ajlopez.blockchain.bc.GenesisGenerator;
-import com.ajlopez.blockchain.bc.Wallet;
-import com.ajlopez.blockchain.bc.WalletCreator;
+import com.ajlopez.blockchain.bc.*;
 import com.ajlopez.blockchain.config.ArgumentsProcessor;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
@@ -27,22 +24,18 @@ import java.util.List;
  */
 public class Start {
     public static void main(String[] args) throws IOException {
-        KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
+        ObjectContext objectContext = new ObjectContext(new MemoryKeyValueStores());
 
-        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
+        AccountStore accountStore = objectContext.getStores().getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
         WalletCreator walletCreator = new WalletCreator(accountStore);
         DataWord oneMillion = DataWord.fromUnsignedLong(1_000_000L);
         Coin balance = Coin.fromBytes(oneMillion.mul(oneMillion).mul(oneMillion).mul(DataWord.fromUnsignedInteger(100)).getBytes());
         Wallet wallet = walletCreator.createWallet(10, balance);
         accountStore.save();
 
-        BlockChain blockChain = new BlockChain(stores);
-        TransactionPool transactionPool = new TransactionPool();
-
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        blockChain.connectBlock(genesis);
+        objectContext.getBlockChain().connectBlock(genesis);
 
         ArgumentsProcessor argsproc = processArguments(args);
 
@@ -53,7 +46,7 @@ public class Start {
         List<String> peers = argsproc.getStringList("peers");
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        NodeRunner runner = new NodeRunner(isMiner, port, peers, coinbase, networkConfiguration, keyValueStores, transactionPool, blockChain);
+        NodeRunner runner = new NodeRunner(isMiner, port, peers, coinbase, networkConfiguration, objectContext);
         runner.onNewBlock(Start::printBlock);
 
         runner.start();
@@ -65,7 +58,7 @@ public class Start {
         if (rpc) {
             int rpcport = argsproc.getInteger("rpcport");
 
-            RpcRunner rpcrunner = new RpcRunner(blockChain, rpcport, stores.getAccountStoreProvider(), transactionPool, networkConfiguration, wallet);
+            RpcRunner rpcrunner = new RpcRunner(objectContext.getBlockChain(), rpcport, objectContext.getStores().getAccountStoreProvider(), objectContext.getTransactionPool(), networkConfiguration, wallet);
 
             rpcrunner.start();
 

@@ -34,7 +34,7 @@ public class HttpProcessorTest {
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
-        Assert.assertEquals("HTTP/1.1 200 OK\r\n\r\n{ \"id\": \"1\", \"jsonrpc\": \"2.0\", \"result\": \"0x0a\" }", result);
+        Assert.assertEquals("HTTP/1.1 200 OK\r\n\r\n{ \"id\": \"1\", \"jsonrpc\": \"2.0\", \"result\": \"0xa\" }", result);
     }
 
     @Test

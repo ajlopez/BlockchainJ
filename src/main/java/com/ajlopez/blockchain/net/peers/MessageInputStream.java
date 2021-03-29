@@ -19,6 +19,9 @@ public class MessageInputStream {
         // TODO process protocol
         Packet packet = this.packetInputStream.readPacket();
 
+        if (packet == null)
+            return null;
+
         if (packet.getNetwork() != this.network)
             this.packetInputStream.close();
 

@@ -17,6 +17,9 @@ public class PacketInputStream {
     }
 
     public Packet readPacket() {
+        if (this.closed)
+            return null;
+
         try {
             int signature = this.dataInputStream.readInt();
 
@@ -31,6 +34,7 @@ public class PacketInputStream {
 
             int length = this.dataInputStream.readInt();
 
+            System.out.println("length " + length);
             byte[] bytes = new byte[length];
             int btotalread = 0;
 

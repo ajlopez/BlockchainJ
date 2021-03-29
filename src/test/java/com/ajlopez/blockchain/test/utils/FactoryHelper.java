@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.test.utils;
 
 import com.ajlopez.blockchain.bc.BlockValidator;
 import com.ajlopez.blockchain.bc.GenesisGenerator;
+import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.*;
 import com.ajlopez.blockchain.core.types.*;
@@ -237,6 +238,10 @@ public class FactoryHelper {
         return createBlockChainWithGenesis(stores, GenesisGenerator.generateGenesis());
     }
 
+    public static BlockChain createBlockChainWithGenesis(ObjectContext objectContext) throws IOException {
+        return createBlockChainWithGenesis(objectContext, GenesisGenerator.generateGenesis());
+    }
+
     public static BlockChain createBlockChainWithGenesis(Stores stores, AccountStore accountStore) throws IOException {
         return createBlockChainWithGenesis(stores, GenesisGenerator.generateGenesis(accountStore));
     }
@@ -246,6 +251,12 @@ public class FactoryHelper {
         blockChain.connectBlock(genesis);
 
         return blockChain;
+    }
+
+    public static BlockChain createBlockChainWithGenesis(ObjectContext objectContext, Block genesis) throws IOException {
+        objectContext.getBlockChain().connectBlock(genesis);
+
+        return objectContext.getBlockChain();
     }
 
     public static BlockProcessor createBlockProcessor() {

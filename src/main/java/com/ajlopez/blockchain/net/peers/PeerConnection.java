@@ -50,8 +50,17 @@ public class PeerConnection implements PeerNode {
 
     private void readProcess() {
         try {
-            while (!this.stopped)
-                this.inputChannel.postMessage(this.peer, this.messageInputStream.readMessage());
+            while (!this.stopped) {
+                Message message = this.messageInputStream.readMessage();
+
+                if (message == null) {
+                    this.stopped = true;
+                    continue;
+                }
+
+                if (this.inputChannel != null)
+                    this.inputChannel.postMessage(this.peer, message);
+            }
         }
         catch (Exception ex) {
             this.stopped = true;

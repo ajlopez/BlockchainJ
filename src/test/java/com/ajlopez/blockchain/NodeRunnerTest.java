@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
@@ -29,15 +30,14 @@ import java.util.concurrent.Semaphore;
 public class NodeRunnerTest {
     @Test
     public void mineBlockUsingOneRunner() throws InterruptedException, IOException {
-        KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
+        ObjectContext objectContext = new ObjectContext(new MemoryKeyValueStores());
+        FactoryHelper.createBlockChainWithGenesis(objectContext);
 
         Semaphore semaphore = new Semaphore(0, true);
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool(), blockChain);
+        NodeRunner runner = new NodeRunner(true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), objectContext);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -49,7 +49,7 @@ public class NodeRunnerTest {
 
         runner.stop();
 
-        Block bestBlock = new BlockChain(stores).getBestBlockInformation().getBlock();
+        Block bestBlock = objectContext.getBlockChain().getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertTrue(bestBlock.getNumber() > 0);
@@ -57,15 +57,16 @@ public class NodeRunnerTest {
 
     @Test
     public void processBlockInServerRunner() throws InterruptedException, IOException {
-        KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-
+        ObjectContext objectContext = new ObjectContext(new MemoryKeyValueStores());
+        FactoryHelper.createBlockChainWithGenesis(objectContext);
         Semaphore semaphore = new Semaphore(0, true);
+
+        Assert.assertNotNull(objectContext.getBlockChain());
+        Assert.assertNotNull(objectContext.getBlockChain().getBestBlockInformation());
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(false, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool(), blockChain);
+        NodeRunner runner = new NodeRunner(false, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), objectContext);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -73,7 +74,7 @@ public class NodeRunnerTest {
 
         runner.start();
 
-        Block block = new Block(1, blockChain.getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
+        Block block = new Block(1, objectContext.getBlockChain().getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
 
         Message message = new BlockMessage(block);
 
@@ -87,7 +88,7 @@ public class NodeRunnerTest {
 
         runner.stop();
 
-        Block bestBlock = blockChain.getBestBlockInformation().getBlock();
+        Block bestBlock = objectContext.getBlockChain().getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertEquals(1, bestBlock.getNumber());
@@ -96,18 +97,16 @@ public class NodeRunnerTest {
 
     @Test
     public void connectTwoNodeRunners() throws InterruptedException, IOException {
-        KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        FactoryHelper.createBlockChainWithGenesis(stores);
-        KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
-        Stores stores2 = new Stores(keyValueStores2);
+        ObjectContext objectContext1 = new ObjectContext(new MemoryKeyValueStores());
+        FactoryHelper.createBlockChainWithGenesis(objectContext1);
+        ObjectContext objectContext2 = new ObjectContext(new MemoryKeyValueStores());
 
         Semaphore semaphore = new Semaphore(0, true);
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner1 = new NodeRunner(true, 3001, null, coinbase, new NetworkConfiguration((short)42), keyValueStores, new TransactionPool(), null);
-        NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), keyValueStores2, new TransactionPool(), null);
+        NodeRunner runner1 = new NodeRunner(true, 3001, null, coinbase, new NetworkConfiguration((short)42), objectContext1);
+        NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), objectContext2);
 
         runner2.onNewBlock(blk -> {
             if (blk.getNumber() > 0)
@@ -122,7 +121,7 @@ public class NodeRunnerTest {
         runner2.stop();
         runner1.stop();
 
-        Block bestBlock = new BlockChain(stores2).getBestBlockInformation().getBlock();
+        Block bestBlock = objectContext2.getBlockChain().getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock);
         Assert.assertTrue(bestBlock.getNumber() > 0);
