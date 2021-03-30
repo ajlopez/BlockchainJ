@@ -27,7 +27,9 @@ public class MessageOutputStreamTest {
         PacketOutputStream packetOutputStream = new PacketOutputStream(outputStream);
         MessageOutputStream messageOutputStream = new MessageOutputStream((short)1, packetOutputStream);
 
-        messageOutputStream.writeMessage(null, message);
+        Assert.assertFalse(messageOutputStream.isClosed());
+
+        Assert.assertTrue(messageOutputStream.writeMessage(null, message));
 
         outputStream.close();
 
@@ -48,5 +50,10 @@ public class MessageOutputStreamTest {
         dataInputStream.read(bresult);
 
         Assert.assertArrayEquals(bytes, bresult);
+
+        messageOutputStream.close();
+
+        Assert.assertTrue(messageOutputStream.isClosed());
+        Assert.assertFalse(messageOutputStream.writeMessage(null, message));
     }
 }

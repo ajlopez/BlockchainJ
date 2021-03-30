@@ -12,12 +12,17 @@ public class MessageOutputStream {
     private final short network;
     private final PacketOutputStream packetOutputStream;
 
+    private boolean closed;
+
     public MessageOutputStream(short network, PacketOutputStream packetOutputStream) {
         this.network = network;
         this.packetOutputStream = packetOutputStream;
     }
 
     public boolean writeMessage(Peer sender, Message message) {
+        if (this.closed)
+            return false;
+
         byte[] bytes = MessageEncoder.encode(message);
 
         // TODO sign packet using sender keys
@@ -27,5 +32,10 @@ public class MessageOutputStream {
 
     public void close() throws IOException {
         this.packetOutputStream.close();
+        this.closed = true;
+    }
+
+    public boolean isClosed() {
+        return this.closed;
     }
 }
