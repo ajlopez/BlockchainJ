@@ -179,6 +179,7 @@ public class BlockUtilsTest {
         Block block1c = world.getBlock("b1c");
         Block block1d = world.getBlock("b1d");
         Block block2 = world.getBlock("b2");
+        Block block2b = world.getBlock("b2b");
         Block block2plus = world.getBlock("b2plus");
         Block block3plus = world.getBlock("b3plus");
 
@@ -187,14 +188,15 @@ public class BlockUtilsTest {
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
 
-        Assert.assertEquals(7, result.size());
-        Assert.assertTrue(result.contains(block2plus.getHeader()));
-        Assert.assertTrue(result.contains(block1.getHeader()));
+        Assert.assertEquals(8, result.size());
         Assert.assertTrue(result.contains(genesis.getHeader()));
+        Assert.assertTrue(result.contains(block1.getHeader()));
         Assert.assertTrue(result.contains(block1b.getHeader()));
         Assert.assertTrue(result.contains(block1c.getHeader()));
         Assert.assertTrue(result.contains(block1d.getHeader()));
         Assert.assertTrue(result.contains(block2.getHeader()));
+        Assert.assertTrue(result.contains(block2b.getHeader()));
+        Assert.assertTrue(result.contains(block2plus.getHeader()));
     }
 
     @Test
