@@ -53,10 +53,14 @@ public class BlockUtils {
     }
 
     public static Set<BlockHeader> getPreviousAllHeaders(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
+        return getPreviousAllHeaders(block.getNumber(), depth, blockStore, blocksInformationStore);
+    }
+
+    public static Set<BlockHeader> getPreviousAllHeaders(long height, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
         Set<BlockHeader> headers = new HashSet<>();
 
         for (int k = 0; k < depth; k++) {
-            BlocksInformation blocksInformation = blocksInformationStore.get(block.getNumber() - k - 1);
+            BlocksInformation blocksInformation = blocksInformationStore.get(height - k - 1);
 
             for (BlockInformation bi : blocksInformation.getBlockInformationList()) {
                 Block b = blockStore.getBlock(bi.getBlockHash());
@@ -69,7 +73,6 @@ public class BlockUtils {
         return headers;
     }
 
-    // TODO test discarding candidate uncles with parent not in blockchain
     public static Set<BlockHeader> getCandidateUncles(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
         Set<BlockHeader> candidateUncles = getPreviousAllHeaders(block, depth, blockStore, blocksInformationStore);
         Set<BlockHeader> ancestorsAllHeaders = getAncestorsAllHeaders(block, depth + 1, blockStore);
