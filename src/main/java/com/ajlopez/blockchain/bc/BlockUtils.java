@@ -18,8 +18,11 @@ public class BlockUtils {
     }
 
     public static Set<BlockHeader> getAncestorsHeaders(Block block, int depth, BlockStore blockStore) throws IOException {
+        return getAncestorsHeaders(block.getParentHash(), depth, blockStore);
+    }
+
+    public static Set<BlockHeader> getAncestorsHeaders(BlockHash parentHash, int depth, BlockStore blockStore) throws IOException {
         Set<BlockHeader> ancestors = new HashSet<>();
-        BlockHash parentHash = block.getParentHash();
 
         for (int k = 0; k < depth; k++) {
             Block parent = blockStore.getBlock(parentHash);
