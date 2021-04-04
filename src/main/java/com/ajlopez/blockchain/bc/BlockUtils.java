@@ -80,9 +80,13 @@ public class BlockUtils {
     }
 
     public static Set<BlockHeader> getCandidateUncles(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
-        Set<BlockHeader> candidateUncles = getPreviousAllHeaders(block, depth, blockStore, blocksInformationStore);
-        Set<BlockHeader> ancestorsAllHeaders = getAncestorsAllHeaders(block, depth + 1, blockStore);
-        Set<BlockHeader> ancestorsHeaders = getAncestorsHeaders(block, depth + 1, blockStore);
+        return getCandidateUncles(block.getNumber(), block.getParentHash(), depth, blockStore, blocksInformationStore);
+    }
+
+    public static Set<BlockHeader> getCandidateUncles(long blockNumber, BlockHash parentHash, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
+        Set<BlockHeader> candidateUncles = getPreviousAllHeaders(blockNumber, depth, blockStore, blocksInformationStore);
+        Set<BlockHeader> ancestorsAllHeaders = getAncestorsAllHeaders(parentHash, depth + 1, blockStore);
+        Set<BlockHeader> ancestorsHeaders = getAncestorsHeaders(parentHash, depth + 1, blockStore);
 
         candidateUncles.removeAll(ancestorsAllHeaders);
 
