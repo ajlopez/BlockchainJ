@@ -25,7 +25,7 @@ public class BlockUtilsTest {
     public void getGenesisAncestorsAsEmptySet() throws IOException {
         Block genesis = GenesisGenerator.generateGenesis();
 
-        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(genesis, 0, null);
+        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(genesis.getParentHash(), 0, null);
 
         Assert.assertNotNull(result);
         Assert.assertTrue(result.isEmpty());
@@ -40,7 +40,7 @@ public class BlockUtilsTest {
 
         Block block10 = blockChain.getBlockByNumber(10);
 
-        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(block10, 5, blockStore);
+        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(block10.getParentHash(), 5, blockStore);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(5, result.size());
@@ -232,7 +232,7 @@ public class BlockUtilsTest {
 
         Block block10 = blockChain.getBlockByNumber(10);
 
-        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(block10, 10, blockStore);
+        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(block10.getParentHash(), 10, blockStore);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(10, result.size());
@@ -250,7 +250,7 @@ public class BlockUtilsTest {
 
         Block block10 = blockChain.getBlockByNumber(10);
 
-        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(block10, 20, blockStore);
+        Set<BlockHeader> result = BlockUtils.getAncestorsHeaders(block10.getParentHash(), 20, blockStore);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(10, result.size());
