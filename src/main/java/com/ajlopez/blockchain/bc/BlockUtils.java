@@ -33,10 +33,6 @@ public class BlockUtils {
         return ancestors;
     }
 
-    public static Set<BlockHeader> getAncestorsAllHeaders(Block block, int depth, BlockStore blockStore) throws IOException {
-        return getAncestorsAllHeaders(block.getParentHash(), depth, blockStore);
-    }
-
     public static Set<BlockHeader> getAncestorsAllHeaders(BlockHash parentHash, int depth, BlockStore blockStore) throws IOException {
         Set<BlockHeader> headers = new HashSet<>();
 

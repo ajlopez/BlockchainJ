@@ -121,7 +121,7 @@ public class BlockUtilsTest {
         blockStore.saveBlock(block2);
         blockStore.saveBlock(block3);
 
-        Set<BlockHeader> result = BlockUtils.getAncestorsAllHeaders(block3, 3, blockStore);
+        Set<BlockHeader> result = BlockUtils.getAncestorsAllHeaders(block3.getParentHash(), 3, blockStore);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
@@ -150,7 +150,7 @@ public class BlockUtilsTest {
         Block block2plus = world.getBlock("b2plus");
         Block block3plus = world.getBlock("b3plus");
 
-        Set<BlockHeader> result = BlockUtils.getAncestorsAllHeaders(block3plus, 3, blockStore);
+        Set<BlockHeader> result = BlockUtils.getAncestorsAllHeaders(block3plus.getParentHash(), 3, blockStore);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
