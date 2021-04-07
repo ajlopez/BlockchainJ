@@ -50,10 +50,6 @@ public class BlockUtils {
         return headers;
     }
 
-    public static Set<BlockHeader> getPreviousAllHeaders(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
-        return getPreviousAllHeaders(block.getNumber(), depth, blockStore, blocksInformationStore);
-    }
-
     public static Set<BlockHeader> getPreviousAllHeaders(long height, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
         Set<BlockHeader> headers = new HashSet<>();
 

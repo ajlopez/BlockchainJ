@@ -183,7 +183,7 @@ public class BlockUtilsTest {
         Block block2plus = world.getBlock("b2plus");
         Block block3plus = world.getBlock("b3plus");
 
-        Set<BlockHeader> result = BlockUtils.getPreviousAllHeaders(block3plus, 3, blockStore, blocksInformationStore);
+        Set<BlockHeader> result = BlockUtils.getPreviousAllHeaders(block3plus.getNumber(), 3, blockStore, blocksInformationStore);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
