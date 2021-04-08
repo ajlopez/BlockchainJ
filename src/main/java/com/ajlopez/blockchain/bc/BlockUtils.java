@@ -67,12 +67,10 @@ public class BlockUtils {
         return headers;
     }
 
-    public static Set<BlockHeader> getCandidateUncles(Block block, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
-        return getCandidateUncles(block.getNumber(), block.getParentHash(), depth, blockStore, blocksInformationStore);
-    }
-
-    public static Set<BlockHeader> getCandidateUncles(long blockNumber, BlockHash parentHash, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
-        Set<BlockHeader> candidateUncles = getPreviousAllHeaders(blockNumber, depth, blockStore, blocksInformationStore);
+    public static Set<BlockHeader> getCandidateUncles(BlockHash parentHash, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
+        Block parentBlock = blockStore.getBlock(parentHash);
+        long height = parentBlock.getNumber() + 1;
+        Set<BlockHeader> candidateUncles = getPreviousAllHeaders(height, depth, blockStore, blocksInformationStore);
         Set<BlockHeader> ancestorsAllHeaders = getAncestorsAllHeaders(parentHash, depth + 1, blockStore);
         Set<BlockHeader> ancestorsHeaders = getAncestorsHeaders(parentHash, depth + 1, blockStore);
 

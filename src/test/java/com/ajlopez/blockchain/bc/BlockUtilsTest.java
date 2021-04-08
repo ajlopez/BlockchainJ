@@ -213,7 +213,7 @@ public class BlockUtilsTest {
         Block block2 = world.getBlock("b2");
         Block block3plus = world.getBlock("b3plus");
 
-        Set<BlockHeader> result = BlockUtils.getCandidateUncles(block3plus, 3, blockStore, blocksInformationStore);
+        Set<BlockHeader> result = BlockUtils.getCandidateUncles(block3plus.getParentHash(), 3, blockStore, blocksInformationStore);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
