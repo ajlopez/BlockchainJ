@@ -58,7 +58,7 @@ public class BlockUtilsTest {
 
         Block block10 = blockChain.getBlockByNumber(10);
 
-        Set<BlockHeader> result = BlockUtils.getAncestorsUncles(block10, 5, blockStore);
+        Set<BlockHeader> result = BlockUtils.getAncestorsUncles(block10.getParentHash(), 5, blockStore);
 
         Assert.assertNotNull(result);
         Assert.assertTrue(result.isEmpty());
@@ -88,7 +88,7 @@ public class BlockUtilsTest {
         blockStore.saveBlock(block2);
         blockStore.saveBlock(block3);
 
-        Set<BlockHeader> result = BlockUtils.getAncestorsUncles(block3, 3, blockStore);
+        Set<BlockHeader> result = BlockUtils.getAncestorsUncles(block3.getParentHash(), 3, blockStore);
 
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());

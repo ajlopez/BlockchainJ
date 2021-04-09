@@ -89,9 +89,8 @@ public class BlockUtils {
         return uncles;
     }
 
-    public static Set<Block> getAncestorsBlocks(Block block, int depth, BlockStore blockStore) throws IOException {
+        public static Set<Block> getAncestorsBlocks(BlockHash parentHash, int depth, BlockStore blockStore) throws IOException {
         Set<Block> ancestors = new HashSet<>();
-        BlockHash parentHash = block.getParentHash();
 
         for (int k = 0; k < depth; k++) {
             Block parent = blockStore.getBlock(parentHash);
@@ -106,10 +105,10 @@ public class BlockUtils {
         return ancestors;
     }
 
-    public static Set<BlockHeader> getAncestorsUncles(Block block, int depth, BlockStore blockStore) throws IOException {
+    public static Set<BlockHeader> getAncestorsUncles(BlockHash parentHash, int depth, BlockStore blockStore) throws IOException {
         Set<BlockHeader> uncles = new HashSet<>();
 
-        Set<Block> ancestors = getAncestorsBlocks(block, depth, blockStore);
+        Set<Block> ancestors = getAncestorsBlocks(parentHash, depth, blockStore);
 
         for (Block ancestor : ancestors)
             uncles.addAll(ancestor.getUncles());
