@@ -73,8 +73,10 @@ public class BlockUtils {
         Set<BlockHeader> candidateUncles = getPreviousAllHeaders(height, depth, blockStore, blocksInformationStore);
         Set<BlockHeader> ancestorsAllHeaders = getAncestorsAllHeaders(parentHash, depth + 1, blockStore);
         Set<BlockHeader> ancestorsHeaders = getAncestorsHeaders(parentHash, depth + 1, blockStore);
+        Set<BlockHeader> ancestorsUncles = getAncestorsUncles(parentHash, depth + 1, blockStore);
 
         candidateUncles.removeAll(ancestorsAllHeaders);
+        candidateUncles.removeAll(ancestorsUncles);
 
         Set<BlockHash> ancestorsHashes = ancestorsHeaders
                 .stream()
@@ -89,7 +91,7 @@ public class BlockUtils {
         return uncles;
     }
 
-        public static Set<Block> getAncestorsBlocks(BlockHash parentHash, int depth, BlockStore blockStore) throws IOException {
+    public static Set<Block> getAncestorsBlocks(BlockHash parentHash, int depth, BlockStore blockStore) throws IOException {
         Set<Block> ancestors = new HashSet<>();
 
         for (int k = 0; k < depth; k++) {
