@@ -34,7 +34,7 @@ public class NodeRunner {
         this.peers = peers;
         this.network = networkConfiguration.getNetworkNumber();
 
-        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), objectContext.getKeyValueStores(), coinbase, objectContext.getTransactionPool(), objectContext.getBlockChain());
+        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), coinbase, objectContext);
         this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
     }
 

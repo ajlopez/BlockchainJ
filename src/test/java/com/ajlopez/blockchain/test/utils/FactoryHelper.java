@@ -315,7 +315,13 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(KeyValueStores keyValueStores, BlockChain blockChain) {
-        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), keyValueStores, createRandomAddress(), new TransactionPool(), blockChain);
+        ObjectContext objectContext = new ObjectContext(keyValueStores);
+
+        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), createRandomAddress(), objectContext);
+    }
+
+    public static NodeProcessor createNodeProcessor(ObjectContext objectContext) {
+        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), createRandomAddress(), objectContext);
     }
 
     public static List<Block> createBlocks(int nblocks) {

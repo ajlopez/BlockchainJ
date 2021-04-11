@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.GenesisGenerator;
+import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
@@ -34,8 +36,9 @@ public class NodeProcessorTest {
     public void createWithPeer() throws IOException {
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
+        ObjectContext objectContext = new ObjectContext(new MemoryKeyValueStores());
 
-        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, new MemoryKeyValueStores(), coinbase, null, null);
+        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, coinbase, objectContext);
 
         Assert.assertSame(peer, nodeProcessor.getPeer());
     }
@@ -44,12 +47,14 @@ public class NodeProcessorTest {
     public void getStatus() throws IOException {
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)42);
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
+        ObjectContext objectContext = new ObjectContext(keyValueStores);
+        Stores stores = objectContext.getStores();
+        BlockChain blockChain = objectContext.getBlockChain();
+        blockChain.connectBlock(GenesisGenerator.generateGenesis());
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, keyValueStores, coinbase, null, blockChain);
+        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, coinbase, objectContext);
 
         Status result = nodeProcessor.getStatus();
 
@@ -64,9 +69,10 @@ public class NodeProcessorTest {
     @Test
     public void processBlockMessage() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
+        ObjectContext objectContext = new ObjectContext(keyValueStores);
+        BlockChain blockChain = objectContext.getBlockChain();
+        blockChain.connectBlock(GenesisGenerator.generateGenesis());
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(objectContext);
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(1, blockChain.getBestBlockInformation().getBlockHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
@@ -86,9 +92,10 @@ public class NodeProcessorTest {
     @Test
     public void mineBlock() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
+        ObjectContext objectContext = new ObjectContext(keyValueStores);
+        BlockChain blockChain = objectContext.getBlockChain();
+        blockChain.connectBlock(GenesisGenerator.generateGenesis());
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(objectContext);
 
         Semaphore semaphore = new Semaphore(0, true);
 
@@ -113,9 +120,11 @@ public class NodeProcessorTest {
     @Test
     public void processTenRepeatedBlockMessages() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
+        ObjectContext objectContext = new ObjectContext(keyValueStores);
+        BlockChain blockChain = objectContext.getBlockChain();
+        blockChain.connectBlock(GenesisGenerator.generateGenesis());
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(objectContext);
+
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
@@ -183,9 +192,10 @@ public class NodeProcessorTest {
     @Test
     public void processTwoConsecutiveBlockMessagesOutOfOrder() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
+        ObjectContext objectContext = new ObjectContext(keyValueStores);
+        BlockChain blockChain = objectContext.getBlockChain();
+        blockChain.connectBlock(GenesisGenerator.generateGenesis());
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(objectContext);
         Address coinbase = FactoryHelper.createRandomAddress();
 
         Block block1 = new Block(1, blockChain.getBlockByNumber(0).getHash(), MerkleTree.EMPTY_MERKLE_TREE_HASH, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, Address.ZERO, Difficulty.ONE, 0, 0, null, 0);

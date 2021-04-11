@@ -3,6 +3,7 @@ package com.ajlopez.blockchain.processors;
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.BlockValidator;
 import com.ajlopez.blockchain.bc.ExtendedBlockInformation;
+import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
@@ -37,8 +38,11 @@ public class NodeProcessor implements PeerNode {
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, KeyValueStores keyValueStores, Address coinbase, TransactionPool transactionPool, BlockChain blockChain) {
-        Stores stores = new Stores(keyValueStores);
+    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, Address coinbase, ObjectContext objectContext) {
+        KeyValueStores keyValueStores = objectContext.getKeyValueStores();
+        Stores stores = objectContext.getStores();
+        BlockChain blockChain = objectContext.getBlockChain();
+        TransactionPool transactionPool = objectContext.getTransactionPool();
 
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
         TrieStorageProvider trieStorageProvider = stores.getTrieStorageProvider();
