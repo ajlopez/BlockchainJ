@@ -170,9 +170,11 @@ public class NodeProcessorTest {
     @Test
     public void processTenBlockMessages() throws InterruptedException, IOException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
+        ObjectContext objectContext = new ObjectContext(keyValueStores);
+        BlockChain blockChain = objectContext.getBlockChain();
+        blockChain.connectBlock(GenesisGenerator.generateGenesis());
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(objectContext);
+
         List<Block> blocks = FactoryHelper.createBlocks(9);
 
         for (Block block: blocks) {
