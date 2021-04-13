@@ -314,6 +314,7 @@ public class FactoryHelper {
         return createNodeProcessor(keyValueStores, blockChain);
     }
 
+    @Deprecated
     public static NodeProcessor createNodeProcessor(KeyValueStores keyValueStores, BlockChain blockChain) {
         ObjectContext objectContext = new ObjectContext(keyValueStores);
 
