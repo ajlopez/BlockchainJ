@@ -429,15 +429,19 @@ public class NodeProcessorTest {
 
     @Test
     public void synchronizeTwoNodesConnectedByPipes() throws InterruptedException, IOException {
-        MemoryKeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain1 = FactoryHelper.createBlockChain(stores,300, 0);
-        Block bestBlock = blockChain1.getBestBlockInformation().getBlock();
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
+        KeyValueStores keyValueStores1 = new MemoryKeyValueStores();
+        ObjectContext objectContext1 = new ObjectContext(keyValueStores1);
+        KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
+        ObjectContext objectContext2 = new ObjectContext(keyValueStores2);
+        BlockChain blockChain1 = objectContext1.getBlockChain();
+        blockChain1.connectBlock(GenesisGenerator.generateGenesis());
+        FactoryHelper.extendBlockChainWithBlocks(blockChain1, 300);
+        BlockChain blockChain2 = objectContext2.getBlockChain();
 
-        MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
-        BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
+        Block bestBlock = blockChain1.getBestBlockInformation().getBlock();
+
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(objectContext1);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(objectContext2);
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2);
 
