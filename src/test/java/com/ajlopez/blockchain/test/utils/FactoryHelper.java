@@ -309,9 +309,9 @@ public class FactoryHelper {
 
     public static NodeProcessor createNodeProcessor() {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        BlockChain blockChain = new BlockChain(new Stores(keyValueStores));
+        ObjectContext objectContext = new ObjectContext(keyValueStores);
 
-        return createNodeProcessor(keyValueStores, blockChain);
+        return createNodeProcessor(objectContext);
     }
 
     @Deprecated
