@@ -1,6 +1,8 @@
 package com.ajlopez.blockchain.net.peers;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.GenesisGenerator;
+import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
@@ -125,21 +127,24 @@ public class TcpPeerClientServerTest {
     @Test
     public void connectClientServerAndSynchronizeServer() throws IOException, InterruptedException {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
-        Stores stores = new Stores(keyValueStores);
-        BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores);
+        ObjectContext objectContext = new ObjectContext(keyValueStores);
+        BlockChain blockChain = objectContext.getBlockChain();
+        Block genesis = GenesisGenerator.generateGenesis();
+        blockChain.connectBlock(genesis);
 
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(objectContext);
 
         KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
-        Stores stores2 = new Stores(keyValueStores2);
-        BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis(stores2);
+        ObjectContext objectContext2 = new ObjectContext(keyValueStores2);
+        BlockChain blockChain2 = objectContext2.getBlockChain();
+        blockChain2.connectBlock(genesis);
         FactoryHelper.extendBlockChainWithBlocks(blockChain2, 10);
 
         Assert.assertEquals(10, blockChain2.getBestBlockInformation().getBlockNumber());
 
         Block block = blockChain2.getBestBlockInformation().getBlock();
 
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(objectContext2);
 
         Semaphore semaphore = new Semaphore(0, true);
 
@@ -160,13 +165,13 @@ public class TcpPeerClientServerTest {
 
         server.stop();
 
-        Block bestBlock1 = new BlockChain(stores).getBestBlockInformation().getBlock();
+        Block bestBlock1 = blockChain.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock1);
         Assert.assertEquals(block.getNumber(), bestBlock1.getNumber());
         Assert.assertEquals(block.getHash(), bestBlock1.getHash());
 
-        Block bestBlock2 = new BlockChain(stores2).getBestBlockInformation().getBlock();
+        Block bestBlock2 = blockChain2.getBestBlockInformation().getBlock();
 
         Assert.assertNotNull(bestBlock2);
         Assert.assertEquals(block.getNumber(), bestBlock2.getNumber());
