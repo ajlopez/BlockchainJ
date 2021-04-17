@@ -314,11 +314,10 @@ public class FactoryHelper {
         return createNodeProcessor(objectContext);
     }
 
-    @Deprecated
-    public static NodeProcessor createNodeProcessor(KeyValueStores keyValueStores, BlockChain blockChain) {
+    public static NodeProcessor createNodeProcessor(KeyValueStores keyValueStores) {
         ObjectContext objectContext = new ObjectContext(keyValueStores);
 
-        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), createRandomAddress(), objectContext);
+        return createNodeProcessor(objectContext);
     }
 
     public static NodeProcessor createNodeProcessor(ObjectContext objectContext) {

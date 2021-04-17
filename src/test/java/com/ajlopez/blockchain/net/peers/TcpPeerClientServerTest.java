@@ -31,12 +31,12 @@ public class TcpPeerClientServerTest {
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain1 = FactoryHelper.createBlockChainWithGenesis(stores);
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
 
         KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
         Stores stores2 = new Stores(keyValueStores2);
         BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis(stores2);
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
 
         Semaphore semaphore = new Semaphore(0, true);
 
@@ -86,11 +86,10 @@ public class TcpPeerClientServerTest {
 
         Block block = blockChain1.getBestBlockInformation().getBlock();
 
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
         KeyValueStores keyValueStores2 = new MemoryKeyValueStores();
         Stores stores2 = new Stores(keyValueStores2);
-        BlockChain blockChain2 = FactoryHelper.createBlockChainWithGenesis(stores2);
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
 
         Semaphore semaphore = new Semaphore(0, true);
 

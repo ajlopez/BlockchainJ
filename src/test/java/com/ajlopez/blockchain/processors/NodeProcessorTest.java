@@ -338,7 +338,7 @@ public class NodeProcessorTest {
         Stores stores1 = new Stores(keyValueStores);
         BlockChain blockChain1 = FactoryHelper.createBlockChain(stores1,300, 10);
         Block bestBlock = blockChain1.getBestBlockInformation().getBlock();
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
 
         MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
         Stores stores2 = new Stores(keyValueStores2);
@@ -353,7 +353,7 @@ public class NodeProcessorTest {
         Assert.assertNotNull(stores2.getAccountTrieStore().retrieve(blockChain1.getBlockByNumber(0).getStateRootHash()));
 
         BlockChain blockChain2 = new BlockChain(stores2);
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
@@ -381,12 +381,12 @@ public class NodeProcessorTest {
         MemoryKeyValueStores keyValueStores = new MemoryKeyValueStores();
         Stores stores = new Stores(keyValueStores);
         BlockChain blockChain1 = FactoryHelper.createBlockChain(stores,300, 10);
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
 
         MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
 
         BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
@@ -482,13 +482,13 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
         MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
         BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
         MemoryKeyValueStores keyValueStores3 = new MemoryKeyValueStores();
         BlockChain blockChain3 = new BlockChain(new Stores(keyValueStores3));
-        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(keyValueStores3, blockChain3);
+        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(keyValueStores3);
 
         nodeProcessor1.connectTo(nodeProcessor2);
         nodeProcessor2.connectTo(nodeProcessor1);
@@ -532,13 +532,13 @@ public class NodeProcessorTest {
         for (int k = 0; k < 10; k++)
             Assert.assertNotNull(blockChain1.getBlockByNumber(k));
 
-        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores, blockChain1);
+        NodeProcessor nodeProcessor1 = FactoryHelper.createNodeProcessor(keyValueStores);
         MemoryKeyValueStores keyValueStores2 = new MemoryKeyValueStores();
         BlockChain blockChain2 = new BlockChain(new Stores(keyValueStores2));
-        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2, blockChain2);
+        NodeProcessor nodeProcessor2 = FactoryHelper.createNodeProcessor(keyValueStores2);
         MemoryKeyValueStores keyValueStores3 = new MemoryKeyValueStores();
         BlockChain blockChain3 = new BlockChain(new Stores(keyValueStores3));
-        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(keyValueStores3, blockChain3);
+        NodeProcessor nodeProcessor3 = FactoryHelper.createNodeProcessor(keyValueStores3);
 
         List<PeerConnection> connections = NodesHelper.connectNodeProcessors(nodeProcessor1, nodeProcessor2, nodeProcessor3);
 
@@ -574,7 +574,7 @@ public class NodeProcessorTest {
 
         KeyValueStores keyValueStores = new MemoryKeyValueStores();
         BlockChain blockChain = new BlockChain(new Stores(keyValueStores));
-        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores, blockChain);
+        NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(keyValueStores);
 
         nodeProcessor.postMessage(FactoryHelper.createRandomPeer(), message);
 
