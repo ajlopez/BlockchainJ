@@ -22,6 +22,10 @@ public class BlockUtils {
 
         for (int k = 0; k < depth; k++) {
             Block parent = blockStore.getBlock(parentHash);
+
+            if (parent == null)
+                return ancestors;
+
             ancestors.add(parent.getHeader());
 
             if (parent.getNumber() == 0)
@@ -38,6 +42,10 @@ public class BlockUtils {
 
         for (int k = 0; k < depth; k++) {
             Block parent = blockStore.getBlock(parentHash);
+
+            if (parent == null)
+                return headers;
+
             headers.add(parent.getHeader());
             headers.addAll(parent.getUncles());
 
@@ -53,8 +61,11 @@ public class BlockUtils {
     public static Set<BlockHeader> getPreviousAllHeaders(long height, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
         Set<BlockHeader> headers = new HashSet<>();
 
-        for (int k = 0; k < depth; k++) {
+        for (int k = 0; k < depth && height - k - 1 >= 0; k++) {
             BlocksInformation blocksInformation = blocksInformationStore.get(height - k - 1);
+
+            if (blocksInformation == null)
+                return headers;
 
             for (BlockInformation bi : blocksInformation.getBlockInformationList()) {
                 Block b = blockStore.getBlock(bi.getBlockHash());
@@ -69,6 +80,10 @@ public class BlockUtils {
 
     public static Set<BlockHeader> getCandidateUncles(BlockHash parentHash, int depth, BlockStore blockStore, BlocksInformationStore blocksInformationStore) throws IOException {
         Block parentBlock = blockStore.getBlock(parentHash);
+
+        if (parentBlock == null)
+            return new HashSet();
+
         long height = parentBlock.getNumber() + 1;
         Set<BlockHeader> candidateUncles = getPreviousAllHeaders(height, depth, blockStore, blocksInformationStore);
         Set<BlockHeader> ancestorsAllHeaders = getAncestorsAllHeaders(parentHash, depth + 1, blockStore);
@@ -96,6 +111,10 @@ public class BlockUtils {
 
         for (int k = 0; k < depth; k++) {
             Block parent = blockStore.getBlock(parentHash);
+
+            if (parent == null)
+                return ancestors;
+
             ancestors.add(parent);
 
             if (parent.getNumber() == 0)

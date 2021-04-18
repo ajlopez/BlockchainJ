@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
+import com.ajlopez.blockchain.bc.BlockUtils;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Created by ajlopez on 24/01/2018.
@@ -101,10 +103,12 @@ public class MinerProcessor {
 
         executionContext.commit();
 
-        // TODO use uncles
+        List<BlockHeader> uncles = BlockUtils.getCandidateUncles(parent.getHash(), 10, stores.getBlockStore(), stores.getBlocksInformationStore()).stream().collect(Collectors.toList());
+
+        // TODO control uncle size
         // TODO any adjust in gas limit?
         // TODO use extraData
-        return new Block(parent, null, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), parent.getGasLimit(), gasUsed, null, 0);
+        return new Block(parent, uncles, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), parent.getGasLimit(), gasUsed, null, 0);
     }
 
     private Block calculateProofOfWork(Block block) {
