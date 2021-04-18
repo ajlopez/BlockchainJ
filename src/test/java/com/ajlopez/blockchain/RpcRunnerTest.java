@@ -73,7 +73,7 @@ public class RpcRunnerTest {
         socket.close();
 
         Assert.assertNotNull(result);
-        Assert.assertEquals("HTTP/1.1 200 OK\r\n\r\n{ \"id\": \"1\", \"jsonrpc\": \"2.0\", \"result\": \"0x0a\" }", result);
+        Assert.assertEquals("HTTP/1.1 200 OK\r\n\r\n{ \"id\": \"1\", \"jsonrpc\": \"2.0\", \"result\": \"0xa\" }", result);
     }
 
     @Test
