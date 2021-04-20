@@ -1,9 +1,6 @@
 package com.ajlopez.blockchain.test;
 
-import com.ajlopez.blockchain.bc.BlockChain;
-import com.ajlopez.blockchain.bc.BlockStore;
-import com.ajlopez.blockchain.bc.BlocksInformation;
-import com.ajlopez.blockchain.bc.BlocksInformationStore;
+import com.ajlopez.blockchain.bc.*;
 import com.ajlopez.blockchain.core.Account;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
@@ -28,7 +25,8 @@ import java.util.Map;
  * Created by ajlopez on 12/05/2019.
  */
 public class World {
-    private final Stores stores = new MemoryStores();
+    private final ObjectContext objectContext;
+    private final Stores stores;
     private final AccountStore accountStore;
     private final CodeStore codeStore;
 
@@ -41,9 +39,13 @@ public class World {
     private BlockProcessor blockProcessor;
 
     public World() throws IOException {
+        this.objectContext = new ObjectContext(new MemoryKeyValueStores());
+        this.stores = this.objectContext.getStores();
         this.accountStore = new AccountStore(this.stores.getAccountTrieStore().retrieve(Trie.EMPTY_TRIE_HASH));
         this.codeStore = this.stores.getCodeStore();
     }
+
+    public Stores getStores() { return this.stores; }
 
     public BlockStore getBlockStore() {
         return this.stores.getBlockStore();

@@ -8,6 +8,10 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.merkle.MerkleTree;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
+import com.ajlopez.blockchain.test.World;
+import com.ajlopez.blockchain.test.dsl.DslException;
+import com.ajlopez.blockchain.test.dsl.DslParser;
+import com.ajlopez.blockchain.test.dsl.WorldDslProcessor;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.vms.eth.FeeSchedule;
 import com.ajlopez.blockchain.vms.eth.OpCodes;
@@ -380,5 +384,20 @@ public class MinerProcessorTest {
         Assert.assertTrue(transactionPool.getTransactions().isEmpty());
 
         Assert.assertEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block2.getReceiptsRootHash());
+    }
+
+    @Test
+    public void mineBlockWithUncles() throws IOException, DslException {
+        DslParser parser = DslParser.fromResource("dsl/blockchain06.txt");
+        World world = new World();
+        WorldDslProcessor processor = new WorldDslProcessor(world);
+        processor.processCommands(parser);
+
+        MinerProcessor minerProcessor = new MinerProcessor(world.getBlockChain(), new TransactionPool(), world.getStores(), FactoryHelper.createRandomAddress(), 12_000_000L);
+
+        Block result = minerProcessor.mineBlock(world.getBlockChain().getBestBlockInformation().getBlock());
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.getUncles().isEmpty());
     }
 }
