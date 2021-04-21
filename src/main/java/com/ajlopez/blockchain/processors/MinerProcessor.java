@@ -37,15 +37,17 @@ public class MinerProcessor {
     private final Stores stores;
     private final Address coinbase;
     private final long gasLimit;
+    private final int noUncles;
 
     private boolean stopped = false;
 
-    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, Stores stores, Address coinbase, long gasLimit) {
+    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, Stores stores, Address coinbase, long gasLimit, int noUncles) {
         this.blockChain = blockChain;
         this.transactionPool = transactionPool;
         this.stores = stores;
         this.coinbase = coinbase;
         this.gasLimit = gasLimit;
+        this.noUncles = noUncles;
     }
 
     public Block process() throws IOException {
@@ -105,7 +107,10 @@ public class MinerProcessor {
 
         List<BlockHeader> uncles = BlockUtils.getCandidateUncles(parent.getHash(), 10, stores.getBlockStore(), stores.getBlocksInformationStore()).stream().collect(Collectors.toList());
 
-        // TODO control uncle size
+        // TODO select best uncles
+        if (uncles.size() > this.noUncles)
+            uncles = uncles.subList(0, noUncles);
+
         // TODO any adjust in gas limit?
         // TODO use extraData
         return new Block(parent, uncles, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), parent.getGasLimit(), gasUsed, null, 0);
