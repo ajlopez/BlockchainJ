@@ -34,7 +34,7 @@ public class MinerProcessorTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         Stores stores = new MemoryStores();
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 0, 10);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 6_000_000L, 10);
 
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.TEN, 12_000_000L, 0, null, 0);
@@ -44,7 +44,7 @@ public class MinerProcessorTest {
         Assert.assertNotNull(block);
         Assert.assertEquals(2, block.getNumber());
         Assert.assertEquals(parent.getHash(), block.getParentHash());
-        Assert.assertEquals(parent.getGasLimit(), block.getGasLimit());
+        Assert.assertEquals(6_000_000L, block.getGasLimit());
         Assert.assertEquals(0L, block.getGasUsed());
 
         List<Transaction> txs = block.getTransactions();
@@ -77,7 +77,7 @@ public class MinerProcessorTest {
         Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
 
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 0, 10);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 12_000_000L, 10);
 
         Block block = processor.mineBlock(parent);
 
@@ -85,7 +85,7 @@ public class MinerProcessorTest {
         Assert.assertEquals(2, block.getNumber());
         Assert.assertEquals(parent.getHash(), block.getParentHash());
         Assert.assertEquals(coinbase, block.getCoinbase());
-        Assert.assertEquals(parent.getGasLimit(), block.getGasLimit());
+        Assert.assertEquals(12_000_000L, block.getGasLimit());
         Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), block.getGasUsed());
 
         List<Transaction> txs = block.getTransactions();
@@ -110,6 +110,40 @@ public class MinerProcessorTest {
         Assert.assertEquals(Coin.fromUnsignedLong(100), updatedReceiverAccount.getBalance());
 
         Assert.assertNotEquals(MerkleTree.EMPTY_MERKLE_TREE_HASH, block.getReceiptsRootHash());
+    }
+
+    @Test
+    public void mineBlockWithOneTransactionRejectedByGasLimit() throws IOException {
+        Transaction tx = FactoryHelper.createTransaction(100);
+
+        TransactionPool transactionPool = new TransactionPool();
+        transactionPool.addTransaction(tx);
+
+        Stores stores = new MemoryStores();
+        AccountStore accountStore = stores.getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
+
+        FactoryHelper.createAccountWithBalance(accountStore, tx.getSender(), 1000);
+
+        BlockHash hash = FactoryHelper.createRandomBlockHash();
+        Address coinbase = FactoryHelper.createRandomAddress();
+
+        Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
+
+        AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, tx.getGas() / 2, 10);
+
+        Block block = processor.mineBlock(parent);
+
+        Assert.assertNotNull(block);
+        Assert.assertEquals(2, block.getNumber());
+        Assert.assertEquals(parent.getHash(), block.getParentHash());
+        Assert.assertEquals(coinbase, block.getCoinbase());
+        Assert.assertEquals(tx.getGas() / 2, block.getGasLimit());
+
+        List<Transaction> txs = block.getTransactions();
+
+        Assert.assertNotNull(txs);
+        Assert.assertTrue(txs.isEmpty());
     }
 
     @Test
@@ -140,7 +174,7 @@ public class MinerProcessorTest {
 
         Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 0, 10);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 12_000_000L, 10);
 
         Block block = processor.mineBlock(parent);
 
@@ -207,7 +241,7 @@ public class MinerProcessorTest {
 
         Block parent = new Block(41L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 0, 10);
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, coinbase, 12_000_000L, 10);
 
         Block block = processor.mineBlock(parent);
 
@@ -264,14 +298,14 @@ public class MinerProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores, accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, coinbase, 0, 10);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, coinbase, 12_000_000L, 10);
 
         Block block = processor.process();
 
         Assert.assertNotNull(block);
         Assert.assertEquals(1, block.getNumber());
         Assert.assertEquals(blockChain.getBlockByNumber(0).getHash(), block.getParentHash());
-        Assert.assertEquals(blockChain.getBestBlockInformation().getBlock().getGasLimit(), block.getGasLimit());
+        Assert.assertEquals(12_000_000L, block.getGasLimit());
         Assert.assertEquals(FeeSchedule.TRANSFER.getValue(), block.getGasUsed());
 
         List<Transaction> txs = block.getTransactions();
@@ -303,7 +337,7 @@ public class MinerProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores, accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, coinbase, 0, 10);
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, coinbase, 12_000_000L, 10);
 
         Semaphore sem = new Semaphore(0, true);
 

@@ -88,8 +88,10 @@ public class MinerProcessor {
 
         long gasUsed = 0L;
 
-        // TODO take into account block gas limit
         for (Transaction transaction : transactions) {
+            if (gasUsed + transaction.getGas() > this.gasLimit)
+                break;
+
             ExecutionResult executionResult = transactionExecutor.executeTransaction(transaction, blockData);
 
             if (executionResult == null)
@@ -113,7 +115,7 @@ public class MinerProcessor {
 
         // TODO any adjust in gas limit?
         // TODO use extraData
-        return new Block(parent, uncles, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), parent.getGasLimit(), gasUsed, null, 0);
+        return new Block(parent, uncles, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), this.gasLimit, gasUsed, null, 0);
     }
 
     private Block calculateProofOfWork(Block block) {
