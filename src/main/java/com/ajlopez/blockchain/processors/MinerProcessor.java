@@ -6,7 +6,6 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.TransactionReceipt;
-import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.core.types.Hash;
@@ -35,19 +34,15 @@ public class MinerProcessor {
     private final TransactionPool transactionPool;
     private final List<Consumer<Block>> minedBlockConsumers = new ArrayList<>();
     private final Stores stores;
-    private final Address coinbase;
-    private final long gasLimit;
-    private final int noUncles;
+    private final MinerConfiguration minerConfiguration;
 
     private boolean stopped = false;
 
-    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, Stores stores, Address coinbase, long gasLimit, int noUncles) {
+    public MinerProcessor(BlockChain blockChain, TransactionPool transactionPool, Stores stores, MinerConfiguration minerConfiguration) {
         this.blockChain = blockChain;
         this.transactionPool = transactionPool;
         this.stores = stores;
-        this.coinbase = coinbase;
-        this.gasLimit = gasLimit;
-        this.noUncles = noUncles;
+        this.minerConfiguration = minerConfiguration;
     }
 
     public Block process() throws IOException {
@@ -80,7 +75,7 @@ public class MinerProcessor {
         long timestamp = System.currentTimeMillis();
 
         // TODO adjust difficulty
-        BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.coinbase, parent.getDifficulty(), this.gasLimit, 0);
+        BlockData blockData = new BlockData(parent.getNumber() + 1, timestamp, this.minerConfiguration.getCoinbase(), parent.getDifficulty(), this.minerConfiguration.getGasLimit(), 0);
 
         List<Transaction> transactions = this.transactionPool.getTransactions();
         List<Transaction> executedTransactions = new ArrayList<>();
@@ -89,7 +84,7 @@ public class MinerProcessor {
         long gasUsed = 0L;
 
         for (Transaction transaction : transactions) {
-            if (gasUsed + transaction.getGas() > this.gasLimit)
+            if (gasUsed + transaction.getGas() > this.minerConfiguration.getGasLimit())
                 break;
 
             ExecutionResult executionResult = transactionExecutor.executeTransaction(transaction, blockData);
@@ -110,12 +105,12 @@ public class MinerProcessor {
         List<BlockHeader> uncles = BlockUtils.getCandidateUncles(parent.getHash(), 10, stores.getBlockStore(), stores.getBlocksInformationStore()).stream().collect(Collectors.toList());
 
         // TODO select best uncles
-        if (uncles.size() > this.noUncles)
-            uncles = uncles.subList(0, noUncles);
+        if (uncles.size() > this.minerConfiguration.getNoUncles())
+            uncles = uncles.subList(0, this.minerConfiguration.getNoUncles());
 
         // TODO any adjust in gas limit?
         // TODO use extraData
-        return new Block(parent, uncles, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.coinbase, parent.getDifficulty(), this.gasLimit, gasUsed, null, 0);
+        return new Block(parent, uncles, executedTransactions, BlockExecutionResult.calculateTransactionReceiptsHash(executedTransactionReceipts), accountStore.getRootHash(), System.currentTimeMillis() / 1000, this.minerConfiguration.getCoinbase(), parent.getDifficulty(), this.minerConfiguration.getGasLimit(), gasUsed, null, 0);
     }
 
     private Block calculateProofOfWork(Block block) {

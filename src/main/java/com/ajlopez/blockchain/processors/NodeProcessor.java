@@ -67,7 +67,7 @@ public class NodeProcessor implements PeerNode {
 
         this.receiveProcessor = new ReceiveProcessor(messageProcessor);
         // TODO get block gas limit from config?
-        this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, stores, coinbase, 12_000_000L, 10);
+        this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, stores, new MinerConfiguration(coinbase, 12_000_000L, 10));
         this.minerProcessor.onMinedBlock(blk -> {
             this.postMessage(this.peer, new BlockMessage(blk));
         });
