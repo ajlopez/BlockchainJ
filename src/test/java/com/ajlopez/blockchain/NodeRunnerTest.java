@@ -1,6 +1,5 @@
 package com.ajlopez.blockchain;
 
-import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
@@ -11,11 +10,9 @@ import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
-import com.ajlopez.blockchain.processors.TransactionPool;
+import com.ajlopez.blockchain.processors.MinerConfiguration;
 import com.ajlopez.blockchain.state.Trie;
-import com.ajlopez.blockchain.store.KeyValueStores;
 import com.ajlopez.blockchain.store.MemoryKeyValueStores;
-import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,7 +34,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(true, 0, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), objectContext);
+        NodeRunner runner = new NodeRunner(true, 0, Collections.emptyList(), new MinerConfiguration(coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -66,7 +63,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(false, 3000, Collections.emptyList(), coinbase, new NetworkConfiguration((short)42), objectContext);
+        NodeRunner runner = new NodeRunner(false, 3000, Collections.emptyList(), new MinerConfiguration(coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -105,8 +102,8 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner1 = new NodeRunner(true, 3001, null, coinbase, new NetworkConfiguration((short)42), objectContext1);
-        NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), coinbase, new NetworkConfiguration((short)42), objectContext2);
+        NodeRunner runner1 = new NodeRunner(true, 3001, null, new MinerConfiguration(coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext1);
+        NodeRunner runner2 = new NodeRunner(false, 0, Collections.singletonList("localhost:3001"), new MinerConfiguration(coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext2);
 
         runner2.onNewBlock(blk -> {
             if (blk.getNumber() > 0)

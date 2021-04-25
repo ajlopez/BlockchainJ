@@ -1,16 +1,13 @@
 package com.ajlopez.blockchain;
 
-import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
-import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.net.peers.TcpPeerServer;
+import com.ajlopez.blockchain.processors.MinerConfiguration;
 import com.ajlopez.blockchain.processors.NodeProcessor;
-import com.ajlopez.blockchain.processors.TransactionPool;
-import com.ajlopez.blockchain.store.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,13 +25,14 @@ public class NodeRunner {
     private final NodeProcessor nodeProcessor;
     private final TcpPeerServer tcpPeerServer;
 
-    public NodeRunner(boolean miner, int port, List<String> peers, Address coinbase, NetworkConfiguration networkConfiguration, ObjectContext objectContext) {
+    public NodeRunner(boolean miner, int port, List<String> peers, MinerConfiguration minerConfiguration, NetworkConfiguration networkConfiguration, ObjectContext objectContext) {
         this.miner = miner;
         this.port = port;
         this.peers = peers;
         this.network = networkConfiguration.getNetworkNumber();
 
-        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), coinbase, objectContext);
+        // TODO pass miner configuration
+        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), minerConfiguration.getCoinbase(), objectContext);
         this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
     }
 

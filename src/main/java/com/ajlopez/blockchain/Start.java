@@ -8,12 +8,10 @@ import com.ajlopez.blockchain.core.Transaction;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
-import com.ajlopez.blockchain.processors.TransactionPool;
+import com.ajlopez.blockchain.processors.MinerConfiguration;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
-import com.ajlopez.blockchain.store.KeyValueStores;
 import com.ajlopez.blockchain.store.MemoryKeyValueStores;
-import com.ajlopez.blockchain.store.Stores;
 import com.ajlopez.blockchain.utils.HexUtils;
 
 import java.io.IOException;
@@ -46,7 +44,9 @@ public class Start {
         List<String> peers = argsproc.getStringList("peers");
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        NodeRunner runner = new NodeRunner(isMiner, port, peers, coinbase, networkConfiguration, objectContext);
+        MinerConfiguration minerConfiguration = new MinerConfiguration(coinbase, 12_000_000L, 10);
+
+        NodeRunner runner = new NodeRunner(isMiner, port, peers, new MinerConfiguration(coinbase, 12000000L, 10), networkConfiguration, objectContext);
         runner.onNewBlock(Start::printBlock);
 
         runner.start();
