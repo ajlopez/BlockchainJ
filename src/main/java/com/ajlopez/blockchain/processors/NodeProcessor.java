@@ -7,7 +7,6 @@ import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;
-import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.execution.BlockExecutor;
 import com.ajlopez.blockchain.net.Status;
@@ -38,7 +37,7 @@ public class NodeProcessor implements PeerNode {
     private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, Address coinbase, ObjectContext objectContext) {
+    public NodeProcessor(MinerConfiguration minerConfiguration, NetworkConfiguration networkConfiguration, Peer peer, ObjectContext objectContext) {
         KeyValueStores keyValueStores = objectContext.getKeyValueStores();
         Stores stores = objectContext.getStores();
         BlockChain blockChain = objectContext.getBlockChain();
@@ -67,7 +66,7 @@ public class NodeProcessor implements PeerNode {
 
         this.receiveProcessor = new ReceiveProcessor(messageProcessor);
         // TODO get block gas limit from config?
-        this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, stores, new MinerConfiguration(coinbase, 12_000_000L, 10));
+        this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, stores, minerConfiguration);
         this.minerProcessor.onMinedBlock(blk -> {
             this.postMessage(this.peer, new BlockMessage(blk));
         });

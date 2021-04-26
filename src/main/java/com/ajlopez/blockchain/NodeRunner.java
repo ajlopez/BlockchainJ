@@ -32,7 +32,7 @@ public class NodeRunner {
         this.network = networkConfiguration.getNetworkNumber();
 
         // TODO pass miner configuration
-        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), minerConfiguration.getCoinbase(), objectContext);
+        this.nodeProcessor = new NodeProcessor(minerConfiguration, networkConfiguration, Peer.createRandomPeer(), objectContext);
         this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
     }
 

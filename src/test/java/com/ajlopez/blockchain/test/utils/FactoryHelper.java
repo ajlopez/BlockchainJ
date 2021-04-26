@@ -321,7 +321,7 @@ public class FactoryHelper {
     }
 
     public static NodeProcessor createNodeProcessor(ObjectContext objectContext) {
-        return new NodeProcessor(new NetworkConfiguration((short)42), createRandomPeer(), createRandomAddress(), objectContext);
+        return new NodeProcessor(new MinerConfiguration(createRandomAddress(), 12_000_000L, 10), new NetworkConfiguration((short)42), createRandomPeer(), objectContext);
     }
 
     public static List<Block> createBlocks(int nblocks) {
