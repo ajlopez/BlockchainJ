@@ -46,7 +46,7 @@ public class Start {
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
         MinerConfiguration minerConfiguration = new MinerConfiguration(coinbase, 12_000_000L, 10);
 
-        NodeRunner runner = new NodeRunner(isMiner, port, peers, new MinerConfiguration(coinbase, 12000000L, 10), networkConfiguration, objectContext);
+        NodeRunner runner = new NodeRunner(isMiner, port, peers, minerConfiguration, networkConfiguration, objectContext);
         runner.onNewBlock(Start::printBlock);
 
         runner.start();
