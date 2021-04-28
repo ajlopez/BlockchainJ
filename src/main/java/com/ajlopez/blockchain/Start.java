@@ -46,12 +46,7 @@ public class Start {
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
         MinerConfiguration minerConfiguration = new MinerConfiguration(coinbase, 12_000_000L, 10);
 
-        NodeRunner runner = new NodeRunner(isMiner, port, peers, minerConfiguration, networkConfiguration, objectContext);
-        runner.onNewBlock(Start::printBlock);
-
-        runner.start();
-
-        Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
+        launchNodeRunner(objectContext, isMiner, port, peers, networkConfiguration, minerConfiguration);
 
         boolean rpc = argsproc.getBoolean("rpc");
 
@@ -64,6 +59,15 @@ public class Start {
 
             Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));
         }
+    }
+
+    private static void launchNodeRunner(ObjectContext objectContext, boolean isMiner, int port, List<String> peers, NetworkConfiguration networkConfiguration, MinerConfiguration minerConfiguration) throws IOException {
+        NodeRunner runner = new NodeRunner(isMiner, port, peers, minerConfiguration, networkConfiguration, objectContext);
+        runner.onNewBlock(Start::printBlock);
+
+        runner.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
     }
 
     public static ArgumentsProcessor processArguments(String[] args) {
