@@ -52,13 +52,16 @@ public class Start {
 
         if (rpc) {
             int rpcport = argsproc.getInteger("rpcport");
-
-            RpcRunner rpcrunner = new RpcRunner(objectContext.getBlockChain(), rpcport, objectContext.getStores().getAccountStoreProvider(), objectContext.getTransactionPool(), networkConfiguration, wallet);
-
-            rpcrunner.start();
-
-            Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));
+            launchRpcServer(objectContext, wallet, networkConfiguration, rpcport);
         }
+    }
+
+    private static void launchRpcServer(ObjectContext objectContext, Wallet wallet, NetworkConfiguration networkConfiguration, int rpcport) {
+        RpcRunner rpcrunner = new RpcRunner(objectContext.getBlockChain(), rpcport, objectContext.getStores().getAccountStoreProvider(), objectContext.getTransactionPool(), networkConfiguration, wallet);
+
+        rpcrunner.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));
     }
 
     private static void launchNodeRunner(ObjectContext objectContext, boolean isMiner, int port, List<String> peers, NetworkConfiguration networkConfiguration, MinerConfiguration minerConfiguration) throws IOException {
