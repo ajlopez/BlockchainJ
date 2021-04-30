@@ -24,16 +24,7 @@ public class Start {
     public static void main(String[] args) throws IOException {
         ObjectContext objectContext = new ObjectContext(new MemoryKeyValueStores());
 
-        AccountStore accountStore = objectContext.getStores().getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
-        WalletCreator walletCreator = new WalletCreator(accountStore);
-        DataWord oneMillion = DataWord.fromUnsignedLong(1_000_000L);
-        Coin balance = Coin.fromBytes(oneMillion.mul(oneMillion).mul(oneMillion).mul(DataWord.fromUnsignedInteger(100)).getBytes());
-        Wallet wallet = walletCreator.createWallet(10, balance);
-        accountStore.save();
-
-        Block genesis = GenesisGenerator.generateGenesis(accountStore);
-
-        objectContext.getBlockChain().connectBlock(genesis);
+        Wallet wallet = createWallet(objectContext);
 
         ArgumentsProcessor argsproc = processArguments(args);
 
@@ -54,6 +45,21 @@ public class Start {
             int rpcport = argsproc.getInteger("rpcport");
             launchRpcServer(objectContext, wallet, networkConfiguration, rpcport);
         }
+    }
+
+    private static Wallet createWallet(ObjectContext objectContext) throws IOException {
+        AccountStore accountStore = objectContext.getStores().getAccountStoreProvider().retrieve(Trie.EMPTY_TRIE_HASH);
+        WalletCreator walletCreator = new WalletCreator(accountStore);
+        DataWord oneMillion = DataWord.fromUnsignedLong(1_000_000L);
+        Coin balance = Coin.fromBytes(oneMillion.mul(oneMillion).mul(oneMillion).mul(DataWord.fromUnsignedInteger(100)).getBytes());
+        Wallet wallet = walletCreator.createWallet(10, balance);
+        accountStore.save();
+
+        Block genesis = GenesisGenerator.generateGenesis(accountStore);
+
+        objectContext.getBlockChain().connectBlock(genesis);
+
+        return wallet;
     }
 
     private static void launchRpcServer(ObjectContext objectContext, Wallet wallet, NetworkConfiguration networkConfiguration, int rpcport) {
