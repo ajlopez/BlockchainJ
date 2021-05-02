@@ -71,7 +71,7 @@ public class Start {
     }
 
     private static void launchNodeRunner(ObjectContext objectContext, boolean isMiner, int port, List<String> peers, NetworkConfiguration networkConfiguration, MinerConfiguration minerConfiguration) throws IOException {
-        NodeRunner runner = new NodeRunner(isMiner, port, peers, minerConfiguration, networkConfiguration, objectContext);
+        NodeRunner runner = new NodeRunner(new NodeConfiguration(isMiner, port, peers), minerConfiguration, networkConfiguration, objectContext);
         runner.onNewBlock(Start::printBlock);
 
         runner.start();

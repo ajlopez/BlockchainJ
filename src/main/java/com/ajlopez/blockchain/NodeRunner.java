@@ -17,22 +17,18 @@ import java.util.function.Consumer;
  * Created by ajlopez on 25/11/2018.
  */
 public class NodeRunner {
-    private final boolean miner;
-    private final int port;
+    private final NodeConfiguration nodeConfiguration;
     private final short network;
-    private final List<String> peers;
 
     private final NodeProcessor nodeProcessor;
     private final TcpPeerServer tcpPeerServer;
 
-    public NodeRunner(boolean miner, int port, List<String> peers, MinerConfiguration minerConfiguration, NetworkConfiguration networkConfiguration, ObjectContext objectContext) {
-        this.miner = miner;
-        this.port = port;
-        this.peers = peers;
+    public NodeRunner(NodeConfiguration nodeConfiguration, MinerConfiguration minerConfiguration, NetworkConfiguration networkConfiguration, ObjectContext objectContext) {
+        this.nodeConfiguration = nodeConfiguration;
         this.network = networkConfiguration.getNetworkNumber();
 
         this.nodeProcessor = new NodeProcessor(minerConfiguration, networkConfiguration, Peer.createRandomPeer(), objectContext);
-        this.tcpPeerServer = port > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.port, this.nodeProcessor) : null;
+        this.tcpPeerServer = this.nodeConfiguration.getPort() > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.nodeConfiguration.getPort(), this.nodeProcessor) : null;
     }
 
     public void start() throws IOException {
@@ -40,11 +36,11 @@ public class NodeRunner {
 
         this.nodeProcessor.startMessagingProcess();
 
-        if (this.port > 0)
+        if (this.nodeConfiguration.getPort() > 0)
             this.tcpPeerServer.start();
 
-        if (this.peers != null && !this.peers.isEmpty())
-            for (String peer : this.peers) {
+        if (this.nodeConfiguration.getHosts() != null && !this.nodeConfiguration.getHosts().isEmpty())
+            for (String peer : this.nodeConfiguration.getHosts()) {
                 String[] parts = peer.split(":");
                 String host = parts[0];
                 int port = Integer.parseInt(parts[1]);
@@ -53,15 +49,15 @@ public class NodeRunner {
                 client.connect();
             }
 
-        if (this.miner)
+        if (this.nodeConfiguration.isMiner())
             this.nodeProcessor.startMiningProcess();
     }
 
     public void stop() {
-        if (this.miner)
+        if (this.nodeConfiguration.isMiner())
             this.nodeProcessor.stopMiningProcess();
 
-        if (this.port > 0)
+        if (this.nodeConfiguration.getPort() > 0)
             this.tcpPeerServer.stop();
 
         this.nodeProcessor.stopMessagingProcess();
