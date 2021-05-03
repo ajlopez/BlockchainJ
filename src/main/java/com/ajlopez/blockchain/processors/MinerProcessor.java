@@ -2,6 +2,7 @@ package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.BlockUtils;
+import com.ajlopez.blockchain.config.MinerConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.BlockHeader;
 import com.ajlopez.blockchain.core.Transaction;

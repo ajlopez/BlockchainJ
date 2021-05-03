@@ -1,4 +1,4 @@
-package com.ajlopez.blockchain.processors;
+package com.ajlopez.blockchain.config;
 
 import com.ajlopez.blockchain.core.types.Address;
 

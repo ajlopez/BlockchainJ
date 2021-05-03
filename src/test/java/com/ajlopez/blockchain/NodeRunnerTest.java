@@ -2,6 +2,7 @@ package com.ajlopez.blockchain;
 
 import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
+import com.ajlopez.blockchain.config.NodeConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Difficulty;
@@ -10,7 +11,7 @@ import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
-import com.ajlopez.blockchain.processors.MinerConfiguration;
+import com.ajlopez.blockchain.config.MinerConfiguration;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.MemoryKeyValueStores;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;

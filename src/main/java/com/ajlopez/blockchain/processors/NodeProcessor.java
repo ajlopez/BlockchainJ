@@ -4,6 +4,7 @@ import com.ajlopez.blockchain.bc.BlockChain;
 import com.ajlopez.blockchain.bc.BlockValidator;
 import com.ajlopez.blockchain.bc.ExtendedBlockInformation;
 import com.ajlopez.blockchain.bc.ObjectContext;
+import com.ajlopez.blockchain.config.MinerConfiguration;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.core.Transaction;

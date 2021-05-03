@@ -1,6 +1,5 @@
-package com.ajlopez.blockchain;
+package com.ajlopez.blockchain.config;
 
-import javax.xml.soap.Node;
 import java.util.List;
 
 /**
