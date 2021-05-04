@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class ArgumentsProcessor {
     private final Map<String, String> values = new HashMap();
-    private final Map<Integer, String> pvalues = new HashMap();
+    private final List<String> pvalues = new ArrayList<>();
 
     private final Map<String, Object> defaults = new HashMap<>();
     private final Map<String, String> shortNames = new HashMap<>();
@@ -64,7 +64,7 @@ public class ArgumentsProcessor {
                 continue;
             }
 
-            this.pvalues.put(this.pvalues.size(), arg);
+            this.pvalues.add(arg);
         }
     }
 
