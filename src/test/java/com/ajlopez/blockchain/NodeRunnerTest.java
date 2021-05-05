@@ -35,7 +35,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(new NodeConfiguration(true, 0, Collections.emptyList()), new MinerConfiguration(coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext);
+        NodeRunner runner = new NodeRunner(new NodeConfiguration(0, Collections.emptyList()), new MinerConfiguration(true, coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -64,7 +64,7 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner = new NodeRunner(new NodeConfiguration(false, 3000, Collections.emptyList()), new MinerConfiguration(coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext);
+        NodeRunner runner = new NodeRunner(new NodeConfiguration(3000, Collections.emptyList()), new MinerConfiguration(false, coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext);
 
         runner.onNewBlock(blk -> {
             semaphore.release();
@@ -103,8 +103,8 @@ public class NodeRunnerTest {
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        NodeRunner runner1 = new NodeRunner(new NodeConfiguration(true, 3001, null), new MinerConfiguration(coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext1);
-        NodeRunner runner2 = new NodeRunner(new NodeConfiguration(false, 0, Collections.singletonList("localhost:3001")), new MinerConfiguration(coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext2);
+        NodeRunner runner1 = new NodeRunner(new NodeConfiguration(3001, null), new MinerConfiguration(true, coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext1);
+        NodeRunner runner2 = new NodeRunner(new NodeConfiguration(0, Collections.singletonList("localhost:3001")), new MinerConfiguration(false, coinbase, 12000000L, 10), new NetworkConfiguration((short)42), objectContext2);
 
         runner2.onNewBlock(blk -> {
             if (blk.getNumber() > 0)

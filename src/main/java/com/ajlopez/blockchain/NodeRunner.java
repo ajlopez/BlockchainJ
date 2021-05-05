@@ -18,6 +18,8 @@ import java.util.function.Consumer;
  */
 public class NodeRunner {
     private final NodeConfiguration nodeConfiguration;
+    private final MinerConfiguration minerConfiguration;
+
     private final short network;
 
     private final NodeProcessor nodeProcessor;
@@ -25,6 +27,7 @@ public class NodeRunner {
 
     public NodeRunner(NodeConfiguration nodeConfiguration, MinerConfiguration minerConfiguration, NetworkConfiguration networkConfiguration, ObjectContext objectContext) {
         this.nodeConfiguration = nodeConfiguration;
+        this.minerConfiguration = minerConfiguration;
         this.network = networkConfiguration.getNetworkNumber();
 
         this.nodeProcessor = new NodeProcessor(minerConfiguration, networkConfiguration, Peer.createRandomPeer(), objectContext);
@@ -49,12 +52,12 @@ public class NodeRunner {
                 client.connect();
             }
 
-        if (this.nodeConfiguration.isMiner())
+        if (this.minerConfiguration.isMiner())
             this.nodeProcessor.startMiningProcess();
     }
 
     public void stop() {
-        if (this.nodeConfiguration.isMiner())
+        if (this.minerConfiguration.isMiner())
             this.nodeProcessor.stopMiningProcess();
 
         if (this.nodeConfiguration.getPort() > 0)

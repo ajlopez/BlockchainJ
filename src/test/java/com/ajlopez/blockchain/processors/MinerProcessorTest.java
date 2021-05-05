@@ -35,7 +35,7 @@ public class MinerProcessorTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         Stores stores = new MemoryStores();
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(coinbase, 6_000_000L, 10));
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(true, coinbase, 6_000_000L, 10));
 
         BlockHash hash = FactoryHelper.createRandomBlockHash();
         Block parent = new Block(1L, hash, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.TEN, 12_000_000L, 0, null, 0);
@@ -78,7 +78,7 @@ public class MinerProcessorTest {
         Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
 
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(coinbase, 12_000_000L, 10));
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(true, coinbase, 12_000_000L, 10));
 
         Block block = processor.mineBlock(parent);
 
@@ -131,7 +131,7 @@ public class MinerProcessorTest {
         Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
 
         AccountStoreProvider accountStoreProvider = stores.getAccountStoreProvider();
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(coinbase, tx.getGas() / 2, 10));
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(true, coinbase, tx.getGas() / 2, 10));
 
         Block block = processor.mineBlock(parent);
 
@@ -175,7 +175,7 @@ public class MinerProcessorTest {
 
         Block parent = new Block(1L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(coinbase, 12_000_000L, 10));
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(true, coinbase, 12_000_000L, 10));
 
         Block block = processor.mineBlock(parent);
 
@@ -242,7 +242,7 @@ public class MinerProcessorTest {
 
         Block parent = new Block(41L, hash, null, accountStore.getRootHash(), System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
 
-        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(coinbase, 12_000_000L, 10));
+        MinerProcessor processor = new MinerProcessor(null, transactionPool, stores, new MinerConfiguration(true, coinbase, 12_000_000L, 10));
 
         Block block = processor.mineBlock(parent);
 
@@ -299,7 +299,7 @@ public class MinerProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores, accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, new MinerConfiguration(coinbase, 12_000_000L, 10));
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, new MinerConfiguration(true, coinbase, 12_000_000L, 10));
 
         Block block = processor.process();
 
@@ -338,7 +338,7 @@ public class MinerProcessorTest {
         BlockChain blockChain = FactoryHelper.createBlockChainWithGenesis(stores, accountStore);
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, new MinerConfiguration(coinbase, 12_000_000L, 10));
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, stores, new MinerConfiguration(true, coinbase, 12_000_000L, 10));
 
         Semaphore sem = new Semaphore(0, true);
 
@@ -383,7 +383,7 @@ public class MinerProcessorTest {
         TransactionPool transactionPool = new TransactionPool();
         Address coinbase = FactoryHelper.createRandomAddress();
 
-        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new MemoryStores(), new MinerConfiguration(coinbase, 0, 10));
+        MinerProcessor processor = new MinerProcessor(blockChain, transactionPool, new MemoryStores(), new MinerConfiguration(true, coinbase, 0, 10));
 
         Semaphore sem = new Semaphore(0, true);
 
@@ -428,7 +428,7 @@ public class MinerProcessorTest {
         WorldDslProcessor processor = new WorldDslProcessor(world);
         processor.processCommands(parser);
 
-        MinerProcessor minerProcessor = new MinerProcessor(world.getBlockChain(), new TransactionPool(), world.getStores(), new MinerConfiguration(FactoryHelper.createRandomAddress(), 12_000_000L, 10));
+        MinerProcessor minerProcessor = new MinerProcessor(world.getBlockChain(), new TransactionPool(), world.getStores(), new MinerConfiguration(true, FactoryHelper.createRandomAddress(), 12_000_000L, 10));
 
         Block result = minerProcessor.mineBlock(world.getBlockChain().getBestBlockInformation().getBlock());
 
@@ -444,7 +444,7 @@ public class MinerProcessorTest {
         WorldDslProcessor processor = new WorldDslProcessor(world);
         processor.processCommands(parser);
 
-        MinerProcessor minerProcessor = new MinerProcessor(world.getBlockChain(), new TransactionPool(), world.getStores(), new MinerConfiguration(FactoryHelper.createRandomAddress(), 12_000_000L, 1));
+        MinerProcessor minerProcessor = new MinerProcessor(world.getBlockChain(), new TransactionPool(), world.getStores(), new MinerConfiguration(true, FactoryHelper.createRandomAddress(), 12_000_000L, 1));
 
         Block result = minerProcessor.mineBlock(world.getBlockChain().getBestBlockInformation().getBlock());
 

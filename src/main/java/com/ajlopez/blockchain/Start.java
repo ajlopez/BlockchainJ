@@ -36,9 +36,9 @@ public class Start {
         List<String> peers = argsproc.getStringList("peers");
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        MinerConfiguration minerConfiguration = new MinerConfiguration(coinbase, 12_000_000L, 10);
+        MinerConfiguration minerConfiguration = new MinerConfiguration(isMiner, coinbase, 12_000_000L, 10);
 
-        launchNodeRunner(objectContext, isMiner, port, peers, networkConfiguration, minerConfiguration);
+        launchNodeRunner(objectContext, port, peers, networkConfiguration, minerConfiguration);
 
         boolean rpc = argsproc.getBoolean("rpc");
 
@@ -71,8 +71,8 @@ public class Start {
         Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));
     }
 
-    private static void launchNodeRunner(ObjectContext objectContext, boolean isMiner, int port, List<String> peers, NetworkConfiguration networkConfiguration, MinerConfiguration minerConfiguration) throws IOException {
-        NodeRunner runner = new NodeRunner(new NodeConfiguration(isMiner, port, peers), minerConfiguration, networkConfiguration, objectContext);
+    private static void launchNodeRunner(ObjectContext objectContext, int port, List<String> peers, NetworkConfiguration networkConfiguration, MinerConfiguration minerConfiguration) throws IOException {
+        NodeRunner runner = new NodeRunner(new NodeConfiguration(port, peers), minerConfiguration, networkConfiguration, objectContext);
         runner.onNewBlock(Start::printBlock);
 
         runner.start();
