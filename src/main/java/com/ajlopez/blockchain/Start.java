@@ -32,11 +32,13 @@ public class Start {
         String coinbaseText = argsproc.getString("coinbase");
         Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
         boolean isMiner = argsproc.getBoolean("miner");
-        int port = argsproc.getInteger("port");
-        List<String> peers = argsproc.getStringList("peers");
+
+        MinerConfiguration minerConfiguration = new MinerConfiguration(isMiner, coinbase, 12_000_000L, 10);
 
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
-        MinerConfiguration minerConfiguration = new MinerConfiguration(isMiner, coinbase, 12_000_000L, 10);
+
+        int port = argsproc.getInteger("port");
+        List<String> peers = argsproc.getStringList("peers");
 
         launchNodeRunner(objectContext, port, peers, networkConfiguration, minerConfiguration);
 
