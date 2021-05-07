@@ -39,7 +39,7 @@ public class NodeProcessorTest {
         Address coinbase = FactoryHelper.createRandomAddress();
         ObjectContext objectContext = new ObjectContext(new MemoryKeyValueStores());
 
-        NodeProcessor nodeProcessor = new NodeProcessor(new MinerConfiguration(true, coinbase, 12_000_000L, 10), new NetworkConfiguration((short)42), peer, objectContext);
+        NodeProcessor nodeProcessor = new NodeProcessor(new NetworkConfiguration((short)42), peer, objectContext);
 
         Assert.assertSame(peer, nodeProcessor.getPeer());
     }
@@ -54,8 +54,9 @@ public class NodeProcessorTest {
         blockChain.connectBlock(GenesisGenerator.generateGenesis());
         Peer peer = FactoryHelper.createRandomPeer();
         Address coinbase = FactoryHelper.createRandomAddress();
+        MinerConfiguration minerConfiguration = new MinerConfiguration(true, coinbase, 12_000_000L, 10);
 
-        NodeProcessor nodeProcessor = new NodeProcessor(new MinerConfiguration(true, coinbase, 12_000_000L, 10), networkConfiguration, peer, objectContext);
+        NodeProcessor nodeProcessor = new NodeProcessor(networkConfiguration, peer, objectContext);
 
         Status result = nodeProcessor.getStatus();
 
@@ -105,11 +106,9 @@ public class NodeProcessorTest {
         });
 
         nodeProcessor.startMessagingProcess();
-        nodeProcessor.startMiningProcess();
 
         semaphore.acquire();
 
-        nodeProcessor.stopMiningProcess();
         nodeProcessor.stopMessagingProcess();
 
         Block block1 = blockChain.getBestBlockInformation().getBlock();

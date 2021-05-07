@@ -18,19 +18,17 @@ import java.util.function.Consumer;
  */
 public class NodeRunner {
     private final NodeConfiguration nodeConfiguration;
-    private final MinerConfiguration minerConfiguration;
 
     private final short network;
 
     private final NodeProcessor nodeProcessor;
     private final TcpPeerServer tcpPeerServer;
 
-    public NodeRunner(NodeConfiguration nodeConfiguration, MinerConfiguration minerConfiguration, NetworkConfiguration networkConfiguration, ObjectContext objectContext) {
+    public NodeRunner(NodeConfiguration nodeConfiguration, NetworkConfiguration networkConfiguration, ObjectContext objectContext) {
         this.nodeConfiguration = nodeConfiguration;
-        this.minerConfiguration = minerConfiguration;
         this.network = networkConfiguration.getNetworkNumber();
 
-        this.nodeProcessor = new NodeProcessor(minerConfiguration, networkConfiguration, Peer.createRandomPeer(), objectContext);
+        this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), objectContext);
         this.tcpPeerServer = this.nodeConfiguration.getPort() > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.nodeConfiguration.getPort(), this.nodeProcessor) : null;
     }
 
@@ -51,15 +49,9 @@ public class NodeRunner {
                 TcpPeerClient client = new TcpPeerClient(host, port, this.network, this.nodeProcessor);
                 client.connect();
             }
-
-        if (this.minerConfiguration.isMiner())
-            this.nodeProcessor.startMiningProcess();
     }
 
     public void stop() {
-        if (this.minerConfiguration.isMiner())
-            this.nodeProcessor.stopMiningProcess();
-
         if (this.nodeConfiguration.getPort() > 0)
             this.tcpPeerServer.stop();
 

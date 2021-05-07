@@ -10,6 +10,8 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.config.MinerConfiguration;
+import com.ajlopez.blockchain.net.messages.BlockMessage;
+import com.ajlopez.blockchain.processors.MinerProcessor;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
 import com.ajlopez.blockchain.store.MemoryKeyValueStores;
@@ -40,7 +42,7 @@ public class Start {
         int port = argsproc.getInteger("port");
         List<String> peers = argsproc.getStringList("peers");
 
-        launchNodeRunner(objectContext, port, peers, networkConfiguration, minerConfiguration);
+        launchNodeRunner(objectContext, port, peers, networkConfiguration);
 
         boolean rpc = argsproc.getBoolean("rpc");
 
@@ -73,13 +75,24 @@ public class Start {
         Runtime.getRuntime().addShutdownHook(new Thread(rpcrunner::stop));
     }
 
-    private static void launchNodeRunner(ObjectContext objectContext, int port, List<String> peers, NetworkConfiguration networkConfiguration, MinerConfiguration minerConfiguration) throws IOException {
-        NodeRunner runner = new NodeRunner(new NodeConfiguration(port, peers), minerConfiguration, networkConfiguration, objectContext);
+    private static void launchNodeRunner(ObjectContext objectContext, int port, List<String> peers, NetworkConfiguration networkConfiguration) throws IOException {
+        NodeRunner runner = new NodeRunner(new NodeConfiguration(port, peers), networkConfiguration, objectContext);
         runner.onNewBlock(Start::printBlock);
 
         runner.start();
 
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
+    }
+
+    private static void launchMinerProcessor(ObjectContext objectContext, MinerConfiguration minerConfiguration) throws IOException {
+        MinerProcessor minerProcessor = new MinerProcessor(objectContext.getBlockChain(), objectContext.getTransactionPool(), objectContext.getStores(), minerConfiguration);
+        minerProcessor.onMinedBlock(blk -> {
+        //    this.postMessage(this.peer, new BlockMessage(blk));
+        });
+
+        minerProcessor.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(minerProcessor::stop));
     }
 
     public static ArgumentsProcessor processArguments(String[] args) {

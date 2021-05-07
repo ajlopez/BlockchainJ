@@ -35,10 +35,9 @@ public class NodeProcessor implements PeerNode {
     private final SendProcessor sendProcessor;
     private final KeyValueProcessor keyValueProcessor;
     private final TransactionPool transactionPool;
-    private final MinerProcessor minerProcessor;
     private final BlockProcessor blockProcessor;
 
-    public NodeProcessor(MinerConfiguration minerConfiguration, NetworkConfiguration networkConfiguration, Peer peer, ObjectContext objectContext) {
+    public NodeProcessor(NetworkConfiguration networkConfiguration, Peer peer, ObjectContext objectContext) {
         KeyValueStores keyValueStores = objectContext.getKeyValueStores();
         Stores stores = objectContext.getStores();
         BlockChain blockChain = objectContext.getBlockChain();
@@ -66,11 +65,6 @@ public class NodeProcessor implements PeerNode {
         MessageProcessor messageProcessor = new MessageProcessor(this.peer, this.networkConfiguration, this.blockProcessor, transactionProcessor, peerProcessor, this.sendProcessor, null, keyValueStores, keyValueProcessor);
 
         this.receiveProcessor = new ReceiveProcessor(messageProcessor);
-        // TODO get block gas limit from config?
-        this.minerProcessor = new MinerProcessor(blockChain, this.transactionPool, stores, minerConfiguration);
-        this.minerProcessor.onMinedBlock(blk -> {
-            this.postMessage(this.peer, new BlockMessage(blk));
-        });
     }
 
     public Peer getPeer() {
@@ -83,14 +77,6 @@ public class NodeProcessor implements PeerNode {
 
     public void stopMessagingProcess() {
         this.receiveProcessor.stop();
-    }
-
-    public void startMiningProcess() {
-        this.minerProcessor.start();
-    }
-
-    public void stopMiningProcess() {
-        this.minerProcessor.stop();
     }
 
     public void onEmpty(Runnable action) {
