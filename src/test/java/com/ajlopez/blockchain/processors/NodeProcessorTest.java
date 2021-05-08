@@ -21,6 +21,7 @@ import com.ajlopez.blockchain.state.TrieHashCopierVisitor;
 import com.ajlopez.blockchain.store.*;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
 import com.ajlopez.blockchain.test.utils.NodesHelper;
+import com.ajlopez.blockchain.utils.HexUtils;
 import com.ajlopez.blockchain.vms.eth.TrieStorageProvider;
 import org.junit.Assert;
 import org.junit.Test;
@@ -99,6 +100,14 @@ public class NodeProcessorTest {
         blockChain.connectBlock(GenesisGenerator.generateGenesis());
         NodeProcessor nodeProcessor = FactoryHelper.createNodeProcessor(objectContext);
 
+        Address coinbase = FactoryHelper.createRandomAddress();
+        MinerConfiguration minerConfiguration = new MinerConfiguration(true, coinbase, 12_000_000L, 10);
+        MinerProcessor minerProcessor = new MinerProcessor(blockChain, objectContext.getTransactionPool(), objectContext.getStores(), minerConfiguration);
+
+        minerProcessor.onMinedBlock(blk -> {
+            nodeProcessor.postMessage(nodeProcessor.getPeer(), new BlockMessage(blk));
+        });
+
         Semaphore semaphore = new Semaphore(0, true);
 
         nodeProcessor.onNewBestBlock(blk -> {
@@ -106,9 +115,11 @@ public class NodeProcessorTest {
         });
 
         nodeProcessor.startMessagingProcess();
+        minerProcessor.start();
 
         semaphore.acquire();
 
+        minerProcessor.stop();
         nodeProcessor.stopMessagingProcess();
 
         Block block1 = blockChain.getBestBlockInformation().getBlock();

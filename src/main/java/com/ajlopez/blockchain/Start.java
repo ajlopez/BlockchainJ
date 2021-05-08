@@ -10,7 +10,6 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.config.MinerConfiguration;
-import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.processors.MinerProcessor;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
