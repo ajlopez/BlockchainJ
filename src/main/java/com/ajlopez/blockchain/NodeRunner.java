@@ -63,8 +63,4 @@ public class NodeRunner {
     public void onNewBlock(Consumer<Block> consumer) {
         this.nodeProcessor.onNewBlock(consumer);
     }
-
-    public void onNewBestBlock(Consumer<Block> consumer) {
-        this.nodeProcessor.onNewBestBlock(consumer);
-    }
 }
