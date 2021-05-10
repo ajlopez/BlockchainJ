@@ -10,6 +10,7 @@ import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
 import com.ajlopez.blockchain.core.types.DataWord;
 import com.ajlopez.blockchain.config.MinerConfiguration;
+import com.ajlopez.blockchain.net.messages.BlockMessage;
 import com.ajlopez.blockchain.processors.MinerProcessor;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.AccountStore;
@@ -23,6 +24,8 @@ import java.util.List;
  * Created by ajlopez on 24/11/2018.
  */
 public class Start {
+    private static NodeRunner nodeRunner;
+
     public static void main(String[] args) throws IOException {
         ObjectContext objectContext = new ObjectContext(new MemoryKeyValueStores());
 
@@ -30,18 +33,23 @@ public class Start {
 
         ArgumentsProcessor argsproc = processArguments(args);
 
-        String coinbaseText = argsproc.getString("coinbase");
-        Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
-        boolean isMiner = argsproc.getBoolean("miner");
-
-        MinerConfiguration minerConfiguration = new MinerConfiguration(isMiner, coinbase, 12_000_000L, 10);
-
         NetworkConfiguration networkConfiguration = new NetworkConfiguration((short)1);
 
         int port = argsproc.getInteger("port");
         List<String> peers = argsproc.getStringList("peers");
 
         launchNodeRunner(objectContext, port, peers, networkConfiguration);
+
+        boolean isMiner = argsproc.getBoolean("miner");
+
+        if (isMiner) {
+            String coinbaseText = argsproc.getString("coinbase");
+            Address coinbase = coinbaseText.isEmpty() ? Address.ZERO : new Address(HexUtils.hexStringToBytes(coinbaseText));
+
+            MinerConfiguration minerConfiguration = new MinerConfiguration(isMiner, coinbase, 12_000_000L, 10);
+
+            launchMinerProcessor(objectContext, minerConfiguration);
+        }
 
         boolean rpc = argsproc.getBoolean("rpc");
 
@@ -75,10 +83,10 @@ public class Start {
     }
 
     private static void launchNodeRunner(ObjectContext objectContext, int port, List<String> peers, NetworkConfiguration networkConfiguration) throws IOException {
-        NodeRunner runner = new NodeRunner(new NodeConfiguration(port, peers), networkConfiguration, objectContext);
-        runner.onNewBlock(Start::printBlock);
+        nodeRunner = new NodeRunner(new NodeConfiguration(port, peers), networkConfiguration, objectContext);
+        nodeRunner.onNewBlock(Start::printBlock);
 
-        runner.start();
+        nodeRunner.start();
 
         Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
     }
@@ -86,7 +94,7 @@ public class Start {
     private static void launchMinerProcessor(ObjectContext objectContext, MinerConfiguration minerConfiguration) throws IOException {
         MinerProcessor minerProcessor = new MinerProcessor(objectContext.getBlockChain(), objectContext.getTransactionPool(), objectContext.getStores(), minerConfiguration);
         minerProcessor.onMinedBlock(blk -> {
-        //    this.postMessage(this.peer, new BlockMessage(blk));
+            nodeRunner.getNodeProcessor().postMessage(nodeRunner.getNodeProcessor().getPeer(), new BlockMessage(blk));
         });
 
         minerProcessor.start();

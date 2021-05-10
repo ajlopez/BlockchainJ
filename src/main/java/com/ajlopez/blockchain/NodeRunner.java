@@ -7,7 +7,6 @@ import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.net.peers.TcpPeerServer;
-import com.ajlopez.blockchain.config.MinerConfiguration;
 import com.ajlopez.blockchain.processors.NodeProcessor;
 
 import java.io.IOException;
@@ -62,5 +61,9 @@ public class NodeRunner {
 
     public void onNewBlock(Consumer<Block> consumer) {
         this.nodeProcessor.onNewBlock(consumer);
+    }
+
+    public NodeProcessor getNodeProcessor() {
+        return this.nodeProcessor;
     }
 }
