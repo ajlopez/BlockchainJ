@@ -88,7 +88,7 @@ public class Start {
 
         nodeRunner.start();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(runner::stop));
+        Runtime.getRuntime().addShutdownHook(new Thread(nodeRunner::stop));
     }
 
     private static void launchMinerProcessor(ObjectContext objectContext, MinerConfiguration minerConfiguration) throws IOException {
