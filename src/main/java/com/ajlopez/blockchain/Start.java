@@ -94,7 +94,7 @@ public class Start {
     private static void launchMinerProcessor(ObjectContext objectContext, MinerConfiguration minerConfiguration) throws IOException {
         MinerProcessor minerProcessor = new MinerProcessor(objectContext.getBlockChain(), objectContext.getTransactionPool(), objectContext.getStores(), minerConfiguration);
         minerProcessor.onMinedBlock(blk -> {
-            nodeRunner.getNodeProcessor().postMessage(nodeRunner.getNodeProcessor().getPeer(), new BlockMessage(blk));
+            nodeRunner.getNodeProcessor().postMessage(new BlockMessage(blk));
         });
 
         minerProcessor.start();
