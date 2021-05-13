@@ -26,7 +26,6 @@ public class BlockProcessor {
     private final TransactionPool transactionPool;
 
     private final List<Consumer<Block>> newBlockConsumers = new ArrayList<>();
-    private final List<Consumer<Block>> newBestBlockConsumers = new ArrayList<>();
 
     public BlockProcessor(BlockChain blockChain, OrphanBlocks orphanBlocks, BlockValidator blockValidator, TransactionPool transactionPool) {
         this.blockChain = blockChain;
@@ -73,8 +72,6 @@ public class BlockProcessor {
         if (initialBestBlock != null && newBestBlock.getHash().equals(initialBestBlock.getHash()))
             return connectedBlocks;
 
-        this.emitNewBestBlock(newBestBlock);
-
         BlockFork blockFork = BlockFork.fromBlocks(this.blockChain, initialBestBlock, newBestBlock);
         this.transactionPool.updateTransactions(blockFork.getNewTransactions(), blockFork.getOldTransactions());
 
@@ -113,10 +110,6 @@ public class BlockProcessor {
         this.newBlockConsumers.add(consumer);
     }
 
-    public void onNewBestBlock(Consumer<Block> consumer) {
-        this.newBestBlockConsumers.add(consumer);
-    }
-
     private List<Block> connectDescendants(Block block) {
         List<Block> children = new ArrayList<>(orphanBlocks.getChildrenOrphanBlocks(block));
         List<Block> connected = new ArrayList<>();
@@ -135,9 +128,5 @@ public class BlockProcessor {
 
     private void emitNewBlock(Block block) {
         this.newBlockConsumers.forEach(a -> a.accept(block));
-    }
-
-    private void emitNewBestBlock(Block block) {
-        this.newBestBlockConsumers.forEach(a -> a.accept(block));
     }
 }

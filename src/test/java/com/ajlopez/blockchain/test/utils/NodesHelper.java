@@ -54,7 +54,7 @@ public class NodesHelper {
 
             Semaphore semaphore = new Semaphore(0, true);
 
-            nodeProcessor.onNewBestBlock((block) -> {
+            nodeProcessor.onNewBlock((block) -> {
                 if (block.getHash().equals(bestBlock.getHash()))
                     semaphore.release();
             });

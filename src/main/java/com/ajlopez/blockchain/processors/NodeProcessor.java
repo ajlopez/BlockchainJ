@@ -87,10 +87,6 @@ public class NodeProcessor implements PeerNode {
         this.blockProcessor.onNewBlock(consumer);
     }
 
-    public void onNewBestBlock(Consumer<Block> consumer) {
-        this.blockProcessor.onNewBestBlock(consumer);
-    }
-
     public void postMessage(Message message) {
         this.receiveProcessor.postMessage(this.peer, message);
     }

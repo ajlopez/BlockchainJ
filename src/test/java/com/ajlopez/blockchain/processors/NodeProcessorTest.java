@@ -110,7 +110,7 @@ public class NodeProcessorTest {
 
         Semaphore semaphore = new Semaphore(0, true);
 
-        nodeProcessor.onNewBestBlock(blk -> {
+        nodeProcessor.onNewBlock(blk -> {
             semaphore.release();
         });
 

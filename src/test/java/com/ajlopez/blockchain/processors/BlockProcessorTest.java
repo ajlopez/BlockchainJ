@@ -136,7 +136,7 @@ public class BlockProcessorTest {
 
         BlockConsumer consumer = new BlockConsumer();
 
-        processor.onNewBestBlock(consumer);
+        processor.onNewBlock(consumer);
 
         Address coinbase = FactoryHelper.createRandomAddress();
 
@@ -297,7 +297,7 @@ public class BlockProcessorTest {
 
         Block block = new Block(1, null, null, Trie.EMPTY_TRIE_HASH, System.currentTimeMillis() / 1000, coinbase, Difficulty.ONE, 0, 0, null, 0);
 
-        processor.onNewBestBlock(consumer);
+        processor.onNewBlock(consumer);
         processor.processBlock(block);
 
         Assert.assertNull(processor.getBestBlockInformation());
@@ -345,7 +345,7 @@ public class BlockProcessorTest {
         BlockConsumer consumer = new BlockConsumer();
         BlocksConsumer consumer2 = new BlocksConsumer();
 
-        processor.onNewBestBlock(consumer);
+        processor.onNewBlock(consumer);
         processor.onNewBlock(consumer2);
 
         processor.processBlock(block2);
@@ -393,7 +393,7 @@ public class BlockProcessorTest {
 
         BlockConsumer consumer = new BlockConsumer();
 
-        processor.onNewBestBlock(consumer);
+        processor.onNewBlock(consumer);
 
         processor.processBlock(block2);
 
