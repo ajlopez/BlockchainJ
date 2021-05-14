@@ -37,7 +37,7 @@ public class NodeRunnerTest {
 
         NodeRunner runner = new NodeRunner(new NodeConfiguration(0, Collections.emptyList()), new NetworkConfiguration((short)42), objectContext);
 
-        runner.onNewBlock(blk -> {
+        runner.getNodeProcessor().onNewBlock(blk -> {
             semaphore.release();
         });
 
@@ -66,7 +66,7 @@ public class NodeRunnerTest {
 
         NodeRunner runner = new NodeRunner(new NodeConfiguration(3000, Collections.emptyList()), new NetworkConfiguration((short)42), objectContext);
 
-        runner.onNewBlock(blk -> {
+        runner.getNodeProcessor().onNewBlock(blk -> {
             semaphore.release();
         });
 
@@ -107,7 +107,7 @@ public class NodeRunnerTest {
         NodeRunner runner1 = new NodeRunner(new NodeConfiguration(3001, null), new NetworkConfiguration((short)42), objectContext1);
         NodeRunner runner2 = new NodeRunner(new NodeConfiguration(0, Collections.singletonList("localhost:3001")), new NetworkConfiguration((short)42), objectContext2);
 
-        runner2.onNewBlock(blk -> {
+        runner2.getNodeProcessor().onNewBlock(blk -> {
             if (blk.getNumber() > 0)
                 semaphore.release();
         });

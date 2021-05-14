@@ -84,7 +84,7 @@ public class Start {
 
     private static void launchNodeRunner(ObjectContext objectContext, int port, List<String> peers, NetworkConfiguration networkConfiguration) throws IOException {
         nodeRunner = new NodeRunner(new NodeConfiguration(port, peers), networkConfiguration, objectContext);
-        nodeRunner.onNewBlock(Start::printBlock);
+        nodeRunner.getNodeProcessor().onNewBlock(Start::printBlock);
 
         nodeRunner.start();
 

@@ -59,10 +59,6 @@ public class NodeRunner {
         System.out.println(String.format("Stopping node %s", this.nodeProcessor.getPeer().getId()));
     }
 
-    public void onNewBlock(Consumer<Block> consumer) {
-        this.nodeProcessor.onNewBlock(consumer);
-    }
-
     public NodeProcessor getNodeProcessor() {
         return this.nodeProcessor;
     }
