@@ -3,14 +3,12 @@ package com.ajlopez.blockchain;
 import com.ajlopez.blockchain.bc.ObjectContext;
 import com.ajlopez.blockchain.config.NetworkConfiguration;
 import com.ajlopez.blockchain.config.NodeConfiguration;
-import com.ajlopez.blockchain.core.Block;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.net.peers.TcpPeerServer;
 import com.ajlopez.blockchain.processors.NodeProcessor;
 
 import java.io.IOException;
-import java.util.function.Consumer;
 
 /**
  * Created by ajlopez on 25/11/2018.
@@ -28,7 +26,7 @@ public class NodeRunner {
         this.network = networkConfiguration.getNetworkNumber();
 
         this.nodeProcessor = new NodeProcessor(networkConfiguration, Peer.createRandomPeer(), objectContext);
-        this.tcpPeerServer = this.nodeConfiguration.getPort() > 0 ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.nodeConfiguration.getPort(), this.nodeProcessor) : null;
+        this.tcpPeerServer = this.nodeConfiguration.isTcpServer() ? new TcpPeerServer(networkConfiguration.getNetworkNumber() ,this.nodeConfiguration.getPort(), this.nodeProcessor) : null;
     }
 
     public void start() throws IOException {
@@ -36,7 +34,7 @@ public class NodeRunner {
 
         this.nodeProcessor.startMessagingProcess();
 
-        if (this.nodeConfiguration.getPort() > 0)
+        if (this.nodeConfiguration.isTcpServer())
             this.tcpPeerServer.start();
 
         if (this.nodeConfiguration.getHosts() != null && !this.nodeConfiguration.getHosts().isEmpty())
@@ -51,7 +49,7 @@ public class NodeRunner {
     }
 
     public void stop() {
-        if (this.nodeConfiguration.getPort() > 0)
+        if (this.nodeConfiguration.isTcpServer())
             this.tcpPeerServer.stop();
 
         this.nodeProcessor.stopMessagingProcess();

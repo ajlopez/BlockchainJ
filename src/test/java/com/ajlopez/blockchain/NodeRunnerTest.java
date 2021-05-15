@@ -12,6 +12,7 @@ import com.ajlopez.blockchain.net.messages.Message;
 import com.ajlopez.blockchain.net.peers.PeerNode;
 import com.ajlopez.blockchain.net.peers.TcpPeerClient;
 import com.ajlopez.blockchain.config.MinerConfiguration;
+import com.ajlopez.blockchain.processors.MinerProcessor;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.MemoryKeyValueStores;
 import com.ajlopez.blockchain.test.utils.FactoryHelper;
@@ -34,17 +35,23 @@ public class NodeRunnerTest {
         Semaphore semaphore = new Semaphore(0, true);
 
         Address coinbase = FactoryHelper.createRandomAddress();
-
+        MinerProcessor minerProcessor = new MinerProcessor(objectContext.getBlockChain(), objectContext.getTransactionPool(), objectContext.getStores(), new MinerConfiguration(true, coinbase, 6_000_000L, 10));
         NodeRunner runner = new NodeRunner(new NodeConfiguration(0, Collections.emptyList()), new NetworkConfiguration((short)42), objectContext);
+
+        minerProcessor.onMinedBlock(blk -> {
+            runner.getNodeProcessor().postMessage(new BlockMessage(blk));
+        });
 
         runner.getNodeProcessor().onNewBlock(blk -> {
             semaphore.release();
         });
 
         runner.start();
+        minerProcessor.start();
 
         semaphore.acquire();
 
+        minerProcessor.stop();
         runner.stop();
 
         Block bestBlock = objectContext.getBlockChain().getBestBlockInformation().getBlock();

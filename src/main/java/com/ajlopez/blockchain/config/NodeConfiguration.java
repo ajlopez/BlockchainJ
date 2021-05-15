@@ -14,6 +14,8 @@ public class NodeConfiguration {
         this.hosts = hosts;
     }
 
+    public boolean isTcpServer() { return this.port > 0; }
+
     public int getPort() { return this.port; }
 
     public List<String> getHosts() { return this.hosts; }
