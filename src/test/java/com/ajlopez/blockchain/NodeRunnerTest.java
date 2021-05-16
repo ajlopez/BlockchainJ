@@ -108,9 +108,6 @@ public class NodeRunnerTest {
 
         Semaphore semaphore = new Semaphore(0, true);
 
-        Address coinbase = FactoryHelper.createRandomAddress();
-        MinerConfiguration minerConfiguration = new MinerConfiguration(false, coinbase, 12000000L, 10);
-
         NodeRunner runner1 = new NodeRunner(new NodeConfiguration(3001, null), new NetworkConfiguration((short)42), objectContext1);
         NodeRunner runner2 = new NodeRunner(new NodeConfiguration(0, Collections.singletonList("localhost:3001")), new NetworkConfiguration((short)42), objectContext2);
 
