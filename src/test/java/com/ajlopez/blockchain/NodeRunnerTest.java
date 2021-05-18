@@ -128,4 +128,43 @@ public class NodeRunnerTest {
         Assert.assertNotNull(bestBlock);
         Assert.assertEquals(0, bestBlock.getNumber());
     }
+
+    @Test
+    public void mineBlockConnectingTwoNodeRunners() throws InterruptedException, IOException {
+        ObjectContext objectContext1 = new ObjectContext(new MemoryKeyValueStores());
+        FactoryHelper.createBlockChainWithGenesis(objectContext1);
+        ObjectContext objectContext2 = new ObjectContext(new MemoryKeyValueStores());
+
+        Semaphore semaphore = new Semaphore(0, true);
+
+        Address coinbase = FactoryHelper.createRandomAddress();
+        MinerProcessor minerProcessor = new MinerProcessor(objectContext1.getBlockChain(), objectContext1.getTransactionPool(), objectContext1.getStores(), new MinerConfiguration(true, coinbase, 6_000_000L, 10));
+
+        NodeRunner runner1 = new NodeRunner(new NodeConfiguration(3001, null), new NetworkConfiguration((short)42), objectContext1);
+        NodeRunner runner2 = new NodeRunner(new NodeConfiguration(0, Collections.singletonList("localhost:3001")), new NetworkConfiguration((short)42), objectContext2);
+
+        minerProcessor.onMinedBlock(blk -> {
+            runner1.getNodeProcessor().postMessage(new BlockMessage(blk));
+        });
+
+        runner2.getNodeProcessor().onNewBlock(blk -> {
+            if (blk.getNumber() > 0)
+                semaphore.release();
+        });
+
+        minerProcessor.start();
+        runner1.start();
+        runner2.start();
+
+        semaphore.acquire();
+
+        runner2.stop();
+        runner1.stop();
+        minerProcessor.stop();
+
+        Block bestBlock = objectContext2.getBlockChain().getBestBlockInformation().getBlock();
+
+        Assert.assertNotNull(bestBlock);
+        Assert.assertTrue(bestBlock.getNumber() > 0);
+    }
 }
