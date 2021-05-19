@@ -34,7 +34,6 @@ public class PacketInputStream {
 
             int length = this.dataInputStream.readInt();
 
-            System.out.println("length " + length);
             byte[] bytes = new byte[length];
             int btotalread = 0;
 
