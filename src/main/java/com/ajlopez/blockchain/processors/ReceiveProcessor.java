@@ -25,42 +25,23 @@ public class ReceiveProcessor implements MessageChannel {
     }
 
     public void start() {
-        new Thread(() -> { this.processPriorityQueue(); }).start();
-        new Thread(() -> { this.processNormalQueue(); }).start();
+        new Thread(() -> { this.processQueue(this.messageTaskPriorityQueue); }).start();
+        new Thread(() -> { this.processQueue(this.messageTaskNormalQueue); }).start();
     }
 
     public void stop() {
         this.stopped = true;
     }
 
-    public void processNormalQueue() {
+    public void processQueue(BlockingQueue<MessageTask> messageTaskQueue) {
         while (!this.stopped) {
             try {
-                MessageTask task = this.messageTaskNormalQueue.poll(1, TimeUnit.SECONDS);
+                MessageTask task = messageTaskNormalQueue.poll(1, TimeUnit.SECONDS);
 
                 if (task != null)
                     this.messageProcessor.processMessage(task.getMessage(), task.getSender());
                 else {
-                    if (this.messageTaskPriorityQueue.isEmpty())
-                        emitEmpty();
-
-                    Thread.sleep(1000);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void processPriorityQueue() {
-        while (!this.stopped) {
-            try {
-                MessageTask task = this.messageTaskPriorityQueue.poll(1, TimeUnit.SECONDS);
-
-                if (task != null)
-                    this.messageProcessor.processMessage(task.getMessage(), task.getSender());
-                else {
-                    if (this.messageTaskNormalQueue.isEmpty())
+                    if (messageTaskQueue.isEmpty())
                         emitEmpty();
 
                     Thread.sleep(1000);
