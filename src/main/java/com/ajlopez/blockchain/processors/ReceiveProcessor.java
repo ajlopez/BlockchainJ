@@ -36,13 +36,12 @@ public class ReceiveProcessor implements MessageChannel {
     public void processQueue(BlockingQueue<MessageTask> messageTaskQueue) {
         while (!this.stopped) {
             try {
-                MessageTask task = messageTaskNormalQueue.poll(1, TimeUnit.SECONDS);
+                MessageTask task = messageTaskQueue.poll(1, TimeUnit.SECONDS);
 
                 if (task != null)
                     this.messageProcessor.processMessage(task.getMessage(), task.getSender());
                 else {
-                    if (messageTaskQueue.isEmpty())
-                        emitEmpty();
+                    checkIsEmpty();
 
                     Thread.sleep(1000);
                 }
@@ -50,6 +49,16 @@ public class ReceiveProcessor implements MessageChannel {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void checkIsEmpty() {
+        if (!this.messageTaskNormalQueue.isEmpty())
+            return;
+
+        if (!this.messageTaskPriorityQueue.isEmpty())
+            return;
+
+        emitEmpty();
     }
 
     public void postMessage(Peer sender, Message message) {
