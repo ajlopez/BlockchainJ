@@ -1,6 +1,7 @@
 package com.ajlopez.blockchain.processors;
 
 import com.ajlopez.blockchain.net.MessageChannel;
+import com.ajlopez.blockchain.net.messages.MessageType;
 import com.ajlopez.blockchain.net.peers.Peer;
 import com.ajlopez.blockchain.net.messages.Message;
 
@@ -15,8 +16,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReceiveProcessor implements MessageChannel {
     private MessageProcessor messageProcessor;
-    private BlockingQueue<MessageTask> messageTaskNormalQueue = new LinkedBlockingDeque<>();
-    private BlockingQueue<MessageTask> messageTaskPriorityQueue = new LinkedBlockingDeque<>();
+    private BlockingQueue<MessageTask> messageTaskBlocksAndStatusQueue = new LinkedBlockingDeque<>();
+    private BlockingQueue<MessageTask> messageTaskTransactionsQueue = new LinkedBlockingDeque<>();
+    private BlockingQueue<MessageTask> messageTaskOthersQueue = new LinkedBlockingDeque<>();
     private boolean stopped = false;
     private List<Runnable> emptyActions = new ArrayList<>();
 
@@ -25,8 +27,9 @@ public class ReceiveProcessor implements MessageChannel {
     }
 
     public void start() {
-        new Thread(() -> { this.processQueue(this.messageTaskPriorityQueue); }).start();
-        new Thread(() -> { this.processQueue(this.messageTaskNormalQueue); }).start();
+        new Thread(() -> { this.processQueue(this.messageTaskBlocksAndStatusQueue); }).start();
+        new Thread(() -> { this.processQueue(this.messageTaskTransactionsQueue); }).start();
+        new Thread(() -> { this.processQueue(this.messageTaskOthersQueue); }).start();
     }
 
     public void stop() {
@@ -52,20 +55,28 @@ public class ReceiveProcessor implements MessageChannel {
     }
 
     private void checkIsEmpty() {
-        if (!this.messageTaskNormalQueue.isEmpty())
+        if (!this.messageTaskBlocksAndStatusQueue.isEmpty())
             return;
 
-        if (!this.messageTaskPriorityQueue.isEmpty())
+        if (!this.messageTaskTransactionsQueue.isEmpty())
+            return;
+
+        if (!this.messageTaskOthersQueue.isEmpty())
             return;
 
         emitEmpty();
     }
 
     public void postMessage(Peer sender, Message message) {
-        if (message.isPriorityMessage())
-            this.messageTaskPriorityQueue.add(new MessageTask(message, sender));
+        MessageTask messageTask = new MessageTask(message, sender);
+        MessageType messageType = message.getMessageType();
+
+        if (messageType == MessageType.BLOCK || messageType == MessageType.STATUS)
+            this.messageTaskBlocksAndStatusQueue.add(messageTask);
+        else if (messageType == MessageType.TRANSACTION)
+            this.messageTaskTransactionsQueue.add(messageTask);
         else
-            this.messageTaskNormalQueue.add(new MessageTask(message, sender));
+            this.messageTaskOthersQueue.add(messageTask);
     }
 
     public void onEmpty(Runnable action) {
