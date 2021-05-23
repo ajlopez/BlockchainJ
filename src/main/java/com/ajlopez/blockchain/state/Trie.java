@@ -53,7 +53,7 @@ public class Trie {
         if (this.nodes != null)
             for (int k = 0; k < Trie.ARITY; k++)
                 if (this.hashes[k] == null && this.nodes[k] != null)
-                    this.hashes[k] = this.getSubHash(k);
+                    this.hashes[k] = this.nodes[k].getHash();
 
         Hash[] result = new Hash[Trie.ARITY];
 
