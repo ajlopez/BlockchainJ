@@ -211,7 +211,6 @@ The world state keeps the account states. Each account has a balance and smart c
 - Transaction receipts
 - Log emit
 - Update transaction pool with new block information
-- Shared path in trie
 - Review incoming message processing (queue(s)?)
 - Create/Call opcodes in virtual machine (WIP)
 
