@@ -201,6 +201,8 @@ The world state keeps the account states. Each account has a balance and smart c
 - [EIP Draft: Replace alt_bn128 Precompiles With EVM Bytecode](https://notes.ethereum.org/@poemm/Pre-EIP-deprecate-alt_bn128)
 - [EIP Draft: EVM384 and Friends](https://notes.ethereum.org/@poemm/eip_draft_evm_modular_arithmetic_extensions)
 - [Can a contract fetch the global block gas limit?](https://ethereum.stackexchange.com/questions/11261/can-a-contract-fetch-the-global-block-gas-limit)
+- [EIP-1884: Repricing for trie-size-dependent opcodes](https://eips.ethereum.org/EIPS/eip-1884)
+- [Dodging a bullet: Ethereum State Problems](https://blog.ethereum.org/2021/05/18/eth_state_problems/)
 
 ## To Do
 
