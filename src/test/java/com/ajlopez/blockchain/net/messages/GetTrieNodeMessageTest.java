@@ -21,6 +21,5 @@ public class GetTrieNodeMessageTest {
         Assert.assertEquals(topHash, message.getTopHash());
         Assert.assertEquals(trieType, message.getTrieType());
         Assert.assertEquals(trieHash, message.getTrieHash());
-        Assert.assertFalse(message.isPriorityMessage());
     }
 }

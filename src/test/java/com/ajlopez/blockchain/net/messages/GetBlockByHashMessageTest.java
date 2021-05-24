@@ -18,6 +18,5 @@ public class GetBlockByHashMessageTest {
         Assert.assertEquals(MessageType.GET_BLOCK_BY_HASH, message.getMessageType());
         Assert.assertArrayEquals(hash.getBytes(), message.getPayload());
         Assert.assertEquals(hash, message.getHash());
-        Assert.assertFalse(message.isPriorityMessage());
     }
 }

@@ -19,6 +19,5 @@ public class GetStoredValueMessageTest {
         Assert.assertEquals(MessageType.GET_STORED_VALUE, message.getMessageType());
         Assert.assertEquals(storeType, message.getStoreType());
         Assert.assertArrayEquals(key, message.getKey());
-        Assert.assertFalse(message.isPriorityMessage());
     }
 }

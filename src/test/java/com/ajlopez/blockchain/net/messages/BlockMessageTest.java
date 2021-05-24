@@ -24,6 +24,5 @@ public class BlockMessageTest {
 
         Assert.assertEquals(MessageType.BLOCK, message.getMessageType());
         Assert.assertArrayEquals(BlockEncoder.encode(block), message.getPayload());
-        Assert.assertTrue(message.isPriorityMessage());
     }
 }

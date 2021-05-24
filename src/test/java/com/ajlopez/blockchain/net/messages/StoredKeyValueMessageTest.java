@@ -21,6 +21,5 @@ public class StoredKeyValueMessageTest {
         Assert.assertEquals(storeType, message.getStoreType());
         Assert.assertArrayEquals(key, message.getKey());
         Assert.assertArrayEquals(value, message.getValue());
-        Assert.assertFalse(message.isPriorityMessage());
     }
 }
