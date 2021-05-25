@@ -203,6 +203,7 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Can a contract fetch the global block gas limit?](https://ethereum.stackexchange.com/questions/11261/can-a-contract-fetch-the-global-block-gas-limit)
 - [EIP-1884: Repricing for trie-size-dependent opcodes](https://eips.ethereum.org/EIPS/eip-1884)
 - [Dodging a bullet: Ethereum State Problems](https://blog.ethereum.org/2021/05/18/eth_state_problems/)
+- [EIP-3584: Block Access List](https://eips.ethereum.org/EIPS/eip-3584)
 
 ## To Do
 
