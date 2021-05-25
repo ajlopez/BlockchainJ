@@ -22,7 +22,6 @@ public class TransactionReceipt {
     public TransactionReceipt(long gasUsed, boolean success, List<Log> logs) {
         this.gasUsed = gasUsed;
         this.success = success;
-        // TODO make inmutable copy
         this.logs = logs == null ? Collections.EMPTY_LIST : Collections.unmodifiableList(new ArrayList<>(logs));
     }
 
