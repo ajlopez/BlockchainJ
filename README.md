@@ -22,7 +22,9 @@ The world state keeps the account states. Each account has a balance and smart c
 - [Building a Blockchain: Subroutines in the Virtual Machine](https://angeljavalopez.medium.com/bui%C3%B1ding-a-blockchain-subroutines-in-the-virtual-machine-a79cc2dbf0e5)
 - [Building a Blockchain: Towards Beam Synchronization](https://angeljavalopez.medium.com/building-a-blockchain-towards-beam-synchronization-de4eb30466e8)
 - [Building a Blockchain: Executing Smart Contracts](https://angeljavalopez.medium.com/building-a-blockchain-executing-smart-contracts-ad06c8ec037)
+- [Decoupling Storage from Execution in RSK Blockchain](https://angeljavalopez.medium.com/decoupling-storage-from-execution-in-rsk-blockchain-ea92aeb02259)
 - [One Code Many Storages](https://angeljavalopez.medium.com/one-code-many-storages-afbbe1643c0a)
+
 
 ## References
 
