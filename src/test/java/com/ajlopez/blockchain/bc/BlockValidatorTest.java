@@ -3,7 +3,6 @@ package com.ajlopez.blockchain.bc;
 import com.ajlopez.blockchain.core.*;
 import com.ajlopez.blockchain.core.types.Address;
 import com.ajlopez.blockchain.core.types.Coin;
-import com.ajlopez.blockchain.core.types.Difficulty;
 import com.ajlopez.blockchain.execution.*;
 import com.ajlopez.blockchain.state.Trie;
 import com.ajlopez.blockchain.store.*;
@@ -66,8 +65,7 @@ public class BlockValidatorTest {
 
         Block genesis = GenesisGenerator.generateGenesis(accountStore);
 
-        // TODO use difficulty instead of a constant
-        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE, 0, 0);
+        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), genesis.getDifficulty(), 0, 0);
 
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
@@ -232,14 +230,13 @@ public class BlockValidatorTest {
         ExecutionContext executionContext = new TopExecutionContext(accountStore, null, codeStore);
         TransactionExecutor transactionExecutor = new TransactionExecutor(executionContext);
 
-        // TODO use difficulty instead of a constant
-        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), Difficulty.ONE, 0, 0);
+        BlockData blockData = new BlockData(genesis.getNumber() + 1, 0, FactoryHelper.createRandomAddress(), genesis.getDifficulty(), 0, 0);
 
         // TODO evaluate to use BlockExecutor instead of TransactionExecutor
         List<TransactionReceipt> transactionReceipts = transactionExecutor.executeTransactions(transactions, blockData);
 
         exception.expect(NullPointerException.class);
-        new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), Difficulty.ONE, 0, 0, null, 0);
+        new Block(genesis.getNumber() + 1, genesis.getHash(), null, transactions, BlockExecutionResult.calculateTransactionReceiptsHash(transactionReceipts), genesis.getStateRootHash(), System.currentTimeMillis() / 1000, FactoryHelper.createRandomAddress(), genesis.getDifficulty(), 0, 0, null, 0);
     }
 
     @Test
